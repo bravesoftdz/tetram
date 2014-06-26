@@ -4,6 +4,8 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.tetram.bdtheque.data.services.UserPreferences;
 
+import java.io.File;
+
 public class UserPreferencesTest extends SpringTest {
 
     @Autowired
@@ -21,7 +23,7 @@ public class UserPreferencesTest extends SpringTest {
 
     @Test
     public void testSetRepImages() throws Exception {
-        userPreferences.setRepImages("blabla3");
+        userPreferences.setRepImages(new File("blabla3"));
         userPreferences.save();
     }
 }

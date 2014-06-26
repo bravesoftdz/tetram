@@ -1,7 +1,6 @@
 package org.tetram.bdtheque.data.services;
 
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.ObjectPropertyBase;
+import javafx.beans.property.*;
 import org.jetbrains.annotations.NonNls;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -51,7 +50,6 @@ public class UserPreferencesImpl implements UserPreferences {
     private ApplicationContext applicationContext;
     private Properties defaultPrefs = null;
     private Properties prefs = null;
-    private ObjectProperty<FormatTitreAlbum> formatTitreAlbumProperty = null;
 
     private Properties getDefaultPrefs() {
         if (defaultPrefs != null) return defaultPrefs;
@@ -163,13 +161,13 @@ public class UserPreferencesImpl implements UserPreferences {
     }
 
     @Override
-    public String getRepImages() {
-        return getStringPref(PREF_REP_IMAGES);
+    public File getRepImages() {
+        return new File(getStringPref(PREF_REP_IMAGES));
     }
 
     @Override
-    public void setRepImages(String value) {
-        setPref(PREF_REP_IMAGES, value);
+    public void setRepImages(File value) {
+        setPref(PREF_REP_IMAGES, value.getAbsolutePath());
     }
 
     @Override
@@ -180,35 +178,6 @@ public class UserPreferencesImpl implements UserPreferences {
     @Override
     public void setFormatTitreAlbum(FormatTitreAlbum value) {
         setPref(PREF_FORMAT_TITRE_ALBUM, String.valueOf(value.getValue()));
-    }
-
-    @Override
-    public ObjectProperty<FormatTitreAlbum> formatTitreAlbumProperty() {
-        if (formatTitreAlbumProperty == null)
-            formatTitreAlbumProperty = new ObjectPropertyBase<FormatTitreAlbum>() {
-                @Override
-                public Object getBean() {
-                    return this;
-                }
-
-                @NonNls
-                @Override
-                public String getName() {
-                    return "formatTitreAlbum";
-                }
-
-                @Override
-                public FormatTitreAlbum get() {
-                    return getFormatTitreAlbum();
-                }
-
-                @Override
-                public void set(FormatTitreAlbum newValue) {
-                    setFormatTitreAlbum(newValue);
-                    super.set(newValue);
-                }
-            };
-        return formatTitreAlbumProperty;
     }
 
     @Override

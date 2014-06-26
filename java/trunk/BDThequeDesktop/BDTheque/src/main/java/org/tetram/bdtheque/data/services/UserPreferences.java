@@ -1,7 +1,10 @@
 package org.tetram.bdtheque.data.services;
 
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.StringProperty;
 
+import java.io.File;
 import java.util.Locale;
 
 /**
@@ -16,15 +19,13 @@ public interface UserPreferences {
 
     void setLocale(Locale locale);
 
-    String getRepImages();
+    File getRepImages();
 
-    void setRepImages(String value);
+    void setRepImages(File value);
 
     FormatTitreAlbum getFormatTitreAlbum();
 
     void setFormatTitreAlbum(FormatTitreAlbum value);
-
-    ObjectProperty<FormatTitreAlbum> formatTitreAlbumProperty();
 
     boolean isSerieObligatoireAlbums();
 

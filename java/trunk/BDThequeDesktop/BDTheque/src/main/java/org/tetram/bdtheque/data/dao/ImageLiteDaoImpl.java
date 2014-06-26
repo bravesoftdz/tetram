@@ -61,7 +61,7 @@ public abstract class ImageLiteDaoImpl<T extends ImageLite, K> extends DaoRWImpl
             String fileName = new File(imageInfo.getFileName()).getName();
             String path = new File(imageInfo.getFileName()).getParent();
             if (StringUtils.isNullOrEmpty(path))
-                path = userPreferences.getRepImages();
+                path = userPreferences.getRepImages().getAbsolutePath();
 
             imageBytes = commonMapper.getFileContent(path, fileName).getData();
             if (imageBytes == null || imageBytes.length == 0) return null;
@@ -92,8 +92,8 @@ public abstract class ImageLiteDaoImpl<T extends ImageLite, K> extends DaoRWImpl
                 if (!image.isNewStockee()) {
                     // photos liées (q1)
                     image.setOldNom(image.getNewNom());
-                    image.setNewNom(commonMapper.searchNewFileName(userPreferences.getRepImages(), new File(image.getNewNom()).getName(), true));
-                    commonMapper.sendFileContent(userPreferences.getRepImages(), image.getNewNom(), ImageUtils.getJPEGStream(new File(image.getOldNom()), null, null, false));
+                    image.setNewNom(commonMapper.searchNewFileName(userPreferences.getRepImages().getAbsolutePath(), new File(image.getNewNom()).getName(), true));
+                    commonMapper.sendFileContent(userPreferences.getRepImages().getAbsolutePath(), image.getNewNom(), ImageUtils.getJPEGStream(new File(image.getOldNom()), null, null, false));
                     imageMapper.addImageLite(
                             image, parentId, secondaryParams, image.getNewNom(), null,
                             tableName, fieldParentId, fieldPk, fieldFile, fieldModeStockage, fieldBlob
@@ -121,8 +121,8 @@ public abstract class ImageLiteDaoImpl<T extends ImageLite, K> extends DaoRWImpl
                         image.setNewNom(FilenameUtils.removeExtension(f.getName()));
                     } else {
                         // conversion photos stockées en liées
-                        image.setNewNom(commonMapper.searchNewFileName(userPreferences.getRepImages(), image.getNewNom() + ".jpg", true));
-                        commonMapper.sendFileContent(userPreferences.getRepImages(), image.getNewNom(), imageStream);
+                        image.setNewNom(commonMapper.searchNewFileName(userPreferences.getRepImages().getAbsolutePath(), image.getNewNom() + ".jpg", true));
+                        commonMapper.sendFileContent(userPreferences.getRepImages().getAbsolutePath(), image.getNewNom(), imageStream);
                         imageMapper.changeModeImageLite(image, null, tableName, fieldPk, fieldModeStockage, fieldBlob);
                     }
                 }

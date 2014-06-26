@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.image.*?>
-<?import javafx.geometry.*?>
 <?import java.lang.*?>
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
@@ -15,53 +15,115 @@
         <RowConstraints vgrow="NEVER" />
     </rowConstraints>
     <children>
-        <TabPane tabClosingPolicy="UNAVAILABLE" tabMinHeight="32.0">
+        <TabPane tabClosingPolicy="UNAVAILABLE">
             <tabs>
                 <Tab fx:id="tabOptionsDiverses" text="Options diverses">
                     <content>
-                        <Accordion layoutX="98.0" layoutY="50.0">
-                            <panes>
-                                <TitledPane animated="false" text="Général">
-                                    <content>
-                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="167.0" prefWidth="448.0">
-                                 <children>
-                                    <ChoiceBox fx:id="formatTitreAlbum" layoutX="14.0" layoutY="108.0" />
-                                    <CheckBox layoutX="14.0" layoutY="14.0" mnemonicParsing="false" text="Saisie obligatoire d'une série pour les ablums et les achats" />
-                                    <CheckBox layoutX="14.0" layoutY="38.0" mnemonicParsing="false" text="Saisie obligatoire d'une série pour les para-bd" />
-                                    <CheckBox layoutX="14.0" layoutY="62.0" mnemonicParsing="false" text="Utiliser l'anti-aliasing pour redimensionner les images" />
-                                    <Label layoutX="14.0" layoutY="91.0" text="Format d'affichage des titres d'albums :" />
-                                 </children></AnchorPane>
-                                    </content>
-                                </TitledPane>
-                                <TitledPane animated="false" text="Impression">
-                                    <content>
-                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                                    </content>
-                                </TitledPane>
-                                <TitledPane animated="false" text="Mode Gestion">
-                                    <content>
-                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                                 <children>
-                                    <CheckBox layoutX="14.0" layoutY="14.0" mnemonicParsing="false" text="Images stockées dans la base par défaut" />
-                                    <Label layoutX="14.0" layoutY="39.0" text="Répertoire de stockage des images :" />
-                                    <TextField layoutX="14.0" layoutY="56.0" />
-                                 </children></AnchorPane>
-                                    </content>
-                                </TitledPane>
-                            </panes>
-                        </Accordion>
+                        <ScrollPane fitToWidth="true" hbarPolicy="NEVER">
+                            <content>
+                                <VBox>
+                                    <children>
+                                        <TitledPane animated="false" expanded="true" text="Général">
+                                            <content>
+                                                <GridPane>
+                                                    <children>
+                                                        <CheckBox fx:id="serieObligatoireAlbums" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" text="Saisie obligatoire d'une série pour les ablums et les achats">
+                                                            <padding>
+                                                                <Insets bottom="4.0" top="4.0" />
+                                                            </padding>
+                                                        </CheckBox>
+                                                        <CheckBox fx:id="serieObligatoireParaBD" layoutX="14.0" layoutY="38.0" mnemonicParsing="false" text="Saisie obligatoire d'une série pour les para-bd" GridPane.rowIndex="1">
+                                                            <padding>
+                                                                <Insets bottom="4.0" top="4.0" />
+                                                            </padding>
+                                                        </CheckBox>
+                                                        <CheckBox fx:id="antiAliasing" layoutX="14.0" layoutY="62.0" mnemonicParsing="false" text="Utiliser l'anti-aliasing pour redimensionner les images" GridPane.rowIndex="2">
+                                                            <padding>
+                                                                <Insets bottom="4.0" top="4.0" />
+                                                            </padding>
+                                                        </CheckBox>
+                                                        <Label layoutX="14.0" layoutY="91.0" text="Format d'affichage des titres d'albums :" GridPane.rowIndex="3">
+                                                            <padding>
+                                                                <Insets bottom="4.0" top="4.0" />
+                                                            </padding>
+                                                        </Label>
+                                                        <ChoiceBox fx:id="formatTitreAlbum" layoutX="14.0" layoutY="108.0" GridPane.rowIndex="4" />
+                                                    </children>
+                                                    <columnConstraints>
+                                                        <ColumnConstraints />
+                                                    </columnConstraints>
+                                                    <rowConstraints>
+                                                        <RowConstraints />
+                                                        <RowConstraints />
+                                                        <RowConstraints />
+                                                        <RowConstraints />
+                                                        <RowConstraints />
+                                                    </rowConstraints>
+                                                </GridPane>
+                                            </content>
+                                        </TitledPane>
+                                        <TitledPane animated="false" text="Impression">
+                                            <content>
+                                                <AnchorPane minHeight="0.0" minWidth="0.0" />
+                                            </content>
+                                        </TitledPane>
+                                        <TitledPane animated="false" text="Mode Gestion">
+                                            <content>
+                                                <GridPane>
+                                                    <children>
+                                                        <HBox GridPane.rowIndex="1">
+                                                            <children>
+                                                                <Label layoutX="14.0" layoutY="39.0" text="Répertoire de stockage des images :">
+                                                                    <padding>
+                                                                        <Insets top="4.0" />
+                                                                    </padding>
+                                                                </Label>
+                                                                <Button alignment="TOP_LEFT" mnemonicParsing="false" onAction="#btnChooseFolderClick" text="...">
+                                                                    <HBox.margin>
+                                                                        <Insets left="8.0" />
+                                                                    </HBox.margin>
+                                                                </Button>
+                                                            </children>
+                                                        </HBox>
+                                                        <CheckBox fx:id="imagesStockees" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" text="Images stockées dans la base par défaut">
+                                                            <padding>
+                                                                <Insets bottom="4.0" top="4.0" />
+                                                            </padding>
+                                                        </CheckBox>
+                                                        <Label fx:id="repImages" layoutX="14.0" layoutY="56.0" text="repImages" textOverrun="CENTER_WORD_ELLIPSIS" GridPane.rowIndex="3">
+                                                            <padding>
+                                                                <Insets bottom="4.0" />
+                                                            </padding>
+                                                        </Label>
+                                                    </children>
+                                                    <columnConstraints>
+                                                        <ColumnConstraints />
+                                                    </columnConstraints>
+                                                    <rowConstraints>
+                                                        <RowConstraints />
+                                                        <RowConstraints minHeight="10.0" prefHeight="30.0" />
+                                                        <RowConstraints />
+                                                        <RowConstraints />
+                                                    </rowConstraints>
+                                                </GridPane>
+                                            </content>
+                                        </TitledPane>
+                                    </children>
+                                </VBox>
+                            </content>
+                        </ScrollPane>
                     </content>
                 </Tab>
                 <Tab fx:id="tabMonnaies" text="Monnaies">
                     <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                        <AnchorPane />
                     </content>
                 </Tab>
-            <Tab fx:id="tabSiteWeb" text="Site web">
-              <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-              </content>
-            </Tab>
+                <Tab fx:id="tabSiteWeb" text="Site web">
+                    <content>
+                        <AnchorPane />
+                    </content>
+                </Tab>
             </tabs>
         </TabPane>
         <ToolBar nodeOrientation="RIGHT_TO_LEFT" GridPane.rowIndex="1">
