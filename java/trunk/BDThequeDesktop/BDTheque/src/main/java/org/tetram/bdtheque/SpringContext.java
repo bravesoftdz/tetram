@@ -14,6 +14,7 @@ public class SpringContext {
     @NonNls
     public static final String SPRING_CONFIG_XML = "/org/tetram/bdtheque/config/spring-config.xml";
 
+    @NonNls
     public static final ApplicationContext CONTEXT;
 
     static {

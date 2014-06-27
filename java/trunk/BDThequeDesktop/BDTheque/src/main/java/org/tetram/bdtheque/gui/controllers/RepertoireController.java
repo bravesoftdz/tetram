@@ -4,21 +4,23 @@
 
 package org.tetram.bdtheque.gui.controllers;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.tetram.bdtheque.SpringContext;
 import org.tetram.bdtheque.data.bean.AbstractDBEntity;
 import org.tetram.bdtheque.data.bean.AbstractEntity;
-import org.tetram.bdtheque.data.dao.AlbumLiteDao;
-import org.tetram.bdtheque.data.dao.AlbumLiteSerieDao;
-import org.tetram.bdtheque.data.dao.RepertoireLiteDao;
-import org.tetram.bdtheque.data.dao.SerieLiteDao;
-import org.tetram.bdtheque.gui.utils.InitialEntity;
+import org.tetram.bdtheque.data.dao.*;
+import org.tetram.bdtheque.gui.utils.InitialeEntity;
+import org.tetram.bdtheque.utils.I18nSupport;
 
 import java.net.URL;
 import java.util.List;
@@ -29,42 +31,78 @@ public class RepertoireController extends WindowController {
 
     @FXML // ResourceBundle that was given to the FXMLLoader
     private ResourceBundle resources;
-
     @FXML // URL location of the FXML file that was given to the FXMLLoader
     private URL location;
 
-    @FXML // fx:id="tabSeries"
-    private Tab tabSeries; // Value injected by FXMLLoader
+    @FXML
+    private Tab tabAlbums;
+    @FXML
+    private TreeView<AbstractEntity> tvAlbums;
+    @FXML
+    private Tab tabSeries;
+    @FXML
+    private TreeView<AbstractEntity> tvSeries;
+    @FXML
+    private Tab tabUnivers;
+    @FXML
+    private TreeView tvUnivers;
+    @FXML
+    private Tab tabAuteurs;
+    @FXML
+    private TreeView tvAuteurs;
+    @FXML
+    private Tab tabParabd;
+    @FXML
+    private TreeView tvParabd;
 
-    @FXML // fx:id="tvAlbums"
-    private TreeView<AbstractEntity> tvAlbums; // Value injected by FXMLLoader
-
-    @FXML // fx:id="tvSeries"
-    private TreeView<AbstractEntity> tvSeries; // Value injected by FXMLLoader
-
-    @FXML // fx:id="tabAlbums"
-    private Tab tabAlbums; // Value injected by FXMLLoader
-
-    @Autowired
-    private AlbumLiteSerieDao albumLiteDao;
+    @FXML
+    private ChoiceBox<TypeRepertoireAlbumEntry> repertoireGroup;
 
     @Autowired
     private SerieLiteDao serieLiteDao;
 
+
     @FXML
-        // This method is called by the FXMLLoader when initialization is complete
     void initialize() {
-        assert tabSeries != null : "fx:id=\"tabSeries\" was not injected: check your FXML file 'repertoire.fxml'.";
-        assert tvAlbums != null : "fx:id=\"tvAlbums\" was not injected: check your FXML file 'repertoire.fxml'.";
-        assert tvSeries != null : "fx:id=\"tvSeries\" was not injected: check your FXML file 'repertoire.fxml'.";
-        assert tabAlbums != null : "fx:id=\"tabAlbums\" was not injected: check your FXML file 'repertoire.fxml'.";
+        repertoireGroup.getItems().addAll(TypeRepertoireAlbumEntry.values());
+        repertoireGroup.setValue(TypeRepertoireAlbumEntry.PAR_SERIE);
+        repertoireGroup.valueProperty().addListener(new ChangeListener<TypeRepertoireAlbumEntry>() {
+            @Override
+            public void changed(ObservableValue<? extends TypeRepertoireAlbumEntry> observable, TypeRepertoireAlbumEntry oldValue, TypeRepertoireAlbumEntry newValue) {
+                if (newValue != null)
+                    tvAlbums.setRoot(new InitialTreeItem(SpringContext.CONTEXT.getBean(newValue.daoClass)));
+            }
+        });
 
         refresh();
     }
 
     public void refresh() {
-        tvAlbums.setRoot(new InitialTreeItem(albumLiteDao));
+        tvAlbums.setRoot(new InitialTreeItem(SpringContext.CONTEXT.getBean(repertoireGroup.getValue().daoClass)));
         tvSeries.setRoot(new InitialTreeItem(serieLiteDao));
+    }
+
+    enum TypeRepertoireAlbumEntry {
+        PAR_TITRE(I18nSupport.message("Titre"), AlbumLiteInitialeDao.class),
+        PAR_SERIE(I18nSupport.message("Série"), AlbumLiteSerieDao.class),
+        PAR_EDITEUR(I18nSupport.message("Editeur"), AlbumLiteEditeurDao.class),
+        PAR_GENRE(I18nSupport.message("Genre"), AlbumLiteGenreDao.class),
+        PAR_ANNEE(I18nSupport.message("Annee.de.parution"), AlbumLiteAnneeDao.class),
+        PAR_COLLECTION(I18nSupport.message("Collection"), AlbumLiteCollectionDao.class);
+
+        String label;
+
+        Class<? extends RepertoireLiteDao> daoClass;
+
+        TypeRepertoireAlbumEntry(String label, Class<? extends RepertoireLiteDao> daoClass) {
+            this.label = label;
+            this.daoClass = daoClass;
+        }
+
+        public String toString() {
+            return label;
+        }
+
     }
 
     private class InitialTreeItem extends TreeItem<AbstractEntity> {
@@ -106,7 +144,7 @@ public class RepertoireController extends WindowController {
             if (treeItem.getParent() == null)
                 items = dao.getInitiales(null);
             else
-                items = dao.getListEntitiesByInitiale((InitialEntity) treeItem.getValue(), null);
+                items = dao.getListEntitiesByInitiale((InitialeEntity) treeItem.getValue(), null);
 
             ObservableList<InitialTreeItem> children = FXCollections.observableArrayList();
             if (items != null) {

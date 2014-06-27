@@ -122,7 +122,30 @@
         <include refid="orderAlbum"/>
     </select>
 
-    <select id="getInitialesSeries" resultType="org.tetram.bdtheque.gui.utils.InitialEntity">
+    <select id="getInitiales" resultMap="org.tetram.bdtheque.data.dao.mappers.CommonMapper.InitialeEntityCharacter">
+        <![CDATA[
+        select
+            initialeTitreAlbum "label", countInitiale "count", initialeTitreAlbum "value"
+        from
+            initiales_albums(#{filtre})
+        ]]>
+    </select>
+
+    <select id="getAlbumLiteByInitiale" resultMap="AlbumLite">
+        <!--
+        <if test="initiale == null">
+            <bind name="initiale" value="''"/>
+        </if>
+        -->
+        select
+        <include refid="fieldsAlbumLite"/>, a.id_serie, a.titreSerie
+        <![CDATA[
+        from
+            albums_by_initiale(#{initiale}, #{filtre}) a
+        ]]>
+    </select>
+
+    <select id="getInitialesSeries" resultMap="org.tetram.bdtheque.data.dao.mappers.CommonMapper.InitialeEntityUUID">
         <![CDATA[
         select
             titreSerie "label", countSerie "count", id_serie "value"
@@ -136,17 +159,80 @@
             <bind name="idSerie" value="''"/>
         </if>
         select
-        <include refid="fieldsAlbumLite"/>
+        <include refid="fieldsAlbumLite"/>, a.id_serie, a.titreSerie
         <![CDATA[
         from
             albums_by_serie(#{idSerie}, #{filtre}) a
         ]]>
     </select>
 
-    <select id="getInitialesAnnees" resultType="org.tetram.bdtheque.gui.utils.InitialEntity">
+    <select id="getInitialesCollections" resultMap="org.tetram.bdtheque.data.dao.mappers.CommonMapper.InitialeEntityUUID">
         <![CDATA[
         select
-            anneeParution "label", countAnnee "count", anneeParution "value"
+            nomCollection "label", countCollection "count", id_collection "value"
+        from
+            collections_albums(#{filtre})
+        ]]>
+    </select>
+
+    <select id="getAlbumLiteByCollection" resultMap="AlbumLite">
+        <if test="idCollection == null">
+            <bind name="idCollection" value="''"/>
+        </if>
+        select
+        <include refid="fieldsAlbumLite"/>, a.id_serie, a.titreSerie
+        <![CDATA[
+        from
+            albums_by_collection(#{idCollection}, #{filtre}) a
+        ]]>
+    </select>
+
+    <select id="getInitialesEditeurs" resultMap="org.tetram.bdtheque.data.dao.mappers.CommonMapper.InitialeEntityUUID">
+        <![CDATA[
+        select
+            nomEditeur "label", countEditeur "count", id_editeur "value"
+        from
+            editeurs_albums(#{filtre})
+        ]]>
+    </select>
+
+    <select id="getAlbumLiteByEditeur" resultMap="AlbumLite">
+        <if test="idEditeur == null">
+            <bind name="idEditeur" value="''"/>
+        </if>
+        select
+        <include refid="fieldsAlbumLite"/>, a.id_serie, a.titreSerie
+        <![CDATA[
+        from
+            albums_by_editeur(#{idEditeur}, #{filtre}) a
+        ]]>
+    </select>
+
+    <select id="getInitialesGenres" resultMap="org.tetram.bdtheque.data.dao.mappers.CommonMapper.InitialeEntityUUID">
+        <![CDATA[
+        select
+            genre "label", countGenre "count", id_genre "value"
+        from
+            genres_albums(#{filtre})
+        ]]>
+    </select>
+
+    <select id="getAlbumLiteByGenre" resultMap="AlbumLite">
+        <if test="idGenre == null">
+            <bind name="idGenre" value="''"/>
+        </if>
+        select
+        <include refid="fieldsAlbumLite"/>, a.id_serie, a.titreSerie
+        <![CDATA[
+        from
+            albums_by_genre(#{idGenre}, #{filtre}) a
+        ]]>
+    </select>
+
+    <select id="getInitialesAnnees" resultMap="org.tetram.bdtheque.data.dao.mappers.CommonMapper.InitialeEntityInteger">
+        <![CDATA[
+        select
+            anneeParution "label", countAnnee "count", nullif(anneeParution, -1) "value"
         from
             annees_albums(#{filtre})
         ]]>
@@ -157,7 +243,7 @@
             <bind name="annee" value="-1"/>
         </if>
         select
-        <include refid="fieldsAlbumLite"/>
+        <include refid="fieldsAlbumLite"/>, a.id_serie, a.titreSerie
         <![CDATA[
         from
             albums_by_annee(#{annee}, #{filtre}) a

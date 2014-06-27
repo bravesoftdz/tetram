@@ -8,7 +8,7 @@ import org.tetram.bdtheque.utils.StringUtils;
  * Created by Thierry on 23/06/2014.
  */
 @SuppressWarnings("UnusedDeclaration")
-public class InitialEntity<T> extends AbstractEntity {
+public class InitialeEntity<T> extends AbstractEntity {
 
     private IntegerProperty count = new SimpleIntegerProperty(this, "count", 0);
     private ObjectProperty<T> value = new SimpleObjectProperty<>(this, "value", null);
@@ -62,4 +62,5 @@ public class InitialEntity<T> extends AbstractEntity {
  */
         return StringUtils.ajoutString(label.getValueSafe(), StringUtils.nonZero(getCount()), " ", "(", ")");
     }
+
 }

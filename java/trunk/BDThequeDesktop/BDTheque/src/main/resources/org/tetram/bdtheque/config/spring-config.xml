@@ -29,7 +29,7 @@
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="dataSource"/>
         <property name="configLocation" value="classpath:org/tetram/bdtheque/config/mybatis-config.xml"/>
-        <property name="mapperLocations" value="classpath:org/tetram/bdtheque/data/bean/*.xml"/>
+        <property name="mapperLocations" value="classpath:org/tetram/bdtheque/data/dao/mappers/*.xml"/>
     </bean>
     <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
         <constructor-arg index="0" ref="sqlSessionFactory"/>

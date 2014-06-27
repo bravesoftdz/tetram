@@ -1,12 +1,14 @@
 package org.tetram.bdtheque.gui.controllers;
 
 import impl.org.controlsfx.i18n.Localization;
+import javafx.beans.property.ReadOnlyStringPropertyBase;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import org.jetbrains.annotations.NonNls;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.datasource.SingleConnectionDataSource;
 import org.springframework.stereotype.Controller;
 import org.tetram.bdtheque.SpringContext;
 import org.tetram.bdtheque.SpringFxmlLoader;
@@ -18,6 +20,7 @@ import org.tetram.bdtheque.gui.utils.Dialogs;
 import org.tetram.bdtheque.utils.I18nSupport;
 import org.tetram.bdtheque.utils.StringUtils;
 
+import javax.sql.DataSource;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Locale;
@@ -54,7 +57,13 @@ public class MainController extends WindowController {
     @FXML // fx:id="mnuLanguage"
     private Menu mnuLanguage;
 
+    @FXML
+    private MenuItem mnuDBFile;
+
     private ModeConsultationController modeConsultationController;
+
+    @Autowired
+    private SingleConnectionDataSource dataSource;
 
     @FXML
         // This method is called by the FXMLLoader when initialization is complete
@@ -64,6 +73,24 @@ public class MainController extends WindowController {
         assert buttonTest != null : "fx:id=\"buttonTest\" was not injected: check your FXML file 'main.fxml'.";
         assert detailPane != null : "fx:id=\"detailPane\" was not injected: check your FXML file 'main.fxml'.";
         assert mnuLanguage != null : "fx:id=\"mnuLanguage\" was not injected: check your FXML file 'main.fxml'.";
+
+        mnuDBFile.textProperty().bind(new ReadOnlyStringPropertyBase() {
+            @Override
+            public String get() {
+                return dataSource.getUrl();
+            }
+
+            @Override
+            public Object getBean() {
+                return this;
+            }
+
+            @NonNls
+            @Override
+            public String getName() {
+                return "dataSource";
+            }
+        });
 
         modeConsultationController = SpringFxmlLoader.load("modeConsultation.fxml");
         detailPane.getChildren().add(modeConsultationController.getView());
@@ -110,9 +137,9 @@ public class MainController extends WindowController {
         else
             org.controlsfx.dialog.Dialogs.create().message("OK").showInformation();
 
-        if (preferencesController.getResult() == DialogController.DialogResult.OK)
-        {
-            SpringContext.CONTEXT.getBean(RepertoireController.class).refresh();        }
+        if (preferencesController.getResult() == DialogController.DialogResult.OK) {
+            SpringContext.CONTEXT.getBean(RepertoireController.class).refresh();
+        }
 
     }
 

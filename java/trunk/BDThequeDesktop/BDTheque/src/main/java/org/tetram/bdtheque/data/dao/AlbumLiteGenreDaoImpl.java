@@ -4,12 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import org.tetram.bdtheque.data.BeanUtils;
 import org.tetram.bdtheque.data.bean.AlbumLite;
 import org.tetram.bdtheque.data.dao.mappers.AlbumMapper;
-import org.tetram.bdtheque.gui.utils.InitialEntity;
+import org.tetram.bdtheque.gui.utils.InitialeEntity;
 import org.tetram.bdtheque.utils.I18nSupport;
-import org.tetram.bdtheque.utils.StringUtils;
 
 import java.util.List;
 import java.util.UUID;
@@ -23,12 +21,12 @@ import java.util.UUID;
 @SuppressWarnings("UnusedDeclaration")
 public class AlbumLiteGenreDaoImpl extends DaoROImpl<AlbumLite, UUID> implements AlbumLiteGenreDao {
 
-    private static final String UNKNOWN_LABEL = I18nSupport.message("initiale.inconnu");
+    private static final String UNKNOWN_LABEL = I18nSupport.message("initiale.inconnu.genre");
     @Autowired
     private AlbumMapper albumMapper;
 
     @Override
-    public List<InitialEntity<UUID>> getListInitiales(String filtre) {
+    public List<InitialeEntity<UUID>> getListInitiales(String filtre) {
         return albumMapper.getInitialesGenres(filtre);
     }
 
@@ -38,7 +36,7 @@ public class AlbumLiteGenreDaoImpl extends DaoROImpl<AlbumLite, UUID> implements
     }
 
     @Override
-    public List<AlbumLite> getListEntitiesByInitiale(InitialEntity<UUID> initiale, String filtre) {
+    public List<AlbumLite> getListEntitiesByInitiale(InitialeEntity<UUID> initiale, String filtre) {
         return albumMapper.getAlbumLiteByGenre(initiale.getValue(), filtre);
     }
 }

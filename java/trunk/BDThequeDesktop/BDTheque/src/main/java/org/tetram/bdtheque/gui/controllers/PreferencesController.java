@@ -33,52 +33,37 @@ import java.util.Locale;
 @Controller
 public class PreferencesController extends DialogController {
 
+    UserPreferencesProperties preferencesProperties;
     @Autowired
     private UserPreferences userPreferences;
-
     @FXML
     private Button btnOk;
-
     @FXML
     private Button btnCancel;
-
     @FXML
     private ToggleButton btnOptionsDiverses;
-
     @FXML
     private ToggleButton btnSiteWeb;
-
     @FXML
     private ToggleButton btnMonnaies;
-
     @FXML
     private ScrollPane tabOptionsDiverses;
-
     @FXML
     private ChoiceBox<FormatTitreAlbum> formatTitreAlbum;
-
     @FXML
     private CheckBox serieObligatoireAlbums;
-
     @FXML
     private CheckBox serieObligatoireParaBD;
-
     @FXML
     private CheckBox antiAliasing;
-
     @FXML
     private CheckBox imagesStockees;
-
     @FXML
     private Label repImages;
-
     @FXML
     private BorderPane content;
-
     @FXML
-            private ToggleGroup btnTabGroup;
-
-    UserPreferencesProperties preferencesProperties;
+    private ToggleGroup btnTabGroup;
 
     @FXML
     void initialize() {
@@ -94,7 +79,7 @@ public class PreferencesController extends DialogController {
         for (ToggleButton toggleButton : buttonNodeHashMap.keySet())
             tabWidth = tabWidth == null ? toggleButton.widthProperty() : Bindings.max(toggleButton.widthProperty(), tabWidth);
 
-        for (ToggleButton toggleButton : buttonNodeHashMap.keySet()){
+        for (ToggleButton toggleButton : buttonNodeHashMap.keySet()) {
             toggleButton.minWidthProperty().bind(tabWidth);
             toggleButton.setUserData(buttonNodeHashMap.get(toggleButton));
             toggleButton.setOnAction(new EventHandler<ActionEvent>() {

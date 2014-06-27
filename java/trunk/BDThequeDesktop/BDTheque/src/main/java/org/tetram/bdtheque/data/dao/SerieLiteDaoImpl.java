@@ -5,7 +5,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.tetram.bdtheque.data.bean.AlbumLite;
 import org.tetram.bdtheque.data.bean.SerieLite;
-import org.tetram.bdtheque.gui.utils.InitialEntity;
+import org.tetram.bdtheque.gui.utils.InitialeEntity;
 
 import java.util.List;
 import java.util.UUID;
@@ -20,7 +20,7 @@ import java.util.UUID;
 public class SerieLiteDaoImpl extends DaoROImpl<SerieLite, UUID> implements SerieLiteDao<Character> {
 
     @Override
-    public List<InitialEntity<Character>> getListInitiales(String filtre) {
+    public List<InitialeEntity<Character>> getListInitiales(String filtre) {
         return null;
     }
 
@@ -30,7 +30,7 @@ public class SerieLiteDaoImpl extends DaoROImpl<SerieLite, UUID> implements Seri
     }
 
     @Override
-    public List<AlbumLite> getListEntitiesByInitiale(InitialEntity<Character> initiale, String filtre) {
+    public List<AlbumLite> getListEntitiesByInitiale(InitialeEntity<Character> initiale, String filtre) {
         return null;
     }
 }

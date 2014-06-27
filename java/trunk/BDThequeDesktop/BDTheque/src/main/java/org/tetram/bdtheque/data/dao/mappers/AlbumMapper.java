@@ -4,7 +4,7 @@ import org.apache.ibatis.annotations.Param;
 import org.tetram.bdtheque.data.bean.Album;
 import org.tetram.bdtheque.data.bean.AlbumLite;
 import org.tetram.bdtheque.data.bean.ValeurListe;
-import org.tetram.bdtheque.gui.utils.InitialEntity;
+import org.tetram.bdtheque.gui.utils.InitialeEntity;
 
 import java.util.List;
 import java.util.UUID;
@@ -23,27 +23,27 @@ public interface AlbumMapper extends BaseMapperInterface {
 
     int acheter(@Param("id") UUID id, @Param("achat") boolean previsionAchat);
 
-    List<InitialEntity<UUID>> getInitialesSeries(@Param("filtre") String filtre);
+    List<InitialeEntity<UUID>> getInitialesSeries(@Param("filtre") String filtre);
 
     List<AlbumLite> getAlbumLiteBySerie(@Param("idSerie") UUID idSerie, @Param("filtre") String filtre);
 
-    List<InitialEntity<Integer>> getInitialesAnnees(@Param("filtre") String filtre);
+    List<InitialeEntity<Integer>> getInitialesAnnees(@Param("filtre") String filtre);
 
     List<AlbumLite> getAlbumLiteByAnnee(@Param("annee") Integer anneeParution, @Param("filtre") String filtre);
 
-    List<InitialEntity<UUID>> getInitialesEditeurs(@Param("filtre") String filtre);
+    List<InitialeEntity<UUID>> getInitialesEditeurs(@Param("filtre") String filtre);
 
     List<AlbumLite> getAlbumLiteByEditeur(@Param("idEditeur") UUID idEditeur, @Param("filtre") String filtre);
 
-    List<InitialEntity<Character>> getInitiales(@Param("filtre") String filtre);
+    List<InitialeEntity<Character>> getInitiales(@Param("filtre") String filtre);
 
     List<AlbumLite> getAlbumLiteByInitiale(@Param("initiale") Character initiale, @Param("filtre") String filtre);
 
-    List<InitialEntity<UUID>> getInitialesGenres(@Param("filtre") String filtre);
+    List<InitialeEntity<UUID>> getInitialesGenres(@Param("filtre") String filtre);
 
     List<AlbumLite> getAlbumLiteByGenre(@Param("idGenre") UUID idGenre, @Param("filtre") String filtre);
 
-    List<InitialEntity<UUID>> getInitialesCollections(@Param("filtre") String filtre);
+    List<InitialeEntity<UUID>> getInitialesCollections(@Param("filtre") String filtre);
 
     List<AlbumLite> getAlbumLiteByCollection(@Param("idCollection") UUID idCollection, @Param("filtre") String filtre);
 }

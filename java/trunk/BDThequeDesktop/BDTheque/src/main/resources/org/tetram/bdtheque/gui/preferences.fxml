@@ -139,11 +139,14 @@
         </ScrollPane>
     </center>
     <bottom>
-        <ToolBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="35.0" prefWidth="234.0" BorderPane.alignment="CENTER">
-            <items>
-                <Button fx:id="btnCancel" cancelButton="true" mnemonicParsing="false" onAction="#btnQuitClick" text="Annuler" />
-                <Button fx:id="btnOk" defaultButton="true" mnemonicParsing="false" onAction="#btnQuitClick" text="Ok" />
-            </items>
-        </ToolBar>
+      <HBox alignment="CENTER_RIGHT" spacing="8.0">
+         <children>
+                <Button fx:id="btnOk" defaultButton="true" layoutX="807.0" mnemonicParsing="false" onAction="#btnQuitClick" text="Ok" />
+                <Button fx:id="btnCancel" cancelButton="true" layoutX="745.0" mnemonicParsing="false" onAction="#btnQuitClick" text="Annuler" />
+         </children>
+         <padding>
+            <Insets bottom="6.0" left="6.0" right="6.0" top="6.0" />
+         </padding>
+      </HBox>
     </bottom>
 </BorderPane>
