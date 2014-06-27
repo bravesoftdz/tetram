@@ -22,6 +22,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.tetram.bdtheque.data.services.FormatTitreAlbum;
 import org.tetram.bdtheque.data.services.UserPreferences;
+import org.tetram.bdtheque.utils.FileUtils;
+import org.tetram.bdtheque.utils.StringUtils;
 
 import java.io.File;
 import java.util.HashMap;
@@ -110,12 +112,12 @@ public class PreferencesController extends DialogController {
         Bindings.bindBidirectional(repImages.textProperty(), preferencesProperties.repImagesProperty, new StringConverter<File>() {
             @Override
             public String toString(File object) {
-                return object.getAbsolutePath();
+                return object == null ? null : StringUtils.notNull(object.getAbsolutePath());
             }
 
             @Override
             public File fromString(String string) {
-                return new File(string);
+                return StringUtils.isNullOrEmpty(string) ? null : new File(string);
             }
         });
 
@@ -144,7 +146,7 @@ public class PreferencesController extends DialogController {
     @FXML
     void btnChooseFolderClick(ActionEvent event) {
         final DirectoryChooser directoryChooser = new DirectoryChooser();
-        if (preferencesProperties.repImagesProperty.get().exists())
+        if (FileUtils.isNotNullAndExists(preferencesProperties.repImagesProperty.get()))
             directoryChooser.setInitialDirectory(preferencesProperties.repImagesProperty.get());
         else
             directoryChooser.setInitialDirectory(null);

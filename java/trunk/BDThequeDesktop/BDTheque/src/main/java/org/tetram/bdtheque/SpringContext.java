@@ -1,15 +1,27 @@
 package org.tetram.bdtheque;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.jetbrains.annotations.NonNls;
 import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.GenericApplicationContext;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+import org.tetram.bdtheque.data.services.ApplicationContextImpl;
+import org.tetram.bdtheque.data.services.UserPreferences;
+import org.tetram.bdtheque.data.services.UserPreferencesImpl;
+
+import java.util.ArrayList;
 
 /**
  * Created by Thierry on 21/06/2014.
  */
+@Configuration
 public class SpringContext {
     @NonNls
     public static final String SPRING_CONFIG_XML = "/org/tetram/bdtheque/config/spring-config.xml";
@@ -26,5 +38,35 @@ public class SpringContext {
         context.refresh();
 
         CONTEXT = context;
+    }
+
+    @NonNls
+    private static final String ORG_TETRAM_BDTHEQUE_CONFIG_DEFAULT_DATABASE_PROPERTIES = "/org/tetram/bdtheque/config/default_database.properties";
+    @NonNls
+    private static final String ORG_TETRAM_BDTHEQUE_CONFIG_DATABASE_PROPERTIES = "/org/tetram/bdtheque/config/database.properties";
+    @NonNls
+    private static final String JDBC_PREFIX = "database.url=jdbc:firebirdsql:embedded:";
+
+    @Bean(name = "databaseProperties")
+    public static PropertySourcesPlaceholderConfigurer properties() {
+        // on utilise par getBean puisque Spring n'est pas encore chargé
+        ApplicationContextImpl applicationContext = new ApplicationContextImpl();
+        UserPreferences userPreferences = new UserPreferencesImpl(applicationContext);
+
+        PropertySourcesPlaceholderConfigurer configurer = new PropertySourcesPlaceholderConfigurer();
+        ArrayList<Resource> resources = new ArrayList<>();
+
+        // l'ordre des ressources est important !!
+        resources.add(new ClassPathResource(ORG_TETRAM_BDTHEQUE_CONFIG_DATABASE_PROPERTIES, SpringContext.class.getClassLoader()));
+        resources.add(new ClassPathResource(ORG_TETRAM_BDTHEQUE_CONFIG_DEFAULT_DATABASE_PROPERTIES, SpringContext.class.getClassLoader()));
+        //resources.add(new FileSystemResource(applicationContext.getUserConfigFile()));
+        if (userPreferences.getDatabase() != null && userPreferences.getDatabase().exists()) {
+            final String s = StringEscapeUtils.escapeJava(userPreferences.getDatabase().getAbsolutePath());
+            resources.add(new ByteArrayResource((JDBC_PREFIX + s).getBytes()));
+        }
+
+        configurer.setLocations(resources.toArray(new Resource[resources.size()]));
+        configurer.setIgnoreUnresolvablePlaceholders(true);
+        return configurer;
     }
 }

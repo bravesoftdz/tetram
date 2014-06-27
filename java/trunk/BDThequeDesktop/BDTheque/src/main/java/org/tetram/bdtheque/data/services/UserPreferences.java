@@ -38,4 +38,9 @@ public interface UserPreferences {
     boolean isImagesStockees();
 
     void setImagesStockees(boolean value);
+
+    File getDatabase();
+
+    void setDatabaseUrl(File value);
+
 }

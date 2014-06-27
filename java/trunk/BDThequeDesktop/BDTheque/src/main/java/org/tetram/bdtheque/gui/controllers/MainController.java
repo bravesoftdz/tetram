@@ -35,25 +35,25 @@ public class MainController extends WindowController {
     UserPreferences userPreferences;
     @Autowired
     private SerieDao serieDao;
-    @FXML // ResourceBundle that was given to the FXMLLoader
-    private ResourceBundle resources;
 
-    @FXML // URL location of the FXML file that was given to the FXMLLoader
+    @FXML
+    private ResourceBundle resources;
+    @FXML
     private URL location;
 
-    @FXML // fx:id="menuBar"
-    private MenuBar menuBar; // Value injected by FXMLLoader
+    @FXML
+    private MenuBar menuBar;
 
-    @FXML // fx:id="toolBar"
-    private ToolBar toolBar; // Value injected by FXMLLoader
+    @FXML
+    private ToolBar toolBar;
 
-    @FXML // fx:id="buttonTest"
+    @FXML
     private Button buttonTest;
 
-    @FXML// fx:id="detailPane"
+    @FXML
     private AnchorPane detailPane;
 
-    @FXML // fx:id="mnuLanguage"
+    @FXML
     private Menu mnuLanguage;
 
     @FXML
@@ -61,11 +61,11 @@ public class MainController extends WindowController {
 
     private ModeConsultationController modeConsultationController;
 
+    @NonNls
     @Autowired
     private SingleConnectionDataSource dataSource;
 
     @FXML
-        // This method is called by the FXMLLoader when initialization is complete
     void initialize() throws IOException {
         assert menuBar != null : "fx:id=\"menuBar\" was not injected: check your FXML file 'main.fxml'.";
         assert toolBar != null : "fx:id=\"toolBar\" was not injected: check your FXML file 'main.fxml'.";
@@ -76,7 +76,7 @@ public class MainController extends WindowController {
         mnuDBFile.textProperty().bind(new ReadOnlyStringPropertyBase() {
             @Override
             public String get() {
-                return dataSource.getUrl();
+                return dataSource.getUrl().substring("jdbc:firebirdsql:".length());
             }
 
             @Override

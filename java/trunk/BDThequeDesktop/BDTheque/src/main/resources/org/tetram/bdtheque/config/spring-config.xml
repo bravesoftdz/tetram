@@ -8,9 +8,13 @@
         http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
         http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
 
+    <!--
+    géré par le bean databaseProperties (dans org.tetram.bdtheque.SpringContext)
     <context:property-placeholder location="org/tetram/bdtheque/config/database.properties"/>
+    -->
 
-    <bean id="dataSource" class="org.springframework.jdbc.datasource.SingleConnectionDataSource">
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.SingleConnectionDataSource"
+          depends-on="databaseProperties">
         <property name="suppressClose" value="true"/>
         <property name="autoCommit" value="false"/>
 

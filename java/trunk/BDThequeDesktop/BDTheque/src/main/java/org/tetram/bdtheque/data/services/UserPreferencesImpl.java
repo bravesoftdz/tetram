@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
+import org.tetram.bdtheque.utils.StringUtils;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -21,6 +22,10 @@ import java.util.Properties;
 @SuppressWarnings("UnusedDeclaration")
 public class UserPreferencesImpl implements UserPreferences {
 
+    @NonNls
+    public static final String PREF_DATABASE = "database";
+    @NonNls
+    public static final String PREF_DATABASE_DEFAULT = null;
     @NonNls
     public static final String PREF_REP_IMAGES = "RepImages";
     @NonNls
@@ -49,6 +54,14 @@ public class UserPreferencesImpl implements UserPreferences {
     private ApplicationContext applicationContext;
     private Properties defaultPrefs = null;
     private Properties prefs = null;
+
+    public UserPreferencesImpl() {
+    }
+    // pour rester cohérent avec le reste, ce constructeur ne sert que lorsqu'on a besoin de l'instance en dehors de Spring
+    // @Autowired
+    public UserPreferencesImpl(ApplicationContext applicationContext) {
+        this.applicationContext = applicationContext;
+    }
 
     private Properties getDefaultPrefs() {
         if (defaultPrefs != null) return defaultPrefs;
@@ -147,7 +160,14 @@ public class UserPreferencesImpl implements UserPreferences {
         return Boolean.valueOf(getPrefs().getProperty(key));
     }
 
+    private File getFilePref(String key) {
+        String stringPref = getStringPref(key);
+        return StringUtils.isNullOrEmpty(stringPref) ? null : new File(stringPref);
+    }
+
     private Object setPref(String key, String value) {
+        if (StringUtils.isNullOrEmpty(value))
+            return getPrefs().remove(key);
         return getPrefs().setProperty(key, value);
     }
 
@@ -159,14 +179,18 @@ public class UserPreferencesImpl implements UserPreferences {
         return getPrefs().setProperty(key, String.valueOf(value));
     }
 
+    private Object setPref(String key, File value) {
+        return setPref(key, value == null ? null : value.getAbsolutePath());
+    }
+
     @Override
     public File getRepImages() {
-        return new File(getStringPref(PREF_REP_IMAGES));
+        return getFilePref(PREF_REP_IMAGES);
     }
 
     @Override
     public void setRepImages(File value) {
-        setPref(PREF_REP_IMAGES, value.getAbsolutePath());
+        setPref(PREF_REP_IMAGES, value);
     }
 
     @Override
@@ -217,6 +241,16 @@ public class UserPreferencesImpl implements UserPreferences {
     @Override
     public void setImagesStockees(boolean value) {
         setPref(PREF_IMAGES_STOCKEES, value);
+    }
+
+    @Override
+    public File getDatabase() {
+        return getFilePref(PREF_DATABASE);
+    }
+
+    @Override
+    public void setDatabaseUrl(File value) {
+        setPref(PREF_DATABASE, value);
     }
 
     @Override
