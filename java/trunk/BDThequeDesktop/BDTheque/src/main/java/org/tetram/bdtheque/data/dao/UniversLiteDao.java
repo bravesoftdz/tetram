@@ -7,5 +7,5 @@ import java.util.UUID;
 /**
  * Created by Thierry on 12/06/2014.
  */
-public interface UniversLiteDao extends DaoRO<UniversLite, UUID> {
+public interface UniversLiteDao extends DaoRO<UniversLite, UUID>, RepertoireLiteDao<UniversLite, Character> {
 }

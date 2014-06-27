@@ -78,6 +78,24 @@
         ]]>
     </select>
 
+    <select id="getInitiales" resultMap="org.tetram.bdtheque.data.dao.mappers.CommonMapper.InitialeEntityCharacter">
+        <![CDATA[
+        select
+            initialeNomPersonne "label", countInitiale "count", initialeNomPersonne "value"
+        from
+            vw_initiales_personnes
+        ]]>
+    </select>
+
+    <select id="getPersonneLiteByInitiale" resultMap="PersonneLite">
+        <![CDATA[
+        select
+            id_personne, nomPersonne
+        from
+            personnes_by_initiale(#{initiale})
+        ]]>
+    </select>
+
     <select id="checkUniquePersonne" resultType="UUID">
         <![CDATA[
         select

@@ -1,6 +1,5 @@
 package org.tetram.bdtheque.data.services;
 
-import javafx.beans.property.*;
 import org.jetbrains.annotations.NonNls;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;

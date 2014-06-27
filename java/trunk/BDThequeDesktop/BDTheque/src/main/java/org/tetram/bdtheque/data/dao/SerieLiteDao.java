@@ -7,5 +7,5 @@ import java.util.UUID;
 /**
  * Created by Thierry on 23/06/2014.
  */
-public interface SerieLiteDao<InitialeValueType> extends DaoRO<SerieLite, UUID>, RepertoireLiteDao<SerieLite, InitialeValueType> {
+public interface SerieLiteDao extends DaoRO<SerieLite, UUID>, RepertoireLiteDao<SerieLite, Character> {
 }

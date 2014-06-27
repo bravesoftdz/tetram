@@ -11,6 +11,7 @@ import java.util.UUID;
 /**
  * Created by Thierry on 29/05/2014.
  */
+@XMLFile("/org/tetram/bdtheque/data/dao/mappers/Edition.xml")
 public interface EditionMapper extends BaseMapperInterface {
     EditionLite getEditionLiteById(UUID id);
 

@@ -20,7 +20,6 @@ import org.tetram.bdtheque.gui.utils.Dialogs;
 import org.tetram.bdtheque.utils.I18nSupport;
 import org.tetram.bdtheque.utils.StringUtils;
 
-import javax.sql.DataSource;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Locale;

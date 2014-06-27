@@ -131,6 +131,24 @@
         ]]>
     </update>
 
+    <select id="getInitiales" resultMap="org.tetram.bdtheque.data.dao.mappers.CommonMapper.InitialeEntityCharacter">
+        <![CDATA[
+        select
+            initialeTitreSerie "label", countInitiale "count", initialeTitreSerie "value"
+        from
+            vw_initiales_series
+        ]]>
+    </select>
+
+    <select id="getSerieLiteByInitiale" resultMap="SerieLite">
+        <![CDATA[
+        select
+            id_serie, titreSerie, id_editeur, nomEditeur, id_collection, nomCollection
+        from
+            series_by_initiale(#{initiale})
+        ]]>
+    </select>
+
     <sql id="saveSerie">
         <![CDATA[
         update or insert into series (

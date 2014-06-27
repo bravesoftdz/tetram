@@ -2,6 +2,7 @@ package org.tetram.bdtheque.data.dao.mappers;
 
 import org.apache.ibatis.annotations.Param;
 import org.tetram.bdtheque.data.bean.*;
+import org.tetram.bdtheque.gui.utils.InitialeEntity;
 
 import java.util.List;
 import java.util.UUID;
@@ -9,6 +10,7 @@ import java.util.UUID;
 /**
  * Created by Thierry on 30/05/2014.
  */
+@XMLFile("/org/tetram/bdtheque/data/dao/mappers/Auteur.xml")
 public interface AuteurMapper extends BaseMapperInterface {
     PersonneLite getPersonneLiteById(UUID id);
 
@@ -31,4 +33,8 @@ public interface AuteurMapper extends BaseMapperInterface {
     int cleanAuteursParaBD(@Param("id") UUID idParaBD);
 
     int addAuteurParaBD(@Param("idParaBD") UUID idParaBD, @Param("auteur") AuteurParaBDLite auteur);
+
+    List<InitialeEntity<Character>> getInitiales(@Param("filtre") String filtre);
+
+    List<PersonneLite> getPersonneLiteByInitiale(@Param("initiale") Character initiale, @Param("filtre") String filtre);
 }

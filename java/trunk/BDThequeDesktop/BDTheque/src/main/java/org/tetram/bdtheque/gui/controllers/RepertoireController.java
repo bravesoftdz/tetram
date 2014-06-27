@@ -39,28 +39,35 @@ public class RepertoireController extends WindowController {
     @FXML
     private TreeView<AbstractEntity> tvAlbums;
     @FXML
+    private ChoiceBox<TypeRepertoireAlbumEntry> repertoireGroup;
+
+    @FXML
     private Tab tabSeries;
     @FXML
     private TreeView<AbstractEntity> tvSeries;
-    @FXML
-    private Tab tabUnivers;
-    @FXML
-    private TreeView tvUnivers;
-    @FXML
-    private Tab tabAuteurs;
-    @FXML
-    private TreeView tvAuteurs;
-    @FXML
-    private Tab tabParabd;
-    @FXML
-    private TreeView tvParabd;
-
-    @FXML
-    private ChoiceBox<TypeRepertoireAlbumEntry> repertoireGroup;
-
     @Autowired
     private SerieLiteDao serieLiteDao;
 
+    @FXML
+    private Tab tabUnivers;
+    @FXML
+    private TreeView<AbstractEntity> tvUnivers;
+    @Autowired
+    private UniversLiteDao universLiteDao;
+
+    @FXML
+    private Tab tabAuteurs;
+    @FXML
+    private TreeView<AbstractEntity> tvAuteurs;
+    @Autowired
+    private PersonneLiteDao personneLiteDao;
+
+    @FXML
+    private Tab tabParabd;
+    @FXML
+    private TreeView<AbstractEntity> tvParabd;
+    @Autowired
+    private ParaBDLiteDao paraBDLiteDao;
 
     @FXML
     void initialize() {
@@ -80,10 +87,13 @@ public class RepertoireController extends WindowController {
     public void refresh() {
         tvAlbums.setRoot(new InitialTreeItem(SpringContext.CONTEXT.getBean(repertoireGroup.getValue().daoClass)));
         tvSeries.setRoot(new InitialTreeItem(serieLiteDao));
+        tvUnivers.setRoot(new InitialTreeItem(universLiteDao));
+        tvAuteurs.setRoot(new InitialTreeItem(personneLiteDao));
+        tvParabd.setRoot(new InitialTreeItem(paraBDLiteDao));
     }
 
     enum TypeRepertoireAlbumEntry {
-        PAR_TITRE(I18nSupport.message("Titre"), AlbumLiteInitialeDao.class),
+        PAR_TITRE(I18nSupport.message("Titre"), AlbumLiteDao.class),
         PAR_SERIE(I18nSupport.message("Série"), AlbumLiteSerieDao.class),
         PAR_EDITEUR(I18nSupport.message("Editeur"), AlbumLiteEditeurDao.class),
         PAR_GENRE(I18nSupport.message("Genre"), AlbumLiteGenreDao.class),

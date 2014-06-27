@@ -8,6 +8,7 @@ import java.util.UUID;
 /**
  * Created by Thierry on 24/05/2014.
  */
+@XMLFile("/org/tetram/bdtheque/data/dao/mappers/Editeur.xml")
 public interface EditeurMapper extends BaseMapperInterface {
     EditeurLite getEditeurLiteById(UUID id);
 

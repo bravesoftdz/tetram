@@ -18,7 +18,7 @@ import java.util.UUID;
 @Lazy
 @Transactional
 @SuppressWarnings("UnusedDeclaration")
-public class AlbumLiteDaoImpl extends DaoROImpl<AlbumLite, UUID> implements AlbumLiteInitialeDao {
+public class AlbumLiteDaoImpl extends DaoROImpl<AlbumLite, UUID> implements AlbumLiteDao {
 
     @Autowired
     private AlbumMapper albumMapper;

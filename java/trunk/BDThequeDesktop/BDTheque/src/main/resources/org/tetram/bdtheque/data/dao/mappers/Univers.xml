@@ -70,6 +70,24 @@
         ]]>
     </select>
 
+    <select id="getInitiales" resultMap="org.tetram.bdtheque.data.dao.mappers.CommonMapper.InitialeEntityCharacter">
+        <![CDATA[
+        select
+            initialeNomUnivers "label", countInitiale "count", initialeNomUnivers "value"
+        from
+            initiales_univers(#{filtre})
+        ]]>
+    </select>
+
+    <select id="getUniversLiteByInitiale" resultMap="UniversLite">
+        <![CDATA[
+        select
+            id_univers, nomUnivers
+        from
+            univers_by_initiale(#{initiale}, #{filtre})
+        ]]>
+    </select>
+
     <select id="checkUniqueUnivers" resultType="UUID">
         <![CDATA[
         select

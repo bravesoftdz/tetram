@@ -2,7 +2,6 @@ package org.tetram.bdtheque.data.dao;
 
 import org.tetram.bdtheque.data.BeanUtils;
 import org.tetram.bdtheque.data.bean.AbstractDBEntity;
-import org.tetram.bdtheque.data.bean.AlbumLite;
 import org.tetram.bdtheque.gui.utils.InitialeEntity;
 
 import java.util.List;
@@ -22,12 +21,12 @@ public interface RepertoireLiteDao<T extends AbstractDBEntity, InitialeValueType
         return list;
     }
 
-    List<? extends InitialeEntity<InitialeValueType>> getListInitiales(String filtre);
+    List<InitialeEntity<InitialeValueType>> getListInitiales(String filtre);
 
     default String getUnknownLabel() {
         return null;
     }
 
-    List<AlbumLite> getListEntitiesByInitiale(InitialeEntity<InitialeValueType> initiale, String filtre);
+    List<T> getListEntitiesByInitiale(InitialeEntity<InitialeValueType> initiale, String filtre);
 
 }

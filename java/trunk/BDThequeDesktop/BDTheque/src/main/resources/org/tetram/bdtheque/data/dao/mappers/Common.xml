@@ -11,7 +11,8 @@
     <resultMap id="InitialeEntityInteger" type="org.tetram.bdtheque.gui.utils.InitialeEntity" extends="InitialeEntity">
         <result column="value" property="value" javaType="Integer"/>
     </resultMap>
-    <resultMap id="InitialeEntityCharacter" type="org.tetram.bdtheque.gui.utils.InitialeEntity" extends="InitialeEntity">
+    <resultMap id="InitialeEntityCharacter" type="org.tetram.bdtheque.gui.utils.InitialeEntity"
+               extends="InitialeEntity">
         <result column="value" property="value" javaType="java.lang.Character"/>
     </resultMap>
 

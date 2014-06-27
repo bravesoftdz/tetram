@@ -9,6 +9,7 @@ import java.util.UUID;
 /**
  * Created by Thierry on 24/05/2014.
  */
+@XMLFile("/org/tetram/bdtheque/data/dao/mappers/Collection.xml")
 public interface CollectionMapper extends BaseMapperInterface {
     CollectionLite getCollectionLiteById(UUID id);
 

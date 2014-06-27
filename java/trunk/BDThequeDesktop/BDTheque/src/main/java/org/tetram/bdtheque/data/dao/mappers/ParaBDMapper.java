@@ -3,6 +3,7 @@ package org.tetram.bdtheque.data.dao.mappers;
 import org.apache.ibatis.annotations.Param;
 import org.tetram.bdtheque.data.bean.ParaBD;
 import org.tetram.bdtheque.data.bean.ParaBDLite;
+import org.tetram.bdtheque.gui.utils.InitialeEntity;
 
 import java.util.List;
 import java.util.UUID;
@@ -10,6 +11,7 @@ import java.util.UUID;
 /**
  * Created by Thierry on 25/05/2014.
  */
+@XMLFile("/org/tetram/bdtheque/data/dao/mappers/ParaBD.xml")
 public interface ParaBDMapper extends BaseMapperInterface {
     ParaBDLite getParaBDLiteById(UUID id);
 
@@ -18,4 +20,8 @@ public interface ParaBDMapper extends BaseMapperInterface {
     List<ParaBDLite> getParaBDLiteBySerieIdByAuteurId(@Param("idSerie") UUID idSerie, @Param("idAuteur") UUID idAuteur);
 
     int acheter(@Param("id") UUID id, @Param("achat") boolean previsionAchat);
+
+    List<InitialeEntity<UUID>> getInitiales(@Param("filtre") String filtre);
+
+    List<ParaBDLite> getParaBDLiteBySerieId(@Param("idSerie") UUID idSerie, @Param("filtre") String filtre);
 }

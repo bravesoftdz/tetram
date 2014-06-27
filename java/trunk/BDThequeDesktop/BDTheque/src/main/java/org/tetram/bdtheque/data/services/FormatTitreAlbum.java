@@ -19,6 +19,11 @@ public enum FormatTitreAlbum {
         this.format = format;
     }
 
+    public static FormatTitreAlbum fromValue(int value) {
+        for (FormatTitreAlbum formatTitreAlbum : values()) if (formatTitreAlbum.value == value) return formatTitreAlbum;
+        return null;
+    }
+
     public String getLabel() {
         return MessageFormat.format(format, I18nSupport.message("Album"), I18nSupport.message("Série"), I18nSupport.message("Tome"));
     }
@@ -30,10 +35,5 @@ public enum FormatTitreAlbum {
     @Override
     public String toString() {
         return getLabel();
-    }
-
-    public static FormatTitreAlbum fromValue(int value) {
-        for (FormatTitreAlbum formatTitreAlbum : values()) if (formatTitreAlbum.value == value) return formatTitreAlbum;
-        return null;
     }
 }

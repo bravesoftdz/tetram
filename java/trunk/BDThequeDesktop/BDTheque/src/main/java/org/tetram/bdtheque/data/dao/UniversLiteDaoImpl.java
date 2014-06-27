@@ -1,10 +1,14 @@
 package org.tetram.bdtheque.data.dao;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.tetram.bdtheque.data.bean.UniversLite;
+import org.tetram.bdtheque.data.dao.mappers.UniversMapper;
+import org.tetram.bdtheque.gui.utils.InitialeEntity;
 
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -15,4 +19,17 @@ import java.util.UUID;
 @Transactional
 @SuppressWarnings("UnusedDeclaration")
 public class UniversLiteDaoImpl extends DaoROImpl<UniversLite, UUID> implements UniversLiteDao {
+
+    @Autowired
+    private UniversMapper universMapper;
+
+    @Override
+    public List<InitialeEntity<Character>> getListInitiales(String filtre) {
+        return universMapper.getInitiales(filtre);
+    }
+
+    @Override
+    public List<UniversLite> getListEntitiesByInitiale(InitialeEntity<Character> initiale, String filtre) {
+        return universMapper.getUniversLiteByInitiale(initiale.getValue(), filtre);
+    }
 }

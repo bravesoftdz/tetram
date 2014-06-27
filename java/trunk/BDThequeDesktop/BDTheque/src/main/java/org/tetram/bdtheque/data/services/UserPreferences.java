@@ -1,9 +1,5 @@
 package org.tetram.bdtheque.data.services;
 
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.StringProperty;
-
 import java.io.File;
 import java.util.Locale;
 
