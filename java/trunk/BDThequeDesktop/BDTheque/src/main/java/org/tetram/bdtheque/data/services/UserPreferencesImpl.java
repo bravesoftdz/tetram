@@ -57,6 +57,7 @@ public class UserPreferencesImpl implements UserPreferences {
 
     public UserPreferencesImpl() {
     }
+
     // pour rester cohérent avec le reste, ce constructeur ne sert que lorsqu'on a besoin de l'instance en dehors de Spring
     // @Autowired
     public UserPreferencesImpl(ApplicationContext applicationContext) {

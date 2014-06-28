@@ -7,11 +7,11 @@
         <property name="src.dir" value="firebird"/>
         <property name="dest.dir" value="${artifact.output.path}"/>
 
-        <copy todir="${artifact.output.path}" >
+        <copy todir="${artifact.output.path}">
             <fileset dir="${src.dir}" includes="**"/>
         </copy>
 
-        <delete file="${artifact.output.path}\BDTheque.html" />
-        <delete file="${artifact.output.path}\BDTheque.jnlp" />
+        <delete file="${artifact.output.path}\BDTheque.html"/>
+        <delete file="${artifact.output.path}\BDTheque.jnlp"/>
     </target>
 </project>

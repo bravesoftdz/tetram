@@ -33,7 +33,11 @@
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="dataSource"/>
         <property name="configLocation" value="classpath:org/tetram/bdtheque/config/mybatis-config.xml"/>
-        <property name="mapperLocations" value="classpath:org/tetram/bdtheque/data/dao/mappers/*.xml"/>
+        <!--
+        en production, le "*" de classpath n'est pas nécessaire, mais impératif pour les tests
+        il devient inutile pour les tests si les xml des mappers sont dans un package qui n'existe pas dans les tests
+        -->
+        <property name="mapperLocations" value="classpath*:org/tetram/bdtheque/data/dao/mappers/*.xml"/>
     </bean>
     <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
         <constructor-arg index="0" ref="sqlSessionFactory"/>
