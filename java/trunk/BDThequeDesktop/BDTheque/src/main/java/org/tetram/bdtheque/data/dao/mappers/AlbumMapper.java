@@ -6,6 +6,7 @@ import org.tetram.bdtheque.data.bean.AlbumLite;
 import org.tetram.bdtheque.data.bean.ValeurListe;
 import org.tetram.bdtheque.gui.utils.InitialeEntity;
 
+import java.time.Year;
 import java.util.List;
 import java.util.UUID;
 
@@ -28,9 +29,9 @@ public interface AlbumMapper extends BaseMapperInterface {
 
     List<AlbumLite> getAlbumLiteBySerie(@Param("idSerie") UUID idSerie, @Param("filtre") String filtre);
 
-    List<InitialeEntity<Integer>> getInitialesAnnees(@Param("filtre") String filtre);
+    List<InitialeEntity<Year>> getInitialesAnnees(@Param("filtre") String filtre);
 
-    List<AlbumLite> getAlbumLiteByAnnee(@Param("annee") Integer anneeParution, @Param("filtre") String filtre);
+    List<AlbumLite> getAlbumLiteByAnnee(@Param("annee") Year anneeParution, @Param("filtre") String filtre);
 
     List<InitialeEntity<UUID>> getInitialesEditeurs(@Param("filtre") String filtre);
 

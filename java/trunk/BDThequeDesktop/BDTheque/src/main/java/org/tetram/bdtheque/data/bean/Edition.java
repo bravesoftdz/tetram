@@ -4,8 +4,9 @@ import org.tetram.bdtheque.SpringContext;
 import org.tetram.bdtheque.data.BeanUtils;
 import org.tetram.bdtheque.data.dao.ValeurListeDao;
 
+import java.time.LocalDate;
+import java.time.Year;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -25,9 +26,9 @@ public class Edition extends AbstractDBEntity {
     private ValeurListe formatEdition;
     private ValeurListe orientation;
     private ValeurListe sensLecture;
-    private Integer anneeEdition;
+    private Year anneeEdition;
     private Integer nombreDePages;
-    private Integer anneeCote;
+    private Year anneeCote;
     private Double prix;
     private Double prixCote;
     private boolean couleur;
@@ -38,7 +39,7 @@ public class Edition extends AbstractDBEntity {
     private boolean offert;
     private boolean gratuit;
     private String isbn;
-    private Date dateAchat;
+    private LocalDate dateAchat;
     private String notes;
     private String numeroPerso;
     private List<CouvertureLite> couvertures = new ArrayList<>();
@@ -90,11 +91,11 @@ public class Edition extends AbstractDBEntity {
         return getEditeur() == null || getCollection() == null || !getCollection().getEditeur().equals(getEditeur()) ? null : getCollection().getId();
     }
 
-    public Integer getAnneeEdition() {
+    public Year getAnneeEdition() {
         return anneeEdition;
     }
 
-    public void setAnneeEdition(Integer anneeEdition) {
+    public void setAnneeEdition(Year anneeEdition) {
         this.anneeEdition = anneeEdition;
     }
 
@@ -106,11 +107,11 @@ public class Edition extends AbstractDBEntity {
         this.nombreDePages = nombreDePages;
     }
 
-    public Integer getAnneeCote() {
+    public Year getAnneeCote() {
         return anneeCote;
     }
 
-    public void setAnneeCote(Integer anneeCote) {
+    public void setAnneeCote(Year anneeCote) {
         this.anneeCote = anneeCote;
     }
 
@@ -194,11 +195,11 @@ public class Edition extends AbstractDBEntity {
         this.isbn = BeanUtils.trimOrNull(isbn);
     }
 
-    public Date getDateAchat() {
+    public LocalDate getDateAchat() {
         return dateAchat;
     }
 
-    public void setDateAchat(Date dateAchat) {
+    public void setDateAchat(LocalDate dateAchat) {
         this.dateAchat = dateAchat;
     }
 

@@ -51,7 +51,7 @@ public class EditionDaoImpl extends DaoRWImpl<Edition, UUID> implements EditionD
                 EditionComplete.ISBN := cs;
             end
         */
-        int anneeCote = edition.getAnneeCote() == null ? 0 : edition.getAnneeCote();
+        int anneeCote = edition.getAnneeCote() == null ? 0 : edition.getAnneeCote().getValue();
         double prixCote = edition.getPrixCote() == null ? 0 : edition.getPrixCote();
         if (anneeCote * prixCote == 0 && anneeCote + prixCote != 0)
             // une cote doit être composée d'une année ET d'un prix

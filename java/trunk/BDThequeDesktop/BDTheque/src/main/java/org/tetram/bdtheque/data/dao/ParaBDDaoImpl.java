@@ -46,7 +46,7 @@ public class ParaBDDaoImpl extends DaoRWImpl<ParaBD, UUID> implements ParaBDDao 
         if (object.getCategorieParaBD() == null)
             throw new ConsistencyException(I18nSupport.message("type.parabd.obligatoire"));
 
-        int anneeCote = object.getAnneeCote() == null ? 0 : object.getAnneeCote();
+        int anneeCote = object.getAnneeCote() == null ? 0 : object.getAnneeCote().getValue();
         double prixCote = object.getPrixCote() == null ? 0 : object.getPrixCote();
         if (anneeCote * prixCote == 0 && anneeCote + prixCote != 0)
             // une cote doit être composée d'une année ET d'un prix

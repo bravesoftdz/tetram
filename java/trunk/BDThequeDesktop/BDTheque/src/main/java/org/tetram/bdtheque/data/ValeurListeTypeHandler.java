@@ -39,7 +39,11 @@ public class ValeurListeTypeHandler extends BaseTypeHandler<ValeurListe> {
         v.setValeur(rs.getInt(columnName));
         if (rs.wasNull())
             return null;
-        v.setTexte(rs.getString(LABEL_PREFIX + columnName));
+        try {
+            v.setTexte(rs.getString(LABEL_PREFIX + columnName));
+        } catch (Exception e) {
+            v.setTexte(null);
+        }
         try {
             v.setPosition(rs.getInt(POSITION_PREFIX + columnName));
         } catch (Exception e) {
@@ -59,7 +63,11 @@ public class ValeurListeTypeHandler extends BaseTypeHandler<ValeurListe> {
         v.setValeur(cs.getInt(columnIndex));
         if (cs.wasNull())
             return null;
-        v.setTexte(cs.getString(LABEL_PREFIX + cs.getMetaData().getColumnName(columnIndex)));
+        try {
+            v.setTexte(cs.getString(LABEL_PREFIX + cs.getMetaData().getColumnName(columnIndex)));
+        } catch (Exception e) {
+            v.setTexte(null);
+        }
         try {
             v.setPosition(cs.getInt(POSITION_PREFIX + cs.getMetaData().getColumnName(columnIndex)));
         } catch (Exception e) {

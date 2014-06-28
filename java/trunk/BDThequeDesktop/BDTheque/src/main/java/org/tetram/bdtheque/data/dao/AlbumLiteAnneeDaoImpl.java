@@ -9,6 +9,7 @@ import org.tetram.bdtheque.data.dao.mappers.AlbumMapper;
 import org.tetram.bdtheque.gui.utils.InitialeEntity;
 import org.tetram.bdtheque.utils.I18nSupport;
 
+import java.time.Year;
 import java.util.List;
 import java.util.UUID;
 
@@ -26,7 +27,7 @@ public class AlbumLiteAnneeDaoImpl extends DaoROImpl<AlbumLite, UUID> implements
     private AlbumMapper albumMapper;
 
     @Override
-    public List<InitialeEntity<Integer>> getListInitiales(String filtre) {
+    public List<InitialeEntity<Year>> getListInitiales(String filtre) {
         return albumMapper.getInitialesAnnees(filtre);
     }
 
@@ -36,7 +37,7 @@ public class AlbumLiteAnneeDaoImpl extends DaoROImpl<AlbumLite, UUID> implements
     }
 
     @Override
-    public List<AlbumLite> getListEntitiesByInitiale(InitialeEntity<Integer> initiale, String filtre) {
+    public List<AlbumLite> getListEntitiesByInitiale(InitialeEntity<Year> initiale, String filtre) {
         return albumMapper.getAlbumLiteByAnnee(initiale.getValue(), filtre);
     }
 }

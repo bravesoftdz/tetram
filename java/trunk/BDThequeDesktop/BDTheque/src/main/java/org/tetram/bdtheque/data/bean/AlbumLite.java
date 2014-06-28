@@ -2,6 +2,8 @@ package org.tetram.bdtheque.data.bean;
 
 import org.tetram.bdtheque.data.BeanUtils;
 
+import java.time.Month;
+import java.time.Year;
 import java.util.Comparator;
 import java.util.UUID;
 
@@ -48,7 +50,8 @@ public class AlbumLite extends AbstractDBEntity {
     private String serie = "";
     private UUID idEditeur;
     private String editeur = "";
-    private Integer anneeParution, moisParution = 0;
+    private Year anneeParution = null;
+    private Month moisParution = null;
     private boolean stock = true;
     private boolean integrale;
     private boolean horsSerie;
@@ -120,19 +123,19 @@ public class AlbumLite extends AbstractDBEntity {
         this.editeur = BeanUtils.trimOrNull(editeur);
     }
 
-    public Integer getAnneeParution() {
+    public Year getAnneeParution() {
         return anneeParution;
     }
 
-    public void setAnneeParution(Integer anneeParution) {
+    public void setAnneeParution(Year anneeParution) {
         this.anneeParution = anneeParution;
     }
 
-    public Integer getMoisParution() {
-        return moisParution;
+    public Month getMoisParution() {
+        return anneeParution == null || anneeParution.equals(Year.of(0)) ? null : moisParution;
     }
 
-    public void setMoisParution(Integer moisParution) {
+    public void setMoisParution(Month moisParution) {
         this.moisParution = moisParution;
     }
 

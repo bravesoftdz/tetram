@@ -4,6 +4,8 @@ import org.tetram.bdtheque.SpringContext;
 import org.tetram.bdtheque.data.BeanUtils;
 import org.tetram.bdtheque.data.dao.ValeurListeDao;
 
+import java.time.LocalDate;
+import java.time.Year;
 import java.util.*;
 
 /**
@@ -12,9 +14,9 @@ import java.util.*;
 @SuppressWarnings("UnusedDeclaration")
 public class ParaBD extends AbstractDBEntity {
 
-    private Integer anneeEdition;
+    private Year anneeEdition;
     private ValeurListe categorieParaBD;
-    private Integer anneeCote;
+    private Year anneeCote;
     private String titreParaBD;
     private Set<AuteurParaBDLite> auteurs = new HashSet<>();
     private String description;
@@ -27,7 +29,7 @@ public class ParaBD extends AbstractDBEntity {
     private boolean stock;
     private boolean offert;
     private boolean gratuit;
-    private Date dateAchat;
+    private LocalDate dateAchat;
     private Set<UniversLite> univers = new HashSet<>();
     private Set<UniversLite> universFull = new HashSet<>();
     private List<PhotoLite> photos = new ArrayList<>();
@@ -37,19 +39,19 @@ public class ParaBD extends AbstractDBEntity {
         categorieParaBD = valeurListeDao.getDefaultTypeParaBD();
     }
 
-    public Integer getAnneeEdition() {
+    public Year getAnneeEdition() {
         return anneeEdition;
     }
 
-    public void setAnneeEdition(Integer anneeEdition) {
+    public void setAnneeEdition(Year anneeEdition) {
         this.anneeEdition = anneeEdition;
     }
 
-    public Integer getAnneeCote() {
+    public Year getAnneeCote() {
         return anneeCote;
     }
 
-    public void setAnneeCote(Integer anneeCote) {
+    public void setAnneeCote(Year anneeCote) {
         this.anneeCote = anneeCote;
     }
 
@@ -165,11 +167,11 @@ public class ParaBD extends AbstractDBEntity {
         this.gratuit = gratuit;
     }
 
-    public Date getDateAchat() {
+    public LocalDate getDateAchat() {
         return dateAchat;
     }
 
-    public void setDateAchat(Date dateAchat) {
+    public void setDateAchat(LocalDate dateAchat) {
         this.dateAchat = dateAchat;
     }
 

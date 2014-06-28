@@ -3,8 +3,9 @@ package org.tetram.bdtheque.data.bean;
 import org.tetram.bdtheque.SpringContext;
 import org.tetram.bdtheque.data.BeanUtils;
 import org.tetram.bdtheque.data.dao.ValeurListeDao;
-import org.tetram.bdtheque.utils.TypeUtils;
 
+import java.time.Month;
+import java.time.Year;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
@@ -50,7 +51,8 @@ public class Album extends AbstractDBEntity {
     private boolean complet;
     private String titreAlbum;
     private Serie serie;
-    private Integer moisParution, anneeParution;
+    private Month moisParution;
+    private Year anneeParution;
     private Integer tome;
     private Integer tomeDebut, tomeFin;
     private boolean horsSerie;
@@ -104,19 +106,19 @@ public class Album extends AbstractDBEntity {
         return getSerie() == null ? null : getSerie().getId();
     }
 
-    public Integer getMoisParution() {
-        return TypeUtils.isNullOrZero(anneeParution) ? null : moisParution;
+    public Month getMoisParution() {
+        return anneeParution == null || anneeParution.equals(Year.of(0)) ? null : moisParution;
     }
 
-    public void setMoisParution(Integer moisParution) {
+    public void setMoisParution(Month moisParution) {
         this.moisParution = moisParution;
     }
 
-    public Integer getAnneeParution() {
+    public Year getAnneeParution() {
         return anneeParution;
     }
 
-    public void setAnneeParution(Integer anneeParution) {
+    public void setAnneeParution(Year anneeParution) {
         this.anneeParution = anneeParution;
     }
 

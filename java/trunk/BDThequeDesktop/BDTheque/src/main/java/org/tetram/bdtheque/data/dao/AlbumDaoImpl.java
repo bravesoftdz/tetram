@@ -18,7 +18,6 @@ import org.tetram.bdtheque.data.dao.mappers.ImageMapper;
 import org.tetram.bdtheque.data.dao.mappers.UniversMapper;
 import org.tetram.bdtheque.data.services.UserPreferences;
 import org.tetram.bdtheque.utils.I18nSupport;
-import org.tetram.bdtheque.utils.Range;
 import org.tetram.bdtheque.utils.StringUtils;
 import org.tetram.bdtheque.utils.TypeUtils;
 
@@ -58,8 +57,10 @@ public class AlbumDaoImpl extends DaoRWImpl<Album, UUID> implements AlbumDao {
         if (StringUtils.isNullOrEmpty(object.getTitreAlbum()) && object.getSerie() == null)
             throw new ConsistencyException(I18nSupport.message("titre.obligatoire.album.sans.serie"));
 
+/* ne devrait pas être utile puisque Month est une énumération
         if (object.getMoisParution() != null && !new Range<>(1, 12).contains(object.getMoisParution()))
             throw new ConsistencyException(I18nSupport.message("mois.parution.incorrect"));
+         */
 
         // validate vérifierait qu'on a bien sélectionné un album... or en création, on ne connait pas encore l'idAlbum à ce moment là
         for (Edition edition : object.getEditions()) editionDao.validateFromAlbum(edition);

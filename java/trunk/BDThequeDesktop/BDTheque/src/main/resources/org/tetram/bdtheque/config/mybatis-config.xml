@@ -26,6 +26,11 @@
         <typeAlias type="org.tetram.bdtheque.data.UUIDTypeHandler" alias="UUIDTypeHandler"/>
         <typeAlias type="java.net.URL" alias="URL"/>
         <typeAlias type="org.tetram.bdtheque.data.URLTypeHandler" alias="URLTypeHandler"/>
+        <typeAlias type="java.time.LocalDate" alias="LocalDate"/>
+        <typeAlias type="org.tetram.bdtheque.data.LocalDateTypeHandler" alias="LocalDateTypeHandler"/>
+        <typeAlias type="java.time.Year" alias="Year"/>
+        <typeAlias type="org.tetram.bdtheque.data.YearTypeHandler" alias="YearTypeHandler"/>
+        <typeAlias type="java.time.Month" alias="Month"/>
 
         <typeAlias type="org.tetram.bdtheque.data.bean.ValeurListe" alias="ValeurListe"/>
         <typeAlias type="org.tetram.bdtheque.data.ValeurListeTypeHandler" alias="ValeurListeTypeHandler"/>
@@ -63,6 +68,9 @@
     <typeHandlers>
         <typeHandler handler="UUIDTypeHandler"/>
         <typeHandler handler="URLTypeHandler"/>
+        <typeHandler handler="LocalDateTypeHandler"/>
+        <typeHandler handler="YearTypeHandler"/>
+        <typeHandler handler="org.apache.ibatis.type.EnumOrdinalTypeHandler" javaType="Month"/>
         <typeHandler handler="org.apache.ibatis.type.EnumOrdinalTypeHandler" javaType="MetierAuteur"/>
         <typeHandler handler="org.apache.ibatis.type.EnumOrdinalTypeHandler" javaType="ValeurListeCategorie"/>
         <typeHandler handler="ValeurListeTypeHandler"/>

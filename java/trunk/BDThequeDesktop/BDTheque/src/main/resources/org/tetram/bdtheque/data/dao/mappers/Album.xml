@@ -225,7 +225,7 @@
         ]]>
     </select>
 
-    <select id="getInitialesAnnees" resultMap="org.tetram.bdtheque.data.dao.mappers.CommonMapper.InitialeEntityInteger">
+    <select id="getInitialesAnnees" resultMap="org.tetram.bdtheque.data.dao.mappers.CommonMapper.InitialeEntityYear">
         <![CDATA[
         select
             anneeParution "label", countAnnee "count", nullif(anneeParution, -1) "value"

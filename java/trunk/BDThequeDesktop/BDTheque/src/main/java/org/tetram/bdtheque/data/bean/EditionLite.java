@@ -3,12 +3,15 @@ package org.tetram.bdtheque.data.bean;
 import org.tetram.bdtheque.data.BeanUtils;
 import org.tetram.bdtheque.utils.I18nSupport;
 import org.tetram.bdtheque.utils.StringUtils;
+import org.tetram.bdtheque.utils.TypeUtils;
 
+import java.time.Year;
 import java.util.Comparator;
 
 /**
  * Created by Thierry on 24/05/2014.
  */
+@SuppressWarnings("UnusedDeclaration")
 public class EditionLite extends AbstractDBEntity {
 
     public static Comparator<EditionLite> DEFAULT_COMPARATOR = new Comparator<EditionLite>() {
@@ -33,16 +36,16 @@ public class EditionLite extends AbstractDBEntity {
             return 0;
         }
     };
-    private Integer anneeEdition;
+    private Year anneeEdition;
     private String isbn;
     private EditeurLite editeur;
     private CollectionLite collection;
 
-    public Integer getAnneeEdition() {
+    public Year getAnneeEdition() {
         return anneeEdition;
     }
 
-    public void setAnneeEdition(Integer anneeEdition) {
+    public void setAnneeEdition(Year anneeEdition) {
         this.anneeEdition = anneeEdition;
     }
 
@@ -75,7 +78,7 @@ public class EditionLite extends AbstractDBEntity {
         String s;
         s = StringUtils.ajoutString("", BeanUtils.formatTitre(editeur.getNomEditeur()), " ");
         s = StringUtils.ajoutString(s, BeanUtils.formatTitre(collection.getNomCollection()), " ", "(", ")");
-        s = StringUtils.ajoutString(s, StringUtils.nonZero(anneeEdition), " ", "[", "]");
+        s = StringUtils.ajoutString(s, TypeUtils.nonZero(anneeEdition), " ", "[", "]");
         s = StringUtils.ajoutString(s, BeanUtils.formatISBN(isbn), " - ", I18nSupport.message("isbn") + " ");
         return s;
     }

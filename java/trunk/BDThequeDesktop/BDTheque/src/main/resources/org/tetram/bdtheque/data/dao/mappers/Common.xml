@@ -15,6 +15,10 @@
                extends="InitialeEntity">
         <result column="value" property="value" javaType="java.lang.Character"/>
     </resultMap>
+    <resultMap id="InitialeEntityYear" type="org.tetram.bdtheque.gui.utils.InitialeEntity"
+               extends="InitialeEntity">
+        <result column="value" property="value" javaType="Year"/>
+    </resultMap>
 
     <sql id="autoIncKey">select udf_createguid() from rdb$database</sql>
 
