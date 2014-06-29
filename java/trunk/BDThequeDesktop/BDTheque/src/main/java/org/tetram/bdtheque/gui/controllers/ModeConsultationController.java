@@ -1,10 +1,14 @@
 package org.tetram.bdtheque.gui.controllers;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
+import org.controlsfx.dialog.Dialogs;
 import org.springframework.stereotype.Controller;
 import org.tetram.bdtheque.SpringFxmlLoader;
+import org.tetram.bdtheque.data.bean.AbstractDBEntity;
 
 import java.io.IOException;
 import java.net.URL;
@@ -13,32 +17,34 @@ import java.util.ResourceBundle;
 @Controller
 public class ModeConsultationController extends WindowController {
 
-    @FXML // ResourceBundle that was given to the FXMLLoader
+    @FXML
     private ResourceBundle resources;
-
-    @FXML // URL location of the FXML file that was given to the FXMLLoader
+    @FXML
     private URL location;
 
-    @FXML // fx:id="detailPane"
-    private ScrollPane detailPane; // Value injected by FXMLLoader
-    @FXML // fx:id="repertoirePane"
-    private AnchorPane repertoirePane; // Value injected by FXMLLoader
+    @FXML
+    private ScrollPane detailPane;
+    @FXML
+    private AnchorPane repertoirePane;
 
     public AnchorPane getRepertoirePane() {
         return repertoirePane;
     }
 
     @FXML
-        // This method is called by the FXMLLoader when initialization is complete
     void initialize() throws IOException {
-        assert detailPane != null : "fx:id=\"detailPane\" was not injected: check your FXML file 'modeConsultation.fxml'.";
-        assert repertoirePane != null : "fx:id=\"repertoirePane\" was not injected: check your FXML file 'modeConsultation.fxml'.";
-
         RepertoireController repertoireController = SpringFxmlLoader.load("repertoire.fxml");
         repertoirePane.getChildren().add(repertoireController.getView());
         AnchorPane.setBottomAnchor(repertoireController.getView(), 0.0);
         AnchorPane.setTopAnchor(repertoireController.getView(), 0.0);
         AnchorPane.setLeftAnchor(repertoireController.getView(), 0.0);
         AnchorPane.setRightAnchor(repertoireController.getView(), 0.0);
+
+        repertoireController.selectedEntityProperty().addListener(new ChangeListener<AbstractDBEntity>() {
+            @Override
+            public void changed(ObservableValue<? extends AbstractDBEntity> observable, AbstractDBEntity oldValue, AbstractDBEntity newValue) {
+                Dialogs.create().message(newValue.toString()).showInformation();
+            }
+        });
     }
 }

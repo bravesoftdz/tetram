@@ -28,8 +28,8 @@ public class TypeUtils {
         return s1.equalsIgnoreCase(s2);
     }
 
-    public static <T> boolean sameValue(T d1, T d2) {
-        return d1 == d2 || (d1 != null && d1.equals(d2));
+    public static <T> boolean sameValue(T v1, T v2) {
+        return v1 == v2 || (v1 != null && v1.equals(v2));
     }
 
     public static String nonZero(Year year) {

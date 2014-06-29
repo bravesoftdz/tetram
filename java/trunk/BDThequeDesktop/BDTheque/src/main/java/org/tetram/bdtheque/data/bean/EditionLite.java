@@ -2,6 +2,7 @@ package org.tetram.bdtheque.data.bean;
 
 import org.tetram.bdtheque.data.BeanUtils;
 import org.tetram.bdtheque.utils.I18nSupport;
+import org.tetram.bdtheque.utils.ISBNUtils;
 import org.tetram.bdtheque.utils.StringUtils;
 import org.tetram.bdtheque.utils.TypeUtils;
 
@@ -79,7 +80,7 @@ public class EditionLite extends AbstractDBEntity {
         s = StringUtils.ajoutString("", BeanUtils.formatTitre(editeur.getNomEditeur()), " ");
         s = StringUtils.ajoutString(s, BeanUtils.formatTitre(collection.getNomCollection()), " ", "(", ")");
         s = StringUtils.ajoutString(s, TypeUtils.nonZero(anneeEdition), " ", "[", "]");
-        s = StringUtils.ajoutString(s, BeanUtils.formatISBN(isbn), " - ", I18nSupport.message("isbn") + " ");
+        s = StringUtils.ajoutString(s, ISBNUtils.formatISBN(isbn), " - ", I18nSupport.message("isbn") + " ");
         return s;
     }
 

@@ -14,7 +14,6 @@ import org.tetram.bdtheque.SpringContext;
 import org.tetram.bdtheque.SpringFxmlLoader;
 import org.tetram.bdtheque.data.bean.Serie;
 import org.tetram.bdtheque.data.dao.SerieDao;
-import org.tetram.bdtheque.data.services.FormatTitreAlbum;
 import org.tetram.bdtheque.data.services.UserPreferences;
 import org.tetram.bdtheque.gui.utils.Dialogs;
 import org.tetram.bdtheque.utils.I18nSupport;
@@ -59,20 +58,12 @@ public class MainController extends WindowController {
     @FXML
     private MenuItem mnuDBFile;
 
-    private ModeConsultationController modeConsultationController;
-
     @NonNls
     @Autowired
     private SingleConnectionDataSource dataSource;
 
     @FXML
     void initialize() throws IOException {
-        assert menuBar != null : "fx:id=\"menuBar\" was not injected: check your FXML file 'main.fxml'.";
-        assert toolBar != null : "fx:id=\"toolBar\" was not injected: check your FXML file 'main.fxml'.";
-        assert buttonTest != null : "fx:id=\"buttonTest\" was not injected: check your FXML file 'main.fxml'.";
-        assert detailPane != null : "fx:id=\"detailPane\" was not injected: check your FXML file 'main.fxml'.";
-        assert mnuLanguage != null : "fx:id=\"mnuLanguage\" was not injected: check your FXML file 'main.fxml'.";
-
         mnuDBFile.textProperty().bind(new ReadOnlyStringPropertyBase() {
             @Override
             public String get() {
@@ -91,7 +82,7 @@ public class MainController extends WindowController {
             }
         });
 
-        modeConsultationController = SpringFxmlLoader.load("modeConsultation.fxml");
+        ModeConsultationController modeConsultationController = SpringFxmlLoader.load("modeConsultation.fxml");
         detailPane.getChildren().add(modeConsultationController.getView());
         AnchorPane.setBottomAnchor(modeConsultationController.getView(), 0.0);
         AnchorPane.setTopAnchor(modeConsultationController.getView(), 0.0);
@@ -99,7 +90,7 @@ public class MainController extends WindowController {
         AnchorPane.setRightAnchor(modeConsultationController.getView(), 0.0);
     }
 
-    public void menuQuitClick(ActionEvent actionEvent) {
+    public void menuQuitClick(@SuppressWarnings("UnusedParameters") ActionEvent actionEvent) {
         dialog.close();
     }
 
@@ -127,19 +118,10 @@ public class MainController extends WindowController {
         }
     }
 
-    public void showPreferences(ActionEvent actionEvent) throws IOException {
-        final FormatTitreAlbum formatTitreAlbum = userPreferences.getFormatTitreAlbum();
+    public void showPreferences(@SuppressWarnings("UnusedParameters") ActionEvent actionEvent) throws IOException {
         PreferencesController preferencesController = Dialogs.showPreferences(this.getDialog());
-
-        if (formatTitreAlbum != userPreferences.getFormatTitreAlbum())
-            org.controlsfx.dialog.Dialogs.create().message("KO").showError();
-        else
-            org.controlsfx.dialog.Dialogs.create().message("OK").showInformation();
-
-        if (preferencesController.getResult() == DialogController.DialogResult.OK) {
+        if (preferencesController.getResult() == DialogController.DialogResult.OK)
             SpringContext.CONTEXT.getBean(RepertoireController.class).refresh();
-        }
-
     }
 
 }

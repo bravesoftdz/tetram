@@ -1,7 +1,6 @@
 package org.tetram.bdtheque.data;
 
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.Nullable;
 import org.tetram.bdtheque.SpringContext;
 import org.tetram.bdtheque.data.bean.AuteurAlbumLite;
@@ -10,15 +9,7 @@ import org.tetram.bdtheque.data.bean.UniversLite;
 import org.tetram.bdtheque.data.services.UserPreferences;
 import org.tetram.bdtheque.utils.I18nSupport;
 import org.tetram.bdtheque.utils.StringUtils;
-import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
-import org.xml.sax.helpers.DefaultHandler;
 
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.*;
 
 /**
@@ -26,17 +17,9 @@ import java.util.*;
  */
 public abstract class BeanUtils {
 
-    @NonNls
-    public static final String SEARCH_ISBN_GROUP = "//ISBNRangeMessage/EAN.UCCPrefixes/EAN.UCC[Prefix='%2$s']/Rules/Rule[ValueLower<=%1$s and ValueUpper>=%1$s]/Length";
-    @NonNls
-    public static final String SEARCH_ISBN_PUBLISHER = "//ISBNRangeMessage/RegistrationGroups/Group[Prefix='%2$s-%3$s']/Rules/Rule[ValueLower<=%1$s and ValueUpper>=%1$s]/Length";
-    @NonNls
-    public static final String RESOURCE_ISBN_RANGES_XML = "/org/tetram/bdtheque/isbn_ranges.xml";
     public static final Map<Boolean, String> RES_TOME;
     public static final Map<Boolean, String> RES_HORSERIE;
     public static final Map<Boolean, String> RES_INTEGRALE;
-    private static HashMap<String, List<ISBNRule>> isbnPrefixes;
-    private static HashMap<String, List<ISBNRule>> isbnGroups;
 
     static {
         Map<Boolean, String> aMap;
@@ -89,154 +72,6 @@ public abstract class BeanUtils {
         if (bOther == null) return nullsFirst ? 1 : -1;
 
         return bThis.compareTo(bOther);
-    }
-
-    private static void decodeISBNRules() {
-        if (isbnPrefixes != null) return;
-
-        InputStream inputStream = ClassLoader.class.getResourceAsStream(RESOURCE_ISBN_RANGES_XML);
-        try {
-            isbnPrefixes = new HashMap<>();
-            isbnGroups = new HashMap<>();
-
-            SAXParser parseur = SAXParserFactory.newInstance().newSAXParser();
-            parseur.parse(inputStream, new DefaultHandler() {
-
-                private ISBNRule currentRule;
-                public String tmpValue;
-                public HashMap<String, List<ISBNRule>> currentList;
-                public String prefix;
-
-                @Override
-                public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
-                    @NonNls String s = qName.toLowerCase(Locale.US);
-                    switch (s) {
-                        case "ean.uccprefixes":
-                            this.currentList = isbnPrefixes;
-                            break;
-                        case "registrationgroups":
-                            this.currentList = isbnGroups;
-                            break;
-                        case "rule":
-                            this.currentRule = new ISBNRule();
-                            break;
-                    }
-                    this.tmpValue = "";
-                }
-
-                @Override
-                public void endElement(String uri, String localName, String qName) throws SAXException {
-                    @NonNls String s = qName.toLowerCase(Locale.US);
-                    switch (s) {
-                        case "valuelower":
-                            this.currentRule.valueLower = Integer.valueOf(this.tmpValue);
-                            break;
-                        case "range":
-                            Integer p = this.tmpValue.indexOf('-');
-                            this.currentRule.valueLower = Integer.valueOf(this.tmpValue.substring(0, p));
-                            this.tmpValue = this.tmpValue.substring(p + 1);
-                            // volontairement pas de break pour continuer sur valueupper
-                            // break;
-                            this.currentRule.valueUpper = Integer.valueOf(this.tmpValue);
-                            break;
-                        case "valueupper":
-                            this.currentRule.valueUpper = Integer.valueOf(this.tmpValue);
-                            break;
-                        case "length":
-                            this.currentRule.length = Integer.valueOf(this.tmpValue);
-                            break;
-                        case "prefix":
-                            this.prefix = this.tmpValue;
-                            break;
-                        case "rule":
-                            List<ISBNRule> list;
-                            if (!this.currentList.containsKey(this.prefix))
-                                list = new ArrayList<>();
-                            else
-                                list = this.currentList.get(this.prefix);
-                            list.add(this.currentRule);
-                            this.currentList.put(this.prefix, list);
-                            this.currentRule = null;
-                            break;
-                    }
-                    this.tmpValue = null;
-                }
-
-                @SuppressWarnings("StringConcatenationMissingWhitespace")
-                @Override
-                public void characters(char[] ch, int start, int length) throws SAXException {
-                    if (this.tmpValue != null)
-                        this.tmpValue += new String(ch, start, length);
-                }
-            });
-
-        } catch (final ParserConfigurationException | IOException | SAXException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                inputStream.close();
-            } catch (final IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    private static int getLengthForPrefix(HashMap<String, List<ISBNRule>> map, String prefix, int value) {
-        List<ISBNRule> rules = map.get(prefix);
-        if ((rules == null) || rules.isEmpty()) return 0;
-        for (final ISBNRule rule : rules)
-            if ((rule.valueLower <= value) && (rule.valueUpper >= value))
-                return rule.length;
-        return 0;
-    }
-
-    @Nullable
-    public static String formatISBN(String isbn) {
-        if (isbn == null) return null;
-
-        decodeISBNRules();
-
-        isbn = isbn.toUpperCase(Locale.US).substring(0, Math.min(isbn.length(), 13));
-        @NonNls String prefix = "978";
-        String s = isbn;
-        if (s.length() > 10) {
-            prefix = s.substring(0, 3);
-            s = s.substring(3, Math.min(s.length(), 13));
-        }
-        if (s.length() < 10) return isbn;
-
-        String s1;
-
-        s1 = s.substring(0, 7);
-        Integer groupSize = getLengthForPrefix(isbnPrefixes, prefix, Integer.valueOf(s1));
-        @NonNls String group = s.substring(0, groupSize);
-
-        s1 = s.substring(groupSize, groupSize + 7);
-        Integer publisherSize = getLengthForPrefix(isbnGroups, prefix + '-' + group, Integer.valueOf(s1));
-        String publisher = s.substring(groupSize, groupSize + publisherSize);
-
-        StringBuilder result = new StringBuilder(13 + 4);
-        if (isbn.length() > 10) {
-            result.append(prefix);
-            result.append('-');
-        }
-        result.append(group);
-        result.append('-');
-        result.append(publisher);
-        result.append('-');
-        result.append(s.substring(groupSize + publisherSize, 9));
-        result.append('-');
-        result.append(s.substring(s.length() - 1, s.length()));
-        return result.toString();
-    }
-
-    public static String clearISBN(final String code) {
-        final StringBuilder result = new StringBuilder(code.length());
-        for (final char c : code.toUpperCase(Locale.US).toCharArray())
-            if (Character.isDigit(c) || (c == 'X')) {
-                result.append(c);
-            }
-        return result.toString();
     }
 
     public static String formatTitre(final String titre) {
@@ -330,7 +165,4 @@ public abstract class BeanUtils {
         return !list.contains(univers);
     }
 
-    private static class ISBNRule {
-        int valueLower, valueUpper, length;
-    }
 }

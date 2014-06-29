@@ -3,7 +3,8 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<TabPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+<TabPane xmlns:fx="http://javafx.com/fxml/1" fx:id="tabs" maxHeight="-Infinity" maxWidth="-Infinity"
+         minHeight="-Infinity"
          minWidth="-Infinity"
          prefWidth="339.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8"
          fx:controller="org.tetram.bdtheque.gui.controllers.RepertoireController">
