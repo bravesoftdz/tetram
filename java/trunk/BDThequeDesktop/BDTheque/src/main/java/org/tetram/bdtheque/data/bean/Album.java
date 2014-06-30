@@ -1,5 +1,7 @@
 package org.tetram.bdtheque.data.bean;
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import org.tetram.bdtheque.SpringContext;
 import org.tetram.bdtheque.data.BeanUtils;
 import org.tetram.bdtheque.data.dao.ValeurListeDao;
@@ -48,7 +50,7 @@ public class Album extends AbstractDBEntity {
         }
     };
     private static Album defaultAlbum = null;
-    private boolean complet;
+    private BooleanProperty complet = new SimpleBooleanProperty(this, "complet", false);
     private String titreAlbum;
     private Serie serie;
     private Month moisParution;
@@ -78,12 +80,16 @@ public class Album extends AbstractDBEntity {
         return defaultAlbum;
     }
 
-    public boolean isComplet() {
+    public boolean getComplet() {
+        return complet.get();
+    }
+
+    public BooleanProperty completProperty() {
         return complet;
     }
 
     public void setComplet(boolean complet) {
-        this.complet = complet;
+        this.complet.set(complet);
     }
 
     public String getTitreAlbum() {

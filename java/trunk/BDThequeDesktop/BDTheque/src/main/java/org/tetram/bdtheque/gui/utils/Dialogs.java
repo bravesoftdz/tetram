@@ -1,5 +1,8 @@
 package org.tetram.bdtheque.gui.utils;
 
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
@@ -17,30 +20,31 @@ import java.io.IOException;
  */
 public class Dialogs extends Stage {
 
-    private DialogController dialogController;
+    private ReadOnlyObjectWrapper<DialogController> dialogController = new ReadOnlyObjectWrapper<>(this, "dialogController", null);
 
-    public Dialogs(Window owner, @NonNls String url) throws IOException {
-        this(owner, url, true);
-    }
-
-    public Dialogs(Window owner, @NonNls String url, boolean resizable) throws IOException {
+    private Dialogs(Window owner, @NonNls String url, boolean resizable) {
         initModality(Modality.APPLICATION_MODAL);
         initOwner(owner);
-        dialogController = SpringFxmlLoader.load(url, this);
-        Scene scene = new Scene((Parent) dialogController.getView());
+        dialogController.set(SpringFxmlLoader.load(url, this));
+        Scene scene = new Scene((Parent) getDialogController().getView());
         setScene(scene);
         setResizable(resizable);
         sizeToScene();
     }
 
     @SuppressWarnings("unchecked")
-    public static <T extends WindowController> T showPreferences(Stage owner) throws IOException {
+    public static <T extends WindowController> T showPreferences(Stage owner) {
         final Dialogs dialogs = new Dialogs(owner, "preferences.fxml", false);
         dialogs.showAndWait();
         return (T) dialogs.getDialogController();
     }
 
-    public WindowController getDialogController() {
-        return dialogController;
+    public DialogController getDialogController() {
+        return dialogController.get();
+    }
+
+    @SuppressWarnings("UnusedDeclaration")
+    public ReadOnlyObjectProperty<DialogController> dialogControllerProperty() {
+        return dialogController.getReadOnlyProperty();
     }
 }

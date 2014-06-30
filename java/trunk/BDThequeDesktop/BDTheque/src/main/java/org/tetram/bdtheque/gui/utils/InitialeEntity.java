@@ -52,14 +52,6 @@ public class InitialeEntity<T> extends AbstractEntity {
 
     @Override
     public String buildLabel() {
-/*
-            case FMode of
-              vmAlbumsSerie, vmAlbumsSerieUnivers, vmParaBDSerie, vmParaBDSerieUnivers:
-                Text := '<Sans série>';
-            else
-              Text := '<Inconnu>';
-            end
- */
         return StringUtils.ajoutString(label.getValueSafe(), StringUtils.nonZero(getCount()), " ", "(", ")");
     }
 

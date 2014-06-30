@@ -18,12 +18,12 @@ public class SpringFxmlLoader {
     @NonNls
     private static final String ORG_TETRAM_BDTHEQUE_GUI = "/org/tetram/bdtheque/gui/";
 
-    public static <T extends WindowController> T load(@NonNls String url) throws IOException {
+    public static <T extends WindowController> T load(@NonNls String url) throws RuntimeException {
         return load(url, null);
     }
 
-    @SuppressWarnings("unchecked")
-    public static <T extends WindowController> T load(@NonNls String url, Stage stage) throws IOException {
+    @SuppressWarnings({"unchecked", "ThrowFromFinallyBlock"})
+    public static <T extends WindowController> T load(@NonNls String url, Stage stage) throws RuntimeException {
         InputStream fxmlStream = null;
         try {
             fxmlStream = SpringFxmlLoader.class.getResourceAsStream(ORG_TETRAM_BDTHEQUE_GUI + url);
@@ -45,9 +45,17 @@ public class SpringFxmlLoader {
             controller.controllerLoaded();
 
             return (T) controller;
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
         } finally {
             if (fxmlStream != null) {
-                fxmlStream.close();
+                try {
+                    fxmlStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    throw new RuntimeException(e);
+                }
             }
         }
     }

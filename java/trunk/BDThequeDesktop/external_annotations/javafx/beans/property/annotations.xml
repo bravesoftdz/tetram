@@ -1,4 +1,7 @@
 <root>
+    <item name='javafx.beans.property.ReadOnlyObjectWrapper ReadOnlyObjectWrapper(java.lang.Object, java.lang.String, T) 1'>
+        <annotation name='org.jetbrains.annotations.NonNls'/>
+    </item>
     <item name='javafx.beans.property.SimpleBooleanProperty SimpleBooleanProperty(java.lang.Object, java.lang.String, boolean) 1'>
         <annotation name='org.jetbrains.annotations.NonNls'/>
     </item>
