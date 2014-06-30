@@ -1,6 +1,5 @@
 package org.tetram.bdtheque.gui.utils;
 
-import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.scene.Parent;
@@ -12,8 +11,6 @@ import org.jetbrains.annotations.NonNls;
 import org.tetram.bdtheque.SpringFxmlLoader;
 import org.tetram.bdtheque.gui.controllers.DialogController;
 import org.tetram.bdtheque.gui.controllers.WindowController;
-
-import java.io.IOException;
 
 /**
  * Created by Thierry on 24/06/2014.

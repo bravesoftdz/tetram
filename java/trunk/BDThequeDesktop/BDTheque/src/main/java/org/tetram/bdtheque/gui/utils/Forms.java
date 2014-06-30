@@ -3,7 +3,6 @@ package org.tetram.bdtheque.gui.utils;
 import javafx.beans.property.ObjectProperty;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
 import org.tetram.bdtheque.SpringFxmlLoader;
