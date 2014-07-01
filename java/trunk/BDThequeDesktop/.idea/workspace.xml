@@ -1505,7 +1505,11 @@
       <created>1404212479550</created>
       <updated>1404212479550</updated>
     </task>
-    <option name="localTasksCounter" value="60" />
+    <task id="LOCAL-00060">
+      <created>1404229927198</created>
+      <updated>1404229927199</updated>
+    </task>
+    <option name="localTasksCounter" value="61" />
     <servers />
   </component>
   <component name="TodoView" selected-index="0">
@@ -1823,6 +1827,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.8986784" vertical-offset="0" max-vertical-offset="969">
           <caret line="36" column="51" selection-start-line="36" selection-start-column="51" selection-end-line="36" selection-end-column="51" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1889,6 +1894,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.7004405" vertical-offset="67" max-vertical-offset="748">
           <caret line="52" column="13" selection-start-line="52" selection-start-column="13" selection-end-line="52" selection-end-column="13" />
+          <folding />
         </state>
       </provider>
     </entry>
