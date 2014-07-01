@@ -1,8 +1,16 @@
 package org.tetram.bdtheque.data.bean;
 
+import javafx.beans.property.*;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableSet;
+import javafx.collections.SetChangeListener;
+import org.tetram.bdtheque.AutoTrimStringProperty;
 import org.tetram.bdtheque.SpringContext;
 import org.tetram.bdtheque.data.BeanUtils;
 import org.tetram.bdtheque.data.dao.ValeurListeDao;
+import org.tetram.bdtheque.utils.TypeUtils;
 
 import java.time.Month;
 import java.time.Year;
@@ -15,7 +23,7 @@ import java.util.UUID;
  * Created by Thierry on 24/05/2014.
  */
 @SuppressWarnings("UnusedDeclaration")
-public class Album extends AbstractDBEntity {
+public class Album extends AbstractDBEntity implements EvaluatedEntity {
 
     public static Comparator<Album> DEFAULT_COMPARATOR = new Comparator<Album>() {
         @Override
@@ -48,29 +56,47 @@ public class Album extends AbstractDBEntity {
         }
     };
     private static Album defaultAlbum = null;
-    private boolean complet;
-    private String titreAlbum;
-    private Serie serie;
-    private Month moisParution;
-    private Year anneeParution;
-    private Integer tome;
-    private Integer tomeDebut, tomeFin;
-    private boolean horsSerie;
-    private boolean integrale;
+    private BooleanProperty complet = new SimpleBooleanProperty(this, "complet", false);
+    private StringProperty titreAlbum = new AutoTrimStringProperty(this, "titreAlbum", null);
+    private ObjectProperty<Serie> serie = new SimpleObjectProperty<>(this, "serie", null);
+    private ObjectProperty<Month> moisParution = new SimpleObjectProperty<>(this, "moisParution", null);
+    private ObjectProperty<Year> anneeParution = new SimpleObjectProperty<>(this, "anneeParution", null);
+    private ObjectProperty<Integer> tome = new SimpleObjectProperty<>(this, "tome", null);
+    private ObjectProperty<Integer> tomeDebut = new SimpleObjectProperty<>(this, "tomeDebut", null);
+    private ObjectProperty<Integer> tomeFin = new SimpleObjectProperty<>(this, "tomeFin", null);
+    private BooleanProperty horsSerie = new SimpleBooleanProperty(this, "horsSerie", false);
+    private BooleanProperty integrale = new SimpleBooleanProperty(this, "integrale", false);
     private Set<AuteurAlbumLite> auteurs = new HashSet<>();
     private Set<AuteurAlbumLite> scenaristes = null;
     private Set<AuteurAlbumLite> dessinateurs = null;
     private Set<AuteurAlbumLite> coloristes = null;
-    private String sujet;
-    private String notes;
-    private Set<Edition> editions = new HashSet<>();
-    private ValeurListe notation;
-    private Set<UniversLite> univers = new HashSet<>();
-    private Set<UniversLite> universFull = new HashSet<>();
+    private StringProperty sujet = new AutoTrimStringProperty(this, "sujet", null);
+    private StringProperty notes = new AutoTrimStringProperty(this, "notes", null);
+    @SuppressWarnings("Convert2Diamond")
+    private SetProperty<Edition> editions = new SimpleSetProperty<>(this, "editions", FXCollections.observableSet(new HashSet<Edition>()));
+    private ObjectProperty<ValeurListe> notation = new SimpleObjectProperty<>(this, "notation", null);
+    private SetProperty<UniversLite> univers = new SimpleSetProperty<>(this, "univers", FXCollections.observableSet(new HashSet<>()));
+    private SetProperty<UniversLite> universFull = new SimpleSetProperty<>(this, "universFull", FXCollections.observableSet(new HashSet<>()));
 
     public Album() {
         ValeurListeDao valeurListeDao = SpringContext.CONTEXT.getBean(ValeurListeDao.class);
-        notation = valeurListeDao.getDefaultNotation();
+        notation.set(valeurListeDao.getDefaultNotation());
+
+
+        final SetChangeListener<UniversLite> universSetChangeListener = new SetChangeListener<UniversLite>() {
+            @Override
+            public void onChanged(Change<? extends UniversLite> change) {
+                universFull.set(FXCollections.observableSet(BeanUtils.checkAndBuildListUniversFull(getUniversFull(), getUnivers(), getSerie())));
+            }
+        };
+        serie.addListener(new ChangeListener<Serie>() {
+            @Override
+            public void changed(ObservableValue<? extends Serie> observable, Serie oldValue, Serie newValue) {
+                if (oldValue != null) oldValue.universProperty().removeListener(universSetChangeListener);
+                if (newValue != null) newValue.universProperty().addListener(universSetChangeListener);
+            }
+        });
+        univers.addListener(universSetChangeListener);
     }
 
     public static Album getDefaultAlbum() {
@@ -78,28 +104,40 @@ public class Album extends AbstractDBEntity {
         return defaultAlbum;
     }
 
-    public boolean getComplet() {
+    public boolean isComplet() {
+        return complet.get();
+    }
+
+    public BooleanProperty completProperty() {
         return complet;
     }
 
     public void setComplet(boolean complet) {
-        this.complet = complet;
+        this.complet.set(complet);
     }
 
     public String getTitreAlbum() {
-        return BeanUtils.trimOrNull(titreAlbum);
+        return titreAlbum.get();
+    }
+
+    public StringProperty titreAlbumProperty() {
+        return titreAlbum;
     }
 
     public void setTitreAlbum(String titreAlbum) {
-        this.titreAlbum = BeanUtils.trimOrNull(titreAlbum);
+        this.titreAlbum.set(titreAlbum);
     }
 
     public Serie getSerie() {
+        return serie.get();
+    }
+
+    public ObjectProperty<Serie> serieProperty() {
         return serie;
     }
 
     public void setSerie(Serie serie) {
-        this.serie = serie;
+        this.serie.set(serie);
     }
 
     public UUID getIdSerie() {
@@ -107,59 +145,87 @@ public class Album extends AbstractDBEntity {
     }
 
     public Month getMoisParution() {
-        return anneeParution == null || anneeParution.equals(Year.of(0)) ? null : moisParution;
+        return TypeUtils.isNullOrZero(getAnneeParution()) ? null : moisParution.get();
+    }
+
+    public ObjectProperty<Month> moisParutionProperty() {
+        return moisParution;
     }
 
     public void setMoisParution(Month moisParution) {
-        this.moisParution = moisParution;
+        this.moisParution.set(moisParution);
     }
 
     public Year getAnneeParution() {
+        return anneeParution.get();
+    }
+
+    public ObjectProperty<Year> anneeParutionProperty() {
         return anneeParution;
     }
 
     public void setAnneeParution(Year anneeParution) {
-        this.anneeParution = anneeParution;
+        this.anneeParution.set(anneeParution);
     }
 
     public Integer getTome() {
+        return tome.get();
+    }
+
+    public ObjectProperty<Integer> tomeProperty() {
         return tome;
     }
 
     public void setTome(Integer tome) {
-        this.tome = tome;
+        this.tome.set(tome);
     }
 
     public Integer getTomeDebut() {
+        return tomeDebut.get();
+    }
+
+    public ObjectProperty<Integer> tomeDebutProperty() {
         return tomeDebut;
     }
 
     public void setTomeDebut(Integer tomeDebut) {
-        this.tomeDebut = tomeDebut;
+        this.tomeDebut.set(tomeDebut);
     }
 
     public Integer getTomeFin() {
+        return tomeFin.get();
+    }
+
+    public ObjectProperty<Integer> tomeFinProperty() {
         return tomeFin;
     }
 
     public void setTomeFin(Integer tomeFin) {
-        this.tomeFin = tomeFin;
+        this.tomeFin.set(tomeFin);
     }
 
     public boolean isHorsSerie() {
+        return horsSerie.get();
+    }
+
+    public BooleanProperty horsSerieProperty() {
         return horsSerie;
     }
 
     public void setHorsSerie(boolean horsSerie) {
-        this.horsSerie = horsSerie;
+        this.horsSerie.set(horsSerie);
     }
 
     public boolean isIntegrale() {
+        return integrale.get();
+    }
+
+    public BooleanProperty integraleProperty() {
         return integrale;
     }
 
     public void setIntegrale(boolean integrale) {
-        this.integrale = integrale;
+        this.integrale.set(integrale);
     }
 
     public Set<AuteurAlbumLite> getAuteurs() {
@@ -256,27 +322,39 @@ public class Album extends AbstractDBEntity {
     }
 
     public String getSujet() {
-        return BeanUtils.trimOrNull(sujet);
+        return sujet.get();
+    }
+
+    public StringProperty sujetProperty() {
+        return sujet;
     }
 
     public void setSujet(String sujet) {
-        this.sujet = BeanUtils.trimOrNull(sujet);
+        this.sujet.set(sujet);
     }
 
     public String getNotes() {
-        return BeanUtils.trimOrNull(notes);
+        return notes.get();
+    }
+
+    public StringProperty notesProperty() {
+        return notes;
     }
 
     public void setNotes(String notes) {
-        this.notes = BeanUtils.trimOrNull(notes);
+        this.notes.set(notes);
     }
 
     public Set<Edition> getEditions() {
+        return editions.get();
+    }
+
+    public SetProperty<Edition> editionsProperty() {
         return editions;
     }
 
     public void setEditions(Set<Edition> editions) {
-        this.editions = editions;
+        this.editions.set(FXCollections.observableSet(editions));
     }
 
     public boolean addEdition(Edition edition) {
@@ -288,23 +366,34 @@ public class Album extends AbstractDBEntity {
     }
 
     public ValeurListe getNotation() {
+        return notation.get();
+    }
+
+    public ObjectProperty<ValeurListe> notationProperty() {
         return notation;
     }
 
     public void setNotation(ValeurListe notation) {
-        this.notation = notation == null || notation.getValeur() == 0 ? SpringContext.CONTEXT.getBean(ValeurListeDao.class).getDefaultNotation() : notation;
+        this.notation.set(notation == null || notation.getValeur() == 0 ? SpringContext.CONTEXT.getBean(ValeurListeDao.class).getDefaultNotation() : notation);
     }
 
     public Set<UniversLite> getUnivers() {
+        return univers.get();
+    }
+
+    public SetProperty<UniversLite> universProperty() {
         return univers;
     }
 
     public void setUnivers(Set<UniversLite> univers) {
-        this.univers = univers;
+        this.univers.set(FXCollections.observableSet(univers));
     }
 
-    public Set<UniversLite> getUniversFull() {
-        universFull = BeanUtils.checkAndBuildListUniversFull(universFull, getUnivers(), serie);
+    public ObservableSet<UniversLite> getUniversFull() {
+        return universFull.get();
+    }
+
+    public SetProperty<UniversLite> universFullProperty() {
         return universFull;
     }
 

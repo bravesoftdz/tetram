@@ -35,6 +35,10 @@ public interface UserPreferences {
 
     void setAntiAliasing(boolean value);
 
+    boolean isAfficheNoteListes();
+
+    void setAfficheNoteListes(boolean value);
+
     boolean isImagesStockees();
 
     void setImagesStockees(boolean value);

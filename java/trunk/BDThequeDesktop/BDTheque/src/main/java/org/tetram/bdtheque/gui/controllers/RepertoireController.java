@@ -13,15 +13,20 @@ import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.tetram.bdtheque.SpringContext;
 import org.tetram.bdtheque.data.bean.AbstractDBEntity;
 import org.tetram.bdtheque.data.bean.AbstractEntity;
+import org.tetram.bdtheque.data.bean.EvaluatedEntity;
+import org.tetram.bdtheque.data.bean.ValeurListe;
 import org.tetram.bdtheque.data.dao.*;
 import org.tetram.bdtheque.data.dao.mappers.XMLFile;
+import org.tetram.bdtheque.data.services.UserPreferences;
 import org.tetram.bdtheque.gui.utils.InitialeEntity;
+import org.tetram.bdtheque.gui.utils.NotationResource;
 import org.tetram.bdtheque.utils.I18nSupport;
 
 import java.net.URL;
@@ -69,6 +74,9 @@ public class RepertoireController extends WindowController {
     private TreeView<AbstractEntity> tvParabd;
     @Autowired
     private ParaBDLiteDao paraBDLiteDao;
+
+    @Autowired
+    private UserPreferences userPreferences;
 
     private ObjectProperty<AbstractDBEntity> selectedEntity = new SimpleObjectProperty<>();
     private ObjectProperty<InfoTab> currentInfoTab = new SimpleObjectProperty<>();
@@ -236,6 +244,12 @@ public class RepertoireController extends WindowController {
         public InitialTreeItem(RepertoireLiteDao dao, AbstractEntity value) {
             super(value);
             this.dao = dao;
+            if (userPreferences.isAfficheNoteListes() && value instanceof EvaluatedEntity) {
+                final ValeurListe notation = ((EvaluatedEntity) value).getNotation();
+                final NotationResource resource = NotationResource.fromValue(notation.getValeur());
+                if (notation.getValeur() > 900 && resource != null)
+                    this.setGraphic(new ImageView("/org/tetram/bdtheque/graphics/png/16x16/" + resource.getResource()));
+            }
         }
 
         @Override

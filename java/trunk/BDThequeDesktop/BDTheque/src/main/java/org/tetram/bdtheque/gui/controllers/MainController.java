@@ -31,7 +31,7 @@ public class MainController extends WindowController {
     @NonNls
     public static final UUID ID_SERIE_SILLAGE = StringUtils.GUIDStringToUUID("{69302EDB-6ED6-4DA3-A2E1-65B7B12BCB51}");
     @Autowired
-    UserPreferences userPreferences;
+    private UserPreferences userPreferences;
     @Autowired
     private SerieDao serieDao;
 

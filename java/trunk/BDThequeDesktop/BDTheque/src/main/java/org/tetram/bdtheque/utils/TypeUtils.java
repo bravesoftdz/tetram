@@ -21,6 +21,9 @@ public class TypeUtils {
     public static boolean isNullOrZero(Integer value) {
         return value == null || Integer.valueOf(0).equals(value);
     }
+    public static boolean isNullOrZero(Year value) {
+        return value == null || Year.of(0).equals(value);
+    }
 
     public static boolean sameValue(String s1, String s2) {
         s1 = s1 == null ? "" : s1;

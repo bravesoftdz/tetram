@@ -15,7 +15,7 @@ import java.util.*;
  */
 @SuppressWarnings("UnusedDeclaration")
 @DaoScriptImpl.ScriptInfo(typeData = 7)
-public class Serie extends AbstractScriptEntity {
+public class Serie extends AbstractScriptEntity implements EvaluatedEntity {
 
     private StringProperty titreSerie = new SimpleStringProperty(this, "titreSerie", null);
     private ObjectProperty<Boolean> terminee = new SimpleObjectProperty<>(this, "terminee", null);
@@ -44,7 +44,7 @@ public class Serie extends AbstractScriptEntity {
     private ObjectProperty<ValeurListe> orientation = new SimpleObjectProperty<>(this, "orientation", null);
     private ObjectProperty<ValeurListe> sensLecture = new SimpleObjectProperty<>(this, "sensLecture", null);
     private ObjectProperty<ValeurListe> notation = new SimpleObjectProperty<>(this, "notation", null);
-    private Set<UniversLite> univers = new SimpleSetProperty<>(this, "univers", FXCollections.observableSet(new HashSet<>()));
+    private SetProperty<UniversLite> univers = new SimpleSetProperty<>(this, "univers", FXCollections.observableSet(new HashSet<>()));
 
     public Serie() {
         ValeurListeDao valeurListeDao = SpringContext.CONTEXT.getBean(ValeurListeDao.class);
@@ -369,6 +369,10 @@ public class Serie extends AbstractScriptEntity {
         return notation.get();
     }
 
+    public ObjectProperty<ValeurListe> notationProperty() {
+        return notation;
+    }
+
     public void setNotation(ValeurListe notation) {
         this.notation.set(notation == null || notation.getValeur() == 0 ? SpringContext.CONTEXT.getBean(ValeurListeDao.class).getDefaultNotation() : notation);
     }
@@ -377,8 +381,12 @@ public class Serie extends AbstractScriptEntity {
         return univers;
     }
 
+    public SetProperty<UniversLite> universProperty() {
+        return univers;
+    }
+
     public void setUnivers(Set<UniversLite> univers) {
-        this.univers = univers;
+        this.univers.set(FXCollections.observableSet(univers));
     }
 
     @SuppressWarnings("SimplifiableIfStatement")

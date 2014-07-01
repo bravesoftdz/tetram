@@ -15,7 +15,7 @@ import java.util.Comparator;
  * Created by Thierry on 24/05/2014.
  */
 @SuppressWarnings("UnusedDeclaration")
-public class SerieLite extends AbstractDBEntity {
+public class SerieLite extends AbstractDBEntity implements EvaluatedEntity {
 
     public static Comparator<SerieLite> DEFAULT_COMPARATOR = new Comparator<SerieLite>() {
         @Override
@@ -81,12 +81,12 @@ public class SerieLite extends AbstractDBEntity {
         return notation.get();
     }
 
-    public void setNotation(ValeurListe notation) {
-        this.notation.set(notation == null || notation.getValeur() == 0 ? SpringContext.CONTEXT.getBean(ValeurListeDao.class).getDefaultNotation() : notation);
-    }
-
     public ObjectProperty<ValeurListe> notationProperty() {
         return notation;
+    }
+
+    public void setNotation(ValeurListe notation) {
+        this.notation.set(notation == null || notation.getValeur() == 0 ? SpringContext.CONTEXT.getBean(ValeurListeDao.class).getDefaultNotation() : notation);
     }
 
     @Override

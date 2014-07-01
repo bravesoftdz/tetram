@@ -20,6 +20,7 @@ import javafx.util.StringConverter;
 import org.jetbrains.annotations.NonNls;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.tetram.bdtheque.data.dao.mappers.XMLFile;
 import org.tetram.bdtheque.data.services.FormatTitreAlbum;
 import org.tetram.bdtheque.data.services.UserPreferences;
 import org.tetram.bdtheque.utils.FileUtils;
@@ -33,6 +34,7 @@ import java.util.Locale;
  * Created by Thierry on 24/06/2014.
  */
 @Controller
+@XMLFile("/org/tetram/bdtheque/gui/preferences.fxml")
 public class PreferencesController extends DialogController {
 
     UserPreferencesProperties preferencesProperties;
@@ -52,6 +54,8 @@ public class PreferencesController extends DialogController {
     private ScrollPane tabOptionsDiverses;
     @FXML
     private ChoiceBox<FormatTitreAlbum> formatTitreAlbum;
+    @FXML
+    private CheckBox afficheNotesListes;
     @FXML
     private CheckBox serieObligatoireAlbums;
     @FXML
@@ -109,6 +113,7 @@ public class PreferencesController extends DialogController {
         serieObligatoireParaBD.selectedProperty().bindBidirectional(preferencesProperties.serieObligatoireParaBDProperty);
         antiAliasing.selectedProperty().bindBidirectional(preferencesProperties.antiAliasingProperty);
         imagesStockees.selectedProperty().bindBidirectional(preferencesProperties.imagesStockeesProperty);
+        afficheNotesListes.selectedProperty().bindBidirectional(preferencesProperties.afficheNotesListesProperty);
         Bindings.bindBidirectional(repImages.textProperty(), preferencesProperties.repImagesProperty, new StringConverter<File>() {
             @Override
             public String toString(File object) {
@@ -160,7 +165,7 @@ public class PreferencesController extends DialogController {
         ObjectProperty<File> repImagesProperty = new ObjectPropertyBase<File>() {
             @Override
             public Object getBean() {
-                return this;
+                return userPreferences;
             }
 
             @NonNls
@@ -184,7 +189,7 @@ public class PreferencesController extends DialogController {
         ObjectProperty<FormatTitreAlbum> formatTitreAlbumProperty = new ObjectPropertyBase<FormatTitreAlbum>() {
             @Override
             public Object getBean() {
-                return this;
+                return userPreferences;
             }
 
             @NonNls
@@ -208,7 +213,7 @@ public class PreferencesController extends DialogController {
         BooleanProperty serieObligatoireAlbumsProperty = new BooleanPropertyBase() {
             @Override
             public Object getBean() {
-                return this;
+                return userPreferences;
             }
 
             @NonNls
@@ -232,7 +237,7 @@ public class PreferencesController extends DialogController {
         BooleanProperty serieObligatoireParaBDProperty = new BooleanPropertyBase() {
             @Override
             public Object getBean() {
-                return this;
+                return userPreferences;
             }
 
             @NonNls
@@ -256,7 +261,7 @@ public class PreferencesController extends DialogController {
         BooleanProperty antiAliasingProperty = new BooleanPropertyBase() {
             @Override
             public Object getBean() {
-                return this;
+                return userPreferences;
             }
 
             @NonNls
@@ -280,7 +285,7 @@ public class PreferencesController extends DialogController {
         BooleanProperty imagesStockeesProperty = new BooleanPropertyBase() {
             @Override
             public Object getBean() {
-                return this;
+                return userPreferences;
             }
 
             @NonNls
@@ -301,10 +306,34 @@ public class PreferencesController extends DialogController {
                 super.set(newValue);
             }
         };
+        BooleanProperty afficheNotesListesProperty = new BooleanPropertyBase() {
+            @Override
+            public Object getBean() {
+                return userPreferences;
+            }
+
+            @NonNls
+            @Override
+            public String getName() {
+                return "afficheNotesListesProperty";
+            }
+
+            @Override
+            public boolean get() {
+                super.get();
+                return userPreferences.isAfficheNoteListes();
+            }
+
+            @Override
+            public void set(boolean newValue) {
+                userPreferences.setAfficheNoteListes(newValue);
+                super.set(newValue);
+            }
+        };
         ObjectProperty<Locale> localeProperty = new ObjectPropertyBase<Locale>() {
             @Override
             public Object getBean() {
-                return this;
+                return userPreferences;
             }
 
             @NonNls

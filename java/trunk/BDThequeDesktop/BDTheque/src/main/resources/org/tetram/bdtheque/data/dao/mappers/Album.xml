@@ -133,7 +133,7 @@
 
     <select id="getAlbumLiteByInitiale" resultMap="AlbumLite">
         select
-        <include refid="fieldsAlbumLite"/>, a.id_serie, a.titreSerie
+        <include refid="fieldsAlbumLite"/>, a.titreSerie, a.notation
         <![CDATA[
         from
             albums_by_initiale(#{initiale}, #{filtre}) a
@@ -154,7 +154,7 @@
             <bind name="idSerie" value="''"/>
         </if>
         select
-        <include refid="fieldsAlbumLite"/>, a.id_serie, a.titreSerie
+        <include refid="fieldsAlbumLite"/>, a.titreSerie, a.notation
         <![CDATA[
         from
             albums_by_serie(#{idSerie}, #{filtre}) a
@@ -176,7 +176,7 @@
             <bind name="idCollection" value="''"/>
         </if>
         select
-        <include refid="fieldsAlbumLite"/>, a.id_serie, a.titreSerie
+        <include refid="fieldsAlbumLite"/>, a.titreSerie, a.notation
         <![CDATA[
         from
             albums_by_collection(#{idCollection}, #{filtre}) a
@@ -197,7 +197,7 @@
             <bind name="idEditeur" value="''"/>
         </if>
         select
-        <include refid="fieldsAlbumLite"/>, a.id_serie, a.titreSerie
+        <include refid="fieldsAlbumLite"/>, a.titreSerie, a.notation
         <![CDATA[
         from
             albums_by_editeur(#{idEditeur}, #{filtre}) a
@@ -218,7 +218,7 @@
             <bind name="idGenre" value="''"/>
         </if>
         select
-        <include refid="fieldsAlbumLite"/>, a.id_serie, a.titreSerie
+        <include refid="fieldsAlbumLite"/>, a.titreSerie, a.notation
         <![CDATA[
         from
             albums_by_genre(#{idGenre}, #{filtre}) a
@@ -239,7 +239,7 @@
             <bind name="annee" value="-1"/>
         </if>
         select
-        <include refid="fieldsAlbumLite"/>, a.id_serie, a.titreSerie
+        <include refid="fieldsAlbumLite"/>, a.titreSerie, a.notation
         <![CDATA[
         from
             albums_by_annee(#{annee}, #{filtre}) a

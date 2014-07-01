@@ -29,7 +29,7 @@ public class Main extends Application {
     @NonNls
     private static final String APPLICATION_TITLE = "BDTheque";
     @NonNls
-    private static final String APPLICATION_ICON = "/org/tetram/bdtheque/bdtheque.png";
+    private static final String APPLICATION_ICON = "/org/tetram/bdtheque/graphics/png/128x128/bdtheque.png";
     @SuppressWarnings("UnusedDeclaration")
     @NonNls
     private static final String FB64_CLASSPATH = "firebird_x64";

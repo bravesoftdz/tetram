@@ -1,6 +1,10 @@
 package org.tetram.bdtheque.data.bean;
 
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import org.tetram.bdtheque.SpringContext;
 import org.tetram.bdtheque.data.BeanUtils;
+import org.tetram.bdtheque.data.dao.ValeurListeDao;
 
 import java.time.Month;
 import java.time.Year;
@@ -11,7 +15,7 @@ import java.util.UUID;
  * Created by Thierry on 24/05/2014.
  */
 @SuppressWarnings("UnusedDeclaration")
-public class AlbumLite extends AbstractDBEntity {
+public class AlbumLite extends AbstractDBEntity implements EvaluatedEntity {
 
     public static Comparator<AlbumLite> DEFAULT_COMPARATOR = new Comparator<AlbumLite>() {
         @Override
@@ -57,7 +61,7 @@ public class AlbumLite extends AbstractDBEntity {
     private boolean horsSerie;
     private boolean achat;
     private boolean complet = true;
-    private Integer notation = 900;
+    private ObjectProperty<ValeurListe> notation = new SimpleObjectProperty<>(this, "notation", SpringContext.CONTEXT.getBean(ValeurListeDao.class).getDefaultNotation());
 
     public Integer getTome() {
         return tome;
@@ -179,12 +183,16 @@ public class AlbumLite extends AbstractDBEntity {
         this.complet = complet;
     }
 
-    public Integer getNotation() {
+    public ValeurListe getNotation() {
+        return notation.get();
+    }
+
+    public ObjectProperty<ValeurListe> notationProperty() {
         return notation;
     }
 
-    public void setNotation(Integer notation) {
-        this.notation = notation == 0 ? 900 : notation;
+    public void setNotation(ValeurListe notation) {
+        this.notation.set(notation == null || notation.getValeur() == 0 ? SpringContext.CONTEXT.getBean(ValeurListeDao.class).getDefaultNotation() : notation);
     }
 
     @Override

@@ -49,6 +49,9 @@ public class UserPreferencesImpl implements UserPreferences {
     @NonNls
     private static final String PREF_LOCALE = "Locale";
     private static final Locale PREF_LOCALE_DEFAULT = Locale.getDefault();
+    @NonNls
+    private static final String PREF_AFFICHE_NOTE_LISTES = "AfficheNotesListes";
+    private static final boolean PREF_AFFICHE_NOTE_LISTES_DEFAULT = true;
 
     @Autowired
     private ApplicationContext applicationContext;
@@ -93,6 +96,7 @@ public class UserPreferencesImpl implements UserPreferences {
         defaultPrefs.setProperty(PREF_SERIE_OBLIGATOIRE_ALBUMS, String.valueOf(PREF_SERIE_OBLIGATOIRE_ALBUMS_DEFAULT));
         defaultPrefs.setProperty(PREF_SERIE_OBLIGATOIRE_PARABD, String.valueOf(PREF_SERIE_OBLIGATOIRE_PARABD_DEFAULT));
         defaultPrefs.setProperty(PREF_ANTI_ALIASING, String.valueOf(PREF_ANTI_ALIASING_DEFAULT));
+        defaultPrefs.setProperty(PREF_AFFICHE_NOTE_LISTES, String.valueOf(PREF_AFFICHE_NOTE_LISTES_DEFAULT));
         defaultPrefs.setProperty(PREF_IMAGES_STOCKEES, String.valueOf(PREF_IMAGES_STOCKEES_DEFAULT));
         defaultPrefs.setProperty(PREF_LOCALE, PREF_LOCALE_DEFAULT.toLanguageTag());
 
@@ -232,6 +236,16 @@ public class UserPreferencesImpl implements UserPreferences {
     @Override
     public void setAntiAliasing(boolean value) {
         setPref(PREF_ANTI_ALIASING, value);
+    }
+
+    @Override
+    public boolean isAfficheNoteListes() {
+        return getBooleanPref(PREF_AFFICHE_NOTE_LISTES);
+    }
+
+    @Override
+    public void setAfficheNoteListes(boolean value) {
+        setPref(PREF_AFFICHE_NOTE_LISTES, value);
     }
 
     @Override
