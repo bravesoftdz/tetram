@@ -43,7 +43,7 @@ dependencies {
     // à priori pas utile puisque déjà en dépendance de spring-aspects
     // runtime 'org.aspectj:aspectjweaver:+'
 
-    compile 'org.controlsfx:controlsfx:8.0.6'
+    compile 'org.controlsfx:controlsfx:+'
     compile 'org.jfxtras:jfxtras-common:+'
     compile 'org.jfxtras:jfxtras-fxml:+'
     compile 'org.jfxtras:jfxtras-controls:+'

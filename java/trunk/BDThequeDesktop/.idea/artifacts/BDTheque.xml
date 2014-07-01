@@ -2,10 +2,7 @@
   <artifact type="javafx" build-on-make="true" name="BDTheque">
     <output-path>$PROJECT_DIR$/out/artifacts</output-path>
     <properties id="ant-postprocessing">
-      <options enabled="true">
-        <file>file://$PROJECT_DIR$/BDTheque/ant.xml</file>
-        <target>deploy_firebird_artifact</target>
-      </options>
+      <options enabled="true" />
     </properties>
     <properties id="javafx-properties">
       <options>
@@ -50,11 +47,12 @@
         <element id="library" level="project" name="Gradle: aspectjweaver-1.7.4" />
         <element id="library" level="project" name="Gradle: commons-io-1.3.2" />
         <element id="library" level="project" name="Gradle: spring-aspects-4.0.5.RELEASE" />
-        <element id="library" level="project" name="Gradle: controlsfx-8.0.6" />
         <element id="library" level="project" name="Gradle: jfxtras-common-8.0-r1" />
         <element id="library" level="project" name="Gradle: jfxtras-controls-8.0-r1" />
         <element id="library" level="project" name="Gradle: jfxtras-fxml-8.0-r1" />
         <element id="library" level="project" name="Gradle: jfxtras-labs-8.0-r1" />
+        <element id="library" level="project" name="Gradle: commons-lang3-3.3.2" />
+        <element id="library" level="project" name="Gradle: controlsfx-8.0.6_20" />
       </element>
     </root>
   </artifact>

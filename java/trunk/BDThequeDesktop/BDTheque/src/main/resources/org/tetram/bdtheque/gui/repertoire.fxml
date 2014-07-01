@@ -1,29 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import javafx.geometry.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-
-<TabPane fx:id="tabs" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="339.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.tetram.bdtheque.gui.controllers.RepertoireController">
+<TabPane fx:id="tabs" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+         prefHeight="229.0" prefWidth="397.0" stylesheets="@/org/tetram/bdtheque/gui/repertoire.css"
+         tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+         fx:controller="org.tetram.bdtheque.gui.controllers.RepertoireController">
     <tabs>
         <Tab id="tabAlbums" fx:id="tabAlbums" text="%Albums">
             <content>
                 <BorderPane prefHeight="200.0" prefWidth="200.0">
                     <center>
-                        <TreeView id="tvAlbums" fx:id="tvAlbums" showRoot="false" BorderPane.alignment="CENTER" />
+                        <TreeTableView id="tvAlbums" fx:id="tvAlbums" showRoot="false" BorderPane.alignment="CENTER">
+                            <columns>
+                                <TreeTableColumn editable="false" sortable="false"/>
+                                <TreeTableColumn editable="false" maxWidth="68.0" minWidth="68.0" prefWidth="68.0"
+                                                 resizable="false" sortable="false"/>
+                            </columns>
+                            <columnResizePolicy>
+                                <TreeTableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                            </columnResizePolicy>
+                        </TreeTableView>
                     </center>
-               <top>
-                            <Label contentDisplay="RIGHT" text="%Grouper.par" BorderPane.alignment="CENTER_LEFT">
-                     <graphic>
-                                  <ChoiceBox fx:id="repertoireGroup" />
-                     </graphic>
-                     <BorderPane.margin>
-                        <Insets bottom="4.0" left="4.0" right="4.0" top="4.0" />
-                     </BorderPane.margin>
-                            </Label>
-               </top>
+                    <top>
+                        <Label contentDisplay="RIGHT" text="%Grouper.par" BorderPane.alignment="CENTER_LEFT">
+                            <graphic>
+                                <ChoiceBox fx:id="repertoireGroup"/>
+                            </graphic>
+                            <BorderPane.margin>
+                                <Insets bottom="4.0" left="4.0" right="4.0" top="4.0"/>
+                            </BorderPane.margin>
+                        </Label>
+                    </top>
                 </BorderPane>
             </content>
         </Tab>
@@ -31,7 +40,18 @@
             <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                     <children>
-                        <TreeView id="tvSeries" fx:id="tvSeries" showRoot="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                        <TreeTableView id="tvSeries" fx:id="tvSeries" showRoot="false" AnchorPane.bottomAnchor="0.0"
+                                       AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                                       AnchorPane.topAnchor="0.0">
+                            <columns>
+                                <TreeTableColumn editable="false" sortable="false"/>
+                                <TreeTableColumn editable="false" maxWidth="52.0" minWidth="52.0" prefWidth="52.0"
+                                                 resizable="false" sortable="false"/>
+                            </columns>
+                            <columnResizePolicy>
+                                <TreeTableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                            </columnResizePolicy>
+                        </TreeTableView>
                     </children>
                 </AnchorPane>
             </content>
@@ -40,7 +60,16 @@
             <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                     <children>
-                        <TreeView id="tvUnivers" fx:id="tvUnivers" showRoot="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                        <TreeTableView id="tvUnivers" fx:id="tvUnivers" showRoot="false" AnchorPane.bottomAnchor="0.0"
+                                       AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                                       AnchorPane.topAnchor="0.0">
+                            <columns>
+                                <TreeTableColumn editable="false" sortable="false"/>
+                            </columns>
+                            <columnResizePolicy>
+                                <TreeTableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                            </columnResizePolicy>
+                        </TreeTableView>
                     </children>
                 </AnchorPane>
             </content>
@@ -49,7 +78,16 @@
             <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                     <children>
-                        <TreeView id="tvAuteurs" fx:id="tvAuteurs" showRoot="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                        <TreeTableView id="tvAuteurs" fx:id="tvAuteurs" showRoot="false" AnchorPane.bottomAnchor="0.0"
+                                       AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                                       AnchorPane.topAnchor="0.0">
+                            <columns>
+                                <TreeTableColumn editable="false" sortable="false"/>
+                            </columns>
+                            <columnResizePolicy>
+                                <TreeTableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                            </columnResizePolicy>
+                        </TreeTableView>
                     </children>
                 </AnchorPane>
             </content>
@@ -58,7 +96,16 @@
             <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                     <children>
-                        <TreeView id="tvParabd" fx:id="tvParabd" showRoot="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                        <TreeTableView id="tvParabd" fx:id="tvParabd" showRoot="false" AnchorPane.bottomAnchor="0.0"
+                                       AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                                       AnchorPane.topAnchor="0.0">
+                            <columns>
+                                <TreeTableColumn editable="false" sortable="false"/>
+                            </columns>
+                            <columnResizePolicy>
+                                <TreeTableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                            </columnResizePolicy>
+                        </TreeTableView>
                     </children>
                 </AnchorPane>
             </content>

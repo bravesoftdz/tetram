@@ -1,5 +1,9 @@
 package org.tetram.bdtheque.data.bean;
 
+import javafx.beans.property.ReadOnlyStringWrapper;
+import javafx.beans.property.StringProperty;
+import javafx.beans.value.ObservableValue;
+import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.TestOnly;
 
 import java.lang.reflect.*;
@@ -9,6 +13,15 @@ import java.util.Collection;
  * Created by Thierry on 24/05/2014.
  */
 public abstract class AbstractEntity {
+
+    @NonNls
+    private StringProperty label = new ReadOnlyStringWrapper(this, "label", null){
+        @Override
+        public String get() {
+            super.get();
+            return AbstractEntity.this.buildLabel();
+        }
+    };
 
     protected AbstractEntity() {
     }
@@ -113,4 +126,7 @@ public abstract class AbstractEntity {
         return 0;
     }
 
+    public ObservableValue<String> labelProperty() {
+        return label;
+    }
 }

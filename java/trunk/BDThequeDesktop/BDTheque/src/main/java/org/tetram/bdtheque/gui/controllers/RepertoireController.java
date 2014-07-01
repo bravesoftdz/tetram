@@ -4,8 +4,7 @@
 
 package org.tetram.bdtheque.gui.controllers;
 
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -13,8 +12,11 @@ import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.TreeItemPropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.util.Callback;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.tetram.bdtheque.SpringContext;
@@ -49,29 +51,29 @@ public class RepertoireController extends WindowController {
     @FXML
     private Tab tabAlbums;
     @FXML
-    private TreeView<AbstractEntity> tvAlbums;
+    private TreeTableView<AbstractEntity> tvAlbums;
     @FXML
     private ChoiceBox<TypeRepertoireAlbumEntry> repertoireGroup;
 
     @FXML
     private Tab tabSeries;
     @FXML
-    private TreeView<AbstractEntity> tvSeries;
+    private TreeTableView<AbstractEntity> tvSeries;
 
     @FXML
     private Tab tabUnivers;
     @FXML
-    private TreeView<AbstractEntity> tvUnivers;
+    private TreeTableView<AbstractEntity> tvUnivers;
 
     @FXML
     private Tab tabAuteurs;
     @FXML
-    private TreeView<AbstractEntity> tvAuteurs;
+    private TreeTableView<AbstractEntity> tvAuteurs;
 
     @FXML
     private Tab tabParabd;
     @FXML
-    private TreeView<AbstractEntity> tvParabd;
+    private TreeTableView<AbstractEntity> tvParabd;
     @Autowired
     private ParaBDLiteDao paraBDLiteDao;
 
@@ -81,8 +83,11 @@ public class RepertoireController extends WindowController {
     private ObjectProperty<AbstractDBEntity> selectedEntity = new SimpleObjectProperty<>();
     private ObjectProperty<InfoTab> currentInfoTab = new SimpleObjectProperty<>();
 
+    @SuppressWarnings("unchecked")
     @FXML
     void initialize() {
+        //tabs.getStylesheets().addAll(getClass().getResource("/org/tetram/bdtheque/gui/repertoire.css").toExternalForm());
+
         HashMap<Tab, InfoTab> tabView = new HashMap<>();
         final InfoTab infoTabAlbums = new InfoTab(tabAlbums, tvAlbums, TypeRepertoireAlbumEntry.PAR_SERIE.daoClass);
         tabView.put(tabAlbums, infoTabAlbums);
@@ -90,6 +95,39 @@ public class RepertoireController extends WindowController {
         tabView.put(tabUnivers, new InfoTab(tabUnivers, tvUnivers, UniversLiteDao.class));
         tabView.put(tabAuteurs, new InfoTab(tabAuteurs, tvAuteurs, PersonneLiteDao.class));
         tabView.put(tabParabd, new InfoTab(tabParabd, tvParabd, ParaBDLiteDao.class));
+
+        final Callback<TreeTableColumn.CellDataFeatures<AbstractEntity, String>, ObservableValue<String>> labelValueFactory = new Callback<TreeTableColumn.CellDataFeatures<AbstractEntity, String>, ObservableValue<String>>() {
+            @Override
+            public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<AbstractEntity, String> param) {
+                return new ReadOnlyStringWrapper(param.getValue().getValue().buildLabel());
+            }
+        };
+        final Callback<TreeTableColumn.CellDataFeatures<AbstractEntity, AbstractEntity>, ObservableValue<AbstractEntity>> imageValueCellFactory = new Callback<TreeTableColumn.CellDataFeatures<AbstractEntity, AbstractEntity>, ObservableValue<AbstractEntity>>() {
+            @Override
+            public ObservableValue<AbstractEntity> call(TreeTableColumn.CellDataFeatures<AbstractEntity, AbstractEntity> param) {
+                return new ReadOnlyObjectWrapper<>(param.getValue().getValue());
+            }
+        };
+        final Callback<TreeTableColumn<AbstractEntity,AbstractEntity>, TreeTableCell<AbstractEntity,AbstractEntity>> imageCellFactory = new Callback<TreeTableColumn<AbstractEntity,AbstractEntity>, TreeTableCell<AbstractEntity,AbstractEntity>>() {
+
+            @Override
+            public TreeTableCell<AbstractEntity, AbstractEntity> call(TreeTableColumn<AbstractEntity, AbstractEntity> param) {
+                return new TreeTableCell<AbstractEntity, AbstractEntity>(){
+
+                    @Override
+                    protected void updateItem(AbstractEntity item, boolean empty) {
+                        super.updateItem(item, empty);
+                        setGraphic(null);
+                        if (item instanceof EvaluatedEntity){
+                            final ValeurListe notation = ((EvaluatedEntity) item).getNotation();
+                            final NotationResource resource = NotationResource.fromValue(notation.getValeur());
+                            if (resource != null && notation.getValeur() > 900)
+                                setGraphic(new ImageView("/org/tetram/bdtheque/graphics/png/16x16/" + resource.getResource()));
+                        }
+                    }
+                };
+            }
+        };
 
         final EventHandler<MouseEvent> onMouseClicked = new EventHandler<MouseEvent>() {
             @Override
@@ -102,8 +140,16 @@ public class RepertoireController extends WindowController {
             }
         };
 
-        for (InfoTab infoTab : tabView.values())
+        for (InfoTab infoTab : tabView.values()) {
             infoTab.getTreeView().setOnMouseClicked(onMouseClicked);
+            ((TreeTableColumn<AbstractEntity, String>) infoTab.getTreeView().getColumns().get(0)).setCellValueFactory(labelValueFactory);
+            if (infoTab.getTreeView().getColumns().size() > 1){
+                final TreeTableColumn<AbstractEntity, AbstractEntity> column = (TreeTableColumn<AbstractEntity, AbstractEntity>) infoTab.getTreeView().getColumns().get(1);
+                    column.setCellValueFactory(imageValueCellFactory);
+                    column.setCellFactory(imageCellFactory);
+                column.visibleProperty().bind(userPreferences.afficheNoteListesProperty());
+            }
+        }
 
         infoTabAlbums.daoClassProperty().addListener(new ChangeListener<Class<? extends RepertoireLiteDao>>() {
             @Override
@@ -185,10 +231,10 @@ public class RepertoireController extends WindowController {
     @SuppressWarnings("UnusedDeclaration")
     private class InfoTab {
         private ObjectProperty<Tab> tab = new SimpleObjectProperty<>();
-        private ObjectProperty<TreeView<AbstractEntity>> treeView = new SimpleObjectProperty<>();
+        private ObjectProperty<TreeTableView<AbstractEntity>> treeView = new SimpleObjectProperty<>();
         private ObjectProperty<Class<? extends RepertoireLiteDao>> daoClass = new SimpleObjectProperty<>();
 
-        private InfoTab(Tab tab, TreeView<AbstractEntity> treeView, Class<? extends RepertoireLiteDao> daoClass) {
+        private InfoTab(Tab tab, TreeTableView<AbstractEntity> treeView, Class<? extends RepertoireLiteDao> daoClass) {
             setTab(tab);
             setTreeView(treeView);
             setDaoClass(daoClass);
@@ -206,15 +252,15 @@ public class RepertoireController extends WindowController {
             return tab;
         }
 
-        public TreeView<AbstractEntity> getTreeView() {
+        public TreeTableView<AbstractEntity> getTreeView() {
             return treeView.get();
         }
 
-        public void setTreeView(TreeView<AbstractEntity> treeView) {
+        public void setTreeView(TreeTableView<AbstractEntity> treeView) {
             this.treeView.set(treeView);
         }
 
-        public ObjectProperty<TreeView<AbstractEntity>> treeViewProperty() {
+        public ObjectProperty<TreeTableView<AbstractEntity>> treeViewProperty() {
             return treeView;
         }
 
@@ -244,12 +290,14 @@ public class RepertoireController extends WindowController {
         public InitialTreeItem(RepertoireLiteDao dao, AbstractEntity value) {
             super(value);
             this.dao = dao;
+/*
             if (userPreferences.isAfficheNoteListes() && value instanceof EvaluatedEntity) {
                 final ValeurListe notation = ((EvaluatedEntity) value).getNotation();
                 final NotationResource resource = NotationResource.fromValue(notation.getValeur());
                 if (notation.getValeur() > 900 && resource != null)
                     this.setGraphic(new ImageView("/org/tetram/bdtheque/graphics/png/16x16/" + resource.getResource()));
             }
+             */
         }
 
         @Override
