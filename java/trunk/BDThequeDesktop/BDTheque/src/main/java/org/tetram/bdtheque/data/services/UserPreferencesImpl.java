@@ -1,5 +1,7 @@
 package org.tetram.bdtheque.data.services;
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import org.jetbrains.annotations.NonNls;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -238,14 +240,30 @@ public class UserPreferencesImpl implements UserPreferences {
         setPref(PREF_ANTI_ALIASING, value);
     }
 
+    @NonNls
+    private BooleanProperty afficheNoteListes = null;
+
     @Override
     public boolean isAfficheNoteListes() {
-        return getBooleanPref(PREF_AFFICHE_NOTE_LISTES);
+        return afficheNoteListesProperty().get();
+    }
+
+    @Override
+    public BooleanProperty afficheNoteListesProperty() {
+        if (afficheNoteListes == null)
+            afficheNoteListes = new SimpleBooleanProperty(this, "afficheNoteListes", getBooleanPref(PREF_AFFICHE_NOTE_LISTES)) {
+                @Override
+                public void set(boolean newValue) {
+                    setPref(PREF_AFFICHE_NOTE_LISTES, newValue);
+                    super.set(newValue);
+                }
+            };
+        return afficheNoteListes;
     }
 
     @Override
     public void setAfficheNoteListes(boolean value) {
-        setPref(PREF_AFFICHE_NOTE_LISTES, value);
+        afficheNoteListesProperty().set(value);
     }
 
     @Override

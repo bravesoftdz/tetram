@@ -1,5 +1,7 @@
 package org.tetram.bdtheque.data.services;
 
+import javafx.beans.property.BooleanProperty;
+
 import java.io.File;
 import java.util.Locale;
 
@@ -36,6 +38,8 @@ public interface UserPreferences {
     void setAntiAliasing(boolean value);
 
     boolean isAfficheNoteListes();
+
+    BooleanProperty afficheNoteListesProperty();
 
     void setAfficheNoteListes(boolean value);
 

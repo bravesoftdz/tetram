@@ -113,7 +113,7 @@ public class PreferencesController extends DialogController {
         serieObligatoireParaBD.selectedProperty().bindBidirectional(preferencesProperties.serieObligatoireParaBDProperty);
         antiAliasing.selectedProperty().bindBidirectional(preferencesProperties.antiAliasingProperty);
         imagesStockees.selectedProperty().bindBidirectional(preferencesProperties.imagesStockeesProperty);
-        afficheNotesListes.selectedProperty().bindBidirectional(preferencesProperties.afficheNotesListesProperty);
+        afficheNotesListes.setSelected(userPreferences.isAfficheNoteListes());
         Bindings.bindBidirectional(repImages.textProperty(), preferencesProperties.repImagesProperty, new StringConverter<File>() {
             @Override
             public String toString(File object) {
@@ -139,6 +139,7 @@ public class PreferencesController extends DialogController {
     public void btnQuitClick(ActionEvent actionEvent) {
         switch (getResult()) {
             case OK:
+                userPreferences.setAfficheNoteListes(afficheNotesListes.isSelected());
                 userPreferences.save();
             case CANCEL:
                 userPreferences.reload(); // on relit après avoir sauvé, c'est pas plus mal meme si ça sert probablement à rien
@@ -303,30 +304,6 @@ public class PreferencesController extends DialogController {
             @Override
             public void set(boolean newValue) {
                 userPreferences.setImagesStockees(newValue);
-                super.set(newValue);
-            }
-        };
-        BooleanProperty afficheNotesListesProperty = new BooleanPropertyBase() {
-            @Override
-            public Object getBean() {
-                return userPreferences;
-            }
-
-            @NonNls
-            @Override
-            public String getName() {
-                return "afficheNotesListesProperty";
-            }
-
-            @Override
-            public boolean get() {
-                super.get();
-                return userPreferences.isAfficheNoteListes();
-            }
-
-            @Override
-            public void set(boolean newValue) {
-                userPreferences.setAfficheNoteListes(newValue);
                 super.set(newValue);
             }
         };
