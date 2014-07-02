@@ -45,13 +45,13 @@ public abstract class BeanUtils {
         return v == null ? null : v.trim();
     }
 
-    public static Set<UniversLite> checkAndBuildListUniversFull(Set<UniversLite> universFull, Set<UniversLite> univers, Serie serie) {
+    public static List<UniversLite> checkAndBuildListUniversFull(List<UniversLite> universFull, List<UniversLite> univers, Serie serie) {
         int countUnivers = (univers != null ? univers.size() : 0);
         if (serie != null)
             countUnivers += (serie.getUnivers() != null ? serie.getUnivers().size() : 0);
 
         if (universFull == null || universFull.size() != countUnivers) {
-            universFull = new HashSet<>();
+            universFull = new ArrayList<>();
             if (univers != null)
                 universFull.addAll(univers);
             if (serie != null && serie.getUnivers() != null)

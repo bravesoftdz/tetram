@@ -1,7 +1,7 @@
 package org.tetram.bdtheque;
 
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import org.jetbrains.annotations.NonNls;
@@ -28,6 +28,8 @@ public class SpringFxmlLoader {
         try {
             fxmlStream = SpringFxmlLoader.class.getResourceAsStream(ORG_TETRAM_BDTHEQUE_GUI + url);
             FXMLLoader loader = new FXMLLoader();
+            // idéalement, il faudrait donner le classloader de la classe du futur controller
+            //loader.setClassLoader();
             loader.setControllerFactory(new Callback<Class<?>, Object>() {
                 @Override
                 public Object call(Class<?> aClass) {
@@ -38,7 +40,8 @@ public class SpringFxmlLoader {
             });
             loader.setResources(I18nSupport.getCurrentBundle());
 
-            Node view = loader.load(fxmlStream);
+            Parent view = loader.load(fxmlStream);
+            view.getStylesheets().addAll(SpringFxmlLoader.class.getResource(ORG_TETRAM_BDTHEQUE_GUI + "theme.css").toExternalForm());
             WindowController controller = loader.getController();
             controller.setView(view);
             controller.setDialog(stage);

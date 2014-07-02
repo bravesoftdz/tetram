@@ -1,0 +1,7 @@
+.scene{
+    -fx-background-color: white;
+}
+
+.label-rubrique{
+    -fx-text-fill: #0080c0;
+}

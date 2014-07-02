@@ -30,8 +30,8 @@ public class ParaBD extends AbstractDBEntity {
     private boolean offert;
     private boolean gratuit;
     private LocalDate dateAchat;
-    private Set<UniversLite> univers = new HashSet<>();
-    private Set<UniversLite> universFull = new HashSet<>();
+    private List<UniversLite> univers = new ArrayList<>();
+    private List<UniversLite> universFull = new ArrayList<>();
     private List<PhotoLite> photos = new ArrayList<>();
 
     public ParaBD() {
@@ -175,15 +175,15 @@ public class ParaBD extends AbstractDBEntity {
         this.dateAchat = dateAchat;
     }
 
-    public Set<UniversLite> getUnivers() {
+    public List<UniversLite> getUnivers() {
         return univers;
     }
 
-    public void setUnivers(Set<UniversLite> univers) {
+    public void setUnivers(List<UniversLite> univers) {
         this.univers = univers;
     }
 
-    public Set<UniversLite> getUniversFull() {
+    public List<UniversLite> getUniversFull() {
         universFull = BeanUtils.checkAndBuildListUniversFull(universFull, univers, serie);
         return universFull;
     }

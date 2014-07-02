@@ -56,25 +56,46 @@
     <select id="getListAuteurLiteByAlbumId" resultMap="AuteurAlbumLite">
         <![CDATA[
         select
-            *
+            p.id_personne, p.nomPersonne,
+            a.id_auteur, a.id_album, a.metier
         from
-            proc_auteurs(#{id}, null, null)
+            personnes p
+            inner join auteurs a on
+                a.id_personne = p.id_personne
+        where
+            a.id_album = #{id}
+        order by
+            a.metier, p.nomPersonne
         ]]>
     </select>
     <select id="getListAuteurLiteBySerieId" resultMap="AuteurSerieLite">
         <![CDATA[
         select
-            *
+            p.id_personne, p.nompersonne,
+            a.id_auteur_series, a.id_serie, a.metier
         from
-            proc_auteurs(null, #{id}, null)
+            personnes p
+            inner join auteurs_series a on
+                a.id_personne = p.id_personne
+        where
+            a.id_serie = #{id}
+        order by
+            a.metier, p.nomPersonne
         ]]>
     </select>
     <select id="getListAuteurLiteByParaBDId" resultMap="AuteurParaBDLite">
         <![CDATA[
         select
-            *
+            p.id_personne, p.nompersonne,
+            a.id_auteur_parabd, a.id_parabd
         from
-            proc_auteurs(null, null, #{id})
+            personnes p
+            inner join auteurs_parabd a on
+                a.id_personne = p.id_personne
+        where
+            a.id_parabd =  #{id}
+        order by
+            p.nomPersonne
         ]]>
     </select>
 

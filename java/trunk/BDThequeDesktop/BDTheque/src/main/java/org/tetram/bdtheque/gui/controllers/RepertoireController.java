@@ -89,13 +89,14 @@ public class RepertoireController extends WindowController {
     void initialize() {
         //tabs.getStylesheets().addAll(getClass().getResource("/org/tetram/bdtheque/gui/repertoire.css").toExternalForm());
 
-        HashMap<Tab, InfoTab> tabView = new HashMap<>();
+        // pourquoi ça marchait avant avec <Tab, InfoTab> et que ça ne marche plus maintenant, mystère
+        HashMap<String, InfoTab> tabView = new HashMap<>();
         final InfoTab infoTabAlbums = new InfoTab(tabAlbums, tvAlbums, TypeRepertoireAlbumEntry.PAR_SERIE.daoClass);
-        tabView.put(tabAlbums, infoTabAlbums);
-        tabView.put(tabSeries, new InfoTab(tabSeries, tvSeries, SerieLiteDao.class));
-        tabView.put(tabUnivers, new InfoTab(tabUnivers, tvUnivers, UniversLiteDao.class));
-        tabView.put(tabAuteurs, new InfoTab(tabAuteurs, tvAuteurs, PersonneLiteDao.class));
-        tabView.put(tabParabd, new InfoTab(tabParabd, tvParabd, ParaBDLiteDao.class));
+        tabView.put(tabAlbums.getId(), infoTabAlbums);
+        tabView.put(tabSeries.getId(), new InfoTab(tabSeries, tvSeries, SerieLiteDao.class));
+        tabView.put(tabUnivers.getId(), new InfoTab(tabUnivers, tvUnivers, UniversLiteDao.class));
+        tabView.put(tabAuteurs.getId(), new InfoTab(tabAuteurs, tvAuteurs, PersonneLiteDao.class));
+        tabView.put(tabParabd.getId(), new InfoTab(tabParabd, tvParabd, ParaBDLiteDao.class));
 
         final Callback<TreeTableColumn.CellDataFeatures<AbstractEntity, String>, ObservableValue<String>> labelValueFactory = new Callback<TreeTableColumn.CellDataFeatures<AbstractEntity, String>, ObservableValue<String>>() {
             @Override
@@ -187,7 +188,7 @@ public class RepertoireController extends WindowController {
             @Override
             public void changed(ObservableValue<? extends Tab> observable, Tab oldValue, Tab newValue) {
                 if (newValue != null)
-                    currentInfoTab.set(tabView.get(newValue));
+                    currentInfoTab.set(tabView.get(newValue.getId()));
             }
         });
         tabs.getSelectionModel().select(tabAlbums);

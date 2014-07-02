@@ -57,7 +57,10 @@ public class AlbumDaoImpl extends DaoRWImpl<Album, UUID> implements AlbumDao {
         if (StringUtils.isNullOrEmpty(object.getTitreAlbum()) && object.getSerie() == null)
             throw new ConsistencyException(I18nSupport.message("titre.obligatoire.album.sans.serie"));
 
-/* ne devrait pas être utile puisque Month est une énumération
+        if (object.isIntegrale() && (object.getTomeDebut() == null ^ object.getTomeFin() == null))
+            throw new ConsistencyException(I18nSupport.message("vous.devez.saisir.un.tome.de.debut.ou.de.fin.pour.une.integrale.ou.ne.rien.saisir.du.tout"));
+
+        /* ne devrait pas être utile puisque Month est une énumération
         if (object.getMoisParution() != null && !new Range<>(1, 12).contains(object.getMoisParution()))
             throw new ConsistencyException(I18nSupport.message("mois.parution.incorrect"));
          */

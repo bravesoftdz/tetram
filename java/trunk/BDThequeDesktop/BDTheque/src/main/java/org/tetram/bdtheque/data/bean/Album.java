@@ -4,8 +4,8 @@ import javafx.beans.property.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableSet;
-import javafx.collections.SetChangeListener;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import org.tetram.bdtheque.AutoTrimStringProperty;
 import org.tetram.bdtheque.SpringContext;
 import org.tetram.bdtheque.data.BeanUtils;
@@ -14,10 +14,7 @@ import org.tetram.bdtheque.utils.TypeUtils;
 
 import java.time.Month;
 import java.time.Year;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Created by Thierry on 24/05/2014.
@@ -66,37 +63,62 @@ public class Album extends AbstractDBEntity implements EvaluatedEntity {
     private ObjectProperty<Integer> tomeFin = new SimpleObjectProperty<>(this, "tomeFin", null);
     private BooleanProperty horsSerie = new SimpleBooleanProperty(this, "horsSerie", false);
     private BooleanProperty integrale = new SimpleBooleanProperty(this, "integrale", false);
-    private Set<AuteurAlbumLite> auteurs = new HashSet<>();
-    private Set<AuteurAlbumLite> scenaristes = null;
-    private Set<AuteurAlbumLite> dessinateurs = null;
-    private Set<AuteurAlbumLite> coloristes = null;
+    private ListProperty<AuteurAlbumLite> auteurs = new SimpleListProperty<>(this, "auteurs", FXCollections.<AuteurAlbumLite>observableList(new ArrayList<>()));
+    private ListProperty<AuteurAlbumLite> scenaristes = new SimpleListProperty<>(this, "scenaristes", FXCollections.<AuteurAlbumLite>observableList(new ArrayList<>()));
+    private ListProperty<AuteurAlbumLite> dessinateurs = new SimpleListProperty<>(this, "dessinateurs", FXCollections.<AuteurAlbumLite>observableList(new ArrayList<>()));
+    private ListProperty<AuteurAlbumLite> coloristes = new SimpleListProperty<>(this, "coloristes", FXCollections.<AuteurAlbumLite>observableList(new ArrayList<>()));
     private StringProperty sujet = new AutoTrimStringProperty(this, "sujet", null);
     private StringProperty notes = new AutoTrimStringProperty(this, "notes", null);
-    @SuppressWarnings("Convert2Diamond")
-    private SetProperty<Edition> editions = new SimpleSetProperty<>(this, "editions", FXCollections.observableSet(new HashSet<Edition>()));
+    private SetProperty<Edition> editions = new SimpleSetProperty<>(this, "editions", FXCollections.<Edition>observableSet(new HashSet<>()));
     private ObjectProperty<ValeurListe> notation = new SimpleObjectProperty<>(this, "notation", null);
-    private SetProperty<UniversLite> univers = new SimpleSetProperty<>(this, "univers", FXCollections.observableSet(new HashSet<>()));
-    private SetProperty<UniversLite> universFull = new SimpleSetProperty<>(this, "universFull", FXCollections.observableSet(new HashSet<>()));
+    private ListProperty<UniversLite> univers = new SimpleListProperty<>(this, "univers", FXCollections.<UniversLite>observableList(new ArrayList<>()));
+    private ListProperty<UniversLite> universFull = new SimpleListProperty<>(this, "universFull", FXCollections.<UniversLite>observableList(new ArrayList<>()));
 
     public Album() {
         ValeurListeDao valeurListeDao = SpringContext.CONTEXT.getBean(ValeurListeDao.class);
         notation.set(valeurListeDao.getDefaultNotation());
 
 
-        final SetChangeListener<UniversLite> universSetChangeListener = new SetChangeListener<UniversLite>() {
+        final ListChangeListener<UniversLite> universListChangeListener = new ListChangeListener<UniversLite>() {
             @Override
             public void onChanged(Change<? extends UniversLite> change) {
-                universFull.set(FXCollections.observableSet(BeanUtils.checkAndBuildListUniversFull(getUniversFull(), getUnivers(), getSerie())));
+                universFull.set(FXCollections.observableList(BeanUtils.checkAndBuildListUniversFull(getUniversFull(), getUnivers(), getSerie())));
             }
         };
         serie.addListener(new ChangeListener<Serie>() {
             @Override
             public void changed(ObservableValue<? extends Serie> observable, Serie oldValue, Serie newValue) {
-                if (oldValue != null) oldValue.universProperty().removeListener(universSetChangeListener);
-                if (newValue != null) newValue.universProperty().addListener(universSetChangeListener);
+                if (oldValue != null) oldValue.universProperty().removeListener(universListChangeListener);
+                if (newValue != null) newValue.universProperty().addListener(universListChangeListener);
+                universFull.set(FXCollections.observableList(BeanUtils.checkAndBuildListUniversFull(getUniversFull(), getUnivers(), newValue)));
             }
         });
-        univers.addListener(universSetChangeListener);
+        univers.addListener(universListChangeListener);
+
+        anneeParution.addListener(new ChangeListener<Year>() {
+            @Override
+            public void changed(ObservableValue<? extends Year> observable, Year oldValue, Year newValue) {
+                if (TypeUtils.isNullOrZero(getAnneeParution()))
+                    moisParution.set(null);
+            }
+        });
+
+        auteurs.addListener(new ChangeListener<ObservableList<AuteurAlbumLite>>() {
+            @Override
+            public void changed(ObservableValue<? extends ObservableList<AuteurAlbumLite>> observable, ObservableList<AuteurAlbumLite> oldValue, ObservableList<AuteurAlbumLite> newValue) {
+                // on pourrait optimiser en répercutant la modification mais c'est un poil plus compliqué à écrire
+                // et vu la taille des listes, je suis pas sûr que le gain de perf soit significatif
+                buildListsAuteurs();
+            }
+        });
+        auteurs.addListener(new ListChangeListener<AuteurAlbumLite>() {
+            @Override
+            public void onChanged(Change<? extends AuteurAlbumLite> c) {
+                // on pourrait optimiser en répercutant la modification mais c'est un poil plus compliqué à écrire
+                // et vu la taille des listes, je suis pas sûr que le gain de perf soit significatif
+                buildListsAuteurs();
+            }
+        });
     }
 
     public static Album getDefaultAlbum() {
@@ -228,25 +250,25 @@ public class Album extends AbstractDBEntity implements EvaluatedEntity {
         return integrale;
     }
 
-    public Set<AuteurAlbumLite> getAuteurs() {
+    public List<AuteurAlbumLite> getAuteurs() {
+        return auteurs.get();
+    }
+
+    public void setAuteurs(List<AuteurAlbumLite> auteurs) {
+        this.auteurs.set(FXCollections.observableList(auteurs));
+    }
+
+    public ListProperty<AuteurAlbumLite> auteursProperty() {
         return auteurs;
     }
 
-    public void setAuteurs(Set<AuteurAlbumLite> auteurs) {
-        this.auteurs = auteurs;
-    }
-
     private void buildListsAuteurs() {
-        int countScenaristes = (scenaristes != null ? scenaristes.size() : 0);
-        int countDessinateurs = (dessinateurs != null ? dessinateurs.size() : 0);
-        int countColoristes = (coloristes != null ? coloristes.size() : 0);
+        int countAuteurs = scenaristes.size() + dessinateurs.size() + coloristes.size();
 
-        int countAuteurs = countScenaristes + countDessinateurs + countColoristes;
-
-        if (scenaristes == null || dessinateurs == null || coloristes == null || auteurs.size() != countAuteurs) {
-            scenaristes = new HashSet<>();
-            dessinateurs = new HashSet<>();
-            coloristes = new HashSet<>();
+        if (auteurs.size() != countAuteurs) {
+            scenaristes.set(FXCollections.observableList(new ArrayList<>()));
+            dessinateurs.set(FXCollections.observableList(new ArrayList<>()));
+            coloristes.set(FXCollections.observableList(new ArrayList<>()));
             for (AuteurAlbumLite a : auteurs) {
                 switch (a.getMetier()) {
                     case SCENARISTE:
@@ -263,18 +285,13 @@ public class Album extends AbstractDBEntity implements EvaluatedEntity {
         }
     }
 
-    public Set<AuteurAlbumLite> getScenaristes() {
-        buildListsAuteurs();
-        return scenaristes;
-    }
-
-    private void addAuteur(PersonneLite personne, Set<AuteurAlbumLite> listAuteurs, MetierAuteur metier) {
+    private void addAuteur(PersonneLite personne, List<AuteurAlbumLite> listAuteurs, MetierAuteur metier) {
         for (AuteurAlbumLite auteur : listAuteurs)
             if (auteur.getPersonne() == personne) return;
         AuteurAlbumLite auteur = new AuteurAlbumLite();
         auteur.setPersonne(personne);
         auteur.setMetier(metier);
-        listAuteurs.add(auteur);
+        // listAuteurs.add(auteur);
         auteurs.add(auteur);
     }
 
@@ -290,10 +307,10 @@ public class Album extends AbstractDBEntity implements EvaluatedEntity {
         addAuteur(personne, getColoristes(), MetierAuteur.COLORISTE);
     }
 
-    private void removeAuteur(PersonneLite personne, Set<AuteurAlbumLite> listAuteurs) {
+    private void removeAuteur(PersonneLite personne, List<AuteurAlbumLite> listAuteurs) {
         for (AuteurAlbumLite auteur : listAuteurs)
             if (auteur.getPersonne() == personne) {
-                listAuteurs.remove(auteur);
+                // listAuteurs.remove(auteur);
                 auteurs.remove(auteur);
                 return;
             }
@@ -311,13 +328,30 @@ public class Album extends AbstractDBEntity implements EvaluatedEntity {
         removeAuteur(personne, getColoristes());
     }
 
-    public Set<AuteurAlbumLite> getDessinateurs() {
-        buildListsAuteurs();
+    public List<AuteurAlbumLite> getScenaristes() {
+        // buildListsAuteurs();
+        return scenaristes.get();
+    }
+
+    public ListProperty<AuteurAlbumLite> scenaristesProperty() {
+        return scenaristes;
+    }
+
+    public List<AuteurAlbumLite> getDessinateurs() {
+        // buildListsAuteurs();
+        return dessinateurs.get();
+    }
+
+    public ListProperty<AuteurAlbumLite> dessinateursProperty() {
         return dessinateurs;
     }
 
-    public Set<AuteurAlbumLite> getColoristes() {
-        buildListsAuteurs();
+    public List<AuteurAlbumLite> getColoristes() {
+        // buildListsAuteurs();
+        return coloristes.get();
+    }
+
+    public ListProperty<AuteurAlbumLite> coloristesProperty() {
         return coloristes;
     }
 
@@ -377,23 +411,23 @@ public class Album extends AbstractDBEntity implements EvaluatedEntity {
         return notation;
     }
 
-    public Set<UniversLite> getUnivers() {
+    public List<UniversLite> getUnivers() {
         return univers.get();
     }
 
-    public void setUnivers(Set<UniversLite> univers) {
-        this.univers.set(FXCollections.observableSet(univers));
+    public void setUnivers(List<UniversLite> univers) {
+        this.univers.set(FXCollections.observableList(univers));
     }
 
-    public SetProperty<UniversLite> universProperty() {
+    public ListProperty<UniversLite> universProperty() {
         return univers;
     }
 
-    public ObservableSet<UniversLite> getUniversFull() {
+    public ObservableList<UniversLite> getUniversFull() {
         return universFull.get();
     }
 
-    public SetProperty<UniversLite> universFullProperty() {
+    public ListProperty<UniversLite> universFullProperty() {
         return universFull;
     }
 

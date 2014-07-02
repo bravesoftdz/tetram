@@ -8,7 +8,9 @@ import org.tetram.bdtheque.data.dao.DaoScriptImpl;
 import org.tetram.bdtheque.data.dao.ValeurListeDao;
 
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by Thierry on 24/05/2014.
@@ -19,7 +21,7 @@ public class Serie extends AbstractScriptEntity implements EvaluatedEntity {
 
     private StringProperty titreSerie = new SimpleStringProperty(this, "titreSerie", null);
     private ObjectProperty<Boolean> terminee = new SimpleObjectProperty<>(this, "terminee", null);
-    private ListProperty<GenreLite> genres = new SimpleListProperty<>(this, "genres", FXCollections.observableList(new ArrayList<>()));
+    private ListProperty<GenreLite> genres = new SimpleListProperty<>(this, "genres", FXCollections.<GenreLite>observableList(new ArrayList<>()));
     private StringProperty sujet = new SimpleStringProperty(this, "sujet", null);
     private StringProperty notes = new SimpleStringProperty(this, "notes", null);
     private ObjectProperty<EditeurLite> editeur = new SimpleObjectProperty<>(this, "editeur", null);
@@ -29,12 +31,12 @@ public class Serie extends AbstractScriptEntity implements EvaluatedEntity {
     private BooleanProperty suivreManquants = new SimpleBooleanProperty(this, "suivreManquants", false);
     private BooleanProperty suivreSorties = new SimpleBooleanProperty(this, "suivreSorties", false);
     private IntegerProperty nbAlbums = new SimpleIntegerProperty(this, "nbAlbums", 0);
-    private ListProperty<AlbumLite> albums = new SimpleListProperty<>(this, "albums", FXCollections.observableList(new ArrayList<>()));
-    private ListProperty<ParaBDLite> paraBDs = new SimpleListProperty<>(this, "paraBDs", FXCollections.observableList(new ArrayList<>()));
-    private SetProperty<AuteurSerieLite> auteurs = new SimpleSetProperty<>(this, "auteurs", FXCollections.observableSet(new HashSet<>()));
-    private SetProperty<AuteurSerieLite> scenaristes = new SimpleSetProperty<>(this, "scenaristes", FXCollections.observableSet(new HashSet<>()));
-    private SetProperty<AuteurSerieLite> dessinateurs = new SimpleSetProperty<>(this, "dessinateurs", FXCollections.observableSet(new HashSet<>()));
-    private SetProperty<AuteurSerieLite> coloristes = new SimpleSetProperty<>(this, "coloristes", FXCollections.observableSet(new HashSet<>()));
+    private ListProperty<AlbumLite> albums = new SimpleListProperty<>(this, "albums", FXCollections.<AlbumLite>observableList(new ArrayList<>()));
+    private ListProperty<ParaBDLite> paraBDs = new SimpleListProperty<>(this, "paraBDs", FXCollections.<ParaBDLite>observableList(new ArrayList<>()));
+    private ListProperty<AuteurSerieLite> auteurs = new SimpleListProperty<>(this, "auteurs", FXCollections.<AuteurSerieLite>observableList(new ArrayList<>()));
+    private ListProperty<AuteurSerieLite> scenaristes = new SimpleListProperty<>(this, "scenaristes", FXCollections.<AuteurSerieLite>observableList(new ArrayList<>()));
+    private ListProperty<AuteurSerieLite> dessinateurs = new SimpleListProperty<>(this, "dessinateurs", FXCollections.<AuteurSerieLite>observableList(new ArrayList<>()));
+    private ListProperty<AuteurSerieLite> coloristes = new SimpleListProperty<>(this, "coloristes", FXCollections.<AuteurSerieLite>observableList(new ArrayList<>()));
     private ObjectProperty<Boolean> vo = new SimpleObjectProperty<>(this, "vo", null);
     private ObjectProperty<Boolean> couleur = new SimpleObjectProperty<>(this, "couleur", null);
     private ObjectProperty<ValeurListe> etat = new SimpleObjectProperty<>(this, "etat", null);
@@ -44,7 +46,7 @@ public class Serie extends AbstractScriptEntity implements EvaluatedEntity {
     private ObjectProperty<ValeurListe> orientation = new SimpleObjectProperty<>(this, "orientation", null);
     private ObjectProperty<ValeurListe> sensLecture = new SimpleObjectProperty<>(this, "sensLecture", null);
     private ObjectProperty<ValeurListe> notation = new SimpleObjectProperty<>(this, "notation", null);
-    private SetProperty<UniversLite> univers = new SimpleSetProperty<>(this, "univers", FXCollections.observableSet(new HashSet<>()));
+    private ListProperty<UniversLite> univers = new SimpleListProperty<>(this, "univers", FXCollections.<UniversLite>observableList(new ArrayList<>()));
 
     public Serie() {
         ValeurListeDao valeurListeDao = SpringContext.CONTEXT.getBean(ValeurListeDao.class);
@@ -95,6 +97,10 @@ public class Serie extends AbstractScriptEntity implements EvaluatedEntity {
 
     public boolean removeGenre(GenreLite genre) {
         return genres.remove(genre);
+    }
+
+    public ListProperty<GenreLite> genresProperty() {
+        return genres;
     }
 
     public String getSujet() {
@@ -254,34 +260,34 @@ public class Serie extends AbstractScriptEntity implements EvaluatedEntity {
         }
     }
 
-    public Set<AuteurSerieLite> getAuteurs() {
+    public List<AuteurSerieLite> getAuteurs() {
         return auteurs;
     }
 
-    public void setAuteurs(Set<AuteurSerieLite> auteurs) {
-        this.auteurs.set(FXCollections.observableSet(auteurs));
-        scenaristes.set(FXCollections.observableSet(new HashSet<>()));
-        dessinateurs.set(FXCollections.observableSet(new HashSet<>()));
-        coloristes.set(FXCollections.observableSet(new HashSet<>()));
+    public void setAuteurs(List<AuteurSerieLite> auteurs) {
+        this.auteurs.set(FXCollections.observableList(auteurs));
+        scenaristes.set(FXCollections.observableList(new ArrayList<>()));
+        dessinateurs.set(FXCollections.observableList(new ArrayList<>()));
+        coloristes.set(FXCollections.observableList(new ArrayList<>()));
     }
 
-    public SetProperty<AuteurSerieLite> auteursProperty() {
+    public ListProperty<AuteurSerieLite> auteursProperty() {
         return auteurs;
     }
 
-    public SetProperty<AuteurSerieLite> scenaristesProperty() {
+    public ListProperty<AuteurSerieLite> scenaristesProperty() {
         return scenaristes;
     }
 
-    public SetProperty<AuteurSerieLite> dessinateursProperty() {
+    public ListProperty<AuteurSerieLite> dessinateursProperty() {
         return dessinateurs;
     }
 
-    public SetProperty<AuteurSerieLite> coloristesProperty() {
+    public ListProperty<AuteurSerieLite> coloristesProperty() {
         return coloristes;
     }
 
-    private boolean addAuteur(PersonneLite personne, Set<AuteurSerieLite> listAuteurs, MetierAuteur metier) {
+    private boolean addAuteur(PersonneLite personne, List<AuteurSerieLite> listAuteurs, MetierAuteur metier) {
         for (AuteurSerieLite auteur : listAuteurs)
             if (auteur.getPersonne() == personne) return false;
         AuteurSerieLite auteur = new AuteurSerieLite();
@@ -304,7 +310,7 @@ public class Serie extends AbstractScriptEntity implements EvaluatedEntity {
         return addAuteur(personne, getColoristes(), MetierAuteur.COLORISTE);
     }
 
-    private boolean removeAuteur(PersonneLite personne, Set<AuteurSerieLite> listAuteurs) {
+    private boolean removeAuteur(PersonneLite personne, List<AuteurSerieLite> listAuteurs) {
         for (AuteurSerieLite auteur : listAuteurs)
             if (auteur.getPersonne() == personne) {
                 listAuteurs.remove(auteur);
@@ -326,17 +332,17 @@ public class Serie extends AbstractScriptEntity implements EvaluatedEntity {
         return removeAuteur(personne, getColoristes());
     }
 
-    public Set<AuteurSerieLite> getScenaristes() {
+    public List<AuteurSerieLite> getScenaristes() {
         buildListsAuteurs();
         return scenaristes;
     }
 
-    public Set<AuteurSerieLite> getDessinateurs() {
+    public List<AuteurSerieLite> getDessinateurs() {
         buildListsAuteurs();
         return dessinateurs;
     }
 
-    public Set<AuteurSerieLite> getColoristes() {
+    public List<AuteurSerieLite> getColoristes() {
         buildListsAuteurs();
         return coloristes;
     }
@@ -377,15 +383,15 @@ public class Serie extends AbstractScriptEntity implements EvaluatedEntity {
         return notation;
     }
 
-    public Set<UniversLite> getUnivers() {
+    public List<UniversLite> getUnivers() {
         return univers;
     }
 
-    public void setUnivers(Set<UniversLite> univers) {
-        this.univers.set(FXCollections.observableSet(univers));
+    public void setUnivers(List<UniversLite> univers) {
+        this.univers.set(FXCollections.observableList(univers));
     }
 
-    public SetProperty<UniversLite> universProperty() {
+    public ListProperty<UniversLite> universProperty() {
         return univers;
     }
 
