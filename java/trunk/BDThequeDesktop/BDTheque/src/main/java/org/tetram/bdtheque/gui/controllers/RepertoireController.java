@@ -12,8 +12,6 @@ import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.TreeItemPropertyValueFactory;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.util.Callback;
@@ -25,7 +23,7 @@ import org.tetram.bdtheque.data.bean.AbstractEntity;
 import org.tetram.bdtheque.data.bean.EvaluatedEntity;
 import org.tetram.bdtheque.data.bean.ValeurListe;
 import org.tetram.bdtheque.data.dao.*;
-import org.tetram.bdtheque.data.dao.mappers.XMLFile;
+import org.tetram.bdtheque.data.dao.mappers.FileLink;
 import org.tetram.bdtheque.data.services.UserPreferences;
 import org.tetram.bdtheque.gui.utils.InitialeEntity;
 import org.tetram.bdtheque.gui.utils.NotationResource;
@@ -37,7 +35,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 @Controller
-@XMLFile("/org/tetram/bdtheque/gui/repertoire.fxml")
+@FileLink("/org/tetram/bdtheque/gui/repertoire.fxml")
 public class RepertoireController extends WindowController {
 
     @FXML

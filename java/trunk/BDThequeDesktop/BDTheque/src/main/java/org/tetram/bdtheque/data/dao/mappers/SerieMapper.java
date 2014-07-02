@@ -12,7 +12,7 @@ import java.util.UUID;
 /**
  * Created by Thierry on 25/05/2014.
  */
-@XMLFile("/org/tetram/bdtheque/data/dao/mappers/Serie.xml")
+@FileLink("/org/tetram/bdtheque/data/dao/mappers/Serie.xml")
 public interface SerieMapper extends BaseMapperInterface {
     SerieLite getSerieLiteById(UUID id);
 

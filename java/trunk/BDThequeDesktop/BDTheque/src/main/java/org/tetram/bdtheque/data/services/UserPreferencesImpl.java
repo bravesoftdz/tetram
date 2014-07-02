@@ -1,7 +1,9 @@
 package org.tetram.bdtheque.data.services;
 
 import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import org.jetbrains.annotations.NonNls;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -59,6 +61,16 @@ public class UserPreferencesImpl implements UserPreferences {
     private ApplicationContext applicationContext;
     private Properties defaultPrefs = null;
     private Properties prefs = null;
+
+    private BooleanProperty afficheNoteListes = null;
+    private ObjectProperty<Locale> locale = null;
+    private ObjectProperty<File> repImages = null;
+    private ObjectProperty<FormatTitreAlbum> formatTitreAlbum = null;
+    private BooleanProperty serieObligatoireAlbums = null;
+    private BooleanProperty serieObligatoireParaBD = null;
+    private BooleanProperty antiAliasing = null;
+    private BooleanProperty imagesStockees = null;
+    private ObjectProperty<File> database = null;
 
     public UserPreferencesImpl() {
     }
@@ -130,10 +142,6 @@ public class UserPreferencesImpl implements UserPreferences {
         return prefs;
     }
 
-    public void reload() {
-        prefs = null;
-    }
-
     @Override
     public void save() {
         if (prefs == null) return;
@@ -192,60 +200,130 @@ public class UserPreferencesImpl implements UserPreferences {
 
     @Override
     public File getRepImages() {
-        return getFilePref(PREF_REP_IMAGES);
+        return repImagesProperty().get();
     }
 
     @Override
     public void setRepImages(File value) {
-        setPref(PREF_REP_IMAGES, value);
+        repImagesProperty().set(value);
     }
 
     @Override
+    public ObjectProperty<File> repImagesProperty() {
+        if (repImages == null)
+            repImages = new SimpleObjectProperty<File>(this, "repImages", getFilePref(PREF_REP_IMAGES)) {
+                @Override
+                public void set(File newValue) {
+                    setPref(PREF_REP_IMAGES, newValue);
+                    super.set(newValue);
+                }
+            };
+        return repImages;
+    }
+
+
+    @Override
     public FormatTitreAlbum getFormatTitreAlbum() {
-        return FormatTitreAlbum.fromValue(getIntPref(PREF_FORMAT_TITRE_ALBUM));
+        return formatTitreAlbumProperty().get();
     }
 
     @Override
     public void setFormatTitreAlbum(FormatTitreAlbum value) {
-        setPref(PREF_FORMAT_TITRE_ALBUM, String.valueOf(value.getValue()));
+        formatTitreAlbumProperty().set(value);
+    }
+
+    @Override
+    public ObjectProperty<FormatTitreAlbum> formatTitreAlbumProperty() {
+        if (formatTitreAlbum == null)
+            formatTitreAlbum = new SimpleObjectProperty<FormatTitreAlbum>(this, "formatTitreAlbum", FormatTitreAlbum.fromValue(getIntPref(PREF_FORMAT_TITRE_ALBUM))) {
+                @Override
+                public void set(FormatTitreAlbum newValue) {
+                    setPref(PREF_FORMAT_TITRE_ALBUM, String.valueOf(newValue.getValue()));
+                    super.set(newValue);
+                }
+            };
+        return formatTitreAlbum;
     }
 
     @Override
     public boolean isSerieObligatoireAlbums() {
-        return getBooleanPref(PREF_SERIE_OBLIGATOIRE_ALBUMS);
+        return serieObligatoireAlbumsProperty().get();
     }
 
     @Override
     public void setSerieObligatoireAlbums(boolean value) {
-        setPref(PREF_SERIE_OBLIGATOIRE_ALBUMS, value);
+        serieObligatoireAlbumsProperty().set(value);
+    }
+
+    @Override
+    public BooleanProperty serieObligatoireAlbumsProperty() {
+        if (serieObligatoireAlbums == null)
+            serieObligatoireAlbums = new SimpleBooleanProperty(this, "serieObligatoireAlbums", getBooleanPref(PREF_SERIE_OBLIGATOIRE_ALBUMS)) {
+                @Override
+                public void set(boolean newValue) {
+                    setPref(PREF_SERIE_OBLIGATOIRE_ALBUMS, newValue);
+                    super.set(newValue);
+                }
+            };
+        return serieObligatoireAlbums;
     }
 
     @Override
     public boolean isSerieObligatoireParaBD() {
-        return getBooleanPref(PREF_SERIE_OBLIGATOIRE_PARABD);
+        return serieObligatoireParaBDProperty().get();
     }
+
 
     @Override
     public void setSerieObligatoireParaBD(boolean value) {
-        setPref(PREF_SERIE_OBLIGATOIRE_PARABD, value);
+        serieObligatoireParaBDProperty().set(value);
+    }
+
+
+    @Override
+    public BooleanProperty serieObligatoireParaBDProperty() {
+        if (serieObligatoireParaBD == null)
+            serieObligatoireParaBD = new SimpleBooleanProperty(this, "serieObligatoireParaBD", getBooleanPref(PREF_SERIE_OBLIGATOIRE_PARABD)) {
+                @Override
+                public void set(boolean newValue) {
+                    setPref(PREF_SERIE_OBLIGATOIRE_PARABD, newValue);
+                    super.set(newValue);
+                }
+            };
+        return serieObligatoireParaBD;
     }
 
     @Override
     public boolean isAntiAliasing() {
-        return getBooleanPref(PREF_ANTI_ALIASING);
+        return antiAliasingProperty().get();
     }
 
     @Override
     public void setAntiAliasing(boolean value) {
-        setPref(PREF_ANTI_ALIASING, value);
+        antiAliasingProperty().set(value);
     }
 
-    @NonNls
-    private BooleanProperty afficheNoteListes = null;
+    @Override
+    public BooleanProperty antiAliasingProperty() {
+        if (antiAliasing == null)
+            antiAliasing = new SimpleBooleanProperty(this, "antiAliasing", getBooleanPref(PREF_ANTI_ALIASING)) {
+                @Override
+                public void set(boolean newValue) {
+                    setPref(PREF_ANTI_ALIASING, newValue);
+                    super.set(newValue);
+                }
+            };
+        return antiAliasing;
+    }
 
     @Override
     public boolean isAfficheNoteListes() {
         return afficheNoteListesProperty().get();
+    }
+
+    @Override
+    public void setAfficheNoteListes(boolean value) {
+        afficheNoteListesProperty().set(value);
     }
 
     @Override
@@ -262,38 +340,71 @@ public class UserPreferencesImpl implements UserPreferences {
     }
 
     @Override
-    public void setAfficheNoteListes(boolean value) {
-        afficheNoteListesProperty().set(value);
-    }
-
-    @Override
     public boolean isImagesStockees() {
-        return getBooleanPref(PREF_IMAGES_STOCKEES);
+        return imagesStockeesProperty().get();
     }
 
     @Override
     public void setImagesStockees(boolean value) {
-        setPref(PREF_IMAGES_STOCKEES, value);
+        imagesStockeesProperty().set(value);
+    }
+
+    @Override
+    public BooleanProperty imagesStockeesProperty() {
+        if (imagesStockees == null)
+            imagesStockees = new SimpleBooleanProperty(this, "imagesStockees", getBooleanPref(PREF_IMAGES_STOCKEES)) {
+                @Override
+                public void set(boolean newValue) {
+                    setPref(PREF_IMAGES_STOCKEES, newValue);
+                    super.set(newValue);
+                }
+            };
+        return imagesStockees;
     }
 
     @Override
     public File getDatabase() {
-        return getFilePref(PREF_DATABASE);
+        return databaseProperty().get();
     }
 
     @Override
-    public void setDatabaseUrl(File value) {
-        setPref(PREF_DATABASE, value);
+    public void setDatabase(File value) {
+        databaseProperty().set(value);
+    }
+
+    @Override
+    public ObjectProperty<File> databaseProperty() {
+        if (database == null)
+            database = new SimpleObjectProperty<File>(this, "database", getFilePref(PREF_DATABASE)) {
+                @Override
+                public void set(File newValue) {
+                    setPref(PREF_DATABASE, newValue);
+                    super.set(newValue);
+                }
+            };
+        return database;
     }
 
     @Override
     public Locale getLocale() {
-        return Locale.forLanguageTag(getStringPref(PREF_LOCALE));
+        return localeProperty().get();
     }
 
     @Override
     public void setLocale(Locale locale) {
-        setPref(PREF_LOCALE, locale.toLanguageTag());
+        this.localeProperty().set(locale);
     }
 
+    @Override
+    public ObjectProperty<Locale> localeProperty() {
+        if (locale == null)
+            locale = new SimpleObjectProperty<Locale>(this, "locale", Locale.forLanguageTag(getStringPref(PREF_LOCALE))) {
+                @Override
+                public void set(Locale newValue) {
+                    setPref(PREF_LOCALE, newValue.toLanguageTag());
+                    super.set(newValue);
+                }
+            };
+        return locale;
+    }
 }

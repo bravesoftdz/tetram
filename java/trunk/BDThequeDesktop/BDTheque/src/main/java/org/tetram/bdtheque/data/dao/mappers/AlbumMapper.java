@@ -13,7 +13,7 @@ import java.util.UUID;
 /**
  * Created by Thierry on 29/05/2014.
  */
-@XMLFile("/org/tetram/bdtheque/data/dao/mappers/Album.xml")
+@FileLink("/org/tetram/bdtheque/data/dao/mappers/Album.xml")
 public interface AlbumMapper extends BaseMapperInterface {
     AlbumLite getAlbumLiteById(@Param("id") UUID id, @Param("idEdition") UUID idEdition);
 

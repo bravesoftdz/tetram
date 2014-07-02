@@ -9,7 +9,7 @@ import java.util.UUID;
 /**
  * Created by Thierry on 13/06/2014.
  */
-@XMLFile("/org/tetram/bdtheque/data/dao/mappers/Common.xml")
+@FileLink("/org/tetram/bdtheque/data/dao/mappers/Common.xml")
 public interface CommonMapper extends BaseMapperInterface {
     Set<String> fillAssociations(@Param("id") UUID id, @Param("typeData") int typeData);
 

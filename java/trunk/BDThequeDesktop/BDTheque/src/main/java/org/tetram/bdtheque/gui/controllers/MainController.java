@@ -1,7 +1,6 @@
 package org.tetram.bdtheque.gui.controllers;
 
 import impl.org.controlsfx.i18n.Localization;
-import javafx.beans.property.ReadOnlyStringPropertyBase;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -14,8 +13,10 @@ import org.tetram.bdtheque.SpringContext;
 import org.tetram.bdtheque.SpringFxmlLoader;
 import org.tetram.bdtheque.data.bean.Serie;
 import org.tetram.bdtheque.data.dao.SerieDao;
+import org.tetram.bdtheque.data.dao.mappers.FileLink;
 import org.tetram.bdtheque.data.services.UserPreferences;
 import org.tetram.bdtheque.gui.utils.Dialogs;
+import org.tetram.bdtheque.gui.utils.FileStringConverter;
 import org.tetram.bdtheque.utils.I18nSupport;
 import org.tetram.bdtheque.utils.StringUtils;
 
@@ -63,24 +64,11 @@ public class MainController extends WindowController {
     private SingleConnectionDataSource dataSource;
 
     @FXML
+    @FileLink("/org/tetram/bdtheque/config/default_database.properties")
     void initialize() throws IOException {
-        mnuDBFile.textProperty().bind(new ReadOnlyStringPropertyBase() {
-            @Override
-            public String get() {
-                return dataSource.getUrl().substring("jdbc:firebirdsql:".length());
-            }
-
-            @Override
-            public Object getBean() {
-                return this;
-            }
-
-            @NonNls
-            @Override
-            public String getName() {
-                return "dataSource";
-            }
-        });
+        // c'est du bidirectionnal parce qu'il n'y a pas de bind auquel on peut passer un StringConverter<File>
+        // si le menu est vide c'est qu'on utilise la valeur par défaut de default_database.properties
+        mnuDBFile.textProperty().bindBidirectional(userPreferences.databaseProperty(), new FileStringConverter());
 
         ModeConsultationController modeConsultationController = SpringFxmlLoader.load("modeConsultation.fxml");
         detailPane.getChildren().add(modeConsultationController.getView());

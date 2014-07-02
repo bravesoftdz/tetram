@@ -10,7 +10,7 @@ import java.util.UUID;
 /**
  * Created by Thierry on 30/05/2014.
  */
-@XMLFile("/org/tetram/bdtheque/data/dao/mappers/Auteur.xml")
+@FileLink("/org/tetram/bdtheque/data/dao/mappers/Auteur.xml")
 public interface AuteurMapper extends BaseMapperInterface {
     PersonneLite getPersonneLiteById(UUID id);
 

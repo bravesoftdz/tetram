@@ -11,7 +11,7 @@ import java.util.UUID;
 /**
  * Created by Thierry on 25/05/2014.
  */
-@XMLFile("/org/tetram/bdtheque/data/dao/mappers/ParaBD.xml")
+@FileLink("/org/tetram/bdtheque/data/dao/mappers/ParaBD.xml")
 public interface ParaBDMapper extends BaseMapperInterface {
     ParaBDLite getParaBDLiteById(UUID id);
 

@@ -5,7 +5,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.tetram.bdtheque.data.bean.Album;
 import org.tetram.bdtheque.data.dao.AlbumDao;
-import org.tetram.bdtheque.data.dao.mappers.XMLFile;
+import org.tetram.bdtheque.data.dao.mappers.FileLink;
 import org.tetram.bdtheque.gui.utils.EntityNotFoundException;
 
 import java.util.UUID;
@@ -13,7 +13,7 @@ import java.util.UUID;
 /**
  * Created by Thierry on 30/06/2014.
  */
-@XMLFile("/org/tetram/bdtheque/gui/consultation/ficheAlbum.fxml")
+@FileLink("/org/tetram/bdtheque/gui/consultation/ficheAlbum.fxml")
 public class FicheAlbumController extends WindowController {
 
     @Autowired
