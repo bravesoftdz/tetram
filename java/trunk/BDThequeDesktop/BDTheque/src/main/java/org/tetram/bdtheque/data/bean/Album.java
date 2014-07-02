@@ -108,36 +108,36 @@ public class Album extends AbstractDBEntity implements EvaluatedEntity {
         return complet.get();
     }
 
-    public BooleanProperty completProperty() {
-        return complet;
-    }
-
     public void setComplet(boolean complet) {
         this.complet.set(complet);
+    }
+
+    public BooleanProperty completProperty() {
+        return complet;
     }
 
     public String getTitreAlbum() {
         return titreAlbum.get();
     }
 
-    public StringProperty titreAlbumProperty() {
-        return titreAlbum;
-    }
-
     public void setTitreAlbum(String titreAlbum) {
         this.titreAlbum.set(titreAlbum);
+    }
+
+    public StringProperty titreAlbumProperty() {
+        return titreAlbum;
     }
 
     public Serie getSerie() {
         return serie.get();
     }
 
-    public ObjectProperty<Serie> serieProperty() {
-        return serie;
-    }
-
     public void setSerie(Serie serie) {
         this.serie.set(serie);
+    }
+
+    public ObjectProperty<Serie> serieProperty() {
+        return serie;
     }
 
     public UUID getIdSerie() {
@@ -148,84 +148,84 @@ public class Album extends AbstractDBEntity implements EvaluatedEntity {
         return TypeUtils.isNullOrZero(getAnneeParution()) ? null : moisParution.get();
     }
 
-    public ObjectProperty<Month> moisParutionProperty() {
-        return moisParution;
-    }
-
     public void setMoisParution(Month moisParution) {
         this.moisParution.set(moisParution);
+    }
+
+    public ObjectProperty<Month> moisParutionProperty() {
+        return moisParution;
     }
 
     public Year getAnneeParution() {
         return anneeParution.get();
     }
 
-    public ObjectProperty<Year> anneeParutionProperty() {
-        return anneeParution;
-    }
-
     public void setAnneeParution(Year anneeParution) {
         this.anneeParution.set(anneeParution);
+    }
+
+    public ObjectProperty<Year> anneeParutionProperty() {
+        return anneeParution;
     }
 
     public Integer getTome() {
         return tome.get();
     }
 
-    public ObjectProperty<Integer> tomeProperty() {
-        return tome;
-    }
-
     public void setTome(Integer tome) {
         this.tome.set(tome);
+    }
+
+    public ObjectProperty<Integer> tomeProperty() {
+        return tome;
     }
 
     public Integer getTomeDebut() {
         return tomeDebut.get();
     }
 
-    public ObjectProperty<Integer> tomeDebutProperty() {
-        return tomeDebut;
-    }
-
     public void setTomeDebut(Integer tomeDebut) {
         this.tomeDebut.set(tomeDebut);
+    }
+
+    public ObjectProperty<Integer> tomeDebutProperty() {
+        return tomeDebut;
     }
 
     public Integer getTomeFin() {
         return tomeFin.get();
     }
 
-    public ObjectProperty<Integer> tomeFinProperty() {
-        return tomeFin;
-    }
-
     public void setTomeFin(Integer tomeFin) {
         this.tomeFin.set(tomeFin);
+    }
+
+    public ObjectProperty<Integer> tomeFinProperty() {
+        return tomeFin;
     }
 
     public boolean isHorsSerie() {
         return horsSerie.get();
     }
 
-    public BooleanProperty horsSerieProperty() {
-        return horsSerie;
-    }
-
     public void setHorsSerie(boolean horsSerie) {
         this.horsSerie.set(horsSerie);
+    }
+
+    public BooleanProperty horsSerieProperty() {
+        return horsSerie;
     }
 
     public boolean isIntegrale() {
         return integrale.get();
     }
 
-    public BooleanProperty integraleProperty() {
-        return integrale;
-    }
-
     public void setIntegrale(boolean integrale) {
         this.integrale.set(integrale);
+    }
+
+    public BooleanProperty integraleProperty() {
+        return integrale;
     }
 
     public Set<AuteurAlbumLite> getAuteurs() {
@@ -325,36 +325,36 @@ public class Album extends AbstractDBEntity implements EvaluatedEntity {
         return sujet.get();
     }
 
-    public StringProperty sujetProperty() {
-        return sujet;
-    }
-
     public void setSujet(String sujet) {
         this.sujet.set(sujet);
+    }
+
+    public StringProperty sujetProperty() {
+        return sujet;
     }
 
     public String getNotes() {
         return notes.get();
     }
 
-    public StringProperty notesProperty() {
-        return notes;
-    }
-
     public void setNotes(String notes) {
         this.notes.set(notes);
+    }
+
+    public StringProperty notesProperty() {
+        return notes;
     }
 
     public Set<Edition> getEditions() {
         return editions.get();
     }
 
-    public SetProperty<Edition> editionsProperty() {
-        return editions;
-    }
-
     public void setEditions(Set<Edition> editions) {
         this.editions.set(FXCollections.observableSet(editions));
+    }
+
+    public SetProperty<Edition> editionsProperty() {
+        return editions;
     }
 
     public boolean addEdition(Edition edition) {
@@ -369,24 +369,24 @@ public class Album extends AbstractDBEntity implements EvaluatedEntity {
         return notation.get();
     }
 
-    public ObjectProperty<ValeurListe> notationProperty() {
-        return notation;
-    }
-
     public void setNotation(ValeurListe notation) {
         this.notation.set(notation == null || notation.getValeur() == 0 ? SpringContext.CONTEXT.getBean(ValeurListeDao.class).getDefaultNotation() : notation);
+    }
+
+    public ObjectProperty<ValeurListe> notationProperty() {
+        return notation;
     }
 
     public Set<UniversLite> getUnivers() {
         return univers.get();
     }
 
-    public SetProperty<UniversLite> universProperty() {
-        return univers;
-    }
-
     public void setUnivers(Set<UniversLite> univers) {
         this.univers.set(FXCollections.observableSet(univers));
+    }
+
+    public SetProperty<UniversLite> universProperty() {
+        return univers;
     }
 
     public ObservableSet<UniversLite> getUniversFull() {

@@ -369,24 +369,24 @@ public class Serie extends AbstractScriptEntity implements EvaluatedEntity {
         return notation.get();
     }
 
-    public ObjectProperty<ValeurListe> notationProperty() {
-        return notation;
-    }
-
     public void setNotation(ValeurListe notation) {
         this.notation.set(notation == null || notation.getValeur() == 0 ? SpringContext.CONTEXT.getBean(ValeurListeDao.class).getDefaultNotation() : notation);
+    }
+
+    public ObjectProperty<ValeurListe> notationProperty() {
+        return notation;
     }
 
     public Set<UniversLite> getUnivers() {
         return univers;
     }
 
-    public SetProperty<UniversLite> universProperty() {
-        return univers;
-    }
-
     public void setUnivers(Set<UniversLite> univers) {
         this.univers.set(FXCollections.observableSet(univers));
+    }
+
+    public SetProperty<UniversLite> universProperty() {
+        return univers;
     }
 
     @SuppressWarnings("SimplifiableIfStatement")

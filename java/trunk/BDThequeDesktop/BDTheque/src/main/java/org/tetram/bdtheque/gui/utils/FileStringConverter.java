@@ -6,8 +6,8 @@ import org.tetram.bdtheque.utils.StringUtils;
 import java.io.File;
 
 /**
-* Created by Thierry on 02/07/2014.
-*/
+ * Created by Thierry on 02/07/2014.
+ */
 public class FileStringConverter extends StringConverter<File> {
     @Override
     public String toString(File object) {

@@ -15,7 +15,7 @@ import java.util.Collection;
 public abstract class AbstractEntity {
 
     @NonNls
-    private StringProperty label = new ReadOnlyStringWrapper(this, "label", null){
+    private StringProperty label = new ReadOnlyStringWrapper(this, "label", null) {
         @Override
         public String get() {
             super.get();

@@ -81,12 +81,12 @@ public class SerieLite extends AbstractDBEntity implements EvaluatedEntity {
         return notation.get();
     }
 
-    public ObjectProperty<ValeurListe> notationProperty() {
-        return notation;
-    }
-
     public void setNotation(ValeurListe notation) {
         this.notation.set(notation == null || notation.getValeur() == 0 ? SpringContext.CONTEXT.getBean(ValeurListeDao.class).getDefaultNotation() : notation);
+    }
+
+    public ObjectProperty<ValeurListe> notationProperty() {
+        return notation;
     }
 
     @Override

@@ -22,18 +22,18 @@ public enum NotationResource {
         this.resource = resource;
     }
 
+    public static NotationResource fromValue(int value) {
+        for (NotationResource resource : values()) {
+            if (resource.value == value) return resource;
+        }
+        return null;
+    }
+
     public int getValue() {
         return value;
     }
 
     public String getResource() {
         return resource;
-    }
-
-    public static NotationResource fromValue(int value) {
-        for (NotationResource resource : values()) {
-            if (resource.value == value) return resource;
-        }
-        return null;
     }
 }

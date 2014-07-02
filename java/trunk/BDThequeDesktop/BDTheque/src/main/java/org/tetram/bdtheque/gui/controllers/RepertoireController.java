@@ -4,7 +4,10 @@
 
 package org.tetram.bdtheque.gui.controllers;
 
-import javafx.beans.property.*;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.property.ReadOnlyStringWrapper;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -106,17 +109,17 @@ public class RepertoireController extends WindowController {
                 return new ReadOnlyObjectWrapper<>(param.getValue().getValue());
             }
         };
-        final Callback<TreeTableColumn<AbstractEntity,AbstractEntity>, TreeTableCell<AbstractEntity,AbstractEntity>> imageCellFactory = new Callback<TreeTableColumn<AbstractEntity,AbstractEntity>, TreeTableCell<AbstractEntity,AbstractEntity>>() {
+        final Callback<TreeTableColumn<AbstractEntity, AbstractEntity>, TreeTableCell<AbstractEntity, AbstractEntity>> imageCellFactory = new Callback<TreeTableColumn<AbstractEntity, AbstractEntity>, TreeTableCell<AbstractEntity, AbstractEntity>>() {
 
             @Override
             public TreeTableCell<AbstractEntity, AbstractEntity> call(TreeTableColumn<AbstractEntity, AbstractEntity> param) {
-                return new TreeTableCell<AbstractEntity, AbstractEntity>(){
+                return new TreeTableCell<AbstractEntity, AbstractEntity>() {
 
                     @Override
                     protected void updateItem(AbstractEntity item, boolean empty) {
                         super.updateItem(item, empty);
                         setGraphic(null);
-                        if (item instanceof EvaluatedEntity){
+                        if (item instanceof EvaluatedEntity) {
                             final ValeurListe notation = ((EvaluatedEntity) item).getNotation();
                             final NotationResource resource = NotationResource.fromValue(notation.getValeur());
                             if (resource != null && notation.getValeur() > 900)
@@ -141,10 +144,10 @@ public class RepertoireController extends WindowController {
         for (InfoTab infoTab : tabView.values()) {
             infoTab.getTreeView().setOnMouseClicked(onMouseClicked);
             ((TreeTableColumn<AbstractEntity, String>) infoTab.getTreeView().getColumns().get(0)).setCellValueFactory(labelValueFactory);
-            if (infoTab.getTreeView().getColumns().size() > 1){
+            if (infoTab.getTreeView().getColumns().size() > 1) {
                 final TreeTableColumn<AbstractEntity, AbstractEntity> column = (TreeTableColumn<AbstractEntity, AbstractEntity>) infoTab.getTreeView().getColumns().get(1);
-                    column.setCellValueFactory(imageValueCellFactory);
-                    column.setCellFactory(imageCellFactory);
+                column.setCellValueFactory(imageValueCellFactory);
+                column.setCellFactory(imageCellFactory);
                 column.visibleProperty().bind(userPreferences.afficheNoteListesProperty());
             }
         }
