@@ -6,14 +6,17 @@ import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Labeled;
+import javafx.scene.control.ListView;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.Pane;
 import javafx.util.converter.IntegerStringConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.tetram.bdtheque.data.BeanUtils;
 import org.tetram.bdtheque.data.bean.AbstractDBEntity;
 import org.tetram.bdtheque.data.bean.Album;
+import org.tetram.bdtheque.data.bean.AlbumLite;
 import org.tetram.bdtheque.data.dao.AlbumDao;
 import org.tetram.bdtheque.data.dao.mappers.FileLink;
 import org.tetram.bdtheque.data.dao.mappers.FileLinks;
@@ -21,6 +24,7 @@ import org.tetram.bdtheque.gui.controllers.ModeConsultationController;
 import org.tetram.bdtheque.gui.controllers.WindowController;
 import org.tetram.bdtheque.gui.utils.EntityNotFoundException;
 import org.tetram.bdtheque.gui.utils.FlowItem;
+import org.tetram.bdtheque.gui.utils.NotationResource;
 import org.tetram.bdtheque.utils.I18nSupport;
 
 import java.time.YearMonth;
@@ -44,16 +48,7 @@ public class FicheAlbumController extends WindowController implements Consultati
     private ModeConsultationController modeConsultationController;
 
     @FXML
-    private CheckBox horsSerie;
-
-    @FXML
-    private Label tome;
-
-    @FXML
-    private CheckBox integrale;
-
-    @FXML
-    private Label integraleTomes;
+    private ImageView appreciation;
 
     @FXML
     private Label titreSerie;
@@ -62,7 +57,19 @@ public class FicheAlbumController extends WindowController implements Consultati
     private Label titreAlbum;
 
     @FXML
+    private Label tome;
+
+    @FXML
     private Label dateParution;
+
+    @FXML
+    private CheckBox integrale;
+
+    @FXML
+    private CheckBox horsSerie;
+
+    @FXML
+    private Label integraleTomes;
 
     @FXML
     private FlowPane lvUnivers;
@@ -80,45 +87,41 @@ public class FicheAlbumController extends WindowController implements Consultati
     private FlowPane lvColoristes;
 
     @FXML
+    private ListView<AlbumLite> lvSerie;
+
+    @FXML
     public void initialize() {
 
     }
 
     @Override
     public void setIdEntity(UUID id) {
-        lvUnivers.parentProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null)
-                lvUnivers.prefWidthProperty().bind(((Pane) newValue).widthProperty());
-        });
-        lvGenres.parentProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null)
-                lvGenres.prefWidthProperty().bind(((Pane) newValue).widthProperty());
-        });
-        lvScenaristes.parentProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null) {
-                lvScenaristes.prefWidthProperty().bind(((Pane) newValue).widthProperty());
-            }
-        });
-        lvDessinateurs.parentProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null) {
-                lvDessinateurs.prefWidthProperty().bind(((Pane) newValue).widthProperty());
-            }
-        });
-        lvColoristes.parentProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null) {
-                lvColoristes.prefWidthProperty().bind(((Pane) newValue).widthProperty());
-            }
-        });
-
         // pas la peine de se prendre la tête à faire des bind, la fenêtre est recrée à chaque affichage
 
         Album album = albumDao.get(id);
         if (album == null)
             throw new EntityNotFoundException();
 
+        final NotationResource notationResource = NotationResource.fromValue(album.getNotation());
+        appreciation.setImage(new Image("/org/tetram/bdtheque/graphics/png/32x32/" + notationResource.getResource()));
+
         if (album.getSerie() != null) {
             titreSerie.setText(BeanUtils.formatTitre(album.getSerie().getTitreSerie()));
             album.getSerie().genresProperty().forEach(genre -> lvGenres.getChildren().add(FlowItem.create(genre.buildLabel())));
+            lvSerie.itemsProperty().bind(album.getSerie().albumsProperty());
+            album.getSerie().getAlbums().forEach(albumLite -> {
+                if (album.getId().equals(albumLite.getId())) {
+                    lvSerie.getSelectionModel().select(albumLite);
+                    lvSerie.scrollTo(albumLite);
+                }
+            });
+            lvSerie.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2) {
+                    AlbumLite entity = lvSerie.getSelectionModel().getSelectedItem();
+                    if (entity != null)
+                        modeConsultationController.showConsultationForm(entity);
+                }
+            });
         }
         titreAlbum.setText(BeanUtils.formatTitre(album.getTitreAlbum()));
         tome.textProperty().bindBidirectional(album.tomeProperty(), new IntegerStringConverter());

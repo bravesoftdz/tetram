@@ -95,7 +95,7 @@
             a.id_album = #{id}
         ]]>
     </select>
-    <select id="getAlbumLiteBySerieIdByAuteurId" parameterType="map" resultMap="AlbumLite" resultOrdered="true">
+    <select id="getListAlbumLiteBySerieIdByAuteurId" parameterType="map" resultMap="AlbumLite" resultOrdered="true">
         select
         <include refid="fieldsAlbumLite"/>
         <![CDATA[
@@ -149,7 +149,7 @@
         ]]>
     </select>
 
-    <select id="getAlbumLiteBySerie" resultMap="AlbumLite">
+    <select id="getListAlbumLiteBySerie" resultMap="AlbumLite">
         <if test="idSerie == null">
             <bind name="idSerie" value="''"/>
         </if>

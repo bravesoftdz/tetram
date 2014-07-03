@@ -1,6 +1,7 @@
 package org.tetram.bdtheque.gui.utils;
 
 import org.jetbrains.annotations.NonNls;
+import org.tetram.bdtheque.data.bean.ValeurListe;
 
 /**
  * Created by Thierry on 01/07/2014.
@@ -20,6 +21,10 @@ public enum NotationResource {
 
         this.value = value;
         this.resource = resource;
+    }
+
+    public static NotationResource fromValue(ValeurListe value) {
+        return fromValue(value.getValeur());
     }
 
     public static NotationResource fromValue(int value) {

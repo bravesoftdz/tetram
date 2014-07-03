@@ -19,7 +19,7 @@ public interface AlbumMapper extends BaseMapperInterface {
 
     Album getAlbumById(@Param("id") UUID id);
 
-    List<AlbumLite> getAlbumLiteBySerieIdByAuteurId(@Param("idSerie") UUID idSerie, @Param("idAuteur") UUID idAuteur);
+    List<AlbumLite> getListAlbumLiteBySerieIdByAuteurId(@Param("idSerie") UUID idSerie, @Param("idAuteur") UUID idAuteur);
 
     int changeNotation(@Param("id") UUID id, @Param("notation") ValeurListe note);
 
@@ -27,7 +27,7 @@ public interface AlbumMapper extends BaseMapperInterface {
 
     List<InitialeEntity<UUID>> getInitialesSeries(@Param("filtre") String filtre);
 
-    List<AlbumLite> getAlbumLiteBySerie(@Param("idSerie") UUID idSerie, @Param("filtre") String filtre);
+    List<AlbumLite> getListAlbumLiteBySerie(@Param("idSerie") UUID idSerie, @Param("filtre") String filtre);
 
     List<InitialeEntity<Year>> getInitialesAnnees(@Param("filtre") String filtre);
 

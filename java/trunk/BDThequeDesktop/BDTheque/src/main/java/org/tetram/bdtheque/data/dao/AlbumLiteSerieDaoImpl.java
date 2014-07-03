@@ -38,6 +38,6 @@ public class AlbumLiteSerieDaoImpl extends DaoROImpl<AlbumLite, UUID> implements
 
     @Override
     public List<AlbumLite> getListEntitiesByInitiale(InitialeEntity<UUID> initiale, String filtre) {
-        return albumMapper.getAlbumLiteBySerie(initiale.getValue(), filtre);
+        return albumMapper.getListAlbumLiteBySerie(initiale.getValue(), filtre);
     }
 }

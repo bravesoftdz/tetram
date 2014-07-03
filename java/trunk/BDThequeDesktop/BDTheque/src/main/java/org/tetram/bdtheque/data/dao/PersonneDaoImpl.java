@@ -53,7 +53,7 @@ public class PersonneDaoImpl extends DaoScriptImpl<Personne, UUID> implements Pe
                     serie = serieDao.get(serieLite.getId());
                     lst.add(serie);
                 }
-                serie.setAlbums(albumMapper.getAlbumLiteBySerieIdByAuteurId(serie.getId(), id));
+                serie.setAlbums(albumMapper.getListAlbumLiteBySerieIdByAuteurId(serie.getId(), id));
                 serie.setParaBDs(paraBDMapper.getParaBDLiteBySerieIdByAuteurId(serie.getId(), id));
             }
             personne.setSeries(lst);

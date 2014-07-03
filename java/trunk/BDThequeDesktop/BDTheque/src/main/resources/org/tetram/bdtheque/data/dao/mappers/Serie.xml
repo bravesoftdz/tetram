@@ -41,6 +41,8 @@
                     column="id_serie"/>
         <collection property="genres" select="org.tetram.bdtheque.data.dao.mappers.GenreMapper.getListGenreBySerieId"
                     column="id_serie"/>
+        <collection property="albums" select="org.tetram.bdtheque.data.dao.mappers.AlbumMapper.getListAlbumLiteBySerie"
+                    column="{idSerie=id_serie}"/>
         <collection property="auteurs"
                     select="org.tetram.bdtheque.data.dao.mappers.AuteurMapper.getListAuteurLiteBySerieId"
                     column="id_serie" fetchType="eager"/>
