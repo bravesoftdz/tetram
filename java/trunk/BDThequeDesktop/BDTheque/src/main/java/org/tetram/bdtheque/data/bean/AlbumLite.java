@@ -17,35 +17,32 @@ import java.util.UUID;
 @SuppressWarnings("UnusedDeclaration")
 public class AlbumLite extends AbstractDBEntity implements EvaluatedEntity {
 
-    public static Comparator<AlbumLite> DEFAULT_COMPARATOR = new Comparator<AlbumLite>() {
-        @Override
-        public int compare(AlbumLite o1, AlbumLite o2) {
-            if (o1 == o2) return 0;
+    public static Comparator<AlbumLite> DEFAULT_COMPARATOR = (o1, o2) -> {
+        if (o1 == o2) return 0;
 
-            int comparaison;
+        int comparaison;
 
-            // horsSerie nulls first
-            comparaison = BeanUtils.compare(o1.isHorsSerie(), o2.isHorsSerie());
-            if (comparaison != 0) return comparaison;
+        // horsSerie nulls first
+        comparaison = BeanUtils.compare(o1.isHorsSerie(), o2.isHorsSerie());
+        if (comparaison != 0) return comparaison;
 
-            // integrale nulls first
-            comparaison = BeanUtils.compare(o1.isIntegrale(), o2.isIntegrale());
-            if (comparaison != 0) return comparaison;
+        // integrale nulls first
+        comparaison = BeanUtils.compare(o1.isIntegrale(), o2.isIntegrale());
+        if (comparaison != 0) return comparaison;
 
-            // tome nulls first
-            comparaison = BeanUtils.compare(o1.getTome(), o2.getTome());
-            if (comparaison != 0) return comparaison;
+        // tome nulls first
+        comparaison = BeanUtils.compare(o1.getTome(), o2.getTome());
+        if (comparaison != 0) return comparaison;
 
-            // anneeParution nulls first
-            comparaison = BeanUtils.compare(o1.getAnneeParution(), o2.getAnneeParution());
-            if (comparaison != 0) return comparaison;
+        // anneeParution nulls first
+        comparaison = BeanUtils.compare(o1.getAnneeParution(), o2.getAnneeParution());
+        if (comparaison != 0) return comparaison;
 
-            // moisParution nulls first
-            comparaison = BeanUtils.compare(o1.getMoisParution(), o2.getMoisParution());
-            if (comparaison != 0) return comparaison;
+        // moisParution nulls first
+        comparaison = BeanUtils.compare(o1.getMoisParution(), o2.getMoisParution());
+        if (comparaison != 0) return comparaison;
 
-            return 0;
-        }
+        return 0;
     };
     private Integer tome;
     private Integer tomeDebut, tomeFin;

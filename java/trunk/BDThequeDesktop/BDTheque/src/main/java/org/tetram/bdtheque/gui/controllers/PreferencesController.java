@@ -4,11 +4,8 @@ import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableNumberValue;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
@@ -83,20 +80,12 @@ public class PreferencesController extends DialogController {
         for (ToggleButton toggleButton : buttonNodeHashMap.keySet()) {
             toggleButton.minWidthProperty().bind(tabWidth);
             toggleButton.setUserData(buttonNodeHashMap.get(toggleButton));
-            toggleButton.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent event) {
-                    content.setCenter(buttonNodeHashMap.get(toggleButton));
-                }
-            });
+            toggleButton.setOnAction(event -> content.setCenter(buttonNodeHashMap.get(toggleButton)));
         }
 
-        btnTabGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
-            @Override
-            public void changed(ObservableValue<? extends Toggle> observable, Toggle oldButton, Toggle newButton) {
-                if (newButton == null)
-                    oldButton.setSelected(true);
-            }
+        btnTabGroup.selectedToggleProperty().addListener((observable, oldButton, newButton) -> {
+            if (newButton == null)
+                oldButton.setSelected(true);
         });
 
         // on ne peut pas utiliser le bind des propriétés: ça pourrait avoir une influence directe (et non contrôlée) sur l'appli
@@ -113,12 +102,7 @@ public class PreferencesController extends DialogController {
         Bindings.bindBidirectional(repImages.textProperty(), repImagesProperty, new FileStringConverter());
 
         content.setCenter(null);
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                btnOptionsDiverses.fire();
-            }
-        });
+        Platform.runLater(btnOptionsDiverses::fire);
     }
 
     @FXML

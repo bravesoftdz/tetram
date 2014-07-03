@@ -11,18 +11,15 @@ import java.util.Comparator;
 @DaoScriptImpl.ScriptInfo(typeData = 5)
 public class GenreLite extends AbstractScriptEntity {
 
-    public static Comparator<GenreLite> DEFAULT_COMPARATOR = new Comparator<GenreLite>() {
-        @Override
-        public int compare(GenreLite o1, GenreLite o2) {
-            if (o1 == o2) return 0;
+    public static Comparator<GenreLite> DEFAULT_COMPARATOR = (o1, o2) -> {
+        if (o1 == o2) return 0;
 
-            int comparaison;
+        int comparaison;
 
-            comparaison = BeanUtils.compare(o1.getGenre(), o2.getGenre());
-            if (comparaison != 0) return comparaison;
+        comparaison = BeanUtils.compare(o1.getGenre(), o2.getGenre());
+        if (comparaison != 0) return comparaison;
 
-            return 0;
-        }
+        return 0;
     };
     private String genre;
     private Integer quantite;

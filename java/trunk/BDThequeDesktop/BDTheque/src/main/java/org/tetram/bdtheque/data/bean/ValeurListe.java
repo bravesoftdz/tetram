@@ -14,21 +14,18 @@ import java.util.Comparator;
 @SuppressWarnings("UnusedDeclaration")
 public class ValeurListe {
 
-    public final static Comparator<ValeurListe> DEFAULT_COMPARATOR = new Comparator<ValeurListe>() {
-        @Override
-        public int compare(ValeurListe o1, ValeurListe o2) {
-            if (o1 == o2) return 0;
+    public final static Comparator<ValeurListe> DEFAULT_COMPARATOR = (o1, o2) -> {
+        if (o1 == o2) return 0;
 
-            int comparaison;
+        int comparaison;
 
-            comparaison = BeanUtils.compare(o1.getPosition(), o2.getPosition());
-            if (comparaison != 0) return comparaison;
+        comparaison = BeanUtils.compare(o1.getPosition(), o2.getPosition());
+        if (comparaison != 0) return comparaison;
 
-            comparaison = BeanUtils.compare(o1.getValeur(), o2.getValeur());
-            if (comparaison != 0) return comparaison;
+        comparaison = BeanUtils.compare(o1.getValeur(), o2.getValeur());
+        if (comparaison != 0) return comparaison;
 
-            return 0;
-        }
+        return 0;
     };
     private IntegerProperty valeur = new SimpleIntegerProperty();
     private StringProperty texte = new SimpleStringProperty();

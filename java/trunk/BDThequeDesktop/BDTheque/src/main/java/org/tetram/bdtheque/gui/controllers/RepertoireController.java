@@ -8,7 +8,6 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -98,18 +97,8 @@ public class RepertoireController extends WindowController {
         tabView.put(tabAuteurs.getId(), new InfoTab(tabAuteurs, tvAuteurs, PersonneLiteDao.class));
         tabView.put(tabParabd.getId(), new InfoTab(tabParabd, tvParabd, ParaBDLiteDao.class));
 
-        final Callback<TreeTableColumn.CellDataFeatures<AbstractEntity, String>, ObservableValue<String>> labelValueFactory = new Callback<TreeTableColumn.CellDataFeatures<AbstractEntity, String>, ObservableValue<String>>() {
-            @Override
-            public ObservableValue<String> call(TreeTableColumn.CellDataFeatures<AbstractEntity, String> param) {
-                return new ReadOnlyStringWrapper(param.getValue().getValue().buildLabel());
-            }
-        };
-        final Callback<TreeTableColumn.CellDataFeatures<AbstractEntity, AbstractEntity>, ObservableValue<AbstractEntity>> imageValueCellFactory = new Callback<TreeTableColumn.CellDataFeatures<AbstractEntity, AbstractEntity>, ObservableValue<AbstractEntity>>() {
-            @Override
-            public ObservableValue<AbstractEntity> call(TreeTableColumn.CellDataFeatures<AbstractEntity, AbstractEntity> param) {
-                return new ReadOnlyObjectWrapper<>(param.getValue().getValue());
-            }
-        };
+        final Callback<TreeTableColumn.CellDataFeatures<AbstractEntity, String>, ObservableValue<String>> labelValueFactory = param -> new ReadOnlyStringWrapper(param.getValue().getValue().buildLabel());
+        final Callback<TreeTableColumn.CellDataFeatures<AbstractEntity, AbstractEntity>, ObservableValue<AbstractEntity>> imageValueCellFactory = param -> new ReadOnlyObjectWrapper<>(param.getValue().getValue());
         final Callback<TreeTableColumn<AbstractEntity, AbstractEntity>, TreeTableCell<AbstractEntity, AbstractEntity>> imageCellFactory = new Callback<TreeTableColumn<AbstractEntity, AbstractEntity>, TreeTableCell<AbstractEntity, AbstractEntity>>() {
 
             @Override
@@ -131,14 +120,11 @@ public class RepertoireController extends WindowController {
             }
         };
 
-        final EventHandler<MouseEvent> onMouseClicked = new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                if (event.getClickCount() == 2) {
-                    final AbstractEntity selectedItem = currentInfoTab.get().getTreeView().getSelectionModel().getSelectedItem().getValue();
-                    if (selectedItem instanceof AbstractDBEntity)
-                        selectedEntity.set(((AbstractDBEntity) selectedItem));
-                }
+        final EventHandler<MouseEvent> onMouseClicked = event -> {
+            if (event.getClickCount() == 2) {
+                final AbstractEntity selectedItem = currentInfoTab.get().getTreeView().getSelectionModel().getSelectedItem().getValue();
+                if (selectedItem instanceof AbstractDBEntity)
+                    selectedEntity.set(((AbstractDBEntity) selectedItem));
             }
         };
 
@@ -153,43 +139,31 @@ public class RepertoireController extends WindowController {
             }
         }
 
-        infoTabAlbums.daoClassProperty().addListener(new ChangeListener<Class<? extends RepertoireLiteDao>>() {
-            @Override
-            public void changed(ObservableValue<? extends Class<? extends RepertoireLiteDao>> observable, Class<? extends RepertoireLiteDao> oldValue, Class<? extends RepertoireLiteDao> newValue) {
-                if (newValue != null)
-                    infoTabAlbums.getTreeView().setRoot(new InitialTreeItem(SpringContext.CONTEXT.getBean(newValue)));
-            }
+        infoTabAlbums.daoClassProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null)
+                infoTabAlbums.getTreeView().setRoot(new InitialTreeItem(SpringContext.CONTEXT.getBean(newValue)));
         });
 
         repertoireGroup.getItems().addAll(TypeRepertoireAlbumEntry.values());
         repertoireGroup.setValue(TypeRepertoireAlbumEntry.PAR_SERIE);
-        repertoireGroup.valueProperty().addListener(new ChangeListener<TypeRepertoireAlbumEntry>() {
-            @Override
-            public void changed(ObservableValue<? extends TypeRepertoireAlbumEntry> observable, TypeRepertoireAlbumEntry oldValue, TypeRepertoireAlbumEntry newValue) {
-                if (newValue != null)
-                    infoTabAlbums.setDaoClass(newValue.daoClass);
-            }
+        repertoireGroup.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null)
+                infoTabAlbums.setDaoClass(newValue.daoClass);
         });
 
-        currentInfoTab.addListener(new ChangeListener<InfoTab>() {
-            @Override
-            public void changed(ObservableValue<? extends InfoTab> observable, InfoTab oldValue, InfoTab newValue) {
-                if (newValue != null) {
-                    final InitialTreeItem root = (InitialTreeItem) newValue.getTreeView().getRoot();
-                    if (root == null || !newValue.getDaoClass().isInstance(root.dao))
-                        refresh();
-                }
+        currentInfoTab.addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                final InitialTreeItem root = (InitialTreeItem) newValue.getTreeView().getRoot();
+                if (root == null || !newValue.getDaoClass().isInstance(root.dao))
+                    refresh();
             }
         });
 
         // on se fiche du tab, il doit juste être différent de tabAlbums
         tabs.getSelectionModel().select(tabSeries);
-        tabs.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Tab>() {
-            @Override
-            public void changed(ObservableValue<? extends Tab> observable, Tab oldValue, Tab newValue) {
-                if (newValue != null)
-                    currentInfoTab.set(tabView.get(newValue.getId()));
-            }
+        tabs.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null)
+                currentInfoTab.set(tabView.get(newValue.getId()));
         });
         tabs.getSelectionModel().select(tabAlbums);
     }
@@ -199,6 +173,7 @@ public class RepertoireController extends WindowController {
         infoTab.getTreeView().setRoot(new InitialTreeItem(SpringContext.CONTEXT.getBean(infoTab.getDaoClass())));
     }
 
+    @SuppressWarnings("UnusedDeclaration")
     public AbstractDBEntity getSelectedEntity() {
         return selectedEntity.get();
     }

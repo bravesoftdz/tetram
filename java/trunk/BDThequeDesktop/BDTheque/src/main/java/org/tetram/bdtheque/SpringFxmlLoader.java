@@ -22,7 +22,7 @@ public class SpringFxmlLoader {
         return load(url, null);
     }
 
-    @SuppressWarnings({"unchecked", "ThrowFromFinallyBlock"})
+    @SuppressWarnings({"unchecked", "ThrowFromFinallyBlock", "Convert2MethodRef"})
     public static <T extends WindowController> T load(@NonNls String url, Stage stage) throws RuntimeException {
         InputStream fxmlStream = null;
         try {
@@ -30,14 +30,7 @@ public class SpringFxmlLoader {
             FXMLLoader loader = new FXMLLoader();
             // idéalement, il faudrait donner le classloader de la classe du futur controller
             //loader.setClassLoader();
-            loader.setControllerFactory(new Callback<Class<?>, Object>() {
-                @Override
-                public Object call(Class<?> aClass) {
-                    // on pourrait faire ((WindowController) bean).setDialog(stage); ici
-                    // mais comme on ne peut pas faire la même chose avec setView, ça n'a pas trop d'intérêt
-                    return SpringContext.CONTEXT.getBean(aClass);
-                }
-            });
+            loader.setControllerFactory(aClass -> SpringContext.CONTEXT.getBean(aClass));
             loader.setResources(I18nSupport.getCurrentBundle());
 
             Parent view = loader.load(fxmlStream);

@@ -12,18 +12,15 @@ import java.util.Comparator;
 @SuppressWarnings("UnusedDeclaration")
 public class PersonneLite extends AbstractDBEntity {
 
-    public final static Comparator<PersonneLite> DEFAULT_COMPARATOR = new Comparator<PersonneLite>() {
-        @Override
-        public int compare(PersonneLite o1, PersonneLite o2) {
-            if (o1 == o2) return 0;
+    public final static Comparator<PersonneLite> DEFAULT_COMPARATOR = (o1, o2) -> {
+        if (o1 == o2) return 0;
 
-            int comparaison;
+        int comparaison;
 
-            comparaison = BeanUtils.compare(o1.getNom(), o2.getNom());
-            if (comparaison != 0) return comparaison;
+        comparaison = BeanUtils.compare(o1.getNom(), o2.getNom());
+        if (comparaison != 0) return comparaison;
 
-            return 0;
-        }
+        return 0;
     };
     private StringProperty nom = new SimpleStringProperty(this, "nom", null);
 

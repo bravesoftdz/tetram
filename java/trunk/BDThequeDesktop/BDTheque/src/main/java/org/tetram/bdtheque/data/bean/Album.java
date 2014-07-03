@@ -22,35 +22,32 @@ import java.util.*;
 @SuppressWarnings("UnusedDeclaration")
 public class Album extends AbstractDBEntity implements EvaluatedEntity {
 
-    public static Comparator<Album> DEFAULT_COMPARATOR = new Comparator<Album>() {
-        @Override
-        public int compare(Album o1, Album o2) {
-            if (o1 == o2) return 0;
+    public static Comparator<Album> DEFAULT_COMPARATOR = (o1, o2) -> {
+        if (o1 == o2) return 0;
 
-            int comparaison;
+        int comparaison;
 
-            // horsSerie nulls first
-            comparaison = BeanUtils.compare(o1.isHorsSerie(), o2.isHorsSerie());
-            if (comparaison != 0) return comparaison;
+        // horsSerie nulls first
+        comparaison = BeanUtils.compare(o1.isHorsSerie(), o2.isHorsSerie());
+        if (comparaison != 0) return comparaison;
 
-            // integrale nulls first
-            comparaison = BeanUtils.compare(o1.isIntegrale(), o2.isIntegrale());
-            if (comparaison != 0) return comparaison;
+        // integrale nulls first
+        comparaison = BeanUtils.compare(o1.isIntegrale(), o2.isIntegrale());
+        if (comparaison != 0) return comparaison;
 
-            // tome nulls first
-            comparaison = BeanUtils.compare(o1.getTome(), o2.getTome());
-            if (comparaison != 0) return comparaison;
+        // tome nulls first
+        comparaison = BeanUtils.compare(o1.getTome(), o2.getTome());
+        if (comparaison != 0) return comparaison;
 
-            // anneeParution nulls first
-            comparaison = BeanUtils.compare(o1.getAnneeParution(), o2.getAnneeParution());
-            if (comparaison != 0) return comparaison;
+        // anneeParution nulls first
+        comparaison = BeanUtils.compare(o1.getAnneeParution(), o2.getAnneeParution());
+        if (comparaison != 0) return comparaison;
 
-            // moisParution nulls first
-            comparaison = BeanUtils.compare(o1.getMoisParution(), o2.getMoisParution());
-            if (comparaison != 0) return comparaison;
+        // moisParution nulls first
+        comparaison = BeanUtils.compare(o1.getMoisParution(), o2.getMoisParution());
+        if (comparaison != 0) return comparaison;
 
-            return 0;
-        }
+        return 0;
     };
     private static Album defaultAlbum = null;
     private BooleanProperty complet = new SimpleBooleanProperty(this, "complet", false);
@@ -79,46 +76,21 @@ public class Album extends AbstractDBEntity implements EvaluatedEntity {
         notation.set(valeurListeDao.getDefaultNotation());
 
 
-        final ListChangeListener<UniversLite> universListChangeListener = new ListChangeListener<UniversLite>() {
-            @Override
-            public void onChanged(Change<? extends UniversLite> change) {
-                universFull.set(FXCollections.observableList(BeanUtils.checkAndBuildListUniversFull(getUniversFull(), getUnivers(), getSerie())));
-            }
-        };
-        serie.addListener(new ChangeListener<Serie>() {
-            @Override
-            public void changed(ObservableValue<? extends Serie> observable, Serie oldValue, Serie newValue) {
-                if (oldValue != null) oldValue.universProperty().removeListener(universListChangeListener);
-                if (newValue != null) newValue.universProperty().addListener(universListChangeListener);
-                universFull.set(FXCollections.observableList(BeanUtils.checkAndBuildListUniversFull(getUniversFull(), getUnivers(), newValue)));
-            }
+        final ListChangeListener<UniversLite> universListChangeListener = change -> universFull.set(FXCollections.observableList(BeanUtils.checkAndBuildListUniversFull(getUniversFull(), getUnivers(), getSerie())));
+        serie.addListener((observable, oldValue, newValue) -> {
+            if (oldValue != null) oldValue.universProperty().removeListener(universListChangeListener);
+            if (newValue != null) newValue.universProperty().addListener(universListChangeListener);
+            universFull.set(FXCollections.observableList(BeanUtils.checkAndBuildListUniversFull(getUniversFull(), getUnivers(), newValue)));
         });
         univers.addListener(universListChangeListener);
 
-        anneeParution.addListener(new ChangeListener<Year>() {
-            @Override
-            public void changed(ObservableValue<? extends Year> observable, Year oldValue, Year newValue) {
-                if (TypeUtils.isNullOrZero(getAnneeParution()))
-                    moisParution.set(null);
-            }
+        anneeParution.addListener((observable, oldValue, newValue) -> {
+            if (TypeUtils.isNullOrZero(getAnneeParution()))
+                moisParution.set(null);
         });
 
-        auteurs.addListener(new ChangeListener<ObservableList<AuteurAlbumLite>>() {
-            @Override
-            public void changed(ObservableValue<? extends ObservableList<AuteurAlbumLite>> observable, ObservableList<AuteurAlbumLite> oldValue, ObservableList<AuteurAlbumLite> newValue) {
-                // on pourrait optimiser en répercutant la modification mais c'est un poil plus compliqué à écrire
-                // et vu la taille des listes, je suis pas sûr que le gain de perf soit significatif
-                buildListsAuteurs();
-            }
-        });
-        auteurs.addListener(new ListChangeListener<AuteurAlbumLite>() {
-            @Override
-            public void onChanged(Change<? extends AuteurAlbumLite> c) {
-                // on pourrait optimiser en répercutant la modification mais c'est un poil plus compliqué à écrire
-                // et vu la taille des listes, je suis pas sûr que le gain de perf soit significatif
-                buildListsAuteurs();
-            }
-        });
+        auteurs.addListener((observable, oldValue, newValue) -> buildListsAuteurs());
+        auteurs.addListener((ListChangeListener<AuteurAlbumLite>) c -> buildListsAuteurs());
     }
 
     public static Album getDefaultAlbum() {

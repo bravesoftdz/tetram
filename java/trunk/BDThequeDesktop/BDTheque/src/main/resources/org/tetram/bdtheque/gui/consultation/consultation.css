@@ -1,7 +1,53 @@
+/**
+  source: jfxrt.jar!/com/sun/javafx/scene/control/skin/caspian/caspian.css
+**/
+
 .scene{
     -fx-background-color: white;
 }
 
 .label-rubrique{
     -fx-text-fill: #0080c0;
+}
+
+.scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+
+.scroll-pane {
+    -fx-background-color: transparent;
+}
+
+.hyperlink {
+    -fx-padding: 0;
+/*
+    -fx-padding: 0.166667em;
+    -fx-cursor: hand;
+    -fx-content-display: LEFT;
+    -fx-text-fill: -fx-text-background-color;
+    -fx-border-color: transparent;
+    -fx-border-width: 1px;
+*/
+}
+
+/*
+.hyperlink:visited {
+    -fx-text-fill: -fx-accent;
+}
+*/
+
+/*
+.hyperlink:hover {
+    -fx-underline: true;
+}
+*/
+
+.hyperlink:focused {
+    -fx-border-color: transparent;
+/*
+    -fx-color: -fx-focused-base;
+    -fx-border-color: -fx-focus-color;
+    -fx-border-style: segments(0.166667em, 0.166667em);
+    -fx-border-width: 1px;
+*/
 }

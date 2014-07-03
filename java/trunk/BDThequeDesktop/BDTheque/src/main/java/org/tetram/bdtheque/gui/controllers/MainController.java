@@ -82,7 +82,7 @@ public class MainController extends WindowController {
         dialog.close();
     }
 
-    public void buttonTestClick(ActionEvent actionEvent) {
+    public void buttonTestClick(@SuppressWarnings("UnusedParameters") ActionEvent actionEvent) {
         Serie serie = serieDao.get(ID_SERIE_SILLAGE);
         buttonTest.setText(serie.getTitreSerie());
     }

@@ -109,15 +109,12 @@ public class Main extends Application {
         @NonNls HashMap<String, String> firebirdConf = new HashMap<>();
         if (firebirdConfFile.exists()) {
             try {
-                Files.lines(firebirdConfFile.toPath(), StandardCharsets.UTF_8).forEach(new Consumer<String>() {
-                    @Override
-                    public void accept(String s) {
-                        int i = s.indexOf('=');
-                        if (i == -1)
-                            firebirdConf.put(s, "");
-                        else
-                            firebirdConf.put(s.substring(0, i), s.substring(i + 1));
-                    }
+                Files.lines(firebirdConfFile.toPath(), StandardCharsets.UTF_8).forEach(line -> {
+                    int i = line.indexOf('=');
+                    if (i == -1)
+                        firebirdConf.put(line, "");
+                    else
+                        firebirdConf.put(line.substring(0, i), line.substring(i + 1));
                 });
             } catch (IOException e) {
                 e.printStackTrace();
@@ -128,17 +125,14 @@ public class Main extends Application {
         try {
             output = new FileOutputStream(firebirdConfFile, false);
             final OutputStream finalOutput = output;
-            firebirdConf.forEach(new BiConsumer<String, String>() {
-                @Override
-                public void accept(String key, String value) {
-                    try {
-                        String out = key;
-                        if (!key.trim().startsWith("#"))
-                            out += "=" + value;
-                        finalOutput.write((out + "\n").getBytes());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+            firebirdConf.forEach((key, value) -> {
+                try {
+                    String out = key;
+                    if (!key.trim().startsWith("#"))
+                        out += "=" + value;
+                    finalOutput.write((out + "\n").getBytes());
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
             });
 

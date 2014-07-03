@@ -12,18 +12,8 @@ import javafx.scene.control.Button;
  */
 public class DialogController extends WindowController {
 
-    public EventHandler<ActionEvent> okBtnClickListener = new EventHandler<ActionEvent>() {
-        @Override
-        public void handle(ActionEvent event) {
-            setResult(DialogResult.OK);
-        }
-    };
-    public EventHandler<ActionEvent> cancelBtnClickListener = new EventHandler<ActionEvent>() {
-        @Override
-        public void handle(ActionEvent event) {
-            setResult(DialogResult.CANCEL);
-        }
-    };
+    public EventHandler<ActionEvent> okBtnClickListener = event -> setResult(DialogResult.OK);
+    public EventHandler<ActionEvent> cancelBtnClickListener = event -> setResult(DialogResult.CANCEL);
     private ObjectProperty<DialogResult> result = new SimpleObjectProperty<>(this, "result", DialogResult.NONE);
 
     public DialogResult getResult() {

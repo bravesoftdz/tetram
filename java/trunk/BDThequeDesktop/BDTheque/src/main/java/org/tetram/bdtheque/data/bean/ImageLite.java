@@ -9,21 +9,18 @@ import java.util.Comparator;
  */
 public abstract class ImageLite extends AbstractDBEntity {
 
-    public static Comparator<ImageLite> DEFAULT_COMPARATOR = new Comparator<ImageLite>() {
-        @Override
-        public int compare(ImageLite o1, ImageLite o2) {
-            if (o1 == o2) return 0;
+    public static Comparator<ImageLite> DEFAULT_COMPARATOR = (o1, o2) -> {
+        if (o1 == o2) return 0;
 
-            int comparaison;
+        int comparaison;
 
-            comparaison = ValeurListe.DEFAULT_COMPARATOR.compare(o1.getCategorie(), o2.getCategorie());
-            if (comparaison != 0) return comparaison;
+        comparaison = ValeurListe.DEFAULT_COMPARATOR.compare(o1.getCategorie(), o2.getCategorie());
+        if (comparaison != 0) return comparaison;
 
-            comparaison = BeanUtils.compare(o1.getPosition(), o2.getPosition());
-            if (comparaison != 0) return comparaison;
+        comparaison = BeanUtils.compare(o1.getPosition(), o2.getPosition());
+        if (comparaison != 0) return comparaison;
 
-            return 0;
-        }
+        return 0;
     };
 
     private String oldNom, newNom;

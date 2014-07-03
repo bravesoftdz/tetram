@@ -22,7 +22,7 @@ public class EditeurDaoTest extends SpringTest {
     @SuppressWarnings("HardCodedStringLiteral")
     @Before
     public void setUp() {
-        sqlMapper.execute("delete from editeurs where nomediteur = '" + Constants.TEST_CREATE + "'");
+        sqlMapper.execute("delete from editeurs where nomEditeur = '" + Constants.TEST_CREATE + "'");
     }
 
     @Test

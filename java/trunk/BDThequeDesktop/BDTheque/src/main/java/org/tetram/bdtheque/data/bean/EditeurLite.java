@@ -9,18 +9,15 @@ import java.util.Comparator;
  */
 public class EditeurLite extends AbstractDBEntity {
 
-    public final static Comparator<EditeurLite> DEFAULT_COMPARATOR = new Comparator<EditeurLite>() {
-        @Override
-        public int compare(EditeurLite o1, EditeurLite o2) {
-            if (o1 == o2) return 0;
+    public final static Comparator<EditeurLite> DEFAULT_COMPARATOR = (o1, o2) -> {
+        if (o1 == o2) return 0;
 
-            int comparaison;
+        int comparaison;
 
-            comparaison = BeanUtils.compare(o1.getNomEditeur(), o2.getNomEditeur());
-            if (comparaison != 0) return comparaison;
+        comparaison = BeanUtils.compare(o1.getNomEditeur(), o2.getNomEditeur());
+        if (comparaison != 0) return comparaison;
 
-            return 0;
-        }
+        return 0;
     };
     private String nomEditeur;
 

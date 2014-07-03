@@ -13,18 +13,15 @@ import java.util.Comparator;
 @SuppressWarnings("UnusedDeclaration")
 public class CollectionLite extends AbstractDBEntity {
 
-    public static Comparator<CollectionLite> DEFAULT_COMPARATOR = new Comparator<CollectionLite>() {
-        @Override
-        public int compare(CollectionLite o1, CollectionLite o2) {
-            if (o1 == o2) return 0;
+    public static Comparator<CollectionLite> DEFAULT_COMPARATOR = (o1, o2) -> {
+        if (o1 == o2) return 0;
 
-            int comparaison;
+        int comparaison;
 
-            comparaison = BeanUtils.compare(o1.getNomCollection(), o2.getNomCollection());
-            if (comparaison != 0) return comparaison;
+        comparaison = BeanUtils.compare(o1.getNomCollection(), o2.getNomCollection());
+        if (comparaison != 0) return comparaison;
 
-            return 0;
-        }
+        return 0;
     };
     private StringProperty nomCollection = new SimpleStringProperty();
     private EditeurLite editeur;

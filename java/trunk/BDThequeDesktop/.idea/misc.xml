@@ -25,5 +25,8 @@
     </option>
     <option name="mySupportsUserInfoFilter" value="true" />
   </component>
+  <component name="TaskProjectConfiguration">
+    <server type="Redmine" url="http://dev.tetram.org" />
+  </component>
 </project>
 
