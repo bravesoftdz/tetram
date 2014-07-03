@@ -10,6 +10,8 @@ import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import javafx.util.converter.IntegerStringConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -42,10 +44,10 @@ import java.util.UUID;
 public class FicheAlbumController extends WindowController implements ConsultationController {
 
     @Autowired
-    private AlbumDao albumDao;
+    private ModeConsultationController modeConsultationController;
 
     @Autowired
-    private ModeConsultationController modeConsultationController;
+    private AlbumDao albumDao;
 
     @FXML
     private ImageView appreciation;
@@ -88,6 +90,12 @@ public class FicheAlbumController extends WindowController implements Consultati
 
     @FXML
     private ListView<AlbumLite> lvSerie;
+
+    @FXML
+    private TextFlow notes;
+
+    @FXML
+    private TextFlow histoire;
 
     @FXML
     public void initialize() {
@@ -155,5 +163,8 @@ public class FicheAlbumController extends WindowController implements Consultati
         album.scenaristesProperty().forEach(auteur -> lvScenaristes.getChildren().add(FlowItem.create(auteur.buildLabel(), openEntityEventHandler, auteur)));
         album.dessinateursProperty().forEach(auteur -> lvDessinateurs.getChildren().add(FlowItem.create(auteur.buildLabel(), openEntityEventHandler, auteur)));
         album.coloristesProperty().forEach(auteur -> lvColoristes.getChildren().add(FlowItem.create(auteur.buildLabel(), openEntityEventHandler, auteur)));
+
+        histoire.getChildren().add(new Text(album.getSujet()));
+        notes.getChildren().add(new Text(album.getNotes()));
     }
 }

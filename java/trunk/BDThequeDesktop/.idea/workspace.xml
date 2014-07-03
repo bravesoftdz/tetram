@@ -11,16 +11,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" readonly="true" id="32b66b81-914a-4675-898b-1fae1d6860ea" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/data/dao/mappers/Album.xml" afterPath="$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/data/dao/mappers/Album.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/dao/AlbumLiteSerieDaoImpl.java" afterPath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/dao/AlbumLiteSerieDaoImpl.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/dao/mappers/AlbumMapper.java" afterPath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/dao/mappers/AlbumMapper.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/gui/controllers/consultation/FicheAlbumController.java" afterPath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/gui/controllers/consultation/FicheAlbumController.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/gui/utils/NotationResource.java" afterPath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/gui/utils/NotationResource.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/dao/PersonneDaoImpl.java" afterPath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/dao/PersonneDaoImpl.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/data/dao/mappers/Serie.xml" afterPath="$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/data/dao/mappers/Serie.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/gui/consultation/ficheAlbum.fxml" afterPath="$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/gui/consultation/ficheAlbum.fxml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/gui/modeConsultation.fxml" afterPath="$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/gui/modeConsultation.fxml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/gui/theme.css" afterPath="$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/gui/theme.css" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="BDThequeDesktop.iws" />
@@ -52,17 +44,12 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="FicheAlbumController.java" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="FicheAlbumController.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/gui/controllers/consultation/FicheAlbumController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.25244617" vertical-offset="534" max-vertical-offset="2805">
-              <caret line="39" column="74" selection-start-line="39" selection-start-column="74" selection-end-line="39" selection-end-column="74" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#4312#4346#0" expanded="true" />
-                <element signature="e#4671#4711#0" expanded="true" />
-                <element signature="e#5021#5037#0" expanded="true" />
-              </folding>
+            <state vertical-scroll-proportion="0.0" vertical-offset="1502" max-vertical-offset="2465">
+              <caret line="167" column="60" selection-start-line="167" selection-start-column="60" selection-end-line="167" selection-end-column="60" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -74,11 +61,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ficheAlbum.fxml" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="ficheAlbum.fxml" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/gui/consultation/ficheAlbum.fxml">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="476" max-vertical-offset="1411">
-              <caret line="38" column="42" selection-start-line="38" selection-start-column="42" selection-end-line="38" selection-end-column="42" />
+            <state vertical-scroll-proportion="0.79204893" vertical-offset="1896" max-vertical-offset="2601">
+              <caret line="142" column="22" selection-start-line="142" selection-start-column="22" selection-end-line="142" selection-end-column="22" />
               <folding />
             </state>
           </provider>
@@ -575,17 +562,17 @@
     </option>
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/BDTheque/doc/VirtualTreeBdtk.pas" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/BDTheque/doc/Commun.pas" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/BDTheque/doc/EntitiesStats.pas" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/BDTheque/doc/DaoRecherche.pas" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/BDTheque/doc/VirtualTreeBdtk.pas" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/BDTheque/doc/Editions.pas" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/BDTheque/doc/UfrmEditParaBD.pas" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/BDTheque/doc/UfrmEditAlbum.pas" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/BDTheque/doc/Editions.pas" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/BDTheque/doc/ProceduresBDtk.pas" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/BDTheque/doc/CommonConst.pas" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/BDTheque/doc/Procedures.pas" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/BDTheque/doc/Proc_Gestions.pas" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/BDTheque/doc/EntitiesStats.pas" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/BDTheque/doc/CommonConst.pas" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/BDTheque/doc/Commun.pas" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
@@ -637,10 +624,10 @@
         <option value="$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/data/dao/mappers/Album.xml" />
         <option value="$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/data/dao/mappers/Serie.xml" />
         <option value="$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/gui/theme.css" />
-        <option value="$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/gui/consultation/ficheAlbum.fxml" />
         <option value="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/gui/utils/NotationResource.java" />
-        <option value="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/gui/controllers/consultation/FicheAlbumController.java" />
         <option value="$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/gui/modeConsultation.fxml" />
+        <option value="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/gui/controllers/consultation/FicheAlbumController.java" />
+        <option value="$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/gui/consultation/ficheAlbum.fxml" />
       </list>
     </option>
   </component>
@@ -707,6 +694,8 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="PackagesPane" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -844,6 +833,44 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="gui" />
+              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="BDThequeDesktop" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="BDThequeDesktop" />
+              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="BDTheque" />
+              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="resources" />
+              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="bdtheque" />
+              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="gui" />
+              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="consultation" />
               <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -1027,8 +1054,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
-      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -1161,6 +1186,12 @@
     </key>
   </component>
   <component name="RunManager" selected="Application.Main">
+    <configuration default="true" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Plugin">
+      <module name="" />
+      <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m -XX:MaxPermSize=250m -ea" />
+      <option name="PROGRAM_PARAMETERS" />
+      <method />
+    </configuration>
     <configuration default="true" type="GroovyScriptRunConfiguration" factoryName="Groovy">
       <module name="" />
       <setting name="path" value="" />
@@ -1168,33 +1199,6 @@
       <setting name="params" value="" />
       <setting name="workDir" value="file://$PROJECT_DIR$" />
       <setting name="debug" value="false" />
-      <method />
-    </configuration>
-    <configuration default="true" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Plugin">
-      <module name="" />
-      <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m -XX:MaxPermSize=250m -ea" />
-      <option name="PROGRAM_PARAMETERS" />
-      <method />
-    </configuration>
-    <configuration default="true" type="AndroidTestRunConfigurationType" factoryName="Android Tests">
-      <module name="" />
-      <option name="TESTING_TYPE" value="0" />
-      <option name="INSTRUMENTATION_RUNNER_CLASS" value="" />
-      <option name="METHOD_NAME" value="" />
-      <option name="CLASS_NAME" value="" />
-      <option name="PACKAGE_NAME" value="" />
-      <option name="TARGET_SELECTION_MODE" value="EMULATOR" />
-      <option name="USE_LAST_SELECTED_DEVICE" value="false" />
-      <option name="PREFERRED_AVD" value="" />
-      <option name="USE_COMMAND_LINE" value="true" />
-      <option name="COMMAND_LINE" value="" />
-      <option name="WIPE_USER_DATA" value="false" />
-      <option name="DISABLE_BOOT_ANIMATION" value="false" />
-      <option name="NETWORK_SPEED" value="full" />
-      <option name="NETWORK_LATENCY" value="none" />
-      <option name="CLEAR_LOGCAT" value="false" />
-      <option name="SHOW_LOGCAT_AUTOMATICALLY" value="true" />
-      <option name="FILTER_LOGCAT_AUTOMATICALLY" value="true" />
       <method />
     </configuration>
     <configuration default="true" type="MavenRunConfiguration" factoryName="Maven">
@@ -1217,6 +1221,27 @@
           </MavenRunnerParameters>
         </option>
       </MavenSettings>
+      <method />
+    </configuration>
+    <configuration default="true" type="AndroidTestRunConfigurationType" factoryName="Android Tests">
+      <module name="" />
+      <option name="TESTING_TYPE" value="0" />
+      <option name="INSTRUMENTATION_RUNNER_CLASS" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="CLASS_NAME" value="" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="TARGET_SELECTION_MODE" value="EMULATOR" />
+      <option name="USE_LAST_SELECTED_DEVICE" value="false" />
+      <option name="PREFERRED_AVD" value="" />
+      <option name="USE_COMMAND_LINE" value="true" />
+      <option name="COMMAND_LINE" value="" />
+      <option name="WIPE_USER_DATA" value="false" />
+      <option name="DISABLE_BOOT_ANIMATION" value="false" />
+      <option name="NETWORK_SPEED" value="full" />
+      <option name="NETWORK_LATENCY" value="none" />
+      <option name="CLEAR_LOGCAT" value="false" />
+      <option name="SHOW_LOGCAT_AUTOMATICALLY" value="true" />
+      <option name="FILTER_LOGCAT_AUTOMATICALLY" value="true" />
       <method />
     </configuration>
     <configuration default="true" type="#com.siberika.idea.pascal.run.FPCConfigurationType" factoryName="FPC executable">
@@ -1263,17 +1288,20 @@
       <option name="PARAMETERS" value="" />
       <method />
     </configuration>
-    <configuration default="true" type="Applet" factoryName="Applet">
-      <module name="" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="HTML_FILE_NAME" />
-      <option name="HTML_USED" value="false" />
-      <option name="WIDTH" value="400" />
-      <option name="HEIGHT" value="300" />
-      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
-      <option name="VM_PARAMETERS" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
+    <configuration default="true" type="XSLT" factoryName="XSLT">
+      <option name="myOutputFile" />
+      <option name="myOpenOutputFile" value="false" />
+      <option name="myOpenInBrowser" value="false" />
+      <option name="mySmartErrorHandling" value="true" />
+      <option name="myRunnerPort" value="34873" />
+      <option name="myVmArguments" />
+      <option name="myWorkingDirectory" />
+      <option name="myModule" />
+      <option name="myJdk" />
+      <parameters />
+      <OutputType value="CONSOLE" save-to-file="false" />
+      <FileType name="XML" />
+      <JdkChoice value="FROM_MODULE" />
       <method />
     </configuration>
     <configuration default="true" type="TestNG" factoryName="TestNG">
@@ -1303,20 +1331,17 @@
       <listeners />
       <method />
     </configuration>
-    <configuration default="true" type="XSLT" factoryName="XSLT">
-      <option name="myOutputFile" />
-      <option name="myOpenOutputFile" value="false" />
-      <option name="myOpenInBrowser" value="false" />
-      <option name="mySmartErrorHandling" value="true" />
-      <option name="myRunnerPort" value="34873" />
-      <option name="myVmArguments" />
-      <option name="myWorkingDirectory" />
-      <option name="myModule" />
-      <option name="myJdk" />
-      <parameters />
-      <OutputType value="CONSOLE" save-to-file="false" />
-      <FileType name="XML" />
-      <JdkChoice value="FROM_MODULE" />
+    <configuration default="true" type="Applet" factoryName="Applet">
+      <module name="" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="HTML_FILE_NAME" />
+      <option name="HTML_USED" value="false" />
+      <option name="WIDTH" value="400" />
+      <option name="HEIGHT" value="300" />
+      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
+      <option name="VM_PARAMETERS" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
       <method />
     </configuration>
     <configuration default="true" type="Application" factoryName="Application">
@@ -1808,7 +1833,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1096" extended-state="6" />
+    <frame x="-8" y="-8" width="1936" height="1096" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -1816,26 +1841,26 @@
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32995737" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.5410011" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3940362" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.4259851" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.42515594" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32870865" sideWeight="0.5" order="8" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3290735" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32161874" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.12686567" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.26444444" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32694355" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.20149253" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25985092" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32995737" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.25985092" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Documentation" active="false" anchor="right" auto_hide="true" internal_type="DOCKED" type="FLOATING" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" x="92" y="92" width="1736" height="896" />
+      <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32995737" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3940362" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.39829606" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
@@ -1893,6 +1918,14 @@
     </buildFile>
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/gui/consultation/ficheAlbum.fxml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="646" max-vertical-offset="1819">
+          <caret line="38" column="42" selection-start-line="38" selection-start-column="42" selection-end-line="38" selection-end-column="42" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="jar://C:/Program Files (x86)/Java/jdk1.8.0_20/jre/lib/ext/jfxrt.jar!/com/sun/javafx/scene/control/skin/caspian/embedded.css">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-0.49902153" vertical-offset="255" max-vertical-offset="4641">
@@ -1953,13 +1986,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/gui/utils/FlowItem.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="103" max-vertical-offset="765">
-          <caret line="18" column="0" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/gui/controllers/PreferencesController.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="1258" max-vertical-offset="2074">
@@ -1985,7 +2011,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="1.4245496" vertical-offset="27363" max-vertical-offset="60010">
           <caret line="1767" column="18" selection-start-line="1767" selection-start-column="18" selection-end-line="1767" selection-end-column="18" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2001,7 +2026,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.3536036" vertical-offset="5483" max-vertical-offset="14841">
           <caret line="409" column="22" selection-start-line="409" selection-start-column="22" selection-end-line="409" selection-end-column="22" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2106,7 +2130,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="272" max-vertical-offset="1292">
           <caret line="16" column="69" selection-start-line="16" selection-start-column="69" selection-end-line="16" selection-end-column="69" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2142,7 +2165,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="912">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2150,7 +2172,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="449" max-vertical-offset="1122">
           <caret line="55" column="44" selection-start-line="55" selection-start-column="44" selection-end-line="55" selection-end-column="44" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2158,7 +2179,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="177" max-vertical-offset="833">
           <caret line="29" column="20" selection-start-line="29" selection-start-column="20" selection-end-line="29" selection-end-column="20" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2166,7 +2186,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.6543438" vertical-offset="54" max-vertical-offset="595">
           <caret line="38" column="13" selection-start-line="38" selection-start-column="13" selection-end-line="38" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2184,7 +2203,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="2285" max-vertical-offset="5032">
           <caret line="153" column="31" selection-start-line="153" selection-start-column="24" selection-end-line="153" selection-end-column="31" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2192,7 +2210,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="459">
           <caret line="14" column="52" selection-start-line="14" selection-start-column="52" selection-end-line="14" selection-end-column="52" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2200,9 +2217,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="347" max-vertical-offset="3230">
           <caret line="44" column="37" selection-start-line="44" selection-start-column="37" selection-end-line="44" selection-end-column="37" />
-          <folding>
-            <marker date="1404396111125" expanded="true" signature="-1:-1" placeholder="..." />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -2210,7 +2225,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="187">
           <caret line="1" column="30" selection-start-line="1" selection-start-column="30" selection-end-line="1" selection-end-column="30" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2218,7 +2232,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.7338552" vertical-offset="288" max-vertical-offset="799">
           <caret line="62" column="9" selection-start-line="62" selection-start-column="9" selection-end-line="62" selection-end-column="9" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2226,15 +2239,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.26280624" vertical-offset="1311" max-vertical-offset="4488">
           <caret line="123" column="12" selection-start-line="123" selection-start-column="12" selection-end-line="123" selection-end-column="12" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/gui/consultation/ficheAlbum.fxml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="476" max-vertical-offset="1411">
-          <caret line="38" column="42" selection-start-line="38" selection-start-column="42" selection-end-line="38" selection-end-column="42" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2242,9 +2246,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.6717892" vertical-offset="0" max-vertical-offset="911">
           <caret line="40" column="18" selection-start-line="40" selection-start-column="18" selection-end-line="40" selection-end-column="18" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -2260,6 +2261,13 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.09330406" vertical-offset="0" max-vertical-offset="911">
           <caret line="16" column="46" selection-start-line="16" selection-start-column="46" selection-end-line="16" selection-end-column="46" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/gui/controllers/consultation/FicheAlbumController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="1502" max-vertical-offset="2465">
+          <caret line="167" column="60" selection-start-line="167" selection-start-column="60" selection-end-line="167" selection-end-column="60" />
           <folding />
         </state>
       </provider>
@@ -2269,16 +2277,11 @@
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/gui/controllers/consultation/FicheAlbumController.java">
+    <entry file="file://$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/gui/consultation/ficheAlbum.fxml">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.25244617" vertical-offset="534" max-vertical-offset="2805">
-          <caret line="39" column="74" selection-start-line="39" selection-start-column="74" selection-end-line="39" selection-end-column="74" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#4312#4346#0" expanded="true" />
-            <element signature="e#4671#4711#0" expanded="true" />
-            <element signature="e#5021#5037#0" expanded="true" />
-          </folding>
+        <state vertical-scroll-proportion="0.79204893" vertical-offset="1896" max-vertical-offset="2601">
+          <caret line="142" column="22" selection-start-line="142" selection-start-column="22" selection-end-line="142" selection-end-column="22" />
+          <folding />
         </state>
       </provider>
     </entry>
