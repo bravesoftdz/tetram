@@ -37,6 +37,7 @@ import org.tetram.bdtheque.utils.I18nSupport;
 import org.tetram.bdtheque.utils.ISBNUtils;
 
 import java.io.ByteArrayInputStream;
+import java.io.UnsupportedEncodingException;
 import java.text.MessageFormat;
 import java.text.NumberFormat;
 import java.time.YearMonth;
@@ -196,8 +197,13 @@ public class FicheAlbumController extends WindowController implements Consultati
             lbCote.setText(edition.getAnneeCote() == null ? null : MessageFormat.format("{0} ({0})", NumberFormat.getCurrencyInstance(userPreferences.getLocale()).format(edition.getPrixCote()), edition.getAnneeCote().format(DateTimeFormatter.ofPattern(I18nSupport.message("format.year")))));
             lbDateAchat.setText(edition.getDateAchat() == null ? null : edition.getDateAchat().format(DateTimeFormatter.ofPattern(I18nSupport.message("format.date"))));
 
+
             final NumberFormat currencyInstance = NumberFormat.getCurrencyInstance(userPreferences.getLocale());
-            lbPrix.setText(edition.getPrix() == null ? null : currencyInstance.format(edition.getPrix()));
+            try {
+                lbPrix.setText(edition.getPrix() == null ? null : new String(currencyInstance.format(edition.getPrix()).getBytes(), "UTF-8"));
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
 
             lbAnneeEdition.setText(edition.getAnneeEdition().format(DateTimeFormatter.ofPattern(I18nSupport.message("format.year"))));
             cbOffert.setSelected(edition.isOffert());

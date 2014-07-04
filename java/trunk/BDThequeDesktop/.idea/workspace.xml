@@ -11,49 +11,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" readonly="true" id="32b66b81-914a-4675-898b-1fae1d6860ea" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/graphics/png/16x16/tool_resume.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__commons_beanutils_1_8_3.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__commons_digester_1_8.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/Gradle__commons_validator_1_4_0.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BDTheque/doc/UfrmConsultationAlbum.pas" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/bean/Album.java" afterPath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/bean/Album.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/dao/mappers/AlbumMapper.java" afterPath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/dao/mappers/AlbumMapper.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/dao/mappers/AuteurMapper.java" afterPath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/dao/mappers/AuteurMapper.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/BDTheque.iml" afterPath="$PROJECT_DIR$/BDTheque/BDTheque.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/bean/Collection.java" afterPath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/bean/Collection.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/dao/mappers/CollectionMapper.java" afterPath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/dao/mappers/CollectionMapper.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/dao/mappers/CommonMapper.java" afterPath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/dao/mappers/CommonMapper.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/bean/Editeur.java" afterPath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/bean/Editeur.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/dao/mappers/EditeurMapper.java" afterPath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/dao/mappers/EditeurMapper.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/bean/Edition.java" afterPath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/bean/Edition.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/dao/EditionDaoImpl.java" afterPath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/dao/EditionDaoImpl.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/bean/EditionLite.java" afterPath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/bean/EditionLite.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/dao/mappers/EditionMapper.java" afterPath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/dao/mappers/EditionMapper.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/gui/controllers/consultation/FicheAlbumController.java" afterPath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/gui/controllers/consultation/FicheAlbumController.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/dao/mappers/GenreMapper.java" afterPath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/dao/mappers/GenreMapper.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/utils/ISBNUtils.java" afterPath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/utils/ISBNUtils.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/dao/ImageLiteDao.java" afterPath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/dao/ImageLiteDao.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/dao/mappers/ImageMapper.java" afterPath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/dao/mappers/ImageMapper.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/Main.java" afterPath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/Main.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/gui/controllers/MainController.java" afterPath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/gui/controllers/MainController.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/gui/controllers/ModeConsultationController.java" afterPath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/gui/controllers/ModeConsultationController.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/dao/mappers/ParaBDMapper.java" afterPath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/dao/mappers/ParaBDMapper.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/gui/controllers/PreferencesController.java" afterPath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/gui/controllers/PreferencesController.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/gui/controllers/RepertoireController.java" afterPath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/gui/controllers/RepertoireController.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/dao/mappers/SerieMapper.java" afterPath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/dao/mappers/SerieMapper.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/dictionaries/Thierry.xml" afterPath="$PROJECT_DIR$/.idea/dictionaries/Thierry.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/dao/mappers/UniversMapper.java" afterPath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/dao/mappers/UniversMapper.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/dao/mappers/ValeurListeMapper.java" afterPath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/dao/mappers/ValeurListeMapper.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/lang/bd.properties" afterPath="$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/lang/bd.properties" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/lang/bd_en.properties" afterPath="$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/lang/bd_en.properties" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/build.gradle" afterPath="$PROJECT_DIR$/BDTheque/build.gradle" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/gui/consultation/consultation.css" afterPath="$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/gui/consultation/consultation.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/encodings.xml" afterPath="$PROJECT_DIR$/.idea/encodings.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/gui/consultation/ficheAlbum.fxml" afterPath="$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/gui/consultation/ficheAlbum.fxml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/gui/modeConsultation.fxml" afterPath="$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/gui/modeConsultation.fxml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MOVED" beforePath="D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\src\main\java\org\tetram\bdtheque\data\dao\mappers\FileLink.java" afterPath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/utils/FileLink.java" />
-      <change type="MOVED" beforePath="D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\src\main\java\org\tetram\bdtheque\data\dao\mappers\FileLinks.java" afterPath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/utils/FileLinks.java" />
     </list>
     <ignored path="BDThequeDesktop.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -87,15 +46,15 @@
       <file leaf-file-name="FicheAlbumController.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/gui/controllers/consultation/FicheAlbumController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.49499" vertical-offset="2439" max-vertical-offset="4879">
-              <caret line="199" column="0" selection-start-line="199" selection-start-column="0" selection-end-line="199" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.49499" vertical-offset="2456" max-vertical-offset="4964">
+              <caret line="201" column="17" selection-start-line="201" selection-start-column="17" selection-end-line="201" selection-end-column="17" />
               <folding>
-                <element signature="e#6790#6824#0" expanded="true" />
-                <element signature="e#6960#6994#0" expanded="true" />
-                <element signature="e#7317#7351#0" expanded="true" />
-                <element signature="e#10214#10248#0" expanded="true" />
-                <element signature="e#10576#10616#0" expanded="true" />
-                <element signature="e#10929#10945#0" expanded="true" />
+                <element signature="e#6835#6869#0" expanded="true" />
+                <element signature="e#7005#7039#0" expanded="true" />
+                <element signature="e#7523#7557#0" expanded="true" />
+                <element signature="e#10420#10454#0" expanded="true" />
+                <element signature="e#10782#10822#0" expanded="true" />
+                <element signature="e#11135#11151#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -2145,7 +2104,11 @@
       <created>1404393507508</created>
       <updated>1404393507508</updated>
     </task>
-    <option name="localTasksCounter" value="68" />
+    <task id="LOCAL-00068">
+      <created>1404481268129</created>
+      <updated>1404481268129</updated>
+    </task>
+    <option name="localTasksCounter" value="69" />
     <option name="createBranch" value="false" />
     <servers>
       <Redmine shared="true" url="http://dev.tetram.org">
@@ -2693,15 +2656,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/gui/controllers/consultation/FicheAlbumController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.49499" vertical-offset="2439" max-vertical-offset="4879">
-          <caret line="199" column="0" selection-start-line="199" selection-start-column="0" selection-end-line="199" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.49499" vertical-offset="2456" max-vertical-offset="4964">
+          <caret line="201" column="17" selection-start-line="201" selection-start-column="17" selection-end-line="201" selection-end-column="17" />
           <folding>
-            <element signature="e#6790#6824#0" expanded="true" />
-            <element signature="e#6960#6994#0" expanded="true" />
-            <element signature="e#7317#7351#0" expanded="true" />
-            <element signature="e#10214#10248#0" expanded="true" />
-            <element signature="e#10576#10616#0" expanded="true" />
-            <element signature="e#10929#10945#0" expanded="true" />
+            <element signature="e#6835#6869#0" expanded="true" />
+            <element signature="e#7005#7039#0" expanded="true" />
+            <element signature="e#7523#7557#0" expanded="true" />
+            <element signature="e#10420#10454#0" expanded="true" />
+            <element signature="e#10782#10822#0" expanded="true" />
+            <element signature="e#11135#11151#0" expanded="true" />
           </folding>
         </state>
       </provider>
