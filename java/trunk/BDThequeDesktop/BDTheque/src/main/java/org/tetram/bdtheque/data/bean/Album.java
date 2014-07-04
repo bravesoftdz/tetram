@@ -1,8 +1,6 @@
 package org.tetram.bdtheque.data.bean;
 
 import javafx.beans.property.*;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -14,7 +12,10 @@ import org.tetram.bdtheque.utils.TypeUtils;
 
 import java.time.Month;
 import java.time.Year;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by Thierry on 24/05/2014.
@@ -66,7 +67,7 @@ public class Album extends AbstractDBEntity implements EvaluatedEntity {
     private ListProperty<AuteurAlbumLite> coloristes = new SimpleListProperty<>(this, "coloristes", FXCollections.<AuteurAlbumLite>observableList(new ArrayList<>()));
     private StringProperty sujet = new AutoTrimStringProperty(this, "sujet", null);
     private StringProperty notes = new AutoTrimStringProperty(this, "notes", null);
-    private SetProperty<Edition> editions = new SimpleSetProperty<>(this, "editions", FXCollections.<Edition>observableSet(new HashSet<>()));
+    private ListProperty<Edition> editions = new SimpleListProperty<>(this, "editions", FXCollections.<Edition>observableList(new ArrayList<>()));
     private ObjectProperty<ValeurListe> notation = new SimpleObjectProperty<>(this, "notation", null);
     private ListProperty<UniversLite> univers = new SimpleListProperty<>(this, "univers", FXCollections.<UniversLite>observableList(new ArrayList<>()));
     private ListProperty<UniversLite> universFull = new SimpleListProperty<>(this, "universFull", FXCollections.<UniversLite>observableList(new ArrayList<>()));
@@ -351,15 +352,15 @@ public class Album extends AbstractDBEntity implements EvaluatedEntity {
         return notes;
     }
 
-    public Set<Edition> getEditions() {
+    public List<Edition> getEditions() {
         return editions.get();
     }
 
-    public void setEditions(Set<Edition> editions) {
-        this.editions.set(FXCollections.observableSet(editions));
+    public void setEditions(List<Edition> editions) {
+        this.editions.set(FXCollections.observableList(editions));
     }
 
-    public SetProperty<Edition> editionsProperty() {
+    public ListProperty<Edition> editionsProperty() {
         return editions;
     }
 

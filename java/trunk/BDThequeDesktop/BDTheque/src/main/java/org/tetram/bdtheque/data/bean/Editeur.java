@@ -30,4 +30,8 @@ public class Editeur extends AbstractScriptEntity {
         this.siteWeb = siteWeb;
     }
 
+    @Override
+    public String buildLabel() {
+        return BeanUtils.formatTitre(getNomEditeur());
+    }
 }

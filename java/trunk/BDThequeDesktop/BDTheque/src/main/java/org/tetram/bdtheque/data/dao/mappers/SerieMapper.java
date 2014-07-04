@@ -5,6 +5,7 @@ import org.tetram.bdtheque.data.bean.Serie;
 import org.tetram.bdtheque.data.bean.SerieLite;
 import org.tetram.bdtheque.data.bean.ValeurListe;
 import org.tetram.bdtheque.gui.utils.InitialeEntity;
+import org.tetram.bdtheque.utils.FileLink;
 
 import java.util.List;
 import java.util.UUID;

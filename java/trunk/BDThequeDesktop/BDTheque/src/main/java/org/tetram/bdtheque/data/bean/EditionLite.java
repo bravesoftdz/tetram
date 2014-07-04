@@ -76,11 +76,13 @@ public class EditionLite extends AbstractDBEntity {
 
     @Override
     public String buildLabel() {
-        String s;
-        s = StringUtils.ajoutString("", BeanUtils.formatTitre(editeur.getNomEditeur()), " ");
-        s = StringUtils.ajoutString(s, BeanUtils.formatTitre(collection.getNomCollection()), " ", "(", ")");
-        s = StringUtils.ajoutString(s, TypeUtils.nonZero(anneeEdition), " ", "[", "]");
-        s = StringUtils.ajoutString(s, ISBNUtils.formatISBN(isbn), " - ", I18nSupport.message("isbn") + " ");
+        String s = "";
+        if (getEditeur() != null)
+            s = StringUtils.ajoutString(s, BeanUtils.formatTitre(getEditeur().getNomEditeur()), " ");
+        if (getCollection() != null)
+            s = StringUtils.ajoutString(s, BeanUtils.formatTitre(getCollection().getNomCollection()), " ", "(", ")");
+        s = StringUtils.ajoutString(s, TypeUtils.nonZero(getAnneeEdition()), " ", "[", "]");
+        s = StringUtils.ajoutString(s, ISBNUtils.formatISBN(getIsbn()), " - ", I18nSupport.message("isbn") + " ");
         return s;
     }
 

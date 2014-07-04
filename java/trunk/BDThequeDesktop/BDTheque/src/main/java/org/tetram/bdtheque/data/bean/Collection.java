@@ -6,6 +6,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import org.tetram.bdtheque.data.BeanUtils;
 import org.tetram.bdtheque.data.dao.DaoScriptImpl;
+import org.tetram.bdtheque.utils.StringUtils;
 
 import java.util.UUID;
 
@@ -46,5 +47,23 @@ public class Collection extends AbstractScriptEntity {
     public UUID getIdEditeur() {
         return getEditeur() == null ? null : getEditeur().getId();
     }
+
+    @Override
+    public String toString() {
+        return buildLabel(false);
+    }
+
+    @Override
+    public String buildLabel() {
+        return buildLabel(true);
+    }
+
+    public String buildLabel(boolean simple) {
+        String lb = BeanUtils.formatTitre(getNomCollection());
+        if (!simple && getEditeur() != null)
+            lb = StringUtils.ajoutString(lb, getEditeur().buildLabel(), " ", "(", ")");
+        return lb;
+    }
+
 
 }

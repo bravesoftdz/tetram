@@ -42,7 +42,7 @@ public class EditionDaoImpl extends DaoRWImpl<Edition, UUID> implements EditionD
         /*
         ce n'est pas à faire par le DAO: il faut que l'utilisateur confirme la correction proposée
 
-        int l = object.getISBN() == null ? 0 : object.getISBN().length();
+        int l = object.getIsbn() == null ? 0 : object.getIsbn().length();
         if not(lISBN in[10, 13])
                 l = (object.getAnneeEdition() == 0 || object.getAnneeEdition() >= 2007) ? 13 : 10;
         if not VerifieISBN(cs, lISBN) then
@@ -108,8 +108,8 @@ public class EditionDaoImpl extends DaoRWImpl<Edition, UUID> implements EditionD
             dest.setPrixCote(source.getPrixCote());
         if (source.isCouleur() != defaultEdition.isCouleur())
             dest.setCouleur(source.isCouleur());
-        if (source.isVO() != defaultEdition.isVO())
-            dest.setVO(source.isVO());
+        if (source.isVo() != defaultEdition.isVo())
+            dest.setVo(source.isVo());
         if (source.isDedicace() != defaultEdition.isDedicace())
             dest.setDedicace(source.isDedicace());
         if (source.isStock() != defaultEdition.isStock())
@@ -120,8 +120,8 @@ public class EditionDaoImpl extends DaoRWImpl<Edition, UUID> implements EditionD
             dest.setOffert(source.isOffert());
         if (source.isGratuit() != defaultEdition.isGratuit())
             dest.setGratuit(source.isGratuit());
-        if (!TypeUtils.sameValue(source.getISBN(), defaultEdition.getISBN()))
-            dest.setISBN(source.getISBN());
+        if (!TypeUtils.sameValue(source.getIsbn(), defaultEdition.getIsbn()))
+            dest.setIsbn(source.getIsbn());
         if (!TypeUtils.sameValue(source.getDateAchat(), defaultEdition.getDateAchat()))
             dest.setDateAchat(source.getDateAchat());
         if (!TypeUtils.sameValue(source.getNotes(), defaultEdition.getNotes()))

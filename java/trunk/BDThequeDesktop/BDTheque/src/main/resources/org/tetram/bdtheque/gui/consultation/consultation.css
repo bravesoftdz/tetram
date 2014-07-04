@@ -51,3 +51,8 @@
     -fx-border-width: 1px;
 */
 }
+
+.flow-border {
+    -fx-background-color: -fx-box-border, -fx-control-inner-background;
+    -fx-background-insets: 0, 1;
+}

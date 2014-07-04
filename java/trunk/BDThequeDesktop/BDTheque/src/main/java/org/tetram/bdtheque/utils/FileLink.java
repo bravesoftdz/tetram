@@ -1,4 +1,4 @@
-package org.tetram.bdtheque.data.dao.mappers;
+package org.tetram.bdtheque.utils;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

@@ -4,6 +4,7 @@ import org.apache.ibatis.annotations.Param;
 import org.tetram.bdtheque.data.bean.ParaBD;
 import org.tetram.bdtheque.data.bean.ParaBDLite;
 import org.tetram.bdtheque.gui.utils.InitialeEntity;
+import org.tetram.bdtheque.utils.FileLink;
 
 import java.util.List;
 import java.util.UUID;

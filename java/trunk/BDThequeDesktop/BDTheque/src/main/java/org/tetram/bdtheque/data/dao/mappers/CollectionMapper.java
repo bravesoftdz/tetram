@@ -2,6 +2,7 @@ package org.tetram.bdtheque.data.dao.mappers;
 
 import org.tetram.bdtheque.data.bean.Collection;
 import org.tetram.bdtheque.data.bean.CollectionLite;
+import org.tetram.bdtheque.utils.FileLink;
 
 import java.util.List;
 import java.util.UUID;

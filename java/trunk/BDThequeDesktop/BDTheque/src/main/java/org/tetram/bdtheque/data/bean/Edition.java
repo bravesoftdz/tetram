@@ -1,8 +1,16 @@
 package org.tetram.bdtheque.data.bean;
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import org.tetram.bdtheque.SpringContext;
 import org.tetram.bdtheque.data.BeanUtils;
 import org.tetram.bdtheque.data.dao.ValeurListeDao;
+import org.tetram.bdtheque.utils.I18nSupport;
+import org.tetram.bdtheque.utils.ISBNUtils;
+import org.tetram.bdtheque.utils.StringUtils;
+import org.tetram.bdtheque.utils.TypeUtils;
 
 import java.time.LocalDate;
 import java.time.Year;
@@ -27,17 +35,17 @@ public class Edition extends AbstractDBEntity {
     private ValeurListe orientation;
     private ValeurListe sensLecture;
     private Year anneeEdition;
-    private Integer nombreDePages;
+    private ObjectProperty<Integer> nombreDePages = new SimpleObjectProperty<>();
     private Year anneeCote;
     private Double prix;
     private Double prixCote;
-    private boolean couleur;
-    private boolean vo;
-    private boolean dedicace;
-    private boolean stock;
-    private boolean prete;
-    private boolean offert;
-    private boolean gratuit;
+    private BooleanProperty couleur = new SimpleBooleanProperty();
+    private BooleanProperty vo = new SimpleBooleanProperty();
+    private BooleanProperty dedicace = new SimpleBooleanProperty();
+    private BooleanProperty stock = new SimpleBooleanProperty();
+    private BooleanProperty prete = new SimpleBooleanProperty();
+    private BooleanProperty offert = new SimpleBooleanProperty();
+    private BooleanProperty gratuit = new SimpleBooleanProperty();
     private String isbn;
     private LocalDate dateAchat;
     private String notes;
@@ -57,6 +65,18 @@ public class Edition extends AbstractDBEntity {
     public static Edition getDefaultEdition() {
         if (defaultEdition == null) defaultEdition = new Edition();
         return defaultEdition;
+    }
+
+    @Override
+    public String buildLabel() {
+        String s = "";
+        if (getEditeur() != null)
+            s = StringUtils.ajoutString(s, BeanUtils.formatTitre(getEditeur().getNomEditeur()), " ");
+        if (getCollection() != null)
+            s = StringUtils.ajoutString(s, BeanUtils.formatTitre(getCollection().getNomCollection()), " ", "(", ")");
+        s = StringUtils.ajoutString(s, TypeUtils.nonZero(getAnneeEdition()), " ", "[", "]");
+        s = StringUtils.ajoutString(s, ISBNUtils.formatISBN(getIsbn()), " - ", I18nSupport.message("isbn") + " ");
+        return s;
     }
 
     public UUID getIdAlbum() {
@@ -100,11 +120,15 @@ public class Edition extends AbstractDBEntity {
     }
 
     public Integer getNombreDePages() {
+        return nombreDePages.get();
+    }
+
+    public ObjectProperty<Integer> nombreDePagesProperty() {
         return nombreDePages;
     }
 
     public void setNombreDePages(Integer nombreDePages) {
-        this.nombreDePages = nombreDePages;
+        this.nombreDePages.set(nombreDePages);
     }
 
     public Year getAnneeCote() {
@@ -132,66 +156,94 @@ public class Edition extends AbstractDBEntity {
     }
 
     public boolean isCouleur() {
-        return couleur;
+        return couleur.get();
     }
 
     public void setCouleur(boolean couleur) {
-        this.couleur = couleur;
+        this.couleur.set(couleur);
     }
 
-    public boolean isVO() {
+    public BooleanProperty couleurProperty() {
+        return couleur;
+    }
+
+    public BooleanProperty voProperty() {
         return vo;
     }
 
-    public void setVO(boolean vo) {
-        this.vo = vo;
-    }
-
-    public boolean isDedicace() {
+    public BooleanProperty dedicaceProperty() {
         return dedicace;
     }
 
-    public void setDedicace(boolean dedicace) {
-        this.dedicace = dedicace;
-    }
-
-    public boolean isStock() {
+    public BooleanProperty stockProperty() {
         return stock;
     }
 
-    public void setStock(boolean stock) {
-        this.stock = stock;
-    }
-
-    public boolean isPrete() {
+    public BooleanProperty preteProperty() {
         return prete;
     }
 
-    public void setPrete(boolean prete) {
-        this.prete = prete;
-    }
-
-    public boolean isOffert() {
+    public BooleanProperty offertProperty() {
         return offert;
     }
 
-    public void setOffert(boolean offert) {
-        this.offert = offert;
-    }
-
-    public boolean isGratuit() {
+    public BooleanProperty gratuitProperty() {
         return gratuit;
     }
 
-    public void setGratuit(boolean gratuit) {
-        this.gratuit = gratuit;
+    public boolean isVo() {
+        return vo.get();
     }
 
-    public String getISBN() {
+    public void setVo(boolean vo) {
+        this.vo.set(vo);
+    }
+
+    public boolean isDedicace() {
+        return dedicace.get();
+    }
+
+    public void setDedicace(boolean dedicace) {
+        this.dedicace.set(dedicace);
+    }
+
+    public boolean isStock() {
+        return stock.get();
+    }
+
+    public void setStock(boolean stock) {
+        this.stock.set(stock);
+    }
+
+    public boolean isPrete() {
+        return prete.get();
+    }
+
+    public void setPrete(boolean prete) {
+        this.prete.set(prete);
+    }
+
+    public boolean isOffert() {
+        return offert.get();
+    }
+
+    public void setOffert(boolean offert) {
+        this.offert.set(offert);
+    }
+
+    public boolean isGratuit() {
+        return gratuit.get();
+    }
+
+    public void setGratuit(boolean gratuit) {
+        this.gratuit.set(gratuit);
+    }
+
+    public String getIsbn() {
         return BeanUtils.trimOrNull(isbn);
     }
 
-    public void setISBN(String isbn) {
+    public void setIsbn(String isbn) {
         this.isbn = BeanUtils.trimOrNull(isbn);
     }
 

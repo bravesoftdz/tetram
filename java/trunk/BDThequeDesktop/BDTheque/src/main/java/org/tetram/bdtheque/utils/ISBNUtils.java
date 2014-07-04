@@ -165,8 +165,8 @@ public class ISBNUtils {
 
     public static String clearISBN(final String code) {
         final StringBuilder result = new StringBuilder(code.length());
-        for (final char c : code.toUpperCase(Locale.US).toCharArray())
-            if (Character.isDigit(c) || (c == 'X')) {
+        for (final char c : code.toCharArray())
+            if (Character.isDigit(c) || (c == 'X') || (c == 'x')) {
                 result.append(c);
             }
         return result.toString();

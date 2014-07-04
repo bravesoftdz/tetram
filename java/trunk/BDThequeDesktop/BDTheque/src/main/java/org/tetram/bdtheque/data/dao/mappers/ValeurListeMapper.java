@@ -3,6 +3,7 @@ package org.tetram.bdtheque.data.dao.mappers;
 import org.apache.ibatis.annotations.MapKey;
 import org.tetram.bdtheque.data.bean.CategorieValeurListe;
 import org.tetram.bdtheque.data.bean.DefaultValeurListe;
+import org.tetram.bdtheque.utils.FileLink;
 
 import java.util.Map;
 

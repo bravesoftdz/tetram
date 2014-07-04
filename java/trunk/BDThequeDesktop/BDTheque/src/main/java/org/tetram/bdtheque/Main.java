@@ -21,8 +21,6 @@ import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Locale;
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 
 public class Main extends Application {
 
@@ -171,7 +169,7 @@ public class Main extends Application {
 
         primaryStage.setTitle(APPLICATION_TITLE);
         primaryStage.setMaximized(true);
-        Scene scene = new Scene((Parent) mainController.getView());
+        Scene scene = new Scene((Parent) mainController.getView(), 1280, 800);
         primaryStage.setScene(scene);
         primaryStage.show();
     }

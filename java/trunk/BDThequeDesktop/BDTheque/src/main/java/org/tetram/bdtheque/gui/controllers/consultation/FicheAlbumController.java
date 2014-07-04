@@ -1,34 +1,44 @@
 package org.tetram.bdtheque.gui.controllers.consultation;
 
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.ListProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleListProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.Labeled;
-import javafx.scene.control.ListView;
+import javafx.geometry.Pos;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.util.converter.IntegerStringConverter;
+import org.jetbrains.annotations.NonNls;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.tetram.bdtheque.data.BeanUtils;
-import org.tetram.bdtheque.data.bean.AbstractDBEntity;
-import org.tetram.bdtheque.data.bean.Album;
-import org.tetram.bdtheque.data.bean.AlbumLite;
+import org.tetram.bdtheque.data.bean.*;
 import org.tetram.bdtheque.data.dao.AlbumDao;
-import org.tetram.bdtheque.data.dao.mappers.FileLink;
-import org.tetram.bdtheque.data.dao.mappers.FileLinks;
+import org.tetram.bdtheque.data.dao.CouvertureLiteDao;
+import org.tetram.bdtheque.data.services.UserPreferences;
 import org.tetram.bdtheque.gui.controllers.ModeConsultationController;
 import org.tetram.bdtheque.gui.controllers.WindowController;
 import org.tetram.bdtheque.gui.utils.EntityNotFoundException;
 import org.tetram.bdtheque.gui.utils.FlowItem;
 import org.tetram.bdtheque.gui.utils.NotationResource;
+import org.tetram.bdtheque.utils.FileLink;
+import org.tetram.bdtheque.utils.FileLinks;
 import org.tetram.bdtheque.utils.I18nSupport;
+import org.tetram.bdtheque.utils.ISBNUtils;
 
+import java.io.ByteArrayInputStream;
+import java.text.MessageFormat;
+import java.text.NumberFormat;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.UUID;
@@ -43,82 +53,188 @@ import java.util.UUID;
 })
 public class FicheAlbumController extends WindowController implements ConsultationController {
 
+    @NonNls
+    private static final String CSS_FLOW_B0RDER = "flow-border";
+
     @Autowired
     private ModeConsultationController modeConsultationController;
 
     @Autowired
     private AlbumDao albumDao;
 
+    @Autowired
+    private CouvertureLiteDao couvertureDao;
+
+    @Autowired
+    private UserPreferences userPreferences;
+
     @FXML
     private ImageView appreciation;
-
     @FXML
     private Label titreSerie;
-
     @FXML
     private Label titreAlbum;
-
     @FXML
     private Label tome;
-
     @FXML
     private Label dateParution;
-
     @FXML
     private CheckBox integrale;
-
     @FXML
     private CheckBox horsSerie;
-
     @FXML
     private Label integraleTomes;
-
     @FXML
     private FlowPane lvUnivers;
-
     @FXML
     private FlowPane lvGenres;
-
     @FXML
     private FlowPane lvScenaristes;
-
     @FXML
     private FlowPane lvDessinateurs;
-
     @FXML
     private FlowPane lvColoristes;
-
     @FXML
     private ListView<AlbumLite> lvSerie;
+    @FXML
+    private TextFlow histoire;
 
     @FXML
     private TextFlow notes;
 
     @FXML
-    private TextFlow histoire;
+    private Pagination diaporama;
+
+    @FXML
+    private ListView<Edition> lvEditions;
+
+    @FXML
+    private VBox detailEdition;
+    @FXML
+    private Label lbIsbn;
+    @FXML
+    private Label lbEditeur;
+    @FXML
+    private Label lbCollection;
+    @FXML
+    private Label lbCote;
+    @FXML
+    private Label lbDateAchat;
+    @FXML
+    private Label lbPrix;
+    @FXML
+    private Label lbAnneeEdition;
+    @FXML
+    private CheckBox cbOffert;
+    @FXML
+    private CheckBox cbStock;
+    @FXML
+    private Label lbPages;
+    @FXML
+    private CheckBox cbDedicace;
+    @FXML
+    private CheckBox cbVO;
+    @FXML
+    private CheckBox cbCouleur;
+    @FXML
+    private Label lbReliure;
+    @FXML
+    private Label lbOrientation;
+    @FXML
+    private Label lbSensLecture;
+    @FXML
+    private Label lbFormat;
+    @FXML
+    private Label lbNumeroPerso;
+
+
+    @FXML
+    private Label lbEtat;
+    private ObjectProperty<Album> album = new SimpleObjectProperty<>();
+    private Image[] cacheImages = null;
+    private ListProperty<CouvertureLite> images = new SimpleListProperty<>();
+    private ListProperty<Edition> editions = new SimpleListProperty<>();
+    private ObjectProperty<Edition> currentEdition = new SimpleObjectProperty<>();
 
     @FXML
     public void initialize() {
+        lvSerie.setCellFactory(param -> {
+            ListCell<AlbumLite> cell = new ListCell<>();
+            cell.underlineProperty().bind(Bindings.equal(cell.itemProperty(), album));
+            cell.textProperty().bind(Bindings.createStringBinding(() -> cell.itemProperty().get() == null ? null : cell.itemProperty().get().buildLabel(false), cell.itemProperty()));
+            return cell;
+        });
+        lvEditions.setCellFactory(param -> {
+            ListCell<Edition> cell = new ListCell<>();
+            cell.underlineProperty().bind(Bindings.equal(cell.itemProperty(), currentEdition));
+            cell.textProperty().bind(Bindings.createStringBinding(() -> cell.itemProperty().get() == null ? null : cell.itemProperty().get().buildLabel(), cell.itemProperty()));
+            return cell;
+        });
 
+        detailEdition.visibleProperty().bind(Bindings.isNotEmpty(editions));
+        lvEditions.visibleProperty().bind(Bindings.greaterThan(editions.sizeProperty(), 1));
+        lvEditions.itemsProperty().bind(editions);
+        lvEditions.setOnMouseClicked((event) -> {
+            if (event.getClickCount() == 2)
+                currentEdition.set(lvEditions.getSelectionModel().getSelectedItem());
+        });
+
+        diaporama.pageCountProperty().bind(images.sizeProperty());
+        diaporama.pageCountProperty().addListener((observable, oldValue, newValue) -> diaporama.setCurrentPageIndex(0));
+        diaporama.visibleProperty().bind(Bindings.greaterThan(diaporama.pageCountProperty(), 0));
+        diaporama.setPageFactory(this::createImagePage);
+
+        currentEdition.addListener((observable) -> {
+            Edition edition = currentEdition.get();
+            if (edition == null) return;
+
+            lvEditions.getSelectionModel().select(edition);
+
+            lbIsbn.setText(edition.getIsbn() == null ? null : ISBNUtils.formatISBN(edition.getIsbn()));
+            lbEditeur.setText(edition.getEditeur() == null ? null : edition.getEditeur().toString());
+            lbCollection.setText(edition.getCollection() == null ? null : edition.getCollection().buildLabel(true));
+            lbCote.setText(edition.getAnneeCote() == null ? null : MessageFormat.format("{0} ({0})", NumberFormat.getCurrencyInstance(userPreferences.getLocale()).format(edition.getPrixCote()), edition.getAnneeCote().format(DateTimeFormatter.ofPattern(I18nSupport.message("format.year")))));
+            lbDateAchat.setText(edition.getDateAchat() == null ? null : edition.getDateAchat().format(DateTimeFormatter.ofPattern(I18nSupport.message("format.date"))));
+
+            final NumberFormat currencyInstance = NumberFormat.getCurrencyInstance(userPreferences.getLocale());
+            lbPrix.setText(edition.getPrix() == null ? null : currencyInstance.format(edition.getPrix()));
+
+            lbAnneeEdition.setText(edition.getAnneeEdition().format(DateTimeFormatter.ofPattern(I18nSupport.message("format.year"))));
+            cbOffert.setSelected(edition.isOffert());
+            cbStock.setSelected(edition.isStock());
+            lbReliure.setText(edition.getReliure().getTexte());
+            lbOrientation.setText(edition.getOrientation().getTexte());
+            lbSensLecture.setText(edition.getSensLecture().getTexte());
+            lbFormat.setText(edition.getFormatEdition().getTexte());
+            lbEtat.setText(edition.getEtat().getTexte());
+            lbNumeroPerso.setText(edition.getNumeroPerso());
+            lbPages.textProperty().bindBidirectional(edition.nombreDePagesProperty(), new IntegerStringConverter());
+            cbDedicace.setSelected(edition.isDedicace());
+            cbVO.setSelected(edition.isVo());
+            cbCouleur.setSelected(edition.isCouleur());
+            cacheImages = new Image[edition.getCouvertures().size()];
+            images.set(FXCollections.observableList(edition.getCouvertures()));
+        });
     }
 
     @Override
     public void setIdEntity(UUID id) {
-        // pas la peine de se prendre la tête à faire des bind, la fenêtre est recrée à chaque affichage
+        // pas la peine de se prendre la tête à faire des bind pour l'album, la fenêtre est recrée à chaque affichage
+        // par contre, on utilise des bind pour l'edition en cours de visu
 
-        Album album = albumDao.get(id);
-        if (album == null)
-            throw new EntityNotFoundException();
+        album.set(albumDao.get(id));
+        final Album _album = album.get();
+        if (_album == null) throw new EntityNotFoundException();
 
-        final NotationResource notationResource = NotationResource.fromValue(album.getNotation());
+        final NotationResource notationResource = NotationResource.fromValue(_album.getNotation());
         appreciation.setImage(new Image("/org/tetram/bdtheque/graphics/png/32x32/" + notationResource.getResource()));
 
-        if (album.getSerie() != null) {
-            titreSerie.setText(BeanUtils.formatTitre(album.getSerie().getTitreSerie()));
-            album.getSerie().genresProperty().forEach(genre -> lvGenres.getChildren().add(FlowItem.create(genre.buildLabel())));
-            lvSerie.itemsProperty().bind(album.getSerie().albumsProperty());
-            album.getSerie().getAlbums().forEach(albumLite -> {
-                if (album.getId().equals(albumLite.getId())) {
+        if (_album.getSerie() != null) {
+            titreSerie.setText(BeanUtils.formatTitre(_album.getSerie().getTitreSerie()));
+            fillViewFromList(_album.getSerie().genresProperty(), lvGenres, null);
+            lvSerie.itemsProperty().bind(_album.getSerie().albumsProperty());
+            _album.getSerie().getAlbums().forEach(albumLite -> {
+                if (_album.getId().equals(albumLite.getId())) {
                     lvSerie.getSelectionModel().select(albumLite);
                     lvSerie.scrollTo(albumLite);
                 }
@@ -131,40 +247,76 @@ public class FicheAlbumController extends WindowController implements Consultati
                 }
             });
         }
-        titreAlbum.setText(BeanUtils.formatTitre(album.getTitreAlbum()));
-        tome.textProperty().bindBidirectional(album.tomeProperty(), new IntegerStringConverter());
+        titreAlbum.setText(BeanUtils.formatTitre(_album.getTitreAlbum()));
+        tome.textProperty().bindBidirectional(_album.tomeProperty(), new IntegerStringConverter());
 
         String valueParution;
-        if (album.getMoisParution() == null) {
-            if (album.getAnneeParution() != null) {
+        if (_album.getMoisParution() == null) {
+            if (_album.getAnneeParution() != null) {
                 DateTimeFormatter format = DateTimeFormatter.ofPattern(I18nSupport.message("format.year"));
-                valueParution = album.getAnneeParution().format(format);
+                valueParution = _album.getAnneeParution().format(format);
             } else {
                 valueParution = null;
             }
         } else {
-            YearMonth parution = album.getAnneeParution().atMonth(album.getMoisParution());
+            YearMonth parution = _album.getAnneeParution().atMonth(_album.getMoisParution());
             DateTimeFormatter format = DateTimeFormatter.ofPattern(I18nSupport.message("format.month-year"));
             valueParution = parution.format(format);
         }
         dateParution.setText(valueParution);
 
-        integrale.setSelected(album.isIntegrale());
-        integraleTomes.setVisible(album.getTomeDebut() != null && album.getTomeFin() != null);
-        integraleTomes.setText(I18nSupport.message("integrale.de-a", album.getTomeDebut(), album.getTomeFin()));
-        horsSerie.setSelected(album.isHorsSerie());
+        integrale.setSelected(_album.isIntegrale());
+        integraleTomes.setVisible(_album.getTomeDebut() != null && _album.getTomeFin() != null);
+        integraleTomes.setText(I18nSupport.message("integrale.de-a", _album.getTomeDebut(), _album.getTomeFin()));
+        horsSerie.setSelected(_album.isHorsSerie());
 
         final EventHandler<ActionEvent> openEntityEventHandler = event -> {
             final Labeled source = (Labeled) event.getSource();
             final AbstractDBEntity entity = (AbstractDBEntity) source.getUserData();
             modeConsultationController.showConsultationForm(entity);
         };
-        album.universFullProperty().forEach(univers -> lvUnivers.getChildren().add(FlowItem.create(univers.buildLabel(), openEntityEventHandler, univers)));
-        album.scenaristesProperty().forEach(auteur -> lvScenaristes.getChildren().add(FlowItem.create(auteur.buildLabel(), openEntityEventHandler, auteur)));
-        album.dessinateursProperty().forEach(auteur -> lvDessinateurs.getChildren().add(FlowItem.create(auteur.buildLabel(), openEntityEventHandler, auteur)));
-        album.coloristesProperty().forEach(auteur -> lvColoristes.getChildren().add(FlowItem.create(auteur.buildLabel(), openEntityEventHandler, auteur)));
+        fillViewFromList(_album.universFullProperty(), lvUnivers, openEntityEventHandler);
+        fillViewFromList(_album.scenaristesProperty(), lvScenaristes, openEntityEventHandler);
+        fillViewFromList(_album.dessinateursProperty(), lvDessinateurs, openEntityEventHandler);
+        fillViewFromList(_album.coloristesProperty(), lvColoristes, openEntityEventHandler);
 
-        histoire.getChildren().add(new Text(album.getSujet()));
-        notes.getChildren().add(new Text(album.getNotes()));
+        //if (!StringUtils.isNullOrEmpty(album.getSujet())) histoire.getStyleClass().add(CSS_FLOW_B0RDER);
+        histoire.getChildren().add(new Text(_album.getSujet()));
+        //if (!StringUtils.isNullOrEmpty(album.getNotes())) notes.getStyleClass().add(CSS_FLOW_B0RDER);
+        notes.getChildren().add(new Text(_album.getNotes()));
+
+        // le getEditions force le lazy loading de la liste
+        editions.set(FXCollections.observableList(_album.getEditions()));
+        currentEdition.set(editions.get(0));
     }
+
+    <E extends AbstractDBEntity> void fillViewFromList(ListProperty<E> list, FlowPane view, EventHandler<ActionEvent> onClickEvent) {
+        //if (!list.isEmpty()) view.getStyleClass().add(CSS_FLOW_B0RDER);
+        list.forEach(entity -> view.getChildren().add(FlowItem.create(entity.buildLabel(), onClickEvent, entity)));
+    }
+
+    private VBox createImagePage(int pageIndex) {
+        // même si on dit "pageCount = 0", le factory est appelé: le pageCount sera forcé à 1
+        if (images.size() == 0 || pageIndex >= images.size() || pageIndex < 0) return null;
+
+        CouvertureLite couvertureLite = images.get(pageIndex);
+
+        VBox box = new VBox();
+        box.setAlignment(Pos.CENTER);
+        Label desc = new Label(couvertureLite.getCategorie().getTexte());
+        Image image = cacheImages[pageIndex];
+        if (image == null) {
+            final int height = ((Double) (diaporama.getPrefHeight() - desc.getPrefHeight())).intValue() - 50;
+            final byte[] imageStream = couvertureDao.getImageStream(couvertureLite, height, ((Double) diaporama.getPrefWidth()).intValue());
+            image = new Image(new ByteArrayInputStream(imageStream));
+            cacheImages[pageIndex] = image;
+        }
+        ImageView iv = new ImageView(image);
+        box.getChildren().addAll(iv);
+        box.getChildren().addAll(desc);
+        return box;
+    }
+
+
 }
+

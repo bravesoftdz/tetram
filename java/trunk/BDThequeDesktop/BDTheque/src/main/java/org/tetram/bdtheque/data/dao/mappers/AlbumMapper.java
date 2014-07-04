@@ -5,6 +5,7 @@ import org.tetram.bdtheque.data.bean.Album;
 import org.tetram.bdtheque.data.bean.AlbumLite;
 import org.tetram.bdtheque.data.bean.ValeurListe;
 import org.tetram.bdtheque.gui.utils.InitialeEntity;
+import org.tetram.bdtheque.utils.FileLink;
 
 import java.time.Year;
 import java.util.List;

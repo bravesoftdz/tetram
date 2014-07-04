@@ -2,6 +2,7 @@ package org.tetram.bdtheque.data.dao.mappers;
 
 import org.apache.ibatis.annotations.Param;
 import org.tetram.bdtheque.data.bean.*;
+import org.tetram.bdtheque.utils.FileLink;
 
 import java.util.Collection;
 import java.util.List;

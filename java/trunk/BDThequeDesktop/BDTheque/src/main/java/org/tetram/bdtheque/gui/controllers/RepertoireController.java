@@ -25,7 +25,7 @@ import org.tetram.bdtheque.data.bean.AbstractEntity;
 import org.tetram.bdtheque.data.bean.EvaluatedEntity;
 import org.tetram.bdtheque.data.bean.ValeurListe;
 import org.tetram.bdtheque.data.dao.*;
-import org.tetram.bdtheque.data.dao.mappers.FileLink;
+import org.tetram.bdtheque.utils.FileLink;
 import org.tetram.bdtheque.data.services.UserPreferences;
 import org.tetram.bdtheque.gui.utils.InitialeEntity;
 import org.tetram.bdtheque.gui.utils.NotationResource;

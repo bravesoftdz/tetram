@@ -13,7 +13,7 @@ import org.tetram.bdtheque.SpringContext;
 import org.tetram.bdtheque.SpringFxmlLoader;
 import org.tetram.bdtheque.data.bean.Serie;
 import org.tetram.bdtheque.data.dao.SerieDao;
-import org.tetram.bdtheque.data.dao.mappers.FileLink;
+import org.tetram.bdtheque.utils.FileLink;
 import org.tetram.bdtheque.data.services.UserPreferences;
 import org.tetram.bdtheque.gui.utils.Dialogs;
 import org.tetram.bdtheque.gui.utils.FileStringConverter;

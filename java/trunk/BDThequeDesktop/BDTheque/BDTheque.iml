@@ -47,6 +47,9 @@
     <orderEntry type="library" exported="" name="Gradle: jfxtras-labs-8.0-r1" level="project" />
     <orderEntry type="library" exported="" name="Gradle: commons-lang3-3.3.2" level="project" />
     <orderEntry type="library" exported="" name="Gradle: controlsfx-8.0.6_20" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: commons-validator-1.4.0" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: commons-beanutils-1.8.3" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: commons-digester-1.8" level="project" />
   </component>
 </module>
 
