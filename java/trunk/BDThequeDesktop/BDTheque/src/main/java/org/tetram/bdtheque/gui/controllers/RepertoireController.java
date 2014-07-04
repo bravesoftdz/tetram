@@ -20,15 +20,12 @@ import javafx.util.Callback;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.tetram.bdtheque.SpringContext;
-import org.tetram.bdtheque.data.bean.AbstractDBEntity;
-import org.tetram.bdtheque.data.bean.AbstractEntity;
-import org.tetram.bdtheque.data.bean.EvaluatedEntity;
-import org.tetram.bdtheque.data.bean.ValeurListe;
+import org.tetram.bdtheque.data.bean.*;
 import org.tetram.bdtheque.data.dao.*;
-import org.tetram.bdtheque.utils.FileLink;
 import org.tetram.bdtheque.data.services.UserPreferences;
 import org.tetram.bdtheque.gui.utils.InitialeEntity;
 import org.tetram.bdtheque.gui.utils.NotationResource;
+import org.tetram.bdtheque.utils.FileLink;
 import org.tetram.bdtheque.utils.I18nSupport;
 
 import java.net.URL;
@@ -97,7 +94,13 @@ public class RepertoireController extends WindowController {
         tabView.put(tabAuteurs.getId(), new InfoTab(tabAuteurs, tvAuteurs, PersonneLiteDao.class));
         tabView.put(tabParabd.getId(), new InfoTab(tabParabd, tvParabd, ParaBDLiteDao.class));
 
-        final Callback<TreeTableColumn.CellDataFeatures<AbstractEntity, String>, ObservableValue<String>> labelValueFactory = param -> new ReadOnlyStringWrapper(param.getValue().getValue().buildLabel());
+        final Callback<TreeTableColumn.CellDataFeatures<AbstractEntity, String>, ObservableValue<String>> labelValueFactory = param -> {
+            final AbstractEntity entity = param.getValue().getValue();
+            if (entity instanceof AlbumLite && repertoireGroup.getValue() == TypeRepertoireAlbumEntry.PAR_SERIE)
+                return new ReadOnlyStringWrapper(((AlbumLite) entity).buildLabel(false));
+            else
+                return new ReadOnlyStringWrapper(entity.buildLabel());
+        };
         final Callback<TreeTableColumn.CellDataFeatures<AbstractEntity, AbstractEntity>, ObservableValue<AbstractEntity>> imageValueCellFactory = param -> new ReadOnlyObjectWrapper<>(param.getValue().getValue());
         final Callback<TreeTableColumn<AbstractEntity, AbstractEntity>, TreeTableCell<AbstractEntity, AbstractEntity>> imageCellFactory = new Callback<TreeTableColumn<AbstractEntity, AbstractEntity>, TreeTableCell<AbstractEntity, AbstractEntity>>() {
 

@@ -14,6 +14,9 @@ import org.tetram.bdtheque.utils.StringUtils;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.NumberFormat;
 import java.util.Locale;
 import java.util.Properties;
 
@@ -71,6 +74,7 @@ public class UserPreferencesImpl implements UserPreferences {
     private BooleanProperty antiAliasing = null;
     private BooleanProperty imagesStockees = null;
     private ObjectProperty<File> database = null;
+    private NumberFormat currencyFormatter = null;
 
     public UserPreferencesImpl() {
     }
@@ -370,6 +374,17 @@ public class UserPreferencesImpl implements UserPreferences {
     @Override
     public void setDatabase(File value) {
         databaseProperty().set(value);
+    }
+
+    @Override
+    public NumberFormat getCurrencyFormatter() {
+        if (currencyFormatter == null) {
+            currencyFormatter = NumberFormat.getCurrencyInstance(getLocale());
+            final DecimalFormatSymbols symbols = ((DecimalFormat) currencyFormatter).getDecimalFormatSymbols();
+            symbols.setCurrencySymbol("€");
+            ((DecimalFormat) currencyFormatter).setDecimalFormatSymbols(symbols);
+        }
+        return currencyFormatter;
     }
 
     @Override

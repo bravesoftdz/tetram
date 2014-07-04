@@ -4,6 +4,7 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 
 import java.io.File;
+import java.text.NumberFormat;
 import java.util.Locale;
 
 /**
@@ -66,4 +67,5 @@ public interface UserPreferences {
 
     void setDatabase(File value);
 
+    NumberFormat getCurrencyFormatter();
 }

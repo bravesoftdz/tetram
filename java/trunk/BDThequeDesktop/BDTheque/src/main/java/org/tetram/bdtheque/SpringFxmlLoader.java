@@ -3,7 +3,6 @@ package org.tetram.bdtheque;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 import org.jetbrains.annotations.NonNls;
 import org.tetram.bdtheque.gui.controllers.WindowController;
 import org.tetram.bdtheque.utils.I18nSupport;

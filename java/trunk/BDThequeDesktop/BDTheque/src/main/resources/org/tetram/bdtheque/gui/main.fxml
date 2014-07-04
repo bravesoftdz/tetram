@@ -14,21 +14,32 @@
                         <MenuItem mnemonicParsing="false" onAction="#showPreferences" text="%mnu.Options"/>
                         <Menu fx:id="mnuLanguage" mnemonicParsing="false" text="%mnu.Langue">
                             <items>
-                                <MenuItem id="mnu_fr" mnemonicParsing="false" onAction="#changeLanguage"
+                                <MenuItem id="mnu_fr_FR" mnemonicParsing="false" onAction="#changeLanguage"
                                           text="Français">
                                     <graphic>
                                         <ImageView pickOnBounds="true" preserveRatio="true">
                                             <image>
-                                                <Image url="@/org/tetram/bdtheque/lang/fr.gif"/>
+                                                <Image url="@/org/tetram/bdtheque/lang/fr_fr.gif"/>
                                             </image>
                                         </ImageView>
                                     </graphic>
                                 </MenuItem>
-                                <MenuItem id="mnu_en" mnemonicParsing="false" onAction="#changeLanguage" text="English">
+                                <MenuItem id="mnu_en_GB" mnemonicParsing="false" onAction="#changeLanguage"
+                                          text="English">
                                     <graphic>
                                         <ImageView pickOnBounds="true" preserveRatio="true">
                                             <image>
-                                                <Image url="@/org/tetram/bdtheque/lang/en.gif"/>
+                                                <Image url="@/org/tetram/bdtheque/lang/en_gb.gif"/>
+                                            </image>
+                                        </ImageView>
+                                    </graphic>
+                                </MenuItem>
+                                <MenuItem id="mnu_en_US" mnemonicParsing="false" onAction="#changeLanguage"
+                                          text="English">
+                                    <graphic>
+                                        <ImageView pickOnBounds="true" preserveRatio="true">
+                                            <image>
+                                                <Image url="@/org/tetram/bdtheque/lang/en_us.gif"/>
                                             </image>
                                         </ImageView>
                                     </graphic>

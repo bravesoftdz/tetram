@@ -6,8 +6,8 @@ import javafx.scene.layout.AnchorPane;
 import org.springframework.stereotype.Controller;
 import org.tetram.bdtheque.SpringFxmlLoader;
 import org.tetram.bdtheque.data.bean.AbstractDBEntity;
-import org.tetram.bdtheque.utils.FileLink;
 import org.tetram.bdtheque.gui.utils.Forms;
+import org.tetram.bdtheque.utils.FileLink;
 
 import java.io.IOException;
 import java.net.URL;

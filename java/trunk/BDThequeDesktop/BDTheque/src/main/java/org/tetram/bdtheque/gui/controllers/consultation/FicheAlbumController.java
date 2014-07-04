@@ -37,9 +37,7 @@ import org.tetram.bdtheque.utils.I18nSupport;
 import org.tetram.bdtheque.utils.ISBNUtils;
 
 import java.io.ByteArrayInputStream;
-import java.io.UnsupportedEncodingException;
 import java.text.MessageFormat;
-import java.text.NumberFormat;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.UUID;
@@ -194,16 +192,9 @@ public class FicheAlbumController extends WindowController implements Consultati
             lbIsbn.setText(edition.getIsbn() == null ? null : ISBNUtils.formatISBN(edition.getIsbn()));
             lbEditeur.setText(edition.getEditeur() == null ? null : edition.getEditeur().toString());
             lbCollection.setText(edition.getCollection() == null ? null : edition.getCollection().buildLabel(true));
-            lbCote.setText(edition.getAnneeCote() == null ? null : MessageFormat.format("{0} ({0})", NumberFormat.getCurrencyInstance(userPreferences.getLocale()).format(edition.getPrixCote()), edition.getAnneeCote().format(DateTimeFormatter.ofPattern(I18nSupport.message("format.year")))));
+            lbCote.setText(edition.getAnneeCote() == null ? null : MessageFormat.format("{0} ({0})", userPreferences.getCurrencyFormatter().format(edition.getPrixCote()), edition.getAnneeCote().format(DateTimeFormatter.ofPattern(I18nSupport.message("format.year")))));
             lbDateAchat.setText(edition.getDateAchat() == null ? null : edition.getDateAchat().format(DateTimeFormatter.ofPattern(I18nSupport.message("format.date"))));
-
-
-            final NumberFormat currencyInstance = NumberFormat.getCurrencyInstance(userPreferences.getLocale());
-            try {
-                lbPrix.setText(edition.getPrix() == null ? null : new String(currencyInstance.format(edition.getPrix()).getBytes(), "UTF-8"));
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
+            lbPrix.setText(edition.getPrix() == null ? null : userPreferences.getCurrencyFormatter().format(edition.getPrix()));
 
             lbAnneeEdition.setText(edition.getAnneeEdition().format(DateTimeFormatter.ofPattern(I18nSupport.message("format.year"))));
             cbOffert.setSelected(edition.isOffert());

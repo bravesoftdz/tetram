@@ -13,10 +13,10 @@ import org.tetram.bdtheque.SpringContext;
 import org.tetram.bdtheque.SpringFxmlLoader;
 import org.tetram.bdtheque.data.bean.Serie;
 import org.tetram.bdtheque.data.dao.SerieDao;
-import org.tetram.bdtheque.utils.FileLink;
 import org.tetram.bdtheque.data.services.UserPreferences;
 import org.tetram.bdtheque.gui.utils.Dialogs;
 import org.tetram.bdtheque.gui.utils.FileStringConverter;
+import org.tetram.bdtheque.utils.FileLink;
 import org.tetram.bdtheque.utils.I18nSupport;
 import org.tetram.bdtheque.utils.StringUtils;
 
@@ -92,7 +92,7 @@ public class MainController extends WindowController {
         // certaines traductions sont récupérées à l'initialisation des classes, on n'a pas d'autres choix que de recharger l'appli
         final Locale locale = Localization.getLocale();
         try {
-            final Locale newLocale = Locale.forLanguageTag(((MenuItem) event.getSource()).getId().substring(4));
+            final Locale newLocale = Locale.forLanguageTag(((MenuItem) event.getSource()).getId().substring(4).replace('_', '-'));
             Localization.setLocale(newLocale);
             org.controlsfx.dialog.Dialogs.create()
                     .title(I18nSupport.message(newLocale, "nouvelle.langue"))

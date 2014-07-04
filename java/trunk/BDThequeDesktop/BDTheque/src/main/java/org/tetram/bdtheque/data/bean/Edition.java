@@ -123,12 +123,12 @@ public class Edition extends AbstractDBEntity {
         return nombreDePages.get();
     }
 
-    public ObjectProperty<Integer> nombreDePagesProperty() {
-        return nombreDePages;
-    }
-
     public void setNombreDePages(Integer nombreDePages) {
         this.nombreDePages.set(nombreDePages);
+    }
+
+    public ObjectProperty<Integer> nombreDePagesProperty() {
+        return nombreDePages;
     }
 
     public Year getAnneeCote() {
