@@ -10,6 +10,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -71,7 +72,7 @@ public class FicheAlbumController extends WindowController implements Consultati
     @FXML
     private ImageView appreciation;
     @FXML
-    private Label titreSerie;
+    private Hyperlink titreSerie;
     @FXML
     private Label titreAlbum;
     @FXML
@@ -113,9 +114,9 @@ public class FicheAlbumController extends WindowController implements Consultati
     @FXML
     private Label lbIsbn;
     @FXML
-    private Label lbEditeur;
+    private Hyperlink lbEditeur;
     @FXML
-    private Label lbCollection;
+    private Hyperlink lbCollection;
     @FXML
     private Label lbCote;
     @FXML
@@ -196,7 +197,15 @@ public class FicheAlbumController extends WindowController implements Consultati
             lbIsbn.setText(edition.getIsbn() == null ? null : ISBNUtils.formatISBN(edition.getIsbn()));
             lbEditeur.setText(edition.getEditeur() == null ? null : edition.getEditeur().toString());
             EntityWebHyperlink.addToLabeled(lbEditeur, edition.getEditeur().getSiteWeb());
+            lbEditeur.setOnAction(event -> {
+                if (event.getTarget() != lbEditeur.getGraphic() && edition.getEditeur() != null)
+                    modeConsultationController.showConsultationForm(edition.getEditeur());
+            });
             lbCollection.setText(edition.getCollection() == null ? null : edition.getCollection().buildLabel(true));
+            lbCollection.setOnAction(event -> {
+                if (event.getTarget() != lbCollection.getGraphic() && edition.getCollection() != null)
+                    modeConsultationController.showConsultationForm(edition.getCollection());
+            });
             lbCote.setText(edition.getAnneeCote() == null ? null : MessageFormat.format("{0} ({0})", userPreferences.getCurrencyFormatter().format(edition.getPrixCote()), edition.getAnneeCote().format(DateTimeFormatter.ofPattern(I18nSupport.message("format.year")))));
             lbAchete.setText(edition.isOffert() ? "Offert le :" : "Acheté le :");
             lbDateAchat.setText(edition.getDateAchat() == null ? null : edition.getDateAchat().format(DateTimeFormatter.ofPattern(I18nSupport.message("format.date"))));
@@ -239,6 +248,10 @@ public class FicheAlbumController extends WindowController implements Consultati
         if (_album.getSerie() != null) {
             titreSerie.setText(BeanUtils.formatTitre(_album.getSerie().getTitreSerie()));
             EntityWebHyperlink.addToLabeled(titreSerie, _album.getSerie().getSiteWeb());
+            titreSerie.setOnAction(event -> {
+                if (event.getTarget() != titreSerie.getGraphic() && _album.getSerie() != null)
+                    modeConsultationController.showConsultationForm(_album.getSerie());
+            });
 
             fillViewFromList(_album.getSerie().genresProperty(), lvGenres, null);
             lvSerie.itemsProperty().bind(_album.getSerie().albumsProperty());
@@ -329,6 +342,11 @@ public class FicheAlbumController extends WindowController implements Consultati
             cacheImages[pageIndex] = image;
         }
         ImageView iv = new ImageView(image);
+        iv.setCursor(Cursor.HAND);
+        iv.setOnMouseClicked(event -> {
+            modeConsultationController.showConsultationForm(couvertureLite);
+        });
+        iv.setPreserveRatio(true);
         box.getChildren().addAll(iv);
         box.getChildren().addAll(desc);
         return box;

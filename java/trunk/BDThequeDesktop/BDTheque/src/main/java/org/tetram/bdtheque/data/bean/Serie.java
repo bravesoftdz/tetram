@@ -6,6 +6,7 @@ import org.tetram.bdtheque.SpringContext;
 import org.tetram.bdtheque.data.BeanUtils;
 import org.tetram.bdtheque.data.dao.DaoScriptImpl;
 import org.tetram.bdtheque.data.dao.ValeurListeDao;
+import org.tetram.bdtheque.utils.StringUtils;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -479,6 +480,18 @@ public class Serie extends AbstractScriptEntity implements EvaluatedEntity, WebL
 
     public ObjectProperty<ValeurListe> sensLectureProperty() {
         return sensLecture;
+    }
+
+    @Override
+    public String buildLabel() {
+        String lb = getTitreSerie();
+        lb = BeanUtils.formatTitre(lb);
+        String s = "";
+        if (getEditeur() != null)
+            s = StringUtils.ajoutString("", BeanUtils.formatTitre(getEditeur().getNomEditeur()), " ");
+        if (getCollection() != null)
+            s = StringUtils.ajoutString(s, BeanUtils.formatTitre(getCollection().getNomCollection()), " - ");
+        return StringUtils.ajoutString(lb, s, " ", "(", ")");
     }
 
 }

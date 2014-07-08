@@ -3,3 +3,37 @@
     -fx-font-size: 12px;
 }
 
+.hyperlink {
+    -fx-padding: 0;
+/*
+    -fx-padding: 0.166667em;
+    -fx-cursor: hand;
+    -fx-content-display: LEFT;
+    -fx-text-fill: -fx-text-background-color;
+    -fx-border-color: transparent;
+    -fx-border-width: 1px;
+*/
+}
+
+/*
+.hyperlink:visited {
+    -fx-text-fill: -fx-accent;
+}
+*/
+
+/*
+.hyperlink:hover {
+    -fx-underline: true;
+}
+*/
+
+.hyperlink:focused {
+    -fx-border-color: transparent;
+/*
+    -fx-color: -fx-focused-base;
+    -fx-border-color: -fx-focus-color;
+    -fx-border-style: segments(0.166667em, 0.166667em);
+    -fx-border-width: 1px;
+*/
+}
+
