@@ -14,7 +14,7 @@ import java.util.List;
  */
 @SuppressWarnings("UnusedDeclaration")
 @DaoScriptImpl.ScriptInfo(typeData = 6)
-public class Personne extends AbstractScriptEntity {
+public class Personne extends AbstractScriptEntity implements WebLinkedEntity {
 
     private StringProperty nomPersonne = new SimpleStringProperty(this, "nomPersonne", null);
     private ObjectProperty<URL> siteWeb = new SimpleObjectProperty<>(this, "siteWeb", null);
@@ -33,14 +33,17 @@ public class Personne extends AbstractScriptEntity {
         return nomPersonne;
     }
 
+    @Override
     public URL getSiteWeb() {
         return siteWeb.get();
     }
 
+    @Override
     public void setSiteWeb(URL siteWeb) {
         this.siteWeb.set(siteWeb);
     }
 
+    @Override
     public ObjectProperty<URL> siteWebProperty() {
         return siteWeb;
     }

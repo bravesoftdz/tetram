@@ -152,7 +152,7 @@
                         <Label styleClass="label-rubrique" text="Editeur :" GridPane.rowIndex="1"
                                GridPane.valignment="TOP"/>
                         <Label fx:id="lbEditeur" text="Label" GridPane.columnIndex="1" GridPane.columnSpan="2"
-                               GridPane.rowIndex="1"/>
+                               GridPane.rowIndex="1" contentDisplay="RIGHT"/>
                         <Label styleClass="label-rubrique" text="Collection :" GridPane.rowIndex="2"/>
                         <Label fx:id="lbCollection" text="Label" GridPane.columnIndex="1" GridPane.columnSpan="2"
                                GridPane.rowIndex="2"/>
@@ -160,7 +160,7 @@
                         <Label styleClass="label-rubrique" text="Cote :" GridPane.rowIndex="4"/>
                         <Label fx:id="lbCote" text="Label" GridPane.columnIndex="1" GridPane.columnSpan="2"
                                GridPane.rowIndex="4"/>
-                        <Label styleClass="label-rubrique" text="Acheté le :" GridPane.columnIndex="2"
+                        <Label fx:id="lbAchete" styleClass="label-rubrique" text="Acheté le :" GridPane.columnIndex="2"
                                GridPane.columnSpan="2" GridPane.halignment="RIGHT" GridPane.rowIndex="3"/>
                         <Label fx:id="lbDateAchat" text="Label" GridPane.columnIndex="4" GridPane.columnSpan="3"
                                GridPane.rowIndex="3"/>
@@ -185,6 +185,7 @@
                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity"
                                            prefWidth="170.0"/>
                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity"/>
+                        <ColumnConstraints/>
                     </columnConstraints>
                     <rowConstraints>
                         <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="17.0"
@@ -215,7 +216,8 @@
                         <Label fx:id="lbNumeroPerso" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
                         <Label styleClass="label-rubrique" text="Notes :" GridPane.halignment="RIGHT"
                                GridPane.rowIndex="4"/>
-                        <TextFlow GridPane.columnIndex="1" GridPane.columnSpan="5" GridPane.rowIndex="4"/>
+                        <TextFlow fx:id="tfNotesEdition" GridPane.columnIndex="1" GridPane.columnSpan="5"
+                                  GridPane.rowIndex="4"/>
                         <Label fx:id="lbEtat" text="Label" GridPane.columnIndex="1"/>
                         <Label styleClass="label-rubrique" text="Etat :" GridPane.halignment="RIGHT"/>
                         <Label styleClass="label-rubrique" text="Pages :" GridPane.halignment="RIGHT"

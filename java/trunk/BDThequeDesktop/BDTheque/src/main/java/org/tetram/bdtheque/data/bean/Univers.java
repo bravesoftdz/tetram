@@ -13,7 +13,7 @@ import java.util.UUID;
  * Created by Thierry on 24/05/2014.
  */
 @SuppressWarnings("UnusedDeclaration")
-public class Univers extends AbstractDBEntity {
+public class Univers extends AbstractDBEntity implements WebLinkedEntity {
 
     private StringProperty nomUnivers = new SimpleStringProperty(null);
     private ObjectProperty<URL> siteWeb = new SimpleObjectProperty<>(null);
@@ -32,14 +32,17 @@ public class Univers extends AbstractDBEntity {
         return nomUnivers;
     }
 
+    @Override
     public URL getSiteWeb() {
         return siteWeb.get();
     }
 
+    @Override
     public void setSiteWeb(URL siteWeb) {
         this.siteWeb.set(siteWeb);
     }
 
+    @Override
     public ObjectProperty<URL> siteWebProperty() {
         return siteWeb;
     }

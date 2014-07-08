@@ -25,7 +25,7 @@
     <select id="getEditeurById" resultMap="EditeurFull">
         <![CDATA[
         select
-            id_editeur, nomEditeur
+            id_editeur, nomEditeur, siteWeb
         from
             editeurs
         where

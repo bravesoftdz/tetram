@@ -17,7 +17,7 @@ import java.util.UUID;
  */
 @SuppressWarnings("UnusedDeclaration")
 @DaoScriptImpl.ScriptInfo(typeData = 7)
-public class Serie extends AbstractScriptEntity implements EvaluatedEntity {
+public class Serie extends AbstractScriptEntity implements EvaluatedEntity, WebLinkedEntity {
 
     private StringProperty titreSerie = new SimpleStringProperty(this, "titreSerie", null);
     private ObjectProperty<Boolean> terminee = new SimpleObjectProperty<>(this, "terminee", null);
@@ -159,14 +159,17 @@ public class Serie extends AbstractScriptEntity implements EvaluatedEntity {
         return getEditeur() == null || getCollection() == null || !getCollection().getEditeur().equals(getEditeur()) ? null : getCollection().getId();
     }
 
+    @Override
     public URL getSiteWeb() {
         return siteWeb.get();
     }
 
+    @Override
     public void setSiteWeb(URL siteWeb) {
         this.siteWeb.set(siteWeb);
     }
 
+    @Override
     public ObjectProperty<URL> siteWebProperty() {
         return siteWeb;
     }

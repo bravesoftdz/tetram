@@ -4,6 +4,7 @@
     <resultMap id="PersonneLite" type="beanPersonneLite">
         <id column="id_personne" property="id"/>
         <result column="NomPersonne" property="nom"/>
+        <result column="SiteWeb" property="siteWeb"/>
     </resultMap>
     <resultMap id="PersonneFull" type="beanPersonne">
         <id column="id_personne" property="id"/>
@@ -35,7 +36,7 @@
     <select id="getPersonneLiteById" resultMap="PersonneLite" parameterType="UUID">
         <![CDATA[
         select
-            id_personne, nomPersonne
+            id_personne, nomPersonne, siteWeb
         from
             personnes
         where
@@ -56,7 +57,7 @@
     <select id="getListAuteurLiteByAlbumId" resultMap="AuteurAlbumLite">
         <![CDATA[
         select
-            p.id_personne, p.nomPersonne,
+            p.id_personne, p.nomPersonne, p.siteWeb,
             a.id_auteur, a.id_album, a.metier
         from
             personnes p
@@ -71,7 +72,7 @@
     <select id="getListAuteurLiteBySerieId" resultMap="AuteurSerieLite">
         <![CDATA[
         select
-            p.id_personne, p.nompersonne,
+            p.id_personne, p.nompersonne, p.siteWeb,
             a.id_auteur_series, a.id_serie, a.metier
         from
             personnes p
@@ -86,7 +87,7 @@
     <select id="getListAuteurLiteByParaBDId" resultMap="AuteurParaBDLite">
         <![CDATA[
         select
-            p.id_personne, p.nompersonne,
+            p.id_personne, p.nompersonne, p.siteWeb,
             a.id_auteur_parabd, a.id_parabd
         from
             personnes p

@@ -26,6 +26,7 @@ import org.tetram.bdtheque.data.bean.*;
 import org.tetram.bdtheque.data.dao.AlbumDao;
 import org.tetram.bdtheque.data.dao.CouvertureLiteDao;
 import org.tetram.bdtheque.data.services.UserPreferences;
+import org.tetram.bdtheque.gui.EntityWebHyperlink;
 import org.tetram.bdtheque.gui.controllers.ModeConsultationController;
 import org.tetram.bdtheque.gui.controllers.WindowController;
 import org.tetram.bdtheque.gui.utils.EntityNotFoundException;
@@ -95,9 +96,9 @@ public class FicheAlbumController extends WindowController implements Consultati
     private FlowPane lvColoristes;
     @FXML
     private ListView<AlbumLite> lvSerie;
+
     @FXML
     private TextFlow histoire;
-
     @FXML
     private TextFlow notes;
 
@@ -145,7 +146,10 @@ public class FicheAlbumController extends WindowController implements Consultati
     private Label lbFormat;
     @FXML
     private Label lbNumeroPerso;
-
+    @FXML
+    private Label lbAchete;
+    @FXML
+    private TextFlow tfNotesEdition;
 
     @FXML
     private Label lbEtat;
@@ -191,8 +195,10 @@ public class FicheAlbumController extends WindowController implements Consultati
 
             lbIsbn.setText(edition.getIsbn() == null ? null : ISBNUtils.formatISBN(edition.getIsbn()));
             lbEditeur.setText(edition.getEditeur() == null ? null : edition.getEditeur().toString());
+            EntityWebHyperlink.addToLabeled(lbEditeur, edition.getEditeur().getSiteWeb());
             lbCollection.setText(edition.getCollection() == null ? null : edition.getCollection().buildLabel(true));
             lbCote.setText(edition.getAnneeCote() == null ? null : MessageFormat.format("{0} ({0})", userPreferences.getCurrencyFormatter().format(edition.getPrixCote()), edition.getAnneeCote().format(DateTimeFormatter.ofPattern(I18nSupport.message("format.year")))));
+            lbAchete.setText(edition.isOffert() ? "Offert le :" : "Acheté le :");
             lbDateAchat.setText(edition.getDateAchat() == null ? null : edition.getDateAchat().format(DateTimeFormatter.ofPattern(I18nSupport.message("format.date"))));
             lbPrix.setText(edition.getPrix() == null ? null : userPreferences.getCurrencyFormatter().format(edition.getPrix()));
 
@@ -209,6 +215,10 @@ public class FicheAlbumController extends WindowController implements Consultati
             cbDedicace.setSelected(edition.isDedicace());
             cbVO.setSelected(edition.isVo());
             cbCouleur.setSelected(edition.isCouleur());
+
+            tfNotesEdition.getChildren().clear();
+            tfNotesEdition.getChildren().add(new Text(edition.getNotes()));
+
             cacheImages = new Image[edition.getCouvertures().size()];
             images.set(FXCollections.observableList(edition.getCouvertures()));
         });
@@ -228,6 +238,8 @@ public class FicheAlbumController extends WindowController implements Consultati
 
         if (_album.getSerie() != null) {
             titreSerie.setText(BeanUtils.formatTitre(_album.getSerie().getTitreSerie()));
+            EntityWebHyperlink.addToLabeled(titreSerie, _album.getSerie().getSiteWeb());
+
             fillViewFromList(_album.getSerie().genresProperty(), lvGenres, null);
             lvSerie.itemsProperty().bind(_album.getSerie().albumsProperty());
             _album.getSerie().getAlbums().forEach(albumLite -> {
@@ -289,7 +301,15 @@ public class FicheAlbumController extends WindowController implements Consultati
 
     <E extends AbstractDBEntity> void fillViewFromList(ListProperty<E> list, FlowPane view, EventHandler<ActionEvent> onClickEvent) {
         //if (!list.isEmpty()) view.getStyleClass().add(CSS_FLOW_B0RDER);
-        list.forEach(entity -> view.getChildren().add(FlowItem.create(entity.buildLabel(), onClickEvent, entity)));
+        list.forEach(entity -> {
+            final Labeled e = FlowItem.create(entity.buildLabel(), onClickEvent, entity);
+            // finalement pas très utile
+            /*
+            if (entity instanceof WebLinkedEntity)
+                EntityWebHyperlink.addToLabeled(e, ((WebLinkedEntity) entity).getSiteWeb());
+            */
+            view.getChildren().add(e);
+        });
     }
 
     private VBox createImagePage(int pageIndex) {
