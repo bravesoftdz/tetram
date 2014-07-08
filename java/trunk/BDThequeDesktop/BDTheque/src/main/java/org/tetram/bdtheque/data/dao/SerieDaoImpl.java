@@ -7,12 +7,10 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.tetram.bdtheque.data.ConsistencyException;
-import org.tetram.bdtheque.data.bean.AuteurSerieLite;
-import org.tetram.bdtheque.data.bean.GenreLite;
-import org.tetram.bdtheque.data.bean.Serie;
-import org.tetram.bdtheque.data.bean.UniversLite;
+import org.tetram.bdtheque.data.bean.*;
 import org.tetram.bdtheque.data.dao.mappers.AuteurMapper;
 import org.tetram.bdtheque.data.dao.mappers.GenreMapper;
+import org.tetram.bdtheque.data.dao.mappers.SerieMapper;
 import org.tetram.bdtheque.data.dao.mappers.UniversMapper;
 import org.tetram.bdtheque.utils.I18nSupport;
 import org.tetram.bdtheque.utils.StringUtils;
@@ -27,8 +25,10 @@ import java.util.UUID;
 @Lazy
 @Transactional
 @SuppressWarnings("UnusedDeclaration")
-public class SerieDaoImpl extends DaoScriptImpl<Serie, UUID> implements SerieDao {
+public class SerieDaoImpl extends DaoScriptImpl<Serie, UUID> implements SerieDao, EvaluatedEntityDao<Serie> {
 
+    @Autowired
+    private SerieMapper serieMapper;
     @Autowired
     private GenreMapper genreMapper;
     @Autowired
@@ -71,5 +71,10 @@ public class SerieDaoImpl extends DaoScriptImpl<Serie, UUID> implements SerieDao
             universMapper.addUniversSerie(o.getId(), univers.getId());
 
         return status;
+    }
+
+    @Override
+    public void changeNotation(Serie entity, ValeurListe notation) {
+        serieMapper.changeNotation(entity.getId(), notation);
     }
 }

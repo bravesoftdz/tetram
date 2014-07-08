@@ -21,18 +21,21 @@ import javafx.scene.text.TextFlow;
 import javafx.util.converter.IntegerStringConverter;
 import org.jetbrains.annotations.NonNls;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.tetram.bdtheque.data.BeanUtils;
 import org.tetram.bdtheque.data.bean.*;
 import org.tetram.bdtheque.data.dao.AlbumDao;
 import org.tetram.bdtheque.data.dao.CouvertureLiteDao;
+import org.tetram.bdtheque.data.dao.EvaluatedEntityDao;
 import org.tetram.bdtheque.data.services.UserPreferences;
 import org.tetram.bdtheque.gui.EntityWebHyperlink;
 import org.tetram.bdtheque.gui.controllers.ModeConsultationController;
+import org.tetram.bdtheque.gui.controllers.NotationController;
 import org.tetram.bdtheque.gui.controllers.WindowController;
 import org.tetram.bdtheque.gui.utils.EntityNotFoundException;
 import org.tetram.bdtheque.gui.utils.FlowItem;
-import org.tetram.bdtheque.gui.utils.NotationResource;
 import org.tetram.bdtheque.utils.FileLink;
 import org.tetram.bdtheque.utils.FileLinks;
 import org.tetram.bdtheque.utils.I18nSupport;
@@ -48,6 +51,7 @@ import java.util.UUID;
  * Created by Thierry on 02/07/2014.
  */
 @Controller
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @FileLinks({
         @FileLink("/org/tetram/bdtheque/gui/consultation/ficheAlbum.fxml"),
         @FileLink("/org/tetram/bdtheque/gui/consultation/fiche_album-screenshot.jpg")
@@ -70,7 +74,7 @@ public class FicheAlbumController extends WindowController implements Consultati
     private UserPreferences userPreferences;
 
     @FXML
-    private ImageView appreciation;
+    private NotationController notationController;
     @FXML
     private Hyperlink titreSerie;
     @FXML
@@ -146,22 +150,21 @@ public class FicheAlbumController extends WindowController implements Consultati
     @FXML
     private Label lbFormat;
     @FXML
+    private Label lbEtat;
+    @FXML
     private Label lbNumeroPerso;
     @FXML
     private Label lbAchete;
     @FXML
     private TextFlow tfNotesEdition;
 
-    @FXML
-    private Label lbEtat;
     private ObjectProperty<Album> album = new SimpleObjectProperty<>();
-    private Image[] cacheImages = null;
-    private ListProperty<CouvertureLite> images = new SimpleListProperty<>();
     private ListProperty<Edition> editions = new SimpleListProperty<>();
     private ObjectProperty<Edition> currentEdition = new SimpleObjectProperty<>();
+    private ListProperty<CouvertureLite> images = new SimpleListProperty<>();
+    private Image[] cacheImages = null;
 
-    @FXML
-    public void initialize() {
+    public FicheAlbumController() {
         lvSerie.setCellFactory(param -> {
             ListCell<AlbumLite> cell = new ListCell<>();
             cell.underlineProperty().bind(Bindings.equal(cell.itemProperty(), album));
@@ -175,6 +178,10 @@ public class FicheAlbumController extends WindowController implements Consultati
             return cell;
         });
 
+    }
+
+    @FXML
+    public void initialize() {
         detailEdition.visibleProperty().bind(Bindings.isNotEmpty(editions));
         lvEditions.visibleProperty().bind(Bindings.greaterThan(editions.sizeProperty(), 1));
         lvEditions.itemsProperty().bind(editions);
@@ -242,8 +249,9 @@ public class FicheAlbumController extends WindowController implements Consultati
         final Album _album = album.get();
         if (_album == null) throw new EntityNotFoundException();
 
-        final NotationResource notationResource = NotationResource.fromValue(_album.getNotation());
-        appreciation.setImage(new Image("/org/tetram/bdtheque/graphics/png/32x32/" + notationResource.getResource()));
+        notationController.setNotation(_album.getNotation());
+        notationController.setEntity(_album);
+        notationController.setDao(((EvaluatedEntityDao) albumDao));
 
         if (_album.getSerie() != null) {
             titreSerie.setText(BeanUtils.formatTitre(_album.getSerie().getTitreSerie()));

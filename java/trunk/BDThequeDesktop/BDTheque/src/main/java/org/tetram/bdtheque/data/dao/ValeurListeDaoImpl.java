@@ -10,6 +10,7 @@ import org.tetram.bdtheque.data.bean.DefaultValeurListe;
 import org.tetram.bdtheque.data.bean.ValeurListe;
 import org.tetram.bdtheque.data.dao.mappers.ValeurListeMapper;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -25,6 +26,11 @@ public class ValeurListeDaoImpl implements ValeurListeDao {
     private ValeurListeMapper valeurListeMapper;
 
     private Map<CategorieValeurListe, DefaultValeurListe> defaultValues = null;
+
+    @Override
+    public List<ValeurListe> getListValeurListe(CategorieValeurListe categorie) {
+        return valeurListeMapper.getListValeurListe(categorie);
+    }
 
     private ValeurListe getDefaultValeur(CategorieValeurListe categorie) {
         if (defaultValues == null) defaultValues = valeurListeMapper.getListDefaultValeur();

@@ -1,10 +1,13 @@
 package org.tetram.bdtheque.data.dao.mappers;
 
 import org.apache.ibatis.annotations.MapKey;
+import org.apache.ibatis.annotations.Param;
 import org.tetram.bdtheque.data.bean.CategorieValeurListe;
 import org.tetram.bdtheque.data.bean.DefaultValeurListe;
+import org.tetram.bdtheque.data.bean.ValeurListe;
 import org.tetram.bdtheque.utils.FileLink;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -14,4 +17,6 @@ import java.util.Map;
 public interface ValeurListeMapper extends BaseMapperInterface {
     @MapKey("categorie")
     Map<CategorieValeurListe, DefaultValeurListe> getListDefaultValeur();
+
+    List<ValeurListe> getListValeurListe(@Param("categorie") CategorieValeurListe categorie);
 }

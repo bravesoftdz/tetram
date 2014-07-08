@@ -8,14 +8,8 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.tetram.bdtheque.data.BeanUtils;
 import org.tetram.bdtheque.data.ConsistencyException;
-import org.tetram.bdtheque.data.bean.Album;
-import org.tetram.bdtheque.data.bean.AuteurAlbumLite;
-import org.tetram.bdtheque.data.bean.Edition;
-import org.tetram.bdtheque.data.bean.UniversLite;
-import org.tetram.bdtheque.data.dao.mappers.AuteurMapper;
-import org.tetram.bdtheque.data.dao.mappers.EditionMapper;
-import org.tetram.bdtheque.data.dao.mappers.ImageMapper;
-import org.tetram.bdtheque.data.dao.mappers.UniversMapper;
+import org.tetram.bdtheque.data.bean.*;
+import org.tetram.bdtheque.data.dao.mappers.*;
 import org.tetram.bdtheque.data.services.UserPreferences;
 import org.tetram.bdtheque.utils.I18nSupport;
 import org.tetram.bdtheque.utils.StringUtils;
@@ -30,8 +24,10 @@ import java.util.UUID;
 @Lazy
 @Transactional
 @SuppressWarnings("UnusedDeclaration")
-public class AlbumDaoImpl extends DaoRWImpl<Album, UUID> implements AlbumDao {
+public class AlbumDaoImpl extends DaoRWImpl<Album, UUID> implements AlbumDao, EvaluatedEntityDao<Album> {
 
+    @Autowired
+    AlbumMapper albumMapper;
     @Autowired
     AuteurMapper auteurMapper;
     @Autowired
@@ -138,4 +134,8 @@ public class AlbumDaoImpl extends DaoRWImpl<Album, UUID> implements AlbumDao {
  */
     }
 
+    @Override
+    public void changeNotation(Album entity, ValeurListe notation) {
+        albumMapper.changeNotation(entity.getId(), notation);
+    }
 }

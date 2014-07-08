@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.tetram.bdtheque.data.bean.SerieLite;
+import org.tetram.bdtheque.data.bean.ValeurListe;
 import org.tetram.bdtheque.data.dao.mappers.SerieMapper;
 import org.tetram.bdtheque.gui.utils.InitialeEntity;
 
@@ -18,7 +19,7 @@ import java.util.UUID;
 @Lazy
 @Transactional
 @SuppressWarnings("UnusedDeclaration")
-public class SerieLiteDaoImpl extends DaoROImpl<SerieLite, UUID> implements SerieLiteDao {
+public class SerieLiteDaoImpl extends DaoROImpl<SerieLite, UUID> implements SerieLiteDao, EvaluatedEntityDao<SerieLite> {
 
     @Autowired
     private SerieMapper serieMapper;
@@ -31,5 +32,10 @@ public class SerieLiteDaoImpl extends DaoROImpl<SerieLite, UUID> implements Seri
     @Override
     public List<SerieLite> getListEntitiesByInitiale(InitialeEntity<Character> initiale, String filtre) {
         return serieMapper.getSerieLiteByInitiale(initiale.getValue(), filtre);
+    }
+
+    @Override
+    public void changeNotation(SerieLite entity, ValeurListe notation) {
+        serieMapper.changeNotation(entity.getId(), notation);
     }
 }
