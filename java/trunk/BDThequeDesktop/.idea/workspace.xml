@@ -11,24 +11,54 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" readonly="true" id="32b66b81-914a-4675-898b-1fae1d6860ea" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/dao/EvaluatedEntityDao.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/gui/controllers/NotationController.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/gui/notation.fxml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/dao/AlbumDaoImpl.java" afterPath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/dao/AlbumDaoImpl.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/dao/AlbumLiteDaoImpl.java" afterPath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/dao/AlbumLiteDaoImpl.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/bean/EvaluatedEntity.java" afterPath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/bean/EvaluatedEntity.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/gui/consultation/fiche_serie-screenshot.jpg" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/runConfigurations" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/spring" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/spring/utils" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/runConfigurations/All_tests.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/gui/controllers/consultation/FicheSerieController.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/runConfigurations/Main.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/runConfigurations/deploy_firebird_production.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/runConfigurations/deploy_firebird_test.xml" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/gui/consultation/ficheSerie.fxml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/bean/Album.java" afterPath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/bean/Album.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/bean/AlbumLite.java" afterPath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/bean/AlbumLite.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/BeanUtils.java" afterPath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/BeanUtils.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/bean/Collection.java" afterPath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/bean/Collection.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/bean/CollectionLite.java" afterPath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/bean/CollectionLite.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/bean/CouvertureLite.java" afterPath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/bean/CouvertureLite.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/gui/utils/Dialogs.java" afterPath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/gui/utils/Dialogs.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/bean/Editeur.java" afterPath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/bean/Editeur.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/data/dao/mappers/Editeur.xml" afterPath="$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/data/dao/mappers/Editeur.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/bean/EditeurLite.java" afterPath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/bean/EditeurLite.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/bean/Edition.java" afterPath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/bean/Edition.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/gui/controllers/consultation/FicheAlbumController.java" afterPath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/gui/controllers/consultation/FicheAlbumController.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/dao/SerieDaoImpl.java" afterPath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/dao/SerieDaoImpl.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/dao/SerieLiteDaoImpl.java" afterPath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/dao/SerieLiteDaoImpl.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/bean/ValeurListe.java" afterPath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/bean/ValeurListe.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/data/dao/mappers/ValeurListe.xml" afterPath="$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/data/dao/mappers/ValeurListe.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/dao/ValeurListeDao.java" afterPath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/dao/ValeurListeDao.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/dao/ValeurListeDaoImpl.java" afterPath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/dao/ValeurListeDaoImpl.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/dao/mappers/ValeurListeMapper.java" afterPath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/dao/mappers/ValeurListeMapper.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/gui/utils/FlowItem.java" afterPath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/gui/utils/FlowItem.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/gui/utils/Forms.java" afterPath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/gui/utils/Forms.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/dao/ImageLiteDao.java" afterPath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/dao/ImageLiteDao.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/Main.java" afterPath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/Main.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/gui/controllers/MainController.java" afterPath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/gui/controllers/MainController.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/gui/controllers/ModeConsultationController.java" afterPath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/gui/controllers/ModeConsultationController.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/gui/controllers/NotationController.java" afterPath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/gui/controllers/NotationController.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/bean/ParaBD.java" afterPath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/bean/ParaBD.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/bean/PhotoLite.java" afterPath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/bean/PhotoLite.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/gui/controllers/PreferencesController.java" afterPath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/gui/controllers/PreferencesController.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/gui/controllers/RepertoireController.java" afterPath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/gui/controllers/RepertoireController.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/bean/Serie.java" afterPath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/bean/Serie.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/data/dao/mappers/Serie.xml" afterPath="$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/data/dao/mappers/Serie.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/bean/SerieLite.java" afterPath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/bean/SerieLite.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/dictionaries/Thierry.xml" afterPath="$PROJECT_DIR$/.idea/dictionaries/Thierry.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/gui/consultation/ficheAlbum.fxml" afterPath="$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/gui/consultation/ficheAlbum.fxml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/gui/modeConsultation.fxml" afterPath="$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/gui/modeConsultation.fxml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/gui/main.fxml" afterPath="$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/gui/main.fxml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/gui/preferences.fxml" afterPath="$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/gui/preferences.fxml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/gui/repertoire.fxml" afterPath="$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/gui/repertoire.fxml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/config/spring-config.xml" afterPath="$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/config/spring-config.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MOVED" beforePath="D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\src\main\java\org\tetram\bdtheque\AutoTrimStringProperty.java" afterPath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/spring/utils/AutoTrimStringProperty.java" />
+      <change type="MOVED" beforePath="D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\src\main\java\org\tetram\bdtheque\SpringContext.java" afterPath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/spring/SpringContext.java" />
+      <change type="MOVED" beforePath="D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\src\main\java\org\tetram\bdtheque\SpringFxmlLoader.java" afterPath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/spring/SpringFxmlLoader.java" />
+      <change type="MOVED" beforePath="D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\src\main\java\org\tetram\bdtheque\gui\EntityWebHyperlink.java" afterPath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/gui/utils/EntityWebHyperlink.java" />
+      <change type="MOVED" beforePath="D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\src\main\java\org\tetram\bdtheque\gui\utils\FileStringConverter.java" afterPath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/spring/utils/FileStringConverter.java" />
     </list>
     <ignored path="BDThequeDesktop.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -62,59 +92,93 @@
       <file leaf-file-name="FicheAlbumController.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/gui/controllers/consultation/FicheAlbumController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="5542">
-              <caret line="54" column="0" selection-start-line="53" selection-start-column="0" selection-end-line="54" selection-end-column="0" />
-              <folding>
-                <element signature="e#7808#7842#0" expanded="true" />
-                <element signature="e#8060#8094#0" expanded="true" />
-                <element signature="e#8325#8359#0" expanded="true" />
-                <element signature="e#11642#11676#0" expanded="true" />
-                <element signature="e#12004#12044#0" expanded="true" />
-                <element signature="e#12357#12373#0" expanded="true" />
-              </folding>
+            <state vertical-scroll-proportion="0.0" vertical-offset="884" max-vertical-offset="6239">
+              <caret line="66" column="0" selection-start-line="63" selection-start-column="0" selection-end-line="66" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="NotationController.java" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/gui/controllers/NotationController.java">
+      <file leaf-file-name="ficheAlbum.fxml" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/gui/consultation/ficheAlbum.fxml">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.48518112" vertical-offset="34" max-vertical-offset="1649">
-              <caret line="28" column="0" selection-start-line="28" selection-start-column="0" selection-end-line="28" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="1581" max-vertical-offset="2958">
+              <caret line="93" column="40" selection-start-line="93" selection-start-column="40" selection-end-line="93" selection-end-column="40" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="modeConsultation.fxml" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/gui/modeConsultation.fxml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="204" max-vertical-offset="357">
+              <caret line="12" column="45" selection-start-line="12" selection-start-column="45" selection-end-line="12" selection-end-column="45" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="RepertoireController.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/gui/controllers/RepertoireController.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="2941" max-vertical-offset="5287">
+              <caret line="173" column="0" selection-start-line="173" selection-start-column="0" selection-end-line="173" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ModeConsultationController.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/gui/controllers/ModeConsultationController.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="816" max-vertical-offset="969">
+              <caret line="48" column="16" selection-start-line="48" selection-start-column="16" selection-end-line="48" selection-end-column="16" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Forms.java" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/gui/utils/Forms.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.7167969" vertical-offset="568" max-vertical-offset="1938">
+              <caret line="55" column="25" selection-start-line="55" selection-start-column="25" selection-end-line="55" selection-end-column="25" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#3000#3001#0" expanded="true" />
-                <element signature="e#3037#3038#0" expanded="true" />
+                <element signature="e#2688#2726#0" expanded="true" />
+                <element signature="e#3205#3243#0" expanded="true" />
+                <element signature="e#3728#3766#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="EvaluatedEntity.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/bean/EvaluatedEntity.java">
+      <file leaf-file-name="FicheSerieController.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/gui/controllers/consultation/FicheSerieController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="187" max-vertical-offset="425">
-              <caret line="11" column="17" selection-start-line="11" selection-start-column="17" selection-end-line="11" selection-end-column="17" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="1039" max-vertical-offset="2465">
+              <caret line="77" column="21" selection-start-line="77" selection-start-column="21" selection-end-line="77" selection-end-column="21" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ValeurListe.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/bean/ValeurListe.java">
+      <file leaf-file-name="Album.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/bean/Album.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="850" max-vertical-offset="1292">
-              <caret line="50" column="0" selection-start-line="50" selection-start-column="0" selection-end-line="50" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="7225">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="ValeurListeTypeHandler.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/ValeurListeTypeHandler.java">
+      <file leaf-file-name="Serie.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/bean/Serie.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="714" max-vertical-offset="1428">
-              <caret line="42" column="0" selection-start-line="42" selection-start-column="0" selection-end-line="42" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="850" max-vertical-offset="8551">
+              <caret line="50" column="25" selection-start-line="50" selection-start-column="25" selection-end-line="50" selection-end-column="25" />
               <folding />
             </state>
           </provider>
@@ -617,47 +681,28 @@
     </option>
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/BDTheque/doc/Proc_Gestions.pas" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/BDTheque/doc/EntitiesStats.pas" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/BDTheque/doc/UfrmConsultationAlbum.pas" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/BDTheque/doc/Commun.pas" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/BDTheque/doc/DaoRecherche.pas" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/BDTheque/doc/ProceduresBDtk.pas" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/BDTheque/doc/CommonConst.pas" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/BDTheque/doc/ProceduresBDtk.pas" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/BDTheque/doc/Commun.pas" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/BDTheque/doc/Procedures.pas" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/BDTheque/doc/Proc_Gestions.pas" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/BDTheque/doc/Editions.pas" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/BDTheque/doc/VirtualTreeBdtk.pas" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/BDTheque/doc/UfrmEditParaBD.pas" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/BDTheque/doc/Editions.pas" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/BDTheque/doc/UfrmEditAlbum.pas" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/BDTheque/doc/DaoRecherche.pas" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/BDTheque/doc/UfrmConsultationAlbum.pas" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/dao/AlbumLiteSerieDaoImpl.java" />
-        <option value="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/dao/PersonneDaoImpl.java" />
-        <option value="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/dao/mappers/AlbumMapper.java" />
-        <option value="$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/data/dao/mappers/Serie.xml" />
-        <option value="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/gui/utils/NotationResource.java" />
-        <option value="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/ISBN.java" />
-        <option value="$PROJECT_DIR$/BDTheque/build.gradle" />
-        <option value="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/utils/ISBNUtils.java" />
-        <option value="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/dao/mappers/EditionMapper.java" />
-        <option value="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/bean/Album.java" />
-        <option value="$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/data/dao/mappers/Album.xml" />
-        <option value="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/utils/ImageUtils.java" />
-        <option value="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/dao/ImageLiteDaoImpl.java" />
-        <option value="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/dao/ImageLiteDao.java" />
-        <option value="$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/gui/modeConsultation.fxml" />
-        <option value="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/bean/EditionLite.java" />
-        <option value="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/bean/Collection.java" />
         <option value="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/Main.java" />
         <option value="$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/lang/bd_en.properties" />
         <option value="$PROJECT_DIR$/BDTheque/doc/UfrmConsultationAlbum.pas" />
         <option value="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/bean/Edition.java" />
         <option value="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/utils/I18nSupport.java" />
         <option value="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/gui/controllers/PreferencesController.java" />
-        <option value="$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/data/dao/mappers/Editeur.xml" />
-        <option value="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/bean/Editeur.java" />
         <option value="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/bean/Personne.java" />
         <option value="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/bean/Univers.java" />
         <option value="$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/data/dao/mappers/Auteur.xml" />
@@ -665,11 +710,9 @@
         <option value="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/bean/AuteurLite.java" />
         <option value="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/gui/EntityWebHyperlink.java" />
         <option value="$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/gui/theme.css" />
-        <option value="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/bean/Serie.java" />
         <option value="$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/gui/consultation/consultation.css" />
         <option value="$PROJECT_DIR$/BDTheque/src/main/java/NotationController.java" />
         <option value="$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/gui/notation.fxml" />
-        <option value="$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/gui/consultation/ficheAlbum.fxml" />
         <option value="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/dao/ValeurListeDao.java" />
         <option value="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/dao/ValeurListeDaoImpl.java" />
         <option value="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/dao/mappers/ValeurListeMapper.java" />
@@ -682,8 +725,29 @@
         <option value="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/dao/SerieLiteDaoImpl.java" />
         <option value="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/bean/EvaluatedEntity.java" />
         <option value="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/dao/EvaluatedEntityDao.java" />
-        <option value="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/gui/controllers/consultation/FicheAlbumController.java" />
         <option value="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/gui/controllers/NotationController.java" />
+        <option value="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/SpringFxmlLoader.java" />
+        <option value="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/gui/SpringFxmlLoader.java" />
+        <option value="$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/gui/main.fxml" />
+        <option value="$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/gui/consultation/ficheSerie.fxml" />
+        <option value="$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/gui/preferences.fxml" />
+        <option value="$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/gui/repertoire.fxml" />
+        <option value="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/spring/SpringFxmlLoader.java" />
+        <option value="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/gui/utils/FlowItem.java" />
+        <option value="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/bean/EditeurLite.java" />
+        <option value="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/bean/Editeur.java" />
+        <option value="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/bean/Collection.java" />
+        <option value="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/bean/CollectionLite.java" />
+        <option value="$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/data/dao/mappers/Editeur.xml" />
+        <option value="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/gui/controllers/consultation/FicheSerieController.java" />
+        <option value="$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/data/dao/mappers/Serie.xml" />
+        <option value="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/bean/Album.java" />
+        <option value="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/bean/Serie.java" />
+        <option value="$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/gui/consultation/ficheAlbum.fxml" />
+        <option value="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/gui/controllers/consultation/FicheAlbumController.java" />
+        <option value="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/gui/controllers/RepertoireController.java" />
+        <option value="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/gui/controllers/ModeConsultationController.java" />
+        <option value="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/gui/utils/Forms.java" />
       </list>
     </option>
   </component>
@@ -750,6 +814,7 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="PackagesPane" />
       <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
@@ -759,289 +824,8 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
           </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="BDThequeDesktop" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="BDThequeDesktop" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="BDThequeDesktop" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="BDThequeDesktop" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="BDTheque" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="BDThequeDesktop" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="BDThequeDesktop" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="BDTheque" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="BDThequeDesktop" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="BDThequeDesktop" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="BDTheque" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="BDThequeDesktop" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="BDThequeDesktop" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="BDTheque" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="bdtheque" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="BDThequeDesktop" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="BDThequeDesktop" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="BDTheque" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="bdtheque" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="gui" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="BDThequeDesktop" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="BDThequeDesktop" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="BDTheque" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="bdtheque" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="gui" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="controllers" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="BDThequeDesktop" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="BDThequeDesktop" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="BDTheque" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="bdtheque" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="gui" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="controllers" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="consultation" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="BDThequeDesktop" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="BDThequeDesktop" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="BDTheque" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="bdtheque" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="data" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="BDThequeDesktop" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="BDThequeDesktop" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="BDTheque" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="bdtheque" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="data" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="dao" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -1059,7 +843,7 @@
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.23228699" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/external_annotations" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/BDTheque" />
     <property name="LayoutCode.rearrangeEntriesXML" value="false" />
     <property name="LayoutCode.rearrangeEntriesGroovy" value="false" />
     <property name="LayoutCode.rearrangeEntriesJava" value="false" />
@@ -1109,16 +893,16 @@
     <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder5" value="5" />
   </component>
   <component name="RecentsManager">
+    <key name="CreateTestDialog.RecentsKey">
+      <recent name="org.tetram.bdtheque.data.dao" />
+      <recent name="org.tetram.bdtheque" />
+      <recent name="org.tetram.bdtheque.data.dao.mappers" />
+    </key>
     <key name="CreateTestDialog.Recents.Supers">
       <recent name="" />
       <recent name="org.tetram.bdtheque.data.DBTest" />
       <recent name="org.tetram.bdtheque.data.dao.DaoTest" />
       <recent name="junit.framework.TestCase" />
-    </key>
-    <key name="CreateTestDialog.RecentsKey">
-      <recent name="org.tetram.bdtheque.data.dao" />
-      <recent name="org.tetram.bdtheque" />
-      <recent name="org.tetram.bdtheque.data.dao.mappers" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="org.tetram.bdtheque.data" />
@@ -1126,23 +910,16 @@
       <recent name="org.tetram.bdtheque.data.dao" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\src\main\resources\org\tetram\bdtheque\gui\consultation" />
       <recent name="D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\src\main\resources\org\tetram\bdtheque\graphics\png\16x16" />
       <recent name="D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\src\main\resources\org\tetram\bdtheque\graphics\png\22x22" />
       <recent name="D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\doc" />
-      <recent name="D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\src\main\resources\org\tetram\bdtheque\gui\consultation" />
       <recent name="D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\src\main\resources\org\tetram\bdtheque\graphics\png\32x32" />
     </key>
     <key name="ExtractSuperBase.RECENT_KEYS">
       <recent name="org.tetram.bdtheque.data.bean" />
       <recent name="org.tetram.bdtheque.data.dao" />
       <recent name="org.tetram.bdtheque" />
-    </key>
-    <key name="IntroduceConstantDialog.RECENTS_KEY">
-      <recent name="org.tetram.bdtheque.gui.controllers.consultation.FicheAlbumController" />
-      <recent name="org.tetram.bdtheque.SpringContext" />
-      <recent name="org.tetram.bdtheque.utils.I18nSupport" />
-      <recent name="org.tetram.bdtheque.Main" />
-      <recent name="org.tetram.bdtheque.Main.SpringFxmlLoader" />
     </key>
     <key name="MoveMembersDialog.RECENTS_KEY">
       <recent name="org.tetram.bdtheque.utils.ISBNUtils" />
@@ -1151,6 +928,13 @@
       <recent name="org.tetram.bdtheque.Main" />
       <recent name="org.tetram.bdtheque.utils.TypeUtils" />
     </key>
+    <key name="IntroduceConstantDialog.RECENTS_KEY">
+      <recent name="org.tetram.bdtheque.gui.controllers.consultation.FicheAlbumController" />
+      <recent name="org.tetram.bdtheque.SpringContext" />
+      <recent name="org.tetram.bdtheque.utils.I18nSupport" />
+      <recent name="org.tetram.bdtheque.Main" />
+      <recent name="org.tetram.bdtheque.Main.SpringFxmlLoader" />
+    </key>
     <key name="CreateClassDialog.RecentsKey">
       <recent name="org.tetram.bdtheque.gui.controllers" />
       <recent name="org.tetram.bdtheque.gui.utils" />
@@ -1158,19 +942,19 @@
       <recent name="org.tetram.bdtheque.gui" />
       <recent name="org.tetram.bdtheque.data.services" />
     </key>
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="org.tetram.bdtheque.utils" />
+      <recent name="org.tetram.bdtheque.gui" />
+      <recent name="org.tetram.bdtheque.gui.controllers.consultation" />
+      <recent name="org.tetram.bdtheque" />
+      <recent name="org.tetram.bdtheque.data.dao" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\src\main\resources\org\tetram\bdtheque\graphics\ico" />
       <recent name="D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\src\main\resources\org\tetram\bdtheque\graphics\png\128x128" />
       <recent name="D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\src\main\resources\org\tetram\bdtheque\graphics\png" />
       <recent name="D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\src\main\resources\org\tetram\bdtheque\utils" />
       <recent name="D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\src\main\resources\org\tetram\bdtheque\data\dao\mappers" />
-    </key>
-    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
-      <recent name="org.tetram.bdtheque.utils" />
-      <recent name="org.tetram.bdtheque.gui.controllers.consultation" />
-      <recent name="org.tetram.bdtheque.gui" />
-      <recent name="org.tetram.bdtheque" />
-      <recent name="org.tetram.bdtheque.data.dao" />
     </key>
   </component>
   <component name="RunManager" selected="Application.Main">
@@ -1386,87 +1170,11 @@
       <option name="FILTER_LOGCAT_AUTOMATICALLY" value="true" />
       <method />
     </configuration>
-    <configuration default="false" name="deploy firebird production" type="BatchConfigurationType" factoryName="Batch">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/BDTheque" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs />
-      <module name="BDThequeDesktop" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/BDTheque/deploy_firebird.cmd" />
-      <option name="PARAMETERS" value="..\out\production" />
-      <RunnerSettings RunnerId="BatchRunner" />
-      <ConfigurationWrapper RunnerId="BatchRunner" />
-      <method />
-    </configuration>
-    <configuration default="false" name="deploy firebird test" type="BatchConfigurationType" factoryName="Batch">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/BDTheque" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs />
-      <module name="BDThequeDesktop" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/BDTheque/deploy_firebird.cmd" />
-      <option name="PARAMETERS" value="..\out\test" />
-      <RunnerSettings RunnerId="BatchRunner" />
-      <ConfigurationWrapper RunnerId="BatchRunner" />
-      <method />
-    </configuration>
-    <configuration default="false" name="All tests" type="JUnit" factoryName="JUnit" singleton="true">
-      <module name="BDTheque" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" value="" />
-      <option name="PACKAGE_NAME" value="" />
-      <option name="MAIN_CLASS_NAME" value="" />
-      <option name="METHOD_NAME" value="" />
-      <option name="TEST_OBJECT" value="package" />
-      <option name="VM_PARAMETERS" value="-ea" />
-      <option name="PARAMETERS" value="" />
-      <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$/out/test" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="TEST_SEARCH_SCOPE">
-        <value defaultName="moduleWithDependencies" />
-      </option>
-      <envs />
-      <patterns />
-      <RunnerSettings RunnerId="Debug">
-        <option name="DEBUG_PORT" value="" />
-        <option name="TRANSPORT" value="0" />
-        <option name="LOCAL" value="true" />
-      </RunnerSettings>
-      <RunnerSettings RunnerId="Run" />
-      <ConfigurationWrapper RunnerId="Debug" />
-      <ConfigurationWrapper RunnerId="Run" />
-      <method>
-        <option name="RunConfigurationTask" enabled="true" run_configuration_name="deploy firebird test" run_configuration_type="BatchConfigurationType" />
-      </method>
-    </configuration>
-    <configuration default="false" name="Main" type="Application" factoryName="Application" singleton="true">
-      <option name="MAIN_CLASS_NAME" value="org.tetram.bdtheque.Main" />
-      <option name="VM_PARAMETERS" value="" />
-      <option name="PROGRAM_PARAMETERS" value="" />
-      <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$/out/production" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" value="" />
-      <option name="ENABLE_SWING_INSPECTOR" value="false" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <module name="BDTheque" />
-      <envs />
-      <RunnerSettings RunnerId="Debug">
-        <option name="DEBUG_PORT" value="" />
-        <option name="TRANSPORT" value="0" />
-        <option name="LOCAL" value="true" />
-      </RunnerSettings>
-      <ConfigurationWrapper RunnerId="Debug" />
-      <method>
-        <option name="RunConfigurationTask" enabled="true" run_configuration_name="deploy firebird production" run_configuration_type="BatchConfigurationType" />
-      </method>
-    </configuration>
     <list size="4">
-      <item index="0" class="java.lang.String" itemvalue="Batch.deploy firebird production" />
-      <item index="1" class="java.lang.String" itemvalue="Batch.deploy firebird test" />
-      <item index="2" class="java.lang.String" itemvalue="JUnit.All tests" />
-      <item index="3" class="java.lang.String" itemvalue="Application.Main" />
+      <item index="0" class="java.lang.String" itemvalue="Application.Main" />
+      <item index="1" class="java.lang.String" itemvalue="Batch.deploy firebird production" />
+      <item index="2" class="java.lang.String" itemvalue="Batch.deploy firebird test" />
+      <item index="3" class="java.lang.String" itemvalue="JUnit.All tests" />
     </list>
     <configuration name="&lt;template&gt;" type="WebApp" default="true" selected="false">
       <Host>localhost</Host>
@@ -1794,7 +1502,11 @@
       <created>1404823084763</created>
       <updated>1404823084763</updated>
     </task>
-    <option name="localTasksCounter" value="71" />
+    <task id="LOCAL-00071">
+      <created>1404832609464</created>
+      <updated>1404832609464</updated>
+    </task>
+    <option name="localTasksCounter" value="72" />
     <option name="createBranch" value="false" />
     <servers>
       <Redmine shared="true" url="http://dev.tetram.org">
@@ -1832,7 +1544,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1096" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3290735" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -1840,7 +1552,7 @@
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32995737" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.5410011" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.42492014" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.42492014" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32870865" sideWeight="0.5" order="8" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3290735" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
@@ -1851,8 +1563,8 @@
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.20255864" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.16719915" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.20255864" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.54632586" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Documentation" active="false" anchor="right" auto_hide="true" internal_type="DOCKED" type="FLOATING" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" x="92" y="92" width="1736" height="896" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32995737" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
@@ -1890,7 +1602,7 @@
           <option name="timeStamp" value="65" />
         </line-breakpoint>
       </breakpoints>
-      <option name="time" value="164" />
+      <option name="time" value="173" />
     </breakpoint-manager>
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
@@ -1916,394 +1628,10 @@
     </buildFile>
   </component>
   <component name="editorHistoryManager">
-    <entry file="jar://C:/Program Files (x86)/Java/jdk1.8.0_20/javafx-src.zip!/javafx/beans/binding/ListExpression.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="2754" max-vertical-offset="5848">
-          <caret line="229" column="0" selection-start-line="229" selection-start-column="0" selection-end-line="229" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.mybatis/mybatis/3.2.7/bde646698337550ae417b3bd83af7f95ccee98e8/mybatis-3.2.7-sources.jar!/org/apache/ibatis/executor/loader/cglib/CglibProxyFactory.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1330" max-vertical-offset="2669">
-          <caret line="125" column="0" selection-start-line="125" selection-start-column="0" selection-end-line="125" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/data/dao/mappers/Auteur.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.13062568" vertical-offset="0" max-vertical-offset="3808">
-          <caret line="7" column="0" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/dao/mappers/AuteurMapper.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.13062568" vertical-offset="0" max-vertical-offset="911">
-          <caret line="13" column="53" selection-start-line="13" selection-start-column="53" selection-end-line="13" selection-end-column="53" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/bean/AbstractDBEntity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.13062568" vertical-offset="0" max-vertical-offset="911">
-          <caret line="7" column="22" selection-start-line="7" selection-start-column="22" selection-end-line="7" selection-end-column="22" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/bean/AuteurSerieLite.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.1954023" vertical-offset="0" max-vertical-offset="1122">
-          <caret line="10" column="7" selection-start-line="10" selection-start-column="7" selection-end-line="10" selection-end-column="7" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/bean/AuteurAlbumLite.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.1954023" vertical-offset="0" max-vertical-offset="731">
-          <caret line="7" column="43" selection-start-line="7" selection-start-column="43" selection-end-line="7" selection-end-column="43" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/bean/PersonneLite.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="1.1230469" vertical-offset="105" max-vertical-offset="799">
-          <caret line="61" column="0" selection-start-line="47" selection-start-column="0" selection-end-line="61" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/bean/AuteurLite.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.46962234" vertical-offset="615" max-vertical-offset="1241">
-          <caret line="53" column="20" selection-start-line="53" selection-start-column="20" selection-end-line="53" selection-end-column="20" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#456#457#0" expanded="true" />
-            <element signature="e#487#488#0" expanded="true" />
-            <element signature="e#528#529#0" expanded="true" />
-            <element signature="e#565#566#0" expanded="true" />
-            <element signature="e#619#620#0" expanded="true" />
-            <element signature="e#662#663#0" expanded="true" />
-            <element signature="e#707#708#0" expanded="true" />
-            <element signature="e#787#788#0" expanded="true" />
-            <element signature="e#844#845#0" expanded="true" />
-            <element signature="e#920#921#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/gui/utils/FlowItem.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.20526893" vertical-offset="0" max-vertical-offset="911">
-          <caret line="18" column="26" selection-start-line="18" selection-start-column="26" selection-end-line="18" selection-end-column="26" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://C:/Program Files (x86)/Java/jdk1.8.0_20/javafx-src.zip!/javafx/event/Event.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.33203125" vertical-offset="1122" max-vertical-offset="2907">
-          <caret line="105" column="23" selection-start-line="105" selection-start-column="23" selection-end-line="105" selection-end-column="23" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/gui/theme.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-0.29882812" vertical-offset="153" max-vertical-offset="765">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/bean/SerieLite.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.7675781" vertical-offset="831" max-vertical-offset="1343">
-          <caret line="103" column="0" selection-start-line="91" selection-start-column="0" selection-end-line="103" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/bean/Serie.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.93359375" vertical-offset="4979" max-vertical-offset="5576">
-          <caret line="496" column="0" selection-start-line="496" selection-start-column="0" selection-end-line="496" selection-end-column="0" />
-          <folding>
-            <element signature="e#13273#13317#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/bean/Album.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.33266532" vertical-offset="1500" max-vertical-offset="5015">
-          <caret line="125" column="13" selection-start-line="125" selection-start-column="13" selection-end-line="125" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/gui/EntityWebHyperlink.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.73046875" vertical-offset="0" max-vertical-offset="884">
-          <caret line="22" column="34" selection-start-line="22" selection-start-column="34" selection-end-line="22" selection-end-column="34" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/gui/utils/Forms.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.33203125" vertical-offset="816" max-vertical-offset="1530">
-          <caret line="71" column="74" selection-start-line="71" selection-start-column="74" selection-end-line="71" selection-end-column="74" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/gui/controllers/ModeConsultationController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.734375" vertical-offset="219" max-vertical-offset="731">
-          <caret line="49" column="19" selection-start-line="49" selection-start-column="19" selection-end-line="49" selection-end-column="19" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://C:/Program Files (x86)/Java/jdk1.8.0_20/jre/lib/ext/jfxrt.jar!/com/sun/javafx/scene/control/skin/caspian/caspian.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-0.24416135" vertical-offset="22589" max-vertical-offset="68765">
-          <caret line="1322" column="21" selection-start-line="1322" selection-start-column="21" selection-end-line="1322" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/gui/consultation/consultation.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="544">
-          <caret line="4" column="6" selection-start-line="4" selection-start-column="6" selection-end-line="4" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/gui/controllers/DialogController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="612">
-          <caret line="0" column="8" selection-start-line="0" selection-start-column="8" selection-end-line="0" selection-end-column="43" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/gui/consultation/ficheAlbum.fxml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1071" max-vertical-offset="2890">
-          <caret line="79" column="23" selection-start-line="79" selection-start-column="23" selection-end-line="79" selection-end-column="23" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/gui/notation.fxml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.099609375" vertical-offset="0" max-vertical-offset="512">
-          <caret line="3" column="0" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/gui/utils/NotationResource.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.23242188" vertical-offset="0" max-vertical-offset="731">
-          <caret line="8" column="12" selection-start-line="8" selection-start-column="12" selection-end-line="8" selection-end-column="12" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/bean/CategorieValeurListe.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.23242188" vertical-offset="0" max-vertical-offset="544">
-          <caret line="7" column="12" selection-start-line="7" selection-start-column="12" selection-end-line="7" selection-end-column="12" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/dao/ValeurListeDao.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.9296875" vertical-offset="51" max-vertical-offset="663">
-          <caret line="31" column="20" selection-start-line="31" selection-start-column="20" selection-end-line="31" selection-end-column="20" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/config/mybatis-config.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.37321624" vertical-offset="255" max-vertical-offset="1972">
-          <caret line="35" column="86" selection-start-line="35" selection-start-column="75" selection-end-line="35" selection-end-column="86" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/data/dao/mappers/Common.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-0.5675082" vertical-offset="517" max-vertical-offset="1428">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/bean/DefaultValeurListe.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.09330406" vertical-offset="0" max-vertical-offset="911">
-          <caret line="5" column="13" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/dao/ValeurListeDaoImpl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="187" max-vertical-offset="1241">
-          <caret line="27" column="43" selection-start-line="27" selection-start-column="43" selection-end-line="27" selection-end-column="43" />
-          <folding>
-            <element signature="e#2716#2717#0" expanded="true" />
-            <element signature="e#2786#2787#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/dao/mappers/ValeurListeMapper.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.3984375" vertical-offset="0" max-vertical-offset="512">
-          <caret line="20" column="58" selection-start-line="20" selection-start-column="58" selection-end-line="20" selection-end-column="58" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.mybatis/mybatis/3.2.7/bde646698337550ae417b3bd83af7f95ccee98e8/mybatis-3.2.7-sources.jar!/org/apache/ibatis/executor/resultset/DefaultResultSetHandler.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="5593" max-vertical-offset="15215">
-          <caret line="389" column="0" selection-start-line="389" selection-start-column="0" selection-end-line="389" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://C:/Program Files (x86)/Java/jdk1.8.0_20/javafx-src.zip!/javafx/beans/property/IntegerPropertyBase.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1717" max-vertical-offset="3910">
-          <caret line="147" column="0" selection-start-line="147" selection-start-column="0" selection-end-line="147" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/data/dao/mappers/ValeurListe.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="799">
-          <caret line="26" column="8" selection-start-line="26" selection-start-column="8" selection-end-line="26" selection-end-column="8" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/ValeurListeTypeHandler.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="398" max-vertical-offset="1275">
-          <caret line="42" column="0" selection-start-line="42" selection-start-column="0" selection-end-line="42" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/bean/ValeurListe.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="463" max-vertical-offset="952">
-          <caret line="50" column="0" selection-start-line="50" selection-start-column="0" selection-end-line="50" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://C:/Program Files (x86)/Java/jdk1.8.0_20/javafx-src.zip!/javafx/scene/control/Tooltip.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.33333334" vertical-offset="1010" max-vertical-offset="14195">
-          <caret line="133" column="23" selection-start-line="133" selection-start-column="23" selection-end-line="133" selection-end-column="23" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-beans/4.0.5.RELEASE/589675b60574e292b76f8ef3bf36bec72a979e45/spring-beans-4.0.5.RELEASE-sources.jar!/org/springframework/beans/factory/annotation/Autowired.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.4785276" vertical-offset="633" max-vertical-offset="1122">
-          <caret line="69" column="18" selection-start-line="69" selection-start-column="18" selection-end-line="69" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-context/4.0.5.RELEASE/aadd509610ea91906c177c33c22dd7e28df3b66/spring-context-4.0.5.RELEASE-sources.jar!/org/springframework/stereotype/Controller.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.44376278" vertical-offset="208" max-vertical-offset="697">
-          <caret line="43" column="18" selection-start-line="43" selection-start-column="18" selection-end-line="43" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.springframework/spring-beans/4.0.5.RELEASE/589675b60574e292b76f8ef3bf36bec72a979e45/spring-beans-4.0.5.RELEASE-sources.jar!/org/springframework/beans/BeanUtils.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.33333334" vertical-offset="1962" max-vertical-offset="10081">
-          <caret line="162" column="0" selection-start-line="162" selection-start-column="0" selection-end-line="162" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/dao/SerieLiteDaoImpl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.88439304" vertical-offset="17" max-vertical-offset="629">
-          <caret line="38" column="61" selection-start-line="38" selection-start-column="61" selection-end-line="38" selection-end-column="61" />
-          <folding>
-            <element signature="e#907#908#0" expanded="true" />
-            <element signature="e#962#963#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/dao/SerieDaoImpl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.70520234" vertical-offset="671" max-vertical-offset="1190">
-          <caret line="77" column="61" selection-start-line="77" selection-start-column="61" selection-end-line="77" selection-end-column="61" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/dao/AlbumLiteDaoImpl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.7527675" vertical-offset="17" max-vertical-offset="595">
-          <caret line="37" column="51" selection-start-line="37" selection-start-column="51" selection-end-line="37" selection-end-column="51" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/dao/AlbumLiteDao.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.2195572" vertical-offset="0" max-vertical-offset="542">
-          <caret line="9" column="24" selection-start-line="9" selection-start-column="24" selection-end-line="9" selection-end-column="24" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/dao/AlbumDaoImpl.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.34501845" vertical-offset="0" max-vertical-offset="2244">
-          <caret line="26" column="88" selection-start-line="26" selection-start-column="88" selection-end-line="26" selection-end-column="88" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/dao/AlbumDao.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.1954023" vertical-offset="0" max-vertical-offset="609">
-          <caret line="10" column="17" selection-start-line="10" selection-start-column="17" selection-end-line="10" selection-end-column="17" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/bean/EvaluatedEntity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="425">
+        <state vertical-scroll-proportion="0.20526893" vertical-offset="0" max-vertical-offset="911">
           <caret line="11" column="17" selection-start-line="11" selection-start-column="17" selection-end-line="11" selection-end-column="17" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -2311,9 +1639,20 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.1492865" vertical-offset="0" max-vertical-offset="911">
           <caret line="8" column="17" selection-start-line="8" selection-start-column="17" selection-end-line="8" selection-end-column="17" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/gui/controllers/NotationController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.26125136" vertical-offset="442" max-vertical-offset="1598">
+          <caret line="40" column="39" selection-start-line="40" selection-start-column="39" selection-end-line="40" selection-end-column="39" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/gui/utils/EntityWebHyperlink.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.80241495" vertical-offset="0" max-vertical-offset="911">
+          <caret line="43" column="23" selection-start-line="43" selection-start-column="23" selection-end-line="43" selection-end-column="23" />
         </state>
       </provider>
     </entry>
@@ -2321,33 +1660,339 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.66410536" vertical-offset="92" max-vertical-offset="1003">
           <caret line="62" column="50" selection-start-line="62" selection-start-column="27" selection-end-line="62" selection-end-column="50" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/gui/controllers/consultation/ConsultationController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.13062568" vertical-offset="0" max-vertical-offset="911">
+          <caret line="7" column="17" selection-start-line="7" selection-start-column="17" selection-end-line="7" selection-end-column="17" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/gui/consultation/fiche_album-screenshot.jpg">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files (x86)/Java/jdk1.8.0_20/src.zip!/java/io/File.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.33264464" vertical-offset="30252" max-vertical-offset="37723">
+          <caret line="1805" column="43" selection-start-line="1805" selection-start-column="33" selection-end-line="1805" selection-end-column="43" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files (x86)/Java/jdk1.8.0_20/src.zip!/java/io/FileSystem.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-1.2285156" vertical-offset="918" max-vertical-offset="3893">
+          <caret line="40" column="25" selection-start-line="40" selection-start-column="25" selection-end-line="40" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files (x86)/Java/jdk1.8.0_20/src.zip!/java/lang/Package.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="3247" max-vertical-offset="9792">
+          <caret line="278" column="26" selection-start-line="278" selection-start-column="26" selection-end-line="278" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files (x86)/Java/jdk1.8.0_20/src.zip!/java/lang/ClassLoader.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="23902" max-vertical-offset="35989">
+          <caret line="1501" column="23" selection-start-line="1501" selection-start-column="23" selection-end-line="1501" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files (x86)/Java/jdk1.8.0_20/src.zip!/java/lang/Class.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="3043" max-vertical-offset="60010">
+          <caret line="259" column="43" selection-start-line="259" selection-start-column="43" selection-end-line="259" selection-end-column="43" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/gui/controllers/MainController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.16601562" vertical-offset="0" max-vertical-offset="1615">
+          <caret line="29" column="27" selection-start-line="29" selection-start-column="13" selection-end-line="29" selection-end-column="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/spring/utils/FileStringConverter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.13062568" vertical-offset="0" max-vertical-offset="911">
+          <caret line="10" column="13" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/gui/utils/Dialogs.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="697">
+          <caret line="17" column="13" selection-start-line="17" selection-start-column="13" selection-end-line="17" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/gui/utils/InitialeEntity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="748">
+          <caret line="10" column="13" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/gui/utils/NotationResource.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="731">
+          <caret line="8" column="12" selection-start-line="8" selection-start-column="12" selection-end-line="8" selection-end-column="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files (x86)/Java/jdk1.8.0_20/javafx-src.zip!/javafx/fxml/FXMLLoader.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.33203125" vertical-offset="38420" max-vertical-offset="57222">
+          <caret line="2425" column="18" selection-start-line="2425" selection-start-column="18" selection-end-line="2425" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/gui/repertoire.fxml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.43164062" vertical-offset="0" max-vertical-offset="2159">
+          <caret line="13" column="61" selection-start-line="13" selection-start-column="61" selection-end-line="13" selection-end-column="61" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/gui/theme.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="765">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/gui/preferences.fxml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2856">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/gui/notation.fxml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.23242188" vertical-offset="0" max-vertical-offset="512">
+          <caret line="7" column="0" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/gui/main.fxml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.099609375" vertical-offset="0" max-vertical-offset="1479">
+          <caret line="3" column="31" selection-start-line="3" selection-start-column="31" selection-end-line="3" selection-end-column="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files (x86)/Java/jdk1.8.0_20/src.zip!/java/net/URL.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.43164062" vertical-offset="14365" max-vertical-offset="20978">
+          <caret line="920" column="18" selection-start-line="920" selection-start-column="18" selection-end-line="920" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files (x86)/Java/jdk1.8.0_20/jre/lib/ext/jfxrt.jar!/javafx/collections/ObservableList.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.33203125" vertical-offset="0" max-vertical-offset="561">
+          <caret line="11" column="12" selection-start-line="11" selection-start-column="12" selection-end-line="11" selection-end-column="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/spring/SpringFxmlLoader.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.6308594" vertical-offset="136" max-vertical-offset="731">
+          <caret line="36" column="40" selection-start-line="36" selection-start-column="40" selection-end-line="36" selection-end-column="40" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/gui/consultation/fiche_serie-screenshot.jpg">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/gui/utils/FlowItem.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.37321624" vertical-offset="0" max-vertical-offset="935">
+          <caret line="30" column="50" selection-start-line="30" selection-start-column="50" selection-end-line="30" selection-end-column="50" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/bean/EditeurLite.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="901">
+          <caret line="14" column="76" selection-start-line="14" selection-start-column="76" selection-end-line="14" selection-end-column="76" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/bean/Editeur.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="969">
+          <caret line="16" column="129" selection-start-line="16" selection-start-column="129" selection-end-line="16" selection-end-column="129" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/bean/CollectionLite.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.80241495" vertical-offset="0" max-vertical-offset="935">
+          <caret line="66" column="43" selection-start-line="66" selection-start-column="43" selection-end-line="66" selection-end-column="43" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/bean/Collection.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.5334797" vertical-offset="7" max-vertical-offset="1071">
+          <caret line="38" column="49" selection-start-line="38" selection-start-column="49" selection-end-line="38" selection-end-column="49" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/bean/EditionLite.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1224">
+          <caret line="15" column="13" selection-start-line="15" selection-start-column="13" selection-end-line="15" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/bean/Edition.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.22392975" vertical-offset="0" max-vertical-offset="3434">
+          <caret line="28" column="19" selection-start-line="28" selection-start-column="12" selection-end-line="28" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/data/dao/mappers/Editeur.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-0.24259056" vertical-offset="510" max-vertical-offset="1445">
+          <caret line="17" column="34" selection-start-line="17" selection-start-column="34" selection-end-line="17" selection-end-column="43" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/dao/mappers/EditeurMapper.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="911">
+          <caret line="0" column="45" selection-start-line="0" selection-start-column="45" selection-end-line="0" selection-end-column="45" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/dao/mappers/EditionMapper.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.1492865" vertical-offset="0" max-vertical-offset="911">
+          <caret line="15" column="17" selection-start-line="15" selection-start-column="17" selection-end-line="15" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/gui/consultation/ficheSerie.fxml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="391" max-vertical-offset="1462">
+          <caret line="71" column="36" selection-start-line="71" selection-start-column="36" selection-end-line="71" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/dao/mappers/SerieMapper.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.23242188" vertical-offset="0" max-vertical-offset="512">
+          <caret line="15" column="52" selection-start-line="15" selection-start-column="52" selection-end-line="15" selection-end-column="52" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/data/dao/mappers/Auteur.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-0.7837541" vertical-offset="714" max-vertical-offset="3808">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/data/dao/mappers/Serie.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.8397366" vertical-offset="0" max-vertical-offset="3315">
+          <caret line="45" column="0" selection-start-line="45" selection-start-column="0" selection-end-line="45" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/data/dao/mappers/Album.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.87705815" vertical-offset="0" max-vertical-offset="5032">
+          <caret line="47" column="0" selection-start-line="44" selection-start-column="0" selection-end-line="47" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/bean/Album.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="4930">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/bean/Serie.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="1120" max-vertical-offset="5661">
+          <caret line="50" column="25" selection-start-line="50" selection-start-column="25" selection-end-line="50" selection-end-column="25" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/gui/controllers/consultation/FicheAlbumController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="5542">
-          <caret line="54" column="0" selection-start-line="53" selection-start-column="0" selection-end-line="54" selection-end-column="0" />
-          <folding>
-            <element signature="e#7808#7842#0" expanded="true" />
-            <element signature="e#8060#8094#0" expanded="true" />
-            <element signature="e#8325#8359#0" expanded="true" />
-            <element signature="e#11642#11676#0" expanded="true" />
-            <element signature="e#12004#12044#0" expanded="true" />
-            <element signature="e#12357#12373#0" expanded="true" />
-          </folding>
+        <state vertical-scroll-proportion="0.0" vertical-offset="884" max-vertical-offset="6239">
+          <caret line="66" column="0" selection-start-line="63" selection-start-column="0" selection-end-line="66" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/gui/controllers/NotationController.java">
+    <entry file="file://$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/gui/controllers/RepertoireController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.48518112" vertical-offset="34" max-vertical-offset="1615">
-          <caret line="28" column="0" selection-start-line="28" selection-start-column="0" selection-end-line="28" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="2200" max-vertical-offset="4454">
+          <caret line="173" column="0" selection-start-line="173" selection-start-column="0" selection-end-line="173" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/gui/controllers/consultation/FicheSerieController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="1039" max-vertical-offset="2465">
+          <caret line="77" column="21" selection-start-line="77" selection-start-column="21" selection-end-line="77" selection-end-column="21" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/gui/modeConsultation.fxml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="357">
+          <caret line="12" column="45" selection-start-line="12" selection-start-column="45" selection-end-line="12" selection-end-column="45" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/gui/consultation/ficheAlbum.fxml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="1337" max-vertical-offset="2958">
+          <caret line="93" column="40" selection-start-line="93" selection-start-column="40" selection-end-line="93" selection-end-column="40" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/gui/controllers/ModeConsultationController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="714">
+          <caret line="48" column="16" selection-start-line="48" selection-start-column="16" selection-end-line="48" selection-end-column="16" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/gui/utils/Forms.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.7167969" vertical-offset="568" max-vertical-offset="1938">
+          <caret line="55" column="25" selection-start-line="55" selection-start-column="25" selection-end-line="55" selection-end-column="25" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#3000#3001#0" expanded="true" />
-            <element signature="e#3037#3038#0" expanded="true" />
+            <element signature="e#2688#2726#0" expanded="true" />
+            <element signature="e#3205#3243#0" expanded="true" />
+            <element signature="e#3728#3766#0" expanded="true" />
           </folding>
         </state>
       </provider>

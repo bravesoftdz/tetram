@@ -2,7 +2,7 @@ package org.tetram.bdtheque.data.bean;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import org.tetram.bdtheque.SpringContext;
+import org.tetram.bdtheque.spring.SpringContext;
 import org.tetram.bdtheque.data.BeanUtils;
 import org.tetram.bdtheque.data.dao.ValeurListeDao;
 

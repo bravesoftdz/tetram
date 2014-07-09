@@ -4,8 +4,8 @@ import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import org.tetram.bdtheque.AutoTrimStringProperty;
-import org.tetram.bdtheque.SpringContext;
+import org.tetram.bdtheque.spring.utils.AutoTrimStringProperty;
+import org.tetram.bdtheque.spring.SpringContext;
 import org.tetram.bdtheque.data.BeanUtils;
 import org.tetram.bdtheque.data.dao.ValeurListeDao;
 import org.tetram.bdtheque.utils.TypeUtils;
@@ -264,7 +264,6 @@ public class Album extends AbstractDBEntity implements EvaluatedEntity {
         AuteurAlbumLite auteur = new AuteurAlbumLite();
         auteur.setPersonne(personne);
         auteur.setMetier(metier);
-        // listAuteurs.add(auteur);
         auteurs.add(auteur);
     }
 
@@ -283,7 +282,6 @@ public class Album extends AbstractDBEntity implements EvaluatedEntity {
     private void removeAuteur(PersonneLite personne, List<AuteurAlbumLite> listAuteurs) {
         for (AuteurAlbumLite auteur : listAuteurs)
             if (auteur.getPersonne() == personne) {
-                // listAuteurs.remove(auteur);
                 auteurs.remove(auteur);
                 return;
             }
@@ -302,7 +300,6 @@ public class Album extends AbstractDBEntity implements EvaluatedEntity {
     }
 
     public List<AuteurAlbumLite> getScenaristes() {
-        // buildListsAuteurs();
         return scenaristes.get();
     }
 
@@ -311,7 +308,6 @@ public class Album extends AbstractDBEntity implements EvaluatedEntity {
     }
 
     public List<AuteurAlbumLite> getDessinateurs() {
-        // buildListsAuteurs();
         return dessinateurs.get();
     }
 
@@ -320,7 +316,6 @@ public class Album extends AbstractDBEntity implements EvaluatedEntity {
     }
 
     public List<AuteurAlbumLite> getColoristes() {
-        // buildListsAuteurs();
         return coloristes.get();
     }
 

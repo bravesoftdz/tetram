@@ -1,4 +1,4 @@
-package org.tetram.bdtheque;
+package org.tetram.bdtheque.spring;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.jetbrains.annotations.NonNls;

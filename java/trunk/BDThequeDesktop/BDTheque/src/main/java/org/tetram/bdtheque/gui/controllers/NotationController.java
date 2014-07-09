@@ -71,7 +71,6 @@ public class NotationController extends DialogController {
     }
 
     public void setNotation(ValeurListe notation) {
-        this.notation.set(null);
         this.notation.set(notation);
     }
 

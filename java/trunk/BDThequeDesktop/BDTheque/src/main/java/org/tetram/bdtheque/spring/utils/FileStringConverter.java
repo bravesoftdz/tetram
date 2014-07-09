@@ -1,4 +1,4 @@
-package org.tetram.bdtheque.gui.utils;
+package org.tetram.bdtheque.spring.utils;
 
 import javafx.util.StringConverter;
 import org.tetram.bdtheque.utils.StringUtils;

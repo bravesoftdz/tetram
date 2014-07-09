@@ -9,7 +9,7 @@
         http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
 
     <!--
-    géré par le bean databaseProperties (dans org.tetram.bdtheque.SpringContext)
+    géré par le bean databaseProperties (dans org.tetram.bdtheque.spring.SpringContext)
     <context:property-placeholder location="org/tetram/bdtheque/config/database.properties"/>
     -->
 

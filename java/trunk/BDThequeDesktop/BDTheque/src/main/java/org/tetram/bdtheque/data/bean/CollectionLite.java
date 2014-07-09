@@ -1,8 +1,10 @@
 package org.tetram.bdtheque.data.bean;
 
-import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.StringProperty;
 import org.tetram.bdtheque.data.BeanUtils;
+import org.tetram.bdtheque.spring.utils.AutoTrimStringProperty;
 import org.tetram.bdtheque.utils.StringUtils;
 
 import java.util.Comparator;
@@ -23,15 +25,15 @@ public class CollectionLite extends AbstractDBEntity {
 
         return 0;
     };
-    private StringProperty nomCollection = new SimpleStringProperty();
-    private EditeurLite editeur;
+    private StringProperty nomCollection = new AutoTrimStringProperty(this, "nomCollection", null);
+    private ObjectProperty<EditeurLite> editeur = new SimpleObjectProperty<>(this, "editeur", null);
 
     public String getNomCollection() {
-        return BeanUtils.trimOrNull(nomCollection.getValueSafe());
+        return nomCollection.get();
     }
 
     public void setNomCollection(String nomCollection) {
-        this.nomCollection.setValue(BeanUtils.trimOrNull(nomCollection));
+        this.nomCollection.set(nomCollection);
     }
 
     public StringProperty nomCollectionProperty() {
@@ -39,11 +41,15 @@ public class CollectionLite extends AbstractDBEntity {
     }
 
     public EditeurLite getEditeur() {
+        return editeur.get();
+    }
+
+    public ObjectProperty<EditeurLite> editeurProperty() {
         return editeur;
     }
 
     public void setEditeur(EditeurLite editeur) {
-        this.editeur = editeur;
+        this.editeur.set(editeur);
     }
 
     @Override
@@ -58,8 +64,8 @@ public class CollectionLite extends AbstractDBEntity {
 
     public String buildLabel(boolean simple) {
         String lb = BeanUtils.formatTitre(getNomCollection());
-        if (!simple)
-            lb = StringUtils.ajoutString(lb, BeanUtils.formatTitre(editeur.getNomEditeur()), " ", "(", ")");
+        if (!simple && getEditeur() != null)
+            lb = StringUtils.ajoutString(lb, BeanUtils.formatTitre(getEditeur().getNomEditeur()), " ", "(", ")");
         return lb;
     }
 

@@ -1,6 +1,6 @@
 package org.tetram.bdtheque.data.bean;
 
-import org.tetram.bdtheque.SpringContext;
+import org.tetram.bdtheque.spring.SpringContext;
 import org.tetram.bdtheque.data.dao.ValeurListeDao;
 
 /**

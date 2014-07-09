@@ -8,7 +8,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import org.jetbrains.annotations.NonNls;
-import org.tetram.bdtheque.SpringFxmlLoader;
+import org.tetram.bdtheque.spring.SpringFxmlLoader;
 import org.tetram.bdtheque.gui.controllers.DialogController;
 import org.tetram.bdtheque.gui.controllers.WindowController;
 

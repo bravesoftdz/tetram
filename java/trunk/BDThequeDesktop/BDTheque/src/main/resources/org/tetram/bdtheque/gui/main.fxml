@@ -19,7 +19,7 @@
                                     <graphic>
                                         <ImageView pickOnBounds="true" preserveRatio="true">
                                             <image>
-                                                <Image url="@/org/tetram/bdtheque/lang/fr_fr.gif"/>
+                                                <Image url="@../lang/fr_fr.gif"/>
                                             </image>
                                         </ImageView>
                                     </graphic>
@@ -29,7 +29,7 @@
                                     <graphic>
                                         <ImageView pickOnBounds="true" preserveRatio="true">
                                             <image>
-                                                <Image url="@/org/tetram/bdtheque/lang/en_gb.gif"/>
+                                                <Image url="@../lang/en_gb.gif"/>
                                             </image>
                                         </ImageView>
                                     </graphic>
@@ -39,7 +39,7 @@
                                     <graphic>
                                         <ImageView pickOnBounds="true" preserveRatio="true">
                                             <image>
-                                                <Image url="@/org/tetram/bdtheque/lang/en_us.gif"/>
+                                                <Image url="@../lang/en_us.gif"/>
                                             </image>
                                         </ImageView>
                                     </graphic>
@@ -51,7 +51,7 @@
                             <graphic>
                                 <ImageView pickOnBounds="true" preserveRatio="true">
                                     <image>
-                                        <Image url="@/org/tetram/bdtheque/graphics/png/32x32/home.png"/>
+                                        <Image url="@../graphics/png/32x32/home.png"/>
                                     </image>
                                 </ImageView>
                             </graphic>

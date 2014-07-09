@@ -1,4 +1,5 @@
-package org.tetram.bdtheque;
+
+package org.tetram.bdtheque.spring;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -8,7 +9,6 @@ import org.tetram.bdtheque.gui.controllers.WindowController;
 import org.tetram.bdtheque.utils.I18nSupport;
 
 import java.io.IOException;
-import java.io.InputStream;
 
 /**
  * Created by Thierry on 21/06/2014.
@@ -21,18 +21,16 @@ public class SpringFxmlLoader {
         return load(url, null);
     }
 
-    @SuppressWarnings({"unchecked", "ThrowFromFinallyBlock", "Convert2MethodRef"})
+    @SuppressWarnings("unchecked")
     public static <T extends WindowController> T load(@NonNls String url, Stage stage) throws RuntimeException {
-        InputStream fxmlStream = null;
         try {
-            fxmlStream = SpringFxmlLoader.class.getResourceAsStream(ORG_TETRAM_BDTHEQUE_GUI + url);
-            FXMLLoader loader = new FXMLLoader();
-            // idéalement, il faudrait donner le classloader de la classe du futur controller
-            //loader.setClassLoader();
+            FXMLLoader loader = new FXMLLoader(SpringFxmlLoader.class.getResource(ORG_TETRAM_BDTHEQUE_GUI + url));
+            // apparament Intellij 13.1.3 n'est pas complètement Java8 compliant
+            //noinspection Convert2MethodRef
             loader.setControllerFactory(aClass -> SpringContext.CONTEXT.getBean(aClass));
             loader.setResources(I18nSupport.getCurrentBundle());
+            Parent view = loader.load();
 
-            Parent view = loader.load(fxmlStream);
             view.getStylesheets().addAll(SpringFxmlLoader.class.getResource(ORG_TETRAM_BDTHEQUE_GUI + "theme.css").toExternalForm());
             WindowController controller = loader.getController();
             controller.setView(view);
@@ -43,15 +41,6 @@ public class SpringFxmlLoader {
         } catch (IOException e) {
             e.printStackTrace();
             throw new RuntimeException(e);
-        } finally {
-            if (fxmlStream != null) {
-                try {
-                    fxmlStream.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    throw new RuntimeException(e);
-                }
-            }
         }
     }
 }

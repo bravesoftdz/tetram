@@ -19,28 +19,24 @@ import javafx.scene.input.MouseEvent;
 import javafx.util.Callback;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.tetram.bdtheque.SpringContext;
 import org.tetram.bdtheque.data.bean.*;
 import org.tetram.bdtheque.data.dao.*;
 import org.tetram.bdtheque.data.services.UserPreferences;
 import org.tetram.bdtheque.gui.utils.InitialeEntity;
 import org.tetram.bdtheque.gui.utils.NotationResource;
+import org.tetram.bdtheque.spring.SpringContext;
 import org.tetram.bdtheque.utils.FileLink;
 import org.tetram.bdtheque.utils.I18nSupport;
 
-import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
-import java.util.ResourceBundle;
 
 @Controller
 @FileLink("/org/tetram/bdtheque/gui/repertoire.fxml")
 public class RepertoireController extends WindowController {
 
-    @FXML
-    private ResourceBundle resources;
-    @FXML
-    private URL location;
+    @Autowired
+    private ModeConsultationController modeConsultationController;
 
     @FXML
     private TabPane tabs;
@@ -77,7 +73,6 @@ public class RepertoireController extends WindowController {
     @Autowired
     private UserPreferences userPreferences;
 
-    private ObjectProperty<AbstractDBEntity> selectedEntity = new SimpleObjectProperty<>();
     private ObjectProperty<InfoTab> currentInfoTab = new SimpleObjectProperty<>();
 
     @SuppressWarnings("unchecked")
@@ -125,9 +120,9 @@ public class RepertoireController extends WindowController {
 
         final EventHandler<MouseEvent> onMouseClicked = event -> {
             if (event.getClickCount() == 2) {
-                final AbstractEntity selectedItem = currentInfoTab.get().getTreeView().getSelectionModel().getSelectedItem().getValue();
-                if (selectedItem instanceof AbstractDBEntity)
-                    selectedEntity.set(((AbstractDBEntity) selectedItem));
+                final AbstractEntity entity = currentInfoTab.get().getTreeView().getSelectionModel().getSelectedItem().getValue();
+                if (entity != null && entity instanceof AbstractDBEntity)
+                    modeConsultationController.showConsultationForm((AbstractDBEntity) entity);
             }
         };
 
@@ -174,15 +169,6 @@ public class RepertoireController extends WindowController {
     public void refresh() {
         final InfoTab infoTab = currentInfoTab.getValue();
         infoTab.getTreeView().setRoot(new InitialTreeItem(SpringContext.CONTEXT.getBean(infoTab.getDaoClass())));
-    }
-
-    @SuppressWarnings("UnusedDeclaration")
-    public AbstractDBEntity getSelectedEntity() {
-        return selectedEntity.get();
-    }
-
-    public ObjectProperty<AbstractDBEntity> selectedEntityProperty() {
-        return selectedEntity;
     }
 
     private enum TypeRepertoireAlbumEntry {

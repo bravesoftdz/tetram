@@ -101,8 +101,8 @@
             al.id_serie, titreSerie
         from
             vw_liste_albums al
-        inner join auteurs au on
-            al.id_album = au.id_album and au.id_personne = #{id}
+            inner join auteurs au on
+                al.id_album = au.id_album and au.id_personne = #{id}
 
         union
 
@@ -145,9 +145,14 @@
     <select id="getSerieLiteByInitiale" resultMap="SerieLite">
         <![CDATA[
         select
-            id_serie, titreSerie, id_editeur, nomEditeur, id_collection, nomCollection
+            si.id_serie, si.titreSerie, si.id_editeur, si.nomEditeur, si.id_collection, si.nomCollection,
+            s.notation, n.libelle as lb_notation
         from
-            series_by_initiale(#{initiale})
+            series_by_initiale(#{initiale}) si
+            inner join series s on
+              s.id_serie = si.id_serie
+            left join listes n on
+                (n.ref = s.notation and n.categorie = 9)
         ]]>
     </select>
 

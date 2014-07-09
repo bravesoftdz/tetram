@@ -1,4 +1,4 @@
-package org.tetram.bdtheque.gui;
+package org.tetram.bdtheque.gui.utils;
 
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Hyperlink;

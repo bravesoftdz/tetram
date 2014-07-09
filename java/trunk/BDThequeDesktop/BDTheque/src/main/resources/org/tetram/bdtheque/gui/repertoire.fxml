@@ -3,10 +3,11 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import java.net.URL?>
 <TabPane xmlns:fx="http://javafx.com/fxml/1" fx:id="tabs" maxHeight="-Infinity" maxWidth="-Infinity"
          minHeight="-Infinity"
          minWidth="-Infinity" prefHeight="229.0" prefWidth="397.0"
-         stylesheets="@/org/tetram/bdtheque/gui/repertoire.css" tabClosingPolicy="UNAVAILABLE"
+         tabClosingPolicy="UNAVAILABLE"
          xmlns="http://javafx.com/javafx/8"
          fx:controller="org.tetram.bdtheque.gui.controllers.RepertoireController">
     <tabs>
@@ -113,4 +114,8 @@
             </content>
         </Tab>
     </tabs>
+    <stylesheets>
+        <URL value="@theme.css" />
+        <URL value="@repertoire.css" />
+    </stylesheets>
 </TabPane>

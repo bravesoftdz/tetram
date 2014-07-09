@@ -2,7 +2,8 @@ package org.tetram.bdtheque.data.bean;
 
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
-import org.tetram.bdtheque.SpringContext;
+import javafx.collections.ListChangeListener;
+import org.tetram.bdtheque.spring.SpringContext;
 import org.tetram.bdtheque.data.BeanUtils;
 import org.tetram.bdtheque.data.dao.DaoScriptImpl;
 import org.tetram.bdtheque.data.dao.ValeurListeDao;
@@ -58,6 +59,9 @@ public class Serie extends AbstractScriptEntity implements EvaluatedEntity, WebL
         orientation.set(valeurListeDao.getDefaultOrientation());
         sensLecture.set(valeurListeDao.getDefaultSensLecture());
         notation.set(valeurListeDao.getDefaultNotation());
+
+        auteurs.addListener((observable, oldValue, newValue) -> buildListsAuteurs());
+        auteurs.addListener((ListChangeListener<AuteurSerieLite>) c -> buildListsAuteurs());
     }
 
     public String getTitreSerie() {
@@ -72,7 +76,7 @@ public class Serie extends AbstractScriptEntity implements EvaluatedEntity, WebL
         return titreSerie;
     }
 
-    public Boolean getTerminee() {
+    public Boolean isTerminee() {
         return terminee.get();
     }
 
@@ -243,11 +247,17 @@ public class Serie extends AbstractScriptEntity implements EvaluatedEntity, WebL
         this.paraBDs.set(FXCollections.observableList(paraBDs));
     }
 
+    public ListProperty<ParaBDLite> paraBDsProperty() {
+        return paraBDs;
+    }
+
     private void buildListsAuteurs() {
-        if (auteurs.size() != scenaristes.size() + dessinateurs.size() + coloristes.size()) {
-            scenaristes.clear();
-            dessinateurs.clear();
-            coloristes.clear();
+        int countAuteurs = scenaristes.size() + dessinateurs.size() + coloristes.size();
+
+        if (auteurs.size() != countAuteurs) {
+            scenaristes.set(FXCollections.observableList(new ArrayList<>()));
+            dessinateurs.set(FXCollections.observableList(new ArrayList<>()));
+            coloristes.set(FXCollections.observableList(new ArrayList<>()));
             for (AuteurSerieLite a : auteurs) {
                 switch (a.getMetier()) {
                     case SCENARISTE:
@@ -270,9 +280,6 @@ public class Serie extends AbstractScriptEntity implements EvaluatedEntity, WebL
 
     public void setAuteurs(List<AuteurSerieLite> auteurs) {
         this.auteurs.set(FXCollections.observableList(auteurs));
-        scenaristes.set(FXCollections.observableList(new ArrayList<>()));
-        dessinateurs.set(FXCollections.observableList(new ArrayList<>()));
-        coloristes.set(FXCollections.observableList(new ArrayList<>()));
     }
 
     public ListProperty<AuteurSerieLite> auteursProperty() {
@@ -291,63 +298,56 @@ public class Serie extends AbstractScriptEntity implements EvaluatedEntity, WebL
         return coloristes;
     }
 
-    private boolean addAuteur(PersonneLite personne, List<AuteurSerieLite> listAuteurs, MetierAuteur metier) {
+    private void addAuteur(PersonneLite personne, List<AuteurSerieLite> listAuteurs, MetierAuteur metier) {
         for (AuteurSerieLite auteur : listAuteurs)
-            if (auteur.getPersonne() == personne) return false;
-        AuteurSerieLite auteur = new AuteurSerieLite();
+            if (auteur.getPersonne() == personne) return;
+        AuteurSerieLite auteur = new AuteurAlbumLite();
         auteur.setPersonne(personne);
         auteur.setMetier(metier);
-        listAuteurs.add(auteur);
         auteurs.add(auteur);
-        return true;
     }
 
-    public boolean addScenariste(PersonneLite personne) {
-        return addAuteur(personne, getScenaristes(), MetierAuteur.SCENARISTE);
+    public void addScenariste(PersonneLite personne) {
+        addAuteur(personne, getScenaristes(), MetierAuteur.SCENARISTE);
     }
 
-    public boolean addDessinateur(PersonneLite personne) {
-        return addAuteur(personne, getDessinateurs(), MetierAuteur.DESSINATEUR);
+    public void addDessinateur(PersonneLite personne) {
+        addAuteur(personne, getDessinateurs(), MetierAuteur.DESSINATEUR);
     }
 
-    public boolean addColoriste(PersonneLite personne) {
-        return addAuteur(personne, getColoristes(), MetierAuteur.COLORISTE);
+    public void addColoriste(PersonneLite personne) {
+        addAuteur(personne, getColoristes(), MetierAuteur.COLORISTE);
     }
 
-    private boolean removeAuteur(PersonneLite personne, List<AuteurSerieLite> listAuteurs) {
+    private void removeAuteur(PersonneLite personne, List<AuteurSerieLite> listAuteurs) {
         for (AuteurSerieLite auteur : listAuteurs)
             if (auteur.getPersonne() == personne) {
-                listAuteurs.remove(auteur);
                 auteurs.remove(auteur);
-                return true;
+                return;
             }
-        return false;
     }
 
-    public boolean removeScenariste(PersonneLite personne) {
-        return removeAuteur(personne, getScenaristes());
+    public void removeScenariste(PersonneLite personne) {
+        removeAuteur(personne, getScenaristes());
     }
 
-    public boolean removeDessinateur(PersonneLite personne) {
-        return removeAuteur(personne, getDessinateurs());
+    public void removeDessinateur(PersonneLite personne) {
+        removeAuteur(personne, getDessinateurs());
     }
 
-    public boolean removeColoriste(PersonneLite personne) {
-        return removeAuteur(personne, getColoristes());
+    public void removeColoriste(PersonneLite personne) {
+        removeAuteur(personne, getColoristes());
     }
 
     public List<AuteurSerieLite> getScenaristes() {
-        buildListsAuteurs();
         return scenaristes;
     }
 
     public List<AuteurSerieLite> getDessinateurs() {
-        buildListsAuteurs();
         return dessinateurs;
     }
 
     public List<AuteurSerieLite> getColoristes() {
-        buildListsAuteurs();
         return coloristes;
     }
 

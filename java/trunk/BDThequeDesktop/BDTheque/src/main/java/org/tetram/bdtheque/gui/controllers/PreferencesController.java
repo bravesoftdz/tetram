@@ -15,7 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.tetram.bdtheque.data.services.FormatTitreAlbum;
 import org.tetram.bdtheque.data.services.UserPreferences;
-import org.tetram.bdtheque.gui.utils.FileStringConverter;
+import org.tetram.bdtheque.spring.utils.FileStringConverter;
 import org.tetram.bdtheque.utils.FileLink;
 import org.tetram.bdtheque.utils.FileUtils;
 

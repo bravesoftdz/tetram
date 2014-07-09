@@ -30,7 +30,7 @@ import org.tetram.bdtheque.data.dao.AlbumDao;
 import org.tetram.bdtheque.data.dao.CouvertureLiteDao;
 import org.tetram.bdtheque.data.dao.EvaluatedEntityDao;
 import org.tetram.bdtheque.data.services.UserPreferences;
-import org.tetram.bdtheque.gui.EntityWebHyperlink;
+import org.tetram.bdtheque.gui.utils.EntityWebHyperlink;
 import org.tetram.bdtheque.gui.controllers.ModeConsultationController;
 import org.tetram.bdtheque.gui.controllers.NotationController;
 import org.tetram.bdtheque.gui.controllers.WindowController;
@@ -159,12 +159,53 @@ public class FicheAlbumController extends WindowController implements Consultati
     private TextFlow tfNotesEdition;
 
     private ObjectProperty<Album> album = new SimpleObjectProperty<>();
+    private ObjectProperty<Serie> serie = new SimpleObjectProperty<>();
     private ListProperty<Edition> editions = new SimpleListProperty<>();
     private ObjectProperty<Edition> currentEdition = new SimpleObjectProperty<>();
     private ListProperty<CouvertureLite> images = new SimpleListProperty<>();
     private Image[] cacheImages = null;
 
-    public FicheAlbumController() {
+    @FXML
+    public void initialize() {
+        album.addListener((observable, oldAlbum, album) -> {
+            serie.unbind();
+
+            if (album == null) return;
+            notationController.notationProperty().bindBidirectional(album.notationProperty());
+            serie.bind(album.serieProperty());
+        });
+
+        serie.addListener((observable, oldSerie, serie) -> {
+            if (serie == null) return;
+            titreSerie.setText(BeanUtils.formatTitre(serie.getTitreSerie()));
+            EntityWebHyperlink.addToLabeled(titreSerie, serie.getSiteWeb());
+
+            FlowItem.fillViewFromList(serie.genresProperty(), lvGenres);
+            lvSerie.itemsProperty().bind(serie.albumsProperty());
+            if (album.get() != null) // ça devrait pas arriver mais on sait jamais
+                serie.getAlbums().forEach(albumLite -> {
+                    if (album.get().getId().equals(albumLite.getId())) {
+                        lvSerie.getSelectionModel().select(albumLite);
+                        lvSerie.scrollTo(albumLite);
+                    }
+                });
+            lvSerie.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2) {
+                    AlbumLite entity = lvSerie.getSelectionModel().getSelectedItem();
+                    if (entity != null)
+                        modeConsultationController.showConsultationForm(entity);
+                }
+            });
+        });
+
+        titreSerie.setOnAction(event -> {
+            if (event.getTarget() != titreSerie.getGraphic() && serie.get() != null)
+                modeConsultationController.showConsultationForm(serie.get());
+        });
+
+        notationController.entityProperty().bind(album);
+        notationController.setDao(((EvaluatedEntityDao) albumDao));
+
         lvSerie.setCellFactory(param -> {
             ListCell<AlbumLite> cell = new ListCell<>();
             cell.underlineProperty().bind(Bindings.equal(cell.itemProperty(), album));
@@ -178,10 +219,6 @@ public class FicheAlbumController extends WindowController implements Consultati
             return cell;
         });
 
-    }
-
-    @FXML
-    public void initialize() {
         detailEdition.visibleProperty().bind(Bindings.isNotEmpty(editions));
         lvEditions.visibleProperty().bind(Bindings.greaterThan(editions.sizeProperty(), 1));
         lvEditions.itemsProperty().bind(editions);
@@ -249,34 +286,6 @@ public class FicheAlbumController extends WindowController implements Consultati
         final Album _album = album.get();
         if (_album == null) throw new EntityNotFoundException();
 
-        notationController.setNotation(_album.getNotation());
-        notationController.setEntity(_album);
-        notationController.setDao(((EvaluatedEntityDao) albumDao));
-
-        if (_album.getSerie() != null) {
-            titreSerie.setText(BeanUtils.formatTitre(_album.getSerie().getTitreSerie()));
-            EntityWebHyperlink.addToLabeled(titreSerie, _album.getSerie().getSiteWeb());
-            titreSerie.setOnAction(event -> {
-                if (event.getTarget() != titreSerie.getGraphic() && _album.getSerie() != null)
-                    modeConsultationController.showConsultationForm(_album.getSerie());
-            });
-
-            fillViewFromList(_album.getSerie().genresProperty(), lvGenres, null);
-            lvSerie.itemsProperty().bind(_album.getSerie().albumsProperty());
-            _album.getSerie().getAlbums().forEach(albumLite -> {
-                if (_album.getId().equals(albumLite.getId())) {
-                    lvSerie.getSelectionModel().select(albumLite);
-                    lvSerie.scrollTo(albumLite);
-                }
-            });
-            lvSerie.setOnMouseClicked(event -> {
-                if (event.getClickCount() == 2) {
-                    AlbumLite entity = lvSerie.getSelectionModel().getSelectedItem();
-                    if (entity != null)
-                        modeConsultationController.showConsultationForm(entity);
-                }
-            });
-        }
         titreAlbum.setText(BeanUtils.formatTitre(_album.getTitreAlbum()));
         tome.textProperty().bindBidirectional(_album.tomeProperty(), new IntegerStringConverter());
 
@@ -305,10 +314,10 @@ public class FicheAlbumController extends WindowController implements Consultati
             final AbstractDBEntity entity = (AbstractDBEntity) source.getUserData();
             modeConsultationController.showConsultationForm(entity);
         };
-        fillViewFromList(_album.universFullProperty(), lvUnivers, openEntityEventHandler);
-        fillViewFromList(_album.scenaristesProperty(), lvScenaristes, openEntityEventHandler);
-        fillViewFromList(_album.dessinateursProperty(), lvDessinateurs, openEntityEventHandler);
-        fillViewFromList(_album.coloristesProperty(), lvColoristes, openEntityEventHandler);
+        FlowItem.fillViewFromList(_album.universFullProperty(), lvUnivers, openEntityEventHandler);
+        FlowItem.fillViewFromList(_album.scenaristesProperty(), lvScenaristes, openEntityEventHandler);
+        FlowItem.fillViewFromList(_album.dessinateursProperty(), lvDessinateurs, openEntityEventHandler);
+        FlowItem.fillViewFromList(_album.coloristesProperty(), lvColoristes, openEntityEventHandler);
 
         //if (!StringUtils.isNullOrEmpty(album.getSujet())) histoire.getStyleClass().add(CSS_FLOW_B0RDER);
         histoire.getChildren().add(new Text(_album.getSujet()));
@@ -318,19 +327,6 @@ public class FicheAlbumController extends WindowController implements Consultati
         // le getEditions force le lazy loading de la liste
         editions.set(FXCollections.observableList(_album.getEditions()));
         currentEdition.set(editions.get(0));
-    }
-
-    <E extends AbstractDBEntity> void fillViewFromList(ListProperty<E> list, FlowPane view, EventHandler<ActionEvent> onClickEvent) {
-        //if (!list.isEmpty()) view.getStyleClass().add(CSS_FLOW_B0RDER);
-        list.forEach(entity -> {
-            final Labeled e = FlowItem.create(entity.buildLabel(), onClickEvent, entity);
-            // finalement pas très utile
-            /*
-            if (entity instanceof WebLinkedEntity)
-                EntityWebHyperlink.addToLabeled(e, ((WebLinkedEntity) entity).getSiteWeb());
-            */
-            view.getChildren().add(e);
-        });
     }
 
     private VBox createImagePage(int pageIndex) {

@@ -2,7 +2,7 @@ package org.tetram.bdtheque.data;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
-import org.tetram.bdtheque.SpringContext;
+import org.tetram.bdtheque.spring.SpringContext;
 import org.tetram.bdtheque.data.bean.AuteurAlbumLite;
 import org.tetram.bdtheque.data.bean.Serie;
 import org.tetram.bdtheque.data.bean.UniversLite;

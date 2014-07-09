@@ -1,4 +1,4 @@
-package org.tetram.bdtheque;
+package org.tetram.bdtheque.spring.utils;
 
 import javafx.beans.property.SimpleStringProperty;
 import org.jetbrains.annotations.NonNls;

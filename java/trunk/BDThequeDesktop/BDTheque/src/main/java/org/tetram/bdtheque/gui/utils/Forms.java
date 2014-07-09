@@ -6,11 +6,10 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.Pane;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
-import org.tetram.bdtheque.SpringFxmlLoader;
-import org.tetram.bdtheque.data.bean.AbstractDBEntity;
-import org.tetram.bdtheque.data.bean.AlbumLite;
+import org.tetram.bdtheque.data.bean.*;
 import org.tetram.bdtheque.gui.controllers.WindowController;
 import org.tetram.bdtheque.gui.controllers.consultation.ConsultationController;
+import org.tetram.bdtheque.spring.SpringFxmlLoader;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -26,6 +25,18 @@ public class Forms {
     static {
         entitiesUrl = new HashMap<>();
         entitiesUrl.put(AlbumLite.class, "consultation/ficheAlbum.fxml");
+        entitiesUrl.put(Album.class, "consultation/ficheAlbum.fxml");
+        entitiesUrl.put(SerieLite.class, "consultation/ficheSerie.fxml");
+        entitiesUrl.put(Serie.class, "consultation/ficheSerie.fxml");
+    }
+
+    // on ne peut pas simplement utiliser entitiesUrl.get : CGLIB ajoute une surcharge
+    static String searchForURL(Class<? extends AbstractDBEntity> clasz) {
+        for (Map.Entry<Class<? extends AbstractDBEntity>, String> entry : entitiesUrl.entrySet()) {
+            if (entry.getKey().isAssignableFrom(clasz))
+                return entry.getValue();
+        }
+        return null;
     }
 
     @SuppressWarnings("unchecked")
@@ -40,13 +51,13 @@ public class Forms {
         if (container instanceof Pane) {
             Pane containerPane = (Pane) container;
             containerPane.getChildren().add(view);
-            view.minWidthProperty().bind(containerPane.widthProperty());
-            view.minHeightProperty().bind(containerPane.heightProperty());
+            view.prefWidthProperty().bind(containerPane.widthProperty());
+            view.prefHeightProperty().bind(containerPane.heightProperty());
         } else if (container instanceof ScrollPane) {
             ScrollPane containerPane = (ScrollPane) container;
             containerPane.setContent(view);
-            view.minWidthProperty().bind(containerPane.widthProperty());
-            view.minHeightProperty().bind(containerPane.heightProperty());
+            view.prefWidthProperty().bind(containerPane.widthProperty());
+            view.prefHeightProperty().bind(containerPane.heightProperty());
         } else if (container instanceof ObjectProperty) {
             ObjectProperty<Node> containerNode = (ObjectProperty<Node>) container;
             containerNode.set(view);
@@ -57,7 +68,7 @@ public class Forms {
 
     @SuppressWarnings("UnusedDeclaration")
     public static <T extends WindowController & ConsultationController> T showFiche(AbstractDBEntity entity, Pane container) {
-        String url = entitiesUrl.get(entity.getClass());
+        String url = searchForURL(entity.getClass());
         if (url == null) {
             org.controlsfx.dialog.Dialogs.create().message(entity.toString()).showInformation();
             return null;
@@ -70,7 +81,7 @@ public class Forms {
 
     @SuppressWarnings("UnusedDeclaration")
     public static <T extends WindowController & ConsultationController> T showFiche(AbstractDBEntity entity, ScrollPane container) {
-        String url = entitiesUrl.get(entity.getClass());
+        String url = searchForURL(entity.getClass());
         if (url == null) {
             org.controlsfx.dialog.Dialogs.create().message(entity.toString()).showInformation();
             return null;
@@ -83,7 +94,7 @@ public class Forms {
 
     @SuppressWarnings("UnusedDeclaration")
     public static <T extends WindowController & ConsultationController> T showFiche(AbstractDBEntity entity, ObjectProperty<Node> container) {
-        String url = entitiesUrl.get(entity.getClass());
+        String url = searchForURL(entity.getClass());
         if (url == null) {
             org.controlsfx.dialog.Dialogs.create().message(entity.toString()).showInformation();
             return null;

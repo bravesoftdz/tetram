@@ -1,13 +1,18 @@
 package org.tetram.bdtheque.data.bean;
 
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.StringProperty;
 import org.tetram.bdtheque.data.BeanUtils;
+import org.tetram.bdtheque.spring.utils.AutoTrimStringProperty;
 
+import java.net.URL;
 import java.util.Comparator;
 
 /**
  * Created by Thierry on 24/05/2014.
  */
-public class EditeurLite extends AbstractDBEntity {
+public class EditeurLite extends AbstractDBEntity implements WebLinkedEntity {
 
     public final static Comparator<EditeurLite> DEFAULT_COMPARATOR = (o1, o2) -> {
         if (o1 == o2) return 0;
@@ -19,14 +24,34 @@ public class EditeurLite extends AbstractDBEntity {
 
         return 0;
     };
-    private String nomEditeur;
+    private StringProperty nomEditeur = new AutoTrimStringProperty(this, "nomEditeur", null);
+    private ObjectProperty<URL> siteWeb = new SimpleObjectProperty<>(this, "siteWeb", null);
+
+    public StringProperty nomEditeurProperty() {
+        return nomEditeur;
+    }
 
     public String getNomEditeur() {
-        return BeanUtils.trimOrNull(nomEditeur);
+        return nomEditeur.get();
     }
 
     public void setNomEditeur(String nomEditeur) {
-        this.nomEditeur = BeanUtils.trimOrNull(nomEditeur);
+        this.nomEditeur.set(nomEditeur);
+    }
+
+    @Override
+    public URL getSiteWeb() {
+        return siteWeb.get();
+    }
+
+    @Override
+    public void setSiteWeb(URL siteWeb) {
+        this.siteWeb.set(siteWeb);
+    }
+
+    @Override
+    public ObjectProperty<URL> siteWebProperty() {
+        return null;
     }
 
     @Override
