@@ -74,12 +74,13 @@ public abstract class BeanUtils {
         return bThis.compareTo(bOther);
     }
 
+    @Contract("null -> !null; !null -> !null")
     public static String formatTitre(final String titre) {
         String s = formatTitreAcceptNull(titre);
         return (s == null) ? "" : s;
     }
 
-    @Contract("null -> null")
+    @Contract("null -> null; !null -> !null")
     @Nullable
     @SuppressWarnings("StringConcatenationMissingWhitespace")
     public static String formatTitreAcceptNull(final String titre) {

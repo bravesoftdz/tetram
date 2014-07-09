@@ -64,7 +64,7 @@
             inner join auteurs a on
                 a.id_personne = p.id_personne
         where
-            a.id_album = #{id}
+            a.id_album = #{idAlbum}
         order by
             a.metier, p.nomPersonne
         ]]>
@@ -79,7 +79,7 @@
             inner join auteurs_series a on
                 a.id_personne = p.id_personne
         where
-            a.id_serie = #{id}
+            a.id_serie = #{idSerie}
         order by
             a.metier, p.nomPersonne
         ]]>
@@ -87,14 +87,14 @@
     <select id="getListAuteurLiteByParaBDId" resultMap="AuteurParaBDLite">
         <![CDATA[
         select
-            p.id_personne, p.nompersonne, p.siteWeb,
+            p.id_personne, p.nomPersonne, p.siteWeb,
             a.id_auteur_parabd, a.id_parabd
         from
             personnes p
             inner join auteurs_parabd a on
                 a.id_personne = p.id_personne
         where
-            a.id_parabd =  #{id}
+            a.id_parabd =  #{idParaBD}
         order by
             p.nomPersonne
         ]]>

@@ -15,11 +15,11 @@ import java.util.UUID;
 public interface AuteurMapper extends BaseMapperInterface {
     PersonneLite getPersonneLiteById(UUID id);
 
-    List<AuteurAlbumLite> getListAuteurLiteByAlbumId(UUID id);
+    List<AuteurAlbumLite> getListAuteurLiteByAlbumId(@Param("idAlbum") UUID idAlbum);
 
-    List<AuteurSerieLite> getListAuteurLiteBySerieId(UUID id);
+    List<AuteurSerieLite> getListAuteurLiteBySerieId(@Param("idSerie") UUID idSerie);
 
-    List<AuteurParaBDLite> getListAuteurLiteByParaBDId(UUID id);
+    List<AuteurParaBDLite> getListAuteurLiteByParaBDId(@Param("idParaBD") UUID idParaBD);
 
     Personne getPersonneById(UUID id);
 

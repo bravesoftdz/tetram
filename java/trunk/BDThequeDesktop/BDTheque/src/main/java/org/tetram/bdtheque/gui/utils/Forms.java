@@ -28,6 +28,9 @@ public class Forms {
         entitiesUrl.put(Album.class, "consultation/ficheAlbum.fxml");
         entitiesUrl.put(SerieLite.class, "consultation/ficheSerie.fxml");
         entitiesUrl.put(Serie.class, "consultation/ficheSerie.fxml");
+        entitiesUrl.put(PersonneLite.class, "consultation/ficheAuteur.fxml");
+        entitiesUrl.put(Personne.class, "consultation/ficheAuteur.fxml");
+        entitiesUrl.put(AuteurLite.class, "consultation/ficheAuteur.fxml");
     }
 
     // on ne peut pas simplement utiliser entitiesUrl.get : CGLIB ajoute une surcharge

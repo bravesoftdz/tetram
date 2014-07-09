@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TreeTableColumn?>
+<?import javafx.scene.control.TreeTableView?>
+<TreeTableView xmlns:fx="http://javafx.com/fxml/1" fx:id="treeview" showRoot="false" stylesheets="@treeview.css"
+               xmlns="http://javafx.com/javafx/8"
+               fx:controller="org.tetram.bdtheque.gui.controllers.components.TreeViewController">
+    <columnResizePolicy>
+        <TreeTableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+    </columnResizePolicy>
+    <columns>
+        <TreeTableColumn editable="false" sortable="false"/>
+        <TreeTableColumn editable="false" maxWidth="68.0" minWidth="68.0" prefWidth="68.0" resizable="false"
+                         sortable="false"/>
+    </columns>
+</TreeTableView>

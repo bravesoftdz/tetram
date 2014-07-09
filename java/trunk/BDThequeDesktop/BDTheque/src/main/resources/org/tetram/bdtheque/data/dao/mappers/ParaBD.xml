@@ -36,7 +36,7 @@
                     column="id_paraBD"/>
         <collection property="auteurs"
                     select="org.tetram.bdtheque.data.dao.mappers.AuteurMapper.getListAuteurLiteByParaBDId"
-                    column="id_paraBD"/>
+                    column="{idParaBD=id_paraBD}"/>
     </resultMap>
 
     <select id="getParaBDLiteById" resultMap="ParaBDLite">
@@ -59,7 +59,7 @@
         ]]>
     </select>
 
-    <select id="getParaBDLiteBySerieIdByAuteurId" parameterType="map" resultMap="ParaBDLite" resultOrdered="true">
+    <select id="getListParaBDLiteBySerieIdByAuteurId" parameterType="map" resultMap="ParaBDLite" resultOrdered="true">
         <![CDATA[
         select
             id_paraBD, titreParaBD, id_serie, titreSerie, achat, complet, sCategorie
@@ -90,7 +90,7 @@
         ]]>
     </select>
 
-    <select id="getParaBDLiteBySerieId" resultMap="ParaBDLite">
+    <select id="getListParaBDLiteBySerieId" resultMap="ParaBDLite">
         <if test="idSerie == null">
             <bind name="idSerie" value="''"/>
         </if>

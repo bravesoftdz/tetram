@@ -31,7 +31,7 @@ import org.tetram.bdtheque.data.dao.CouvertureLiteDao;
 import org.tetram.bdtheque.data.dao.EvaluatedEntityDao;
 import org.tetram.bdtheque.data.services.UserPreferences;
 import org.tetram.bdtheque.gui.controllers.ModeConsultationController;
-import org.tetram.bdtheque.gui.controllers.NotationController;
+import org.tetram.bdtheque.gui.controllers.components.NotationController;
 import org.tetram.bdtheque.gui.controllers.WindowController;
 import org.tetram.bdtheque.gui.utils.EntityNotFoundException;
 import org.tetram.bdtheque.gui.utils.EntityWebHyperlink;
@@ -54,7 +54,7 @@ import java.util.UUID;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @FileLinks({
         @FileLink("/org/tetram/bdtheque/gui/consultation/ficheAlbum.fxml"),
-        @FileLink("/org/tetram/bdtheque/gui/consultation/fiche_album-screenshot.jpg")
+        @FileLink("/org/tetram/bdtheque/gui/consultation/ficheAlbum-screenshot.jpg")
 })
 public class FicheAlbumController extends WindowController implements ConsultationController {
 
@@ -118,9 +118,9 @@ public class FicheAlbumController extends WindowController implements Consultati
     @FXML
     private Label lbIsbn;
     @FXML
-    private Hyperlink lbEditeur;
+    private Label lbEditeur;
     @FXML
-    private Hyperlink lbCollection;
+    private Label lbCollection;
     @FXML
     private Label lbCote;
     @FXML
@@ -241,15 +241,7 @@ public class FicheAlbumController extends WindowController implements Consultati
             lbIsbn.setText(edition.getIsbn() == null ? null : ISBNUtils.formatISBN(edition.getIsbn()));
             lbEditeur.setText(edition.getEditeur() == null ? null : edition.getEditeur().toString());
             EntityWebHyperlink.addToLabeled(lbEditeur, edition.getEditeur().getSiteWeb());
-            lbEditeur.setOnAction(event -> {
-                if (event.getTarget() != lbEditeur.getGraphic() && edition.getEditeur() != null)
-                    modeConsultationController.showConsultationForm(edition.getEditeur());
-            });
             lbCollection.setText(edition.getCollection() == null ? null : edition.getCollection().buildLabel(true));
-            lbCollection.setOnAction(event -> {
-                if (event.getTarget() != lbCollection.getGraphic() && edition.getCollection() != null)
-                    modeConsultationController.showConsultationForm(edition.getCollection());
-            });
             lbCote.setText(edition.getAnneeCote() == null ? null : MessageFormat.format("{0} ({0})", userPreferences.getCurrencyFormatter().format(edition.getPrixCote()), edition.getAnneeCote().format(DateTimeFormatter.ofPattern(I18nSupport.message("format.year")))));
             lbAchete.setText(edition.isOffert() ? "Offert le :" : "Acheté le :");
             lbDateAchat.setText(edition.getDateAchat() == null ? null : edition.getDateAchat().format(DateTimeFormatter.ofPattern(I18nSupport.message("format.date"))));

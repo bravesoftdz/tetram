@@ -1,5 +1,6 @@
 package org.tetram.bdtheque.gui.controllers.consultation;
 
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.ActionEvent;
@@ -22,7 +23,7 @@ import org.tetram.bdtheque.data.bean.Serie;
 import org.tetram.bdtheque.data.dao.EvaluatedEntityDao;
 import org.tetram.bdtheque.data.dao.SerieDao;
 import org.tetram.bdtheque.gui.controllers.ModeConsultationController;
-import org.tetram.bdtheque.gui.controllers.NotationController;
+import org.tetram.bdtheque.gui.controllers.components.NotationController;
 import org.tetram.bdtheque.gui.controllers.WindowController;
 import org.tetram.bdtheque.gui.utils.EntityNotFoundException;
 import org.tetram.bdtheque.gui.utils.EntityWebHyperlink;
@@ -39,7 +40,7 @@ import java.util.UUID;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @FileLinks({
         @FileLink("/org/tetram/bdtheque/gui/consultation/ficheSerie.fxml"),
-        @FileLink("/org/tetram/bdtheque/gui/consultation/fiche_serie-screenshot.jpg")
+        @FileLink("/org/tetram/bdtheque/gui/consultation/ficheSerie-screenshot.jpg")
 })
 public class FicheSerieController extends WindowController implements ConsultationController {
 
@@ -68,9 +69,9 @@ public class FicheSerieController extends WindowController implements Consultati
     @FXML
     private TextFlow notes;
     @FXML
-    private Hyperlink lbEditeur;
+    private Label lbEditeur;
     @FXML
-    private Hyperlink lbCollection;
+    private Label lbCollection;
     @FXML
     private CheckBox cbTerminee;
     @FXML
@@ -90,7 +91,18 @@ public class FicheSerieController extends WindowController implements Consultati
             }
         };
         lvAlbums.setOnMouseClicked(onMouseClicked);
+        lvAlbums.setCellFactory(param -> {
+            ListCell<AlbumLite> cell = new ListCell<>();
+            cell.textProperty().bind(Bindings.createStringBinding(() -> cell.itemProperty().get() == null ? null : cell.itemProperty().get().buildLabel(false), cell.itemProperty()));
+            return cell;
+        });
+
         lvParabd.setOnMouseClicked(onMouseClicked);
+        lvParabd.setCellFactory(param -> {
+            ListCell<ParaBDLite> cell = new ListCell<>();
+            cell.textProperty().bind(Bindings.createStringBinding(() -> cell.itemProperty().get() == null ? null : cell.itemProperty().get().buildLabel(false), cell.itemProperty()));
+            return cell;
+        });
     }
 
     @Override
@@ -106,31 +118,25 @@ public class FicheSerieController extends WindowController implements Consultati
         lbEditeur.setText(_serie.getEditeur() == null ? null : _serie.getEditeur().toString());
         EntityWebHyperlink.addToLabeled(lbEditeur, _serie.getEditeur().getSiteWeb());
         lbCollection.setText(_serie.getCollection() == null ? null : _serie.getCollection().buildLabel(true));
-        lbEditeur.setOnAction(event -> {
-            if (event.getTarget() != lbEditeur.getGraphic() && _serie.getEditeur() != null)
-                modeConsultationController.showConsultationForm(_serie.getEditeur());
-        });
-        lbCollection.setOnAction(event -> {
-            if (event.getTarget() != lbCollection.getGraphic() && _serie.getCollection() != null)
-                modeConsultationController.showConsultationForm(_serie.getCollection());
-        });
         cbTerminee.setSelected(serie.get().isTerminee());
 
-        FlowItem.fillViewFromList(_serie.genresProperty(), lvGenres);
+        FlowItem.fillViewFromList(_serie.getGenres(), lvGenres);
         final EventHandler<ActionEvent> openEntityEventHandler = event -> {
             final Labeled source = (Labeled) event.getSource();
             final AbstractDBEntity entity = (AbstractDBEntity) source.getUserData();
             modeConsultationController.showConsultationForm(entity);
         };
-        FlowItem.fillViewFromList(_serie.universProperty(), lvUnivers, openEntityEventHandler);
-        FlowItem.fillViewFromList(_serie.scenaristesProperty(), lvScenaristes, openEntityEventHandler);
-        FlowItem.fillViewFromList(_serie.dessinateursProperty(), lvDessinateurs, openEntityEventHandler);
-        FlowItem.fillViewFromList(_serie.coloristesProperty(), lvColoristes, openEntityEventHandler);
+        FlowItem.fillViewFromList(_serie.getUnivers(), lvUnivers, openEntityEventHandler);
+        FlowItem.fillViewFromList(_serie.getScenaristes(), lvScenaristes, openEntityEventHandler);
+        FlowItem.fillViewFromList(_serie.getDessinateurs(), lvDessinateurs, openEntityEventHandler);
+        FlowItem.fillViewFromList(_serie.getColoristes(), lvColoristes, openEntityEventHandler);
 
         histoire.getChildren().add(new Text(_serie.getSujet()));
         notes.getChildren().add(new Text(_serie.getNotes()));
 
+        _serie.getAlbums();
         lvAlbums.itemsProperty().bind(_serie.albumsProperty());
+        _serie.getParaBDs();
         lvParabd.itemsProperty().bind(_serie.paraBDsProperty());
     }
 }

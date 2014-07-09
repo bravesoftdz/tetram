@@ -44,7 +44,7 @@
                     column="{id=id_album}"/>
         <collection property="auteurs"
                     select="org.tetram.bdtheque.data.dao.mappers.AuteurMapper.getListAuteurLiteByAlbumId"
-                    column="id_album" fetchType="eager"/>
+                    column="{idAlbum=id_album}" fetchType="eager"/>
     </resultMap>
 
     <sql id="fieldsAlbumLite">

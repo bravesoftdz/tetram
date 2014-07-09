@@ -30,6 +30,6 @@ public class ParaBDLiteDaoImpl extends DaoROImpl<ParaBDLite, UUID> implements Pa
 
     @Override
     public List<ParaBDLite> getListEntitiesByInitiale(InitialeEntity<UUID> initiale, String filtre) {
-        return paraBDMapper.getParaBDLiteBySerieId(initiale.getValue(), filtre);
+        return paraBDMapper.getListParaBDLiteBySerieId(initiale.getValue(), filtre);
     }
 }

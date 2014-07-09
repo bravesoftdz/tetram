@@ -1,4 +1,4 @@
-package org.tetram.bdtheque.gui.controllers;
+package org.tetram.bdtheque.gui.controllers.components;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -18,6 +18,7 @@ import org.tetram.bdtheque.data.bean.EvaluatedEntity;
 import org.tetram.bdtheque.data.bean.ValeurListe;
 import org.tetram.bdtheque.data.dao.EvaluatedEntityDao;
 import org.tetram.bdtheque.data.dao.ValeurListeDao;
+import org.tetram.bdtheque.gui.controllers.WindowController;
 import org.tetram.bdtheque.gui.utils.NotationResource;
 
 /**
@@ -26,7 +27,7 @@ import org.tetram.bdtheque.gui.utils.NotationResource;
 
 @Controller
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class NotationController extends DialogController {
+public class NotationController extends WindowController {
     @FXML
     public ImageView ivAppreciation;
 

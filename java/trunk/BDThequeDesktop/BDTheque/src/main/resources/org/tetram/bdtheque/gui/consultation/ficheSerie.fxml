@@ -78,17 +78,17 @@
                 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
                       GridPane.halignment="LEFT" GridPane.valignment="TOP">
                     <children>
-                        <fx:include fx:id="notation" source="../notation.fxml"/>
+                        <fx:include fx:id="notation" source="../components/notation.fxml"/>
                     </children>
                 </VBox>
                 <Label styleClass="label-rubrique" text="Editeur :" GridPane.columnSpan="3" GridPane.halignment="RIGHT"
                        GridPane.rowIndex="1"/>
-                <Hyperlink fx:id="lbEditeur" contentDisplay="RIGHT" text="Label" GridPane.columnIndex="3"
-                           GridPane.columnSpan="2" GridPane.rowIndex="1"/>
+                <Label fx:id="lbEditeur" contentDisplay="RIGHT" text="Label" GridPane.columnIndex="3"
+                       GridPane.columnSpan="2" GridPane.rowIndex="1"/>
                 <Label styleClass="label-rubrique" text="Collection :" GridPane.columnSpan="3"
                        GridPane.halignment="RIGHT" GridPane.rowIndex="2"/>
-                <Hyperlink fx:id="lbCollection" text="Label" GridPane.columnIndex="3" GridPane.columnSpan="2"
-                           GridPane.rowIndex="2"/>
+                <Label fx:id="lbCollection" text="Label" GridPane.columnIndex="3" GridPane.columnSpan="2"
+                       GridPane.rowIndex="2"/>
                 <CheckBox fx:id="cbTerminee" disable="true" mnemonicParsing="false" style="-fx-opacity: 1;"
                           styleClass="label-rubrique" text="Terminée" GridPane.columnIndex="6" GridPane.rowIndex="1"/>
                 <Label styleClass="label-rubrique" text="Para-bd" GridPane.columnSpan="3" GridPane.halignment="RIGHT"
