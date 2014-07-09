@@ -2,6 +2,7 @@
 
 
 <?import javafx.scene.image.ImageView?>
-<ImageView xmlns:fx="http://javafx.com/fxml/1" fx:id="ivAppreciation" fitHeight="32.0" fitWidth="32.0" pickOnBounds="true"
+<ImageView xmlns:fx="http://javafx.com/fxml/1" fx:id="ivAppreciation" fitHeight="32.0" fitWidth="32.0"
+           pickOnBounds="true"
            preserveRatio="true" xmlns="http://javafx.com/javafx/8"
            fx:controller="org.tetram.bdtheque.gui.controllers.NotationController"/>

@@ -6,9 +6,9 @@ import javafx.scene.layout.AnchorPane;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
-import org.tetram.bdtheque.spring.SpringFxmlLoader;
 import org.tetram.bdtheque.data.bean.AbstractDBEntity;
 import org.tetram.bdtheque.gui.utils.Forms;
+import org.tetram.bdtheque.spring.SpringFxmlLoader;
 import org.tetram.bdtheque.utils.FileLink;
 
 import java.io.IOException;

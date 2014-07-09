@@ -43,15 +43,12 @@ import java.util.UUID;
 })
 public class FicheSerieController extends WindowController implements ConsultationController {
 
-    @Autowired
-    private SerieDao serieDao;
-
-    @Autowired
-    private ModeConsultationController modeConsultationController;
-
     @FXML
     NotationController notationController;
-
+    @Autowired
+    private SerieDao serieDao;
+    @Autowired
+    private ModeConsultationController modeConsultationController;
     @FXML
     private Label titreSerie;
     @FXML

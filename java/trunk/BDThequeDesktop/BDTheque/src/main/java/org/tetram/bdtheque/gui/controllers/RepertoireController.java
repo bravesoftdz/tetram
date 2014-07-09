@@ -78,8 +78,6 @@ public class RepertoireController extends WindowController {
     @SuppressWarnings("unchecked")
     @FXML
     void initialize() {
-        //tabs.getStylesheets().addAll(getClass().getResource("/org/tetram/bdtheque/gui/repertoire.css").toExternalForm());
-
         // pourquoi ça marchait avant avec <Tab, InfoTab> et que ça ne marche plus maintenant, mystère
         HashMap<String, InfoTab> tabView = new HashMap<>();
         final InfoTab infoTabAlbums = new InfoTab(tabAlbums, tvAlbums, TypeRepertoireAlbumEntry.PAR_SERIE.daoClass);

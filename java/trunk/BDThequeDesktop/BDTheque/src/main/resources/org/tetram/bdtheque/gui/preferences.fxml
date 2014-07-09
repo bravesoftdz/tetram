@@ -5,36 +5,41 @@
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import java.net.URL?>
-<BorderPane fx:id="content" prefHeight="506.0" prefWidth="511.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.tetram.bdtheque.gui.controllers.PreferencesController">
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" fx:id="content" prefHeight="506.0" prefWidth="511.0"
+            xmlns="http://javafx.com/javafx/8"
+            fx:controller="org.tetram.bdtheque.gui.controllers.PreferencesController">
     <left>
         <ToolBar orientation="VERTICAL" BorderPane.alignment="CENTER">
             <items>
-                <ToggleButton fx:id="btnOptionsDiverses" contentDisplay="TOP" mnemonicParsing="false" text="Options diverses">
+                <ToggleButton fx:id="btnOptionsDiverses" contentDisplay="TOP" mnemonicParsing="false"
+                              text="Options diverses">
                     <graphic>
                         <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
                             <image>
-                                <Image url="@../graphics/png/32x32/kernel.png" />
+                                <Image url="@../graphics/png/32x32/kernel.png"/>
                             </image>
                         </ImageView>
                     </graphic>
                     <toggleGroup>
-                        <ToggleGroup fx:id="btnTabGroup" />
+                        <ToggleGroup fx:id="btnTabGroup"/>
                     </toggleGroup>
                 </ToggleButton>
-                <ToggleButton fx:id="btnMonnaies" contentDisplay="TOP" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" text="Monnaies" toggleGroup="$btnTabGroup">
+                <ToggleButton fx:id="btnMonnaies" contentDisplay="TOP" layoutX="10.0" layoutY="10.0"
+                              mnemonicParsing="false" text="Monnaies" toggleGroup="$btnTabGroup">
                     <graphic>
                         <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
                             <image>
-                                <Image url="@../graphics/png/32x32/contents.png" />
+                                <Image url="@../graphics/png/32x32/contents.png"/>
                             </image>
                         </ImageView>
                     </graphic>
                 </ToggleButton>
-                <ToggleButton fx:id="btnSiteWeb" contentDisplay="TOP" layoutX="10.0" layoutY="39.0" mnemonicParsing="false" text="Site web" toggleGroup="$btnTabGroup">
+                <ToggleButton fx:id="btnSiteWeb" contentDisplay="TOP" layoutX="10.0" layoutY="39.0"
+                              mnemonicParsing="false" text="Site web" toggleGroup="$btnTabGroup">
                     <graphic>
                         <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
                             <image>
-                                <Image url="@../graphics/png/32x32/network.png" />
+                                <Image url="@../graphics/png/32x32/network.png"/>
                             </image>
                         </ImageView>
                     </graphic>
@@ -43,7 +48,8 @@
         </ToolBar>
     </left>
     <center>
-        <ScrollPane fx:id="tabOptionsDiverses" fitToWidth="true" hbarPolicy="NEVER" prefHeight="471.0" prefWidth="523.0" BorderPane.alignment="CENTER">
+        <ScrollPane fx:id="tabOptionsDiverses" fitToWidth="true" hbarPolicy="NEVER" prefHeight="471.0" prefWidth="523.0"
+                    BorderPane.alignment="CENTER">
             <content>
                 <VBox>
                     <children>
@@ -51,54 +57,66 @@
                             <content>
                                 <GridPane>
                                     <children>
-                                        <CheckBox fx:id="serieObligatoireAlbums" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" text="Saisie obligatoire d'une série pour les ablums et les achats">
+                                        <CheckBox fx:id="serieObligatoireAlbums" layoutX="14.0" layoutY="14.0"
+                                                  mnemonicParsing="false"
+                                                  text="Saisie obligatoire d'une série pour les ablums et les achats">
                                             <GridPane.margin>
-                                                <Insets bottom="4.0" top="4.0" />
+                                                <Insets bottom="4.0" top="4.0"/>
                                             </GridPane.margin>
                                         </CheckBox>
-                                        <CheckBox fx:id="serieObligatoireParaBD" layoutX="14.0" layoutY="38.0" mnemonicParsing="false" text="Saisie obligatoire d'une série pour les para-bd" GridPane.rowIndex="1">
+                                        <CheckBox fx:id="serieObligatoireParaBD" layoutX="14.0" layoutY="38.0"
+                                                  mnemonicParsing="false"
+                                                  text="Saisie obligatoire d'une série pour les para-bd"
+                                                  GridPane.rowIndex="1">
                                             <GridPane.margin>
-                                                <Insets bottom="4.0" top="4.0" />
+                                                <Insets bottom="4.0" top="4.0"/>
                                             </GridPane.margin>
                                         </CheckBox>
-                                        <CheckBox fx:id="antiAliasing" layoutX="14.0" layoutY="62.0" mnemonicParsing="false" text="Utiliser l'anti-aliasing pour redimensionner les images" GridPane.rowIndex="2">
+                                        <CheckBox fx:id="antiAliasing" layoutX="14.0" layoutY="62.0"
+                                                  mnemonicParsing="false"
+                                                  text="Utiliser l'anti-aliasing pour redimensionner les images"
+                                                  GridPane.rowIndex="2">
                                             <GridPane.margin>
-                                                <Insets bottom="4.0" top="4.0" />
+                                                <Insets bottom="4.0" top="4.0"/>
                                             </GridPane.margin>
                                         </CheckBox>
-                                        <Label layoutX="14.0" layoutY="91.0" text="Format d'affichage des titres d'albums :" GridPane.rowIndex="3">
+                                        <Label layoutX="14.0" layoutY="91.0"
+                                               text="Format d'affichage des titres d'albums :" GridPane.rowIndex="3">
                                             <GridPane.margin>
-                                                <Insets top="4.0" />
+                                                <Insets top="4.0"/>
                                             </GridPane.margin>
                                         </Label>
-                                        <ChoiceBox fx:id="formatTitreAlbum" layoutX="14.0" layoutY="108.0" GridPane.rowIndex="4">
+                                        <ChoiceBox fx:id="formatTitreAlbum" layoutX="14.0" layoutY="108.0"
+                                                   GridPane.rowIndex="4">
                                             <GridPane.margin>
-                                                <Insets bottom="4.0" />
+                                                <Insets bottom="4.0"/>
                                             </GridPane.margin>
                                         </ChoiceBox>
-                                        <CheckBox fx:id="afficheNotesListes" mnemonicParsing="false" text="Afficher l'appréciation personnelle dans les listes" GridPane.rowIndex="5">
+                                        <CheckBox fx:id="afficheNotesListes" mnemonicParsing="false"
+                                                  text="Afficher l'appréciation personnelle dans les listes"
+                                                  GridPane.rowIndex="5">
                                             <GridPane.margin>
-                                                <Insets bottom="4.0" top="4.0" />
+                                                <Insets bottom="4.0" top="4.0"/>
                                             </GridPane.margin>
                                         </CheckBox>
                                     </children>
                                     <columnConstraints>
-                                        <ColumnConstraints />
+                                        <ColumnConstraints/>
                                     </columnConstraints>
                                     <rowConstraints>
-                                        <RowConstraints />
-                                        <RowConstraints />
-                                        <RowConstraints />
-                                        <RowConstraints />
-                                        <RowConstraints />
-                                        <RowConstraints />
+                                        <RowConstraints/>
+                                        <RowConstraints/>
+                                        <RowConstraints/>
+                                        <RowConstraints/>
+                                        <RowConstraints/>
+                                        <RowConstraints/>
                                     </rowConstraints>
                                 </GridPane>
                             </content>
                         </TitledPane>
                         <TitledPane animated="false" text="Impression">
                             <content>
-                                <AnchorPane minHeight="0.0" minWidth="0.0" />
+                                <AnchorPane minHeight="0.0" minWidth="0.0"/>
                             </content>
                         </TitledPane>
                         <TitledPane animated="false" text="Mode Gestion">
@@ -107,35 +125,40 @@
                                     <children>
                                         <HBox GridPane.rowIndex="1">
                                             <children>
-                                                <Label contentDisplay="RIGHT" layoutX="14.0" layoutY="39.0" text="Répertoire de stockage des images :">
+                                                <Label contentDisplay="RIGHT" layoutX="14.0" layoutY="39.0"
+                                                       text="Répertoire de stockage des images :">
                                                     <HBox.margin>
-                                                        <Insets top="4.0" />
+                                                        <Insets top="4.0"/>
                                                     </HBox.margin>
                                                     <graphic>
-                                                        <Button mnemonicParsing="false" onAction="#btnChooseFolderClick" text="..." />
+                                                        <Button mnemonicParsing="false" onAction="#btnChooseFolderClick"
+                                                                text="..."/>
                                                     </graphic>
                                                 </Label>
                                             </children>
                                         </HBox>
-                                        <CheckBox fx:id="imagesStockees" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" text="Images stockées dans la base par défaut">
+                                        <CheckBox fx:id="imagesStockees" layoutX="14.0" layoutY="14.0"
+                                                  mnemonicParsing="false"
+                                                  text="Images stockées dans la base par défaut">
                                             <GridPane.margin>
-                                                <Insets bottom="4.0" top="4.0" />
+                                                <Insets bottom="4.0" top="4.0"/>
                                             </GridPane.margin>
                                         </CheckBox>
-                                        <Label fx:id="repImages" layoutX="14.0" layoutY="56.0" text="repImages" textOverrun="CENTER_WORD_ELLIPSIS" GridPane.rowIndex="3">
+                                        <Label fx:id="repImages" layoutX="14.0" layoutY="56.0" text="repImages"
+                                               textOverrun="CENTER_WORD_ELLIPSIS" GridPane.rowIndex="3">
                                             <GridPane.margin>
-                                                <Insets bottom="4.0" />
+                                                <Insets bottom="4.0"/>
                                             </GridPane.margin>
                                         </Label>
                                     </children>
                                     <columnConstraints>
-                                        <ColumnConstraints />
+                                        <ColumnConstraints/>
                                     </columnConstraints>
                                     <rowConstraints>
-                                        <RowConstraints />
-                                        <RowConstraints />
-                                        <RowConstraints />
-                                        <RowConstraints />
+                                        <RowConstraints/>
+                                        <RowConstraints/>
+                                        <RowConstraints/>
+                                        <RowConstraints/>
                                     </rowConstraints>
                                 </GridPane>
                             </content>
@@ -148,15 +171,17 @@
     <bottom>
         <HBox alignment="CENTER_RIGHT" spacing="8.0">
             <children>
-                <Button fx:id="btnOk" defaultButton="true" layoutX="807.0" mnemonicParsing="false" onAction="#btnQuitClick" text="Ok" />
-                <Button fx:id="btnCancel" cancelButton="true" layoutX="745.0" mnemonicParsing="false" onAction="#btnQuitClick" text="Annuler" />
+                <Button fx:id="btnOk" defaultButton="true" layoutX="807.0" mnemonicParsing="false"
+                        onAction="#btnQuitClick" text="Ok"/>
+                <Button fx:id="btnCancel" cancelButton="true" layoutX="745.0" mnemonicParsing="false"
+                        onAction="#btnQuitClick" text="Annuler"/>
             </children>
             <padding>
-                <Insets bottom="6.0" left="6.0" right="6.0" top="6.0" />
+                <Insets bottom="6.0" left="6.0" right="6.0" top="6.0"/>
             </padding>
         </HBox>
     </bottom>
     <stylesheets>
-        <URL value="@theme.css" />
+        <URL value="@theme.css"/>
     </stylesheets>
 </BorderPane>

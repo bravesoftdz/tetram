@@ -44,12 +44,12 @@ public class CollectionLite extends AbstractDBEntity {
         return editeur.get();
     }
 
-    public ObjectProperty<EditeurLite> editeurProperty() {
-        return editeur;
-    }
-
     public void setEditeur(EditeurLite editeur) {
         this.editeur.set(editeur);
+    }
+
+    public ObjectProperty<EditeurLite> editeurProperty() {
+        return editeur;
     }
 
     @Override

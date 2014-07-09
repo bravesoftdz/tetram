@@ -1,168 +1,234 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.net.*?>
-<?import java.lang.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.text.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.TextFlow?>
-
-<VBox alignment="TOP_CENTER" prefHeight="613.0" prefWidth="761.0" spacing="16.0" styleClass="scene" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.tetram.bdtheque.gui.controllers.consultation.FicheAlbumController">
+<?import java.net.URL?>
+<VBox xmlns:fx="http://javafx.com/fxml/1" alignment="TOP_CENTER" prefHeight="613.0" prefWidth="761.0" spacing="16.0"
+      styleClass="scene" xmlns="http://javafx.com/javafx/8"
+      fx:controller="org.tetram.bdtheque.gui.controllers.consultation.FicheAlbumController">
     <padding>
-        <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+        <Insets bottom="8.0" left="8.0" right="8.0" top="8.0"/>
     </padding>
     <children>
         <GridPane hgap="4.0" vgap="4.0">
             <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="60.0" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="40.0" />
-                <ColumnConstraints hgrow="SOMETIMES" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="260.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity"/>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0"/>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="60.0"/>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="100.0"/>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="40.0"/>
+                <ColumnConstraints hgrow="SOMETIMES"/>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="260.0"/>
             </columnConstraints>
             <rowConstraints>
-                <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="20.0" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="20.0" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="17.0" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="17.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="-Infinity" prefHeight="17.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="-Infinity" prefHeight="17.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="8.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="-Infinity" prefHeight="17.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="-Infinity" prefHeight="17.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="-Infinity" prefHeight="17.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="30.0" vgrow="ALWAYS" />
-                <RowConstraints maxHeight="1.7976931348623157E308" vgrow="SOMETIMES" />
-                <RowConstraints vgrow="SOMETIMES" />
-                <RowConstraints vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="20.0" vgrow="SOMETIMES"/>
+                <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="20.0" vgrow="SOMETIMES"/>
+                <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="17.0" vgrow="SOMETIMES"/>
+                <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="17.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="-Infinity" prefHeight="17.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="-Infinity" prefHeight="17.0" vgrow="SOMETIMES"/>
+                <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="8.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="-Infinity" prefHeight="17.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="-Infinity" prefHeight="17.0" vgrow="SOMETIMES"/>
+                <RowConstraints minHeight="-Infinity" prefHeight="17.0" vgrow="SOMETIMES"/>
+                <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" prefHeight="30.0" vgrow="ALWAYS"/>
+                <RowConstraints maxHeight="1.7976931348623157E308" vgrow="SOMETIMES"/>
+                <RowConstraints vgrow="SOMETIMES"/>
+                <RowConstraints vgrow="SOMETIMES"/>
             </rowConstraints>
             <children>
-                <Label styleClass="label-rubrique" text="Série :" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.halignment="RIGHT" />
-                <Label styleClass="label-rubrique" text="Titre :" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
-                <Hyperlink fx:id="titreSerie" style="-fx-font-size: 13px; -fx-font-weight: bold;" text="Sillage - Premières Armes" GridPane.columnIndex="3" GridPane.columnSpan="4" />
-                <Label fx:id="titreAlbum" style="-fx-font-size: 13px; -fx-font-weight: bold;" text="Esprit d'équipe" GridPane.columnIndex="3" GridPane.columnSpan="4" GridPane.rowIndex="1" />
-                <Label styleClass="label-rubrique" text="Tome :" GridPane.columnSpan="3" GridPane.halignment="RIGHT" GridPane.rowIndex="2" />
-                <Label fx:id="tome" text="1" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
-                <Label styleClass="label-rubrique" text="Parution :" GridPane.columnSpan="3" GridPane.halignment="RIGHT" GridPane.rowIndex="3" />
-                <Label fx:id="dateParution" text="décembre 2014" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
-                <CheckBox fx:id="integrale" contentDisplay="RIGHT" disable="true" mnemonicParsing="false" style="-fx-opacity: 1;" styleClass="label-rubrique" text="Intégrale" GridPane.columnIndex="5" GridPane.columnSpan="2" GridPane.rowIndex="2">
+                <Label styleClass="label-rubrique" text="Série :" GridPane.columnIndex="1" GridPane.columnSpan="2"
+                       GridPane.halignment="RIGHT"/>
+                <Label styleClass="label-rubrique" text="Titre :" GridPane.columnIndex="1" GridPane.columnSpan="2"
+                       GridPane.halignment="RIGHT" GridPane.rowIndex="1"/>
+                <Hyperlink fx:id="titreSerie" style="-fx-font-size: 13px; -fx-font-weight: bold;"
+                           text="Sillage - Premières Armes" GridPane.columnIndex="3" GridPane.columnSpan="4"/>
+                <Label fx:id="titreAlbum" style="-fx-font-size: 13px; -fx-font-weight: bold;" text="Esprit d'équipe"
+                       GridPane.columnIndex="3" GridPane.columnSpan="4" GridPane.rowIndex="1"/>
+                <Label styleClass="label-rubrique" text="Tome :" GridPane.columnSpan="3" GridPane.halignment="RIGHT"
+                       GridPane.rowIndex="2"/>
+                <Label fx:id="tome" text="1" GridPane.columnIndex="3" GridPane.halignment="CENTER"
+                       GridPane.rowIndex="2"/>
+                <Label styleClass="label-rubrique" text="Parution :" GridPane.columnSpan="3" GridPane.halignment="RIGHT"
+                       GridPane.rowIndex="3"/>
+                <Label fx:id="dateParution" text="décembre 2014" GridPane.columnIndex="3" GridPane.halignment="CENTER"
+                       GridPane.rowIndex="3"/>
+                <CheckBox fx:id="integrale" contentDisplay="RIGHT" disable="true" mnemonicParsing="false"
+                          style="-fx-opacity: 1;" styleClass="label-rubrique" text="Intégrale" GridPane.columnIndex="5"
+                          GridPane.columnSpan="2" GridPane.rowIndex="2">
                     <graphic>
-                        <Label fx:id="integraleTomes" style="-fx-opacity: 1;" styleClass="label-rubrique" text="de...à..." />
+                        <Label fx:id="integraleTomes" style="-fx-opacity: 1;" styleClass="label-rubrique"
+                               text="de...à..."/>
                     </graphic>
                 </CheckBox>
-                <CheckBox fx:id="horsSerie" disable="true" mnemonicParsing="false" style="-fx-opacity: 1;" styleClass="label-rubrique" text="Hors série" GridPane.columnIndex="5" GridPane.columnSpan="2" GridPane.rowIndex="3" />
-                <Pagination fx:id="diaporama" maxHeight="-Infinity" maxPageIndicatorCount="5" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" pageCount="15" prefHeight="350.0" prefWidth="250.0" style="-fx-page-information-visible: true;" styleClass="bullet" GridPane.columnIndex="6" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.rowSpan="10" GridPane.valignment="TOP" />
-                <Label styleClass="label-rubrique" text="Genres :" GridPane.columnSpan="2" GridPane.halignment="RIGHT" GridPane.rowIndex="5" GridPane.valignment="TOP" />
-                <FlowPane fx:id="lvGenres" GridPane.columnIndex="2" GridPane.columnSpan="4" GridPane.rowIndex="5" />
-                <Label styleClass="label-rubrique" text="Scénario :" GridPane.columnSpan="2" GridPane.halignment="RIGHT" GridPane.rowIndex="7" GridPane.valignment="TOP" />
-                <FlowPane fx:id="lvScenaristes" GridPane.columnIndex="2" GridPane.columnSpan="4" GridPane.rowIndex="7" />
-                <Label styleClass="label-rubrique" text="Dessins :" GridPane.columnSpan="2" GridPane.halignment="RIGHT" GridPane.rowIndex="8" GridPane.valignment="TOP" />
-                <FlowPane fx:id="lvDessinateurs" GridPane.columnIndex="2" GridPane.columnSpan="4" GridPane.rowIndex="8" />
-                <Label styleClass="label-rubrique" text="Couleurs :" GridPane.columnSpan="2" GridPane.halignment="RIGHT" GridPane.rowIndex="9" GridPane.valignment="TOP" />
-                <FlowPane fx:id="lvColoristes" GridPane.columnIndex="2" GridPane.columnSpan="4" GridPane.rowIndex="9" />
-                <Label styleClass="label-rubrique" text="Série" GridPane.columnSpan="2" GridPane.halignment="RIGHT" GridPane.rowIndex="11" GridPane.valignment="TOP" />
-                <ListView fx:id="lvSerie" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="69.0" GridPane.columnIndex="2" GridPane.columnSpan="4" GridPane.rowIndex="11" GridPane.valignment="TOP" />
-                <FlowPane fx:id="lvUnivers" GridPane.columnIndex="2" GridPane.columnSpan="4" GridPane.rowIndex="4" />
-                <Label styleClass="label-rubrique" text="Histoire :" GridPane.columnSpan="2" GridPane.halignment="RIGHT" GridPane.rowIndex="12" GridPane.valignment="TOP" />
-                <Label styleClass="label-rubrique" text="Notes :" GridPane.columnSpan="2" GridPane.halignment="RIGHT" GridPane.rowIndex="13" GridPane.valignment="TOP" />
-                <Label styleClass="label-rubrique" text="Univers :" GridPane.columnSpan="2" GridPane.halignment="RIGHT" GridPane.rowIndex="4" GridPane.valignment="TOP" />
-                <TextFlow fx:id="histoire" GridPane.columnIndex="2" GridPane.columnSpan="5" GridPane.rowIndex="12" />
-                <TextFlow fx:id="notes" GridPane.columnIndex="2" GridPane.columnSpan="5" GridPane.rowIndex="13" />
-                <VBox GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowSpan="2" GridPane.valignment="TOP">
+                <CheckBox fx:id="horsSerie" disable="true" mnemonicParsing="false" style="-fx-opacity: 1;"
+                          styleClass="label-rubrique" text="Hors série" GridPane.columnIndex="5" GridPane.columnSpan="2"
+                          GridPane.rowIndex="3"/>
+                <Pagination fx:id="diaporama" maxHeight="-Infinity" maxPageIndicatorCount="5" maxWidth="-Infinity"
+                            minHeight="-Infinity" minWidth="-Infinity" pageCount="15" prefHeight="350.0"
+                            prefWidth="250.0" style="-fx-page-information-visible: true;" styleClass="bullet"
+                            GridPane.columnIndex="6" GridPane.halignment="CENTER" GridPane.rowIndex="2"
+                            GridPane.rowSpan="10" GridPane.valignment="TOP"/>
+                <Label styleClass="label-rubrique" text="Genres :" GridPane.columnSpan="2" GridPane.halignment="RIGHT"
+                       GridPane.rowIndex="5" GridPane.valignment="TOP"/>
+                <FlowPane fx:id="lvGenres" GridPane.columnIndex="2" GridPane.columnSpan="4" GridPane.rowIndex="5"/>
+                <Label styleClass="label-rubrique" text="Scénario :" GridPane.columnSpan="2" GridPane.halignment="RIGHT"
+                       GridPane.rowIndex="7" GridPane.valignment="TOP"/>
+                <FlowPane fx:id="lvScenaristes" GridPane.columnIndex="2" GridPane.columnSpan="4" GridPane.rowIndex="7"/>
+                <Label styleClass="label-rubrique" text="Dessins :" GridPane.columnSpan="2" GridPane.halignment="RIGHT"
+                       GridPane.rowIndex="8" GridPane.valignment="TOP"/>
+                <FlowPane fx:id="lvDessinateurs" GridPane.columnIndex="2" GridPane.columnSpan="4"
+                          GridPane.rowIndex="8"/>
+                <Label styleClass="label-rubrique" text="Couleurs :" GridPane.columnSpan="2" GridPane.halignment="RIGHT"
+                       GridPane.rowIndex="9" GridPane.valignment="TOP"/>
+                <FlowPane fx:id="lvColoristes" GridPane.columnIndex="2" GridPane.columnSpan="4" GridPane.rowIndex="9"/>
+                <Label styleClass="label-rubrique" text="Série" GridPane.columnSpan="2" GridPane.halignment="RIGHT"
+                       GridPane.rowIndex="11" GridPane.valignment="TOP"/>
+                <ListView fx:id="lvSerie" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="69.0"
+                          GridPane.columnIndex="2" GridPane.columnSpan="4" GridPane.rowIndex="11"
+                          GridPane.valignment="TOP"/>
+                <FlowPane fx:id="lvUnivers" GridPane.columnIndex="2" GridPane.columnSpan="4" GridPane.rowIndex="4"/>
+                <Label styleClass="label-rubrique" text="Histoire :" GridPane.columnSpan="2" GridPane.halignment="RIGHT"
+                       GridPane.rowIndex="12" GridPane.valignment="TOP"/>
+                <Label styleClass="label-rubrique" text="Notes :" GridPane.columnSpan="2" GridPane.halignment="RIGHT"
+                       GridPane.rowIndex="13" GridPane.valignment="TOP"/>
+                <Label styleClass="label-rubrique" text="Univers :" GridPane.columnSpan="2" GridPane.halignment="RIGHT"
+                       GridPane.rowIndex="4" GridPane.valignment="TOP"/>
+                <TextFlow fx:id="histoire" GridPane.columnIndex="2" GridPane.columnSpan="5" GridPane.rowIndex="12"/>
+                <TextFlow fx:id="notes" GridPane.columnIndex="2" GridPane.columnSpan="5" GridPane.rowIndex="13"/>
+                <VBox GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowSpan="2"
+                      GridPane.valignment="TOP">
                     <children>
-                        <fx:include fx:id="notation" source="../notation.fxml" />
+                        <fx:include fx:id="notation" source="../notation.fxml"/>
                     </children>
                 </VBox>
             </children>
         </GridPane>
-        <Separator prefWidth="200.0" />
+        <Separator prefWidth="200.0"/>
         <VBox fx:id="detailEdition" spacing="8.0">
             <children>
                 <GridPane hgap="4.0" vgap="4.0">
                     <columnConstraints>
-                        <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="180.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="50.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="10.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" />
-                        <ColumnConstraints hgrow="SOMETIMES" />
-                        <ColumnConstraints />
+                        <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="-Infinity"
+                                           minWidth="-Infinity"/>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity"
+                                           prefWidth="180.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="50.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity"
+                                           prefWidth="10.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity"/>
+                        <ColumnConstraints hgrow="SOMETIMES"/>
+                        <ColumnConstraints/>
                     </columnConstraints>
                     <rowConstraints>
-                        <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="17.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="17.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="17.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="17.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="17.0" vgrow="SOMETIMES" />
-                        <RowConstraints />
+                        <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="17.0"
+                                        vgrow="SOMETIMES"/>
+                        <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="17.0"
+                                        vgrow="SOMETIMES"/>
+                        <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="17.0"
+                                        vgrow="SOMETIMES"/>
+                        <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="17.0"
+                                        vgrow="SOMETIMES"/>
+                        <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="17.0"
+                                        vgrow="SOMETIMES"/>
+                        <RowConstraints/>
                     </rowConstraints>
                     <children>
-                        <Label styleClass="label-rubrique" text="ISBN :" />
-                        <Label fx:id="lbIsbn" text="Label" GridPane.columnIndex="1" GridPane.columnSpan="2" />
-                        <ListView fx:id="lvEditions" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="69.0" prefWidth="350.0" GridPane.columnIndex="5" GridPane.halignment="RIGHT" GridPane.rowSpan="6" GridPane.valignment="TOP" />
-                        <Label styleClass="label-rubrique" text="Editeur :" GridPane.rowIndex="1" GridPane.valignment="TOP" />
-                        <Hyperlink fx:id="lbEditeur" contentDisplay="RIGHT" text="Label" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="1" />
-                        <Label styleClass="label-rubrique" text="Collection :" GridPane.rowIndex="2" />
-                        <Hyperlink fx:id="lbCollection" text="Label" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="2" />
-                        <Label styleClass="label-rubrique" text="Prix :" GridPane.rowIndex="3" />
-                        <Label styleClass="label-rubrique" text="Cote :" GridPane.rowIndex="4" />
-                        <Label fx:id="lbCote" text="Label" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="4" />
-                        <Label fx:id="lbAchete" styleClass="label-rubrique" text="Acheté le :" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.halignment="RIGHT" GridPane.rowIndex="3" />
-                        <Label fx:id="lbDateAchat" text="Label" GridPane.columnIndex="4" GridPane.columnSpan="3" GridPane.rowIndex="3" />
-                        <CheckBox fx:id="cbOffert" disable="true" mnemonicParsing="false" style="-fx-opacity: 1;" styleClass="label-rubrique" text="Offert" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-                        <CheckBox fx:id="cbStock" disable="true" layoutX="223.0" layoutY="10.0" mnemonicParsing="false" style="-fx-opacity: 1;" styleClass="label-rubrique" text="Stock" GridPane.columnIndex="4" GridPane.rowIndex="2" />
-                        <Label fx:id="lbPrix" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                        <Label styleClass="label-rubrique" text="Année :" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.halignment="RIGHT" />
-                        <Label fx:id="lbAnneeEdition" text="Label" GridPane.columnIndex="4" />
+                        <Label styleClass="label-rubrique" text="ISBN :"/>
+                        <Label fx:id="lbIsbn" text="Label" GridPane.columnIndex="1" GridPane.columnSpan="2"/>
+                        <ListView fx:id="lvEditions" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+                                  minWidth="-Infinity" prefHeight="69.0" prefWidth="350.0" GridPane.columnIndex="5"
+                                  GridPane.halignment="RIGHT" GridPane.rowSpan="6" GridPane.valignment="TOP"/>
+                        <Label styleClass="label-rubrique" text="Editeur :" GridPane.rowIndex="1"
+                               GridPane.valignment="TOP"/>
+                        <Hyperlink fx:id="lbEditeur" contentDisplay="RIGHT" text="Label" GridPane.columnIndex="1"
+                                   GridPane.columnSpan="2" GridPane.rowIndex="1"/>
+                        <Label styleClass="label-rubrique" text="Collection :" GridPane.rowIndex="2"/>
+                        <Hyperlink fx:id="lbCollection" text="Label" GridPane.columnIndex="1" GridPane.columnSpan="2"
+                                   GridPane.rowIndex="2"/>
+                        <Label styleClass="label-rubrique" text="Prix :" GridPane.rowIndex="3"/>
+                        <Label styleClass="label-rubrique" text="Cote :" GridPane.rowIndex="4"/>
+                        <Label fx:id="lbCote" text="Label" GridPane.columnIndex="1" GridPane.columnSpan="2"
+                               GridPane.rowIndex="4"/>
+                        <Label fx:id="lbAchete" styleClass="label-rubrique" text="Acheté le :" GridPane.columnIndex="2"
+                               GridPane.columnSpan="2" GridPane.halignment="RIGHT" GridPane.rowIndex="3"/>
+                        <Label fx:id="lbDateAchat" text="Label" GridPane.columnIndex="4" GridPane.columnSpan="3"
+                               GridPane.rowIndex="3"/>
+                        <CheckBox fx:id="cbOffert" disable="true" mnemonicParsing="false" style="-fx-opacity: 1;"
+                                  styleClass="label-rubrique" text="Offert" GridPane.columnIndex="2"
+                                  GridPane.rowIndex="2"/>
+                        <CheckBox fx:id="cbStock" disable="true" layoutX="223.0" layoutY="10.0" mnemonicParsing="false"
+                                  style="-fx-opacity: 1;" styleClass="label-rubrique" text="Stock"
+                                  GridPane.columnIndex="4" GridPane.rowIndex="2"/>
+                        <Label fx:id="lbPrix" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+                        <Label styleClass="label-rubrique" text="Année :" GridPane.columnIndex="2"
+                               GridPane.columnSpan="2" GridPane.halignment="RIGHT"/>
+                        <Label fx:id="lbAnneeEdition" text="Label" GridPane.columnIndex="4"/>
                     </children>
                 </GridPane>
                 <GridPane hgap="4.0" vgap="4.0">
                     <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="170.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="170.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" />
-                        <ColumnConstraints />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity"/>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity"
+                                           prefWidth="170.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity"/>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity"
+                                           prefWidth="170.0"/>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity"/>
+                        <ColumnConstraints/>
                     </columnConstraints>
                     <rowConstraints>
-                        <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="17.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="17.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="17.0" vgrow="SOMETIMES" />
-                        <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="17.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="-Infinity" prefHeight="17.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="17.0"
+                                        vgrow="SOMETIMES"/>
+                        <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="17.0"
+                                        vgrow="SOMETIMES"/>
+                        <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="17.0"
+                                        vgrow="SOMETIMES"/>
+                        <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="17.0"
+                                        vgrow="SOMETIMES"/>
+                        <RowConstraints minHeight="-Infinity" prefHeight="17.0" vgrow="SOMETIMES"/>
                     </rowConstraints>
                     <children>
-                        <Label styleClass="label-rubrique" text="Reliure :" GridPane.columnIndex="2" GridPane.halignment="RIGHT" />
-                        <Label fx:id="lbReliure" text="Label" GridPane.columnIndex="3" />
-                        <Label styleClass="label-rubrique" text="Orientation :" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
-                        <Label fx:id="lbOrientation" text="Label" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-                        <Label fx:id="lbSensLecture" text="Label" GridPane.columnIndex="3" GridPane.rowIndex="2" />
-                        <Label styleClass="label-rubrique" text="Sens de lecture :" GridPane.columnIndex="2" GridPane.halignment="RIGHT" GridPane.rowIndex="2" />
-                        <Label styleClass="label-rubrique" text="Format :" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
-                        <Label fx:id="lbFormat" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                        <Label styleClass="label-rubrique" text="N° perso :" GridPane.halignment="RIGHT" GridPane.rowIndex="3" />
-                        <Label fx:id="lbNumeroPerso" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                        <Label styleClass="label-rubrique" text="Notes :" GridPane.halignment="RIGHT" GridPane.rowIndex="4" />
-                        <TextFlow fx:id="tfNotesEdition" GridPane.columnIndex="1" GridPane.columnSpan="5" GridPane.rowIndex="4" />
-                        <Label fx:id="lbEtat" text="Label" GridPane.columnIndex="1" />
-                        <Label styleClass="label-rubrique" text="Etat :" GridPane.halignment="RIGHT" />
-                        <Label styleClass="label-rubrique" text="Pages :" GridPane.halignment="RIGHT" GridPane.rowIndex="2" />
-                        <Label fx:id="lbPages" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                        <CheckBox fx:id="cbDedicace" disable="true" mnemonicParsing="false" style="-fx-opacity: 1;" styleClass="label-rubrique" text="Dédicacé" GridPane.columnIndex="4" GridPane.rowIndex="2" />
-                        <CheckBox fx:id="cbVO" disable="true" mnemonicParsing="false" style="-fx-opacity: 1;" styleClass="label-rubrique" text="VO" GridPane.columnIndex="4" GridPane.rowIndex="1" />
-                        <CheckBox fx:id="cbCouleur" disable="true" mnemonicParsing="false" style="-fx-opacity: 1;" styleClass="label-rubrique" text="Couleur" GridPane.columnIndex="4" />
+                        <Label styleClass="label-rubrique" text="Reliure :" GridPane.columnIndex="2"
+                               GridPane.halignment="RIGHT"/>
+                        <Label fx:id="lbReliure" text="Label" GridPane.columnIndex="3"/>
+                        <Label styleClass="label-rubrique" text="Orientation :" GridPane.columnIndex="2"
+                               GridPane.halignment="RIGHT" GridPane.rowIndex="1"/>
+                        <Label fx:id="lbOrientation" text="Label" GridPane.columnIndex="3" GridPane.rowIndex="1"/>
+                        <Label fx:id="lbSensLecture" text="Label" GridPane.columnIndex="3" GridPane.rowIndex="2"/>
+                        <Label styleClass="label-rubrique" text="Sens de lecture :" GridPane.columnIndex="2"
+                               GridPane.halignment="RIGHT" GridPane.rowIndex="2"/>
+                        <Label styleClass="label-rubrique" text="Format :" GridPane.halignment="RIGHT"
+                               GridPane.rowIndex="1"/>
+                        <Label fx:id="lbFormat" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                        <Label styleClass="label-rubrique" text="N° perso :" GridPane.halignment="RIGHT"
+                               GridPane.rowIndex="3"/>
+                        <Label fx:id="lbNumeroPerso" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+                        <Label styleClass="label-rubrique" text="Notes :" GridPane.halignment="RIGHT"
+                               GridPane.rowIndex="4"/>
+                        <TextFlow fx:id="tfNotesEdition" GridPane.columnIndex="1" GridPane.columnSpan="5"
+                                  GridPane.rowIndex="4"/>
+                        <Label fx:id="lbEtat" text="Label" GridPane.columnIndex="1"/>
+                        <Label styleClass="label-rubrique" text="Etat :" GridPane.halignment="RIGHT"/>
+                        <Label styleClass="label-rubrique" text="Pages :" GridPane.halignment="RIGHT"
+                               GridPane.rowIndex="2"/>
+                        <Label fx:id="lbPages" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                        <CheckBox fx:id="cbDedicace" disable="true" mnemonicParsing="false" style="-fx-opacity: 1;"
+                                  styleClass="label-rubrique" text="Dédicacé" GridPane.columnIndex="4"
+                                  GridPane.rowIndex="2"/>
+                        <CheckBox fx:id="cbVO" disable="true" mnemonicParsing="false" style="-fx-opacity: 1;"
+                                  styleClass="label-rubrique" text="VO" GridPane.columnIndex="4" GridPane.rowIndex="1"/>
+                        <CheckBox fx:id="cbCouleur" disable="true" mnemonicParsing="false" style="-fx-opacity: 1;"
+                                  styleClass="label-rubrique" text="Couleur" GridPane.columnIndex="4"/>
                     </children>
                 </GridPane>
             </children>
         </VBox>
     </children>
-   <stylesheets>
-      <URL value="@../theme.css" />
-      <URL value="@consultation.css" />
-   </stylesheets>
+    <stylesheets>
+        <URL value="@../theme.css"/>
+        <URL value="@consultation.css"/>
+    </stylesheets>
 </VBox>

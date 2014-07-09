@@ -4,9 +4,9 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import org.tetram.bdtheque.spring.SpringContext;
 import org.tetram.bdtheque.data.BeanUtils;
 import org.tetram.bdtheque.data.dao.ValeurListeDao;
+import org.tetram.bdtheque.spring.SpringContext;
 import org.tetram.bdtheque.utils.StringUtils;
 
 import java.util.Comparator;

@@ -1,8 +1,8 @@
 package org.tetram.bdtheque.data.dao;
 
-import org.tetram.bdtheque.spring.SpringContext;
 import org.tetram.bdtheque.data.bean.ImageLite;
 import org.tetram.bdtheque.data.services.UserPreferences;
+import org.tetram.bdtheque.spring.SpringContext;
 
 import java.util.List;
 import java.util.Map;

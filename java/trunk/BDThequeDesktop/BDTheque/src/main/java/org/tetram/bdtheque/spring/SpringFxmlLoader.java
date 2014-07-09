@@ -1,4 +1,3 @@
-
 package org.tetram.bdtheque.spring;
 
 import javafx.fxml.FXMLLoader;

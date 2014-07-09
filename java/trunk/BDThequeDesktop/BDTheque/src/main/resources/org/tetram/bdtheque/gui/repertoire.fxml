@@ -115,7 +115,7 @@
         </Tab>
     </tabs>
     <stylesheets>
-        <URL value="@theme.css" />
-        <URL value="@repertoire.css" />
+        <URL value="@theme.css"/>
+        <URL value="@repertoire.css"/>
     </stylesheets>
 </TabPane>

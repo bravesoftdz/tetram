@@ -4,10 +4,10 @@ import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import org.tetram.bdtheque.spring.utils.AutoTrimStringProperty;
-import org.tetram.bdtheque.spring.SpringContext;
 import org.tetram.bdtheque.data.BeanUtils;
 import org.tetram.bdtheque.data.dao.ValeurListeDao;
+import org.tetram.bdtheque.spring.SpringContext;
+import org.tetram.bdtheque.spring.utils.AutoTrimStringProperty;
 import org.tetram.bdtheque.utils.TypeUtils;
 
 import java.time.Month;

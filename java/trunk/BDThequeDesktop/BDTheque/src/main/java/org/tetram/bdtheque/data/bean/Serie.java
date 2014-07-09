@@ -3,10 +3,10 @@ package org.tetram.bdtheque.data.bean;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
-import org.tetram.bdtheque.spring.SpringContext;
 import org.tetram.bdtheque.data.BeanUtils;
 import org.tetram.bdtheque.data.dao.DaoScriptImpl;
 import org.tetram.bdtheque.data.dao.ValeurListeDao;
+import org.tetram.bdtheque.spring.SpringContext;
 import org.tetram.bdtheque.utils.StringUtils;
 
 import java.net.URL;

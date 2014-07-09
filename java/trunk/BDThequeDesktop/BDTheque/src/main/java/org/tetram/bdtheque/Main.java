@@ -11,9 +11,9 @@ import javafx.stage.Stage;
 import org.controlsfx.dialog.Dialogs;
 import org.jetbrains.annotations.NonNls;
 import org.tetram.bdtheque.data.services.UserPreferences;
-import org.tetram.bdtheque.spring.SpringFxmlLoader;
 import org.tetram.bdtheque.gui.controllers.MainController;
 import org.tetram.bdtheque.spring.SpringContext;
+import org.tetram.bdtheque.spring.SpringFxmlLoader;
 import org.tetram.bdtheque.utils.I18nSupport;
 
 import java.io.*;
