@@ -1,7 +1,11 @@
 package org.tetram.bdtheque.data.dao.mappers;
 
 import org.apache.ibatis.annotations.Param;
-import org.tetram.bdtheque.data.bean.*;
+import org.tetram.bdtheque.data.bean.CouvertureLite;
+import org.tetram.bdtheque.data.bean.Edition;
+import org.tetram.bdtheque.data.bean.ImageStream;
+import org.tetram.bdtheque.data.bean.PhotoLite;
+import org.tetram.bdtheque.data.bean.abstractentities.AbstractImage;
 import org.tetram.bdtheque.utils.FileLink;
 
 import java.util.Collection;
@@ -18,7 +22,7 @@ public interface ImageMapper extends BaseMapperInterface {
 
     List<PhotoLite> getListPhotoLiteByParaBDId(UUID id);
 
-    <T extends ImageLite>
+    <T extends AbstractImage>
     int cleanImageLite(
             @Param("parentId") UUID parentId,
             @Param("list") Collection<T> list,
@@ -27,7 +31,7 @@ public interface ImageMapper extends BaseMapperInterface {
             @Param("fieldId") String fieldId
     );
 
-    <T extends ImageLite>
+    <T extends AbstractImage>
     int addImageLite(
             @Param("image") T image,
             @Param("parentId") UUID parentId,
@@ -42,7 +46,7 @@ public interface ImageMapper extends BaseMapperInterface {
             @Param("fieldBlob") String fieldBlob
     );
 
-    <T extends ImageLite>
+    <T extends AbstractImage>
     int updateMetadataImageLite(
             @Param("image") T image,
             @Param("fileName") String fileName,
@@ -51,7 +55,7 @@ public interface ImageMapper extends BaseMapperInterface {
             @Param("fieldFile") String fieldFile
     );
 
-    <T extends ImageLite>
+    <T extends AbstractImage>
     int changeModeImageLite(
             @Param("image") T image,
             @Param("data") byte[] stream,
@@ -61,7 +65,7 @@ public interface ImageMapper extends BaseMapperInterface {
             @Param("fieldBlob") String fieldBlob
     );
 
-    <T extends ImageLite>
+    <T extends AbstractImage>
     ImageStream getImageStream(
             @Param("image") T image,
             @Param("tableName") String tableName,

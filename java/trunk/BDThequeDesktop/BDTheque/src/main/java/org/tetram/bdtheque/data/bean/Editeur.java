@@ -4,6 +4,7 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.StringProperty;
 import org.tetram.bdtheque.data.BeanUtils;
+import org.tetram.bdtheque.data.bean.abstractentities.AbstractScriptEntity;
 import org.tetram.bdtheque.data.dao.DaoScriptImpl;
 import org.tetram.bdtheque.spring.utils.AutoTrimStringProperty;
 
@@ -30,8 +31,8 @@ public class Editeur extends AbstractScriptEntity implements WebLinkedEntity {
         return 0;
     };
 
-    private StringProperty nomEditeur = new AutoTrimStringProperty(this, "nomEditeur", null);
-    private ObjectProperty<URL> siteWeb = new SimpleObjectProperty<>(this, "siteWeb", null);
+    private final StringProperty nomEditeur = new AutoTrimStringProperty(this, "nomEditeur", null);
+    private final ObjectProperty<URL> siteWeb = new SimpleObjectProperty<>(this, "siteWeb", null);
 
     public StringProperty nomEditeurProperty() {
         return nomEditeur;

@@ -10,7 +10,8 @@
     </columnResizePolicy>
     <columns>
         <TreeTableColumn fx:id="column0" editable="false" sortable="false"/>
-        <TreeTableColumn fx:id="column1" editable="false" maxWidth="68.0" minWidth="68.0" prefWidth="68.0" resizable="false"
+        <TreeTableColumn fx:id="column1" editable="false" maxWidth="68.0" minWidth="68.0" prefWidth="68.0"
+                         resizable="false"
                          sortable="false"/>
     </columns>
 </TreeTableView>

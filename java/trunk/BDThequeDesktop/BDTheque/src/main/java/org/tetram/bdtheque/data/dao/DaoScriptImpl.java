@@ -3,7 +3,7 @@ package org.tetram.bdtheque.data.dao;
 import org.apache.ibatis.exceptions.PersistenceException;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.tetram.bdtheque.data.bean.AbstractScriptEntity;
+import org.tetram.bdtheque.data.bean.abstractentities.AbstractScriptEntity;
 import org.tetram.bdtheque.data.dao.mappers.CommonMapper;
 
 import java.lang.annotation.ElementType;

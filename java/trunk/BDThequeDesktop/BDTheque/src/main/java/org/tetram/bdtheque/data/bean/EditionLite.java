@@ -1,6 +1,7 @@
 package org.tetram.bdtheque.data.bean;
 
 import org.tetram.bdtheque.data.BeanUtils;
+import org.tetram.bdtheque.data.bean.abstractentities.AbstractDBEntity;
 import org.tetram.bdtheque.utils.I18nSupport;
 import org.tetram.bdtheque.utils.ISBNUtils;
 import org.tetram.bdtheque.utils.StringUtils;

@@ -1,16 +1,19 @@
-package org.tetram.bdtheque.data.bean;
+package org.tetram.bdtheque.data.bean.abstractentities;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import org.tetram.bdtheque.data.bean.PersonneLite;
+import org.tetram.bdtheque.data.bean.WebLinkedEntity;
 
 import java.net.URL;
 
 /**
  * Created by Thierry on 24/05/2014.
  */
-public abstract class AuteurLite extends AbstractDBEntity implements WebLinkedEntity {
+@SuppressWarnings("UnusedDeclaration")
+public abstract class AbstractAuteur extends AbstractDBEntity implements WebLinkedEntity {
 
-    private ObjectProperty<PersonneLite> personne = new SimpleObjectProperty<>(this, "personne", null);
+    private final ObjectProperty<PersonneLite> personne = new SimpleObjectProperty<>(this, "personne", null);
 
     public ObjectProperty<PersonneLite> personneProperty() {
         return personne;
@@ -43,10 +46,10 @@ public abstract class AuteurLite extends AbstractDBEntity implements WebLinkedEn
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof AuteurLite)) return false;
+        if (!(o instanceof AbstractAuteur)) return false;
         if (!super.equals(o)) return false;
 
-        AuteurLite that = (AuteurLite) o;
+        AbstractAuteur that = (AbstractAuteur) o;
 
         if (getPersonne() != null ? !getPersonne().equals(that.getPersonne()) : that.getPersonne() != null)
             return false;

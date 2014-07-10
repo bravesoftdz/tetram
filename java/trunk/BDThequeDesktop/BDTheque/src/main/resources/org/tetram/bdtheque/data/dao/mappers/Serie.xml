@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="org.tetram.bdtheque.data.dao.mappers.SerieMapper">
-    <resultMap id="SerieLite" type="beanSerieLite">
+    <resultMap id="AbstractSerie" type="org.tetram.bdtheque.data.bean.abstractentities.AbstractSerie">
         <id column="id_serie" property="id"/>
         <result column="TitreSerie" property="titreSerie"/>
         <result column="notation" property="notation"/>
+        <result column="siteWeb" property="siteWeb"/>
+    </resultMap>
+    <resultMap id="SerieLite" extends="AbstractSerie" type="beanSerieLite">
         <association property="editeur" select="org.tetram.bdtheque.data.dao.mappers.EditeurMapper.getEditeurLiteById"
                      column="id_editeur"/>
         <association property="collection"
                      select="org.tetram.bdtheque.data.dao.mappers.CollectionMapper.getCollectionLiteById"
                      column="id_collection"/>
     </resultMap>
-    <resultMap id="SerieFull" type="beanSerie">
-        <id column="id_serie" property="id"/>
-        <result column="titreSerie" property="titreSerie"/>
-        <result column="notation" property="notation"/>
+    <resultMap id="SerieFull" extends="AbstractSerie" type="beanSerie">
         <result column="terminee" property="terminee"/>
         <result column="vo" property="vo"/>
         <result column="couleur" property="couleur"/>
@@ -24,7 +24,6 @@
         <result column="nb_albums" property="nbAlbums"/>
         <result column="sujetSerie" property="sujet"/>
         <result column="remarquesSerie" property="notes"/>
-        <result column="siteWeb" property="siteWeb"/>
         <result column="typeEdition" property="typeEdition"/>
         <result column="etat" property="etat"/>
         <result column="reliure" property="reliure"/>

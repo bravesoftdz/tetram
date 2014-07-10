@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="org.tetram.bdtheque.data.dao.mappers.ImageMapper">
-    <resultMap id="ImageLite" type="beanImageLite">
-        <result column="CategorieImage" property="categorie"/>
+    <resultMap id="AbstractImage" type="org.tetram.bdtheque.data.bean.abstractentities.AbstractImage">
+    <result column="CategorieImage" property="categorie"/>
         <result column="ordre" property="position"/>
     </resultMap>
-    <resultMap id="PhotoLite" type="beanPhotoLite" extends="ImageLite">
-        <id column="id_photo" property="id"/>
+    <resultMap id="PhotoLite" extends="AbstractImage" type="beanPhotoLite">
+    <id column="id_photo" property="id"/>
         <result column="FichierPhoto" property="newNom"/>
         <result column="StockagePhoto" property="newStockee"/>
     </resultMap>
@@ -14,8 +14,8 @@
         <result column="FichierPhoto" property="oldNom"/>
         <result column="StockagePhoto" property="oldStockee"/>
     </resultMap>
-    <resultMap id="CouvertureLite" type="beanCouvertureLite" extends="ImageLite">
-        <id column="id_couverture" property="id"/>
+    <resultMap id="CouvertureLite" extends="AbstractImage" type="beanCouvertureLite">
+    <id column="id_couverture" property="id"/>
         <result column="FichierCouverture" property="newNom"/>
         <result column="StockageCouverture" property="newStockee"/>
     </resultMap>

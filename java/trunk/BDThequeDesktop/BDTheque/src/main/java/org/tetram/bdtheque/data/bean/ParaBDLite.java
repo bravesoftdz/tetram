@@ -2,6 +2,7 @@ package org.tetram.bdtheque.data.bean;
 
 import javafx.beans.property.*;
 import org.tetram.bdtheque.data.BeanUtils;
+import org.tetram.bdtheque.data.bean.abstractentities.AbstractDBEntity;
 import org.tetram.bdtheque.spring.utils.AutoTrimStringProperty;
 import org.tetram.bdtheque.utils.StringUtils;
 
@@ -13,59 +14,59 @@ import java.util.UUID;
 @SuppressWarnings("UnusedDeclaration")
 public class ParaBDLite extends AbstractDBEntity {
 
-    private StringProperty titre = new AutoTrimStringProperty(this, "titre", null);
-    private ObjectProperty<UUID> idSerie = new SimpleObjectProperty<>(this, "idSerie", null);
-    private StringProperty serie = new AutoTrimStringProperty(this, "serie", null);
-    private StringProperty sCategorie = new AutoTrimStringProperty(this, "sCategorie", null);
-    private BooleanProperty achat = new SimpleBooleanProperty(this, "achat", false);
-    private BooleanProperty complet = new SimpleBooleanProperty(this, "complet", true);
+    private final StringProperty titre = new AutoTrimStringProperty(this, "titre", null);
+    private final ObjectProperty<UUID> idSerie = new SimpleObjectProperty<>(this, "idSerie", null);
+    private final StringProperty serie = new AutoTrimStringProperty(this, "serie", null);
+    private final StringProperty sCategorie = new AutoTrimStringProperty(this, "sCategorie", null);
+    private final BooleanProperty achat = new SimpleBooleanProperty(this, "achat", false);
+    private final BooleanProperty complet = new SimpleBooleanProperty(this, "complet", true);
 
     public String getTitre() {
         return titre.get();
-    }
-
-    public StringProperty titreProperty() {
-        return titre;
     }
 
     public void setTitre(String titre) {
         this.titre.set(titre);
     }
 
-    public UUID getIdSerie() {
-        return idSerie.get();
+    public StringProperty titreProperty() {
+        return titre;
     }
 
-    public ObjectProperty<UUID> idSerieProperty() {
-        return idSerie;
+    public UUID getIdSerie() {
+        return idSerie.get();
     }
 
     public void setIdSerie(UUID idSerie) {
         this.idSerie.set(idSerie);
     }
 
-    public String getSerie() {
-        return serie.get();
+    public ObjectProperty<UUID> idSerieProperty() {
+        return idSerie;
     }
 
-    public StringProperty serieProperty() {
-        return serie;
+    public String getSerie() {
+        return serie.get();
     }
 
     public void setSerie(String serie) {
         this.serie.set(serie);
     }
 
+    public StringProperty serieProperty() {
+        return serie;
+    }
+
     public String getsCategorie() {
         return sCategorie.get();
     }
 
-    public StringProperty sCategorieProperty() {
-        return sCategorie;
-    }
-
     public void setsCategorie(String sCategorie) {
         this.sCategorie.set(sCategorie);
+    }
+
+    public StringProperty sCategorieProperty() {
+        return sCategorie;
     }
 
     public boolean isAchat() {
@@ -84,12 +85,12 @@ public class ParaBDLite extends AbstractDBEntity {
         return complet.get();
     }
 
-    public BooleanProperty completProperty() {
-        return complet;
-    }
-
     public void setComplet(boolean complet) {
         this.complet.set(complet);
+    }
+
+    public BooleanProperty completProperty() {
+        return complet;
     }
 
     @Override

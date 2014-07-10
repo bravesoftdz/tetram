@@ -5,6 +5,9 @@
     <item name='javafx.beans.property.SimpleBooleanProperty SimpleBooleanProperty(java.lang.Object, java.lang.String, boolean) 1'>
         <annotation name='org.jetbrains.annotations.NonNls'/>
     </item>
+    <item name='javafx.beans.property.SimpleDoubleProperty SimpleDoubleProperty(java.lang.Object, java.lang.String, double) 1'>
+        <annotation name='org.jetbrains.annotations.NonNls'/>
+    </item>
     <item name='javafx.beans.property.SimpleIntegerProperty SimpleIntegerProperty(java.lang.Object, java.lang.String, int) 1'>
         <annotation name='org.jetbrains.annotations.NonNls'/>
     </item>

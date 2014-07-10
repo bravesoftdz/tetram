@@ -4,7 +4,7 @@ import org.apache.ibatis.exceptions.PersistenceException;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.tetram.bdtheque.data.ConsistencyException;
-import org.tetram.bdtheque.data.bean.AbstractDBEntity;
+import org.tetram.bdtheque.data.bean.abstractentities.AbstractDBEntity;
 
 /**
  * Created by Thierry on 30/05/2014.

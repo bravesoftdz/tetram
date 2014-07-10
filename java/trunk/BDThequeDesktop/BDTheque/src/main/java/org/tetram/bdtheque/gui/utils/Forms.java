@@ -6,7 +6,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.Pane;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
-import org.tetram.bdtheque.data.bean.*;
+import org.tetram.bdtheque.data.bean.abstractentities.*;
 import org.tetram.bdtheque.gui.controllers.WindowController;
 import org.tetram.bdtheque.gui.controllers.consultation.ConsultationController;
 import org.tetram.bdtheque.spring.SpringFxmlLoader;
@@ -24,13 +24,10 @@ public class Forms {
 
     static {
         entitiesUrl = new HashMap<>();
-        entitiesUrl.put(AlbumLite.class, "consultation/ficheAlbum.fxml");
-        entitiesUrl.put(Album.class, "consultation/ficheAlbum.fxml");
-        entitiesUrl.put(SerieLite.class, "consultation/ficheSerie.fxml");
-        entitiesUrl.put(Serie.class, "consultation/ficheSerie.fxml");
-        entitiesUrl.put(PersonneLite.class, "consultation/ficheAuteur.fxml");
-        entitiesUrl.put(Personne.class, "consultation/ficheAuteur.fxml");
-        entitiesUrl.put(AuteurLite.class, "consultation/ficheAuteur.fxml");
+        entitiesUrl.put(AbstractAlbum.class, "consultation/ficheAlbum.fxml");
+        entitiesUrl.put(AbstractSerie.class, "consultation/ficheSerie.fxml");
+        entitiesUrl.put(AbstractPersonne.class, "consultation/ficheAuteur.fxml");
+        entitiesUrl.put(AbstractAuteur.class, "consultation/ficheAuteur.fxml");
     }
 
     // on ne peut pas simplement utiliser entitiesUrl.get : CGLIB ajoute une surcharge

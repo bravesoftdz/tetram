@@ -27,9 +27,9 @@ public class ValeurListe {
 
         return 0;
     };
-    private IntegerProperty valeur = new SimpleIntegerProperty(this, "valeur", 0);
-    private StringProperty texte = new SimpleStringProperty(this, "texte", null);
-    private IntegerProperty position = new SimpleIntegerProperty(this, "position", 0);
+    private final IntegerProperty valeur = new SimpleIntegerProperty(this, "valeur", 0);
+    private final StringProperty texte = new SimpleStringProperty(this, "texte", null);
+    private final IntegerProperty position = new SimpleIntegerProperty(this, "position", 0);
 
     public int getValeur() {
         return valeur.get();

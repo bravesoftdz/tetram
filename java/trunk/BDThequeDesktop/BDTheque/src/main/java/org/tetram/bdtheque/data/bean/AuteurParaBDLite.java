@@ -1,20 +1,29 @@
 package org.tetram.bdtheque.data.bean;
 
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import org.tetram.bdtheque.data.bean.abstractentities.AbstractAuteur;
+
 import java.util.UUID;
 
 /**
  * Created by Thierry on 24/05/2014.
  */
-public class AuteurParaBDLite extends AuteurLite {
+@SuppressWarnings("UnusedDeclaration")
+public class AuteurParaBDLite extends AbstractAuteur {
 
-    private UUID idParaBD;
+    private final ObjectProperty<UUID> idParaBD = new SimpleObjectProperty<>(this, "idParaBD", null);
 
     public UUID getIdParaBD() {
-        return idParaBD;
+        return idParaBD.get();
     }
 
     public void setIdParaBD(UUID idParaBD) {
-        this.idParaBD = idParaBD;
+        this.idParaBD.set(idParaBD);
+    }
+
+    public ObjectProperty<UUID> idParaBDProperty() {
+        return idParaBD;
     }
 
     @SuppressWarnings("RedundantIfStatement")
@@ -26,7 +35,8 @@ public class AuteurParaBDLite extends AuteurLite {
 
         AuteurParaBDLite that = (AuteurParaBDLite) o;
 
-        if (idParaBD != null ? !idParaBD.equals(that.idParaBD) : that.idParaBD != null) return false;
+        if (getIdParaBD() != null ? !getIdParaBD().equals(that.getIdParaBD()) : that.getIdParaBD() != null)
+            return false;
 
         return true;
     }
@@ -34,7 +44,7 @@ public class AuteurParaBDLite extends AuteurLite {
     @Override
     public int hashCode() {
         int result = super.hashCode();
-        result = 31 * result + (idParaBD != null ? idParaBD.hashCode() : 0);
+        result = 31 * result + (getIdParaBD() != null ? getIdParaBD().hashCode() : 0);
         return result;
     }
 

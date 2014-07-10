@@ -1,7 +1,7 @@
 package org.tetram.bdtheque.gui.utils;
 
 import javafx.beans.property.*;
-import org.tetram.bdtheque.data.bean.AbstractEntity;
+import org.tetram.bdtheque.data.bean.abstractentities.AbstractEntity;
 import org.tetram.bdtheque.utils.StringUtils;
 
 /**

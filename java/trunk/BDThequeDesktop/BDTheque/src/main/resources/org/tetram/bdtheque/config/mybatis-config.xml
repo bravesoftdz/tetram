@@ -42,7 +42,6 @@
         <typeAlias type="org.tetram.bdtheque.data.bean.Album" alias="beanAlbum"/>
         <typeAlias type="org.tetram.bdtheque.data.bean.AlbumLite" alias="beanAlbumLite"/>
         <typeAlias type="org.tetram.bdtheque.data.bean.AuteurAlbumLite" alias="beanAuteurAlbumLite"/>
-        <typeAlias type="org.tetram.bdtheque.data.bean.AuteurLite" alias="beanAuteurLite"/>
         <typeAlias type="org.tetram.bdtheque.data.bean.AuteurParaBDLite" alias="beanAuteurParaBDLite"/>
         <typeAlias type="org.tetram.bdtheque.data.bean.AuteurSerieLite" alias="beanAuteurSerieLite"/>
         <typeAlias type="org.tetram.bdtheque.data.bean.Collection" alias="beanCollection"/>
@@ -54,7 +53,6 @@
         <typeAlias type="org.tetram.bdtheque.data.bean.Edition" alias="beanEdition"/>
         <typeAlias type="org.tetram.bdtheque.data.bean.EditionLite" alias="beanEditionLite"/>
         <typeAlias type="org.tetram.bdtheque.data.bean.GenreLite" alias="beanGenreLite"/>
-        <typeAlias type="org.tetram.bdtheque.data.bean.ImageLite" alias="beanImageLite"/>
         <typeAlias type="org.tetram.bdtheque.data.bean.ParaBD" alias="beanParaBD"/>
         <typeAlias type="org.tetram.bdtheque.data.bean.ParaBDLite" alias="beanParaBDLite"/>
         <typeAlias type="org.tetram.bdtheque.data.bean.Personne" alias="beanPersonne"/>

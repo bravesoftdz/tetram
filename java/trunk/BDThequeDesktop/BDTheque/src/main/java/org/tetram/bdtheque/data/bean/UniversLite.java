@@ -3,6 +3,7 @@ package org.tetram.bdtheque.data.bean;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import org.tetram.bdtheque.data.BeanUtils;
+import org.tetram.bdtheque.data.bean.abstractentities.AbstractDBEntity;
 
 /**
  * Created by Thierry on 24/05/2014.
@@ -10,7 +11,7 @@ import org.tetram.bdtheque.data.BeanUtils;
 @SuppressWarnings("UnusedDeclaration")
 public class UniversLite extends AbstractDBEntity {
 
-    private StringProperty nomUnivers = new SimpleStringProperty(null);
+    private final StringProperty nomUnivers = new SimpleStringProperty(null);
 
     public String getNomUnivers() {
         return BeanUtils.trimOrNull(nomUnivers.get());

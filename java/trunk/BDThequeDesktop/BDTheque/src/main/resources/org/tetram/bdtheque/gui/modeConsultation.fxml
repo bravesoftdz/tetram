@@ -3,7 +3,8 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.layout.AnchorPane?>
-<SplitPane xmlns:fx="http://javafx.com/fxml/1" dividerPositions="0.22429906542056074" focusTraversable="false" prefHeight="471.0"
+<SplitPane xmlns:fx="http://javafx.com/fxml/1" dividerPositions="0.22429906542056074" focusTraversable="false"
+           prefHeight="471.0"
            prefWidth="644.0" xmlns="http://javafx.com/javafx/8"
            fx:controller="org.tetram.bdtheque.gui.controllers.ModeConsultationController">
     <items>

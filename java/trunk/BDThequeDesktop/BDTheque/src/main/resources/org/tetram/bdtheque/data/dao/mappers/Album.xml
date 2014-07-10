@@ -1,39 +1,30 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="org.tetram.bdtheque.data.dao.mappers.AlbumMapper">
-    <resultMap id="AlbumLite" type="beanAlbumLite">
+    <resultMap id="AbstractAlbum" type="org.tetram.bdtheque.data.bean.abstractentities.AbstractAlbum">
         <id column="id_album" property="id"/>
-        <result column="titreAlbum" property="titre"/>
+        <result column="titreAlbum" property="titreAlbum"/>
+        <result column="AnneeParution" property="anneeParution"/>
+        <result column="MoisParution" property="moisParution"/>
         <result column="tome" property="tome"/>
         <result column="TomeDebut" property="tomeDebut"/>
         <result column="TomeFin" property="tomeFin"/>
-        <result column="id_serie" property="idSerie"/>
         <result column="integrale" property="integrale"/>
         <result column="HorsSerie" property="horsSerie"/>
+        <result column="notation" property="notation"/>
+        <result column="complet" property="complet"/>
+    </resultMap>
+    <resultMap id="AlbumLite" extends="AbstractAlbum" type="beanAlbumLite">
+        <result column="id_serie" property="idSerie"/>
         <result column="id_editeur" property="idEditeur"/>
         <result column="TitreSerie" property="serie"/>
         <result column="NomEditeur" property="editeur"/>
-        <result column="MoisParution" property="moisParution"/>
-        <result column="AnneeParution" property="anneeParution"/>
         <result column="stock" property="stock"/>
         <result column="achat" property="achat"/>
-        <result column="complet" property="complet"/>
-        <result column="notation" property="notation"/>
     </resultMap>
-    <resultMap id="AlbumFull" type="beanAlbum">
-        <id column="id_album" property="id"/>
-        <result column="TitreAlbum" property="titreAlbum"/>
-        <result column="AnneeParution" property="anneeParution"/>
-        <result column="MoisParution" property="moisParution"/>
+    <resultMap id="AlbumFull" extends="AbstractAlbum" type="beanAlbum">
         <result column="SujetAlbum" property="sujet"/>
         <result column="RemarquesAlbum" property="notes"/>
-        <result column="tome" property="tome"/>
-        <result column="TomeDebut" property="tomeDebut"/>
-        <result column="TomeFin" property="tomeFin"/>
-        <result column="integrale" property="integrale"/>
-        <result column="HorsSerie" property="horsSerie"/>
-        <result column="notation" property="notation"/>
-        <result column="complet" property="complet"/>
         <association property="serie" select="org.tetram.bdtheque.data.dao.mappers.SerieMapper.getSerieById"
                      column="id_serie"/>
         <collection property="univers"

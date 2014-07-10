@@ -4,7 +4,7 @@ import org.apache.ibatis.annotations.Param;
 import org.tetram.bdtheque.data.BlobContainer;
 import org.tetram.bdtheque.utils.FileLink;
 
-import java.util.Set;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -12,7 +12,7 @@ import java.util.UUID;
  */
 @FileLink("/org/tetram/bdtheque/data/dao/mappers/Common.xml")
 public interface CommonMapper extends BaseMapperInterface {
-    Set<String> fillAssociations(@Param("id") UUID id, @Param("typeData") int typeData);
+    List<String> fillAssociations(@Param("id") UUID id, @Param("typeData") int typeData);
 
     int cleanAssociations(@Param("id") UUID id, @Param("typeData") int typeData);
 

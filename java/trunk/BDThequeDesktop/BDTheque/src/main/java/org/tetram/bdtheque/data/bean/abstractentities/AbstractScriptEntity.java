@@ -1,11 +1,11 @@
-package org.tetram.bdtheque.data.bean;
+package org.tetram.bdtheque.data.bean.abstractentities;
 
-import javafx.beans.property.SetProperty;
-import javafx.beans.property.SimpleSetProperty;
+import javafx.beans.property.ListProperty;
+import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
+import org.tetram.bdtheque.data.bean.ScriptEntity;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 /**
  * Created by Thierry on 11/06/2014.
@@ -13,19 +13,19 @@ import java.util.Set;
 @SuppressWarnings("UnusedDeclaration")
 public abstract class AbstractScriptEntity extends AbstractDBEntity implements ScriptEntity {
 
-    private SetProperty<String> associations = new SimpleSetProperty<>(this, "associations", FXCollections.observableSet(new HashSet<>()));
+    private final ListProperty<String> associations = new SimpleListProperty<>(this, "associations", FXCollections.observableArrayList());
 
     @Override
-    public Set<String> getAssociations() {
+    public List<String> getAssociations() {
         return associations.get();
     }
 
     @Override
-    public void setAssociations(Set<String> associations) {
-        this.associations.set(FXCollections.observableSet(associations));
+    public void setAssociations(List<String> associations) {
+        this.associations.set(FXCollections.observableList(associations));
     }
 
-    public SetProperty<String> associationsProperty() {
+    public ListProperty<String> associationsProperty() {
         return associations;
     }
 

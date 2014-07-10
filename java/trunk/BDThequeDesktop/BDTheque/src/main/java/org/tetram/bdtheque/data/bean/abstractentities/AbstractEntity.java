@@ -1,4 +1,4 @@
-package org.tetram.bdtheque.data.bean;
+package org.tetram.bdtheque.data.bean.abstractentities;
 
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.property.StringProperty;

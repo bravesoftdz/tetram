@@ -4,13 +4,14 @@ import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import org.tetram.bdtheque.data.BeanUtils;
+import org.tetram.bdtheque.data.bean.abstractentities.AbstractSerie;
 import org.tetram.bdtheque.data.dao.DaoScriptImpl;
 import org.tetram.bdtheque.data.dao.ValeurListeDao;
 import org.tetram.bdtheque.spring.SpringContext;
 import org.tetram.bdtheque.utils.StringUtils;
 
-import java.net.URL;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
@@ -19,61 +20,66 @@ import java.util.UUID;
  */
 @SuppressWarnings("UnusedDeclaration")
 @DaoScriptImpl.ScriptInfo(typeData = 7)
-public class Serie extends AbstractScriptEntity implements EvaluatedEntity, WebLinkedEntity {
+public class Serie extends AbstractSerie {
 
-    private StringProperty titreSerie = new SimpleStringProperty(this, "titreSerie", null);
-    private ObjectProperty<Boolean> terminee = new SimpleObjectProperty<>(this, "terminee", null);
-    private ListProperty<GenreLite> genres = new SimpleListProperty<>(this, "genres", FXCollections.<GenreLite>observableList(new ArrayList<>()));
-    private StringProperty sujet = new SimpleStringProperty(this, "sujet", null);
-    private StringProperty notes = new SimpleStringProperty(this, "notes", null);
-    private ObjectProperty<EditeurLite> editeur = new SimpleObjectProperty<>(this, "editeur", null);
-    private ObjectProperty<CollectionLite> collection = new SimpleObjectProperty<>(this, "collection", null);
-    private ObjectProperty<URL> siteWeb = new SimpleObjectProperty<>(this, "siteWeb", null);
-    private BooleanProperty complete = new SimpleBooleanProperty(this, "complete", false);
-    private BooleanProperty suivreManquants = new SimpleBooleanProperty(this, "suivreManquants", false);
-    private BooleanProperty suivreSorties = new SimpleBooleanProperty(this, "suivreSorties", false);
-    private IntegerProperty nbAlbums = new SimpleIntegerProperty(this, "nbAlbums", 0);
-    private ListProperty<AlbumLite> albums = new SimpleListProperty<>(this, "albums", FXCollections.<AlbumLite>observableList(new ArrayList<>()));
-    private ListProperty<ParaBDLite> paraBDs = new SimpleListProperty<>(this, "paraBDs", FXCollections.<ParaBDLite>observableList(new ArrayList<>()));
-    private ListProperty<AuteurSerieLite> auteurs = new SimpleListProperty<>(this, "auteurs", FXCollections.<AuteurSerieLite>observableList(new ArrayList<>()));
-    private ListProperty<AuteurSerieLite> scenaristes = new SimpleListProperty<>(this, "scenaristes", FXCollections.<AuteurSerieLite>observableList(new ArrayList<>()));
-    private ListProperty<AuteurSerieLite> dessinateurs = new SimpleListProperty<>(this, "dessinateurs", FXCollections.<AuteurSerieLite>observableList(new ArrayList<>()));
-    private ListProperty<AuteurSerieLite> coloristes = new SimpleListProperty<>(this, "coloristes", FXCollections.<AuteurSerieLite>observableList(new ArrayList<>()));
-    private ObjectProperty<Boolean> vo = new SimpleObjectProperty<>(this, "vo", null);
-    private ObjectProperty<Boolean> couleur = new SimpleObjectProperty<>(this, "couleur", null);
-    private ObjectProperty<ValeurListe> etat = new SimpleObjectProperty<>(this, "etat", null);
-    private ObjectProperty<ValeurListe> reliure = new SimpleObjectProperty<>(this, "reliure", null);
-    private ObjectProperty<ValeurListe> typeEdition = new SimpleObjectProperty<>(this, "typeEdition", null);
-    private ObjectProperty<ValeurListe> formatEdition = new SimpleObjectProperty<>(this, "formatEdition", null);
-    private ObjectProperty<ValeurListe> orientation = new SimpleObjectProperty<>(this, "orientation", null);
-    private ObjectProperty<ValeurListe> sensLecture = new SimpleObjectProperty<>(this, "sensLecture", null);
-    private ObjectProperty<ValeurListe> notation = new SimpleObjectProperty<>(this, "notation", null);
-    private ListProperty<UniversLite> univers = new SimpleListProperty<>(this, "univers", FXCollections.<UniversLite>observableList(new ArrayList<>()));
+    public static Comparator<SerieLite> DEFAULT_COMPARATOR = new Comparator<SerieLite>() {
+        @Override
+        public int compare(SerieLite o1, SerieLite o2) {
+            if (o1 == o2) return 0;
+
+            int comparaison;
+
+            comparaison = BeanUtils.compare(o1.getTitreSerie(), o2.getTitreSerie());
+            if (comparaison != 0) return comparaison;
+
+            comparaison = EditeurLite.DEFAULT_COMPARATOR.compare(o1.getEditeur(), o2.getEditeur());
+            if (comparaison != 0) return comparaison;
+
+            comparaison = CollectionLite.DEFAULT_COMPARATOR.compare(o1.getCollection(), o2.getCollection());
+            if (comparaison != 0) return comparaison;
+
+            return 0;
+        }
+    };
+
+    private final ObjectProperty<Boolean> terminee = new SimpleObjectProperty<>(this, "terminee", null);
+    private final ListProperty<GenreLite> genres = new SimpleListProperty<>(this, "genres", FXCollections.<GenreLite>observableArrayList());
+    private final StringProperty sujet = new SimpleStringProperty(this, "sujet", null);
+    private final StringProperty notes = new SimpleStringProperty(this, "notes", null);
+    private final ObjectProperty<EditeurLite> editeur = new SimpleObjectProperty<>(this, "editeur", null);
+    private final ObjectProperty<CollectionLite> collection = new SimpleObjectProperty<>(this, "collection", null);
+    private final BooleanProperty complete = new SimpleBooleanProperty(this, "complete", false);
+    private final BooleanProperty suivreManquants = new SimpleBooleanProperty(this, "suivreManquants", false);
+    private final BooleanProperty suivreSorties = new SimpleBooleanProperty(this, "suivreSorties", false);
+    private final IntegerProperty nbAlbums = new SimpleIntegerProperty(this, "nbAlbums", 0);
+    private final ListProperty<AlbumLite> albums = new SimpleListProperty<>(this, "albums", FXCollections.<AlbumLite>observableArrayList());
+    private final ListProperty<ParaBDLite> paraBDs = new SimpleListProperty<>(this, "paraBDs", FXCollections.<ParaBDLite>observableArrayList());
+    private final ListProperty<AuteurSerieLite> auteurs = new SimpleListProperty<>(this, "auteurs", FXCollections.<AuteurSerieLite>observableArrayList());
+    private final ListProperty<AuteurSerieLite> scenaristes = new SimpleListProperty<>(this, "scenaristes", FXCollections.<AuteurSerieLite>observableArrayList());
+    private final ListProperty<AuteurSerieLite> dessinateurs = new SimpleListProperty<>(this, "dessinateurs", FXCollections.<AuteurSerieLite>observableArrayList());
+    private final ListProperty<AuteurSerieLite> coloristes = new SimpleListProperty<>(this, "coloristes", FXCollections.<AuteurSerieLite>observableArrayList());
+    private final ObjectProperty<Boolean> vo = new SimpleObjectProperty<>(this, "vo", null);
+    private final ObjectProperty<Boolean> couleur = new SimpleObjectProperty<>(this, "couleur", null);
+    private final ObjectProperty<ValeurListe> etat = new SimpleObjectProperty<>(this, "etat", null);
+    private final ObjectProperty<ValeurListe> reliure = new SimpleObjectProperty<>(this, "reliure", null);
+    private final ObjectProperty<ValeurListe> typeEdition = new SimpleObjectProperty<>(this, "typeEdition", null);
+    private final ObjectProperty<ValeurListe> formatEdition = new SimpleObjectProperty<>(this, "formatEdition", null);
+    private final ObjectProperty<ValeurListe> orientation = new SimpleObjectProperty<>(this, "orientation", null);
+    private final ObjectProperty<ValeurListe> sensLecture = new SimpleObjectProperty<>(this, "sensLecture", null);
+    private final ListProperty<UniversLite> univers = new SimpleListProperty<>(this, "univers", FXCollections.<UniversLite>observableArrayList());
 
     public Serie() {
         ValeurListeDao valeurListeDao = SpringContext.CONTEXT.getBean(ValeurListeDao.class);
-        etat.set(valeurListeDao.getDefaultEtat());
-        reliure.set(valeurListeDao.getDefaultReliure());
-        typeEdition.set(valeurListeDao.getDefaultTypeEdition());
-        formatEdition.set(valeurListeDao.getDefaultFormatEdition());
-        orientation.set(valeurListeDao.getDefaultOrientation());
-        sensLecture.set(valeurListeDao.getDefaultSensLecture());
-        notation.set(valeurListeDao.getDefaultNotation());
+        setEtat(valeurListeDao.getDefaultEtat());
+        setReliure(valeurListeDao.getDefaultReliure());
+        setTypeEdition(valeurListeDao.getDefaultTypeEdition());
+        setFormatEdition(valeurListeDao.getDefaultFormatEdition());
+        setOrientation(valeurListeDao.getDefaultOrientation());
+        setSensLecture(valeurListeDao.getDefaultSensLecture());
+        setNotation(valeurListeDao.getDefaultNotation());
 
-        auteurs.addListener((observable, oldValue, newValue) -> buildListsAuteurs());
-        auteurs.addListener((ListChangeListener<AuteurSerieLite>) c -> buildListsAuteurs());
-    }
-
-    public String getTitreSerie() {
-        return BeanUtils.trimOrNull(titreSerie.get());
-    }
-
-    public void setTitreSerie(String titreSerie) {
-        this.titreSerie.set(BeanUtils.trimOrNull(titreSerie));
-    }
-
-    public StringProperty titreSerieProperty() {
-        return titreSerie;
+        auteursProperty().addListener((observable, oldValue, newValue) -> buildListsAuteurs());
+        auteursProperty().addListener((ListChangeListener<AuteurSerieLite>) c -> buildListsAuteurs());
     }
 
     public Boolean isTerminee() {
@@ -162,21 +168,6 @@ public class Serie extends AbstractScriptEntity implements EvaluatedEntity, WebL
 
     public UUID getIdCollection() {
         return getEditeur() == null || getCollection() == null || !getCollection().getEditeur().equals(getEditeur()) ? null : getCollection().getId();
-    }
-
-    @Override
-    public URL getSiteWeb() {
-        return siteWeb.get();
-    }
-
-    @Override
-    public void setSiteWeb(URL siteWeb) {
-        this.siteWeb.set(siteWeb);
-    }
-
-    @Override
-    public ObjectProperty<URL> siteWebProperty() {
-        return siteWeb;
     }
 
     public boolean isComplete() {
@@ -373,18 +364,6 @@ public class Serie extends AbstractScriptEntity implements EvaluatedEntity, WebL
 
     public ObjectProperty<Boolean> couleurProperty() {
         return couleur;
-    }
-
-    public ValeurListe getNotation() {
-        return notation.get();
-    }
-
-    public void setNotation(ValeurListe notation) {
-        this.notation.set(notation == null || notation.getValeur() == 0 ? SpringContext.CONTEXT.getBean(ValeurListeDao.class).getDefaultNotation() : notation);
-    }
-
-    public ObjectProperty<ValeurListe> notationProperty() {
-        return notation;
     }
 
     public List<UniversLite> getUnivers() {

@@ -39,4 +39,8 @@ public class TypeUtils {
     public static String nonZero(Year year) {
         return year == null || year.equals(Year.of(0)) ? "" : year.toString();
     }
+
+    public static boolean isNullOrZero(UUID uuid) {
+        return uuid == null || uuid.equals(GUID_NULL);
+    }
 }

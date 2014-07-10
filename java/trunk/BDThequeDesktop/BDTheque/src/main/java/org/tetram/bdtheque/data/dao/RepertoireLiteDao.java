@@ -1,7 +1,7 @@
 package org.tetram.bdtheque.data.dao;
 
 import org.tetram.bdtheque.data.BeanUtils;
-import org.tetram.bdtheque.data.bean.AbstractDBEntity;
+import org.tetram.bdtheque.data.bean.abstractentities.AbstractDBEntity;
 import org.tetram.bdtheque.gui.utils.InitialeEntity;
 
 import java.util.List;

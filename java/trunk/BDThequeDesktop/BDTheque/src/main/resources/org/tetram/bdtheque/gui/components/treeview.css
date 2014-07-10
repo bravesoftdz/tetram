@@ -1,1 +1,2 @@
 .column-header-background { visibility: hidden; display: none; -fx-padding: -2em; }
+.node-bold { -fx-font-weight: bold; }

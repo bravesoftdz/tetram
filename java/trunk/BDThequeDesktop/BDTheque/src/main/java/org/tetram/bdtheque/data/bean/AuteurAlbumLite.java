@@ -1,20 +1,28 @@
 package org.tetram.bdtheque.data.bean;
 
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+
 import java.util.UUID;
 
 /**
  * Created by Thierry on 24/05/2014.
  */
+@SuppressWarnings("UnusedDeclaration")
 public class AuteurAlbumLite extends AuteurSerieLite {
 
-    private UUID idAlbum;
+    private final ObjectProperty<UUID> idAlbum = new SimpleObjectProperty<>(this, "idAlbum", null);
 
     public UUID getIdAlbum() {
-        return idAlbum;
+        return idAlbum.get();
     }
 
     public void setIdAlbum(UUID idAlbum) {
-        this.idAlbum = idAlbum;
+        this.idAlbum.set(idAlbum);
+    }
+
+    public ObjectProperty<UUID> idAlbumProperty() {
+        return idAlbum;
     }
 
     @SuppressWarnings("RedundantIfStatement")
@@ -26,7 +34,7 @@ public class AuteurAlbumLite extends AuteurSerieLite {
 
         AuteurAlbumLite that = (AuteurAlbumLite) other;
 
-        if (idAlbum != null ? !idAlbum.equals(that.idAlbum) : that.idAlbum != null) return false;
+        if (getIdAlbum() != null ? !getIdAlbum().equals(that.getIdAlbum()) : that.getIdAlbum() != null) return false;
 
         return true;
     }
@@ -34,7 +42,7 @@ public class AuteurAlbumLite extends AuteurSerieLite {
     @Override
     public int hashCode() {
         int result = super.hashCode();
-        result = 31 * result + (idAlbum != null ? idAlbum.hashCode() : 0);
+        result = 31 * result + (getIdAlbum() != null ? getIdAlbum().hashCode() : 0);
         return result;
     }
 

@@ -5,6 +5,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import org.tetram.bdtheque.data.BeanUtils;
+import org.tetram.bdtheque.data.bean.abstractentities.AbstractDBEntity;
 
 import java.net.URL;
 import java.util.UUID;
@@ -15,10 +16,10 @@ import java.util.UUID;
 @SuppressWarnings("UnusedDeclaration")
 public class Univers extends AbstractDBEntity implements WebLinkedEntity {
 
-    private StringProperty nomUnivers = new SimpleStringProperty(null);
-    private ObjectProperty<URL> siteWeb = new SimpleObjectProperty<>(null);
-    private StringProperty description = new SimpleStringProperty(null);
-    private ObjectProperty<UniversLite> universParent = new SimpleObjectProperty<>(null);
+    private final StringProperty nomUnivers = new SimpleStringProperty(null);
+    private final ObjectProperty<URL> siteWeb = new SimpleObjectProperty<>(null);
+    private final StringProperty description = new SimpleStringProperty(null);
+    private final ObjectProperty<UniversLite> universParent = new SimpleObjectProperty<>(null);
 
     public String getNomUnivers() {
         return BeanUtils.trimOrNull(nomUnivers.get());

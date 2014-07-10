@@ -1,7 +1,7 @@
 package org.tetram.bdtheque.data.dao;
 
 import org.jetbrains.annotations.NotNull;
-import org.tetram.bdtheque.data.bean.AbstractScriptEntity;
+import org.tetram.bdtheque.data.bean.abstractentities.AbstractScriptEntity;
 
 /**
  * Created by Thierry on 12/06/2014.

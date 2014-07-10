@@ -1,15 +1,16 @@
 package org.tetram.bdtheque.data.bean;
 
-import java.util.Set;
+import java.util.List;
 
 /**
  * Created by Thierry on 11/06/2014.
  */
+@SuppressWarnings("UnusedDeclaration")
 public interface ScriptEntity {
 
-    Set<String> getAssociations();
+    List<String> getAssociations();
 
-    void setAssociations(Set<String> associations);
+    void setAssociations(List<String> associations);
 
     boolean addAssociation(String association);
 

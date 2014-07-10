@@ -5,7 +5,7 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.jetbrains.annotations.NonNls;
 import org.mybatis.spring.support.SqlSessionDaoSupport;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.tetram.bdtheque.data.bean.AbstractDBEntity;
+import org.tetram.bdtheque.data.bean.abstractentities.AbstractDBEntity;
 import org.tetram.bdtheque.utils.GenericUtils;
 import org.tetram.bdtheque.utils.logging.Log;
 import org.tetram.bdtheque.utils.logging.LogManager;

@@ -1,6 +1,10 @@
 package org.tetram.bdtheque.data.bean;
 
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import org.tetram.bdtheque.data.BeanUtils;
+import org.tetram.bdtheque.data.bean.abstractentities.AbstractAuteur;
+import org.tetram.bdtheque.data.bean.abstractentities.AbstractPersonne;
 
 import java.util.Comparator;
 import java.util.UUID;
@@ -8,10 +12,9 @@ import java.util.UUID;
 /**
  * Created by Thierry on 24/05/2014.
  */
-public class AuteurSerieLite extends AuteurLite {
+@SuppressWarnings("UnusedDeclaration")
+public class AuteurSerieLite extends AbstractAuteur {
 
-    private UUID idSerie;
-    private MetierAuteur metier;
     public static Comparator<AuteurSerieLite> DEFAULT_COMPARATOR = new Comparator<AuteurSerieLite>() {
         @Override
         public int compare(AuteurSerieLite o1, AuteurSerieLite o2) {
@@ -19,30 +22,40 @@ public class AuteurSerieLite extends AuteurLite {
 
             int comparaison;
 
-            comparaison = BeanUtils.compare(o1.metier, o2.metier);
+            comparaison = BeanUtils.compare(o1.getMetier(), o2.getMetier());
             if (comparaison != 0) return comparaison;
 
-            comparaison = PersonneLite.DEFAULT_COMPARATOR.compare(o1.getPersonne(), o2.getPersonne());
+            comparaison = AbstractPersonne.DEFAULT_COMPARATOR.compare(o1.getPersonne(), o2.getPersonne());
             if (comparaison != 0) return comparaison;
 
             return 0;
         }
     };
-
-    public MetierAuteur getMetier() {
-        return metier;
-    }
-
-    public void setMetier(MetierAuteur metier) {
-        this.metier = metier;
-    }
+    private final ObjectProperty<UUID> idSerie = new SimpleObjectProperty<>(this, "idSerie", null);
+    private final ObjectProperty<MetierAuteur> metier = new SimpleObjectProperty<>(this, "metier", null);
 
     public UUID getIdSerie() {
-        return idSerie;
+        return idSerie.get();
     }
 
     public void setIdSerie(UUID idSerie) {
-        this.idSerie = idSerie;
+        this.idSerie.set(idSerie);
+    }
+
+    public ObjectProperty<UUID> idSerieProperty() {
+        return idSerie;
+    }
+
+    public MetierAuteur getMetier() {
+        return metier.get();
+    }
+
+    public void setMetier(MetierAuteur metier) {
+        this.metier.set(metier);
+    }
+
+    public ObjectProperty<MetierAuteur> metierProperty() {
+        return metier;
     }
 
     @SuppressWarnings("RedundantIfStatement")
@@ -54,8 +67,8 @@ public class AuteurSerieLite extends AuteurLite {
 
         AuteurSerieLite that = (AuteurSerieLite) other;
 
-        if (BeanUtils.compare(this.idSerie, that.idSerie) != 0) return false;
-        if (BeanUtils.compare(this.metier, that.metier) != 0) return false;
+        if (BeanUtils.compare(this.getIdSerie(), that.getIdSerie()) != 0) return false;
+        if (BeanUtils.compare(this.getMetier(), that.getMetier()) != 0) return false;
 
         return true;
     }
@@ -63,8 +76,8 @@ public class AuteurSerieLite extends AuteurLite {
     @Override
     public int hashCode() {
         int result = super.hashCode();
-        result = 31 * result + (idSerie != null ? idSerie.hashCode() : 0);
-        result = 31 * result + (metier != null ? metier.hashCode() : 0);
+        result = 31 * result + (getIdSerie() != null ? getIdSerie().hashCode() : 0);
+        result = 31 * result + (getMetier() != null ? getMetier().hashCode() : 0);
         return result;
     }
 

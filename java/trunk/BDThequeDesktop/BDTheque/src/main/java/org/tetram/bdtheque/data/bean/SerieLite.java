@@ -2,11 +2,8 @@ package org.tetram.bdtheque.data.bean;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 import org.tetram.bdtheque.data.BeanUtils;
-import org.tetram.bdtheque.data.dao.ValeurListeDao;
-import org.tetram.bdtheque.spring.SpringContext;
+import org.tetram.bdtheque.data.bean.abstractentities.AbstractSerie;
 import org.tetram.bdtheque.utils.StringUtils;
 
 import java.util.Comparator;
@@ -15,7 +12,7 @@ import java.util.Comparator;
  * Created by Thierry on 24/05/2014.
  */
 @SuppressWarnings("UnusedDeclaration")
-public class SerieLite extends AbstractDBEntity implements EvaluatedEntity {
+public class SerieLite extends AbstractSerie {
 
     public static Comparator<SerieLite> DEFAULT_COMPARATOR = new Comparator<SerieLite>() {
         @Override
@@ -36,22 +33,8 @@ public class SerieLite extends AbstractDBEntity implements EvaluatedEntity {
             return 0;
         }
     };
-    private StringProperty titreSerie = new SimpleStringProperty(this, "titreSerie", null);
-    private ObjectProperty<EditeurLite> editeur = new SimpleObjectProperty<>(this, "editeur", null);
-    private ObjectProperty<CollectionLite> collection = new SimpleObjectProperty<>(this, "collection", null);
-    private ObjectProperty<ValeurListe> notation = new SimpleObjectProperty<>(this, "notation", SpringContext.CONTEXT.getBean(ValeurListeDao.class).getDefaultNotation());
-
-    public String getTitreSerie() {
-        return BeanUtils.trimOrNull(titreSerie.get());
-    }
-
-    public void setTitreSerie(String titreSerie) {
-        this.titreSerie.set(BeanUtils.trimOrNull(titreSerie));
-    }
-
-    public StringProperty titreSerieProperty() {
-        return titreSerie;
-    }
+    private final ObjectProperty<EditeurLite> editeur = new SimpleObjectProperty<>(this, "editeur", null);
+    private final ObjectProperty<CollectionLite> collection = new SimpleObjectProperty<>(this, "collection", null);
 
     public EditeurLite getEditeur() {
         return editeur.get();
@@ -75,18 +58,6 @@ public class SerieLite extends AbstractDBEntity implements EvaluatedEntity {
 
     public ObjectProperty<CollectionLite> collectionProperty() {
         return collection;
-    }
-
-    public ValeurListe getNotation() {
-        return notation.get();
-    }
-
-    public void setNotation(ValeurListe notation) {
-        this.notation.set(notation == null || notation.getValeur() == 0 ? SpringContext.CONTEXT.getBean(ValeurListeDao.class).getDefaultNotation() : notation);
-    }
-
-    public ObjectProperty<ValeurListe> notationProperty() {
-        return notation;
     }
 
     @Override
