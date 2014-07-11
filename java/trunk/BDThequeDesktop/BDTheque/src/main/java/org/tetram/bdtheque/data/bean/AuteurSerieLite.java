@@ -35,10 +35,10 @@ public class AuteurSerieLite extends BaseAuteur {
     private final ObjectProperty<UUID> idSerie = new SimpleObjectProperty<>(this, "idSerie", null);
     private final ObjectProperty<MetierAuteur> metier = new SimpleObjectProperty<>(this, "metier", null);
 
-    static {
-        baseClass = AuteurSerieLite.class;
+    @Override
+    public Class<? extends AbstractDBEntity> getBaseClass() {
+        return AuteurSerieLite.class;
     }
-
 
     public UUID getIdSerie() {
         return idSerie.get();

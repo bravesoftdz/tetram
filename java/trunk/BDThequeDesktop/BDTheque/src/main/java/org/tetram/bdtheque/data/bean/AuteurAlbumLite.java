@@ -14,8 +14,9 @@ public class AuteurAlbumLite extends AuteurSerieLite {
 
     private final ObjectProperty<UUID> idAlbum = new SimpleObjectProperty<>(this, "idAlbum", null);
 
-    static {
-        baseClass = AuteurAlbumLite.class;
+    @Override
+    public Class<? extends AbstractDBEntity> getBaseClass() {
+        return AuteurAlbumLite.class;
     }
 
 

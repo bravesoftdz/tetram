@@ -32,7 +32,6 @@ public class Forms {
         entitiesUrl.put(BaseParaBD.class, "consultation/ficheParabd.fxml");
     }
 
-    // on ne peut pas simplement utiliser entitiesUrl.get : CGLIB ajoute une surcharge
     static String searchForURL(Class<? extends AbstractDBEntity> clasz) {
         for (Map.Entry<Class<? extends AbstractDBEntity>, String> entry : entitiesUrl.entrySet()) {
             if (entry.getKey().isAssignableFrom(clasz))
@@ -70,7 +69,7 @@ public class Forms {
 
     @SuppressWarnings("UnusedDeclaration")
     public static <T extends WindowController & ConsultationController> T showFiche(AbstractDBEntity entity, Pane container) {
-        String url = searchForURL(entity.getClass());
+        String url = entitiesUrl.get(entity.getBaseClass());
         if (url == null) {
             org.controlsfx.dialog.Dialogs.create().message(entity.toString()).showInformation();
             return null;
@@ -83,7 +82,7 @@ public class Forms {
 
     @SuppressWarnings("UnusedDeclaration")
     public static <T extends WindowController & ConsultationController> T showFiche(AbstractDBEntity entity, ScrollPane container) {
-        String url = searchForURL(entity.getClass());
+        String url = entitiesUrl.get(entity.getBaseClass());
         if (url == null) {
             org.controlsfx.dialog.Dialogs.create().message(entity.toString()).showInformation();
             return null;
@@ -96,7 +95,7 @@ public class Forms {
 
     @SuppressWarnings("UnusedDeclaration")
     public static <T extends WindowController & ConsultationController> T showFiche(AbstractDBEntity entity, ObjectProperty<Node> container) {
-        String url = searchForURL(entity.getClass());
+        String url = entitiesUrl.get(entity.getBaseClass());
         if (url == null) {
             org.controlsfx.dialog.Dialogs.create().message(entity.toString()).showInformation();
             return null;

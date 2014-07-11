@@ -13,15 +13,18 @@ import java.util.UUID;
 @SuppressWarnings("UnusedDeclaration")
 public abstract class AbstractDBEntity extends AbstractEntity implements DBEntity {
 
-    static protected Class<? extends AbstractDBEntity> baseClass = AbstractDBEntity.class;
     private final ObjectProperty<UUID> id = new SimpleObjectProperty<>(this, "id", null);
+
+    public Class<? extends AbstractDBEntity> getBaseClass() {
+        return AbstractDBEntity.class;
+    }
 
     @Override
     public ObjectProperty<UUID> idProperty() {
         return id;
     }
 
-    @SuppressWarnings({"RedundantIfStatement", "AccessStaticViaInstance"})
+    @SuppressWarnings("RedundantIfStatement")
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -29,7 +32,7 @@ public abstract class AbstractDBEntity extends AbstractEntity implements DBEntit
 
         AbstractDBEntity that = (AbstractDBEntity) o;
 
-        if (baseClass != that.baseClass) return false;
+        if (getBaseClass() != that.getBaseClass()) return false;
         if (getId() != null ? !getId().equals(that.getId()) : that.getId() != null) return false;
 
         return true;

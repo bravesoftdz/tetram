@@ -1,5 +1,6 @@
 package org.tetram.bdtheque.data.bean;
 
+import org.tetram.bdtheque.data.bean.abstractentities.AbstractDBEntity;
 import org.tetram.bdtheque.data.bean.abstractentities.BaseImage;
 import org.tetram.bdtheque.data.dao.ValeurListeDao;
 import org.tetram.bdtheque.spring.SpringContext;
@@ -9,8 +10,9 @@ import org.tetram.bdtheque.spring.SpringContext;
  */
 public class PhotoLite extends BaseImage {
 
-    static {
-        baseClass = PhotoLite.class;
+    @Override
+    public Class<? extends AbstractDBEntity> getBaseClass() {
+        return PhotoLite.class;
     }
 
 

@@ -31,8 +31,9 @@ public class GenreLite extends AbstractDBEntity implements ScriptEntity {
     private final IntegerProperty quantite = new SimpleIntegerProperty(this, "quantite", 0);
     private final ListProperty<String> associations = new SimpleListProperty<>(this, "associations", FXCollections.observableArrayList());
 
-    static {
-        baseClass = GenreLite.class;
+    @Override
+    public Class<? extends AbstractDBEntity> getBaseClass() {
+        return GenreLite.class;
     }
 
 

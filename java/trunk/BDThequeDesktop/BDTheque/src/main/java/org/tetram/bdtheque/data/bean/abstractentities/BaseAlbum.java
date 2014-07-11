@@ -57,8 +57,9 @@ public abstract class BaseAlbum extends AbstractDBEntity implements EvaluatedEnt
     private final BooleanProperty integrale = new SimpleBooleanProperty(this, "integrale", false);
     private final ObjectProperty<ValeurListe> notation = new SimpleObjectProperty<>(this, "notation", null);
 
-    static {
-        baseClass = BaseAlbum.class;
+    @Override
+    public Class<? extends AbstractDBEntity> getBaseClass() {
+        return BaseAlbum.class;
     }
 
     protected BaseAlbum() {

@@ -26,6 +26,7 @@ import org.tetram.bdtheque.data.bean.interfaces.EvaluatedEntity;
 import org.tetram.bdtheque.data.services.UserPreferences;
 import org.tetram.bdtheque.gui.controllers.ModeConsultationController;
 import org.tetram.bdtheque.gui.controllers.WindowController;
+import org.tetram.bdtheque.gui.utils.InitialeEntity;
 import org.tetram.bdtheque.gui.utils.NotationResource;
 import org.tetram.bdtheque.utils.FileLink;
 import org.tetram.bdtheque.utils.FileLinks;
@@ -62,7 +63,7 @@ public class TreeViewController extends WindowController {
     private BooleanProperty clickToShow = new SimpleBooleanProperty(this, "clickToShow", true);
     private ObjectProperty<EventHandler<MouseEvent>> onClickItem = new SimpleObjectProperty<>(this, "onClickItem", null);
     private ObjectProperty<Callback<TreeViewNode, List<? extends AbstractEntity>>> onGetChildren = new SimpleObjectProperty<>(this, "onGetChildren", null);
-    private ObjectProperty<Callback<TreeViewNode, Boolean>> onIsLeaf = new SimpleObjectProperty<>(this, "onIsLeaf", param -> true);
+    private ObjectProperty<Callback<TreeViewNode, Boolean>> onIsLeaf = new SimpleObjectProperty<>(this, "onIsLeaf", null);
     private ObjectProperty<Callback<TreeViewNode, String>> onGetLabel = new SimpleObjectProperty<>(this, "onGetLabel", null);
     private ObjectProperty<Class<? extends AbstractEntity>> finalEntityClass = new SimpleObjectProperty<>(this, "finalEntityClass", AbstractEntity.class);
 
@@ -150,7 +151,7 @@ public class TreeViewController extends WindowController {
         final BooleanBinding column1Visible = Bindings.and(userPreferences.afficheNoteListesProperty(), finalEntityClassIsEvaluated);
         column1.visibleProperty().bind(column1Visible);
 
-        Platform.runLater(() -> treeview.setRoot(new TreeViewNode(null)));
+        Platform.runLater(this::refresh);
     }
 
     public boolean getClickToShow() {
@@ -213,7 +214,7 @@ public class TreeViewController extends WindowController {
         return onGetLabel;
     }
 
-    public TreeTableView<AbstractEntity> getTreeview() {
+    public TreeTableView<AbstractEntity> getTreeView() {
         return treeview;
     }
 
@@ -235,6 +236,10 @@ public class TreeViewController extends WindowController {
 
     public void setFinalEntityClass(Class<? extends AbstractEntity> finalEntityClass) {
         this.finalEntityClass.set(finalEntityClass);
+    }
+
+    public void refresh() {
+        treeview.setRoot(new TreeViewNode(null));
     }
 
     public class TreeViewNode extends TreeItem<AbstractEntity> {
@@ -259,7 +264,7 @@ public class TreeViewController extends WindowController {
         public boolean isLeaf() {
             if (isFirstTimeLeaf) {
                 isFirstTimeLeaf = false;
-                isLeaf = getOnIsLeaf() == null ? true : getOnIsLeaf().call(this);
+                isLeaf = getOnIsLeaf() == null ? (this.getValue() != null && !(this.getValue() instanceof InitialeEntity)) : getOnIsLeaf().call(this);
             }
             return isLeaf;
         }

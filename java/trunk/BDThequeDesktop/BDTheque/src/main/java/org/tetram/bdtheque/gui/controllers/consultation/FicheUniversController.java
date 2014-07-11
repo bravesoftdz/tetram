@@ -93,20 +93,17 @@ public class FicheUniversController extends WindowController implements Consulta
             final AbstractEntity entity = treeItem.getValue();
             if (entity == null)
                 return null;
-            else if (BaseAlbum.class.isAssignableFrom(entity.getClass()))
+            else if (entity instanceof BaseAlbum)
                 return ((BaseAlbum) entity).buildLabel(false);
             else
                 return entity.buildLabel();
-        });
-        albumsController.setOnIsLeaf(treeItem -> {
-            return treeItem.getValue() != null && !InitialeEntity.class.isAssignableFrom(treeItem.getValue().getClass());
         });
         albumsController.onGetChildrenProperty().setValue(treeItem -> {
             final AbstractEntity entity = treeItem.getValue();
             if (entity == null) {
                 // c'est la racine
                 return albumLiteSerieDao.getInitiales(filtreBrancheUnivers);
-            } else if (InitialeEntity.class.isAssignableFrom(entity.getClass())) {
+            } else if (entity instanceof InitialeEntity) {
                 // c'est le niveau 1
                 return albumLiteSerieDao.getListEntitiesByInitiale((InitialeEntity<UUID>) entity, filtreBrancheUnivers);
             }
@@ -119,20 +116,17 @@ public class FicheUniversController extends WindowController implements Consulta
             final AbstractEntity entity = treeItem.getValue();
             if (entity == null)
                 return null;
-            else if (BaseParaBD.class.isAssignableFrom(entity.getClass()))
+            else if (entity instanceof BaseParaBD)
                 return ((BaseParaBD) entity).buildLabel(false);
             else
                 return entity.buildLabel();
-        });
-        parabdController.setOnIsLeaf(treeItem -> {
-            return treeItem.getValue() != null && !InitialeEntity.class.isAssignableFrom(treeItem.getValue().getClass());
         });
         parabdController.onGetChildrenProperty().setValue(treeItem -> {
             final AbstractEntity entity = treeItem.getValue();
             if (entity == null) {
                 // c'est la racine
                 return paraBDLiteDao.getInitiales(filtreBrancheUnivers);
-            } else if (InitialeEntity.class.isAssignableFrom(entity.getClass())) {
+            } else if (entity instanceof InitialeEntity) {
                 // c'est le niveau 1
                 return paraBDLiteDao.getListEntitiesByInitiale((InitialeEntity<UUID>) entity, filtreBrancheUnivers);
             }

@@ -21,8 +21,9 @@ public class ConversionLite extends AbstractDBEntity {
     private final StringProperty monnaie2 = new AutoTrimStringProperty(this, "monnaie2", null);
     private final DoubleProperty taux = new SimpleDoubleProperty(this, "taux", 0);
 
-    static {
-        baseClass = ConversionLite.class;
+    @Override
+    public Class<? extends AbstractDBEntity> getBaseClass() {
+        return ConversionLite.class;
     }
 
 

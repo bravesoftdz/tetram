@@ -43,18 +43,9 @@
             <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                     <children>
-                        <TreeTableView id="tvSeries" fx:id="tvSeries" showRoot="false" AnchorPane.bottomAnchor="0.0"
-                                       AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-                                       AnchorPane.topAnchor="0.0">
-                            <columns>
-                                <TreeTableColumn editable="false" sortable="false"/>
-                                <TreeTableColumn editable="false" maxWidth="52.0" minWidth="52.0" prefWidth="52.0"
-                                                 resizable="false" sortable="false"/>
-                            </columns>
-                            <columnResizePolicy>
-                                <TreeTableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
-                            </columnResizePolicy>
-                        </TreeTableView>
+                        <fx:include fx:id="series" source="components/treeview.fxml" AnchorPane.bottomAnchor="0.0"
+                                    AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                                    AnchorPane.topAnchor="0.0"/>
                     </children>
                 </AnchorPane>
             </content>
@@ -63,16 +54,9 @@
             <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                     <children>
-                        <TreeTableView id="tvUnivers" fx:id="tvUnivers" showRoot="false" AnchorPane.bottomAnchor="0.0"
-                                       AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-                                       AnchorPane.topAnchor="0.0">
-                            <columns>
-                                <TreeTableColumn editable="false" sortable="false"/>
-                            </columns>
-                            <columnResizePolicy>
-                                <TreeTableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
-                            </columnResizePolicy>
-                        </TreeTableView>
+                        <fx:include fx:id="univers" source="components/treeview.fxml" AnchorPane.bottomAnchor="0.0"
+                                    AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                                    AnchorPane.topAnchor="0.0"/>
                     </children>
                 </AnchorPane>
             </content>
@@ -81,16 +65,9 @@
             <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                     <children>
-                        <TreeTableView id="tvAuteurs" fx:id="tvAuteurs" showRoot="false" AnchorPane.bottomAnchor="0.0"
-                                       AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-                                       AnchorPane.topAnchor="0.0">
-                            <columns>
-                                <TreeTableColumn editable="false" sortable="false"/>
-                            </columns>
-                            <columnResizePolicy>
-                                <TreeTableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
-                            </columnResizePolicy>
-                        </TreeTableView>
+                        <fx:include fx:id="auteurs" source="components/treeview.fxml" AnchorPane.bottomAnchor="0.0"
+                                    AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                                    AnchorPane.topAnchor="0.0"/>
                     </children>
                 </AnchorPane>
             </content>
@@ -99,16 +76,9 @@
             <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                     <children>
-                        <TreeTableView id="tvParabd" fx:id="tvParabd" showRoot="false" AnchorPane.bottomAnchor="0.0"
-                                       AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-                                       AnchorPane.topAnchor="0.0">
-                            <columns>
-                                <TreeTableColumn editable="false" sortable="false"/>
-                            </columns>
-                            <columnResizePolicy>
-                                <TreeTableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
-                            </columnResizePolicy>
-                        </TreeTableView>
+                        <fx:include fx:id="parabd" source="components/treeview.fxml" AnchorPane.bottomAnchor="0.0"
+                                    AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                                    AnchorPane.topAnchor="0.0"/>
                     </children>
                 </AnchorPane>
             </content>

@@ -19,13 +19,14 @@ import javafx.scene.input.MouseEvent;
 import javafx.util.Callback;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.tetram.bdtheque.data.bean.AlbumLite;
-import org.tetram.bdtheque.data.bean.interfaces.EvaluatedEntity;
-import org.tetram.bdtheque.data.bean.ValeurListe;
+import org.tetram.bdtheque.data.bean.*;
 import org.tetram.bdtheque.data.bean.abstractentities.AbstractDBEntity;
 import org.tetram.bdtheque.data.bean.abstractentities.AbstractEntity;
+import org.tetram.bdtheque.data.bean.abstractentities.BaseParaBD;
+import org.tetram.bdtheque.data.bean.interfaces.EvaluatedEntity;
 import org.tetram.bdtheque.data.dao.*;
 import org.tetram.bdtheque.data.services.UserPreferences;
+import org.tetram.bdtheque.gui.controllers.components.TreeViewController;
 import org.tetram.bdtheque.gui.utils.InitialeEntity;
 import org.tetram.bdtheque.gui.utils.NotationResource;
 import org.tetram.bdtheque.spring.SpringContext;
@@ -34,6 +35,7 @@ import org.tetram.bdtheque.utils.I18nSupport;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 @Controller
 @FileLink("/org/tetram/bdtheque/gui/repertoire.fxml")
@@ -55,22 +57,22 @@ public class RepertoireController extends WindowController {
     @FXML
     private Tab tabSeries;
     @FXML
-    private TreeTableView<AbstractEntity> tvSeries;
+    private TreeViewController seriesController;
 
     @FXML
     private Tab tabUnivers;
     @FXML
-    private TreeTableView<AbstractEntity> tvUnivers;
+    private TreeViewController universController;
 
     @FXML
     private Tab tabAuteurs;
     @FXML
-    private TreeTableView<AbstractEntity> tvAuteurs;
+    private TreeViewController auteursController;
 
     @FXML
     private Tab tabParabd;
     @FXML
-    private TreeTableView<AbstractEntity> tvParabd;
+    private TreeViewController parabdController;
     @Autowired
     private ParaBDLiteDao paraBDLiteDao;
 
@@ -86,10 +88,10 @@ public class RepertoireController extends WindowController {
         HashMap<String, InfoTab> tabView = new HashMap<>();
         final InfoTab infoTabAlbums = new InfoTab(tabAlbums, tvAlbums, TypeRepertoireAlbumEntry.PAR_SERIE.daoClass);
         tabView.put(tabAlbums.getId(), infoTabAlbums);
-        tabView.put(tabSeries.getId(), new InfoTab(tabSeries, tvSeries, SerieLiteDao.class));
-        tabView.put(tabUnivers.getId(), new InfoTab(tabUnivers, tvUnivers, UniversLiteDao.class));
-        tabView.put(tabAuteurs.getId(), new InfoTab(tabAuteurs, tvAuteurs, PersonneLiteDao.class));
-        tabView.put(tabParabd.getId(), new InfoTab(tabParabd, tvParabd, ParaBDLiteDao.class));
+        tabView.put(tabSeries.getId(), new InfoTab(tabSeries, SerieLiteDao.class, seriesController));
+        tabView.put(tabUnivers.getId(), new InfoTab(tabUnivers, UniversLiteDao.class, universController));
+        tabView.put(tabAuteurs.getId(), new InfoTab(tabAuteurs, PersonneLiteDao.class, auteursController));
+        tabView.put(tabParabd.getId(), new InfoTab(tabParabd, ParaBDLiteDao.class, parabdController));
 
         final Callback<TreeTableColumn.CellDataFeatures<AbstractEntity, String>, ObservableValue<String>> labelValueFactory = param -> {
             final AbstractEntity entity = param.getValue().getValue();
@@ -128,14 +130,49 @@ public class RepertoireController extends WindowController {
             }
         };
 
+        // albumsController.setFinalEntityClass(AlbumLite.class);
+        seriesController.setFinalEntityClass(SerieLite.class);
+        universController.setFinalEntityClass(UniversLite.class);
+        auteursController.setFinalEntityClass(PersonneLite.class);
+        parabdController.setFinalEntityClass(ParaBDLite.class);
+
         for (InfoTab infoTab : tabView.values()) {
-            infoTab.getTreeView().setOnMouseClicked(onMouseClicked);
-            ((TreeTableColumn<AbstractEntity, String>) infoTab.getTreeView().getColumns().get(0)).setCellValueFactory(labelValueFactory);
-            if (infoTab.getTreeView().getColumns().size() > 1) {
-                final TreeTableColumn<AbstractEntity, AbstractEntity> column = (TreeTableColumn<AbstractEntity, AbstractEntity>) infoTab.getTreeView().getColumns().get(1);
-                column.setCellValueFactory(imageValueCellFactory);
-                column.setCellFactory(imageCellFactory);
-                column.visibleProperty().bind(userPreferences.afficheNoteListesProperty());
+            if (infoTab.getTreeView() != null) {
+                infoTab.getTreeView().setOnMouseClicked(onMouseClicked);
+                ((TreeTableColumn<AbstractEntity, String>) infoTab.getTreeView().getColumns().get(0)).setCellValueFactory(labelValueFactory);
+                if (infoTab.getTreeView().getColumns().size() > 1) {
+                    final TreeTableColumn<AbstractEntity, AbstractEntity> column = (TreeTableColumn<AbstractEntity, AbstractEntity>) infoTab.getTreeView().getColumns().get(1);
+                    column.setCellValueFactory(imageValueCellFactory);
+                    column.setCellFactory(imageCellFactory);
+                    column.visibleProperty().bind(userPreferences.afficheNoteListesProperty());
+                }
+            }
+            final TreeViewController treeViewController = infoTab.getTreeViewController();
+            if (treeViewController != null) {
+                treeViewController.setClickToShow(true);
+                final RepertoireLiteDao dao = SpringContext.CONTEXT.getBean(infoTab.getDaoClass());
+                treeViewController.onGetChildrenProperty().setValue(treeItem -> {
+                    final AbstractEntity entity = treeItem.getValue();
+                    if (entity == null) {
+                        // c'est la racine
+                        return dao.getInitiales(null);
+                    } else if (entity instanceof InitialeEntity) {
+                        // c'est le niveau 1
+                        return dao.getListEntitiesByInitiale((InitialeEntity<UUID>) entity, null);
+                    }
+                    return null;
+                });
+                treeViewController.setOnGetLabel(treeItem -> {
+                    final AbstractEntity entity = treeItem.getValue();
+                    if (entity == null)
+                        return null;
+                    else if (entity instanceof BaseParaBD)
+                        return ((BaseParaBD) entity).buildLabel(false);
+                    else if (entity instanceof AlbumLite && repertoireGroup.getValue() == TypeRepertoireAlbumEntry.PAR_SERIE)
+                        return ((AlbumLite) entity).buildLabel(false);
+                    else
+                        return entity.buildLabel();
+                });
             }
         }
 
@@ -153,9 +190,17 @@ public class RepertoireController extends WindowController {
 
         currentInfoTab.addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
-                final InitialTreeItem root = (InitialTreeItem) newValue.getTreeView().getRoot();
-                if (root == null || !newValue.getDaoClass().isInstance(root.dao))
-                    refresh();
+                final TreeTableView<AbstractEntity> treeView;
+                if (newValue.getTreeView() != null) {
+                    treeView = newValue.getTreeView();
+                    final InitialTreeItem root = (InitialTreeItem) treeView.getRoot();
+                    if (root == null || !newValue.getDaoClass().isInstance(root.dao))
+                        refresh();
+                } else {
+                    treeView = newValue.getTreeViewController().getTreeView();
+                    if (treeView.getRoot() == null)
+                        refresh();
+                }
             }
         });
 
@@ -170,7 +215,14 @@ public class RepertoireController extends WindowController {
 
     public void refresh() {
         final InfoTab infoTab = currentInfoTab.getValue();
-        infoTab.getTreeView().setRoot(new InitialTreeItem(SpringContext.CONTEXT.getBean(infoTab.getDaoClass())));
+        final TreeTableView<AbstractEntity> treeView;
+        if (infoTab.getTreeView() != null) {
+            treeView = infoTab.getTreeView();
+            treeView.setRoot(new InitialTreeItem(SpringContext.CONTEXT.getBean(infoTab.getDaoClass())));
+        }
+        else {
+            infoTab.getTreeViewController().refresh();
+        }
     }
 
     private enum TypeRepertoireAlbumEntry {
@@ -198,14 +250,23 @@ public class RepertoireController extends WindowController {
 
     @SuppressWarnings("UnusedDeclaration")
     private class InfoTab {
-        private ObjectProperty<Tab> tab = new SimpleObjectProperty<>();
-        private ObjectProperty<TreeTableView<AbstractEntity>> treeView = new SimpleObjectProperty<>();
-        private ObjectProperty<Class<? extends RepertoireLiteDao>> daoClass = new SimpleObjectProperty<>();
+        private final ObjectProperty<Tab> tab = new SimpleObjectProperty<>(this, "tab", null);
+        private final ObjectProperty<TreeTableView<AbstractEntity>> treeView = new SimpleObjectProperty<>(this, "treeView", null);
+        private final ObjectProperty<Class<? extends RepertoireLiteDao>> daoClass = new SimpleObjectProperty<>(this, "daoClass", null);
+        private final ObjectProperty<TreeViewController> treeViewController = new SimpleObjectProperty<>(this, "treeViewController", null);
 
         private InfoTab(Tab tab, TreeTableView<AbstractEntity> treeView, Class<? extends RepertoireLiteDao> daoClass) {
             setTab(tab);
             setTreeView(treeView);
             setDaoClass(daoClass);
+            setTreeViewController(null);
+        }
+
+        public InfoTab(Tab tab, Class<? extends RepertoireLiteDao> daoClass, TreeViewController treeViewController) {
+            setTab(tab);
+            setTreeView(null);
+            setDaoClass(daoClass);
+            setTreeViewController(treeViewController);
         }
 
         public Tab getTab() {
@@ -242,6 +303,18 @@ public class RepertoireController extends WindowController {
 
         public ObjectProperty<Class<? extends RepertoireLiteDao>> daoClassProperty() {
             return daoClass;
+        }
+
+        public TreeViewController getTreeViewController() {
+            return treeViewController.get();
+        }
+
+        public ObjectProperty<TreeViewController> treeViewControllerProperty() {
+            return treeViewController;
+        }
+
+        public void setTreeViewController(TreeViewController treeViewController) {
+            this.treeViewController.set(treeViewController);
         }
     }
 

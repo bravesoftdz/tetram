@@ -15,8 +15,9 @@ public class AuteurParaBDLite extends BaseAuteur {
 
     private final ObjectProperty<UUID> idParaBD = new SimpleObjectProperty<>(this, "idParaBD", null);
 
-    static {
-        baseClass = AuteurParaBDLite.class;
+    @Override
+    public Class<? extends AbstractDBEntity> getBaseClass() {
+        return AuteurParaBDLite.class;
     }
 
 

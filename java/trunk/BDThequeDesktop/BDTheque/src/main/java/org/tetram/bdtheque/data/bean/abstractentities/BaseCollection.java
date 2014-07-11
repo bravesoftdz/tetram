@@ -29,8 +29,9 @@ public abstract class BaseCollection<E extends BaseEditeur> extends AbstractDBEn
     private final StringProperty nomCollection = new AutoTrimStringProperty(this, "nomCollection", null);
     private final ObjectProperty<E> editeur = new SimpleObjectProperty<>(this, "editeur", null);
 
-    static {
-        baseClass = BaseCollection.class;
+    @Override
+    public Class<? extends AbstractDBEntity> getBaseClass() {
+        return BaseCollection.class;
     }
 
     public String getNomCollection() {

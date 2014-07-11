@@ -5,6 +5,7 @@ import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.TestOnly;
+import org.springframework.util.ClassUtils;
 
 import java.lang.reflect.*;
 import java.util.Collection;
@@ -129,5 +130,10 @@ public abstract class AbstractEntity {
 
     public ObservableValue<String> labelProperty() {
         return label;
+    }
+
+    @SuppressWarnings("unchecked")
+    public Class<? extends AbstractEntity> getEntityClass(){
+        return (Class<? extends AbstractEntity>) ClassUtils.getUserClass(this);
     }
 }

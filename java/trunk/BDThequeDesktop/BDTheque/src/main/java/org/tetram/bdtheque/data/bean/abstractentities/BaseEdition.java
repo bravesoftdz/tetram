@@ -22,35 +22,33 @@ import java.util.Comparator;
 @SuppressWarnings("UnusedDeclaration")
 public class BaseEdition<E extends BaseEditeur, C extends BaseCollection> extends AbstractDBEntity {
 
-    public static Comparator<EditionLite> DEFAULT_COMPARATOR = new Comparator<EditionLite>() {
-        @Override
-        public int compare(EditionLite o1, EditionLite o2) {
-            if (o1 == o2) return 0;
+    public static Comparator<EditionLite> DEFAULT_COMPARATOR = (o1, o2) -> {
+        if (o1 == o2) return 0;
 
-            int comparaison;
+        int comparaison;
 
-            comparaison = BeanUtils.compare(o1.getAnneeEdition(), o2.getAnneeEdition());
-            if (comparaison != 0) return comparaison;
+        comparaison = BeanUtils.compare(o1.getAnneeEdition(), o2.getAnneeEdition());
+        if (comparaison != 0) return comparaison;
 
-            comparaison = EditeurLite.DEFAULT_COMPARATOR.compare(o1.getEditeur(), o2.getEditeur());
-            if (comparaison != 0) return comparaison;
+        comparaison = EditeurLite.DEFAULT_COMPARATOR.compare(o1.getEditeur(), o2.getEditeur());
+        if (comparaison != 0) return comparaison;
 
-            comparaison = CollectionLite.DEFAULT_COMPARATOR.compare(o1.getCollection(), o2.getCollection());
-            if (comparaison != 0) return comparaison;
+        comparaison = CollectionLite.DEFAULT_COMPARATOR.compare(o1.getCollection(), o2.getCollection());
+        if (comparaison != 0) return comparaison;
 
-            comparaison = BeanUtils.compare(o1.getIsbn(), o2.getIsbn());
-            if (comparaison != 0) return comparaison;
+        comparaison = BeanUtils.compare(o1.getIsbn(), o2.getIsbn());
+        if (comparaison != 0) return comparaison;
 
-            return 0;
-        }
+        return 0;
     };
     private final ObjectProperty<Year> anneeEdition = new SimpleObjectProperty<>(this, "anneeEdition", null);
     private final StringProperty isbn = new AutoTrimStringProperty(this, "isbn", null);
     private final ObjectProperty<E> editeur = new SimpleObjectProperty<>(this, "editeur", null);
     private final ObjectProperty<C> collection = new SimpleObjectProperty<>(this, "collection", null);
 
-    static {
-        baseClass = BaseEdition.class;
+    @Override
+    public Class<? extends AbstractDBEntity> getBaseClass() {
+        return BaseEdition.class;
     }
 
 

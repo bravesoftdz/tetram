@@ -17,8 +17,9 @@ public abstract class BaseUnivers extends AbstractDBEntity implements WebLinkedE
     private final StringProperty nomUnivers = new AutoTrimStringProperty(this, "nomUnivers", null);
     private final ObjectProperty<URL> siteWeb = new SimpleObjectProperty<>(this, "siteWeb", null);
 
-    static {
-        baseClass = BaseUnivers.class;
+    @Override
+    public Class<? extends AbstractDBEntity> getBaseClass() {
+        return BaseUnivers.class;
     }
 
 

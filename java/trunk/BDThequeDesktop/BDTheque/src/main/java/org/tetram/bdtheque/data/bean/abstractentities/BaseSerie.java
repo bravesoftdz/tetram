@@ -22,8 +22,9 @@ public abstract class BaseSerie extends AbstractDBEntity implements EvaluatedEnt
     private final ObjectProperty<URL> siteWeb = new SimpleObjectProperty<>(this, "siteWeb", null);
     private final ObjectProperty<ValeurListe> notation = new SimpleObjectProperty<>(this, "notation", null);
 
-    static {
-        baseClass = BaseSerie.class;
+    @Override
+    public Class<? extends AbstractDBEntity> getBaseClass() {
+        return BaseSerie.class;
     }
 
 
