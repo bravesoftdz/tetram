@@ -12,6 +12,7 @@ import java.util.Collection;
 /**
  * Created by Thierry on 24/05/2014.
  */
+@SuppressWarnings("UnusedDeclaration")
 public abstract class AbstractEntity {
 
     @NonNls
@@ -35,7 +36,7 @@ public abstract class AbstractEntity {
         return "";
     }
 
-    @SuppressWarnings({"HardCodedStringLiteral", "unchecked", "RedundantCast"})
+    @SuppressWarnings({"HardCodedStringLiteral", "unchecked"})
     @TestOnly
     public final int fullCompare(AbstractEntity to) {
         assert this.getClass().isAssignableFrom(to.getClass());

@@ -11,9 +11,9 @@ import java.util.Comparator;
  * Created by Thierry on 24/05/2014.
  */
 @SuppressWarnings("UnusedDeclaration")
-public abstract class AbstractImage extends AbstractDBEntity {
+public abstract class BaseImage extends AbstractDBEntity {
 
-    public static Comparator<AbstractImage> DEFAULT_COMPARATOR = (o1, o2) -> {
+    public static Comparator<BaseImage> DEFAULT_COMPARATOR = (o1, o2) -> {
         if (o1 == o2) return 0;
 
         int comparaison;

@@ -1,7 +1,11 @@
 package org.tetram.bdtheque.data.bean;
 
+import javafx.beans.property.ListProperty;
+import javafx.beans.property.SimpleListProperty;
+import javafx.collections.FXCollections;
 import org.tetram.bdtheque.data.BeanUtils;
-import org.tetram.bdtheque.data.bean.abstractentities.AbstractScriptEntity;
+import org.tetram.bdtheque.data.bean.abstractentities.AbstractDBEntity;
+import org.tetram.bdtheque.data.bean.interfaces.ScriptEntity;
 import org.tetram.bdtheque.data.dao.DaoScriptImpl;
 
 import java.util.Comparator;
@@ -11,7 +15,7 @@ import java.util.Comparator;
  */
 @SuppressWarnings("UnusedDeclaration")
 @DaoScriptImpl.ScriptInfo(typeData = 5)
-public class GenreLite extends AbstractScriptEntity {
+public class GenreLite extends AbstractDBEntity implements ScriptEntity {
 
     public static Comparator<GenreLite> DEFAULT_COMPARATOR = (o1, o2) -> {
         if (o1 == o2) return 0;
@@ -25,6 +29,7 @@ public class GenreLite extends AbstractScriptEntity {
     };
     private String genre;
     private Integer quantite;
+    private final ListProperty<String> associations = new SimpleListProperty<>(this, "associations", FXCollections.observableArrayList());
 
     public String getGenre() {
         return BeanUtils.trimOrNull(genre);
@@ -40,6 +45,11 @@ public class GenreLite extends AbstractScriptEntity {
 
     public void setQuantite(Integer quantite) {
         this.quantite = quantite;
+    }
+
+    @Override
+    public ListProperty<String> associationsProperty() {
+        return associations;
     }
 
     @Override

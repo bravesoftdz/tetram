@@ -2,7 +2,7 @@ package org.tetram.bdtheque.data.bean.abstractentities;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import org.tetram.bdtheque.data.bean.DBEntity;
+import org.tetram.bdtheque.data.bean.interfaces.DBEntity;
 
 import java.util.UUID;
 
@@ -13,16 +13,6 @@ import java.util.UUID;
 public abstract class AbstractDBEntity extends AbstractEntity implements DBEntity {
 
     private final ObjectProperty<UUID> id = new SimpleObjectProperty<>(this, "id", null);
-
-    @Override
-    public UUID getId() {
-        return id.get();
-    }
-
-    @Override
-    public void setId(UUID id) {
-        this.id.set(id);
-    }
 
     @Override
     public ObjectProperty<UUID> idProperty() {

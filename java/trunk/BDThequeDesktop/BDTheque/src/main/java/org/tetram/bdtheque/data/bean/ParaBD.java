@@ -1,75 +1,153 @@
 package org.tetram.bdtheque.data.bean;
 
+import javafx.beans.property.*;
+import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import org.tetram.bdtheque.data.BeanUtils;
-import org.tetram.bdtheque.data.bean.abstractentities.AbstractDBEntity;
+import org.tetram.bdtheque.data.bean.abstractentities.BaseParaBD;
 import org.tetram.bdtheque.data.dao.ValeurListeDao;
 import org.tetram.bdtheque.spring.SpringContext;
+import org.tetram.bdtheque.spring.utils.AutoTrimStringProperty;
+import org.tetram.bdtheque.utils.StringUtils;
 
 import java.time.LocalDate;
 import java.time.Year;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by Thierry on 24/05/2014.
  */
 @SuppressWarnings("UnusedDeclaration")
-public class ParaBD extends AbstractDBEntity {
+public class ParaBD extends BaseParaBD {
 
-    private Year anneeEdition;
-    private ValeurListe categorieParaBD;
-    private Year anneeCote;
-    private String titreParaBD;
-    private Set<AuteurParaBDLite> auteurs = new HashSet<>();
-    private String description;
-    private String notes;
-    private Serie serie;
-    private Double prix;
-    private Double prixCote;
-    private boolean dedicace;
-    private boolean numerote;
-    private boolean stock;
-    private boolean offert;
-    private boolean gratuit;
-    private LocalDate dateAchat;
-    private List<UniversLite> univers = new ArrayList<>();
-    private List<UniversLite> universFull = new ArrayList<>();
-    private List<PhotoLite> photos = new ArrayList<>();
+    private final ObjectProperty<Year> anneeEdition = new SimpleObjectProperty<>(this, "anneeEdition", null);
+    private final ObjectProperty<ValeurListe> categorieParaBD = new SimpleObjectProperty<>(this, "categorieParaBD", null);
+    private final ObjectProperty<Year> anneeCote = new SimpleObjectProperty<>(this, "anneeCote", null);
+    private final ListProperty<AuteurParaBDLite> auteurs = new SimpleListProperty<>(this, "auteurs", FXCollections.observableArrayList());
+    private final StringProperty description = new AutoTrimStringProperty(this, "description", null);
+    private final StringProperty notes = new AutoTrimStringProperty(this, "notes", null);
+    private final ObjectProperty<Serie> serie = new SimpleObjectProperty<>(this, "serie", null);
+    private final ObjectProperty<Double> prix = new SimpleObjectProperty<>(this, "prix", null);
+    private final ObjectProperty<Double> prixCote = new SimpleObjectProperty<>(this, "prixCote", null);
+    private final BooleanProperty dedicace = new SimpleBooleanProperty(this, "dedicace", false);
+    private final BooleanProperty numerote = new SimpleBooleanProperty(this, "numerote", false);
+    private final BooleanProperty stock = new SimpleBooleanProperty(this, "stock", false);
+    private final BooleanProperty offert = new SimpleBooleanProperty(this, "offert", false);
+    private final BooleanProperty gratuit = new SimpleBooleanProperty(this, "gratuit", false);
+    private final ObjectProperty<LocalDate> dateAchat = new SimpleObjectProperty<>(this, "dateAchat", null);
+    private final ListProperty<UniversLite> univers = new SimpleListProperty<>(this, "univers", FXCollections.<UniversLite>observableList(new ArrayList<>()));
+    private final ListProperty<UniversLite> universFull = new SimpleListProperty<>(this, "universFull", FXCollections.<UniversLite>observableList(new ArrayList<>()));
+    private final ListProperty<PhotoLite> photos = new SimpleListProperty<>(this, "photos", FXCollections.observableArrayList());
 
     public ParaBD() {
         ValeurListeDao valeurListeDao = SpringContext.CONTEXT.getBean(ValeurListeDao.class);
-        categorieParaBD = valeurListeDao.getDefaultTypeParaBD();
+        setCategorieParaBD(valeurListeDao.getDefaultTypeParaBD());
+
+        final ListChangeListener<UniversLite> universListChangeListener = change -> universFullProperty().set(FXCollections.observableList(BeanUtils.checkAndBuildListUniversFull(getUniversFull(), getUnivers(), getSerie())));
+        serieProperty().addListener((observable, oldValue, newValue) -> {
+            if (oldValue != null) oldValue.universProperty().removeListener(universListChangeListener);
+            if (newValue != null) newValue.universProperty().addListener(universListChangeListener);
+            universFullProperty().set(FXCollections.observableList(BeanUtils.checkAndBuildListUniversFull(getUniversFull(), getUnivers(), newValue)));
+        });
+        universProperty().addListener(universListChangeListener);
     }
 
     public Year getAnneeEdition() {
+        return anneeEdition.get();
+    }
+
+    public ObjectProperty<Year> anneeEditionProperty() {
         return anneeEdition;
     }
 
     public void setAnneeEdition(Year anneeEdition) {
-        this.anneeEdition = anneeEdition;
+        this.anneeEdition.set(anneeEdition);
+    }
+
+    public ValeurListe getCategorieParaBD() {
+        return categorieParaBD.get();
+    }
+
+    public ObjectProperty<ValeurListe> categorieParaBDProperty() {
+        return categorieParaBD;
+    }
+
+    public void setCategorieParaBD(ValeurListe categorieParaBD) {
+        this.categorieParaBD.set(categorieParaBD);
     }
 
     public Year getAnneeCote() {
+        return anneeCote.get();
+    }
+
+    public ObjectProperty<Year> anneeCoteProperty() {
         return anneeCote;
     }
 
     public void setAnneeCote(Year anneeCote) {
-        this.anneeCote = anneeCote;
+        this.anneeCote.set(anneeCote);
     }
 
-    public String getTitreParaBD() {
-        return BeanUtils.trimOrNull(titreParaBD);
+    public Serie getSerie() {
+        return serie.get();
     }
 
-    public void setTitreParaBD(String titreParaBD) {
-        this.titreParaBD = BeanUtils.trimOrNull(titreParaBD);
+    public ObjectProperty<Serie> serieProperty() {
+        return serie;
     }
 
-    public Set<AuteurParaBDLite> getAuteurs() {
+    public void setSerie(Serie serie) {
+        this.serie.set(serie);
+    }
+
+    public Double getPrix() {
+        return prix.get();
+    }
+
+    public ObjectProperty<Double> prixProperty() {
+        return prix;
+    }
+
+    public void setPrix(Double prix) {
+        this.prix.set(prix);
+    }
+
+    public Double getPrixCote() {
+        return prixCote.get();
+    }
+
+    public ObjectProperty<Double> prixCoteProperty() {
+        return prixCote;
+    }
+
+    public void setPrixCote(Double prixCote) {
+        this.prixCote.set(prixCote);
+    }
+
+    public LocalDate getDateAchat() {
+        return dateAchat.get();
+    }
+
+    public ObjectProperty<LocalDate> dateAchatProperty() {
+        return dateAchat;
+    }
+
+    public void setDateAchat(LocalDate dateAchat) {
+        this.dateAchat.set(dateAchat);
+    }
+
+    public List<AuteurParaBDLite> getAuteurs() {
+        return auteurs.get();
+    }
+
+    public ListProperty<AuteurParaBDLite> auteursProperty() {
         return auteurs;
     }
 
-    public void setAuteurs(Set<AuteurParaBDLite> auteurs) {
-        this.auteurs = auteurs;
+    public void setAuteurs(List<AuteurParaBDLite> auteurs) {
+        this.auteurs.set(FXCollections.observableList(auteurs));
     }
 
     public void addAuteur(PersonneLite personne) {
@@ -89,109 +167,111 @@ public class ParaBD extends AbstractDBEntity {
     }
 
     public String getDescription() {
-        return BeanUtils.trimOrNull(description);
+        return description.get();
+    }
+
+    public StringProperty descriptionProperty() {
+        return description;
     }
 
     public void setDescription(String description) {
-        this.description = BeanUtils.trimOrNull(description);
+        this.description.set(description);
     }
 
     public String getNotes() {
-        return BeanUtils.trimOrNull(notes);
+        return notes.get();
+    }
+
+    public StringProperty notesProperty() {
+        return notes;
     }
 
     public void setNotes(String notes) {
-        this.notes = BeanUtils.trimOrNull(notes);
-    }
-
-    public Serie getSerie() {
-        return serie;
-    }
-
-    public void setSerie(Serie serie) {
-        this.serie = serie;
-    }
-
-    public Double getPrix() {
-        return prix;
-    }
-
-    public void setPrix(Double prix) {
-        this.prix = prix;
-    }
-
-    public Double getPrixCote() {
-        return prixCote;
-    }
-
-    public void setPrixCote(Double prixCote) {
-        this.prixCote = prixCote;
+        this.notes.set(notes);
     }
 
     public boolean isDedicace() {
+        return dedicace.get();
+    }
+
+    public BooleanProperty dedicaceProperty() {
         return dedicace;
     }
 
     public void setDedicace(boolean dedicace) {
-        this.dedicace = dedicace;
+        this.dedicace.set(dedicace);
     }
 
     public boolean isNumerote() {
+        return numerote.get();
+    }
+
+    public BooleanProperty numeroteProperty() {
         return numerote;
     }
 
     public void setNumerote(boolean numerote) {
-        this.numerote = numerote;
+        this.numerote.set(numerote);
     }
 
     public boolean isStock() {
+        return stock.get();
+    }
+
+    public BooleanProperty stockProperty() {
         return stock;
     }
 
     public void setStock(boolean stock) {
-        this.stock = stock;
+        this.stock.set(stock);
     }
 
     public boolean isOffert() {
+        return offert.get();
+    }
+
+    public BooleanProperty offertProperty() {
         return offert;
     }
 
     public void setOffert(boolean offert) {
-        this.offert = offert;
+        this.offert.set(offert);
     }
 
     public boolean isGratuit() {
+        return gratuit.get();
+    }
+
+    public BooleanProperty gratuitProperty() {
         return gratuit;
     }
 
     public void setGratuit(boolean gratuit) {
-        this.gratuit = gratuit;
-    }
-
-    public LocalDate getDateAchat() {
-        return dateAchat;
-    }
-
-    public void setDateAchat(LocalDate dateAchat) {
-        this.dateAchat = dateAchat;
+        this.gratuit.set(gratuit);
     }
 
     public List<UniversLite> getUnivers() {
-        return univers;
+        return univers.get();
     }
 
     public void setUnivers(List<UniversLite> univers) {
-        this.univers = univers;
+        this.univers.set(FXCollections.observableList(univers));
+    }
+
+    public ListProperty<UniversLite> universProperty() {
+        return univers;
     }
 
     public List<UniversLite> getUniversFull() {
-        universFull = BeanUtils.checkAndBuildListUniversFull(universFull, univers, serie);
+        return universFull.get();
+    }
+
+    public ListProperty<UniversLite> universFullProperty() {
         return universFull;
     }
 
-    @SuppressWarnings("SimplifiableIfStatement")
     public boolean addUnivers(UniversLite universLite) {
-        if (!getUnivers().contains(universLite) && !getUniversFull().contains(universLite)) {
+        if (!univers.contains(universLite) && !universFull.contains(universLite)) {
             universFull.add(universLite);
             return univers.add(universLite);
         }
@@ -199,8 +279,8 @@ public class ParaBD extends AbstractDBEntity {
     }
 
     public boolean removeUnivers(UniversLite universLite) {
-        if (getUnivers().remove(universLite)) {
-            getUniversFull().remove(universLite);
+        if (univers.remove(universLite)) {
+            universFull.remove(universLite);
             return true;
         } else
             return false;
@@ -211,7 +291,11 @@ public class ParaBD extends AbstractDBEntity {
     }
 
     public void setPhotos(List<PhotoLite> photos) {
-        this.photos = photos;
+        this.photos.set(FXCollections.observableList(photos));
+    }
+
+    public ListProperty<PhotoLite> photosProperty() {
+        return photos;
     }
 
     public boolean addPhoto(PhotoLite photo) {
@@ -222,16 +306,28 @@ public class ParaBD extends AbstractDBEntity {
         return getPhotos().remove(photo);
     }
 
-    public ValeurListe getCategorieParaBD() {
-        return categorieParaBD;
-    }
-
-    public void setCategorieParaBD(ValeurListe categorieParaBD) {
-        this.categorieParaBD = categorieParaBD;
-    }
-
     public UUID getIdSerie() {
-        return serie.getId();
+        return getSerie() == null ? null : getSerie().getId();
+    }
+
+    @Override
+    protected String buildLabel(boolean simple, boolean avecSerie) {
+        String lb = getTitreParaBD();
+        if (!simple)
+            lb = BeanUtils.formatTitre(lb);
+        String s = "";
+        if (avecSerie && getSerie() != null)
+            if ("".equals(lb))
+                lb = BeanUtils.formatTitre(getSerie().getTitreSerie());
+            else
+                s = StringUtils.ajoutString(s, BeanUtils.formatTitre(getSerie().getTitreSerie()), " - ");
+        if (getCategorieParaBD() != null)
+            s = StringUtils.ajoutString(s, getCategorieParaBD().getTexte(), " - ");
+        if ("".equals(lb))
+            return s;
+        else
+            return StringUtils.ajoutString(lb, s, " ", "(", ")");
+
     }
 
 }

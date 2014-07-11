@@ -3,9 +3,8 @@ package org.tetram.bdtheque.data.bean;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
-import javafx.collections.ObservableList;
 import org.tetram.bdtheque.data.BeanUtils;
-import org.tetram.bdtheque.data.bean.abstractentities.AbstractAlbum;
+import org.tetram.bdtheque.data.bean.abstractentities.BaseAlbum;
 import org.tetram.bdtheque.data.dao.ValeurListeDao;
 import org.tetram.bdtheque.spring.SpringContext;
 import org.tetram.bdtheque.spring.utils.AutoTrimStringProperty;
@@ -19,7 +18,7 @@ import java.util.UUID;
  * Created by Thierry on 24/05/2014.
  */
 @SuppressWarnings("UnusedDeclaration")
-public class Album extends AbstractAlbum {
+public class Album extends BaseAlbum {
 
     private static Album defaultAlbum = null;
     private final ObjectProperty<Serie> serie = new SimpleObjectProperty<>(this, "serie", null);
@@ -232,7 +231,7 @@ public class Album extends AbstractAlbum {
         return univers;
     }
 
-    public ObservableList<UniversLite> getUniversFull() {
+    public List<UniversLite> getUniversFull() {
         return universFull.get();
     }
 
@@ -240,9 +239,8 @@ public class Album extends AbstractAlbum {
         return universFull;
     }
 
-    @SuppressWarnings("SimplifiableIfStatement")
     public boolean addUnivers(UniversLite universLite) {
-        if (!getUnivers().contains(universLite) && !getUniversFull().contains(universLite)) {
+        if (!univers.contains(universLite) && !universFull.contains(universLite)) {
             universFull.add(universLite);
             return univers.add(universLite);
         }
@@ -250,8 +248,8 @@ public class Album extends AbstractAlbum {
     }
 
     public boolean removeUnivers(UniversLite universLite) {
-        if (getUnivers().remove(universLite)) {
-            getUniversFull().remove(universLite);
+        if (univers.remove(universLite)) {
+            universFull.remove(universLite);
             return true;
         } else
             return false;

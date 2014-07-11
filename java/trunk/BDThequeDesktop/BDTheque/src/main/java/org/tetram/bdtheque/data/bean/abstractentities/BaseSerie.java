@@ -5,11 +5,9 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import org.tetram.bdtheque.data.BeanUtils;
-import org.tetram.bdtheque.data.bean.EvaluatedEntity;
+import org.tetram.bdtheque.data.bean.interfaces.EvaluatedEntity;
 import org.tetram.bdtheque.data.bean.ValeurListe;
-import org.tetram.bdtheque.data.bean.WebLinkedEntity;
-import org.tetram.bdtheque.data.dao.ValeurListeDao;
-import org.tetram.bdtheque.spring.SpringContext;
+import org.tetram.bdtheque.data.bean.interfaces.WebLinkedEntity;
 
 import java.net.URL;
 
@@ -17,10 +15,10 @@ import java.net.URL;
  * Created by Thierry on 10/07/2014.
  */
 @SuppressWarnings("UnusedDeclaration")
-public abstract class AbstractSerie extends AbstractScriptEntity implements EvaluatedEntity, WebLinkedEntity {
-    private final ObjectProperty<ValeurListe> notation = new SimpleObjectProperty<>(this, "notation", null);
+public abstract class BaseSerie extends AbstractDBEntity implements EvaluatedEntity, WebLinkedEntity {
     private final StringProperty titreSerie = new SimpleStringProperty(this, "titreSerie", null);
     private final ObjectProperty<URL> siteWeb = new SimpleObjectProperty<>(this, "siteWeb", null);
+    private final ObjectProperty<ValeurListe> notation = new SimpleObjectProperty<>(this, "notation", null);
 
     public String getTitreSerie() {
         return BeanUtils.trimOrNull(titreSerie.get());
@@ -35,28 +33,11 @@ public abstract class AbstractSerie extends AbstractScriptEntity implements Eval
     }
 
     @Override
-    public URL getSiteWeb() {
-        return siteWeb.get();
-    }
-
-    @Override
-    public void setSiteWeb(URL siteWeb) {
-        this.siteWeb.set(siteWeb);
-    }
-
-    @Override
     public ObjectProperty<URL> siteWebProperty() {
         return siteWeb;
     }
 
-    public ValeurListe getNotation() {
-        return notation.get();
-    }
-
-    public void setNotation(ValeurListe notation) {
-        this.notation.set(notation == null || notation.getValeur() == 0 ? SpringContext.CONTEXT.getBean(ValeurListeDao.class).getDefaultNotation() : notation);
-    }
-
+    @Override
     public ObjectProperty<ValeurListe> notationProperty() {
         return notation;
     }

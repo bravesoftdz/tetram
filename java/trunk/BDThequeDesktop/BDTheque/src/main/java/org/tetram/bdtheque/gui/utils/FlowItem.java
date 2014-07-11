@@ -7,7 +7,7 @@ import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.Labeled;
 import javafx.scene.layout.FlowPane;
-import org.tetram.bdtheque.data.bean.abstractentities.AbstractAuteur;
+import org.tetram.bdtheque.data.bean.abstractentities.BaseAuteur;
 import org.tetram.bdtheque.data.bean.abstractentities.AbstractDBEntity;
 
 import java.util.List;
@@ -47,10 +47,10 @@ public class FlowItem {
 
     public static <E extends AbstractDBEntity> void fillViewFromList(List<E> list, FlowPane view, EventHandler<ActionEvent> onClickEvent) {
         list.forEach(entity -> {
-            final boolean isAuteur = AbstractAuteur.class.isAssignableFrom(entity.getClass());
+            final boolean isAuteur = BaseAuteur.class.isAssignableFrom(entity.getClass());
             Labeled e;
             if (isAuteur)
-                e = FlowItem.create(entity.buildLabel(), onClickEvent, ((AbstractAuteur) entity).getPersonne());
+                e = FlowItem.create(entity.buildLabel(), onClickEvent, ((BaseAuteur) entity).getPersonne());
             else
                 e = FlowItem.create(entity.buildLabel(), onClickEvent, entity);
             view.getChildren().add(e);

@@ -14,7 +14,7 @@ import org.tetram.bdtheque.data.BeanUtils;
 import org.tetram.bdtheque.data.bean.AlbumLite;
 import org.tetram.bdtheque.data.bean.Personne;
 import org.tetram.bdtheque.data.bean.Serie;
-import org.tetram.bdtheque.data.bean.abstractentities.AbstractAlbum;
+import org.tetram.bdtheque.data.bean.abstractentities.BaseAlbum;
 import org.tetram.bdtheque.data.bean.abstractentities.AbstractDBEntity;
 import org.tetram.bdtheque.data.bean.abstractentities.AbstractEntity;
 import org.tetram.bdtheque.data.dao.AlbumLiteSerieDaoImpl;
@@ -69,8 +69,8 @@ public class FicheAuteurController extends WindowController implements Consultat
             final AbstractEntity entity = treeItem.getValue();
             if (entity == null)
                 return null;
-            else if (AbstractAlbum.class.isAssignableFrom(entity.getClass()))
-                return ((AbstractAlbum) entity).buildLabel(false);
+            else if (BaseAlbum.class.isAssignableFrom(entity.getClass()))
+                return ((BaseAlbum) entity).buildLabel(false);
             else if (TypeUtils.isNullOrZero(((AbstractDBEntity) entity).getId()))
                 return AlbumLiteSerieDaoImpl.UNKNOWN_LABEL;
             else

@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NonNls;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.tetram.bdtheque.data.ConsistencyException;
 import org.tetram.bdtheque.data.bean.ImageStream;
-import org.tetram.bdtheque.data.bean.abstractentities.AbstractImage;
+import org.tetram.bdtheque.data.bean.abstractentities.BaseImage;
 import org.tetram.bdtheque.data.dao.mappers.CommonMapper;
 import org.tetram.bdtheque.data.dao.mappers.ImageMapper;
 import org.tetram.bdtheque.data.services.UserPreferences;
@@ -23,7 +23,7 @@ import java.util.*;
 /**
  * Created by Thierry on 13/06/2014.
  */
-public abstract class ImageLiteDaoImpl<T extends AbstractImage, K> extends DaoRWImpl<T, K> implements ImageLiteDao<T, K> {
+public abstract class ImageLiteDaoImpl<T extends BaseImage, K> extends DaoRWImpl<T, K> implements ImageLiteDao<T, K> {
 
     private final String tableName;
     private final String fieldPk;

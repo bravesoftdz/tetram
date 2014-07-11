@@ -14,7 +14,7 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.tetram.bdtheque.data.bean.CategorieValeurListe;
-import org.tetram.bdtheque.data.bean.EvaluatedEntity;
+import org.tetram.bdtheque.data.bean.interfaces.EvaluatedEntity;
 import org.tetram.bdtheque.data.bean.ValeurListe;
 import org.tetram.bdtheque.data.dao.EvaluatedEntityDao;
 import org.tetram.bdtheque.data.dao.ValeurListeDao;

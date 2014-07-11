@@ -2,7 +2,7 @@ package org.tetram.bdtheque.data.bean;
 
 import javafx.beans.property.*;
 import org.tetram.bdtheque.data.BeanUtils;
-import org.tetram.bdtheque.data.bean.abstractentities.AbstractAlbum;
+import org.tetram.bdtheque.data.bean.abstractentities.BaseAlbum;
 import org.tetram.bdtheque.spring.utils.AutoTrimStringProperty;
 
 import java.util.UUID;
@@ -11,10 +11,10 @@ import java.util.UUID;
  * Created by Thierry on 24/05/2014.
  */
 @SuppressWarnings("UnusedDeclaration")
-public class AlbumLite extends AbstractAlbum {
+public class AlbumLite extends BaseAlbum {
 
     private final ObjectProperty<UUID> idSerie = new SimpleObjectProperty<>(this, "idSerie", null);
-    private final StringProperty serie = new AutoTrimStringProperty(this, "serie", "");
+    private final StringProperty titreSerie = new AutoTrimStringProperty(this, "titreSerie", "");
     private final ObjectProperty<UUID> idEditeur = new SimpleObjectProperty<>(this, "idEditeur", null);
     private final StringProperty editeur = new AutoTrimStringProperty(this, "serie", "");
     private final BooleanProperty stock = new SimpleBooleanProperty(this, "stock", true);
@@ -32,16 +32,16 @@ public class AlbumLite extends AbstractAlbum {
         return idSerie;
     }
 
-    public String getSerie() {
-        return serie.get();
+    public String getTitreSerie() {
+        return titreSerie.get();
     }
 
-    public void setSerie(String serie) {
-        this.serie.set(serie);
+    public void setTitreSerie(String titreSerie) {
+        this.titreSerie.set(titreSerie);
     }
 
-    public StringProperty serieProperty() {
-        return serie;
+    public StringProperty titreSerieProperty() {
+        return titreSerie;
     }
 
     public UUID getIdEditeur() {
@@ -94,7 +94,7 @@ public class AlbumLite extends AbstractAlbum {
 
     @Override
     public String buildLabel(boolean simple, boolean avecSerie) {
-        return BeanUtils.formatTitreAlbum(simple, avecSerie, getTitreAlbum(), getSerie(), getTome(), getTomeDebut(), getTomeFin(), isIntegrale(), isHorsSerie());
+        return BeanUtils.formatTitreAlbum(simple, avecSerie, getTitreAlbum(), getTitreSerie(), getTome(), getTomeDebut(), getTomeFin(), isIntegrale(), isHorsSerie());
     }
 
 }

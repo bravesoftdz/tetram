@@ -2,7 +2,7 @@ package org.tetram.bdtheque.data.bean;
 
 import javafx.beans.property.*;
 import org.tetram.bdtheque.data.BeanUtils;
-import org.tetram.bdtheque.data.bean.abstractentities.AbstractDBEntity;
+import org.tetram.bdtheque.data.bean.abstractentities.BaseParaBD;
 import org.tetram.bdtheque.spring.utils.AutoTrimStringProperty;
 import org.tetram.bdtheque.utils.StringUtils;
 
@@ -12,26 +12,13 @@ import java.util.UUID;
  * Created by Thierry on 24/05/2014.
  */
 @SuppressWarnings("UnusedDeclaration")
-public class ParaBDLite extends AbstractDBEntity {
+public class ParaBDLite extends BaseParaBD {
 
-    private final StringProperty titre = new AutoTrimStringProperty(this, "titre", null);
     private final ObjectProperty<UUID> idSerie = new SimpleObjectProperty<>(this, "idSerie", null);
-    private final StringProperty serie = new AutoTrimStringProperty(this, "serie", null);
+    private final StringProperty titreSerie = new AutoTrimStringProperty(this, "titreSerie", null);
     private final StringProperty sCategorie = new AutoTrimStringProperty(this, "sCategorie", null);
     private final BooleanProperty achat = new SimpleBooleanProperty(this, "achat", false);
     private final BooleanProperty complet = new SimpleBooleanProperty(this, "complet", true);
-
-    public String getTitre() {
-        return titre.get();
-    }
-
-    public void setTitre(String titre) {
-        this.titre.set(titre);
-    }
-
-    public StringProperty titreProperty() {
-        return titre;
-    }
 
     public UUID getIdSerie() {
         return idSerie.get();
@@ -45,16 +32,16 @@ public class ParaBDLite extends AbstractDBEntity {
         return idSerie;
     }
 
-    public String getSerie() {
-        return serie.get();
+    public String getTitreSerie() {
+        return titreSerie.get();
     }
 
-    public void setSerie(String serie) {
-        this.serie.set(serie);
+    public void setTitreSerie(String titreSerie) {
+        this.titreSerie.set(titreSerie);
     }
 
-    public StringProperty serieProperty() {
-        return serie;
+    public StringProperty titreSerieProperty() {
+        return titreSerie;
     }
 
     public String getsCategorie() {
@@ -94,24 +81,16 @@ public class ParaBDLite extends AbstractDBEntity {
     }
 
     @Override
-    public String buildLabel() {
-        return buildLabel(true);
-    }
-
-    public String buildLabel(boolean avecSerie) {
-        return buildLabel(false, avecSerie);
-    }
-
-    private String buildLabel(boolean simple, boolean avecSerie) {
-        String lb = getTitre();
+    protected String buildLabel(boolean simple, boolean avecSerie) {
+        String lb = getTitreParaBD();
         if (!simple)
             lb = BeanUtils.formatTitre(lb);
         String s = "";
         if (avecSerie)
             if ("".equals(lb))
-                lb = BeanUtils.formatTitre(getSerie());
+                lb = BeanUtils.formatTitre(getTitreSerie());
             else
-                s = StringUtils.ajoutString(s, BeanUtils.formatTitre(getSerie()), " - ");
+                s = StringUtils.ajoutString(s, BeanUtils.formatTitre(getTitreSerie()), " - ");
         s = StringUtils.ajoutString(s, getsCategorie(), " - ");
         if ("".equals(lb))
             return s;

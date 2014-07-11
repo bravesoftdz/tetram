@@ -3,7 +3,8 @@ package org.tetram.bdtheque.data.dao;
 import org.apache.ibatis.exceptions.PersistenceException;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.tetram.bdtheque.data.bean.abstractentities.AbstractScriptEntity;
+import org.tetram.bdtheque.data.bean.interfaces.ScriptEntity;
+import org.tetram.bdtheque.data.bean.abstractentities.AbstractDBEntity;
 import org.tetram.bdtheque.data.dao.mappers.CommonMapper;
 
 import java.lang.annotation.ElementType;
@@ -17,7 +18,7 @@ import java.util.UUID;
 /**
  * Created by Thierry on 12/06/2014.
  */
-public abstract class DaoScriptImpl<T extends AbstractScriptEntity, PK> extends DaoRWImpl<T, PK> implements DaoScript<T> {
+public abstract class DaoScriptImpl<T extends AbstractDBEntity & ScriptEntity, PK> extends DaoRWImpl<T, PK> implements DaoScript<T> {
 
     @Autowired
     private CommonMapper commonMapper;

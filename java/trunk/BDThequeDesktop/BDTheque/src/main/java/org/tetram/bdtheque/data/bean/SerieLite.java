@@ -3,7 +3,7 @@ package org.tetram.bdtheque.data.bean;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import org.tetram.bdtheque.data.BeanUtils;
-import org.tetram.bdtheque.data.bean.abstractentities.AbstractSerie;
+import org.tetram.bdtheque.data.bean.abstractentities.BaseSerie;
 import org.tetram.bdtheque.utils.StringUtils;
 
 import java.util.Comparator;
@@ -12,7 +12,7 @@ import java.util.Comparator;
  * Created by Thierry on 24/05/2014.
  */
 @SuppressWarnings("UnusedDeclaration")
-public class SerieLite extends AbstractSerie {
+public class SerieLite extends BaseSerie {
 
     public static Comparator<SerieLite> DEFAULT_COMPARATOR = new Comparator<SerieLite>() {
         @Override

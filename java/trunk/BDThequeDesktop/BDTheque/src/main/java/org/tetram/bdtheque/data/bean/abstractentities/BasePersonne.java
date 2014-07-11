@@ -6,7 +6,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import org.tetram.bdtheque.data.BeanUtils;
 import org.tetram.bdtheque.data.bean.PersonneLite;
-import org.tetram.bdtheque.data.bean.WebLinkedEntity;
+import org.tetram.bdtheque.data.bean.interfaces.WebLinkedEntity;
 
 import java.net.URL;
 import java.util.Comparator;
@@ -15,7 +15,7 @@ import java.util.Comparator;
  * Created by Thierry on 10/07/2014.
  */
 @SuppressWarnings("UnusedDeclaration")
-public abstract class AbstractPersonne extends AbstractScriptEntity implements WebLinkedEntity {
+public abstract class BasePersonne extends AbstractDBEntity implements WebLinkedEntity {
     public final static Comparator<PersonneLite> DEFAULT_COMPARATOR = (o1, o2) -> {
         if (o1 == o2) return 0;
 
@@ -39,16 +39,6 @@ public abstract class AbstractPersonne extends AbstractScriptEntity implements W
 
     public StringProperty nomPersonneProperty() {
         return nomPersonne;
-    }
-
-    @Override
-    public URL getSiteWeb() {
-        return siteWeb.get();
-    }
-
-    @Override
-    public void setSiteWeb(URL siteWeb) {
-        this.siteWeb.set(siteWeb);
     }
 
     @Override

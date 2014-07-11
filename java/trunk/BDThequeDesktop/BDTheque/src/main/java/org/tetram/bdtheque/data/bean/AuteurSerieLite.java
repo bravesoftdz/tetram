@@ -3,8 +3,8 @@ package org.tetram.bdtheque.data.bean;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import org.tetram.bdtheque.data.BeanUtils;
-import org.tetram.bdtheque.data.bean.abstractentities.AbstractAuteur;
-import org.tetram.bdtheque.data.bean.abstractentities.AbstractPersonne;
+import org.tetram.bdtheque.data.bean.abstractentities.BaseAuteur;
+import org.tetram.bdtheque.data.bean.abstractentities.BasePersonne;
 
 import java.util.Comparator;
 import java.util.UUID;
@@ -13,7 +13,7 @@ import java.util.UUID;
  * Created by Thierry on 24/05/2014.
  */
 @SuppressWarnings("UnusedDeclaration")
-public class AuteurSerieLite extends AbstractAuteur {
+public class AuteurSerieLite extends BaseAuteur {
 
     public static Comparator<AuteurSerieLite> DEFAULT_COMPARATOR = new Comparator<AuteurSerieLite>() {
         @Override
@@ -25,7 +25,7 @@ public class AuteurSerieLite extends AbstractAuteur {
             comparaison = BeanUtils.compare(o1.getMetier(), o2.getMetier());
             if (comparaison != 0) return comparaison;
 
-            comparaison = AbstractPersonne.DEFAULT_COMPARATOR.compare(o1.getPersonne(), o2.getPersonne());
+            comparaison = BasePersonne.DEFAULT_COMPARATOR.compare(o1.getPersonne(), o2.getPersonne());
             if (comparaison != 0) return comparaison;
 
             return 0;

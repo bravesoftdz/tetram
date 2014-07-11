@@ -3,9 +3,9 @@
 <mapper namespace="org.tetram.bdtheque.data.dao.mappers.ParaBDMapper">
     <resultMap id="ParaBDLite" type="beanParaBDLite">
         <id column="id_paraBD" property="id"/>
-        <result column="titreParaBD" property="titre"/>
+        <result column="titreParaBD" property="titreParaBD"/>
         <result column="id_serie" property="idSerie"/>
-        <result column="titreserie" property="serie"/>
+        <result column="titreserie" property="titreSerie"/>
         <result column="achat" property="achat"/>
         <result column="complet" property="complet"/>
         <result column="sCategorie" property="sCategorie"/>

@@ -1,6 +1,6 @@
 package org.tetram.bdtheque.data.dao;
 
-import org.tetram.bdtheque.data.bean.abstractentities.AbstractImage;
+import org.tetram.bdtheque.data.bean.abstractentities.BaseImage;
 import org.tetram.bdtheque.data.services.UserPreferences;
 import org.tetram.bdtheque.spring.SpringContext;
 
@@ -11,7 +11,7 @@ import java.util.UUID;
 /**
  * Created by Thierry on 13/06/2014.
  */
-public interface ImageLiteDao<T extends AbstractImage, K> extends DaoRW<T, K> {
+public interface ImageLiteDao<T extends BaseImage, K> extends DaoRW<T, K> {
 
     byte[] getImageStream(T image, Integer height, Integer width, boolean antiAliasing, boolean cadre, int effet3D);
 

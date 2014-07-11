@@ -24,10 +24,10 @@ public class Forms {
 
     static {
         entitiesUrl = new HashMap<>();
-        entitiesUrl.put(AbstractAlbum.class, "consultation/ficheAlbum.fxml");
-        entitiesUrl.put(AbstractSerie.class, "consultation/ficheSerie.fxml");
-        entitiesUrl.put(AbstractPersonne.class, "consultation/ficheAuteur.fxml");
-        entitiesUrl.put(AbstractAuteur.class, "consultation/ficheAuteur.fxml");
+        entitiesUrl.put(BaseAlbum.class, "consultation/ficheAlbum.fxml");
+        entitiesUrl.put(BaseSerie.class, "consultation/ficheSerie.fxml");
+        entitiesUrl.put(BasePersonne.class, "consultation/ficheAuteur.fxml");
+        entitiesUrl.put(BaseAuteur.class, "consultation/ficheAuteur.fxml");
     }
 
     // on ne peut pas simplement utiliser entitiesUrl.get : CGLIB ajoute une surcharge

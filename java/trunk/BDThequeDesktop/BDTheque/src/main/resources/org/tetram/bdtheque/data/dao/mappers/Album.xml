@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="org.tetram.bdtheque.data.dao.mappers.AlbumMapper">
-    <resultMap id="AbstractAlbum" type="org.tetram.bdtheque.data.bean.abstractentities.AbstractAlbum">
+    <resultMap id="AbstractAlbum" type="org.tetram.bdtheque.data.bean.abstractentities.BaseAlbum">
         <id column="id_album" property="id"/>
         <result column="titreAlbum" property="titreAlbum"/>
         <result column="AnneeParution" property="anneeParution"/>
@@ -17,7 +17,7 @@
     <resultMap id="AlbumLite" extends="AbstractAlbum" type="beanAlbumLite">
         <result column="id_serie" property="idSerie"/>
         <result column="id_editeur" property="idEditeur"/>
-        <result column="TitreSerie" property="serie"/>
+        <result column="TitreSerie" property="titreSerie"/>
         <result column="NomEditeur" property="editeur"/>
         <result column="stock" property="stock"/>
         <result column="achat" property="achat"/>

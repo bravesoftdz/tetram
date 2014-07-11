@@ -2,7 +2,7 @@ package org.tetram.bdtheque.data.bean;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import org.tetram.bdtheque.data.bean.abstractentities.AbstractAuteur;
+import org.tetram.bdtheque.data.bean.abstractentities.BaseAuteur;
 
 import java.util.UUID;
 
@@ -10,7 +10,7 @@ import java.util.UUID;
  * Created by Thierry on 24/05/2014.
  */
 @SuppressWarnings("UnusedDeclaration")
-public class AuteurParaBDLite extends AbstractAuteur {
+public class AuteurParaBDLite extends BaseAuteur {
 
     private final ObjectProperty<UUID> idParaBD = new SimpleObjectProperty<>(this, "idParaBD", null);
 

@@ -5,48 +5,18 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import org.tetram.bdtheque.data.BeanUtils;
-import org.tetram.bdtheque.data.bean.abstractentities.AbstractDBEntity;
+import org.tetram.bdtheque.data.bean.abstractentities.BaseUnivers;
 
-import java.net.URL;
 import java.util.UUID;
 
 /**
  * Created by Thierry on 24/05/2014.
  */
 @SuppressWarnings("UnusedDeclaration")
-public class Univers extends AbstractDBEntity implements WebLinkedEntity {
+public class Univers extends BaseUnivers {
 
-    private final StringProperty nomUnivers = new SimpleStringProperty(null);
-    private final ObjectProperty<URL> siteWeb = new SimpleObjectProperty<>(null);
     private final StringProperty description = new SimpleStringProperty(null);
     private final ObjectProperty<UniversLite> universParent = new SimpleObjectProperty<>(null);
-
-    public String getNomUnivers() {
-        return BeanUtils.trimOrNull(nomUnivers.get());
-    }
-
-    public void setNomUnivers(String nomUnivers) {
-        this.nomUnivers.set(BeanUtils.trimOrNull(nomUnivers));
-    }
-
-    public StringProperty nomUniversProperty() {
-        return nomUnivers;
-    }
-
-    @Override
-    public URL getSiteWeb() {
-        return siteWeb.get();
-    }
-
-    @Override
-    public void setSiteWeb(URL siteWeb) {
-        this.siteWeb.set(siteWeb);
-    }
-
-    @Override
-    public ObjectProperty<URL> siteWebProperty() {
-        return siteWeb;
-    }
 
     public String getDescription() {
         return BeanUtils.trimOrNull(description.get());

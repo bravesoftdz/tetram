@@ -1,4 +1,4 @@
-package org.tetram.bdtheque.data.bean;
+package org.tetram.bdtheque.data.bean.interfaces;
 
 import javafx.beans.property.ObjectProperty;
 
@@ -10,9 +10,13 @@ import java.util.UUID;
 @SuppressWarnings("UnusedDeclaration")
 public interface DBEntity {
 
-    UUID getId();
+    default UUID getId() {
+        return idProperty().get();
+    }
 
-    void setId(UUID id);
+    default void setId(UUID id) {
+        idProperty().set(id);
+    }
 
     ObjectProperty<UUID> idProperty();
 

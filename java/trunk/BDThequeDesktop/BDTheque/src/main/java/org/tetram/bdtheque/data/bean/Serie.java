@@ -4,7 +4,8 @@ import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import org.tetram.bdtheque.data.BeanUtils;
-import org.tetram.bdtheque.data.bean.abstractentities.AbstractSerie;
+import org.tetram.bdtheque.data.bean.abstractentities.BaseSerie;
+import org.tetram.bdtheque.data.bean.interfaces.ScriptEntity;
 import org.tetram.bdtheque.data.dao.DaoScriptImpl;
 import org.tetram.bdtheque.data.dao.ValeurListeDao;
 import org.tetram.bdtheque.spring.SpringContext;
@@ -20,7 +21,7 @@ import java.util.UUID;
  */
 @SuppressWarnings("UnusedDeclaration")
 @DaoScriptImpl.ScriptInfo(typeData = 7)
-public class Serie extends AbstractSerie {
+public class Serie extends BaseSerie implements ScriptEntity {
 
     public static Comparator<SerieLite> DEFAULT_COMPARATOR = new Comparator<SerieLite>() {
         @Override
@@ -67,6 +68,7 @@ public class Serie extends AbstractSerie {
     private final ObjectProperty<ValeurListe> orientation = new SimpleObjectProperty<>(this, "orientation", null);
     private final ObjectProperty<ValeurListe> sensLecture = new SimpleObjectProperty<>(this, "sensLecture", null);
     private final ListProperty<UniversLite> univers = new SimpleListProperty<>(this, "univers", FXCollections.<UniversLite>observableArrayList());
+    private final ListProperty<String> associations = new SimpleListProperty<>(this, "associations", FXCollections.observableArrayList());
 
     public Serie() {
         ValeurListeDao valeurListeDao = SpringContext.CONTEXT.getBean(ValeurListeDao.class);
@@ -144,6 +146,7 @@ public class Serie extends AbstractSerie {
 
     public void setEditeur(EditeurLite editeur) {
         this.editeur.set(editeur);
+        if (editeur == null) setCollection(null);
     }
 
     public ObjectProperty<EditeurLite> editeurProperty() {
@@ -459,6 +462,11 @@ public class Serie extends AbstractSerie {
 
     public ObjectProperty<ValeurListe> sensLectureProperty() {
         return sensLecture;
+    }
+
+    @Override
+    public ListProperty<String> associationsProperty() {
+        return associations;
     }
 
     @Override

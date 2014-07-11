@@ -1,21 +1,14 @@
 package org.tetram.bdtheque.data.bean;
 
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import org.tetram.bdtheque.data.BeanUtils;
-import org.tetram.bdtheque.data.bean.abstractentities.AbstractDBEntity;
+import javafx.beans.property.*;
+import javafx.collections.FXCollections;
+import org.tetram.bdtheque.data.bean.abstractentities.BaseEdition;
 import org.tetram.bdtheque.data.dao.ValeurListeDao;
 import org.tetram.bdtheque.spring.SpringContext;
-import org.tetram.bdtheque.utils.I18nSupport;
-import org.tetram.bdtheque.utils.ISBNUtils;
-import org.tetram.bdtheque.utils.StringUtils;
-import org.tetram.bdtheque.utils.TypeUtils;
+import org.tetram.bdtheque.spring.utils.AutoTrimStringProperty;
 
 import java.time.LocalDate;
 import java.time.Year;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -23,7 +16,7 @@ import java.util.UUID;
  * Created by Thierry on 24/05/2014.
  */
 @SuppressWarnings("UnusedDeclaration")
-public class Edition extends AbstractDBEntity {
+public class Edition extends BaseEdition<Editeur, Collection> {
 
     private static Edition defaultEdition = null;
     private final ObjectProperty<Integer> nombreDePages = new SimpleObjectProperty<>();
@@ -34,33 +27,29 @@ public class Edition extends AbstractDBEntity {
     private final BooleanProperty prete = new SimpleBooleanProperty();
     private final BooleanProperty offert = new SimpleBooleanProperty();
     private final BooleanProperty gratuit = new SimpleBooleanProperty();
-    private UUID idAlbum;
-    private Editeur editeur;
-    private Collection collection;
-    private ValeurListe etat;
-    private ValeurListe reliure;
-    private ValeurListe typeEdition;
-    private ValeurListe formatEdition;
-    private ValeurListe orientation;
-    private ValeurListe sensLecture;
-    private Year anneeEdition;
-    private Year anneeCote;
-    private Double prix;
-    private Double prixCote;
-    private String isbn;
-    private LocalDate dateAchat;
-    private String notes;
-    private String numeroPerso;
-    private List<CouvertureLite> couvertures = new ArrayList<>();
+    private final ObjectProperty<UUID> idAlbum = new SimpleObjectProperty<>(this, "idAlbum", null);
+    private final ObjectProperty<ValeurListe> etat= new SimpleObjectProperty<>(this, "etat", null);
+    private final ObjectProperty<ValeurListe> reliure= new SimpleObjectProperty<>(this, "reliure", null);
+    private final ObjectProperty<ValeurListe> typeEdition= new SimpleObjectProperty<>(this, "typeEdition", null);
+    private final ObjectProperty<ValeurListe> formatEdition= new SimpleObjectProperty<>(this, "formatEdition", null);
+    private final ObjectProperty<ValeurListe> orientation= new SimpleObjectProperty<>(this, "orientation", null);
+    private final ObjectProperty<ValeurListe> sensLecture= new SimpleObjectProperty<>(this, "sensLecture", null);
+    private final ObjectProperty<Year> anneeCote= new SimpleObjectProperty<>(this, "anneeCote", null);
+    private final ObjectProperty<Double> prix= new SimpleObjectProperty<>(this, "prix", null);
+    private final ObjectProperty<Double> prixCote= new SimpleObjectProperty<>(this, "prixCote", null);
+    private final ObjectProperty<LocalDate> dateAchat= new SimpleObjectProperty<>(this, "dateAchat", null);
+    private final StringProperty notes = new AutoTrimStringProperty(this, "notes", null);
+    private final StringProperty numeroPerso = new AutoTrimStringProperty(this, "numeroPerso", null);
+    private final ListProperty<CouvertureLite> couvertures = new SimpleListProperty<>(this, "couvertures", FXCollections.observableArrayList());
 
     public Edition() {
         ValeurListeDao valeurListeDao = SpringContext.CONTEXT.getBean(ValeurListeDao.class);
-        etat = valeurListeDao.getDefaultEtat();
-        reliure = valeurListeDao.getDefaultReliure();
-        typeEdition = valeurListeDao.getDefaultTypeEdition();
-        formatEdition = valeurListeDao.getDefaultFormatEdition();
-        orientation = valeurListeDao.getDefaultOrientation();
-        sensLecture = valeurListeDao.getDefaultSensLecture();
+        setEtat(valeurListeDao.getDefaultEtat());
+        setReliure(valeurListeDao.getDefaultReliure());
+        setTypeEdition(valeurListeDao.getDefaultTypeEdition());
+        setFormatEdition(valeurListeDao.getDefaultFormatEdition());
+        setOrientation(valeurListeDao.getDefaultOrientation());
+        setSensLecture(valeurListeDao.getDefaultSensLecture());
     }
 
     public static Edition getDefaultEdition() {
@@ -68,56 +57,25 @@ public class Edition extends AbstractDBEntity {
         return defaultEdition;
     }
 
-    @Override
-    public String buildLabel() {
-        String s = "";
-        if (getEditeur() != null)
-            s = StringUtils.ajoutString(s, BeanUtils.formatTitre(getEditeur().getNomEditeur()), " ");
-        if (getCollection() != null)
-            s = StringUtils.ajoutString(s, BeanUtils.formatTitre(getCollection().getNomCollection()), " ", "(", ")");
-        s = StringUtils.ajoutString(s, TypeUtils.nonZero(getAnneeEdition()), " ", "[", "]");
-        s = StringUtils.ajoutString(s, ISBNUtils.formatISBN(getIsbn()), " - ", I18nSupport.message("isbn") + " ");
-        return s;
+    public UUID getIdAlbum() {
+        return idAlbum.get();
     }
 
-    public UUID getIdAlbum() {
+    public ObjectProperty<UUID> idAlbumProperty() {
         return idAlbum;
     }
 
     public void setIdAlbum(UUID idAlbum) {
-        this.idAlbum = idAlbum;
-    }
-
-    public Editeur getEditeur() {
-        return editeur;
-    }
-
-    public void setEditeur(Editeur editeur) {
-        this.editeur = editeur;
+        this.idAlbum.set(idAlbum);
     }
 
     public UUID getIdEditeur() {
         return getEditeur() == null ? null : getEditeur().getId();
     }
 
-    public Collection getCollection() {
-        return collection;
-    }
-
-    public void setCollection(Collection collection) {
-        this.collection = collection;
-    }
 
     public UUID getIdCollection() {
         return getEditeur() == null || getCollection() == null || !getCollection().getEditeur().equals(getEditeur()) ? null : getCollection().getId();
-    }
-
-    public Year getAnneeEdition() {
-        return anneeEdition;
-    }
-
-    public void setAnneeEdition(Year anneeEdition) {
-        this.anneeEdition = anneeEdition;
     }
 
     public Integer getNombreDePages() {
@@ -130,30 +88,6 @@ public class Edition extends AbstractDBEntity {
 
     public ObjectProperty<Integer> nombreDePagesProperty() {
         return nombreDePages;
-    }
-
-    public Year getAnneeCote() {
-        return anneeCote;
-    }
-
-    public void setAnneeCote(Year anneeCote) {
-        this.anneeCote = anneeCote;
-    }
-
-    public Double getPrix() {
-        return prix;
-    }
-
-    public void setPrix(Double prix) {
-        this.prix = prix;
-    }
-
-    public Double getPrixCote() {
-        return prixCote;
-    }
-
-    public void setPrixCote(Double prixCote) {
-        this.prixCote = prixCote;
     }
 
     public boolean isCouleur() {
@@ -240,44 +174,160 @@ public class Edition extends AbstractDBEntity {
         this.gratuit.set(gratuit);
     }
 
-    public String getIsbn() {
-        return BeanUtils.trimOrNull(isbn);
+    public ValeurListe getEtat() {
+        return etat.get();
     }
 
-    public void setIsbn(String isbn) {
-        this.isbn = BeanUtils.trimOrNull(isbn);
+    public ObjectProperty<ValeurListe> etatProperty() {
+        return etat;
+    }
+
+    public void setEtat(ValeurListe etat) {
+        this.etat.set(etat);
+    }
+
+    public ValeurListe getReliure() {
+        return reliure.get();
+    }
+
+    public ObjectProperty<ValeurListe> reliureProperty() {
+        return reliure;
+    }
+
+    public void setReliure(ValeurListe reliure) {
+        this.reliure.set(reliure);
+    }
+
+    public ValeurListe getTypeEdition() {
+        return typeEdition.get();
+    }
+
+    public ObjectProperty<ValeurListe> typeEditionProperty() {
+        return typeEdition;
+    }
+
+    public void setTypeEdition(ValeurListe typeEdition) {
+        this.typeEdition.set(typeEdition);
+    }
+
+    public ValeurListe getFormatEdition() {
+        return formatEdition.get();
+    }
+
+    public ObjectProperty<ValeurListe> formatEditionProperty() {
+        return formatEdition;
+    }
+
+    public void setFormatEdition(ValeurListe formatEdition) {
+        this.formatEdition.set(formatEdition);
+    }
+
+    public ValeurListe getOrientation() {
+        return orientation.get();
+    }
+
+    public ObjectProperty<ValeurListe> orientationProperty() {
+        return orientation;
+    }
+
+    public void setOrientation(ValeurListe orientation) {
+        this.orientation.set(orientation);
+    }
+
+    public ValeurListe getSensLecture() {
+        return sensLecture.get();
+    }
+
+    public ObjectProperty<ValeurListe> sensLectureProperty() {
+        return sensLecture;
+    }
+
+    public void setSensLecture(ValeurListe sensLecture) {
+        this.sensLecture.set(sensLecture);
+    }
+
+    public Year getAnneeCote() {
+        return anneeCote.get();
+    }
+
+    public ObjectProperty<Year> anneeCoteProperty() {
+        return anneeCote;
+    }
+
+    public void setAnneeCote(Year anneeCote) {
+        this.anneeCote.set(anneeCote);
+    }
+
+    public Double getPrix() {
+        return prix.get();
+    }
+
+    public ObjectProperty<Double> prixProperty() {
+        return prix;
+    }
+
+    public void setPrix(Double prix) {
+        this.prix.set(prix);
+    }
+
+    public Double getPrixCote() {
+        return prixCote.get();
+    }
+
+    public ObjectProperty<Double> prixCoteProperty() {
+        return prixCote;
+    }
+
+    public void setPrixCote(Double prixCote) {
+        this.prixCote.set(prixCote);
     }
 
     public LocalDate getDateAchat() {
+        return dateAchat.get();
+    }
+
+    public ObjectProperty<LocalDate> dateAchatProperty() {
         return dateAchat;
     }
 
     public void setDateAchat(LocalDate dateAchat) {
-        this.dateAchat = dateAchat;
+        this.dateAchat.set(dateAchat);
     }
 
     public String getNotes() {
-        return BeanUtils.trimOrNull(notes);
+        return notes.get();
+    }
+
+    public StringProperty notesProperty() {
+        return notes;
     }
 
     public void setNotes(String notes) {
-        this.notes = BeanUtils.trimOrNull(notes);
+        this.notes.set(notes);
     }
 
     public String getNumeroPerso() {
-        return BeanUtils.trimOrNull(numeroPerso);
+        return numeroPerso.get();
+    }
+
+    public StringProperty numeroPersoProperty() {
+        return numeroPerso;
     }
 
     public void setNumeroPerso(String numeroPerso) {
-        this.numeroPerso = BeanUtils.trimOrNull(numeroPerso);
+        this.numeroPerso.set(numeroPerso);
     }
 
     public List<CouvertureLite> getCouvertures() {
+        return couvertures.get();
+    }
+
+    public ListProperty<CouvertureLite> couverturesProperty() {
         return couvertures;
     }
 
     public void setCouvertures(List<CouvertureLite> couvertures) {
-        this.couvertures = couvertures;
+        this.couvertures.set(FXCollections.observableList(couvertures));
     }
 
     public boolean addCouverture(CouvertureLite couverture) {
@@ -286,54 +336,6 @@ public class Edition extends AbstractDBEntity {
 
     public boolean removeCouverture(CouvertureLite couverture) {
         return getCouvertures().remove(couverture);
-    }
-
-    public ValeurListe getEtat() {
-        return etat;
-    }
-
-    public void setEtat(ValeurListe etat) {
-        this.etat = etat;
-    }
-
-    public ValeurListe getReliure() {
-        return reliure;
-    }
-
-    public void setReliure(ValeurListe reliure) {
-        this.reliure = reliure;
-    }
-
-    public ValeurListe getTypeEdition() {
-        return typeEdition;
-    }
-
-    public void setTypeEdition(ValeurListe typeEdition) {
-        this.typeEdition = typeEdition;
-    }
-
-    public ValeurListe getFormatEdition() {
-        return formatEdition;
-    }
-
-    public void setFormatEdition(ValeurListe formatEdition) {
-        this.formatEdition = formatEdition;
-    }
-
-    public ValeurListe getOrientation() {
-        return orientation;
-    }
-
-    public void setOrientation(ValeurListe orientation) {
-        this.orientation = orientation;
-    }
-
-    public ValeurListe getSensLecture() {
-        return sensLecture;
-    }
-
-    public void setSensLecture(ValeurListe sensLecture) {
-        this.sensLecture = sensLecture;
     }
 
 }

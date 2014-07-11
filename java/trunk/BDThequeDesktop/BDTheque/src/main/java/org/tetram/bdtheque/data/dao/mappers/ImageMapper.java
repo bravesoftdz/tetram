@@ -5,7 +5,7 @@ import org.tetram.bdtheque.data.bean.CouvertureLite;
 import org.tetram.bdtheque.data.bean.Edition;
 import org.tetram.bdtheque.data.bean.ImageStream;
 import org.tetram.bdtheque.data.bean.PhotoLite;
-import org.tetram.bdtheque.data.bean.abstractentities.AbstractImage;
+import org.tetram.bdtheque.data.bean.abstractentities.BaseImage;
 import org.tetram.bdtheque.utils.FileLink;
 
 import java.util.Collection;
@@ -22,7 +22,7 @@ public interface ImageMapper extends BaseMapperInterface {
 
     List<PhotoLite> getListPhotoLiteByParaBDId(UUID id);
 
-    <T extends AbstractImage>
+    <T extends BaseImage>
     int cleanImageLite(
             @Param("parentId") UUID parentId,
             @Param("list") Collection<T> list,
@@ -31,7 +31,7 @@ public interface ImageMapper extends BaseMapperInterface {
             @Param("fieldId") String fieldId
     );
 
-    <T extends AbstractImage>
+    <T extends BaseImage>
     int addImageLite(
             @Param("image") T image,
             @Param("parentId") UUID parentId,
@@ -46,7 +46,7 @@ public interface ImageMapper extends BaseMapperInterface {
             @Param("fieldBlob") String fieldBlob
     );
 
-    <T extends AbstractImage>
+    <T extends BaseImage>
     int updateMetadataImageLite(
             @Param("image") T image,
             @Param("fileName") String fileName,
@@ -55,7 +55,7 @@ public interface ImageMapper extends BaseMapperInterface {
             @Param("fieldFile") String fieldFile
     );
 
-    <T extends AbstractImage>
+    <T extends BaseImage>
     int changeModeImageLite(
             @Param("image") T image,
             @Param("data") byte[] stream,
@@ -65,7 +65,7 @@ public interface ImageMapper extends BaseMapperInterface {
             @Param("fieldBlob") String fieldBlob
     );
 
-    <T extends AbstractImage>
+    <T extends BaseImage>
     ImageStream getImageStream(
             @Param("image") T image,
             @Param("tableName") String tableName,
