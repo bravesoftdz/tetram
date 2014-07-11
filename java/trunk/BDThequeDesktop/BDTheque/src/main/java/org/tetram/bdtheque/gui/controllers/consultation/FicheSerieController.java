@@ -7,7 +7,6 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
@@ -83,21 +82,26 @@ public class FicheSerieController extends WindowController implements Consultati
     public void initialize() {
         notationController.entityProperty().bind(serie);
         notationController.setDao(((EvaluatedEntityDao) serieDao));
-        final EventHandler<MouseEvent> onMouseClicked = event -> {
+        lvAlbums.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2) {
                 AbstractDBEntity entity = lvAlbums.getSelectionModel().getSelectedItem();
                 if (entity != null)
                     modeConsultationController.showConsultationForm(entity);
             }
-        };
-        lvAlbums.setOnMouseClicked(onMouseClicked);
+        });
         lvAlbums.setCellFactory(param -> {
             ListCell<AlbumLite> cell = new ListCell<>();
             cell.textProperty().bind(Bindings.createStringBinding(() -> cell.itemProperty().get() == null ? null : cell.itemProperty().get().buildLabel(false), cell.itemProperty()));
             return cell;
         });
 
-        lvParabd.setOnMouseClicked(onMouseClicked);
+        lvParabd.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 2) {
+                AbstractDBEntity entity = lvParabd.getSelectionModel().getSelectedItem();
+                if (entity != null)
+                    modeConsultationController.showConsultationForm(entity);
+            }
+        });
         lvParabd.setCellFactory(param -> {
             ListCell<ParaBDLite> cell = new ListCell<>();
             cell.textProperty().bind(Bindings.createStringBinding(() -> cell.itemProperty().get() == null ? null : cell.itemProperty().get().buildLabel(false), cell.itemProperty()));

@@ -42,7 +42,7 @@ public abstract class BeanUtils {
 
     @Contract("null -> null")
     public static String trimOrNull(String v) {
-        return v == null ? null : v.trim();
+        return org.apache.commons.lang3.StringUtils.strip(v, " \r\n\t\b\u00A0");
     }
 
     public static List<UniversLite> checkAndBuildListUniversFull(List<UniversLite> universFull, List<UniversLite> univers, Serie serie) {

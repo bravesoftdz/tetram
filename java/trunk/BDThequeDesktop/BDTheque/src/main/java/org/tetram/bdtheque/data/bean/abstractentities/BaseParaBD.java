@@ -10,6 +10,11 @@ import org.tetram.bdtheque.spring.utils.AutoTrimStringProperty;
 public abstract class BaseParaBD extends AbstractDBEntity {
     private final StringProperty titreParaBD = new AutoTrimStringProperty(this, "titreParaBD", null);
 
+    static {
+        baseClass = BaseParaBD.class;
+    }
+
+
     public String getTitreParaBD() {
         return titreParaBD.get();
     }

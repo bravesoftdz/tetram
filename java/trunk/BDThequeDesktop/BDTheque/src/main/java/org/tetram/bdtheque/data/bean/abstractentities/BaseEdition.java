@@ -49,36 +49,37 @@ public class BaseEdition<E extends BaseEditeur, C extends BaseCollection> extend
     private final ObjectProperty<E> editeur = new SimpleObjectProperty<>(this, "editeur", null);
     private final ObjectProperty<C> collection = new SimpleObjectProperty<>(this, "collection", null);
 
-    public Year getAnneeEdition() {
-        return anneeEdition.get();
+    static {
+        baseClass = BaseEdition.class;
     }
 
-    public ObjectProperty<Year> anneeEditionProperty() {
-        return anneeEdition;
+
+    public Year getAnneeEdition() {
+        return anneeEdition.get();
     }
 
     public void setAnneeEdition(Year anneeEdition) {
         this.anneeEdition.set(anneeEdition);
     }
 
-    public String getIsbn() {
-        return isbn.get();
+    public ObjectProperty<Year> anneeEditionProperty() {
+        return anneeEdition;
     }
 
-    public StringProperty isbnProperty() {
-        return isbn;
+    public String getIsbn() {
+        return isbn.get();
     }
 
     public void setIsbn(String isbn) {
         this.isbn.set(isbn);
     }
 
-    public E getEditeur() {
-        return editeur.get();
+    public StringProperty isbnProperty() {
+        return isbn;
     }
 
-    public ObjectProperty<E> editeurProperty() {
-        return editeur;
+    public E getEditeur() {
+        return editeur.get();
     }
 
     public void setEditeur(E editeur) {
@@ -87,16 +88,20 @@ public class BaseEdition<E extends BaseEditeur, C extends BaseCollection> extend
             setCollection(null);
     }
 
+    public ObjectProperty<E> editeurProperty() {
+        return editeur;
+    }
+
     public C getCollection() {
         return collection.get();
     }
 
-    public ObjectProperty<C> collectionProperty() {
-        return collection;
-    }
-
     public void setCollection(C collection) {
         this.collection.set(collection);
+    }
+
+    public ObjectProperty<C> collectionProperty() {
+        return collection;
     }
 
     @Override

@@ -21,6 +21,11 @@ public class ConversionLite extends AbstractDBEntity {
     private final StringProperty monnaie2 = new AutoTrimStringProperty(this, "monnaie2", null);
     private final DoubleProperty taux = new SimpleDoubleProperty(this, "taux", 0);
 
+    static {
+        baseClass = ConversionLite.class;
+    }
+
+
     public String getMonnaie1() {
         return monnaie1.get();
     }

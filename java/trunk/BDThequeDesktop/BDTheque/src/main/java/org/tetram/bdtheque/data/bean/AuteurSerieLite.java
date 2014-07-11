@@ -3,6 +3,7 @@ package org.tetram.bdtheque.data.bean;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import org.tetram.bdtheque.data.BeanUtils;
+import org.tetram.bdtheque.data.bean.abstractentities.AbstractDBEntity;
 import org.tetram.bdtheque.data.bean.abstractentities.BaseAuteur;
 import org.tetram.bdtheque.data.bean.abstractentities.BasePersonne;
 
@@ -33,6 +34,11 @@ public class AuteurSerieLite extends BaseAuteur {
     };
     private final ObjectProperty<UUID> idSerie = new SimpleObjectProperty<>(this, "idSerie", null);
     private final ObjectProperty<MetierAuteur> metier = new SimpleObjectProperty<>(this, "metier", null);
+
+    static {
+        baseClass = AuteurSerieLite.class;
+    }
+
 
     public UUID getIdSerie() {
         return idSerie.get();
@@ -81,4 +87,11 @@ public class AuteurSerieLite extends BaseAuteur {
         return result;
     }
 
+    @Override
+    public AbstractDBEntity lightRef() {
+        AuteurSerieLite e = (AuteurSerieLite) super.lightRef();
+        e.setIdSerie(this.getIdSerie());
+        e.setMetier(this.getMetier());
+        return e;
+    }
 }

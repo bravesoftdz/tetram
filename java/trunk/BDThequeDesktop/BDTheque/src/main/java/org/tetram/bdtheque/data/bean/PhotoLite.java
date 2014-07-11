@@ -9,6 +9,11 @@ import org.tetram.bdtheque.spring.SpringContext;
  */
 public class PhotoLite extends BaseImage {
 
+    static {
+        baseClass = PhotoLite.class;
+    }
+
+
     public PhotoLite() {
         ValeurListeDao valeurListeDao = SpringContext.CONTEXT.getBean(ValeurListeDao.class);
         setCategorie(valeurListeDao.getDefaultTypePhoto());

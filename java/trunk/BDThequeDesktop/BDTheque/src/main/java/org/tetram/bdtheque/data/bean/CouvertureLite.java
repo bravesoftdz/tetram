@@ -9,6 +9,10 @@ import org.tetram.bdtheque.spring.SpringContext;
  */
 public class CouvertureLite extends BaseImage {
 
+    static {
+        baseClass = CouvertureLite.class;
+    }
+
     public CouvertureLite() {
         ValeurListeDao valeurListeDao = SpringContext.CONTEXT.getBean(ValeurListeDao.class);
         setCategorie(valeurListeDao.getDefaultTypeCouverture());

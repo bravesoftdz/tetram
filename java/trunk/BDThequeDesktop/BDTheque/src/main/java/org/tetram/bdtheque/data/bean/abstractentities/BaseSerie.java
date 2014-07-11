@@ -22,6 +22,11 @@ public abstract class BaseSerie extends AbstractDBEntity implements EvaluatedEnt
     private final ObjectProperty<URL> siteWeb = new SimpleObjectProperty<>(this, "siteWeb", null);
     private final ObjectProperty<ValeurListe> notation = new SimpleObjectProperty<>(this, "notation", null);
 
+    static {
+        baseClass = BaseSerie.class;
+    }
+
+
     protected BaseSerie() {
         ValeurListeDao valeurListeDao = SpringContext.CONTEXT.getBean(ValeurListeDao.class);
         setNotation(valeurListeDao.getDefaultNotation());

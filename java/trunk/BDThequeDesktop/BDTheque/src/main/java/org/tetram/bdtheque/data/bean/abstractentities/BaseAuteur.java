@@ -69,4 +69,10 @@ public abstract class BaseAuteur extends AbstractDBEntity implements WebLinkedEn
         return getPersonne().buildLabel();
     }
 
+    @Override
+    public AbstractDBEntity lightRef() {
+        BaseAuteur e = (BaseAuteur) super.lightRef();
+        e.setPersonne((PersonneLite) this.getPersonne().lightRef());
+        return e;
+    }
 }

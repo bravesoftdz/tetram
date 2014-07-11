@@ -29,6 +29,11 @@ public class BaseEditeur extends AbstractDBEntity implements WebLinkedEntity {
     private final StringProperty nomEditeur = new AutoTrimStringProperty(this, "nomEditeur", null);
     private final ObjectProperty<URL> siteWeb = new SimpleObjectProperty<>(this, "siteWeb", null);
 
+    static {
+        baseClass = BaseEditeur.class;
+    }
+
+
     public StringProperty nomEditeurProperty() {
         return nomEditeur;
     }

@@ -2,6 +2,7 @@ package org.tetram.bdtheque.data.bean;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import org.tetram.bdtheque.data.bean.abstractentities.AbstractDBEntity;
 import org.tetram.bdtheque.data.bean.abstractentities.BaseAuteur;
 
 import java.util.UUID;
@@ -13,6 +14,11 @@ import java.util.UUID;
 public class AuteurParaBDLite extends BaseAuteur {
 
     private final ObjectProperty<UUID> idParaBD = new SimpleObjectProperty<>(this, "idParaBD", null);
+
+    static {
+        baseClass = AuteurParaBDLite.class;
+    }
+
 
     public UUID getIdParaBD() {
         return idParaBD.get();
@@ -48,4 +54,10 @@ public class AuteurParaBDLite extends BaseAuteur {
         return result;
     }
 
+    @Override
+    public AbstractDBEntity lightRef() {
+        AuteurParaBDLite e = (AuteurParaBDLite) super.lightRef();
+        e.setIdParaBD(this.getIdParaBD());
+        return e;
+    }
 }

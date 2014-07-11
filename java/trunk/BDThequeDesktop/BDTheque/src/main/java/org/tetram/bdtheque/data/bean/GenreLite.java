@@ -1,12 +1,12 @@
 package org.tetram.bdtheque.data.bean;
 
-import javafx.beans.property.ListProperty;
-import javafx.beans.property.SimpleListProperty;
+import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import org.tetram.bdtheque.data.BeanUtils;
 import org.tetram.bdtheque.data.bean.abstractentities.AbstractDBEntity;
 import org.tetram.bdtheque.data.bean.interfaces.ScriptEntity;
 import org.tetram.bdtheque.data.dao.DaoScriptImpl;
+import org.tetram.bdtheque.spring.utils.AutoTrimStringProperty;
 
 import java.util.Comparator;
 
@@ -27,24 +27,37 @@ public class GenreLite extends AbstractDBEntity implements ScriptEntity {
 
         return 0;
     };
-    private String genre;
-    private Integer quantite;
+    private final StringProperty genre = new AutoTrimStringProperty(this, "genre", null);
+    private final IntegerProperty quantite = new SimpleIntegerProperty(this, "quantite", 0);
     private final ListProperty<String> associations = new SimpleListProperty<>(this, "associations", FXCollections.observableArrayList());
 
+    static {
+        baseClass = GenreLite.class;
+    }
+
+
     public String getGenre() {
-        return BeanUtils.trimOrNull(genre);
+        return genre.get();
     }
 
     public void setGenre(String genre) {
-        this.genre = BeanUtils.trimOrNull(genre);
+        this.genre.set(genre);
     }
 
-    public Integer getQuantite() {
+    public StringProperty genreProperty() {
+        return genre;
+    }
+
+    public int getQuantite() {
+        return quantite.get();
+    }
+
+    public void setQuantite(int quantite) {
+        this.quantite.set(quantite);
+    }
+
+    public IntegerProperty quantiteProperty() {
         return quantite;
-    }
-
-    public void setQuantite(Integer quantite) {
-        this.quantite = quantite;
     }
 
     @Override
@@ -54,7 +67,7 @@ public class GenreLite extends AbstractDBEntity implements ScriptEntity {
 
     @Override
     public String buildLabel() {
-        return genre;
+        return getGenre();
     }
 
 }

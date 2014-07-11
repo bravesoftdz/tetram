@@ -1,5 +1,7 @@
 package org.tetram.bdtheque.gui.controllers;
 
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
@@ -31,6 +33,9 @@ public class ModeConsultationController extends WindowController {
     @FXML
     private AnchorPane repertoirePane;
 
+    private ObjectProperty<AbstractDBEntity> currentEntity = new SimpleObjectProperty<>(this, "currentEntity", null);
+
+    @SuppressWarnings("UnusedDeclaration")
     public AnchorPane getRepertoirePane() {
         return repertoirePane;
     }
@@ -46,6 +51,9 @@ public class ModeConsultationController extends WindowController {
     }
 
     public void showConsultationForm(AbstractDBEntity entity) {
-        Forms.showFiche(entity, detailPane);
+        if (entity != null && !entity.equals(currentEntity.get())) {
+            Forms.showFiche(entity, detailPane);
+            currentEntity.set(entity.lightRef());
+        }
     }
 }

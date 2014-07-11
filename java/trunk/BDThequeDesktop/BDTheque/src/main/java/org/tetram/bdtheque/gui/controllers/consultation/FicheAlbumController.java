@@ -64,13 +64,10 @@ public class FicheAlbumController extends WindowController implements Consultati
 
     @Autowired
     private ModeConsultationController modeConsultationController;
-
     @Autowired
     private AlbumDao albumDao;
-
     @Autowired
     private CouvertureLiteDao couvertureDao;
-
     @Autowired
     private UserPreferences userPreferences;
 
@@ -348,7 +345,6 @@ public class FicheAlbumController extends WindowController implements Consultati
         box.getChildren().addAll(desc);
         return box;
     }
-
 
 }
 

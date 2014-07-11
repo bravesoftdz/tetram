@@ -29,6 +29,11 @@ public abstract class BasePersonne extends AbstractDBEntity implements WebLinked
     private final StringProperty nomPersonne = new SimpleStringProperty(this, "nomPersonne", null);
     private final ObjectProperty<URL> siteWeb = new SimpleObjectProperty<>(this, "siteWeb", null);
 
+    static {
+        baseClass = BasePersonne.class;
+    }
+
+
     public String getNomPersonne() {
         return BeanUtils.trimOrNull(nomPersonne.get());
     }
