@@ -12,7 +12,6 @@ import org.tetram.bdtheque.utils.StringUtils;
 
 import java.time.LocalDate;
 import java.time.Year;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -37,8 +36,8 @@ public class ParaBD extends BaseParaBD {
     private final BooleanProperty offert = new SimpleBooleanProperty(this, "offert", false);
     private final BooleanProperty gratuit = new SimpleBooleanProperty(this, "gratuit", false);
     private final ObjectProperty<LocalDate> dateAchat = new SimpleObjectProperty<>(this, "dateAchat", null);
-    private final ListProperty<UniversLite> univers = new SimpleListProperty<>(this, "univers", FXCollections.<UniversLite>observableList(new ArrayList<>()));
-    private final ListProperty<UniversLite> universFull = new SimpleListProperty<>(this, "universFull", FXCollections.<UniversLite>observableList(new ArrayList<>()));
+    private final ListProperty<UniversLite> univers = new SimpleListProperty<>(this, "univers", FXCollections.<UniversLite>observableArrayList());
+    private final ListProperty<UniversLite> universFull = new SimpleListProperty<>(this, "universFull", FXCollections.<UniversLite>observableArrayList());
     private final ListProperty<PhotoLite> photos = new SimpleListProperty<>(this, "photos", FXCollections.observableArrayList());
 
     public ParaBD() {
@@ -58,96 +57,96 @@ public class ParaBD extends BaseParaBD {
         return anneeEdition.get();
     }
 
-    public ObjectProperty<Year> anneeEditionProperty() {
-        return anneeEdition;
-    }
-
     public void setAnneeEdition(Year anneeEdition) {
         this.anneeEdition.set(anneeEdition);
+    }
+
+    public ObjectProperty<Year> anneeEditionProperty() {
+        return anneeEdition;
     }
 
     public ValeurListe getCategorieParaBD() {
         return categorieParaBD.get();
     }
 
-    public ObjectProperty<ValeurListe> categorieParaBDProperty() {
-        return categorieParaBD;
-    }
-
     public void setCategorieParaBD(ValeurListe categorieParaBD) {
         this.categorieParaBD.set(categorieParaBD);
+    }
+
+    public ObjectProperty<ValeurListe> categorieParaBDProperty() {
+        return categorieParaBD;
     }
 
     public Year getAnneeCote() {
         return anneeCote.get();
     }
 
-    public ObjectProperty<Year> anneeCoteProperty() {
-        return anneeCote;
-    }
-
     public void setAnneeCote(Year anneeCote) {
         this.anneeCote.set(anneeCote);
+    }
+
+    public ObjectProperty<Year> anneeCoteProperty() {
+        return anneeCote;
     }
 
     public Serie getSerie() {
         return serie.get();
     }
 
-    public ObjectProperty<Serie> serieProperty() {
-        return serie;
-    }
-
     public void setSerie(Serie serie) {
         this.serie.set(serie);
+    }
+
+    public ObjectProperty<Serie> serieProperty() {
+        return serie;
     }
 
     public Double getPrix() {
         return prix.get();
     }
 
-    public ObjectProperty<Double> prixProperty() {
-        return prix;
-    }
-
     public void setPrix(Double prix) {
         this.prix.set(prix);
+    }
+
+    public ObjectProperty<Double> prixProperty() {
+        return prix;
     }
 
     public Double getPrixCote() {
         return prixCote.get();
     }
 
-    public ObjectProperty<Double> prixCoteProperty() {
-        return prixCote;
-    }
-
     public void setPrixCote(Double prixCote) {
         this.prixCote.set(prixCote);
+    }
+
+    public ObjectProperty<Double> prixCoteProperty() {
+        return prixCote;
     }
 
     public LocalDate getDateAchat() {
         return dateAchat.get();
     }
 
-    public ObjectProperty<LocalDate> dateAchatProperty() {
-        return dateAchat;
-    }
-
     public void setDateAchat(LocalDate dateAchat) {
         this.dateAchat.set(dateAchat);
+    }
+
+    public ObjectProperty<LocalDate> dateAchatProperty() {
+        return dateAchat;
     }
 
     public List<AuteurParaBDLite> getAuteurs() {
         return auteurs.get();
     }
 
-    public ListProperty<AuteurParaBDLite> auteursProperty() {
-        return auteurs;
-    }
-
     public void setAuteurs(List<AuteurParaBDLite> auteurs) {
         this.auteurs.set(FXCollections.observableList(auteurs));
+    }
+
+    public ListProperty<AuteurParaBDLite> auteursProperty() {
+        return auteurs;
     }
 
     public void addAuteur(PersonneLite personne) {
@@ -170,84 +169,84 @@ public class ParaBD extends BaseParaBD {
         return description.get();
     }
 
-    public StringProperty descriptionProperty() {
-        return description;
-    }
-
     public void setDescription(String description) {
         this.description.set(description);
+    }
+
+    public StringProperty descriptionProperty() {
+        return description;
     }
 
     public String getNotes() {
         return notes.get();
     }
 
-    public StringProperty notesProperty() {
-        return notes;
-    }
-
     public void setNotes(String notes) {
         this.notes.set(notes);
+    }
+
+    public StringProperty notesProperty() {
+        return notes;
     }
 
     public boolean isDedicace() {
         return dedicace.get();
     }
 
-    public BooleanProperty dedicaceProperty() {
-        return dedicace;
-    }
-
     public void setDedicace(boolean dedicace) {
         this.dedicace.set(dedicace);
+    }
+
+    public BooleanProperty dedicaceProperty() {
+        return dedicace;
     }
 
     public boolean isNumerote() {
         return numerote.get();
     }
 
-    public BooleanProperty numeroteProperty() {
-        return numerote;
-    }
-
     public void setNumerote(boolean numerote) {
         this.numerote.set(numerote);
+    }
+
+    public BooleanProperty numeroteProperty() {
+        return numerote;
     }
 
     public boolean isStock() {
         return stock.get();
     }
 
-    public BooleanProperty stockProperty() {
-        return stock;
-    }
-
     public void setStock(boolean stock) {
         this.stock.set(stock);
+    }
+
+    public BooleanProperty stockProperty() {
+        return stock;
     }
 
     public boolean isOffert() {
         return offert.get();
     }
 
-    public BooleanProperty offertProperty() {
-        return offert;
-    }
-
     public void setOffert(boolean offert) {
         this.offert.set(offert);
+    }
+
+    public BooleanProperty offertProperty() {
+        return offert;
     }
 
     public boolean isGratuit() {
         return gratuit.get();
     }
 
-    public BooleanProperty gratuitProperty() {
-        return gratuit;
-    }
-
     public void setGratuit(boolean gratuit) {
         this.gratuit.set(gratuit);
+    }
+
+    public BooleanProperty gratuitProperty() {
+        return gratuit;
     }
 
     public List<UniversLite> getUnivers() {

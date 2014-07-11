@@ -5,9 +5,11 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import org.tetram.bdtheque.data.BeanUtils;
-import org.tetram.bdtheque.data.bean.interfaces.EvaluatedEntity;
 import org.tetram.bdtheque.data.bean.ValeurListe;
+import org.tetram.bdtheque.data.bean.interfaces.EvaluatedEntity;
 import org.tetram.bdtheque.data.bean.interfaces.WebLinkedEntity;
+import org.tetram.bdtheque.data.dao.ValeurListeDao;
+import org.tetram.bdtheque.spring.SpringContext;
 
 import java.net.URL;
 
@@ -19,6 +21,11 @@ public abstract class BaseSerie extends AbstractDBEntity implements EvaluatedEnt
     private final StringProperty titreSerie = new SimpleStringProperty(this, "titreSerie", null);
     private final ObjectProperty<URL> siteWeb = new SimpleObjectProperty<>(this, "siteWeb", null);
     private final ObjectProperty<ValeurListe> notation = new SimpleObjectProperty<>(this, "notation", null);
+
+    protected BaseSerie() {
+        ValeurListeDao valeurListeDao = SpringContext.CONTEXT.getBean(ValeurListeDao.class);
+        setNotation(valeurListeDao.getDefaultNotation());
+    }
 
     public String getTitreSerie() {
         return BeanUtils.trimOrNull(titreSerie.get());

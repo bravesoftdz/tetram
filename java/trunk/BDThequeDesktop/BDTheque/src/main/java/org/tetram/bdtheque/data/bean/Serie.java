@@ -78,7 +78,6 @@ public class Serie extends BaseSerie implements ScriptEntity {
         setFormatEdition(valeurListeDao.getDefaultFormatEdition());
         setOrientation(valeurListeDao.getDefaultOrientation());
         setSensLecture(valeurListeDao.getDefaultSensLecture());
-        setNotation(valeurListeDao.getDefaultNotation());
 
         auteursProperty().addListener((observable, oldValue, newValue) -> buildListsAuteurs());
         auteursProperty().addListener((ListChangeListener<AuteurSerieLite>) c -> buildListsAuteurs());

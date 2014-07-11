@@ -15,15 +15,6 @@ public abstract class BaseAuteur extends AbstractDBEntity implements WebLinkedEn
 
     private final ObjectProperty<PersonneLite> personne = new SimpleObjectProperty<>(this, "personne", null);
 
-    public BaseAuteur() {
-        super();
-    }
-
-    public BaseAuteur(PersonneLite personne) {
-        this();
-        setPersonne(personne);
-    }
-
     public ObjectProperty<PersonneLite> personneProperty() {
         return personne;
     }

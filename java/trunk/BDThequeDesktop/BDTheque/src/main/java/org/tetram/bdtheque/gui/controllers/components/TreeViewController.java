@@ -3,6 +3,7 @@ package org.tetram.bdtheque.gui.controllers.components;
 import javafx.application.Platform;
 import javafx.beans.NamedArg;
 import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -18,16 +19,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
-import org.tetram.bdtheque.data.bean.interfaces.EvaluatedEntity;
 import org.tetram.bdtheque.data.bean.ValeurListe;
 import org.tetram.bdtheque.data.bean.abstractentities.AbstractDBEntity;
 import org.tetram.bdtheque.data.bean.abstractentities.AbstractEntity;
+import org.tetram.bdtheque.data.bean.interfaces.EvaluatedEntity;
 import org.tetram.bdtheque.data.services.UserPreferences;
 import org.tetram.bdtheque.gui.controllers.ModeConsultationController;
 import org.tetram.bdtheque.gui.controllers.WindowController;
 import org.tetram.bdtheque.gui.utils.NotationResource;
 import org.tetram.bdtheque.utils.FileLink;
 import org.tetram.bdtheque.utils.FileLinks;
+import org.tetram.bdtheque.utils.I18nSupport;
 
 import java.util.List;
 
@@ -62,9 +64,12 @@ public class TreeViewController extends WindowController {
     private ObjectProperty<Callback<TreeViewNode, List<? extends AbstractEntity>>> onGetChildren = new SimpleObjectProperty<>(this, "onGetChildren", null);
     private ObjectProperty<Callback<TreeViewNode, Boolean>> onIsLeaf = new SimpleObjectProperty<>(this, "onIsLeaf", param -> true);
     private ObjectProperty<Callback<TreeViewNode, String>> onGetLabel = new SimpleObjectProperty<>(this, "onGetLabel", null);
+    private ObjectProperty<Class<? extends AbstractEntity>> finalEntityClass = new SimpleObjectProperty<>(this, "finalEntityClass", AbstractEntity.class);
 
     @FXML
     public void initialize() {
+        treeview.setPlaceholder(new Label(I18nSupport.message("pas.de.donnees.a.afficher")));
+
         final EventHandler<MouseEvent> onMouseClicked = event -> {
             if (event.getClickCount() == 2) {
                 final TreeItem<AbstractEntity> selectedItem = treeview.getSelectionModel().getSelectedItem();
@@ -141,7 +146,9 @@ public class TreeViewController extends WindowController {
                         }
         );
 
-        column1.visibleProperty().bind(userPreferences.afficheNoteListesProperty());
+        final BooleanBinding finalEntityClassIsEvaluated = Bindings.createBooleanBinding(() -> EvaluatedEntity.class.isAssignableFrom(getFinalEntityClass()), finalEntityClass);
+        final BooleanBinding column1Visible = Bindings.and(userPreferences.afficheNoteListesProperty(), finalEntityClassIsEvaluated);
+        column1.visibleProperty().bind(column1Visible);
 
         Platform.runLater(() -> treeview.setRoot(new TreeViewNode(null)));
     }
@@ -216,6 +223,18 @@ public class TreeViewController extends WindowController {
 
     public TreeTableColumn<AbstractEntity, AbstractEntity> getColumn1() {
         return column1;
+    }
+
+    public ObjectProperty<Class<? extends AbstractEntity>> finalEntityClassProperty() {
+        return finalEntityClass;
+    }
+
+    public Class<? extends AbstractEntity> getFinalEntityClass() {
+        return finalEntityClass.get();
+    }
+
+    public void setFinalEntityClass(Class<? extends AbstractEntity> finalEntityClass) {
+        this.finalEntityClass.set(finalEntityClass);
     }
 
     public class TreeViewNode extends TreeItem<AbstractEntity> {

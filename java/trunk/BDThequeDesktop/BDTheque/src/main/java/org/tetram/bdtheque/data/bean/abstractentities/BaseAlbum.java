@@ -3,8 +3,10 @@ package org.tetram.bdtheque.data.bean.abstractentities;
 import javafx.beans.property.*;
 import org.tetram.bdtheque.data.BeanUtils;
 import org.tetram.bdtheque.data.bean.Album;
-import org.tetram.bdtheque.data.bean.interfaces.EvaluatedEntity;
 import org.tetram.bdtheque.data.bean.ValeurListe;
+import org.tetram.bdtheque.data.bean.interfaces.EvaluatedEntity;
+import org.tetram.bdtheque.data.dao.ValeurListeDao;
+import org.tetram.bdtheque.spring.SpringContext;
 import org.tetram.bdtheque.spring.utils.AutoTrimStringProperty;
 import org.tetram.bdtheque.utils.TypeUtils;
 
@@ -54,6 +56,15 @@ public abstract class BaseAlbum extends AbstractDBEntity implements EvaluatedEnt
     private final BooleanProperty horsSerie = new SimpleBooleanProperty(this, "horsSerie", false);
     private final BooleanProperty integrale = new SimpleBooleanProperty(this, "integrale", false);
     private final ObjectProperty<ValeurListe> notation = new SimpleObjectProperty<>(this, "notation", null);
+
+    protected BaseAlbum() {
+        ValeurListeDao valeurListeDao = SpringContext.CONTEXT.getBean(ValeurListeDao.class);
+        setNotation(valeurListeDao.getDefaultNotation());
+        anneeParutionProperty().addListener((observable, oldValue, newValue) -> {
+            if (TypeUtils.isNullOrZero(getAnneeParution()))
+                setMoisParution(null);
+        });
+    }
 
     public boolean isComplet() {
         return complet.get();

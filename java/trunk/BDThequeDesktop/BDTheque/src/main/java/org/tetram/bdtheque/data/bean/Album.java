@@ -5,10 +5,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import org.tetram.bdtheque.data.BeanUtils;
 import org.tetram.bdtheque.data.bean.abstractentities.BaseAlbum;
-import org.tetram.bdtheque.data.dao.ValeurListeDao;
-import org.tetram.bdtheque.spring.SpringContext;
 import org.tetram.bdtheque.spring.utils.AutoTrimStringProperty;
-import org.tetram.bdtheque.utils.TypeUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,21 +19,17 @@ public class Album extends BaseAlbum {
 
     private static Album defaultAlbum = null;
     private final ObjectProperty<Serie> serie = new SimpleObjectProperty<>(this, "serie", null);
-    private final ListProperty<AuteurAlbumLite> auteurs = new SimpleListProperty<>(this, "auteurs", FXCollections.<AuteurAlbumLite>observableList(new ArrayList<>()));
-    private final ListProperty<AuteurAlbumLite> scenaristes = new SimpleListProperty<>(this, "scenaristes", FXCollections.<AuteurAlbumLite>observableList(new ArrayList<>()));
-    private final ListProperty<AuteurAlbumLite> dessinateurs = new SimpleListProperty<>(this, "dessinateurs", FXCollections.<AuteurAlbumLite>observableList(new ArrayList<>()));
-    private final ListProperty<AuteurAlbumLite> coloristes = new SimpleListProperty<>(this, "coloristes", FXCollections.<AuteurAlbumLite>observableList(new ArrayList<>()));
+    private final ListProperty<AuteurAlbumLite> auteurs = new SimpleListProperty<>(this, "auteurs", FXCollections.<AuteurAlbumLite>observableArrayList());
+    private final ListProperty<AuteurAlbumLite> scenaristes = new SimpleListProperty<>(this, "scenaristes", FXCollections.<AuteurAlbumLite>observableArrayList());
+    private final ListProperty<AuteurAlbumLite> dessinateurs = new SimpleListProperty<>(this, "dessinateurs", FXCollections.<AuteurAlbumLite>observableArrayList());
+    private final ListProperty<AuteurAlbumLite> coloristes = new SimpleListProperty<>(this, "coloristes", FXCollections.<AuteurAlbumLite>observableArrayList());
     private final StringProperty sujet = new AutoTrimStringProperty(this, "sujet", null);
     private final StringProperty notes = new AutoTrimStringProperty(this, "notes", null);
-    private final ListProperty<Edition> editions = new SimpleListProperty<>(this, "editions", FXCollections.<Edition>observableList(new ArrayList<>()));
-    private final ListProperty<UniversLite> univers = new SimpleListProperty<>(this, "univers", FXCollections.<UniversLite>observableList(new ArrayList<>()));
-    private final ListProperty<UniversLite> universFull = new SimpleListProperty<>(this, "universFull", FXCollections.<UniversLite>observableList(new ArrayList<>()));
+    private final ListProperty<Edition> editions = new SimpleListProperty<>(this, "editions", FXCollections.<Edition>observableArrayList());
+    private final ListProperty<UniversLite> univers = new SimpleListProperty<>(this, "univers", FXCollections.<UniversLite>observableArrayList());
+    private final ListProperty<UniversLite> universFull = new SimpleListProperty<>(this, "universFull", FXCollections.<UniversLite>observableArrayList());
 
     public Album() {
-        ValeurListeDao valeurListeDao = SpringContext.CONTEXT.getBean(ValeurListeDao.class);
-        setNotation(valeurListeDao.getDefaultNotation());
-
-
         final ListChangeListener<UniversLite> universListChangeListener = change -> universFullProperty().set(FXCollections.observableList(BeanUtils.checkAndBuildListUniversFull(getUniversFull(), getUnivers(), getSerie())));
         serieProperty().addListener((observable, oldValue, newValue) -> {
             if (oldValue != null) oldValue.universProperty().removeListener(universListChangeListener);
@@ -44,11 +37,6 @@ public class Album extends BaseAlbum {
             universFullProperty().set(FXCollections.observableList(BeanUtils.checkAndBuildListUniversFull(getUniversFull(), getUnivers(), newValue)));
         });
         universProperty().addListener(universListChangeListener);
-
-        anneeParutionProperty().addListener((observable, oldValue, newValue) -> {
-            if (TypeUtils.isNullOrZero(getAnneeParution()))
-                setMoisParution(null);
-        });
 
         auteursProperty().addListener((observable, oldValue, newValue) -> buildListsAuteurs());
         auteursProperty().addListener((ListChangeListener<AuteurAlbumLite>) c -> buildListsAuteurs());

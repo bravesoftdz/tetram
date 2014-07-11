@@ -25,4 +25,6 @@ public interface ParaBDMapper extends BaseMapperInterface {
     List<InitialeEntity<UUID>> getInitiales(@Param("filtre") String filtre);
 
     List<ParaBDLite> getListParaBDLiteBySerieId(@Param("idSerie") UUID idSerie, @Param("filtre") String filtre);
+
+    List<InitialeEntity<UUID>> getInitialesSeries(@Param("filtre") String filtre);
 }
