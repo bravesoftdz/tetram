@@ -11,9 +11,11 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.event.EventTarget;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.text.Text;
 import javafx.util.Callback;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -90,16 +92,18 @@ public class TreeViewController extends WindowController {
         }, clickToShowProperty(), onClickItemProperty()));
 
         column0.setCellValueFactory(param -> {
-                    String label;
-                    if (getOnGetLabel() != null)
-                        label = param.getValue() == null ? null : getOnGetLabel().call((TreeViewNode) param.getValue());
-                    else {
-                        final AbstractEntity entity = param.getValue().getValue();
-                        label = entity == null ? null : entity.buildLabel();
-                    }
-                    return new ReadOnlyStringWrapper(label);
-                }
-        );
+            final TreeItem<AbstractEntity> treeViewNode = param.getValue();
+            String label;
+            if (getOnGetLabel() != null)
+                label = treeViewNode == null ? "" : getOnGetLabel().call((TreeViewNode) treeViewNode);
+            else {
+                final AbstractEntity entity = treeViewNode == null ? null : treeViewNode.getValue();
+                label = entity == null ? "" : entity.buildLabel();
+            }
+            // l'appel à new String est peut être redondant mais sans ça, le treeview ne fonctionne pas correctement
+            //noinspection RedundantStringConstructorCall
+            return new ReadOnlyStringWrapper(new String(label));
+        });
         column0.setCellFactory(param -> {
                     final TreeTableCell<AbstractEntity, String> cell = new TreeTableCell<>();
                     cell.itemProperty().addListener((observable) -> {
@@ -109,7 +113,22 @@ public class TreeViewController extends WindowController {
                             cell.getStyleClass().add("node-bold");
                         else
                             cell.getStyleClass().remove("node-bold");
+
+                        cell.setAlignment(Pos.CENTER_LEFT);
+
+                        cell.setContentDisplay(ContentDisplay.RIGHT);
+                        AbstractEntity entity = treeItem == null ? null : treeItem.getValue();
+                        if (entity instanceof InitialeEntity && ((InitialeEntity) entity).getCount() > 0) {
+                            final Text text = new Text("  (" + ((InitialeEntity) entity).getCount() + ")");
+                            text.setStyle("-fx-font-weight: normal;");
+                            cell.setGraphic(text);
+                        } else {
+                            cell.setGraphic(null);
+                        }
+
                     });
+                    cell.textProperty().bind(cell.itemProperty());
+/*
                     cell.textProperty().bind(Bindings.createStringBinding(() -> {
                         final TreeTableRow<AbstractEntity> tableRow = cell.getTreeTableRow();
                         if (tableRow == null) return null;
@@ -124,6 +143,7 @@ public class TreeViewController extends WindowController {
                         }
                         return label;
                     }, cell.itemProperty(), cell.tableRowProperty()));
+*/
                     return cell;
                 }
         );

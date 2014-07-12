@@ -2,7 +2,6 @@ package org.tetram.bdtheque.gui.utils;
 
 import javafx.beans.property.*;
 import org.tetram.bdtheque.data.bean.abstractentities.AbstractEntity;
-import org.tetram.bdtheque.utils.StringUtils;
 
 /**
  * Created by Thierry on 23/06/2014.
@@ -52,7 +51,8 @@ public class InitialeEntity<T> extends AbstractEntity {
 
     @Override
     public String buildLabel() {
-        return StringUtils.ajoutString(label.getValueSafe(), StringUtils.nonZero(getCount()), " ", "(", ")");
+        // return StringUtils.ajoutString(label.getValueSafe(), StringUtils.nonZero(getCount()), " ", "(", ")");
+        return label.getValueSafe();
     }
 
 }
