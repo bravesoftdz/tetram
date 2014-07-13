@@ -5,9 +5,9 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.tetram.bdtheque.data.bean.AlbumLite;
+import org.tetram.bdtheque.data.bean.InitialeEntity;
 import org.tetram.bdtheque.data.bean.ValeurListe;
 import org.tetram.bdtheque.data.dao.mappers.AlbumMapper;
-import org.tetram.bdtheque.gui.utils.InitialeEntity;
 
 import java.util.List;
 import java.util.UUID;

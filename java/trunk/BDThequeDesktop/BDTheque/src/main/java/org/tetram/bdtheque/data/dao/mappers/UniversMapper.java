@@ -1,9 +1,9 @@
 package org.tetram.bdtheque.data.dao.mappers;
 
 import org.apache.ibatis.annotations.Param;
+import org.tetram.bdtheque.data.bean.InitialeEntity;
 import org.tetram.bdtheque.data.bean.Univers;
 import org.tetram.bdtheque.data.bean.UniversLite;
-import org.tetram.bdtheque.gui.utils.InitialeEntity;
 import org.tetram.bdtheque.utils.FileLink;
 
 import java.util.Collection;

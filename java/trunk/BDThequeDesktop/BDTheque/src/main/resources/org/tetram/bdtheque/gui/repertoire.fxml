@@ -14,18 +14,6 @@
         <Tab id="tabAlbums" fx:id="tabAlbums" text="%Albums">
             <content>
                 <BorderPane prefHeight="200.0" prefWidth="200.0">
-                    <center>
-                        <TreeTableView id="tvAlbums" fx:id="tvAlbums" showRoot="false" BorderPane.alignment="CENTER">
-                            <columns>
-                                <TreeTableColumn editable="false" sortable="false"/>
-                                <TreeTableColumn editable="false" maxWidth="68.0" minWidth="68.0" prefWidth="68.0"
-                                                 resizable="false" sortable="false"/>
-                            </columns>
-                            <columnResizePolicy>
-                                <TreeTableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
-                            </columnResizePolicy>
-                        </TreeTableView>
-                    </center>
                     <top>
                         <Label contentDisplay="RIGHT" text="%Grouper.par" BorderPane.alignment="CENTER_LEFT">
                             <graphic>
@@ -36,6 +24,11 @@
                             </BorderPane.margin>
                         </Label>
                     </top>
+                    <center>
+                        <fx:include fx:id="albums" source="components/treeview.fxml" AnchorPane.bottomAnchor="0.0"
+                                    AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                                    AnchorPane.topAnchor="0.0"/>
+                    </center>
                 </BorderPane>
             </content>
         </Tab>

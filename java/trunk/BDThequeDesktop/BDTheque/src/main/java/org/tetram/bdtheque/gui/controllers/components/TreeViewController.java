@@ -1,26 +1,24 @@
 package org.tetram.bdtheque.gui.controllers.components;
 
 import javafx.application.Platform;
-import javafx.beans.NamedArg;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.event.EventTarget;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.text.Text;
 import javafx.util.Callback;
+import org.jetbrains.annotations.NonNls;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
+import org.tetram.bdtheque.data.bean.InitialeEntity;
 import org.tetram.bdtheque.data.bean.ValeurListe;
 import org.tetram.bdtheque.data.bean.abstractentities.AbstractDBEntity;
 import org.tetram.bdtheque.data.bean.abstractentities.AbstractEntity;
@@ -28,7 +26,6 @@ import org.tetram.bdtheque.data.bean.interfaces.EvaluatedEntity;
 import org.tetram.bdtheque.data.services.UserPreferences;
 import org.tetram.bdtheque.gui.controllers.ModeConsultationController;
 import org.tetram.bdtheque.gui.controllers.WindowController;
-import org.tetram.bdtheque.gui.utils.InitialeEntity;
 import org.tetram.bdtheque.gui.utils.NotationResource;
 import org.tetram.bdtheque.utils.FileLink;
 import org.tetram.bdtheque.utils.FileLinks;
@@ -48,6 +45,8 @@ import java.util.List;
 })
 public class TreeViewController extends WindowController {
 
+    @NonNls
+    private static final String NODE_BOLD_CSS = "node-bold";
     @Autowired
     private ModeConsultationController modeConsultationController;
 
@@ -55,7 +54,7 @@ public class TreeViewController extends WindowController {
     private UserPreferences userPreferences;
 
     @FXML
-    private TreeTableView<AbstractEntity> treeview;
+    private TreeTableView<AbstractEntity> treeTableView;
 
     @FXML
     private TreeTableColumn<AbstractEntity, String> column0;
@@ -71,11 +70,11 @@ public class TreeViewController extends WindowController {
 
     @FXML
     public void initialize() {
-        treeview.setPlaceholder(new Label(I18nSupport.message("pas.de.donnees.a.afficher")));
+        treeTableView.setPlaceholder(new Label(I18nSupport.message("pas.de.donnees.a.afficher")));
 
         final EventHandler<MouseEvent> onMouseClicked = event -> {
             if (event.getClickCount() == 2) {
-                final TreeItem<AbstractEntity> selectedItem = treeview.getSelectionModel().getSelectedItem();
+                final TreeItem<AbstractEntity> selectedItem = treeTableView.getSelectionModel().getSelectedItem();
                 if (selectedItem != null && selectedItem.isLeaf()) {
                     final AbstractEntity entity = selectedItem.getValue();
                     if (entity != null && entity instanceof AbstractDBEntity)
@@ -84,7 +83,7 @@ public class TreeViewController extends WindowController {
             }
         };
 
-        treeview.onMouseClickedProperty().bind(Bindings.createObjectBinding(() -> {
+        treeTableView.onMouseClickedProperty().bind(Bindings.createObjectBinding(() -> {
             if (getClickToShow() && getOnClickItem() == null)
                 return onMouseClicked;
             else
@@ -100,52 +99,43 @@ public class TreeViewController extends WindowController {
                 final AbstractEntity entity = treeViewNode == null ? null : treeViewNode.getValue();
                 label = entity == null ? "" : entity.buildLabel();
             }
-            // l'appel à new String est peut être redondant mais sans ça, le treeview ne fonctionne pas correctement
+            // l'appel à new String() est peut être redondant mais sans ça, le treeTableView ne fonctionne pas correctement
             //noinspection RedundantStringConstructorCall
             return new ReadOnlyStringWrapper(new String(label));
         });
-        column0.setCellFactory(param -> {
-                    final TreeTableCell<AbstractEntity, String> cell = new TreeTableCell<>();
-                    cell.itemProperty().addListener((observable) -> {
-                        final TreeItem<AbstractEntity> treeItem = cell.getTreeTableRow().getTreeItem();
-                        //if (cell.getItem() != null)
-                        if (treeItem != null && treeItem.getParent() != null && treeItem.getParent().equals(treeview.getRoot()))
-                            cell.getStyleClass().add("node-bold");
-                        else
-                            cell.getStyleClass().remove("node-bold");
+        column0.setCellFactory(param ->
+                        new TreeTableCell<AbstractEntity, String>() {
+                            @Override
+                            protected void updateItem(String item, boolean empty) {
+                                super.updateItem(item, empty);
 
-                        cell.setAlignment(Pos.CENTER_LEFT);
+                                final TreeItem<AbstractEntity> treeItem = getTreeTableRow().getTreeItem();
+                                if (treeItem != null && treeItem.getParent() != null && treeItem.getParent().equals(treeTableView.getRoot()))
+                                    getStyleClass().add(NODE_BOLD_CSS);
+                                else
+                                    getStyleClass().remove(NODE_BOLD_CSS);
 
-                        cell.setContentDisplay(ContentDisplay.RIGHT);
-                        AbstractEntity entity = treeItem == null ? null : treeItem.getValue();
-                        if (entity instanceof InitialeEntity && ((InitialeEntity) entity).getCount() > 0) {
-                            final Text text = new Text("  (" + ((InitialeEntity) entity).getCount() + ")");
-                            text.setStyle("-fx-font-weight: normal;");
-                            cell.setGraphic(text);
-                        } else {
-                            cell.setGraphic(null);
+                                setAlignment(Pos.BASELINE_LEFT);
+                                setContentDisplay(ContentDisplay.RIGHT);
+
+                                if (empty) {
+                                    setText(null);
+                                    setGraphic(null);
+                                } else {
+                                    setText(item);
+                                    AbstractEntity entity = treeItem == null ? null : treeItem.getValue();
+                                    if (entity instanceof InitialeEntity && ((InitialeEntity) entity).getCount() > 0) {
+                                        @NonNls final Label text = new Label("(" + ((InitialeEntity) entity).getCount() + ")");
+                                        text.setStyle("-fx-font-weight: normal;");
+                                        text.setAlignment(Pos.BASELINE_CENTER);
+                                        setGraphicTextGap(8);
+                                        setGraphic(text);
+                                    } else {
+                                        setGraphic(null);
+                                    }
+                                }
+                            }
                         }
-
-                    });
-                    cell.textProperty().bind(cell.itemProperty());
-/*
-                    cell.textProperty().bind(Bindings.createStringBinding(() -> {
-                        final TreeTableRow<AbstractEntity> tableRow = cell.getTreeTableRow();
-                        if (tableRow == null) return null;
-
-                        String label;
-                        TreeItem<AbstractEntity> treeNode = tableRow.getTreeItem();
-                        if (getOnGetLabel() != null)
-                            label = treeNode == null ? null : getOnGetLabel().call((TreeViewNode) treeNode);
-                        else {
-                            final AbstractEntity entity = treeNode.getValue();
-                            label = entity == null ? null : entity.buildLabel();
-                        }
-                        return label;
-                    }, cell.itemProperty(), cell.tableRowProperty()));
-*/
-                    return cell;
-                }
         );
 
         column1.setCellValueFactory(param ->
@@ -235,7 +225,7 @@ public class TreeViewController extends WindowController {
     }
 
     public TreeTableView<AbstractEntity> getTreeView() {
-        return treeview;
+        return treeTableView;
     }
 
     public TreeTableColumn<AbstractEntity, String> getColumn0() {
@@ -259,7 +249,7 @@ public class TreeViewController extends WindowController {
     }
 
     public void refresh() {
-        treeview.setRoot(new TreeViewNode(null));
+        treeTableView.setRoot(new TreeViewNode(null));
     }
 
     public class TreeViewNode extends TreeItem<AbstractEntity> {
@@ -289,7 +279,6 @@ public class TreeViewController extends WindowController {
             return isLeaf;
         }
 
-
         @SuppressWarnings("unchecked")
         private ObservableList<TreeViewNode> buildChildren(TreeViewNode treeItem) {
             final Callback<TreeViewNode, List<? extends AbstractEntity>> getChildren = TreeViewController.this.getOnGetChildren();
@@ -307,9 +296,4 @@ public class TreeViewController extends WindowController {
 
     }
 
-    public class GetChildrenEvent extends ActionEvent {
-        public GetChildrenEvent(@NamedArg("source") Object source, @NamedArg("target") EventTarget target) {
-            super(source, target);
-        }
-    }
 }

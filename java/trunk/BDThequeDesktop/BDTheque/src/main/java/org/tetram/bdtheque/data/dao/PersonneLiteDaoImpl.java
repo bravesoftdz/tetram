@@ -4,9 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import org.tetram.bdtheque.data.bean.InitialeEntity;
 import org.tetram.bdtheque.data.bean.PersonneLite;
 import org.tetram.bdtheque.data.dao.mappers.AuteurMapper;
-import org.tetram.bdtheque.gui.utils.InitialeEntity;
 
 import java.util.List;
 import java.util.UUID;
