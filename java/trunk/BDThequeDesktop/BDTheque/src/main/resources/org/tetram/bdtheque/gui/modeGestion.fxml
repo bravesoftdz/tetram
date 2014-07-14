@@ -7,54 +7,58 @@
 <BorderPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="573.0" prefWidth="789.0" xmlns="http://javafx.com/javafx/8"
             fx:controller="org.tetram.bdtheque.gui.controllers.ModeGestionController">
     <left>
-        <ToolBar orientation="VERTICAL" prefHeight="369.0" BorderPane.alignment="CENTER">
+        <ToolBar fx:id="tbEntities" orientation="VERTICAL" prefHeight="369.0" BorderPane.alignment="CENTER">
             <items>
                 <ToggleButton fx:id="btAlbums" mnemonicParsing="false" text="Albums">
                     <padding>
                         <Insets bottom="4.0" left="10.0" right="10.0" top="4.0"/>
                     </padding>
+                    <toggleGroup>
+                        <ToggleGroup fx:id="entitiesType"/>
+                    </toggleGroup>
                 </ToggleButton>
-                <ToggleButton fx:id="btAchats" mnemonicParsing="false" text="Achats">
+                <ToggleButton fx:id="btAchats" mnemonicParsing="false" text="Achats" toggleGroup="$entitiesType">
                     <padding>
                         <Insets bottom="4.0" left="10.0" right="10.0" top="4.0"/>
                     </padding>
                 </ToggleButton>
                 <Separator/>
-                <ToggleButton fx:id="btUnivers" mnemonicParsing="false" text="Univers">
+                <ToggleButton fx:id="btUnivers" mnemonicParsing="false" text="Univers" toggleGroup="$entitiesType">
                     <padding>
                         <Insets bottom="4.0" left="10.0" right="10.0" top="4.0"/>
                     </padding>
                 </ToggleButton>
-                <ToggleButton fx:id="btSeries" mnemonicParsing="false" text="Séries">
-                    <padding>
-                        <Insets bottom="4.0" left="10.0" right="10.0" top="4.0"/>
-                    </padding>
-                </ToggleButton>
-                <Separator/>
-                <ToggleButton fx:id="btAuteurs" mnemonicParsing="false" text="Auteurs">
+                <ToggleButton fx:id="btSeries" mnemonicParsing="false" text="Séries" toggleGroup="$entitiesType">
                     <padding>
                         <Insets bottom="4.0" left="10.0" right="10.0" top="4.0"/>
                     </padding>
                 </ToggleButton>
                 <Separator/>
-                <ToggleButton fx:id="btEditeurs" mnemonicParsing="false" text="Editeurs">
-                    <padding>
-                        <Insets bottom="4.0" left="10.0" right="10.0" top="4.0"/>
-                    </padding>
-                </ToggleButton>
-                <ToggleButton fx:id="btCollections" mnemonicParsing="false" text="Collections">
+                <ToggleButton fx:id="btAuteurs" mnemonicParsing="false" text="Auteurs" toggleGroup="$entitiesType">
                     <padding>
                         <Insets bottom="4.0" left="10.0" right="10.0" top="4.0"/>
                     </padding>
                 </ToggleButton>
                 <Separator/>
-                <ToggleButton fx:id="btGenres" mnemonicParsing="false" text="Genres">
+                <ToggleButton fx:id="btEditeurs" mnemonicParsing="false" text="Editeurs" toggleGroup="$entitiesType">
+                    <padding>
+                        <Insets bottom="4.0" left="10.0" right="10.0" top="4.0"/>
+                    </padding>
+                </ToggleButton>
+                <ToggleButton fx:id="btCollections" mnemonicParsing="false" text="Collections"
+                              toggleGroup="$entitiesType">
                     <padding>
                         <Insets bottom="4.0" left="10.0" right="10.0" top="4.0"/>
                     </padding>
                 </ToggleButton>
                 <Separator/>
-                <ToggleButton fx:id="btParabd" mnemonicParsing="false" text="Para-BD">
+                <ToggleButton fx:id="btGenres" mnemonicParsing="false" text="Genres" toggleGroup="$entitiesType">
+                    <padding>
+                        <Insets bottom="4.0" left="10.0" right="10.0" top="4.0"/>
+                    </padding>
+                </ToggleButton>
+                <Separator/>
+                <ToggleButton fx:id="btParabd" mnemonicParsing="false" text="Para-BD" toggleGroup="$entitiesType">
                     <padding>
                         <Insets bottom="4.0" left="10.0" right="10.0" top="4.0"/>
                     </padding>

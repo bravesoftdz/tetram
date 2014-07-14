@@ -1,10 +1,10 @@
 package org.tetram.bdtheque.gui.controllers;
 
-import javafx.beans.binding.Bindings;
-import javafx.beans.value.ObservableNumberValue;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.ToolBar;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -22,6 +22,10 @@ import java.util.Map;
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @FileLink("/org/tetram/bdtheque/gui/modeGestion.fxml")
 public class ModeGestionController extends WindowController {
+    @FXML
+    private ToggleGroup entitiesType;
+    @FXML
+    private ToolBar tbEntities;
     @FXML
     private Button btAcheter;
     @FXML
@@ -64,12 +68,19 @@ public class ModeGestionController extends WindowController {
         buttonNodeHashMap.put(btGenres, null);
         buttonNodeHashMap.put(btParabd, null);
 
+/*
         ObservableNumberValue tabWidth = null;
         for (ToggleButton toggleButton : buttonNodeHashMap.keySet())
             tabWidth = tabWidth == null ? toggleButton.widthProperty() : Bindings.max(toggleButton.widthProperty(), tabWidth);
+        assert tabWidth != null;
+        tabWidth.addListener(observable -> {
+            for (ToggleButton toggleButton : buttonNodeHashMap.keySet())
+                toggleButton.setMinWidth(((ObservableNumberValue) observable).getValue().intValue());
+        });
+*/
         for (ToggleButton toggleButton : buttonNodeHashMap.keySet()) {
-            toggleButton.minWidthProperty().bind(tabWidth);
-            //toggleButton.prefWidthProperty().bind(tabWidth);
+            toggleButton.minWidthProperty().bind(tbEntities.widthProperty().subtract(tbEntities.getInsets().getRight()).subtract(tbEntities.getInsets().getLeft()));
+            // toggleButton.prefWidthProperty().bind(tabWidth);
         }
 
     }
