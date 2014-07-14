@@ -14,7 +14,7 @@
                 <ToggleButton fx:id="btnOptionsDiverses" contentDisplay="TOP" mnemonicParsing="false"
                               text="Options diverses">
                     <graphic>
-                        <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView>
                             <image>
                                 <Image url="@../graphics/png/32x32/kernel.png"/>
                             </image>
@@ -27,7 +27,7 @@
                 <ToggleButton fx:id="btnMonnaies" contentDisplay="TOP" layoutX="10.0" layoutY="10.0"
                               mnemonicParsing="false" text="Monnaies" toggleGroup="$btnTabGroup">
                     <graphic>
-                        <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView>
                             <image>
                                 <Image url="@../graphics/png/32x32/contents.png"/>
                             </image>
@@ -37,7 +37,7 @@
                 <ToggleButton fx:id="btnSiteWeb" contentDisplay="TOP" layoutX="10.0" layoutY="39.0"
                               mnemonicParsing="false" text="Site web" toggleGroup="$btnTabGroup">
                     <graphic>
-                        <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView>
                             <image>
                                 <Image url="@../graphics/png/32x32/network.png"/>
                             </image>

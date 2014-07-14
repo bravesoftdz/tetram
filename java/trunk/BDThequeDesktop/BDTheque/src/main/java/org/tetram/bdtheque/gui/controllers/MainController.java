@@ -1,6 +1,9 @@
 package org.tetram.bdtheque.gui.controllers;
 
 import impl.org.controlsfx.i18n.Localization;
+import javafx.application.Platform;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -63,6 +66,8 @@ public class MainController extends WindowController {
     @Autowired
     private SingleConnectionDataSource dataSource;
 
+    private ObjectProperty<ApplicationMode> mode = new SimpleObjectProperty<>(this, "mode", null);
+
     @FXML
     @FileLink("/org/tetram/bdtheque/config/default_database.properties")
     void initialize() throws IOException {
@@ -70,12 +75,17 @@ public class MainController extends WindowController {
         // si le menu est vide c'est qu'on utilise la valeur par défaut de default_database.properties
         mnuDBFile.textProperty().bindBidirectional(userPreferences.databaseProperty(), new FileStringConverter());
 
-        ModeConsultationController modeConsultationController = SpringFxmlLoader.load("modeConsultation.fxml");
-        detailPane.getChildren().add(modeConsultationController.getView());
-        AnchorPane.setBottomAnchor(modeConsultationController.getView(), 0.0);
-        AnchorPane.setTopAnchor(modeConsultationController.getView(), 0.0);
-        AnchorPane.setLeftAnchor(modeConsultationController.getView(), 0.0);
-        AnchorPane.setRightAnchor(modeConsultationController.getView(), 0.0);
+        mode.addListener((observable, oldMode, newMode) -> {
+            if (newMode == null) return;
+            WindowController controller = SpringFxmlLoader.load(newMode.getResource());
+            detailPane.getChildren().add(controller.getView());
+            AnchorPane.setBottomAnchor(controller.getView(), 0.0);
+            AnchorPane.setTopAnchor(controller.getView(), 0.0);
+            AnchorPane.setLeftAnchor(controller.getView(), 0.0);
+            AnchorPane.setRightAnchor(controller.getView(), 0.0);
+        });
+
+        Platform.runLater(() -> mode.set(ApplicationMode.GESTION));
     }
 
     public void menuQuitClick(@SuppressWarnings("UnusedParameters") ActionEvent actionEvent) {
@@ -110,6 +120,20 @@ public class MainController extends WindowController {
         PreferencesController preferencesController = Dialogs.showPreferences(this.getDialog());
         if (preferencesController.getResult() == DialogController.DialogResult.OK)
             SpringContext.CONTEXT.getBean(RepertoireController.class).refresh();
+    }
+
+    enum ApplicationMode {
+        CONSULTATION("modeConsultation.fxml"), GESTION("modeGestion.fxml");
+
+        private final String resource;
+
+        ApplicationMode(@NonNls String resource) {
+            this.resource = resource;
+        }
+
+        public String getResource() {
+            return resource;
+        }
     }
 
 }

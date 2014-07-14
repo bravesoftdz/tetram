@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="573.0" prefWidth="789.0" xmlns="http://javafx.com/javafx/8"
+            fx:controller="org.tetram.bdtheque.gui.controllers.ModeGestionController">
+    <left>
+        <ToolBar orientation="VERTICAL" prefHeight="369.0" BorderPane.alignment="CENTER">
+            <items>
+                <ToggleButton fx:id="btAlbums" mnemonicParsing="false" text="Albums">
+                    <padding>
+                        <Insets bottom="4.0" left="10.0" right="10.0" top="4.0"/>
+                    </padding>
+                </ToggleButton>
+                <ToggleButton fx:id="btAchats" mnemonicParsing="false" text="Achats">
+                    <padding>
+                        <Insets bottom="4.0" left="10.0" right="10.0" top="4.0"/>
+                    </padding>
+                </ToggleButton>
+                <Separator/>
+                <ToggleButton fx:id="btUnivers" mnemonicParsing="false" text="Univers">
+                    <padding>
+                        <Insets bottom="4.0" left="10.0" right="10.0" top="4.0"/>
+                    </padding>
+                </ToggleButton>
+                <ToggleButton fx:id="btSeries" mnemonicParsing="false" text="Séries">
+                    <padding>
+                        <Insets bottom="4.0" left="10.0" right="10.0" top="4.0"/>
+                    </padding>
+                </ToggleButton>
+                <Separator/>
+                <ToggleButton fx:id="btAuteurs" mnemonicParsing="false" text="Auteurs">
+                    <padding>
+                        <Insets bottom="4.0" left="10.0" right="10.0" top="4.0"/>
+                    </padding>
+                </ToggleButton>
+                <Separator/>
+                <ToggleButton fx:id="btEditeurs" mnemonicParsing="false" text="Editeurs">
+                    <padding>
+                        <Insets bottom="4.0" left="10.0" right="10.0" top="4.0"/>
+                    </padding>
+                </ToggleButton>
+                <ToggleButton fx:id="btCollections" mnemonicParsing="false" text="Collections">
+                    <padding>
+                        <Insets bottom="4.0" left="10.0" right="10.0" top="4.0"/>
+                    </padding>
+                </ToggleButton>
+                <Separator/>
+                <ToggleButton fx:id="btGenres" mnemonicParsing="false" text="Genres">
+                    <padding>
+                        <Insets bottom="4.0" left="10.0" right="10.0" top="4.0"/>
+                    </padding>
+                </ToggleButton>
+                <Separator/>
+                <ToggleButton fx:id="btParabd" mnemonicParsing="false" text="Para-BD">
+                    <padding>
+                        <Insets bottom="4.0" left="10.0" right="10.0" top="4.0"/>
+                    </padding>
+                </ToggleButton>
+            </items>
+        </ToolBar>
+    </left>
+    <center>
+        <fx:include fx:id="albums" source="components/treeview.fxml" AnchorPane.bottomAnchor="0.0"
+                    AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>
+    </center>
+    <top>
+        <ToolBar prefWidth="200.0" BorderPane.alignment="CENTER">
+            <items>
+                <Button fx:id="btRefresh" graphicTextGap="8.0" mnemonicParsing="false" text="Rafraichir">
+                    <graphic>
+                        <ImageView>
+                            <image>
+                                <Image url="@../graphics/png/22x22/reload.png"/>
+                            </image>
+                        </ImageView>
+                    </graphic>
+                </Button>
+                <Separator orientation="VERTICAL"/>
+                <Button fx:id="btNouveau" graphicTextGap="8.0" mnemonicParsing="false" text="Nouveau">
+                    <graphic>
+                        <ImageView>
+                            <image>
+                                <Image url="@../graphics/png/22x22/editnew.png"/>
+                            </image>
+                        </ImageView>
+                    </graphic>
+                </Button>
+                <Button fx:id="btModifier" graphicTextGap="8.0" mnemonicParsing="false" text="Modifier">
+                    <graphic>
+                        <ImageView>
+                            <image>
+                                <Image url="@../graphics/png/22x22/edit.png"/>
+                            </image>
+                        </ImageView>
+                    </graphic>
+                </Button>
+                <Button fx:id="btSupprimer" graphicTextGap="8.0" mnemonicParsing="false" text="Supprimer">
+                    <graphic>
+                        <ImageView>
+                            <image>
+                                <Image url="@../graphics/png/22x22/editdelete.png"/>
+                            </image>
+                        </ImageView>
+                    </graphic>
+                </Button>
+                <Separator orientation="VERTICAL"/>
+                <Button fx:id="btAcheter" graphicTextGap="8.0" mnemonicParsing="false" text="Acheter">
+                    <graphic>
+                        <ImageView>
+                            <image>
+                                <Image url="@../graphics/png/22x22/contents.png"/>
+                            </image>
+                        </ImageView>
+                    </graphic>
+                </Button>
+            </items>
+        </ToolBar>
+    </top>
+</BorderPane>
