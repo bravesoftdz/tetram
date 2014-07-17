@@ -77,6 +77,12 @@ public class PreferencesController extends DialogController {
         for (ToggleButton toggleButton : buttonNodeHashMap.keySet())
             tabWidth = tabWidth == null ? toggleButton.widthProperty() : Bindings.max(toggleButton.widthProperty(), tabWidth);
 
+        final ObservableNumberValue finalTabWidth = tabWidth;
+        Platform.runLater(() -> {
+            for (ToggleButton toggleButton : buttonNodeHashMap.keySet())
+                toggleButton.minWidthProperty().bind(finalTabWidth);
+        });
+
         for (ToggleButton toggleButton : buttonNodeHashMap.keySet()) {
             toggleButton.minWidthProperty().bind(tabWidth);
             toggleButton.setUserData(buttonNodeHashMap.get(toggleButton));

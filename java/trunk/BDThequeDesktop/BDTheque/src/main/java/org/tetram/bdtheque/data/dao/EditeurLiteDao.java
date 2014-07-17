@@ -7,5 +7,5 @@ import java.util.UUID;
 /**
  * Created by Thierry on 11/06/2014.
  */
-public interface EditeurLiteDao extends DaoRO<EditeurLite, UUID> {
+public interface EditeurLiteDao extends DaoRO<EditeurLite, UUID>, RepertoireLiteDao<EditeurLite, Character> {
 }

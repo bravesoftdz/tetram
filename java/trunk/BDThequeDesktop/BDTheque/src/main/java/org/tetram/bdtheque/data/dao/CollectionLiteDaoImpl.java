@@ -3,20 +3,21 @@ package org.tetram.bdtheque.data.dao;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import org.tetram.bdtheque.data.bean.EditeurLite;
+import org.tetram.bdtheque.data.bean.CollectionLite;
 import org.tetram.bdtheque.data.bean.InitialeEntity;
 
 import java.util.List;
 import java.util.UUID;
 
 /**
- * Created by Thierry on 11/06/2014.
+ * Created by Thierry on 17/07/2014.
  */
 @Repository
 @Lazy
 @Transactional
 @SuppressWarnings("UnusedDeclaration")
-public class EditeurLiteDaoImpl extends DaoROImpl<EditeurLite, UUID> implements EditeurLiteDao {
+public class CollectionLiteDaoImpl extends DaoROImpl<CollectionLite, UUID> implements CollectionLiteDao {
+
     @Override
     public List<InitialeEntity<Character>> getListInitiales(String filtre) {
         // TODO
@@ -24,7 +25,7 @@ public class EditeurLiteDaoImpl extends DaoROImpl<EditeurLite, UUID> implements 
     }
 
     @Override
-    public List<EditeurLite> getListEntitiesByInitiale(InitialeEntity<Character> initiale, String filtre) {
+    public List<CollectionLite> getListEntitiesByInitiale(InitialeEntity<Character> initiale, String filtre) {
         // TODO
         return null;
     }
