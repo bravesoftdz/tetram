@@ -2,27 +2,19 @@ package org.tetram.bdtheque.gui.controllers;
 
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableNumberValue;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ToggleButton;
-import javafx.scene.control.ToggleGroup;
-import javafx.scene.control.ToolBar;
+import javafx.scene.control.*;
+import org.jetbrains.annotations.NonNls;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
-import org.tetram.bdtheque.data.bean.InitialeEntity;
-import org.tetram.bdtheque.data.bean.abstractentities.AbstractEntity;
-import org.tetram.bdtheque.data.dao.*;
 import org.tetram.bdtheque.gui.controllers.components.TreeViewController;
-import org.tetram.bdtheque.spring.SpringContext;
+import org.tetram.bdtheque.gui.controllers.components.TreeViewMode;
 import org.tetram.bdtheque.utils.FileLink;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 /**
  * Created by Thierry on 14/07/2014.
@@ -32,8 +24,8 @@ import java.util.UUID;
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @FileLink("/org/tetram/bdtheque/gui/modeGestion.fxml")
 public class ModeGestionController extends WindowController {
-    @FXML
-    private ToggleGroup entitiesType;
+    @NonNls
+    private static final String FILTRE_ACHAT = "Achat = 1";
     @FXML
     private ToolBar tbEntities;
     @FXML
@@ -46,6 +38,10 @@ public class ModeGestionController extends WindowController {
     private Button btNouveau;
     @FXML
     private Button btRefresh;
+    @FXML
+    private ToggleGroup entitiesType;
+    @FXML
+    private ToggleButton btAchatsParaBD;
     @FXML
     private ToggleButton btParabd;
     @FXML
@@ -61,27 +57,26 @@ public class ModeGestionController extends WindowController {
     @FXML
     private ToggleButton btUnivers;
     @FXML
-    private ToggleButton btAchats;
+    private ToggleButton btAchatsAlbums;
     @FXML
     private ToggleButton btAlbums;
     @FXML
     private TreeViewController entitiesController;
 
-    private ObjectProperty<RepertoireLiteDao> dao = new SimpleObjectProperty<>(this, "dao", null);
-
     @SuppressWarnings("unchecked")
     @FXML
     public void initialize() {
-        Map<ToggleButton, Class<? extends RepertoireLiteDao>> buttonNodeHashMap = new HashMap<>();
-        buttonNodeHashMap.put(btAlbums, AlbumLiteDao.class);
-        buttonNodeHashMap.put(btAchats, null);
-        buttonNodeHashMap.put(btUnivers, UniversLiteDao.class);
-        buttonNodeHashMap.put(btSeries, SerieLiteDao.class);
-        buttonNodeHashMap.put(btAuteurs, PersonneLiteDao.class);
-        buttonNodeHashMap.put(btEditeurs, EditeurLiteDao.class);
-        buttonNodeHashMap.put(btCollections, CollectionLiteDao.class);
-        buttonNodeHashMap.put(btGenres, GenreLiteDao.class);
-        buttonNodeHashMap.put(btParabd, ParaBDLiteDao.class);
+        Map<ToggleButton, TreeViewMode> buttonNodeHashMap = new HashMap<>();
+        buttonNodeHashMap.put(btAlbums, TreeViewMode.ALBUMS_SERIE);
+        buttonNodeHashMap.put(btAchatsAlbums, TreeViewMode.ALBUMS_SERIE);
+        buttonNodeHashMap.put(btUnivers, TreeViewMode.UNIVERS);
+        buttonNodeHashMap.put(btSeries, TreeViewMode.SERIES);
+        buttonNodeHashMap.put(btAuteurs, TreeViewMode.PERSONNES);
+        buttonNodeHashMap.put(btEditeurs, TreeViewMode.EDITEURS);
+        buttonNodeHashMap.put(btCollections, TreeViewMode.COLLECTIONS);
+        buttonNodeHashMap.put(btGenres, TreeViewMode.GENRES);
+        buttonNodeHashMap.put(btParabd, TreeViewMode.PARAB_SERIE);
+        buttonNodeHashMap.put(btAchatsParaBD, TreeViewMode.PARAB_SERIE);
 
         ObservableNumberValue tabWidth = null;
         for (ToggleButton toggleButton : buttonNodeHashMap.keySet())
@@ -97,34 +92,25 @@ public class ModeGestionController extends WindowController {
             toggleButton.setUserData(buttonNodeHashMap.get(toggleButton));
         }
 
+        btRefresh.setOnAction(event -> entitiesController.refresh());
+
         entitiesController.setClickToShow(true);
-        entitiesController.setOnGetLabel(treeItem -> {
-            final AbstractEntity entity = treeItem.getValue();
-            if (entity == null)
-                return null;
+        entitiesController.filtreProperty().bind(Bindings.createStringBinding(() -> {
+            Toggle button = entitiesType.getSelectedToggle();
+            if (button == btAchatsAlbums || button == btAchatsParaBD)
+                return FILTRE_ACHAT;
             else
-                return entity.buildLabel();
-        });
-        entitiesController.onGetChildrenProperty().setValue(treeItem -> {
-            final AbstractEntity entity = treeItem.getValue();
-            if (entity == null) {
-                // c'est la racine
-                return dao.get().getInitiales(null);
-            } else if (entity instanceof InitialeEntity) {
-                // c'est le niveau 1
-                return dao.get().getListEntitiesByInitiale((InitialeEntity<UUID>) entity, null);
-            }
-            return null;
-        });
-
-
-        dao.addListener(observable -> entitiesController.refresh());
+                return null;
+        }, entitiesType.selectedToggleProperty()));
         entitiesType.selectedToggleProperty().addListener((observable, oldButton, newButton) -> {
             if (newButton == null) return;
-            Class<RepertoireLiteDao> daoClass = (Class<RepertoireLiteDao>) newButton.getUserData();
-            dao.set(SpringContext.CONTEXT.getBean(daoClass));
+            final TreeViewMode newMode = (TreeViewMode) newButton.getUserData();
+            if (entitiesController.getMode().equals(newMode))
+                entitiesController.refresh();
+            else
+                entitiesController.setMode(newMode);
         });
 
-        btAlbums.fire();
+        entitiesType.selectToggle(btAlbums);
     }
 }

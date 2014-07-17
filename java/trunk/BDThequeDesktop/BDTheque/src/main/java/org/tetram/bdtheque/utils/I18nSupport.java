@@ -3,7 +3,10 @@ package org.tetram.bdtheque.utils;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.PropertyKey;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.MessageFormat;
+import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -18,6 +21,7 @@ public class I18nSupport {
     private static final String ORG_TETRAM_BDTHEQUE_LANG_BD = "org.tetram.bdtheque.lang.bd";
     private static ResourceBundle currentResourceBundle = getLocaleBundle(Locale.getDefault());
     private static Map<Locale, ResourceBundle> resources = null;
+    private static NumberFormat currencyFormatter = null;
 
     private static String message(ResourceBundle resourceBundle, @PropertyKey(resourceBundle = ORG_TETRAM_BDTHEQUE_LANG_BD) String key, Object... params) {
         String value = resourceBundle.getString(key);
@@ -48,8 +52,24 @@ public class I18nSupport {
         return currentResourceBundle;
     }
 
+    public static Locale getLocale() {
+        return currentResourceBundle.getLocale();
+    }
+
     public static void setLocale(Locale locale) {
         currentResourceBundle = getLocaleBundle(locale);
     }
+
+    public static NumberFormat getCurrencyFormatter() {
+        if (currencyFormatter == null) {
+            currencyFormatter = NumberFormat.getCurrencyInstance(getLocale());
+            final DecimalFormatSymbols symbols = ((DecimalFormat) currencyFormatter).getDecimalFormatSymbols();
+            // TODO: récupérer le symbole dans les préférences de l'utilisateur
+            symbols.setCurrencySymbol("€");
+            ((DecimalFormat) currencyFormatter).setDecimalFormatSymbols(symbols);
+        }
+        return currencyFormatter;
+    }
+
 
 }

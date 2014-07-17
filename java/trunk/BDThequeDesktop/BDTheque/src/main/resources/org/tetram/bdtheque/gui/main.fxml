@@ -11,6 +11,16 @@
             <menus>
                 <Menu mnemonicParsing="false" text="File">
                     <items>
+                        <Menu mnemonicParsing="false" text="%mnu.Mode">
+                            <items>
+                                <RadioMenuItem mnemonicParsing="false" text="%mnu.ModeConsultation">
+                                    <toggleGroup>
+                                        <ToggleGroup fx:id="tgMode"/>
+                                    </toggleGroup>
+                                </RadioMenuItem>
+                                <RadioMenuItem mnemonicParsing="false" text="%mnu.ModeGestion" toggleGroup="$tgMode"/>
+                            </items>
+                        </Menu>
                         <MenuItem mnemonicParsing="false" onAction="#showPreferences" text="%mnu.Options"/>
                         <Menu fx:id="mnuLanguage" mnemonicParsing="false" text="%mnu.Langue">
                             <items>

@@ -240,10 +240,10 @@ public class FicheAlbumController extends WindowController implements Consultati
             lbEditeur.setText(edition.getEditeur() == null ? null : edition.getEditeur().toString());
             EntityWebHyperlink.addToLabeled(lbEditeur, edition.getEditeur().getSiteWeb());
             lbCollection.setText(edition.getCollection() == null ? null : edition.getCollection().buildLabel(true));
-            lbCote.setText(edition.getAnneeCote() == null ? null : MessageFormat.format("{0} ({0})", userPreferences.getCurrencyFormatter().format(edition.getPrixCote()), edition.getAnneeCote().format(DateTimeFormatter.ofPattern(I18nSupport.message("format.year")))));
+            lbCote.setText(edition.getAnneeCote() == null ? null : MessageFormat.format("{0} ({0})", I18nSupport.getCurrencyFormatter().format(edition.getPrixCote()), edition.getAnneeCote().format(DateTimeFormatter.ofPattern(I18nSupport.message("format.year")))));
             lbAchete.setText(edition.isOffert() ? "Offert le :" : "Acheté le :");
             lbDateAchat.setText(edition.getDateAchat() == null ? null : edition.getDateAchat().format(DateTimeFormatter.ofPattern(I18nSupport.message("format.date"))));
-            lbPrix.setText(edition.getPrix() == null ? null : userPreferences.getCurrencyFormatter().format(edition.getPrix()));
+            lbPrix.setText(edition.getPrix() == null ? null : I18nSupport.getCurrencyFormatter().format(edition.getPrix()));
 
             lbAnneeEdition.setText(edition.getAnneeEdition().format(DateTimeFormatter.ofPattern(I18nSupport.message("format.year"))));
             cbOffert.setSelected(edition.isOffert());

@@ -2,14 +2,15 @@ package org.tetram.bdtheque.data.services;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
+import org.tetram.bdtheque.gui.controllers.ApplicationMode;
 
 import java.io.File;
-import java.text.NumberFormat;
 import java.util.Locale;
 
 /**
  * Created by Thierry on 15/06/2014.
  */
+@SuppressWarnings("UnusedDeclaration")
 public interface UserPreferences {
     void save();
 
@@ -67,5 +68,9 @@ public interface UserPreferences {
 
     void setDatabase(File value);
 
-    NumberFormat getCurrencyFormatter();
+    ApplicationMode getModeOuverture();
+
+    void setModeOuverture(ApplicationMode value);
+
+    ObjectProperty<ApplicationMode> modeOuvertureProperty();
 }

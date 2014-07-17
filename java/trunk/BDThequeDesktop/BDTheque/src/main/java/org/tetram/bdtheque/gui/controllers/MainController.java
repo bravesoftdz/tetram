@@ -30,10 +30,12 @@ import java.util.ResourceBundle;
 import java.util.UUID;
 
 @Controller
+@FileLink("/org/tetram/bdtheque/gui/main.fxml")
 public class MainController extends WindowController {
 
     @NonNls
     public static final UUID ID_SERIE_SILLAGE = StringUtils.GUIDStringToUUID("{69302EDB-6ED6-4DA3-A2E1-65B7B12BCB51}");
+
     @Autowired
     private UserPreferences userPreferences;
     @Autowired
@@ -62,6 +64,9 @@ public class MainController extends WindowController {
     @FXML
     private MenuItem mnuDBFile;
 
+    @FXML
+    private ToggleGroup tgMode;
+
     @NonNls
     @Autowired
     private SingleConnectionDataSource dataSource;
@@ -75,6 +80,14 @@ public class MainController extends WindowController {
         // si le menu est vide c'est qu'on utilise la valeur par défaut de default_database.properties
         mnuDBFile.textProperty().bindBidirectional(userPreferences.databaseProperty(), new FileStringConverter());
 
+        for (int i = 0; i < tgMode.getToggles().size(); i++) {
+            final Toggle toggle = tgMode.getToggles().get(i);
+            final ApplicationMode applicationMode = ApplicationMode.values()[i];
+            toggle.setUserData(applicationMode);
+            toggle.setSelected(userPreferences.getModeOuverture().equals(applicationMode));
+        }
+        tgMode.selectedToggleProperty().addListener(o -> mode.set((ApplicationMode) tgMode.getSelectedToggle().getUserData()));
+
         mode.addListener((observable, oldMode, newMode) -> {
             if (newMode == null) return;
             WindowController controller = SpringFxmlLoader.load(newMode.getResource());
@@ -83,9 +96,13 @@ public class MainController extends WindowController {
             AnchorPane.setTopAnchor(controller.getView(), 0.0);
             AnchorPane.setLeftAnchor(controller.getView(), 0.0);
             AnchorPane.setRightAnchor(controller.getView(), 0.0);
+
+            // pratique en développement mais à voir si on garde pour la version finale
+            userPreferences.setModeOuverture(newMode);
+            userPreferences.save();
         });
 
-        Platform.runLater(() -> mode.set(ApplicationMode.GESTION));
+        Platform.runLater(() -> mode.set(userPreferences.getModeOuverture()));
     }
 
     public void menuQuitClick(@SuppressWarnings("UnusedParameters") ActionEvent actionEvent) {
@@ -102,7 +119,8 @@ public class MainController extends WindowController {
         // certaines traductions sont récupérées à l'initialisation des classes, on n'a pas d'autres choix que de recharger l'appli
         final Locale locale = Localization.getLocale();
         try {
-            final Locale newLocale = Locale.forLanguageTag(((MenuItem) event.getSource()).getId().substring(4).replace('_', '-'));
+            final MenuItem menuItem = (MenuItem) event.getSource();
+            final Locale newLocale = Locale.forLanguageTag(menuItem.getId().substring(4).replace('_', '-'));
             Localization.setLocale(newLocale);
             org.controlsfx.dialog.Dialogs.create()
                     .title(I18nSupport.message(newLocale, "nouvelle.langue"))
@@ -120,20 +138,6 @@ public class MainController extends WindowController {
         PreferencesController preferencesController = Dialogs.showPreferences(this.getDialog());
         if (preferencesController.getResult() == DialogController.DialogResult.OK)
             SpringContext.CONTEXT.getBean(RepertoireController.class).refresh();
-    }
-
-    enum ApplicationMode {
-        CONSULTATION("modeConsultation.fxml"), GESTION("modeGestion.fxml");
-
-        private final String resource;
-
-        ApplicationMode(@NonNls String resource) {
-            this.resource = resource;
-        }
-
-        public String getResource() {
-            return resource;
-        }
     }
 
 }

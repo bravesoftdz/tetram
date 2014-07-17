@@ -9,14 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
+import org.tetram.bdtheque.gui.controllers.ApplicationMode;
 import org.tetram.bdtheque.utils.StringUtils;
 
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
-import java.text.NumberFormat;
 import java.util.Locale;
 import java.util.Properties;
 
@@ -59,6 +57,9 @@ public class UserPreferencesImpl implements UserPreferences {
     @NonNls
     private static final String PREF_AFFICHE_NOTE_LISTES = "AfficheNotesListes";
     private static final boolean PREF_AFFICHE_NOTE_LISTES_DEFAULT = true;
+    @NonNls
+    private static final String PREF_MODE_OUVERTURE = "ModeOuverture";
+    private static final ApplicationMode PREF_MODE_OUVERTURE_DEFAULT = ApplicationMode.CONSULTATION;
 
     @Autowired
     private ApplicationContext applicationContext;
@@ -74,7 +75,7 @@ public class UserPreferencesImpl implements UserPreferences {
     private BooleanProperty antiAliasing = null;
     private BooleanProperty imagesStockees = null;
     private ObjectProperty<File> database = null;
-    private NumberFormat currencyFormatter = null;
+    private ObjectProperty<ApplicationMode> modeOuverture;
 
     public UserPreferencesImpl() {
     }
@@ -117,6 +118,7 @@ public class UserPreferencesImpl implements UserPreferences {
         defaultPrefs.setProperty(PREF_AFFICHE_NOTE_LISTES, String.valueOf(PREF_AFFICHE_NOTE_LISTES_DEFAULT));
         defaultPrefs.setProperty(PREF_IMAGES_STOCKEES, String.valueOf(PREF_IMAGES_STOCKEES_DEFAULT));
         defaultPrefs.setProperty(PREF_LOCALE, PREF_LOCALE_DEFAULT.toLanguageTag());
+        defaultPrefs.setProperty(PREF_MODE_OUVERTURE, String.valueOf(PREF_MODE_OUVERTURE_DEFAULT));
 
         return defaultPrefs;
     }
@@ -377,14 +379,27 @@ public class UserPreferencesImpl implements UserPreferences {
     }
 
     @Override
-    public NumberFormat getCurrencyFormatter() {
-        if (currencyFormatter == null) {
-            currencyFormatter = NumberFormat.getCurrencyInstance(getLocale());
-            final DecimalFormatSymbols symbols = ((DecimalFormat) currencyFormatter).getDecimalFormatSymbols();
-            symbols.setCurrencySymbol("€");
-            ((DecimalFormat) currencyFormatter).setDecimalFormatSymbols(symbols);
+    public ApplicationMode getModeOuverture() {
+        return modeOuvertureProperty().get();
+    }
+
+    @Override
+    public void setModeOuverture(ApplicationMode value) {
+        modeOuvertureProperty().set(value);
+    }
+
+    @Override
+    public ObjectProperty<ApplicationMode> modeOuvertureProperty() {
+        if (modeOuverture == null) {
+            modeOuverture = new SimpleObjectProperty<ApplicationMode>(this, "modeOuverture", ApplicationMode.valueOf(getStringPref(PREF_MODE_OUVERTURE))) {
+                @Override
+                public void set(ApplicationMode newValue) {
+                    setPref(PREF_MODE_OUVERTURE, String.valueOf(newValue));
+                    super.set(newValue);
+                }
+            };
         }
-        return currencyFormatter;
+        return modeOuverture;
     }
 
     @Override

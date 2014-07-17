@@ -23,13 +23,16 @@ import org.tetram.bdtheque.data.bean.ValeurListe;
 import org.tetram.bdtheque.data.bean.abstractentities.AbstractDBEntity;
 import org.tetram.bdtheque.data.bean.abstractentities.AbstractEntity;
 import org.tetram.bdtheque.data.bean.interfaces.EvaluatedEntity;
+import org.tetram.bdtheque.data.dao.RepertoireLiteDao;
 import org.tetram.bdtheque.data.services.UserPreferences;
 import org.tetram.bdtheque.gui.controllers.ModeConsultationController;
 import org.tetram.bdtheque.gui.controllers.WindowController;
 import org.tetram.bdtheque.gui.utils.NotationResource;
+import org.tetram.bdtheque.spring.SpringContext;
 import org.tetram.bdtheque.utils.FileLink;
 import org.tetram.bdtheque.utils.FileLinks;
 import org.tetram.bdtheque.utils.I18nSupport;
+import org.tetram.bdtheque.utils.StringUtils;
 
 import java.util.List;
 
@@ -68,8 +71,30 @@ public class TreeViewController extends WindowController {
     private ObjectProperty<Callback<TreeViewNode, String>> onGetLabel = new SimpleObjectProperty<>(this, "onGetLabel", null);
     private ObjectProperty<Class<? extends AbstractEntity>> finalEntityClass = new SimpleObjectProperty<>(this, "finalEntityClass", AbstractEntity.class);
 
+    private ReadOnlyStringWrapper appliedFiltre = new ReadOnlyStringWrapper(this, "appliedFiltre", null);
+    private StringProperty filtre = new SimpleStringProperty(this, "filtre", null);
+    private BooleanProperty useDefaultFiltre = new SimpleBooleanProperty(this, "useDefaultFiltre", true);
+    private ReadOnlyObjectWrapper<RepertoireLiteDao> dao = new ReadOnlyObjectWrapper<>(this, "dao", null);
+    private ObjectProperty<TreeViewMode> mode = new SimpleObjectProperty<>(this, "mode", TreeViewMode.NONE);
+
     @FXML
     public void initialize() {
+        mode.addListener(observable -> {
+            final TreeViewMode newMode = getMode() == null ? TreeViewMode.NONE : getMode();
+            finalEntityClass.set(newMode == TreeViewMode.NONE ? AbstractEntity.class : newMode.getEntityClass());
+            onGetLabel.set(newMode == TreeViewMode.NONE ? null : new TreeViewMode.GetLabelCallback(this));
+            onGetChildren.set(newMode == TreeViewMode.NONE ? null : new TreeViewMode.GetChildrenCallback(this));
+            dao.set(newMode == TreeViewMode.NONE ? null : SpringContext.CONTEXT.getBean(newMode.getDaoClass()));
+            refresh();
+        });
+
+        appliedFiltre.bind(Bindings.createStringBinding(() -> {
+            String s = getFiltre();
+            if (!StringUtils.isNullOrEmpty(s)) return s;
+            if (getUseDefaultFiltre()) return getMode().getDefaultFiltre();
+            return null;
+        }, filtreProperty()));
+
         treeTableView.setPlaceholder(new Label(I18nSupport.message("pas.de.donnees.a.afficher")));
 
         final EventHandler<MouseEvent> onMouseClicked = event -> {
@@ -250,6 +275,58 @@ public class TreeViewController extends WindowController {
 
     public void refresh() {
         treeTableView.setRoot(new TreeViewNode(null));
+    }
+
+    public TreeViewMode getMode() {
+        return mode.get();
+    }
+
+    public void setMode(TreeViewMode mode) {
+        this.mode.set(mode);
+    }
+
+    public ObjectProperty<TreeViewMode> modeProperty() {
+        return mode;
+    }
+
+    public String getFiltre() {
+        return filtre.get();
+    }
+
+    public void setFiltre(String filtre) {
+        this.filtre.set(filtre);
+    }
+
+    public StringProperty filtreProperty() {
+        return filtre;
+    }
+
+    public String getAppliedFiltre() {
+        return appliedFiltre.get();
+    }
+
+    public ReadOnlyStringProperty appliedFiltreProperty() {
+        return appliedFiltre.getReadOnlyProperty();
+    }
+
+    public RepertoireLiteDao getDao() {
+        return dao.get();
+    }
+
+    public ReadOnlyObjectProperty<RepertoireLiteDao> daoProperty() {
+        return dao.getReadOnlyProperty();
+    }
+
+    public boolean getUseDefaultFiltre() {
+        return useDefaultFiltre.get();
+    }
+
+    public void setUseDefaultFiltre(boolean useDefaultFiltre) {
+        this.useDefaultFiltre.set(useDefaultFiltre);
+    }
+
+    public BooleanProperty useDefaultFiltreProperty() {
+        return useDefaultFiltre;
     }
 
     public class TreeViewNode extends TreeItem<AbstractEntity> {

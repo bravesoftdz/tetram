@@ -65,7 +65,7 @@ public class ConversionLite extends AbstractDBEntity {
 
     @Override
     public String buildLabel() {
-        return String.format(I18nSupport.getCurrentBundle().getLocale(), CONVERSION_FORMAT, getMonnaie1(), getTaux(), getMonnaie2());
+        return String.format(I18nSupport.getLocale(), CONVERSION_FORMAT, getMonnaie1(), getTaux(), getMonnaie2());
     }
 
 }
