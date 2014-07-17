@@ -74,6 +74,9 @@ public class RepertoireController extends WindowController {
     @SuppressWarnings("unchecked")
     @FXML
     void initialize() {
+        // TODO simplifier tout ça par l'utilisation de l'enum TreeViewMode
+
+
         // pourquoi ça marchait avant avec <Tab, InfoTab> et que ça ne marche plus maintenant, mystère
         HashMap<String, InfoTab> tabView = new HashMap<>();
         final InfoTab infoTabAlbums = new InfoTab(tabAlbums, TypeRepertoireAlbumEntry.PAR_SERIE.daoClass, albumsController);
