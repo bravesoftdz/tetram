@@ -1,16 +1,21 @@
 package org.tetram.bdtheque.gui.utils;
 
+import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyIntegerProperty;
 import javafx.beans.property.ReadOnlyIntegerWrapper;
 import javafx.beans.property.ReadOnlyListProperty;
 import javafx.beans.property.ReadOnlyListWrapper;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import org.jetbrains.annotations.NonNls;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
+import org.tetram.bdtheque.gui.controllers.ApplicationMode;
+import org.tetram.bdtheque.gui.controllers.MainController;
 import org.tetram.bdtheque.utils.StringUtils;
 
 import java.time.LocalDate;
@@ -30,7 +35,28 @@ public class History {
     private final ReadOnlyListWrapper<HistoryItem> shown = new ReadOnlyListWrapper<>(this, "shown", FXCollections.observableArrayList());
     private final ReadOnlyListWrapper<HistoryItem> waiting = new ReadOnlyListWrapper<>(this, "waiting", FXCollections.observableArrayList());
     private final ReadOnlyIntegerWrapper current = new ReadOnlyIntegerWrapper(this, "current", -1);
+    @Autowired
+    private MainController mainController;
     private int lockCount = 0;
+    private boolean processRegistered = false;
+
+    public History() {
+        waiting.addListener((ListChangeListener<HistoryItem>) c -> {
+            if (c.wasAdded())
+                registerProcessNext();
+        });
+    }
+
+    @SuppressWarnings("Convert2MethodRef")
+    private synchronized void registerProcessNext() {
+        if (!processRegistered) {
+            Platform.runLater(() -> {
+                processRegistered = false;
+                processNext();
+            });
+            processRegistered = true;
+        }
+    }
 
     public ObservableList<HistoryItem> getShown() {
         return shown.get();
@@ -200,107 +226,110 @@ public class History {
 
     private boolean open(HistoryItem item, boolean withLock) {
 /*
-    var
-    doCallback: Boolean;
-    begin
     TfrmConsole.AddEvent(UnitName, 'THistory.Open ' + GetEnumName(TypeInfo(TActionConsultation), Integer(Consult.Action)));
 
-    Result := True;
     doCallback := False;
-    if WithLock then
-    Lock;
-    try
-            if not(Consult.Action in NoSaveHistorique) then
-    AddConsultation(Consult);
-    // if (Consult.Action in UsedInGestion) then
-    // frmFond.actModeGestion.Execute;
-    case Consult.Action of
-    fcModeConsultation:
-    frmFond.actModeConsultation.Execute;
-    fcModeGestion:
-    frmFond.actModeGestion.Execute;
-    fcActionBack:
-    Back;
-    fcActionRefresh:
-    Result := Open(CurrentConsult, True);
-    fcAlbum:
-    Result := MAJConsultationAlbum(Consult.ReferenceGUID);
-    fcSerie:
-    Result := MAJConsultationSerie(Consult.ReferenceGUID);
-    fcAuteur:
-    Result := MAJConsultationAuteur(Consult.ReferenceGUID);
-    fcUnivers:
-    Result := MAJConsultationUnivers(Consult.ReferenceGUID);
-    fcParaBD:
-    Result := MAJConsultationParaBD(Consult.ReferenceGUID);
-    fcCouverture, fcImageParaBD:
-    Result := ZoomCouverture(Consult.Action = fcImageParaBD, Consult.ReferenceGUID, Consult.ReferenceGUID2);
-    fcRecherche:
-    MAJRecherche(Consult.ReferenceGUID, Consult.Reference2, Consult.Stream);
-    fcPreview:
-            frmFond.SetModalChildForm(TForm(Consult.Reference));
-    fcGallerie:
-    Result := MAJGallerie(Consult.Reference2, Consult.ReferenceGUID);
-    fcSeriesIncompletes:
-    MAJSeriesIncompletes;
-    fcPrevisionsSorties:
-    MAJPrevisionsSorties;
-    fcRecreateToolBar:
-    frmFond.RechargeToolBar;
-    fcPrevisionsAchats:
-    MAJPrevisionsAchats;
-    fcRefreshRepertoire:
-    frmFond.actActualiseRepertoire.Execute;
-    fcRefreshRepertoireData:
-    frmFond.actActualiseRepertoireData;
-    fcScripts:
-    doCallback := MAJRunScript(TAlbumFull(Consult.GestionVTV));
-    fcConflitImport:
-            frmFond.SetModalChildForm(TForm(Consult.Reference));
-
-    fcGestionAjout:
-            if not IsEqualGUID(GUID_NULL, Consult.ReferenceGUID) then
-    doCallback := not IsEqualGUID(GUID_NULL, TActionGestionAddWithRef(Consult.GestionProc)(Consult.GestionVTV, Consult.ReferenceGUID,
-    Consult.GestionValeur))
-            else
-    doCallback := not IsEqualGUID(GUID_NULL, TActionGestionAdd(Consult.GestionProc)(Consult.GestionVTV, Consult.GestionValeur));
-    fcGestionModif:
-            if IsEqualGUID(Consult.ReferenceGUID, GUID_NULL) then
-    doCallback := TActionGestionModif(Consult.GestionProc)(Consult.GestionVTV)
-            else
-    doCallback := TActionGestionModif2(Consult.GestionProc)(Consult.ReferenceGUID);
-    fcGestionSupp:
-    doCallback := TActionGestionSupp(Consult.GestionProc)(Consult.GestionVTV);
-    fcGestionAchat:
-    doCallback := TActionGestionAchat(Consult.GestionProc)(Consult.GestionVTV);
-    fcConsole:
-            TfrmConsole.Create(Application).Show;
-    end;
-    if doCallback then
-    begin
-    if Assigned(Consult.GestionCallback) then
-    Consult.GestionCallback(Consult.GestionCallbackData);
-    AddWaiting(fcRefreshRepertoire);
-    end;
-
-    if not Result then
-            begin
-    Delete(FCurrentConsultation);
-    BackWaiting;
-    Result := True;
-    end;
-    finally
-            if WithLock then
-    Unlock;
-    end;
-    if Assigned(FOnChange) and not(Consult.Action in NoSaveHistorique) then
-                                                                       FOnChange(Self, Consult);
 */
-        return true;
+        boolean result = true;
+
+        if (withLock) lock();
+        try {
+            if (!HistoryAction.noSaveHistorique.contains(item.action))
+                addConsultation(item);
+            switch (item.action) {
+                case MODE_CONSULTATION:
+                    mainController.setMode(ApplicationMode.CONSULTATION);
+                    break;
+                case MODE_GESTION:
+                    mainController.setMode(ApplicationMode.GESTION);
+                    break;
+                case BACK:
+                    back();
+                    break;
+                case REFRESH:
+                    result = open(shown.get(getCurrent()), true);
+                    break;
+/*
+                fcAlbum:
+                    Result := MAJConsultationAlbum(Consult.ReferenceGUID);
+                fcSerie:
+                    Result := MAJConsultationSerie(Consult.ReferenceGUID);
+                fcAuteur:
+                    Result := MAJConsultationAuteur(Consult.ReferenceGUID);
+                fcUnivers:
+                    Result := MAJConsultationUnivers(Consult.ReferenceGUID);
+                fcParaBD:
+                    Result := MAJConsultationParaBD(Consult.ReferenceGUID);
+                fcCouverture, fcImageParaBD:
+                    Result := ZoomCouverture(Consult.Action = fcImageParaBD, Consult.ReferenceGUID, Consult.ReferenceGUID2);
+                fcRecherche:
+                    MAJRecherche(Consult.ReferenceGUID, Consult.Reference2, Consult.Stream);
+                fcPreview:
+                    frmFond.SetModalChildForm(TForm(Consult.Reference));
+                fcGallerie:
+                    Result := MAJGallerie(Consult.Reference2, Consult.ReferenceGUID);
+                fcSeriesIncompletes:
+                    MAJSeriesIncompletes;
+                fcPrevisionsSorties:
+                    MAJPrevisionsSorties;
+                fcRecreateToolBar:
+                    frmFond.RechargeToolBar;
+                fcPrevisionsAchats:
+                    MAJPrevisionsAchats;
+                fcRefreshRepertoire:
+                    frmFond.actActualiseRepertoire.Execute;
+                fcRefreshRepertoireData:
+                    frmFond.actActualiseRepertoireData;
+                fcScripts:
+                    doCallback := MAJRunScript(TAlbumFull(Consult.GestionVTV));
+                fcConflitImport:
+                    frmFond.SetModalChildForm(TForm(Consult.Reference));
+
+                fcGestionAjout:
+                    if not IsEqualGUID(GUID_NULL, Consult.ReferenceGUID) then
+                        doCallback := not IsEqualGUID(GUID_NULL, TActionGestionAddWithRef(Consult.GestionProc)(Consult.GestionVTV, Consult.ReferenceGUID, Consult.GestionValeur))
+                    else
+                        doCallback := not IsEqualGUID(GUID_NULL, TActionGestionAdd(Consult.GestionProc)(Consult.GestionVTV, Consult.GestionValeur));
+                fcGestionModif:
+                    if IsEqualGUID(Consult.ReferenceGUID, GUID_NULL) then
+                        doCallback := TActionGestionModif(Consult.GestionProc)(Consult.GestionVTV)
+                    else
+                        doCallback := TActionGestionModif2(Consult.GestionProc)(Consult.ReferenceGUID);
+                fcGestionSupp:
+                    doCallback := TActionGestionSupp(Consult.GestionProc)(Consult.GestionVTV);
+                fcGestionAchat:
+                    doCallback := TActionGestionAchat(Consult.GestionProc)(Consult.GestionVTV);
+                fcConsole:
+                    TfrmConsole.Create(Application).Show;
+*/
+            }
+/*
+            if doCallback then
+            begin
+                if Assigned(Consult.GestionCallback) then
+                    Consult.GestionCallback(Consult.GestionCallbackData);
+                AddWaiting(fcRefreshRepertoire);
+            end;
+*/
+            if (!result) {
+                shown.remove(getCurrent());
+                backWaiting();
+                result = true;
+            }
+        } finally {
+            if (withLock)
+                unlock();
+        }
+/*
+    if Assigned(FOnChange) and not(Consult.Action in NoSaveHistorique) then
+       FOnChange(Self, Consult);
+*/
+        registerProcessNext();
+        return result;
     }
 
     enum HistoryAction {
-        BACK, REFRESH, ALBUM, AUTEUR, COUVERTURE, RECHERCHE, PREVIEW, SERIES_INCOMPLETES,
+        BACK, REFRESH, FICHE, ALBUM, AUTEUR, COUVERTURE, RECHERCHE, PREVIEW, SERIES_INCOMPLETES,
         PREVISIONS_SORTIES, RECREATE_TOOL_BAR, PREVISIONS_ACHATS, REFRESH_REPERTOIRE, REFRESH_REPERTOIRE_DATA, PARABD, IMAGE_PARABD, SERIE, GESTION_AJOUT,
         GESTION_MODIF, GESTION_SUPP, GESTION_ACHAT, CONFLIT_IMPORT, GALERIE, MODE_CONSULTATION, MODE_GESTION, UNIVERS,
         CONSOLE, SCRIPTS;

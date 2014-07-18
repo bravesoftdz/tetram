@@ -140,4 +140,15 @@ public class MainController extends WindowController {
             SpringContext.CONTEXT.getBean(RepertoireController.class).refresh();
     }
 
+    public ApplicationMode getMode() {
+        return mode.get();
+    }
+
+    public void setMode(ApplicationMode mode) {
+        this.mode.set(mode);
+    }
+
+    public ObjectProperty<ApplicationMode> modeProperty() {
+        return mode;
+    }
 }
