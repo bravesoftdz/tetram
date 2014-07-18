@@ -117,7 +117,7 @@ public class FicheParaBDController extends WindowController implements Consultat
         lbTitre.setText(BeanUtils.formatTitre(_parabd.getTitreParaBD()));
         if (_parabd.getSerie() != null) {
             lbSerie.setText(BeanUtils.formatTitre(_parabd.getSerie().getTitreSerie()));
-            EntityWebHyperlink.addToLabeled(lbSerie, _parabd.getSerie().getSiteWeb());
+            EntityWebHyperlink.addToLabeled(lbSerie, _parabd.getSerie().siteWebProperty());
         }
         lbType.setText(_parabd.getCategorieParaBD().getTexte());
         if (_parabd.getAnneeEdition() != null)

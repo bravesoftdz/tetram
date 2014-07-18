@@ -6,6 +6,7 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import org.jetbrains.annotations.NonNls;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
@@ -23,7 +24,7 @@ import java.util.Properties;
  */
 @Service
 @Lazy
-@Scope
+@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @SuppressWarnings("UnusedDeclaration")
 public class UserPreferencesImpl implements UserPreferences {
 

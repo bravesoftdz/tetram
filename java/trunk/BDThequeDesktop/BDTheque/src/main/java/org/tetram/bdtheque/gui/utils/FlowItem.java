@@ -7,8 +7,8 @@ import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.Labeled;
 import javafx.scene.layout.FlowPane;
-import org.tetram.bdtheque.data.bean.abstractentities.BaseAuteur;
 import org.tetram.bdtheque.data.bean.abstractentities.AbstractDBEntity;
+import org.tetram.bdtheque.data.bean.abstractentities.BaseAuteur;
 
 import java.util.List;
 

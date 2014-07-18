@@ -176,7 +176,7 @@ public class FicheAlbumController extends WindowController implements Consultati
         serie.addListener((observable, oldSerie, serie) -> {
             if (serie == null) return;
             titreSerie.setText(BeanUtils.formatTitre(serie.getTitreSerie()));
-            EntityWebHyperlink.addToLabeled(titreSerie, serie.getSiteWeb());
+            EntityWebHyperlink.addToLabeled(titreSerie, serie.siteWebProperty());
 
             FlowItem.fillViewFromList(serie.genresProperty(), lvGenres);
             lvSerie.itemsProperty().bind(serie.albumsProperty());
@@ -238,7 +238,7 @@ public class FicheAlbumController extends WindowController implements Consultati
 
             lbIsbn.setText(edition.getIsbn() == null ? null : ISBNUtils.formatISBN(edition.getIsbn()));
             lbEditeur.setText(edition.getEditeur() == null ? null : edition.getEditeur().toString());
-            EntityWebHyperlink.addToLabeled(lbEditeur, edition.getEditeur().getSiteWeb());
+            EntityWebHyperlink.addToLabeled(lbEditeur, edition.getEditeur().siteWebProperty());
             lbCollection.setText(edition.getCollection() == null ? null : edition.getCollection().buildLabel(true));
             lbCote.setText(edition.getAnneeCote() == null ? null : MessageFormat.format("{0} ({0})", I18nSupport.getCurrencyFormatter().format(edition.getPrixCote()), edition.getAnneeCote().format(DateTimeFormatter.ofPattern(I18nSupport.message("format.year")))));
             lbAchete.setText(edition.isOffert() ? "Offert le :" : "Acheté le :");

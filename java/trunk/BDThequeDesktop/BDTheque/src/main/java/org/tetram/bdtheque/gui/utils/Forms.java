@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NonNls;
 import org.tetram.bdtheque.data.bean.abstractentities.*;
 import org.tetram.bdtheque.gui.controllers.WindowController;
 import org.tetram.bdtheque.gui.controllers.consultation.ConsultationController;
+import org.tetram.bdtheque.gui.controllers.gestion.GestionController;
 import org.tetram.bdtheque.spring.SpringFxmlLoader;
 
 import java.util.HashMap;
@@ -20,20 +21,30 @@ import java.util.Map;
 public class Forms {
 
     @NonNls
-    private static Map<Class<? extends AbstractDBEntity>, String> entitiesUrl;
+    private static Map<Class<? extends AbstractDBEntity>, String> entitiesUrlFiche;
+    @NonNls
+    private static Map<Class<? extends AbstractDBEntity>, String> entitiesUrlEdit;
 
     static {
-        entitiesUrl = new HashMap<>();
-        entitiesUrl.put(BaseAlbum.class, "consultation/ficheAlbum.fxml");
-        entitiesUrl.put(BaseSerie.class, "consultation/ficheSerie.fxml");
-        entitiesUrl.put(BasePersonne.class, "consultation/ficheAuteur.fxml");
-        entitiesUrl.put(BaseAuteur.class, "consultation/ficheAuteur.fxml");
-        entitiesUrl.put(BaseUnivers.class, "consultation/ficheUnivers.fxml");
-        entitiesUrl.put(BaseParaBD.class, "consultation/ficheParabd.fxml");
+        entitiesUrlFiche = new HashMap<>();
+        entitiesUrlFiche.put(BaseAlbum.class, "consultation/ficheAlbum.fxml");
+        entitiesUrlFiche.put(BaseSerie.class, "consultation/ficheSerie.fxml");
+        entitiesUrlFiche.put(BasePersonne.class, "consultation/ficheAuteur.fxml");
+        entitiesUrlFiche.put(BaseAuteur.class, "consultation/ficheAuteur.fxml");
+        entitiesUrlFiche.put(BaseUnivers.class, "consultation/ficheUnivers.fxml");
+        entitiesUrlFiche.put(BaseParaBD.class, "consultation/ficheParabd.fxml");
+
+        entitiesUrlEdit = new HashMap<>();
+        //entitiesUrlEdit.put(BaseAlbum.class, "gestion/ficheAlbum.fxml");
+        //entitiesUrlEdit.put(BaseSerie.class, "gestion/ficheSerie.fxml");
+        entitiesUrlEdit.put(BasePersonne.class, "gestion/ficheAuteur.fxml");
+        entitiesUrlEdit.put(BaseAuteur.class, "gestion/ficheAuteur.fxml");
+        //entitiesUrlEdit.put(BaseUnivers.class, "gestion/ficheUnivers.fxml");
+        //entitiesUrlEdit.put(BaseParaBD.class, "gestion/ficheParabd.fxml");
     }
 
     static String searchForURL(Class<? extends AbstractDBEntity> clasz) {
-        for (Map.Entry<Class<? extends AbstractDBEntity>, String> entry : entitiesUrl.entrySet()) {
+        for (Map.Entry<Class<? extends AbstractDBEntity>, String> entry : entitiesUrlFiche.entrySet()) {
             if (entry.getKey().isAssignableFrom(clasz))
                 return entry.getValue();
         }
@@ -68,8 +79,34 @@ public class Forms {
     }
 
     @SuppressWarnings("UnusedDeclaration")
+    public static <T extends WindowController & GestionController> T showEdit(AbstractDBEntity entity, Pane container) {
+        String url = entitiesUrlEdit.get(entity.getBaseClass());
+        if (url == null) {
+            org.controlsfx.dialog.Dialogs.create().message(entity.toString()).showInformation();
+            return null;
+        }
+
+        T controller = showWindow(container, url);
+        controller.setIdEntity(entity.getId());
+        return controller;
+    }
+
+    @SuppressWarnings("UnusedDeclaration")
     public static <T extends WindowController & ConsultationController> T showFiche(AbstractDBEntity entity, Pane container) {
-        String url = entitiesUrl.get(entity.getBaseClass());
+        String url = entitiesUrlFiche.get(entity.getBaseClass());
+        if (url == null) {
+            org.controlsfx.dialog.Dialogs.create().message(entity.toString()).showInformation();
+            return null;
+        }
+
+        T controller = showWindow(container, url);
+        controller.setIdEntity(entity.getId());
+        return controller;
+    }
+
+    @SuppressWarnings("UnusedDeclaration")
+    public static <T extends WindowController & GestionController> T showEdit(AbstractDBEntity entity, ScrollPane container) {
+        String url = entitiesUrlEdit.get(entity.getBaseClass());
         if (url == null) {
             org.controlsfx.dialog.Dialogs.create().message(entity.toString()).showInformation();
             return null;
@@ -82,7 +119,21 @@ public class Forms {
 
     @SuppressWarnings("UnusedDeclaration")
     public static <T extends WindowController & ConsultationController> T showFiche(AbstractDBEntity entity, ScrollPane container) {
-        String url = entitiesUrl.get(entity.getBaseClass());
+        String url = entitiesUrlFiche.get(entity.getBaseClass());
+        if (url == null) {
+            org.controlsfx.dialog.Dialogs.create().message(entity.toString()).showInformation();
+            return null;
+        }
+
+        T controller = showWindow(container, url);
+        controller.setIdEntity(entity.getId());
+        return controller;
+    }
+
+
+    @SuppressWarnings("UnusedDeclaration")
+    public static <T extends WindowController & GestionController> T showEdit(AbstractDBEntity entity, ObjectProperty<Node> container) {
+        String url = entitiesUrlEdit.get(entity.getBaseClass());
         if (url == null) {
             org.controlsfx.dialog.Dialogs.create().message(entity.toString()).showInformation();
             return null;
@@ -95,7 +146,7 @@ public class Forms {
 
     @SuppressWarnings("UnusedDeclaration")
     public static <T extends WindowController & ConsultationController> T showFiche(AbstractDBEntity entity, ObjectProperty<Node> container) {
-        String url = entitiesUrl.get(entity.getBaseClass());
+        String url = entitiesUrlFiche.get(entity.getBaseClass());
         if (url == null) {
             org.controlsfx.dialog.Dialogs.create().message(entity.toString()).showInformation();
             return null;

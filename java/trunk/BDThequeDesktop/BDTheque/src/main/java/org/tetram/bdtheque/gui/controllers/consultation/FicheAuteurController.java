@@ -14,9 +14,9 @@ import org.tetram.bdtheque.data.BeanUtils;
 import org.tetram.bdtheque.data.bean.AlbumLite;
 import org.tetram.bdtheque.data.bean.Personne;
 import org.tetram.bdtheque.data.bean.Serie;
-import org.tetram.bdtheque.data.bean.abstractentities.BaseAlbum;
 import org.tetram.bdtheque.data.bean.abstractentities.AbstractDBEntity;
 import org.tetram.bdtheque.data.bean.abstractentities.AbstractEntity;
+import org.tetram.bdtheque.data.bean.abstractentities.BaseAlbum;
 import org.tetram.bdtheque.data.dao.AlbumLiteSerieDaoImpl;
 import org.tetram.bdtheque.data.dao.PersonneDao;
 import org.tetram.bdtheque.gui.controllers.WindowController;
@@ -61,7 +61,7 @@ public class FicheAuteurController extends WindowController implements Consultat
         if (_personne == null) throw new EntityNotFoundException();
 
         lbNom.setText(BeanUtils.formatTitre(_personne.getNomPersonne()));
-        EntityWebHyperlink.addToLabeled(lbNom, _personne.getSiteWeb());
+        EntityWebHyperlink.addToLabeled(lbNom, _personne.siteWebProperty());
         tfBiographie.getChildren().add(new Text(_personne.getBiographie()));
 
         seriesController.setClickToShow(true);

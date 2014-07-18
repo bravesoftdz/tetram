@@ -118,9 +118,9 @@ public class FicheSerieController extends WindowController implements Consultati
         notationController.notationProperty().bindBidirectional(_serie.notationProperty());
 
         titreSerie.setText(BeanUtils.formatTitre(serie.get().getTitreSerie()));
-        EntityWebHyperlink.addToLabeled(titreSerie, _serie.getSiteWeb());
+        EntityWebHyperlink.addToLabeled(titreSerie, _serie.siteWebProperty());
         lbEditeur.setText(_serie.getEditeur() == null ? null : _serie.getEditeur().toString());
-        EntityWebHyperlink.addToLabeled(lbEditeur, _serie.getEditeur().getSiteWeb());
+        EntityWebHyperlink.addToLabeled(lbEditeur, _serie.getEditeur().siteWebProperty());
         lbCollection.setText(_serie.getCollection() == null ? null : _serie.getCollection().buildLabel(true));
         cbTerminee.setSelected(serie.get().isTerminee());
 

@@ -1,5 +1,6 @@
 package org.tetram.bdtheque.gui.utils;
 
+import javafx.beans.property.ObjectProperty;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Labeled;
@@ -17,7 +18,7 @@ import java.net.URL;
  */
 public class EntityWebHyperlink extends Hyperlink {
 
-    public EntityWebHyperlink(@NotNull URL url) {
+    public EntityWebHyperlink(@NotNull ObjectProperty<URL> url) {
         super();
         setText(null);
         final Image image = new Image(getClass().getResourceAsStream("/org/tetram/bdtheque/graphics/png/16x16/network.png"));
@@ -25,15 +26,18 @@ public class EntityWebHyperlink extends Hyperlink {
         setGraphic(new ImageView(image));
         setOnAction(event -> {
             try {
-                Desktop.getDesktop().browse(url.toURI());
+                final URL value = url.get();
+                if (value != null)
+                    Desktop.getDesktop().browse(value.toURI());
             } catch (IOException | URISyntaxException e) {
                 e.printStackTrace();
             }
         });
+        visibleProperty().bind(url.isNotNull());
     }
 
 
-    public static void addToLabeled(Labeled node, URL url, ContentDisplay contentDisplay) {
+    public static void addToLabeled(Labeled node, ObjectProperty<URL> url, ContentDisplay contentDisplay) {
         if (url == null)
             node.setGraphic(null);
         else
@@ -41,7 +45,7 @@ public class EntityWebHyperlink extends Hyperlink {
         node.setContentDisplay(contentDisplay);
     }
 
-    public static void addToLabeled(Labeled node, URL url) {
+    public static void addToLabeled(Labeled node, ObjectProperty<URL> url) {
         addToLabeled(node, url, ContentDisplay.RIGHT);
     }
 
