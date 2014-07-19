@@ -1,10 +1,7 @@
 package org.tetram.bdtheque.gui.utils;
 
 import javafx.application.Platform;
-import javafx.beans.property.ReadOnlyIntegerProperty;
-import javafx.beans.property.ReadOnlyIntegerWrapper;
-import javafx.beans.property.ReadOnlyListProperty;
-import javafx.beans.property.ReadOnlyListWrapper;
+import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -14,14 +11,14 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
-import org.tetram.bdtheque.gui.controllers.ApplicationMode;
-import org.tetram.bdtheque.gui.controllers.MainController;
+import org.tetram.bdtheque.data.bean.abstractentities.AbstractDBEntity;
+import org.tetram.bdtheque.gui.controllers.*;
+import org.tetram.bdtheque.spring.SpringContext;
 import org.tetram.bdtheque.utils.StringUtils;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.EnumSet;
-import java.util.UUID;
 
 /**
  * Created by Thierry on 18/07/2014.
@@ -35,15 +32,19 @@ public class History {
     private final ReadOnlyListWrapper<HistoryItem> shown = new ReadOnlyListWrapper<>(this, "shown", FXCollections.observableArrayList());
     private final ReadOnlyListWrapper<HistoryItem> waiting = new ReadOnlyListWrapper<>(this, "waiting", FXCollections.observableArrayList());
     private final ReadOnlyIntegerWrapper current = new ReadOnlyIntegerWrapper(this, "current", -1);
-    @Autowired
-    private MainController mainController;
+    private final ReadOnlyObjectWrapper<WindowController> currentController = new ReadOnlyObjectWrapper<>(this, "currentController", null);
+
     private int lockCount = 0;
     private boolean processRegistered = false;
 
+    @Autowired
+    private MainController mainController;
+
     public History() {
         waiting.addListener((ListChangeListener<HistoryItem>) c -> {
-            if (c.wasAdded())
-                registerProcessNext();
+            while (c.next())
+                if (c.wasAdded())
+                    registerProcessNext();
         });
     }
 
@@ -141,8 +142,8 @@ public class History {
         waiting.add(new HistoryItem(action));
     }
 
-    public void addWaiting(HistoryAction action, UUID id) {
-        waiting.add(new HistoryItem(action, id));
+    public void addWaiting(HistoryAction action, AbstractDBEntity entity) {
+        waiting.add(new HistoryItem(action, entity));
     }
 
     public void clear() {
@@ -224,7 +225,7 @@ public class History {
     }
 
 
-    private boolean open(HistoryItem item, boolean withLock) {
+    private synchronized boolean open(HistoryItem item, boolean withLock) {
 /*
     TfrmConsole.AddEvent(UnitName, 'THistory.Open ' + GetEnumName(TypeInfo(TActionConsultation), Integer(Consult.Action)));
 
@@ -233,15 +234,20 @@ public class History {
         boolean result = true;
 
         if (withLock) lock();
+        // if (currentController.get() != null)
+        // currentController.get().getDialog().getScene().getRoot().setCursor(Cursor.WAIT);
+        WindowController newController = null;
         try {
             if (!HistoryAction.noSaveHistorique.contains(item.action))
                 addConsultation(item);
             switch (item.action) {
                 case MODE_CONSULTATION:
                     mainController.setMode(ApplicationMode.CONSULTATION);
+                    newController = SpringContext.CONTEXT.getBean(ModeConsultationController.class);
                     break;
                 case MODE_GESTION:
                     mainController.setMode(ApplicationMode.GESTION);
+                    newController = SpringContext.CONTEXT.getBean(ModeGestionController.class);
                     break;
                 case BACK:
                     back();
@@ -249,19 +255,10 @@ public class History {
                 case REFRESH:
                     result = open(shown.get(getCurrent()), true);
                     break;
+                case FICHE:
+                    ModeConsultationController consultationController = SpringContext.CONTEXT.getBean(ModeConsultationController.class);
+                    newController = consultationController.showConsultationForm(item.entity);
 /*
-                fcAlbum:
-                    Result := MAJConsultationAlbum(Consult.ReferenceGUID);
-                fcSerie:
-                    Result := MAJConsultationSerie(Consult.ReferenceGUID);
-                fcAuteur:
-                    Result := MAJConsultationAuteur(Consult.ReferenceGUID);
-                fcUnivers:
-                    Result := MAJConsultationUnivers(Consult.ReferenceGUID);
-                fcParaBD:
-                    Result := MAJConsultationParaBD(Consult.ReferenceGUID);
-                fcCouverture, fcImageParaBD:
-                    Result := ZoomCouverture(Consult.Action = fcImageParaBD, Consult.ReferenceGUID, Consult.ReferenceGUID2);
                 fcRecherche:
                     MAJRecherche(Consult.ReferenceGUID, Consult.Reference2, Consult.Stream);
                 fcPreview:
@@ -319,6 +316,10 @@ public class History {
         } finally {
             if (withLock)
                 unlock();
+            //if (currentController.get() != null)
+            //currentController.get().getDialog().getScene().getRoot().setCursor(Cursor.DEFAULT);
+            if (newController != null)
+                currentController.set(newController);
         }
 /*
     if Assigned(FOnChange) and not(Consult.Action in NoSaveHistorique) then
@@ -328,14 +329,14 @@ public class History {
         return result;
     }
 
-    enum HistoryAction {
-        BACK, REFRESH, FICHE, ALBUM, AUTEUR, COUVERTURE, RECHERCHE, PREVIEW, SERIES_INCOMPLETES,
-        PREVISIONS_SORTIES, RECREATE_TOOL_BAR, PREVISIONS_ACHATS, REFRESH_REPERTOIRE, REFRESH_REPERTOIRE_DATA, PARABD, IMAGE_PARABD, SERIE, GESTION_AJOUT,
+    public enum HistoryAction {
+        BACK, REFRESH, FICHE, RECHERCHE, PREVIEW, SERIES_INCOMPLETES,
+        PREVISIONS_SORTIES, RECREATE_TOOL_BAR, PREVISIONS_ACHATS, REFRESH_REPERTOIRE, REFRESH_REPERTOIRE_DATA, SERIE, GESTION_AJOUT,
         GESTION_MODIF, GESTION_SUPP, GESTION_ACHAT, CONFLIT_IMPORT, GALERIE, MODE_CONSULTATION, MODE_GESTION, UNIVERS,
         CONSOLE, SCRIPTS;
 
         static EnumSet<HistoryAction> mustRefresh = EnumSet.of(RECHERCHE);
-        static EnumSet<HistoryAction> canRefresh = EnumSet.of(ALBUM, AUTEUR, SERIES_INCOMPLETES, PREVISIONS_SORTIES, PREVISIONS_ACHATS, GALERIE, UNIVERS);
+        static EnumSet<HistoryAction> canRefresh = EnumSet.of(FICHE, SERIES_INCOMPLETES, PREVISIONS_SORTIES, PREVISIONS_ACHATS, GALERIE, UNIVERS);
         static EnumSet<HistoryAction> usedInGestion = EnumSet.of(GESTION_AJOUT, GESTION_MODIF, GESTION_SUPP, GESTION_ACHAT, CONFLIT_IMPORT);
         static EnumSet<HistoryAction> modes = EnumSet.of(MODE_CONSULTATION, MODE_GESTION);
         static EnumSet<HistoryAction> specials = EnumSet.of(BACK, REFRESH, PREVIEW, RECREATE_TOOL_BAR, REFRESH_REPERTOIRE, REFRESH_REPERTOIRE_DATA, CONSOLE, SCRIPTS);
@@ -354,16 +355,16 @@ public class History {
     private class HistoryItem implements Cloneable {
 
         private HistoryAction action = null;
-        private UUID id = null;
+        private AbstractDBEntity entity;
         private String description = null;
 
         HistoryItem(HistoryAction action) {
             this.action = action;
         }
 
-        public HistoryItem(HistoryAction action, UUID id) {
+        public HistoryItem(HistoryAction action, AbstractDBEntity entity) {
             this(action);
-            this.id = id;
+            this.entity = entity.lightRef();
         }
 
         @SuppressWarnings("CloneDoesntDeclareCloneNotSupportedException")

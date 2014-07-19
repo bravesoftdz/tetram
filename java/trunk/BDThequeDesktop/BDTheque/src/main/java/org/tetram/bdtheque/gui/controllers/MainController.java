@@ -1,7 +1,6 @@
 package org.tetram.bdtheque.gui.controllers;
 
 import impl.org.controlsfx.i18n.Localization;
-import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.ActionEvent;
@@ -16,6 +15,7 @@ import org.tetram.bdtheque.data.bean.Serie;
 import org.tetram.bdtheque.data.dao.SerieDao;
 import org.tetram.bdtheque.data.services.UserPreferences;
 import org.tetram.bdtheque.gui.utils.Dialogs;
+import org.tetram.bdtheque.gui.utils.History;
 import org.tetram.bdtheque.spring.SpringContext;
 import org.tetram.bdtheque.spring.SpringFxmlLoader;
 import org.tetram.bdtheque.spring.utils.FileStringConverter;
@@ -29,6 +29,7 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.UUID;
 
+@SuppressWarnings("UnusedDeclaration")
 @Controller
 @FileLink("/org/tetram/bdtheque/gui/main.fxml")
 public class MainController extends WindowController {
@@ -38,6 +39,8 @@ public class MainController extends WindowController {
 
     @Autowired
     private UserPreferences userPreferences;
+    @Autowired
+    private History history;
     @Autowired
     private SerieDao serieDao;
 
@@ -102,11 +105,11 @@ public class MainController extends WindowController {
             userPreferences.save();
         });
 
-        Platform.runLater(() -> mode.set(userPreferences.getModeOuverture()));
+        history.addWaiting(History.HistoryAction.MODE_CONSULTATION);
     }
 
     public void menuQuitClick(@SuppressWarnings("UnusedParameters") ActionEvent actionEvent) {
-        dialog.close();
+        getDialog().close();
     }
 
     public void buttonTestClick(@SuppressWarnings("UnusedParameters") ActionEvent actionEvent) {

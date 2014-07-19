@@ -50,10 +50,12 @@ public class ModeConsultationController extends WindowController {
         AnchorPane.setRightAnchor(repertoireController.getView(), 0.0);
     }
 
-    public void showConsultationForm(AbstractDBEntity entity) {
+    public WindowController showConsultationForm(AbstractDBEntity entity) {
+        WindowController controller = null;
         if (entity != null && !entity.equals(currentEntity.get())) {
-            Forms.showFiche(entity, detailPane);
+            controller = Forms.showFiche(entity, detailPane);
             currentEntity.set(entity.lightRef());
         }
+        return controller;
     }
 }

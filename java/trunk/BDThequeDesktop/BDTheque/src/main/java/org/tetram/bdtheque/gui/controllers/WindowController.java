@@ -1,29 +1,40 @@
 package org.tetram.bdtheque.gui.controllers;
 
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.Node;
 import javafx.stage.Stage;
 
 /**
  * Created by Thierry on 21/06/2014.
  */
+@SuppressWarnings("UnusedDeclaration")
 public class WindowController {
-    Stage dialog;
-    private Node view;
+    private ObjectProperty<Stage> dialog = new SimpleObjectProperty<>(this, "dialog", null);
+    private ObjectProperty<Node> view = new SimpleObjectProperty<>(this, "view", null);
 
     public Stage getDialog() {
-        return dialog;
+        return dialog.get();
     }
 
     public void setDialog(Stage dialog) {
-        this.dialog = dialog;
+        this.dialog.set(dialog);
+    }
+
+    public ObjectProperty<Stage> dialogProperty() {
+        return dialog;
     }
 
     public Node getView() {
-        return view;
+        return view.get();
     }
 
     public void setView(Node view) {
-        this.view = view;
+        this.view.set(view);
+    }
+
+    public ObjectProperty<Node> viewProperty() {
+        return view;
     }
 
     /**

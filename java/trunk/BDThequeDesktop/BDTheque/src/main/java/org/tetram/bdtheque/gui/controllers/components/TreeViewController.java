@@ -25,8 +25,8 @@ import org.tetram.bdtheque.data.bean.abstractentities.AbstractEntity;
 import org.tetram.bdtheque.data.bean.interfaces.EvaluatedEntity;
 import org.tetram.bdtheque.data.dao.RepertoireLiteDao;
 import org.tetram.bdtheque.data.services.UserPreferences;
-import org.tetram.bdtheque.gui.controllers.ModeConsultationController;
 import org.tetram.bdtheque.gui.controllers.WindowController;
+import org.tetram.bdtheque.gui.utils.History;
 import org.tetram.bdtheque.gui.utils.NotationResource;
 import org.tetram.bdtheque.spring.SpringContext;
 import org.tetram.bdtheque.utils.FileLink;
@@ -51,7 +51,7 @@ public class TreeViewController extends WindowController {
     @NonNls
     private static final String NODE_BOLD_CSS = "node-bold";
     @Autowired
-    private ModeConsultationController modeConsultationController;
+    private History history;
 
     @Autowired
     private UserPreferences userPreferences;
@@ -103,7 +103,7 @@ public class TreeViewController extends WindowController {
                 if (selectedItem != null && selectedItem.isLeaf()) {
                     final AbstractEntity entity = selectedItem.getValue();
                     if (entity != null && entity instanceof AbstractDBEntity)
-                        modeConsultationController.showConsultationForm((AbstractDBEntity) entity);
+                        history.addWaiting(History.HistoryAction.FICHE, (AbstractDBEntity) entity);
                 }
             }
         };
