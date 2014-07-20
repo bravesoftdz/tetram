@@ -234,20 +234,18 @@ public class History {
         boolean result = true;
 
         if (withLock) lock();
-        // if (currentController.get() != null)
-        // currentController.get().getDialog().getScene().getRoot().setCursor(Cursor.WAIT);
         WindowController newController = null;
         try {
-            if (!HistoryAction.noSaveHistorique.contains(item.action))
+            if (HistoryAction.noSaveHistorique.contains(item.action))
+                item.previousController = currentController.get();
+            else
                 addConsultation(item);
             switch (item.action) {
                 case MODE_CONSULTATION:
-                    mainController.setMode(ApplicationMode.CONSULTATION);
-                    newController = SpringContext.CONTEXT.getBean(ModeConsultationController.class);
+                    newController = Forms.showMode(ApplicationMode.CONSULTATION);
                     break;
                 case MODE_GESTION:
-                    mainController.setMode(ApplicationMode.GESTION);
-                    newController = SpringContext.CONTEXT.getBean(ModeGestionController.class);
+                    newController = Forms.showMode(ApplicationMode.GESTION);
                     break;
                 case BACK:
                     back();
@@ -258,6 +256,7 @@ public class History {
                 case FICHE:
                     ModeConsultationController consultationController = SpringContext.CONTEXT.getBean(ModeConsultationController.class);
                     newController = consultationController.showConsultationForm(item.entity);
+                    break;
 /*
                 fcRecherche:
                     MAJRecherche(Consult.ReferenceGUID, Consult.Reference2, Consult.Stream);
@@ -287,11 +286,18 @@ public class History {
                         doCallback := not IsEqualGUID(GUID_NULL, TActionGestionAddWithRef(Consult.GestionProc)(Consult.GestionVTV, Consult.ReferenceGUID, Consult.GestionValeur))
                     else
                         doCallback := not IsEqualGUID(GUID_NULL, TActionGestionAdd(Consult.GestionProc)(Consult.GestionVTV, Consult.GestionValeur));
-                fcGestionModif:
+*/
+                case GESTION_MODIF:
+                    ModeGestionController gestionController = SpringContext.CONTEXT.getBean(ModeGestionController.class);
+                    newController = gestionController.showEditForm(item.entity);
+/*
                     if IsEqualGUID(Consult.ReferenceGUID, GUID_NULL) then
                         doCallback := TActionGestionModif(Consult.GestionProc)(Consult.GestionVTV)
                     else
                         doCallback := TActionGestionModif2(Consult.GestionProc)(Consult.ReferenceGUID);
+*/
+                    break;
+/*
                 fcGestionSupp:
                     doCallback := TActionGestionSupp(Consult.GestionProc)(Consult.GestionVTV);
                 fcGestionAchat:
@@ -316,8 +322,6 @@ public class History {
         } finally {
             if (withLock)
                 unlock();
-            //if (currentController.get() != null)
-            //currentController.get().getDialog().getScene().getRoot().setCursor(Cursor.DEFAULT);
             if (newController != null)
                 currentController.set(newController);
         }
@@ -357,6 +361,7 @@ public class History {
         private HistoryAction action = null;
         private AbstractDBEntity entity;
         private String description = null;
+        private WindowController previousController = null;
 
         HistoryItem(HistoryAction action) {
             this.action = action;

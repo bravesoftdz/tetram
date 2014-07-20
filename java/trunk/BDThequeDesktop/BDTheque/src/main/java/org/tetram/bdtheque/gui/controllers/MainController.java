@@ -6,7 +6,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
 import org.jetbrains.annotations.NonNls;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.datasource.SingleConnectionDataSource;
@@ -17,7 +17,6 @@ import org.tetram.bdtheque.data.services.UserPreferences;
 import org.tetram.bdtheque.gui.utils.Dialogs;
 import org.tetram.bdtheque.gui.utils.History;
 import org.tetram.bdtheque.spring.SpringContext;
-import org.tetram.bdtheque.spring.SpringFxmlLoader;
 import org.tetram.bdtheque.spring.utils.FileStringConverter;
 import org.tetram.bdtheque.utils.FileLink;
 import org.tetram.bdtheque.utils.I18nSupport;
@@ -59,7 +58,7 @@ public class MainController extends WindowController {
     private Button buttonTest;
 
     @FXML
-    private AnchorPane detailPane;
+    private StackPane detailPane;
 
     @FXML
     private Menu mnuLanguage;
@@ -89,23 +88,16 @@ public class MainController extends WindowController {
             toggle.setUserData(applicationMode);
             toggle.setSelected(userPreferences.getModeOuverture().equals(applicationMode));
         }
-        tgMode.selectedToggleProperty().addListener(o -> mode.set((ApplicationMode) tgMode.getSelectedToggle().getUserData()));
+        tgMode.selectedToggleProperty().addListener(o -> history.addWaiting(((ApplicationMode) tgMode.getSelectedToggle().getUserData()).getHistoryAction()));
 
         mode.addListener((observable, oldMode, newMode) -> {
             if (newMode == null) return;
-            WindowController controller = SpringFxmlLoader.load(newMode.getResource());
-            detailPane.getChildren().add(controller.getView());
-            AnchorPane.setBottomAnchor(controller.getView(), 0.0);
-            AnchorPane.setTopAnchor(controller.getView(), 0.0);
-            AnchorPane.setLeftAnchor(controller.getView(), 0.0);
-            AnchorPane.setRightAnchor(controller.getView(), 0.0);
-
             // pratique en développement mais à voir si on garde pour la version finale
             userPreferences.setModeOuverture(newMode);
             userPreferences.save();
         });
 
-        history.addWaiting(History.HistoryAction.MODE_CONSULTATION);
+        history.addWaiting(userPreferences.getModeOuverture().getHistoryAction());
     }
 
     public void menuQuitClick(@SuppressWarnings("UnusedParameters") ActionEvent actionEvent) {
@@ -153,5 +145,9 @@ public class MainController extends WindowController {
 
     public ObjectProperty<ApplicationMode> modeProperty() {
         return mode;
+    }
+
+    public StackPane getDetailPane() {
+        return detailPane;
     }
 }

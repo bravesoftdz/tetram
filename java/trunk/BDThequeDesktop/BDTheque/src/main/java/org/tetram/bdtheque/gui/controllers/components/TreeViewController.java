@@ -25,7 +25,7 @@ import org.tetram.bdtheque.data.bean.abstractentities.AbstractEntity;
 import org.tetram.bdtheque.data.bean.interfaces.EvaluatedEntity;
 import org.tetram.bdtheque.data.dao.RepertoireLiteDao;
 import org.tetram.bdtheque.data.services.UserPreferences;
-import org.tetram.bdtheque.gui.controllers.WindowController;
+import org.tetram.bdtheque.gui.controllers.*;
 import org.tetram.bdtheque.gui.utils.History;
 import org.tetram.bdtheque.gui.utils.NotationResource;
 import org.tetram.bdtheque.spring.SpringContext;
@@ -55,6 +55,12 @@ public class TreeViewController extends WindowController {
 
     @Autowired
     private UserPreferences userPreferences;
+    @Autowired
+    private MainController mainController;
+    @Autowired
+    private ModeConsultationController consultationController;
+    @Autowired
+    private ModeGestionController gestionController;
 
     @FXML
     private TreeTableView<AbstractEntity> treeTableView;
@@ -76,6 +82,7 @@ public class TreeViewController extends WindowController {
     private BooleanProperty useDefaultFiltre = new SimpleBooleanProperty(this, "useDefaultFiltre", true);
     private ReadOnlyObjectWrapper<RepertoireLiteDao> dao = new ReadOnlyObjectWrapper<>(this, "dao", null);
     private ObjectProperty<TreeViewMode> mode = new SimpleObjectProperty<>(this, "mode", TreeViewMode.NONE);
+    private ObjectProperty<AbstractEntity> selectedEntity = new SimpleObjectProperty<>(this, "selectedEntity", null);
 
     @FXML
     public void initialize() {
@@ -103,7 +110,10 @@ public class TreeViewController extends WindowController {
                 if (selectedItem != null && selectedItem.isLeaf()) {
                     final AbstractEntity entity = selectedItem.getValue();
                     if (entity != null && entity instanceof AbstractDBEntity)
-                        history.addWaiting(History.HistoryAction.FICHE, (AbstractDBEntity) entity);
+                        if (mainController.getMode() == ApplicationMode.CONSULTATION)
+                            history.addWaiting(History.HistoryAction.FICHE, (AbstractDBEntity) entity);
+                        else
+                            history.addWaiting(History.HistoryAction.GESTION_MODIF, (AbstractDBEntity) entity);
                 }
             }
         };
@@ -185,6 +195,11 @@ public class TreeViewController extends WindowController {
         final BooleanBinding finalEntityClassIsEvaluated = Bindings.createBooleanBinding(() -> EvaluatedEntity.class.isAssignableFrom(getFinalEntityClass()), finalEntityClass);
         final BooleanBinding column1Visible = Bindings.and(userPreferences.afficheNoteListesProperty(), finalEntityClassIsEvaluated);
         column1.visibleProperty().bind(column1Visible);
+
+        treeTableView.getSelectionModel().selectedItemProperty().addListener((observable, oldEntity, newEntity) -> {
+            TreeViewNode treeViewNode = (TreeViewNode) newEntity;
+            selectedEntity.set(treeViewNode != null && treeViewNode.isLeaf() ? treeViewNode.getValue() : null);
+        });
 
         Platform.runLater(this::refresh);
     }
@@ -327,6 +342,18 @@ public class TreeViewController extends WindowController {
 
     public BooleanProperty useDefaultFiltreProperty() {
         return useDefaultFiltre;
+    }
+
+    public AbstractEntity getSelectedEntity() {
+        return selectedEntity.get();
+    }
+
+    private void setSelectedEntity(AbstractEntity selectedEntity) {
+        this.selectedEntity.set(selectedEntity);
+    }
+
+    public ObjectProperty<AbstractEntity> selectedEntityProperty() {
+        return selectedEntity;
     }
 
     public class TreeViewNode extends TreeItem<AbstractEntity> {

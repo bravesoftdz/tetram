@@ -21,7 +21,7 @@ import java.util.ResourceBundle;
 // c'est la valeur par défaut, mais contrairement aux autres, il faut impérativement que ce controller soit un singleton
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @FileLink("/org/tetram/bdtheque/gui/modeConsultation.fxml")
-public class ModeConsultationController extends WindowController {
+public class ModeConsultationController extends WindowController implements ModeController {
 
     @FXML
     private ResourceBundle resources;
@@ -53,9 +53,13 @@ public class ModeConsultationController extends WindowController {
     public WindowController showConsultationForm(AbstractDBEntity entity) {
         WindowController controller = null;
         if (entity != null && !entity.equals(currentEntity.get())) {
-            controller = Forms.showFiche(entity, detailPane);
+            controller = Forms.showFiche(entity);
             currentEntity.set(entity.lightRef());
         }
         return controller;
+    }
+
+    public ScrollPane getDetailPane() {
+        return detailPane;
     }
 }

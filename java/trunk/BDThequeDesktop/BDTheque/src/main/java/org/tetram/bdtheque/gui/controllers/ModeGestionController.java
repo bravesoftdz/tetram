@@ -2,15 +2,23 @@ package org.tetram.bdtheque.gui.controllers;
 
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.ReadOnlyListWrapper;
 import javafx.beans.value.ObservableNumberValue;
+import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import org.jetbrains.annotations.NonNls;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
+import org.tetram.bdtheque.data.bean.abstractentities.AbstractDBEntity;
+import org.tetram.bdtheque.data.bean.abstractentities.AbstractEntity;
 import org.tetram.bdtheque.gui.controllers.components.TreeViewController;
 import org.tetram.bdtheque.gui.controllers.components.TreeViewMode;
+import org.tetram.bdtheque.gui.utils.Forms;
+import org.tetram.bdtheque.gui.utils.History;
 import org.tetram.bdtheque.utils.FileLink;
 
 import java.util.HashMap;
@@ -23,7 +31,7 @@ import java.util.Map;
 // c'est la valeur par défaut, mais contrairement aux autres, il faut impérativement que ce controller soit un singleton
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @FileLink("/org/tetram/bdtheque/gui/modeGestion.fxml")
-public class ModeGestionController extends WindowController {
+public class ModeGestionController extends WindowController implements ModeController {
     @NonNls
     private static final String FILTRE_ACHAT = "Achat = 1";
     @FXML
@@ -63,6 +71,11 @@ public class ModeGestionController extends WindowController {
     @FXML
     private TreeViewController entitiesController;
 
+    private ReadOnlyListWrapper<Class<? extends AbstractEntity>> currentEntities = new ReadOnlyListWrapper<>(this, "currentEntity", FXCollections.observableArrayList());
+
+    @Autowired
+    private History history;
+
     @SuppressWarnings("unchecked")
     @FXML
     public void initialize() {
@@ -92,8 +105,6 @@ public class ModeGestionController extends WindowController {
             toggleButton.setUserData(buttonNodeHashMap.get(toggleButton));
         }
 
-        btRefresh.setOnAction(event -> entitiesController.refresh());
-
         entitiesController.setClickToShow(true);
         entitiesController.filtreProperty().bind(Bindings.createStringBinding(() -> {
             Toggle button = entitiesType.getSelectedToggle();
@@ -111,6 +122,50 @@ public class ModeGestionController extends WindowController {
                 entitiesController.setMode(newMode);
         });
 
+        btModifier.disableProperty().bind(entitiesController.selectedEntityProperty().isNull());
+        btSupprimer.disableProperty().bind(entitiesController.selectedEntityProperty().isNull());
+        btAcheter.disableProperty().bind(
+                entitiesController.selectedEntityProperty().isNull().or(
+                        Bindings.and(
+                                Bindings.createBooleanBinding(() -> !btAchatsAlbums.equals(entitiesType.getSelectedToggle()), entitiesType.selectedToggleProperty()),
+                                Bindings.createBooleanBinding(() -> !btAchatsParaBD.equals(entitiesType.getSelectedToggle()), entitiesType.selectedToggleProperty())
+                        )
+                ));
+
         entitiesType.selectToggle(btAlbums);
+    }
+
+    public WindowController showEditForm(AbstractDBEntity entity) {
+        WindowController controller = null;
+        if (entity != null && !currentEntities.contains(entity.getEntityClass())) {
+            controller = Forms.showEdit(entity);
+            currentEntities.add(entity.getEntityClass());
+        }
+        return controller;
+    }
+
+    @FXML
+    public void clickRefresh(ActionEvent actionEvent) {
+        entitiesController.refresh();
+    }
+
+    @FXML
+    public void clickNew(ActionEvent actionEvent) {
+        history.addWaiting(History.HistoryAction.GESTION_AJOUT);
+    }
+
+    @FXML
+    public void clickEdit(ActionEvent actionEvent) {
+        history.addWaiting(History.HistoryAction.GESTION_MODIF, (AbstractDBEntity) entitiesController.getSelectedEntity());
+    }
+
+    @FXML
+    public void clickDel(ActionEvent actionEvent) {
+        history.addWaiting(History.HistoryAction.GESTION_SUPP, (AbstractDBEntity) entitiesController.getSelectedEntity());
+    }
+
+    @FXML
+    public void clickAchat(ActionEvent actionEvent) {
+        history.addWaiting(History.HistoryAction.GESTION_ACHAT, (AbstractDBEntity) entitiesController.getSelectedEntity());
     }
 }
