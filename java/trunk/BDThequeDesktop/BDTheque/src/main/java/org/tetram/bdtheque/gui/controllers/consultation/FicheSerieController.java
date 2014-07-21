@@ -21,12 +21,12 @@ import org.tetram.bdtheque.data.bean.Serie;
 import org.tetram.bdtheque.data.bean.abstractentities.AbstractDBEntity;
 import org.tetram.bdtheque.data.dao.EvaluatedEntityDao;
 import org.tetram.bdtheque.data.dao.SerieDao;
-import org.tetram.bdtheque.gui.controllers.ModeConsultationController;
 import org.tetram.bdtheque.gui.controllers.WindowController;
 import org.tetram.bdtheque.gui.controllers.components.NotationController;
 import org.tetram.bdtheque.gui.utils.EntityNotFoundException;
 import org.tetram.bdtheque.gui.utils.EntityWebHyperlink;
 import org.tetram.bdtheque.gui.utils.FlowItem;
+import org.tetram.bdtheque.gui.utils.History;
 import org.tetram.bdtheque.utils.FileLink;
 import org.tetram.bdtheque.utils.FileLinks;
 
@@ -48,7 +48,7 @@ public class FicheSerieController extends WindowController implements Consultati
     @Autowired
     private SerieDao serieDao;
     @Autowired
-    private ModeConsultationController modeConsultationController;
+    private History history;
     @FXML
     private Label titreSerie;
     @FXML
@@ -86,7 +86,7 @@ public class FicheSerieController extends WindowController implements Consultati
             if (event.getClickCount() == 2) {
                 AbstractDBEntity entity = lvAlbums.getSelectionModel().getSelectedItem();
                 if (entity != null)
-                    modeConsultationController.showConsultationForm(entity);
+                    history.addWaiting(History.HistoryAction.FICHE, entity);
             }
         });
         lvAlbums.setCellFactory(param -> {
@@ -99,7 +99,7 @@ public class FicheSerieController extends WindowController implements Consultati
             if (event.getClickCount() == 2) {
                 AbstractDBEntity entity = lvParabd.getSelectionModel().getSelectedItem();
                 if (entity != null)
-                    modeConsultationController.showConsultationForm(entity);
+                    history.addWaiting(History.HistoryAction.FICHE, entity);
             }
         });
         lvParabd.setCellFactory(param -> {
@@ -128,7 +128,7 @@ public class FicheSerieController extends WindowController implements Consultati
         final EventHandler<ActionEvent> openEntityEventHandler = event -> {
             final Labeled source = (Labeled) event.getSource();
             final AbstractDBEntity entity = (AbstractDBEntity) source.getUserData();
-            modeConsultationController.showConsultationForm(entity);
+            history.addWaiting(History.HistoryAction.FICHE, entity);
         };
         FlowItem.fillViewFromList(_serie.getUnivers(), lvUnivers, openEntityEventHandler);
         FlowItem.fillViewFromList(_serie.getScenaristes(), lvScenaristes, openEntityEventHandler);

@@ -24,9 +24,6 @@ import java.util.HashMap;
 @FileLink("/org/tetram/bdtheque/gui/repertoire.fxml")
 public class RepertoireController extends WindowController {
 
-    @Autowired
-    private ModeConsultationController modeConsultationController;
-
     @FXML
     private TabPane tabs;
 

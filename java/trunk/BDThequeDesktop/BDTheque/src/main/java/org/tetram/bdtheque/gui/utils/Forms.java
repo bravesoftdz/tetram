@@ -18,6 +18,7 @@ import org.tetram.bdtheque.spring.SpringFxmlLoader;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Created by Thierry on 30/06/2014.
@@ -31,7 +32,7 @@ public class Forms {
 
     private static ReadOnlyStringWrapper lastUrl = new ReadOnlyStringWrapper(null, "lastURL", null);
     private static ReadOnlyObjectWrapper<Object> lastContainer = new ReadOnlyObjectWrapper<>(null, "lastContainer", null);
-    private static ReadOnlyObjectWrapper<Object> lastView = new ReadOnlyObjectWrapper<>(null, "lastView", null);
+    private static ReadOnlyObjectWrapper<Node> lastView = new ReadOnlyObjectWrapper<>(null, "lastView", null);
     private static ReadOnlyObjectWrapper<WindowController> lastController = new ReadOnlyObjectWrapper<>(null, "lastController", null);
 
     static {
@@ -68,11 +69,11 @@ public class Forms {
         return lastContainer.getReadOnlyProperty();
     }
 
-    public static Object getLastView() {
+    public static Node getLastView() {
         return lastView.get();
     }
 
-    public static ReadOnlyObjectProperty<Object> lastViewProperty() {
+    public static ReadOnlyObjectProperty<Node> lastViewProperty() {
         return lastView.getReadOnlyProperty();
     }
 
@@ -92,15 +93,11 @@ public class Forms {
         return null;
     }
 
-    @SuppressWarnings("unchecked")
-    @Contract("null,_->fail")
-    private static <T extends WindowController> T showWindow(Object container, @NonNls String url) {
-        if (container == null)
-            throw new RuntimeException("You must define one container.");
+    @Contract("null,_->fail ; _,null->fail")
+    public static void setViewToContainer(Node view, Object container) {
+        Objects.requireNonNull(view);
+        Objects.requireNonNull(container);
 
-        final WindowController controller = SpringFxmlLoader.load(url);
-
-        final Node view = controller.getView();
         final Pane pane = view instanceof Pane ? (Pane) view : null;
         if (container instanceof StackPane) {
             StackPane containerPane = (StackPane) container;
@@ -130,15 +127,25 @@ public class Forms {
                 pane.prefHeightProperty().bind(containerPane.heightProperty().subtract(16));
             }
         } else if (container instanceof ObjectProperty) {
-            ObjectProperty<Node> containerNode = (ObjectProperty<Node>) container;
+            @SuppressWarnings("unchecked") ObjectProperty<Node> containerNode = (ObjectProperty<Node>) container;
             containerNode.set(view);
         }
 
-        lastController.set(controller);
         lastView.set(view);
         lastContainer.set(container);
-        lastUrl.set(url);
+    }
 
+    @SuppressWarnings("unchecked")
+    @Contract("null,_->fail")
+    private static <T extends WindowController> T showWindow(Object container, @NonNls String url) {
+        if (container == null)
+            throw new RuntimeException("You must define one container.");
+
+        final WindowController controller = SpringFxmlLoader.load(url);
+
+        setViewToContainer(controller.getView(), container);
+        lastController.set(controller);
+        lastUrl.set(url);
         return (T) controller;
     }
 
@@ -173,7 +180,9 @@ public class Forms {
 
     public static <T extends WindowController & ModeController> T showMode(ApplicationMode mode) {
         MainController mainController = SpringContext.CONTEXT.getBean(MainController.class);
-        return showWindow(mainController.getDetailPane(), mode.getResource());
+        final T modeController = showWindow(mainController.getDetailPane(), mode.getResource());
+        mainController.setMode(mode);
+        return modeController;
     }
 
 }

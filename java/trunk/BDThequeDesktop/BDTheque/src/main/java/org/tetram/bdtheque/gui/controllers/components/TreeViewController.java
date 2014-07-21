@@ -25,7 +25,9 @@ import org.tetram.bdtheque.data.bean.abstractentities.AbstractEntity;
 import org.tetram.bdtheque.data.bean.interfaces.EvaluatedEntity;
 import org.tetram.bdtheque.data.dao.RepertoireLiteDao;
 import org.tetram.bdtheque.data.services.UserPreferences;
-import org.tetram.bdtheque.gui.controllers.*;
+import org.tetram.bdtheque.gui.controllers.ApplicationMode;
+import org.tetram.bdtheque.gui.controllers.MainController;
+import org.tetram.bdtheque.gui.controllers.WindowController;
 import org.tetram.bdtheque.gui.utils.History;
 import org.tetram.bdtheque.gui.utils.NotationResource;
 import org.tetram.bdtheque.spring.SpringContext;
@@ -57,10 +59,6 @@ public class TreeViewController extends WindowController {
     private UserPreferences userPreferences;
     @Autowired
     private MainController mainController;
-    @Autowired
-    private ModeConsultationController consultationController;
-    @Autowired
-    private ModeGestionController gestionController;
 
     @FXML
     private TreeTableView<AbstractEntity> treeTableView;

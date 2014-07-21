@@ -6,6 +6,7 @@ import javafx.beans.property.ReadOnlyListWrapper;
 import javafx.beans.value.ObservableNumberValue;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import org.jetbrains.annotations.NonNls;
@@ -17,6 +18,8 @@ import org.tetram.bdtheque.data.bean.abstractentities.AbstractDBEntity;
 import org.tetram.bdtheque.data.bean.abstractentities.AbstractEntity;
 import org.tetram.bdtheque.gui.controllers.components.TreeViewController;
 import org.tetram.bdtheque.gui.controllers.components.TreeViewMode;
+import org.tetram.bdtheque.gui.controllers.gestion.FicheEditController;
+import org.tetram.bdtheque.gui.controllers.gestion.GestionController;
 import org.tetram.bdtheque.gui.utils.Forms;
 import org.tetram.bdtheque.gui.utils.History;
 import org.tetram.bdtheque.utils.FileLink;
@@ -135,11 +138,15 @@ public class ModeGestionController extends WindowController implements ModeContr
         entitiesType.selectToggle(btAlbums);
     }
 
-    public WindowController showEditForm(AbstractDBEntity entity) {
-        WindowController controller = null;
+    public <T extends WindowController & GestionController> FicheEditController<T> showEditForm(AbstractDBEntity entity) {
+        FicheEditController<T> controller = null;
         if (entity != null && !currentEntities.contains(entity.getEntityClass())) {
             controller = Forms.showEdit(entity);
             currentEntities.add(entity.getEntityClass());
+
+            final EventHandler<ActionEvent> handler = event -> currentEntities.remove(entity.getEntityClass());
+            controller.registerCancelHandler(handler);
+            controller.registerOkHandler(handler);
         }
         return controller;
     }

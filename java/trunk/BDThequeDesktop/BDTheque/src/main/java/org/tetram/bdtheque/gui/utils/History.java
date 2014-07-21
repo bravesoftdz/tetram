@@ -5,6 +5,9 @@ import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.scene.Node;
 import org.jetbrains.annotations.NonNls;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -12,7 +15,11 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import org.tetram.bdtheque.data.bean.abstractentities.AbstractDBEntity;
-import org.tetram.bdtheque.gui.controllers.*;
+import org.tetram.bdtheque.gui.controllers.ApplicationMode;
+import org.tetram.bdtheque.gui.controllers.MainController;
+import org.tetram.bdtheque.gui.controllers.ModeGestionController;
+import org.tetram.bdtheque.gui.controllers.WindowController;
+import org.tetram.bdtheque.gui.controllers.gestion.FicheEditController;
 import org.tetram.bdtheque.spring.SpringContext;
 import org.tetram.bdtheque.utils.StringUtils;
 
@@ -88,6 +95,10 @@ public class History {
         addConsultation(new HistoryItem(action));
     }
 
+    private void editConsultation(HistoryItem item) {
+        shown.get(getCurrent()).update(item);
+    }
+
     private void addItem(HistoryItem item) {
         current.set(getCurrent() + 1);
         if (getCurrent() == shown.size())
@@ -99,15 +110,17 @@ public class History {
     }
 
     public void addConsultation(HistoryItem item) {
-/*
-        if (lockCount == 0){
-            if (getCurrent() > -1 && item.action == shown.get(getCurrent()).action)
+        if (lockCount == 0) {
+            final HistoryItem currentItem = getCurrent() == -1 ? null : shown.get(getCurrent());
+            if (currentItem != null && item.action == currentItem.action) {
                 if (HistoryAction.mustRefresh.contains(item.action))
                     editConsultation(item);
-                else
-
-
+                else if (!HistoryAction.canRefresh.contains(item.action) || !currentItem.entity.equals(item.entity))
+                    addItem(item);
+            } else
+                addItem(item);
         }
+/*
         procedure Modifie;
         begin
             EditConsultation(Consult);
@@ -226,7 +239,8 @@ public class History {
     }
 
 
-    private synchronized boolean open(HistoryItem item, boolean withLock) {
+    @SuppressWarnings("unchecked")
+    private synchronized boolean open(final HistoryItem item, boolean withLock) {
 /*
     TfrmConsole.AddEvent(UnitName, 'THistory.Open ' + GetEnumName(TypeInfo(TActionConsultation), Integer(Consult.Action)));
 
@@ -238,12 +252,14 @@ public class History {
         WindowController newController = null;
         try {
             if (HistoryAction.noSaveHistorique.contains(item.action)) {
-                item.previousController = Forms.getLastController();
                 item.previousContainer = Forms.getLastContainer();
                 item.previousView = Forms.getLastView();
-                temporary.add(item);
+                if (HistoryAction.usedInGestion.contains(item.action))
+                    temporary.add(item);
             } else
                 addConsultation(item);
+            if (HistoryAction.modes.contains(item.action))
+                temporary.clear();
             switch (item.action) {
                 case MODE_CONSULTATION:
                     newController = Forms.showMode(ApplicationMode.CONSULTATION);
@@ -258,8 +274,7 @@ public class History {
                     result = open(shown.get(getCurrent()), true);
                     break;
                 case FICHE:
-                    ModeConsultationController consultationController = SpringContext.CONTEXT.getBean(ModeConsultationController.class);
-                    newController = consultationController.showConsultationForm(item.entity);
+                    newController = Forms.showFiche(item.entity);
                     break;
 /*
                 fcRecherche:
@@ -293,7 +308,19 @@ public class History {
 */
                 case GESTION_MODIF:
                     ModeGestionController gestionController = SpringContext.CONTEXT.getBean(ModeGestionController.class);
-                    newController = gestionController.showEditForm(item.entity);
+                    FicheEditController editController = gestionController.showEditForm(item.entity);
+                    newController = editController;
+
+                    final EventHandler<ActionEvent> handler = event -> {
+                        temporary.remove(item);
+                        if (temporary.isEmpty() && mainController.getMode() == ApplicationMode.CONSULTATION)
+                            refresh();
+                            // SpringContext.CONTEXT.getBean(ModeConsultationController.class).refreshConsultationForm();
+                        else
+                            Forms.setViewToContainer(item.previousView, item.previousContainer);
+                    };
+                    editController.registerCancelHandler(handler);
+                    editController.registerOkHandler(handler);
 /*
                     if IsEqualGUID(Consult.ReferenceGUID, GUID_NULL) then
                         doCallback := TActionGestionModif(Consult.GestionProc)(Consult.GestionVTV)
@@ -365,9 +392,8 @@ public class History {
         private HistoryAction action = null;
         private AbstractDBEntity entity;
         private String description = null;
-        private WindowController previousController = null;
         private Object previousContainer = null;
-        private Object previousView = null;
+        private Node previousView = null;
 
         HistoryItem(HistoryAction action) {
             this.action = action;
@@ -387,6 +413,14 @@ public class History {
                 e.printStackTrace();
                 return null;
             }
+        }
+
+        public void update(HistoryItem item) {
+            this.action = item.action;
+            this.entity = item.entity;
+            this.description = item.description;
+            this.previousContainer = item.previousContainer;
+            this.previousView = item.previousView;
         }
     }
 }

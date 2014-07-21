@@ -28,6 +28,7 @@
                 <Label fx:id="lbNom" style="-fx-font-size: 13px; -fx-font-weight: bold;" text="Label"
                        GridPane.columnIndex="1"/>
                 <Label styleClass="label-rubrique" text="Biographie :" GridPane.halignment="RIGHT"
+                       GridPane.valignment="TOP"
                        GridPane.rowIndex="1"/>
                 <TextFlow fx:id="tfBiographie" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
                 <Label styleClass="label-rubrique" text="Séries :" GridPane.halignment="RIGHT" GridPane.rowIndex="2"

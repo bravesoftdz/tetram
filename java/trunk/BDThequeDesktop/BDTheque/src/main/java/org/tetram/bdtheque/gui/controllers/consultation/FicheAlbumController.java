@@ -31,12 +31,12 @@ import org.tetram.bdtheque.data.dao.AlbumDao;
 import org.tetram.bdtheque.data.dao.CouvertureLiteDao;
 import org.tetram.bdtheque.data.dao.EvaluatedEntityDao;
 import org.tetram.bdtheque.data.services.UserPreferences;
-import org.tetram.bdtheque.gui.controllers.ModeConsultationController;
 import org.tetram.bdtheque.gui.controllers.WindowController;
 import org.tetram.bdtheque.gui.controllers.components.NotationController;
 import org.tetram.bdtheque.gui.utils.EntityNotFoundException;
 import org.tetram.bdtheque.gui.utils.EntityWebHyperlink;
 import org.tetram.bdtheque.gui.utils.FlowItem;
+import org.tetram.bdtheque.gui.utils.History;
 import org.tetram.bdtheque.utils.FileLink;
 import org.tetram.bdtheque.utils.FileLinks;
 import org.tetram.bdtheque.utils.I18nSupport;
@@ -63,7 +63,7 @@ public class FicheAlbumController extends WindowController implements Consultati
     private static final String CSS_FLOW_B0RDER = "flow-border";
 
     @Autowired
-    private ModeConsultationController modeConsultationController;
+    private History history;
     @Autowired
     private AlbumDao albumDao;
     @Autowired
@@ -191,14 +191,14 @@ public class FicheAlbumController extends WindowController implements Consultati
                 if (event.getClickCount() == 2) {
                     AlbumLite entity = lvSerie.getSelectionModel().getSelectedItem();
                     if (entity != null)
-                        modeConsultationController.showConsultationForm(entity);
+                        history.addWaiting(History.HistoryAction.FICHE, entity);
                 }
             });
         });
 
         titreSerie.setOnAction(event -> {
             if (event.getTarget() != titreSerie.getGraphic() && serie.get() != null)
-                modeConsultationController.showConsultationForm(serie.get());
+                history.addWaiting(History.HistoryAction.FICHE, serie.get());
         });
 
         notationController.entityProperty().bind(album);
@@ -302,7 +302,7 @@ public class FicheAlbumController extends WindowController implements Consultati
         final EventHandler<ActionEvent> openEntityEventHandler = event -> {
             final Labeled source = (Labeled) event.getSource();
             final AbstractDBEntity entity = (AbstractDBEntity) source.getUserData();
-            modeConsultationController.showConsultationForm(entity);
+            history.addWaiting(History.HistoryAction.FICHE, entity);
         };
         FlowItem.fillViewFromList(_album.universFullProperty(), lvUnivers, openEntityEventHandler);
         FlowItem.fillViewFromList(_album.scenaristesProperty(), lvScenaristes, openEntityEventHandler);
@@ -338,7 +338,7 @@ public class FicheAlbumController extends WindowController implements Consultati
         ImageView iv = new ImageView(image);
         iv.setCursor(Cursor.HAND);
         iv.setOnMouseClicked(event -> {
-            modeConsultationController.showConsultationForm(couvertureLite);
+            history.addWaiting(History.HistoryAction.FICHE, couvertureLite);
         });
         iv.setPreserveRatio(true);
         box.getChildren().addAll(iv);

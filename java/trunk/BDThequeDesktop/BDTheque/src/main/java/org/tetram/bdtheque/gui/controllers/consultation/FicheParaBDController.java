@@ -29,11 +29,11 @@ import org.tetram.bdtheque.data.bean.abstractentities.AbstractDBEntity;
 import org.tetram.bdtheque.data.dao.ParaBDDao;
 import org.tetram.bdtheque.data.dao.PhotoLiteDao;
 import org.tetram.bdtheque.data.services.UserPreferences;
-import org.tetram.bdtheque.gui.controllers.ModeConsultationController;
 import org.tetram.bdtheque.gui.controllers.WindowController;
 import org.tetram.bdtheque.gui.utils.EntityNotFoundException;
 import org.tetram.bdtheque.gui.utils.EntityWebHyperlink;
 import org.tetram.bdtheque.gui.utils.FlowItem;
+import org.tetram.bdtheque.gui.utils.History;
 import org.tetram.bdtheque.utils.FileLink;
 import org.tetram.bdtheque.utils.FileLinks;
 import org.tetram.bdtheque.utils.I18nSupport;
@@ -59,7 +59,7 @@ public class FicheParaBDController extends WindowController implements Consultat
     @Autowired
     private PhotoLiteDao photoLiteDao;
     @Autowired
-    private ModeConsultationController modeConsultationController;
+    private History history;
     @Autowired
     private UserPreferences userPreferences;
 
@@ -128,7 +128,7 @@ public class FicheParaBDController extends WindowController implements Consultat
         final EventHandler<ActionEvent> openEntityEventHandler = event -> {
             final Labeled source = (Labeled) event.getSource();
             final AbstractDBEntity entity = (AbstractDBEntity) source.getUserData();
-            modeConsultationController.showConsultationForm(entity);
+            history.addWaiting(History.HistoryAction.FICHE, entity);
         };
         FlowItem.fillViewFromList(_parabd.getUnivers(), lvUnivers, openEntityEventHandler);
         FlowItem.fillViewFromList(_parabd.getAuteurs(), lvCreateurs, openEntityEventHandler);
@@ -164,7 +164,7 @@ public class FicheParaBDController extends WindowController implements Consultat
         ImageView iv = new ImageView(image);
         iv.setCursor(Cursor.HAND);
         iv.setOnMouseClicked(event -> {
-            modeConsultationController.showConsultationForm(photoLite);
+            history.addWaiting(History.HistoryAction.FICHE, photoLite);
         });
         iv.setPreserveRatio(true);
         box.getChildren().addAll(iv);

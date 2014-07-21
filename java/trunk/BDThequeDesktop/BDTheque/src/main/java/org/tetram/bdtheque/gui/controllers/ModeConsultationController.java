@@ -5,17 +5,16 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.tetram.bdtheque.data.bean.abstractentities.AbstractDBEntity;
-import org.tetram.bdtheque.gui.utils.Forms;
+import org.tetram.bdtheque.gui.utils.History;
 import org.tetram.bdtheque.spring.SpringFxmlLoader;
 import org.tetram.bdtheque.utils.FileLink;
 
 import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
 
 @Controller
 // c'est la valeur par défaut, mais contrairement aux autres, il faut impérativement que ce controller soit un singleton
@@ -23,10 +22,8 @@ import java.util.ResourceBundle;
 @FileLink("/org/tetram/bdtheque/gui/modeConsultation.fxml")
 public class ModeConsultationController extends WindowController implements ModeController {
 
-    @FXML
-    private ResourceBundle resources;
-    @FXML
-    private URL location;
+    @Autowired
+    private History history;
 
     @FXML
     private ScrollPane detailPane;
@@ -48,15 +45,8 @@ public class ModeConsultationController extends WindowController implements Mode
         AnchorPane.setTopAnchor(repertoireController.getView(), 0.0);
         AnchorPane.setLeftAnchor(repertoireController.getView(), 0.0);
         AnchorPane.setRightAnchor(repertoireController.getView(), 0.0);
-    }
 
-    public WindowController showConsultationForm(AbstractDBEntity entity) {
-        WindowController controller = null;
-        if (entity != null && !entity.equals(currentEntity.get())) {
-            controller = Forms.showFiche(entity);
-            currentEntity.set(entity.lightRef());
-        }
-        return controller;
+        history.refresh();
     }
 
     public ScrollPane getDetailPane() {

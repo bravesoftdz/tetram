@@ -22,10 +22,10 @@ import org.tetram.bdtheque.data.bean.abstractentities.BaseParaBD;
 import org.tetram.bdtheque.data.dao.AlbumLiteSerieDao;
 import org.tetram.bdtheque.data.dao.ParaBDLiteDao;
 import org.tetram.bdtheque.data.dao.UniversDao;
-import org.tetram.bdtheque.gui.controllers.ModeConsultationController;
 import org.tetram.bdtheque.gui.controllers.WindowController;
 import org.tetram.bdtheque.gui.controllers.components.TreeViewController;
 import org.tetram.bdtheque.gui.utils.EntityNotFoundException;
+import org.tetram.bdtheque.gui.utils.History;
 import org.tetram.bdtheque.utils.FileLink;
 import org.tetram.bdtheque.utils.FileLinks;
 import org.tetram.bdtheque.utils.StringUtils;
@@ -50,7 +50,7 @@ public class FicheUniversController extends WindowController implements Consulta
     @Autowired
     private ParaBDLiteDao paraBDLiteDao;
     @Autowired
-    private ModeConsultationController modeConsultationController;
+    private History history;
 
     @FXML
     private Label lbNom;
@@ -69,7 +69,7 @@ public class FicheUniversController extends WindowController implements Consulta
     public void initialize() {
         lbUniversParent.setOnAction(event -> {
             if (event.getTarget() != lbUniversParent.getGraphic() && univers.get().getUniversParent() != null)
-                modeConsultationController.showConsultationForm(univers.get().getUniversParent());
+                history.addWaiting(History.HistoryAction.FICHE, univers.get().getUniversParent());
         });
     }
 
