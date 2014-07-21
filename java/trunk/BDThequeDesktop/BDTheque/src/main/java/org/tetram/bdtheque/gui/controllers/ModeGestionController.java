@@ -145,8 +145,8 @@ public class ModeGestionController extends WindowController implements ModeContr
             currentEntities.add(entity.getEntityClass());
 
             final EventHandler<ActionEvent> handler = event -> currentEntities.remove(entity.getEntityClass());
-            controller.registerCancelHandler(handler);
-            controller.registerOkHandler(handler);
+            controller.registerCancelHandler(handler, FicheEditController.HandlerPriority.LOW);
+            controller.registerOkHandler(handler, FicheEditController.HandlerPriority.LOW);
         }
         return controller;
     }

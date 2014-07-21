@@ -15,7 +15,9 @@ import org.tetram.bdtheque.utils.FileLink;
 import org.tetram.bdtheque.utils.FileLinks;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Thierry on 21/07/2014.
@@ -34,8 +36,8 @@ public class FicheEditController<C extends WindowController & GestionController>
     private ButtonsBarController buttonsController;
 
     private StringProperty label = new SimpleStringProperty(this, "label", null);
-    private List<EventHandler<ActionEvent>> cancelHandlers = new ArrayList<>();
-    private List<EventHandler<ActionEvent>> okHandlers = new ArrayList<>();
+    private Map<HandlerPriority, List<EventHandler<ActionEvent>>> cancelHandlers = new HashMap<>();
+    private Map<HandlerPriority, List<EventHandler<ActionEvent>>> okHandlers = new HashMap<>();
 
     private C childController;
 
@@ -46,24 +48,41 @@ public class FicheEditController<C extends WindowController & GestionController>
         label.bindBidirectional(buttonsController.getLbMessage().textProperty());
     }
 
-    private synchronized void runHandlers(List<EventHandler<ActionEvent>> handlers, ActionEvent event) {
-        handlers.forEach(handler -> handler.handle(event));
+    private synchronized void runHandlers(Map<HandlerPriority, List<EventHandler<ActionEvent>>> handlers, ActionEvent event) {
+        for (HandlerPriority handlerPriority : HandlerPriority.values()) {
+            final List<EventHandler<ActionEvent>> handlerList = handlers.get(handlerPriority);
+            if (handlerList != null)
+                handlerList.forEach(handler -> handler.handle(event));
+        }
     }
 
-    public void registerCancelHandler(EventHandler<ActionEvent> handler) {
-        if (!cancelHandlers.contains(handler)) cancelHandlers.add(handler);
+    private void registerHandler(EventHandler<ActionEvent> handler, HandlerPriority priority, Map<HandlerPriority, List<EventHandler<ActionEvent>>> handlers) {
+        handlers.putIfAbsent(priority, new ArrayList<>());
+        final List<EventHandler<ActionEvent>> handlerList = handlers.get(priority);
+        if (!handlerList.contains(handler)) handlerList.add(handler);
+    }
+
+    public void registerCancelHandler(EventHandler<ActionEvent> handler, HandlerPriority priority) {
+        registerHandler(handler, priority, cancelHandlers);
+    }
+
+    public void registerOkHandler(EventHandler<ActionEvent> handler, HandlerPriority priority) {
+        registerHandler(handler, priority, okHandlers);
+    }
+
+    private void unregisterHandler(EventHandler<ActionEvent> handler, Map<HandlerPriority, List<EventHandler<ActionEvent>>> handlers) {
+        for (HandlerPriority priority : HandlerPriority.values()) {
+            final List<EventHandler<ActionEvent>> handlerList = handlers.get(priority);
+            if (handlerList != null) handlerList.remove(handler);
+        }
     }
 
     public void unregisterCancelHandler(EventHandler<ActionEvent> handler) {
-        cancelHandlers.remove(handler);
-    }
-
-    public void registerOkHandler(EventHandler<ActionEvent> handler) {
-        if (!okHandlers.contains(handler)) okHandlers.add(handler);
+        unregisterHandler(handler, cancelHandlers);
     }
 
     public void unregisterOkHandler(EventHandler<ActionEvent> handler) {
-        okHandlers.remove(handler);
+        unregisterHandler(handler, okHandlers);
     }
 
     public ScrollPane getDetailPane() {
@@ -88,5 +107,9 @@ public class FicheEditController<C extends WindowController & GestionController>
 
     public StringProperty labelProperty() {
         return label;
+    }
+
+    public enum HandlerPriority {
+        HIGH, UNDEFINED, LOW
     }
 }

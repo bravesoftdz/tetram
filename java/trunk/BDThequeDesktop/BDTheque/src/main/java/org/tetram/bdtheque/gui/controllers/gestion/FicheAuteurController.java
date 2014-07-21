@@ -47,6 +47,7 @@ public class FicheAuteurController extends GestionControllerImpl {
     private Personne personne;
 
     @FXML
+    @SuppressWarnings("unchecked")
     void initialize() {
         editControllerProperty().addListener(o -> {
             FicheEditController controller = getEditController();
@@ -54,7 +55,7 @@ public class FicheAuteurController extends GestionControllerImpl {
 
             controller.registerOkHandler(event -> {
                 personneDao.save(personne);
-            });
+            }, FicheEditController.HandlerPriority.HIGH);
         });
     }
 

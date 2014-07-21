@@ -319,8 +319,8 @@ public class History {
                         else
                             Forms.setViewToContainer(item.previousView, item.previousContainer);
                     };
-                    editController.registerCancelHandler(handler);
-                    editController.registerOkHandler(handler);
+                    editController.registerCancelHandler(handler, FicheEditController.HandlerPriority.LOW);
+                    editController.registerOkHandler(handler, FicheEditController.HandlerPriority.LOW);
 /*
                     if IsEqualGUID(Consult.ReferenceGUID, GUID_NULL) then
                         doCallback := TActionGestionModif(Consult.GestionProc)(Consult.GestionVTV)
