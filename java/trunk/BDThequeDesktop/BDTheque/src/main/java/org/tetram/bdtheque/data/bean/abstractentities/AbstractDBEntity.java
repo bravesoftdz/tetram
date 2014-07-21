@@ -10,7 +10,7 @@ import java.util.UUID;
 /**
  * Created by Thierry on 24/05/2014.
  */
-@SuppressWarnings("UnusedDeclaration")
+
 public abstract class AbstractDBEntity extends AbstractEntity implements DBEntity {
 
     private final ObjectProperty<UUID> id = new SimpleObjectProperty<>(this, "id", null);

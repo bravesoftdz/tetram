@@ -6,7 +6,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.AnchorPane;
 import org.jetbrains.annotations.NonNls;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.datasource.SingleConnectionDataSource;
@@ -28,7 +28,7 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.UUID;
 
-@SuppressWarnings("UnusedDeclaration")
+
 @Controller
 @FileLink("/org/tetram/bdtheque/gui/main.fxml")
 public class MainController extends WindowController {
@@ -58,7 +58,7 @@ public class MainController extends WindowController {
     private Button buttonTest;
 
     @FXML
-    private StackPane detailPane;
+    private AnchorPane detailPane;
 
     @FXML
     private Menu mnuLanguage;
@@ -147,7 +147,7 @@ public class MainController extends WindowController {
         return mode;
     }
 
-    public StackPane getDetailPane() {
+    public AnchorPane getDetailPane() {
         return detailPane;
     }
 }

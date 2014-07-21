@@ -18,7 +18,7 @@ import java.util.UUID;
 @Repository
 @Lazy
 @Transactional
-@SuppressWarnings("UnusedDeclaration")
+
 public class AlbumLiteEditeurDaoImpl extends DaoROImpl<AlbumLite, UUID> implements AlbumLiteEditeurDao {
 
     private static final String UNKNOWN_LABEL = I18nSupport.message("initiale.inconnu.editeur");

@@ -13,7 +13,7 @@ import java.util.Comparator;
 /**
  * Created by Thierry on 24/05/2014.
  */
-@SuppressWarnings("UnusedDeclaration")
+
 public class BaseEditeur extends AbstractDBEntity implements WebLinkedEntity {
 
     public final static Comparator<BaseEditeur> DEFAULT_COMPARATOR = (o1, o2) -> {

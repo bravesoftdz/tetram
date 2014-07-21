@@ -17,7 +17,7 @@ import java.util.UUID;
 @Repository
 @Lazy
 @Transactional
-@SuppressWarnings("UnusedDeclaration")
+
 public class EditeurDaoImpl extends DaoScriptImpl<Editeur, UUID> implements EditeurDao {
     @Override
     public void validate(@NotNull Editeur object) throws ConsistencyException {

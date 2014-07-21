@@ -17,7 +17,7 @@ import java.util.Comparator;
 /**
  * Created by Thierry on 10/07/2014.
  */
-@SuppressWarnings("UnusedDeclaration")
+
 public abstract class BaseAlbum extends AbstractDBEntity implements EvaluatedEntity {
     public static Comparator<Album> DEFAULT_COMPARATOR = (o1, o2) -> {
         if (o1 == o2) return 0;
@@ -57,11 +57,6 @@ public abstract class BaseAlbum extends AbstractDBEntity implements EvaluatedEnt
     private final BooleanProperty integrale = new SimpleBooleanProperty(this, "integrale", false);
     private final ObjectProperty<ValeurListe> notation = new SimpleObjectProperty<>(this, "notation", null);
 
-    @Override
-    public Class<? extends AbstractDBEntity> getBaseClass() {
-        return BaseAlbum.class;
-    }
-
     protected BaseAlbum() {
         ValeurListeDao valeurListeDao = SpringContext.CONTEXT.getBean(ValeurListeDao.class);
         setNotation(valeurListeDao.getDefaultNotation());
@@ -69,6 +64,11 @@ public abstract class BaseAlbum extends AbstractDBEntity implements EvaluatedEnt
             if (TypeUtils.isNullOrZero(getAnneeParution()))
                 setMoisParution(null);
         });
+    }
+
+    @Override
+    public Class<? extends AbstractDBEntity> getBaseClass() {
+        return BaseAlbum.class;
     }
 
     public boolean isComplet() {

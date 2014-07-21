@@ -26,11 +26,12 @@ import java.util.EnumSet;
 @Service
 @Lazy
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
-@SuppressWarnings("UnusedDeclaration")
+
 public class History {
 
     private final ReadOnlyListWrapper<HistoryItem> shown = new ReadOnlyListWrapper<>(this, "shown", FXCollections.observableArrayList());
     private final ReadOnlyListWrapper<HistoryItem> waiting = new ReadOnlyListWrapper<>(this, "waiting", FXCollections.observableArrayList());
+    private final ReadOnlyListWrapper<HistoryItem> temporary = new ReadOnlyListWrapper<>(this, "waiting", FXCollections.observableArrayList());
     private final ReadOnlyIntegerWrapper current = new ReadOnlyIntegerWrapper(this, "current", -1);
     private final ReadOnlyObjectWrapper<WindowController> currentController = new ReadOnlyObjectWrapper<>(this, "currentController", null);
 
@@ -236,9 +237,12 @@ public class History {
         if (withLock) lock();
         WindowController newController = null;
         try {
-            if (HistoryAction.noSaveHistorique.contains(item.action))
-                item.previousController = currentController.get();
-            else
+            if (HistoryAction.noSaveHistorique.contains(item.action)) {
+                item.previousController = Forms.getLastController();
+                item.previousContainer = Forms.getLastContainer();
+                item.previousView = Forms.getLastView();
+                temporary.add(item);
+            } else
                 addConsultation(item);
             switch (item.action) {
                 case MODE_CONSULTATION:
@@ -362,6 +366,8 @@ public class History {
         private AbstractDBEntity entity;
         private String description = null;
         private WindowController previousController = null;
+        private Object previousContainer = null;
+        private Object previousView = null;
 
         HistoryItem(HistoryAction action) {
             this.action = action;

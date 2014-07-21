@@ -40,11 +40,6 @@ public abstract class BeanUtils {
         RES_INTEGRALE = Collections.unmodifiableMap(aMap);
     }
 
-    @Contract("null -> null")
-    public static String trimOrNull(String v) {
-        return org.apache.commons.lang3.StringUtils.strip(v, " \r\n\t\b\u00A0");
-    }
-
     public static List<UniversLite> checkAndBuildListUniversFull(List<UniversLite> universFull, List<UniversLite> univers, Serie serie) {
         int countUnivers = (univers != null ? univers.size() : 0);
         if (serie != null)
@@ -86,12 +81,12 @@ public abstract class BeanUtils {
     public static String formatTitreAcceptNull(final String titre) {
         if (titre == null) return null;
         final int p = titre.lastIndexOf('[');
-        if (p == -1) return titre.trim();
+        if (p == -1) return StringUtils.trim(titre);
 
         final int p2 = titre.lastIndexOf(']');
-        if (p2 < p) return titre.trim();
+        if (p2 < p) return StringUtils.trim(titre);
 
-        final String article = titre.substring(p + 1, p2).trim();
+        final String article = StringUtils.trim(titre.substring(p + 1, p2));
         final String debut = titre.substring(0, p);
         final String fin = titre.substring(p2 + 1);
 
@@ -102,7 +97,7 @@ public abstract class BeanUtils {
         result.append(debut);
         result.append(fin);
 
-        return result.toString().trim();
+        return StringUtils.trim(result.toString());
     }
 
     public static String formatTitreAlbum(final boolean simple, final boolean avecSerie, final String titre, final String serie, final Integer tome, final Integer tomeDebut, final Integer tomeFin, final boolean integrale, final boolean horsSerie) {

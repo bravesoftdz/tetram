@@ -17,7 +17,7 @@ import java.util.UUID;
 @Repository
 @Lazy
 @Transactional
-@SuppressWarnings("UnusedDeclaration")
+
 public class PersonneLiteDaoImpl extends DaoROImpl<PersonneLite, UUID> implements PersonneLiteDao {
 
     @Autowired

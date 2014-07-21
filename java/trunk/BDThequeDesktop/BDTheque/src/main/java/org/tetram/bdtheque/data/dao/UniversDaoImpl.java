@@ -17,7 +17,7 @@ import java.util.UUID;
 @Repository
 @Lazy
 @Transactional
-@SuppressWarnings("UnusedDeclaration")
+
 public class UniversDaoImpl extends DaoRWImpl<Univers, UUID> implements UniversDao {
     @Override
     public int save(@NotNull Univers o) throws ConsistencyException {

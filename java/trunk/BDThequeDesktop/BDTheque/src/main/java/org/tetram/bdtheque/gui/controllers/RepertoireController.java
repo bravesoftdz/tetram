@@ -126,7 +126,7 @@ public class RepertoireController extends WindowController {
 
     }
 
-    @SuppressWarnings("UnusedDeclaration")
+
     private class InfoTab {
         private final ObjectProperty<TreeViewMode> mode = new SimpleObjectProperty<>(this, "mode", null);
         private final TreeViewController treeViewController;

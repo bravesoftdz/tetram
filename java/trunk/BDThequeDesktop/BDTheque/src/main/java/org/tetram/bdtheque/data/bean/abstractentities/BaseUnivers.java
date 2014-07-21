@@ -12,7 +12,7 @@ import java.net.URL;
 /**
  * Created by Thierry on 11/07/2014.
  */
-@SuppressWarnings("UnusedDeclaration")
+
 public abstract class BaseUnivers extends AbstractDBEntity implements WebLinkedEntity {
     private final StringProperty nomUnivers = new AutoTrimStringProperty(this, "nomUnivers", null);
     private final ObjectProperty<URL> siteWeb = new SimpleObjectProperty<>(this, "siteWeb", null);

@@ -7,7 +7,7 @@ import java.util.UUID;
 /**
  * Created by Thierry on 11/06/2014.
  */
-@SuppressWarnings("UnusedDeclaration")
+
 public interface DBEntity {
 
     default UUID getId() {

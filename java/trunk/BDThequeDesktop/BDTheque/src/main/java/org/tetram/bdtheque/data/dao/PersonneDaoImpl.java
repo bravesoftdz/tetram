@@ -26,7 +26,7 @@ import java.util.UUID;
 @Repository
 @Lazy
 @Transactional
-@SuppressWarnings("UnusedDeclaration")
+
 public class PersonneDaoImpl extends DaoScriptImpl<Personne, UUID> implements PersonneDao {
 
     @Autowired

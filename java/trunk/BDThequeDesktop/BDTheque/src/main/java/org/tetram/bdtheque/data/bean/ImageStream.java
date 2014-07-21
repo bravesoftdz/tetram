@@ -3,7 +3,7 @@ package org.tetram.bdtheque.data.bean;
 /**
  * Created by Thierry on 15/06/2014.
  */
-@SuppressWarnings("UnusedDeclaration")
+
 public class ImageStream {
 
     byte[] data;

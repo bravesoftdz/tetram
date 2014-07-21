@@ -9,6 +9,7 @@ import org.tetram.bdtheque.data.bean.interfaces.ScriptEntity;
 import org.tetram.bdtheque.data.dao.DaoScriptImpl;
 import org.tetram.bdtheque.data.dao.ValeurListeDao;
 import org.tetram.bdtheque.spring.SpringContext;
+import org.tetram.bdtheque.spring.utils.AutoTrimStringProperty;
 import org.tetram.bdtheque.utils.StringUtils;
 
 import java.util.ArrayList;
@@ -19,7 +20,7 @@ import java.util.UUID;
 /**
  * Created by Thierry on 24/05/2014.
  */
-@SuppressWarnings("UnusedDeclaration")
+
 @DaoScriptImpl.ScriptInfo(typeData = 7)
 public class Serie extends BaseSerie implements ScriptEntity {
 
@@ -45,8 +46,8 @@ public class Serie extends BaseSerie implements ScriptEntity {
 
     private final ObjectProperty<Boolean> terminee = new SimpleObjectProperty<>(this, "terminee", null);
     private final ListProperty<GenreLite> genres = new SimpleListProperty<>(this, "genres", FXCollections.<GenreLite>observableArrayList());
-    private final StringProperty sujet = new SimpleStringProperty(this, "sujet", null);
-    private final StringProperty notes = new SimpleStringProperty(this, "notes", null);
+    private final StringProperty sujet = new AutoTrimStringProperty(this, "sujet", null);
+    private final StringProperty notes = new AutoTrimStringProperty(this, "notes", null);
     private final ObjectProperty<EditeurLite> editeur = new SimpleObjectProperty<>(this, "editeur", null);
     private final ObjectProperty<CollectionLite> collection = new SimpleObjectProperty<>(this, "collection", null);
     private final BooleanProperty complete = new SimpleBooleanProperty(this, "complete", false);
@@ -116,11 +117,11 @@ public class Serie extends BaseSerie implements ScriptEntity {
     }
 
     public String getSujet() {
-        return BeanUtils.trimOrNull(sujet.get());
+        return sujet.get();
     }
 
     public void setSujet(String sujet) {
-        this.sujet.set(BeanUtils.trimOrNull(sujet));
+        this.sujet.set(sujet);
     }
 
     public StringProperty sujetProperty() {
@@ -128,11 +129,11 @@ public class Serie extends BaseSerie implements ScriptEntity {
     }
 
     public String getNotes() {
-        return BeanUtils.trimOrNull(notes.get());
+        return notes.get();
     }
 
     public void setNotes(String notes) {
-        this.notes.set(BeanUtils.trimOrNull(notes));
+        this.notes.set(notes);
     }
 
     public StringProperty notesProperty() {

@@ -18,7 +18,7 @@ import java.util.UUID;
 /**
  * Created by Thierry on 24/05/2014.
  */
-@SuppressWarnings("UnusedDeclaration")
+
 public class ParaBD extends BaseParaBD {
 
     private final ObjectProperty<Year> anneeEdition = new SimpleObjectProperty<>(this, "anneeEdition", null);

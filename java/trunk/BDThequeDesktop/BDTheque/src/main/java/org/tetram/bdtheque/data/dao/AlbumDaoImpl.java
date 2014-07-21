@@ -23,7 +23,7 @@ import java.util.UUID;
 @Repository
 @Lazy
 @Transactional
-@SuppressWarnings("UnusedDeclaration")
+
 public class AlbumDaoImpl extends DaoRWImpl<Album, UUID> implements AlbumDao, EvaluatedEntityDao<Album> {
 
     @Autowired

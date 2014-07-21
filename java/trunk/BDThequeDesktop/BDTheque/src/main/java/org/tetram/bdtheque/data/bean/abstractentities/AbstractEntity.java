@@ -13,7 +13,7 @@ import java.util.Collection;
 /**
  * Created by Thierry on 24/05/2014.
  */
-@SuppressWarnings("UnusedDeclaration")
+
 public abstract class AbstractEntity {
 
     @NonNls
@@ -133,7 +133,7 @@ public abstract class AbstractEntity {
     }
 
     @SuppressWarnings("unchecked")
-    public Class<? extends AbstractEntity> getEntityClass(){
+    public Class<? extends AbstractEntity> getEntityClass() {
         return (Class<? extends AbstractEntity>) ClassUtils.getUserClass(this);
     }
 }

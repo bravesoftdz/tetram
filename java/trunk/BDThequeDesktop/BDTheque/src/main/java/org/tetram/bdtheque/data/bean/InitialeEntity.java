@@ -6,7 +6,7 @@ import org.tetram.bdtheque.data.bean.abstractentities.AbstractEntity;
 /**
  * Created by Thierry on 23/06/2014.
  */
-@SuppressWarnings("UnusedDeclaration")
+
 public class InitialeEntity<T> extends AbstractEntity {
 
     private IntegerProperty count = new SimpleIntegerProperty(this, "count", 0);

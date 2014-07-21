@@ -11,7 +11,7 @@ import java.util.Comparator;
 /**
  * Created by Thierry on 24/05/2014.
  */
-@SuppressWarnings("UnusedDeclaration")
+
 public class SerieLite extends BaseSerie {
 
     public static Comparator<SerieLite> DEFAULT_COMPARATOR = new Comparator<SerieLite>() {

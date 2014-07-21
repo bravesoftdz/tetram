@@ -15,7 +15,7 @@ import java.util.UUID;
 /**
  * Created by Thierry on 24/05/2014.
  */
-@SuppressWarnings("UnusedDeclaration")
+
 public class Edition extends BaseEdition<Editeur, Collection> {
 
     private static Edition defaultEdition = null;
@@ -28,16 +28,16 @@ public class Edition extends BaseEdition<Editeur, Collection> {
     private final BooleanProperty offert = new SimpleBooleanProperty();
     private final BooleanProperty gratuit = new SimpleBooleanProperty();
     private final ObjectProperty<UUID> idAlbum = new SimpleObjectProperty<>(this, "idAlbum", null);
-    private final ObjectProperty<ValeurListe> etat= new SimpleObjectProperty<>(this, "etat", null);
-    private final ObjectProperty<ValeurListe> reliure= new SimpleObjectProperty<>(this, "reliure", null);
-    private final ObjectProperty<ValeurListe> typeEdition= new SimpleObjectProperty<>(this, "typeEdition", null);
-    private final ObjectProperty<ValeurListe> formatEdition= new SimpleObjectProperty<>(this, "formatEdition", null);
-    private final ObjectProperty<ValeurListe> orientation= new SimpleObjectProperty<>(this, "orientation", null);
-    private final ObjectProperty<ValeurListe> sensLecture= new SimpleObjectProperty<>(this, "sensLecture", null);
-    private final ObjectProperty<Year> anneeCote= new SimpleObjectProperty<>(this, "anneeCote", null);
-    private final ObjectProperty<Double> prix= new SimpleObjectProperty<>(this, "prix", null);
-    private final ObjectProperty<Double> prixCote= new SimpleObjectProperty<>(this, "prixCote", null);
-    private final ObjectProperty<LocalDate> dateAchat= new SimpleObjectProperty<>(this, "dateAchat", null);
+    private final ObjectProperty<ValeurListe> etat = new SimpleObjectProperty<>(this, "etat", null);
+    private final ObjectProperty<ValeurListe> reliure = new SimpleObjectProperty<>(this, "reliure", null);
+    private final ObjectProperty<ValeurListe> typeEdition = new SimpleObjectProperty<>(this, "typeEdition", null);
+    private final ObjectProperty<ValeurListe> formatEdition = new SimpleObjectProperty<>(this, "formatEdition", null);
+    private final ObjectProperty<ValeurListe> orientation = new SimpleObjectProperty<>(this, "orientation", null);
+    private final ObjectProperty<ValeurListe> sensLecture = new SimpleObjectProperty<>(this, "sensLecture", null);
+    private final ObjectProperty<Year> anneeCote = new SimpleObjectProperty<>(this, "anneeCote", null);
+    private final ObjectProperty<Double> prix = new SimpleObjectProperty<>(this, "prix", null);
+    private final ObjectProperty<Double> prixCote = new SimpleObjectProperty<>(this, "prixCote", null);
+    private final ObjectProperty<LocalDate> dateAchat = new SimpleObjectProperty<>(this, "dateAchat", null);
     private final StringProperty notes = new AutoTrimStringProperty(this, "notes", null);
     private final StringProperty numeroPerso = new AutoTrimStringProperty(this, "numeroPerso", null);
     private final ListProperty<CouvertureLite> couvertures = new SimpleListProperty<>(this, "couvertures", FXCollections.observableArrayList());
@@ -61,12 +61,12 @@ public class Edition extends BaseEdition<Editeur, Collection> {
         return idAlbum.get();
     }
 
-    public ObjectProperty<UUID> idAlbumProperty() {
-        return idAlbum;
-    }
-
     public void setIdAlbum(UUID idAlbum) {
         this.idAlbum.set(idAlbum);
+    }
+
+    public ObjectProperty<UUID> idAlbumProperty() {
+        return idAlbum;
     }
 
     public UUID getIdEditeur() {
@@ -178,156 +178,156 @@ public class Edition extends BaseEdition<Editeur, Collection> {
         return etat.get();
     }
 
-    public ObjectProperty<ValeurListe> etatProperty() {
-        return etat;
-    }
-
     public void setEtat(ValeurListe etat) {
         this.etat.set(etat);
+    }
+
+    public ObjectProperty<ValeurListe> etatProperty() {
+        return etat;
     }
 
     public ValeurListe getReliure() {
         return reliure.get();
     }
 
-    public ObjectProperty<ValeurListe> reliureProperty() {
-        return reliure;
-    }
-
     public void setReliure(ValeurListe reliure) {
         this.reliure.set(reliure);
+    }
+
+    public ObjectProperty<ValeurListe> reliureProperty() {
+        return reliure;
     }
 
     public ValeurListe getTypeEdition() {
         return typeEdition.get();
     }
 
-    public ObjectProperty<ValeurListe> typeEditionProperty() {
-        return typeEdition;
-    }
-
     public void setTypeEdition(ValeurListe typeEdition) {
         this.typeEdition.set(typeEdition);
+    }
+
+    public ObjectProperty<ValeurListe> typeEditionProperty() {
+        return typeEdition;
     }
 
     public ValeurListe getFormatEdition() {
         return formatEdition.get();
     }
 
-    public ObjectProperty<ValeurListe> formatEditionProperty() {
-        return formatEdition;
-    }
-
     public void setFormatEdition(ValeurListe formatEdition) {
         this.formatEdition.set(formatEdition);
+    }
+
+    public ObjectProperty<ValeurListe> formatEditionProperty() {
+        return formatEdition;
     }
 
     public ValeurListe getOrientation() {
         return orientation.get();
     }
 
-    public ObjectProperty<ValeurListe> orientationProperty() {
-        return orientation;
-    }
-
     public void setOrientation(ValeurListe orientation) {
         this.orientation.set(orientation);
+    }
+
+    public ObjectProperty<ValeurListe> orientationProperty() {
+        return orientation;
     }
 
     public ValeurListe getSensLecture() {
         return sensLecture.get();
     }
 
-    public ObjectProperty<ValeurListe> sensLectureProperty() {
-        return sensLecture;
-    }
-
     public void setSensLecture(ValeurListe sensLecture) {
         this.sensLecture.set(sensLecture);
+    }
+
+    public ObjectProperty<ValeurListe> sensLectureProperty() {
+        return sensLecture;
     }
 
     public Year getAnneeCote() {
         return anneeCote.get();
     }
 
-    public ObjectProperty<Year> anneeCoteProperty() {
-        return anneeCote;
-    }
-
     public void setAnneeCote(Year anneeCote) {
         this.anneeCote.set(anneeCote);
+    }
+
+    public ObjectProperty<Year> anneeCoteProperty() {
+        return anneeCote;
     }
 
     public Double getPrix() {
         return prix.get();
     }
 
-    public ObjectProperty<Double> prixProperty() {
-        return prix;
-    }
-
     public void setPrix(Double prix) {
         this.prix.set(prix);
+    }
+
+    public ObjectProperty<Double> prixProperty() {
+        return prix;
     }
 
     public Double getPrixCote() {
         return prixCote.get();
     }
 
-    public ObjectProperty<Double> prixCoteProperty() {
-        return prixCote;
-    }
-
     public void setPrixCote(Double prixCote) {
         this.prixCote.set(prixCote);
+    }
+
+    public ObjectProperty<Double> prixCoteProperty() {
+        return prixCote;
     }
 
     public LocalDate getDateAchat() {
         return dateAchat.get();
     }
 
-    public ObjectProperty<LocalDate> dateAchatProperty() {
-        return dateAchat;
-    }
-
     public void setDateAchat(LocalDate dateAchat) {
         this.dateAchat.set(dateAchat);
+    }
+
+    public ObjectProperty<LocalDate> dateAchatProperty() {
+        return dateAchat;
     }
 
     public String getNotes() {
         return notes.get();
     }
 
-    public StringProperty notesProperty() {
-        return notes;
-    }
-
     public void setNotes(String notes) {
         this.notes.set(notes);
+    }
+
+    public StringProperty notesProperty() {
+        return notes;
     }
 
     public String getNumeroPerso() {
         return numeroPerso.get();
     }
 
-    public StringProperty numeroPersoProperty() {
-        return numeroPerso;
-    }
-
     public void setNumeroPerso(String numeroPerso) {
         this.numeroPerso.set(numeroPerso);
+    }
+
+    public StringProperty numeroPersoProperty() {
+        return numeroPerso;
     }
 
     public List<CouvertureLite> getCouvertures() {
         return couvertures.get();
     }
 
-    public ListProperty<CouvertureLite> couverturesProperty() {
-        return couvertures;
-    }
-
     public void setCouvertures(List<CouvertureLite> couvertures) {
         this.couvertures.set(FXCollections.observableList(couvertures));
+    }
+
+    public ListProperty<CouvertureLite> couverturesProperty() {
+        return couvertures;
     }
 
     public boolean addCouverture(CouvertureLite couverture) {

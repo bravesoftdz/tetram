@@ -19,7 +19,7 @@ import java.util.UUID;
 @Repository
 @Lazy
 @Transactional
-@SuppressWarnings("UnusedDeclaration")
+
 public class AlbumLiteAnneeDaoImpl extends DaoROImpl<AlbumLite, UUID> implements AlbumLiteAnneeDao {
 
     private static final String UNKNOWN_LABEL = I18nSupport.message("initiale.inconnu.annee");

@@ -24,7 +24,7 @@ import java.util.UUID;
 @Repository
 @Lazy
 @Transactional
-@SuppressWarnings("UnusedDeclaration")
+
 public class SerieDaoImpl extends DaoScriptImpl<Serie, UUID> implements SerieDao, EvaluatedEntityDao<Serie> {
 
     @Autowired

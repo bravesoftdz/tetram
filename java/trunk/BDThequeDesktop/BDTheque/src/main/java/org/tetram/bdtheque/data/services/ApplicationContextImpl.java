@@ -14,7 +14,7 @@ import java.io.File;
 @Service
 @Lazy
 @Scope
-@SuppressWarnings("UnusedDeclaration")
+
 public class ApplicationContextImpl implements ApplicationContext {
     @NonNls
     private static final String CONFIG_FILE_NAME = "config.properties";

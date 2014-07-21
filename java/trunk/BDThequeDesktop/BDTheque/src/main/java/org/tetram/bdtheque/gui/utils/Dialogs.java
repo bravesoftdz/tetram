@@ -40,7 +40,7 @@ public class Dialogs extends Stage {
         return dialogController.get();
     }
 
-    @SuppressWarnings("UnusedDeclaration")
+
     public ReadOnlyObjectProperty<DialogController> dialogControllerProperty() {
         return dialogController.getReadOnlyProperty();
     }

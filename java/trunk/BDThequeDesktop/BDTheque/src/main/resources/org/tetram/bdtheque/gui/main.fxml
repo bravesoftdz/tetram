@@ -2,7 +2,7 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
-<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 <VBox xmlns:fx="http://javafx.com/fxml/1" prefHeight="480.0" prefWidth="588.0" xmlns="http://javafx.com/javafx/8"
       fx:controller="org.tetram.bdtheque.gui.controllers.MainController">
@@ -59,6 +59,6 @@
         <Button id="buttonTest" fx:id="buttonTest" mnemonicParsing="false" onAction="#buttonTestClick" text="Button">
         </Button>
     </ToolBar>
-    <StackPane fx:id="detailPane" maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0"
-               VBox.vgrow="ALWAYS"/>
+    <AnchorPane fx:id="detailPane" maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0"
+                VBox.vgrow="ALWAYS"/>
 </VBox>

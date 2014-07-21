@@ -1,5 +1,8 @@
 package org.tetram.bdtheque.gui.controllers.gestion;
 
+import javafx.beans.property.ObjectProperty;
+
+import java.lang.ref.WeakReference;
 import java.util.UUID;
 
 /**
@@ -7,4 +10,10 @@ import java.util.UUID;
  */
 public interface GestionController {
     void setIdEntity(UUID id);
+
+    ObjectProperty<WeakReference<FicheEditController>> editControllerProperty();
+
+    FicheEditController getEditController();
+
+    void setEditController(FicheEditController editController);
 }

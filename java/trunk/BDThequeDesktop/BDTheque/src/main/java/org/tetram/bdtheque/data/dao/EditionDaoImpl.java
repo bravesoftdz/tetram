@@ -23,7 +23,7 @@ import java.util.UUID;
 @Repository
 @Lazy
 @Transactional
-@SuppressWarnings("UnusedDeclaration")
+
 public class EditionDaoImpl extends DaoRWImpl<Edition, UUID> implements EditionDao {
 
     @Autowired

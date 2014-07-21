@@ -11,7 +11,7 @@ import org.tetram.bdtheque.utils.I18nSupport;
 /**
  * Created by Thierry on 24/05/2014.
  */
-@SuppressWarnings("UnusedDeclaration")
+
 public class ConversionLite extends AbstractDBEntity {
 
     @NonNls

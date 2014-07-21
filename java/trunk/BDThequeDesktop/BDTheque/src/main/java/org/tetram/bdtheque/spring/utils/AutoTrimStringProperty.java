@@ -2,7 +2,7 @@ package org.tetram.bdtheque.spring.utils;
 
 import javafx.beans.property.SimpleStringProperty;
 import org.jetbrains.annotations.NonNls;
-import org.tetram.bdtheque.data.BeanUtils;
+import org.tetram.bdtheque.utils.StringUtils;
 
 /**
  * Created by Thierry on 01/07/2014.
@@ -27,11 +27,11 @@ public class AutoTrimStringProperty extends SimpleStringProperty {
 
     @Override
     public void set(String newValue) {
-        super.set(BeanUtils.trimOrNull(newValue));
+        super.set(StringUtils.trim(newValue));
     }
 
     @Override
     public String get() {
-        return BeanUtils.trimOrNull(super.get());
+        return StringUtils.trim(super.get());
     }
 }

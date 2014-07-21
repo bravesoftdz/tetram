@@ -3,9 +3,11 @@ package org.tetram.bdtheque.data.dao;
 import org.apache.ibatis.exceptions.PersistenceException;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.tetram.bdtheque.data.bean.interfaces.ScriptEntity;
 import org.tetram.bdtheque.data.bean.abstractentities.AbstractDBEntity;
+import org.tetram.bdtheque.data.bean.interfaces.ScriptEntity;
 import org.tetram.bdtheque.data.dao.mappers.CommonMapper;
+import org.tetram.bdtheque.utils.StringUtils;
+import org.tetram.bdtheque.utils.TypeUtils;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -53,7 +55,7 @@ public abstract class DaoScriptImpl<T extends AbstractDBEntity & ScriptEntity, P
         ScriptInfo annotation = type.getAnnotation(ScriptInfo.class);
         assert annotation != null;
 
-        UUID parentId = null;
+        UUID parentId = TypeUtils.GUID_NULL;
         if (!annotation.getParentIdMethod().isEmpty()) {
             try {
                 Method method = type.getMethod(annotation.getParentIdMethod());
@@ -65,8 +67,11 @@ public abstract class DaoScriptImpl<T extends AbstractDBEntity & ScriptEntity, P
         }
 
         commonMapper.cleanAssociations(entity.getId(), annotation.typeData());
-        for (String s : entity.getAssociations())
-            commonMapper.saveAssociations(s, entity.getId(), annotation.typeData(), parentId);
+        for (String s : entity.getAssociations()) {
+            s = StringUtils.trim(s);
+            if (!s.isEmpty())
+                commonMapper.saveAssociations(s, entity.getId(), annotation.typeData(), parentId);
+        }
 
     }
 

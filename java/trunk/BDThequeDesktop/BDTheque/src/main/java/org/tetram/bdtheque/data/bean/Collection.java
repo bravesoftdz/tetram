@@ -10,7 +10,7 @@ import org.tetram.bdtheque.data.dao.DaoScriptImpl;
 /**
  * Created by Thierry on 24/05/2014.
  */
-@SuppressWarnings("UnusedDeclaration")
+
 @DaoScriptImpl.ScriptInfo(typeData = 2, getParentIdMethod = "getIdEditeur")
 public class Collection extends BaseCollection<Editeur> implements ScriptEntity {
 

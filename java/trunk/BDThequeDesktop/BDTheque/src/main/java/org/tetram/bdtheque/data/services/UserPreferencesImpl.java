@@ -25,7 +25,7 @@ import java.util.Properties;
 @Service
 @Lazy
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
-@SuppressWarnings("UnusedDeclaration")
+
 public class UserPreferencesImpl implements UserPreferences {
 
     @NonNls

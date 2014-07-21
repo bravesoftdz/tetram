@@ -24,7 +24,7 @@ public class DialogController extends WindowController {
         this.result.set(result);
     }
 
-    @SuppressWarnings("UnusedDeclaration")
+
     public ObjectProperty<DialogResult> resultProperty() {
         return result;
     }

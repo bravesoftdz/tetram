@@ -30,10 +30,10 @@ public class Main extends Application {
     private static final String APPLICATION_TITLE = "BDTheque";
     @NonNls
     private static final String APPLICATION_ICON = "/org/tetram/bdtheque/graphics/png/128x128/bdtheque.png";
-    @SuppressWarnings("UnusedDeclaration")
+
     @NonNls
     private static final String FB64_CLASSPATH = "firebird_x64";
-    @SuppressWarnings("UnusedDeclaration")
+
     @NonNls
     private static final String FB32_CLASSPATH = "firebird_x86";
 
@@ -94,7 +94,7 @@ public class Main extends Application {
         return property.contains("64");
     }
 
-    @SuppressWarnings("UnusedDeclaration")
+
     private static void updateLibraryPath(String fbPath) {
         try {
             addLibraryPath(fbPath);
@@ -103,7 +103,7 @@ public class Main extends Application {
         }
     }
 
-    @SuppressWarnings("UnusedDeclaration")
+
     private static void updateFirebirdConf(String fbPath) {
         File firebirdConfFile = new File(fbPath, "firebird.conf");
         @NonNls HashMap<String, String> firebirdConf = new HashMap<>();

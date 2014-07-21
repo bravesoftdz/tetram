@@ -10,7 +10,7 @@ import java.net.URL;
 /**
  * Created by Thierry on 24/05/2014.
  */
-@SuppressWarnings("UnusedDeclaration")
+
 public abstract class BaseAuteur extends AbstractDBEntity implements WebLinkedEntity {
 
     private final ObjectProperty<PersonneLite> personne = new SimpleObjectProperty<>(this, "personne", null);

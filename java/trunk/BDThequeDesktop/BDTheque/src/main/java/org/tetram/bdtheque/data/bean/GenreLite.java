@@ -13,7 +13,7 @@ import java.util.Comparator;
 /**
  * Created by Thierry on 24/05/2014.
  */
-@SuppressWarnings("UnusedDeclaration")
+
 @DaoScriptImpl.ScriptInfo(typeData = 5)
 public class GenreLite extends AbstractDBEntity implements ScriptEntity {
 

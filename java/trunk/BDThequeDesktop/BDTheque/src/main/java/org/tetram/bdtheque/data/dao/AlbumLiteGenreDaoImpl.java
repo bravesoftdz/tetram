@@ -18,7 +18,7 @@ import java.util.UUID;
 @Repository
 @Lazy
 @Transactional
-@SuppressWarnings("UnusedDeclaration")
+
 public class AlbumLiteGenreDaoImpl extends DaoROImpl<AlbumLite, UUID> implements AlbumLiteGenreDao {
 
     private static final String UNKNOWN_LABEL = I18nSupport.message("initiale.inconnu.genre");

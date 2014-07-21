@@ -14,7 +14,7 @@ import java.util.UUID;
 /**
  * Created by Thierry on 10/07/2014.
  */
-@SuppressWarnings("UnusedDeclaration")
+
 public abstract class BaseCollection<E extends BaseEditeur> extends AbstractDBEntity {
     public static Comparator<CollectionLite> DEFAULT_COMPARATOR = (o1, o2) -> {
         if (o1 == o2) return 0;

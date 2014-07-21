@@ -6,7 +6,7 @@ import javafx.beans.property.SimpleObjectProperty;
 /**
  * Created by Thierry on 28/05/2014.
  */
-@SuppressWarnings("UnusedDeclaration")
+
 public class DefaultValeurListe {
 
     private final ObjectProperty<ValeurListe> valeur = new SimpleObjectProperty<>(this, "valeur", null);

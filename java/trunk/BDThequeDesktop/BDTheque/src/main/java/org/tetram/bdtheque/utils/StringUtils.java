@@ -8,7 +8,7 @@ import java.util.Collection;
 import java.util.Locale;
 import java.util.UUID;
 
-@SuppressWarnings("UnusedDeclaration")
+
 public abstract class StringUtils {
 
     @Contract("null -> null")
@@ -61,7 +61,7 @@ public abstract class StringUtils {
     @SuppressWarnings("CallToStringEquals")
     @Contract("null -> !null")
     public static String nonZero(final String s) {
-        if ((s == null) || "0".equals(s.trim()))
+        if ((s == null) || "0".equals(trim(s)))
             return "";
         return s;
     }
@@ -74,17 +74,8 @@ public abstract class StringUtils {
         return i.toString();
     }
 
-    public static String trimRight(final String str) {
-        final int start = 0;
-        final int last = str.length() - 1;
-        int end = last;
-        while ((end >= start) && (str.charAt(end) == ' ')) {
-            end--;
-        }
-        if (end == last) {
-            return str;
-        }
-        return str.substring(start, end + 1);
+    public static String trimRight(final String v) {
+        return org.apache.commons.lang3.StringUtils.stripEnd(v, " \r\n\t\b\u00A0");
     }
 
     public static boolean isNullOrEmpty(String string) {
@@ -98,5 +89,10 @@ public abstract class StringUtils {
     @Contract("null -> !null; !null -> !null")
     public static String notNull(String s) {
         return s == null ? "" : s;
+    }
+
+    @Contract("null -> null")
+    public static String trim(String v) {
+        return org.apache.commons.lang3.StringUtils.strip(v, " \r\n\t\b\u00A0");
     }
 }

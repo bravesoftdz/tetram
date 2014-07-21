@@ -39,7 +39,7 @@ import java.util.List;
 /**
  * Created by Thierry on 09/07/2014.
  */
-@SuppressWarnings("UnusedDeclaration")
+
 @Controller
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @FileLinks({

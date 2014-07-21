@@ -1,8 +1,9 @@
 package org.tetram.bdtheque.gui.utils;
 
-import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.*;
 import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import org.jetbrains.annotations.Contract;
@@ -10,6 +11,7 @@ import org.jetbrains.annotations.NonNls;
 import org.tetram.bdtheque.data.bean.abstractentities.*;
 import org.tetram.bdtheque.gui.controllers.*;
 import org.tetram.bdtheque.gui.controllers.consultation.ConsultationController;
+import org.tetram.bdtheque.gui.controllers.gestion.FicheEditController;
 import org.tetram.bdtheque.gui.controllers.gestion.GestionController;
 import org.tetram.bdtheque.spring.SpringContext;
 import org.tetram.bdtheque.spring.SpringFxmlLoader;
@@ -27,6 +29,11 @@ public class Forms {
     @NonNls
     private static Map<Class<? extends AbstractDBEntity>, String> entitiesUrlEdit;
 
+    private static ReadOnlyStringWrapper lastUrl = new ReadOnlyStringWrapper(null, "lastURL", null);
+    private static ReadOnlyObjectWrapper<Object> lastContainer = new ReadOnlyObjectWrapper<>(null, "lastContainer", null);
+    private static ReadOnlyObjectWrapper<Object> lastView = new ReadOnlyObjectWrapper<>(null, "lastView", null);
+    private static ReadOnlyObjectWrapper<WindowController> lastController = new ReadOnlyObjectWrapper<>(null, "lastController", null);
+
     static {
         entitiesUrlFiche = new HashMap<>();
         entitiesUrlFiche.put(BaseAlbum.class, "consultation/ficheAlbum.fxml");
@@ -37,12 +44,44 @@ public class Forms {
         entitiesUrlFiche.put(BaseParaBD.class, "consultation/ficheParabd.fxml");
 
         entitiesUrlEdit = new HashMap<>();
-        entitiesUrlEdit.put(BaseAlbum.class, "gestion/ficheAlbum.fxml");
-        entitiesUrlEdit.put(BaseSerie.class, "gestion/ficheSerie.fxml");
+        //entitiesUrlEdit.put(BaseAlbum.class, "gestion/ficheAlbum.fxml");
+        //entitiesUrlEdit.put(BaseSerie.class, "gestion/ficheSerie.fxml");
         entitiesUrlEdit.put(BasePersonne.class, "gestion/ficheAuteur.fxml");
         entitiesUrlEdit.put(BaseAuteur.class, "gestion/ficheAuteur.fxml");
-        entitiesUrlEdit.put(BaseUnivers.class, "gestion/ficheUnivers.fxml");
-        entitiesUrlEdit.put(BaseParaBD.class, "gestion/ficheParabd.fxml");
+        //entitiesUrlEdit.put(BaseUnivers.class, "gestion/ficheUnivers.fxml");
+        //entitiesUrlEdit.put(BaseParaBD.class, "gestion/ficheParabd.fxml");
+    }
+
+    public static String getLastUrl() {
+        return lastUrl.get();
+    }
+
+    public static ReadOnlyStringProperty lastUrlProperty() {
+        return lastUrl.getReadOnlyProperty();
+    }
+
+    public static Object getLastContainer() {
+        return lastContainer.get();
+    }
+
+    public static ReadOnlyObjectProperty<Object> lastContainerProperty() {
+        return lastContainer.getReadOnlyProperty();
+    }
+
+    public static Object getLastView() {
+        return lastView.get();
+    }
+
+    public static ReadOnlyObjectProperty<Object> lastViewProperty() {
+        return lastView.getReadOnlyProperty();
+    }
+
+    public static WindowController getLastController() {
+        return lastController.get();
+    }
+
+    public static ReadOnlyObjectProperty<WindowController> lastControllerProperty() {
+        return lastController.getReadOnlyProperty();
     }
 
     static String searchForURL(Class<? extends AbstractDBEntity> clasz) {
@@ -65,9 +104,19 @@ public class Forms {
         final Pane pane = view instanceof Pane ? (Pane) view : null;
         if (container instanceof StackPane) {
             StackPane containerPane = (StackPane) container;
+            containerPane.getChildren().clear();
             containerPane.getChildren().add(view);
+        } else if (container instanceof AnchorPane) {
+            AnchorPane containerPane = (AnchorPane) container;
+            containerPane.getChildren().clear();
+            containerPane.getChildren().add(view);
+            AnchorPane.setTopAnchor(view, 0.0);
+            AnchorPane.setLeftAnchor(view, 0.0);
+            AnchorPane.setBottomAnchor(view, 0.0);
+            AnchorPane.setRightAnchor(view, 0.0);
         } else if (container instanceof Pane) {
             Pane containerPane = (Pane) container;
+            containerPane.getChildren().clear();
             containerPane.getChildren().add(view);
             if (pane != null) {
                 pane.prefWidthProperty().bind(containerPane.widthProperty());
@@ -77,13 +126,18 @@ public class Forms {
             ScrollPane containerPane = (ScrollPane) container;
             containerPane.setContent(view);
             if (pane != null) {
-                pane.prefWidthProperty().bind(containerPane.widthProperty());
-                pane.prefHeightProperty().bind(containerPane.heightProperty());
+                pane.prefWidthProperty().bind(containerPane.widthProperty().subtract(16));
+                pane.prefHeightProperty().bind(containerPane.heightProperty().subtract(16));
             }
         } else if (container instanceof ObjectProperty) {
             ObjectProperty<Node> containerNode = (ObjectProperty<Node>) container;
             containerNode.set(view);
         }
+
+        lastController.set(controller);
+        lastView.set(view);
+        lastContainer.set(container);
+        lastUrl.set(url);
 
         return (T) controller;
     }
@@ -101,7 +155,7 @@ public class Forms {
         return controller;
     }
 
-    public static <T extends WindowController & GestionController> T showEdit(AbstractDBEntity entity) {
+    public static <T extends WindowController & GestionController> FicheEditController<T> showEdit(AbstractDBEntity entity) {
         String url = entitiesUrlEdit.get(entity.getBaseClass());
         if (url == null) {
             org.controlsfx.dialog.Dialogs.create().message(entity.toString()).showInformation();
@@ -109,14 +163,16 @@ public class Forms {
         }
 
         MainController mainController = SpringContext.CONTEXT.getBean(MainController.class);
-        T controller = showWindow(mainController.getDetailPane(), url);
-        controller.setIdEntity(entity.getId());
+        FicheEditController<T> controller = showWindow(mainController.getDetailPane(), "gestion/ficheGeneric.fxml");
+        final T childController = showWindow(controller.getDetailPane(), url);
+        childController.setEditController(controller);
+        controller.setChildController(childController);
+        controller.getChildController().setIdEntity(entity.getId());
         return controller;
     }
 
     public static <T extends WindowController & ModeController> T showMode(ApplicationMode mode) {
         MainController mainController = SpringContext.CONTEXT.getBean(MainController.class);
-        mainController.getDetailPane().getChildren().clear();
         return showWindow(mainController.getDetailPane(), mode.getResource());
     }
 

@@ -8,7 +8,7 @@ import javafx.stage.Stage;
 /**
  * Created by Thierry on 21/06/2014.
  */
-@SuppressWarnings("UnusedDeclaration")
+
 public class WindowController {
     private ObjectProperty<Stage> dialog = new SimpleObjectProperty<>(this, "dialog", null);
     private ObjectProperty<Node> view = new SimpleObjectProperty<>(this, "view", null);

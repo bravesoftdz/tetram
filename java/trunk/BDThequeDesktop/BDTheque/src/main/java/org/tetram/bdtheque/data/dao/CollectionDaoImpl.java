@@ -17,7 +17,7 @@ import java.util.UUID;
 @Repository
 @Lazy
 @Transactional
-@SuppressWarnings("UnusedDeclaration")
+
 public class CollectionDaoImpl extends DaoScriptImpl<Collection, UUID> implements CollectionDao {
 
     @Override

@@ -35,7 +35,7 @@ public class ModeConsultationController extends WindowController implements Mode
 
     private ObjectProperty<AbstractDBEntity> currentEntity = new SimpleObjectProperty<>(this, "currentEntity", null);
 
-    @SuppressWarnings("UnusedDeclaration")
+
     public AnchorPane getRepertoirePane() {
         return repertoirePane;
     }

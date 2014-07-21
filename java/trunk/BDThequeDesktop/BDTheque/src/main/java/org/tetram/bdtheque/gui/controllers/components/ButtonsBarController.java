@@ -13,7 +13,7 @@ import org.tetram.bdtheque.utils.FileLinks;
 /**
  * Created by Thierry on 18/07/2014.
  */
-@SuppressWarnings("UnusedDeclaration")
+
 @Controller
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @FileLinks({
@@ -31,5 +31,17 @@ public class ButtonsBarController extends WindowController {
     @FXML
     public void initialize() {
 
+    }
+
+    public Label getLbMessage() {
+        return lbMessage;
+    }
+
+    public Button getBtCancel() {
+        return btCancel;
+    }
+
+    public Button getBtOk() {
+        return btOk;
     }
 }

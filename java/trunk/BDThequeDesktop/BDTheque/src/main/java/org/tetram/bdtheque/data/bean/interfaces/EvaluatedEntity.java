@@ -8,7 +8,7 @@ import org.tetram.bdtheque.spring.SpringContext;
 /**
  * Created by Thierry on 01/07/2014.
  */
-@SuppressWarnings("UnusedDeclaration")
+
 public interface EvaluatedEntity extends DBEntity {
 
     ObjectProperty<ValeurListe> notationProperty();

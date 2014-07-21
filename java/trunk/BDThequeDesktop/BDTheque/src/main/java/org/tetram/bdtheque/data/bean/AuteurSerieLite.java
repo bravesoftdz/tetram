@@ -13,7 +13,7 @@ import java.util.UUID;
 /**
  * Created by Thierry on 24/05/2014.
  */
-@SuppressWarnings("UnusedDeclaration")
+
 public class AuteurSerieLite extends BaseAuteur {
 
     public static Comparator<AuteurSerieLite> DEFAULT_COMPARATOR = new Comparator<AuteurSerieLite>() {

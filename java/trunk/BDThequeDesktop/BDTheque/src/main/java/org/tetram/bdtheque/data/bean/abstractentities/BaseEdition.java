@@ -19,7 +19,7 @@ import java.util.Comparator;
 /**
  * Created by Thierry on 11/07/2014.
  */
-@SuppressWarnings("UnusedDeclaration")
+
 public class BaseEdition<E extends BaseEditeur, C extends BaseCollection> extends AbstractDBEntity {
 
     public static Comparator<EditionLite> DEFAULT_COMPARATOR = (o1, o2) -> {

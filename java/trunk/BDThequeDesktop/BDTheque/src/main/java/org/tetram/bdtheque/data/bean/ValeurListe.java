@@ -2,16 +2,16 @@ package org.tetram.bdtheque.data.bean;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import org.tetram.bdtheque.data.BeanUtils;
+import org.tetram.bdtheque.spring.utils.AutoTrimStringProperty;
 
 import java.util.Comparator;
 
 /**
  * Created by Thierry on 25/05/2014.
  */
-@SuppressWarnings("UnusedDeclaration")
+
 public class ValeurListe {
 
     public final static Comparator<ValeurListe> DEFAULT_COMPARATOR = (o1, o2) -> {
@@ -28,7 +28,7 @@ public class ValeurListe {
         return 0;
     };
     private final IntegerProperty valeur = new SimpleIntegerProperty(this, "valeur", 0);
-    private final StringProperty texte = new SimpleStringProperty(this, "texte", null);
+    private final StringProperty texte = new AutoTrimStringProperty(this, "texte", null);
     private final IntegerProperty position = new SimpleIntegerProperty(this, "position", 0);
 
     public int getValeur() {
@@ -44,11 +44,11 @@ public class ValeurListe {
     }
 
     public String getTexte() {
-        return BeanUtils.trimOrNull(texte.get());
+        return texte.get();
     }
 
     public void setTexte(String texte) {
-        this.texte.set(BeanUtils.trimOrNull(texte));
+        this.texte.set(texte);
     }
 
     public StringProperty texteProperty() {

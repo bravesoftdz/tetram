@@ -10,7 +10,7 @@ import java.util.Locale;
 /**
  * Created by Thierry on 15/06/2014.
  */
-@SuppressWarnings("UnusedDeclaration")
+
 public interface UserPreferences {
     void save();
 

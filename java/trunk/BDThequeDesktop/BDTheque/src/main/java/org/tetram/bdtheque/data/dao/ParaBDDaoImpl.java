@@ -24,7 +24,7 @@ import java.util.UUID;
 @Repository
 @Lazy
 @Transactional
-@SuppressWarnings("UnusedDeclaration")
+
 public class ParaBDDaoImpl extends DaoRWImpl<ParaBD, UUID> implements ParaBDDao {
 
     @Autowired
