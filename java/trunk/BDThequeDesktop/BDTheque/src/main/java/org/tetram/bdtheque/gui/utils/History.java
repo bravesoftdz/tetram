@@ -238,8 +238,6 @@ public class History {
         if (lockCount > 0) lockCount--;
     }
 
-
-    @SuppressWarnings("unchecked")
     private synchronized boolean open(final HistoryItem item, boolean withLock) {
 /*
     TfrmConsole.AddEvent(UnitName, 'THistory.Open ' + GetEnumName(TypeInfo(TActionConsultation), Integer(Consult.Action)));
@@ -308,7 +306,7 @@ public class History {
 */
                 case GESTION_MODIF:
                     ModeGestionController gestionController = SpringContext.CONTEXT.getBean(ModeGestionController.class);
-                    FicheEditController editController = gestionController.showEditForm(item.entity);
+                    FicheEditController<?> editController = gestionController.showEditForm(item.entity);
                     newController = editController;
 
                     final EventHandler<ActionEvent> handler = event -> {

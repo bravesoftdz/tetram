@@ -47,10 +47,9 @@ public class FicheAuteurController extends GestionControllerImpl {
     private Personne personne;
 
     @FXML
-    @SuppressWarnings("unchecked")
     void initialize() {
         editControllerProperty().addListener(o -> {
-            FicheEditController controller = getEditController();
+            FicheEditController<?> controller = getEditController();
             controller.setLabel("Auteur");
 
             controller.registerOkHandler(event -> {

@@ -12,23 +12,23 @@ import java.util.UUID;
  */
 public abstract class GestionControllerImpl extends WindowController implements GestionController {
 
-    private ObjectProperty<WeakReference<FicheEditController>> editController = new SimpleObjectProperty<>(this, "editController", null);
+    private ObjectProperty<WeakReference<FicheEditController<?>>> editController = new SimpleObjectProperty<>(this, "editController", null);
 
     @Override
     public abstract void setIdEntity(UUID id);
 
     @Override
-    public ObjectProperty<WeakReference<FicheEditController>> editControllerProperty() {
+    public ObjectProperty<WeakReference<FicheEditController<?>>> editControllerProperty() {
         return editController;
     }
 
     @Override
-    public FicheEditController getEditController() {
+    public FicheEditController<?> getEditController() {
         return this.editController.get() == null ? null : this.editController.get().get();
     }
 
     @Override
-    public void setEditController(FicheEditController editController) {
+    public void setEditController(FicheEditController<?> editController) {
         this.editController.set(editController == null ? null : new WeakReference<>(editController));
     }
 }
