@@ -5,7 +5,6 @@ import javafx.beans.property.SimpleObjectProperty;
 import org.tetram.bdtheque.gui.controllers.WindowController;
 
 import java.lang.ref.WeakReference;
-import java.util.UUID;
 
 /**
  * Created by Thierry on 21/07/2014.
@@ -13,9 +12,6 @@ import java.util.UUID;
 public abstract class GestionControllerImpl extends WindowController implements GestionController {
 
     private ObjectProperty<WeakReference<FicheEditController<?>>> editController = new SimpleObjectProperty<>(this, "editController", null);
-
-    @Override
-    public abstract void setIdEntity(UUID id);
 
     @Override
     public ObjectProperty<WeakReference<FicheEditController<?>>> editControllerProperty() {

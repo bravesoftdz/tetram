@@ -11,6 +11,8 @@ import java.util.UUID;
 public interface GestionController {
     void setIdEntity(UUID id);
 
+    void setDefaultLabel(String label);
+
     ObjectProperty<WeakReference<FicheEditController<?>>> editControllerProperty();
 
     FicheEditController<?> getEditController();

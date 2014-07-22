@@ -40,6 +40,20 @@ public abstract class BeanUtils {
         RES_INTEGRALE = Collections.unmodifiableMap(aMap);
     }
 
+    private static List<String> prefixes = new ArrayList<String>() {{
+        add("un");
+        add("une");
+        add("des");
+        add("l'");
+        add("le");
+        add("la");
+        add("les");
+
+        add("the");
+        add("a");
+        add("an");
+    }};
+
     public static List<UniversLite> checkAndBuildListUniversFull(List<UniversLite> universFull, List<UniversLite> univers, Serie serie) {
         int countUnivers = (univers != null ? univers.size() : 0);
         if (serie != null)
@@ -161,4 +175,61 @@ public abstract class BeanUtils {
         return !list.contains(univers);
     }
 
+    @Contract("null->null")
+    public static String prepareTitre(String titre) {
+        if (titre == null) return null;
+        titre = StringUtils.trim(titre);
+        if (titre.isEmpty()) return titre;
+        if (titre.endsWith("]")) return titre;
+        int pEspace = titre.indexOf(' ');
+        int pApostrophe = titre.indexOf('\'');
+        if ((pApostrophe > 0) && (pEspace == 0 || pApostrophe < pEspace))
+            pEspace = pApostrophe + 1; // +1 pour prendre l'apostrophe dans le mot
+        if (pEspace == 0) return titre;
+        String mot = titre.substring(0, pEspace);
+        if (!prefixes.contains(mot.toLowerCase(I18nSupport.getLocale()))) return titre;
+        return titre.substring(pEspace) + " [" + mot + "]";
+    }
+/*
+function PrepareTitre(Titre: string): string;
+var
+  pEspace, pApostrophe: Integer;
+  Mot: string;
+begin
+  Titre := Trim(Titre);
+  Result := Titre;
+  if Result = '' then Exit;
+  if Copy(Result, Length(Result), 1) = ']' then Exit;
+  pEspace := Pos(' ', Titre);
+  pApostrophe := Pos('''', Titre);
+  if (pApostrophe > 0) and ((pEspace = 0) or (pApostrophe < pEspace)) then pEspace := pApostrophe + 1; // + 1 pour prendre l'apostrophe dans le mot
+  if pEspace = 0 then Exit;
+  Mot := Copy(Titre, 1, pEspace - 1);
+  if not ChaineIn(LowerCase(Mot), ['l''', 'un', 'une', 'des', 'le', 'la', 'les']) then Exit;
+  Result := Trim(Copy(Titre, pEspace, Length(Titre))) + ' [' + Mot + ']';
+end;
+
+function PrepareTitre2(Titre: string): string;
+var
+  p: Integer;
+  Mot: string;
+begin
+  try
+    Titre := Trim(Titre);
+    Result := Titre;
+    if Result = '' then Exit;
+    if Copy(Result, Length(Result), 1) <> ')' then Exit;
+    p := Length(Result) - 1;
+    while (p > 0) and (Result[p] <> '(') do
+      p := p - 1;
+    if p = 0 then Exit;
+
+    Mot := Copy(Titre, p + 1, Length(Result) - p - 1);
+    if not ChaineIn(LowerCase(Mot), ['l''', 'un', 'une', 'des', 'le', 'la', 'les']) then Exit;
+    Result := Trim(Copy(Titre, 1, p - 1)) + ' [' + Mot + ']';
+  finally
+    Result := PrepareTitre(Result);
+  end;
+end;
+ */
 }

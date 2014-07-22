@@ -61,6 +61,8 @@ public class FicheAuteurController extends GestionControllerImpl {
     @Override
     public void setIdEntity(UUID id) {
         personne = personneDao.get(id);
+        if (personne == null) personne = new Personne();
+
         tfNom.textProperty().bindBidirectional(personne.nomPersonneProperty());
 
         // pourquoi la conversion d'URL introduit un délai quand la propriété doit être mise à jour est un mystère
@@ -73,6 +75,11 @@ public class FicheAuteurController extends GestionControllerImpl {
 
         taBiographie.textProperty().bindBidirectional(personne.biographieProperty());
         taAssociations.textProperty().bindBidirectional(personne.associationsProperty(), new ListStringConverter());
+    }
+
+    @Override
+    public void setDefaultLabel(String label) {
+        personne.setNomPersonne(label);
     }
 
 }
