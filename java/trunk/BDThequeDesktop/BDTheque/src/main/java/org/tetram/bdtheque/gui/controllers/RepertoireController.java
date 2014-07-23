@@ -69,7 +69,7 @@ public class RepertoireController extends WindowController {
         tabView.put(tabSeries.getId(), new InfoTab(TreeViewMode.SERIES, seriesController));
         tabView.put(tabUnivers.getId(), new InfoTab(TreeViewMode.UNIVERS, universController));
         tabView.put(tabAuteurs.getId(), new InfoTab(TreeViewMode.PERSONNES, auteursController));
-        tabView.put(tabParabd.getId(), new InfoTab(TreeViewMode.PARAB_SERIE, parabdController));
+        tabView.put(tabParabd.getId(), new InfoTab(TreeViewMode.PARABD_SERIE, parabdController));
 
         infoTabAlbums.modeProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null)

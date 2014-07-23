@@ -91,8 +91,8 @@ public class ModeGestionController extends WindowController implements ModeContr
         buttonNodeHashMap.put(btEditeurs, TreeViewMode.EDITEURS);
         buttonNodeHashMap.put(btCollections, TreeViewMode.COLLECTIONS);
         buttonNodeHashMap.put(btGenres, TreeViewMode.GENRES);
-        buttonNodeHashMap.put(btParabd, TreeViewMode.PARAB_SERIE);
-        buttonNodeHashMap.put(btAchatsParaBD, TreeViewMode.PARAB_SERIE);
+        buttonNodeHashMap.put(btParabd, TreeViewMode.PARABD_SERIE);
+        buttonNodeHashMap.put(btAchatsParaBD, TreeViewMode.PARABD_SERIE);
 
         ObservableNumberValue tabWidth = null;
         for (ToggleButton toggleButton : buttonNodeHashMap.keySet())

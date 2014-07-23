@@ -1,17 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.TreeTableColumn?>
-<?import javafx.scene.control.TreeTableView?>
-<TreeTableView xmlns:fx="http://javafx.com/fxml/1" fx:id="treeTableView" showRoot="false" stylesheets="@treeview.css"
-               xmlns="http://javafx.com/javafx/8"
-               fx:controller="org.tetram.bdtheque.gui.controllers.components.TreeViewController">
-    <columnResizePolicy>
-        <TreeTableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
-    </columnResizePolicy>
-    <columns>
-        <TreeTableColumn fx:id="column0" editable="false" sortable="false"/>
-        <TreeTableColumn fx:id="column1" editable="false" maxWidth="68.0" minWidth="68.0" prefWidth="68.0"
-                         resizable="false"
-                         sortable="false"/>
-    </columns>
-</TreeTableView>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<VBox xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8"
+      fx:controller="org.tetram.bdtheque.gui.controllers.components.TreeViewController">
+    <children>
+        <BorderPane prefHeight="200.0" prefWidth="200.0">
+            <center>
+                <TreeTableView fx:id="treeTableView" showRoot="false" stylesheets="@treeview.css"
+                               BorderPane.alignment="CENTER">
+                    <columnResizePolicy>
+                        <TreeTableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                    </columnResizePolicy>
+                    <columns>
+                        <TreeTableColumn fx:id="column0" editable="false" sortable="false"/>
+                        <TreeTableColumn fx:id="column1" editable="false" maxWidth="68.0" minWidth="68.0"
+                                         prefWidth="68.0" resizable="false" sortable="false"/>
+                    </columns>
+                </TreeTableView>
+            </center>
+            <top>
+                <TextField fx:id="tfSearch" maxWidth="1.7976931348623157E308" promptText="%searchHint"
+                           BorderPane.alignment="CENTER">
+                    <BorderPane.margin>
+                        <Insets bottom="4.0" left="4.0" right="4.0" top="4.0"/>
+                    </BorderPane.margin>
+                </TextField>
+            </top>
+        </BorderPane>
+    </children>
+</VBox>

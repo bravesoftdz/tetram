@@ -12,18 +12,13 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.tetram.bdtheque.data.BeanUtils;
-import org.tetram.bdtheque.data.bean.AlbumLite;
-import org.tetram.bdtheque.data.bean.InitialeEntity;
-import org.tetram.bdtheque.data.bean.ParaBDLite;
 import org.tetram.bdtheque.data.bean.Univers;
-import org.tetram.bdtheque.data.bean.abstractentities.AbstractEntity;
-import org.tetram.bdtheque.data.bean.abstractentities.BaseAlbum;
-import org.tetram.bdtheque.data.bean.abstractentities.BaseParaBD;
 import org.tetram.bdtheque.data.dao.AlbumLiteSerieDao;
 import org.tetram.bdtheque.data.dao.ParaBDLiteDao;
 import org.tetram.bdtheque.data.dao.UniversDao;
 import org.tetram.bdtheque.gui.controllers.WindowController;
 import org.tetram.bdtheque.gui.controllers.components.TreeViewController;
+import org.tetram.bdtheque.gui.controllers.components.TreeViewMode;
 import org.tetram.bdtheque.gui.utils.EntityNotFoundException;
 import org.tetram.bdtheque.gui.utils.History;
 import org.tetram.bdtheque.utils.FileLink;
@@ -87,50 +82,10 @@ public class FicheUniversController extends WindowController implements Consulta
 
         @SuppressWarnings("HardCodedStringLiteral") final String filtreBrancheUnivers = String.format("branche_univers containing '%s'", StringUtils.UUIDToGUIDString(_univers.getId()));
 
-        albumsController.setFinalEntityClass(AlbumLite.class);
-        albumsController.setClickToShow(true);
-        albumsController.setOnGetLabel(treeItem -> {
-            final AbstractEntity entity = treeItem.getValue();
-            if (entity == null)
-                return null;
-            else if (entity instanceof BaseAlbum)
-                return ((BaseAlbum) entity).buildLabel(false);
-            else
-                return entity.buildLabel();
-        });
-        albumsController.onGetChildrenProperty().setValue(treeItem -> {
-            final AbstractEntity entity = treeItem.getValue();
-            if (entity == null) {
-                // c'est la racine
-                return albumLiteSerieDao.getInitiales(filtreBrancheUnivers);
-            } else if (entity instanceof InitialeEntity) {
-                // c'est le niveau 1
-                return albumLiteSerieDao.getListEntitiesByInitiale((InitialeEntity<UUID>) entity, filtreBrancheUnivers);
-            }
-            return null;
-        });
+        albumsController.setMode(TreeViewMode.ALBUMS_SERIE);
+        albumsController.setFiltre(filtreBrancheUnivers);
 
-        parabdController.setFinalEntityClass(ParaBDLite.class);
-        parabdController.setClickToShow(true);
-        parabdController.setOnGetLabel(treeItem -> {
-            final AbstractEntity entity = treeItem.getValue();
-            if (entity == null)
-                return null;
-            else if (entity instanceof BaseParaBD)
-                return ((BaseParaBD) entity).buildLabel(false);
-            else
-                return entity.buildLabel();
-        });
-        parabdController.onGetChildrenProperty().setValue(treeItem -> {
-            final AbstractEntity entity = treeItem.getValue();
-            if (entity == null) {
-                // c'est la racine
-                return paraBDLiteDao.getInitiales(filtreBrancheUnivers);
-            } else if (entity instanceof InitialeEntity) {
-                // c'est le niveau 1
-                return paraBDLiteDao.getListEntitiesByInitiale((InitialeEntity<UUID>) entity, filtreBrancheUnivers);
-            }
-            return null;
-        });
+        parabdController.setMode(TreeViewMode.PARABD_SERIE);
+        albumsController.setFiltre(filtreBrancheUnivers);
     }
 }

@@ -68,6 +68,9 @@ public class TreeViewController extends WindowController {
     @FXML
     private TreeTableColumn<AbstractEntity, AbstractEntity> column1;
 
+    @FXML
+    private TextField tfSearch;
+
     private BooleanProperty clickToShow = new SimpleBooleanProperty(this, "clickToShow", true);
     private ObjectProperty<EventHandler<MouseEvent>> onClickItem = new SimpleObjectProperty<>(this, "onClickItem", null);
     private ObjectProperty<Callback<TreeViewNode, List<? extends AbstractEntity>>> onGetChildren = new SimpleObjectProperty<>(this, "onGetChildren", null);
@@ -82,6 +85,9 @@ public class TreeViewController extends WindowController {
     private ObjectProperty<TreeViewMode> mode = new SimpleObjectProperty<>(this, "mode", TreeViewMode.NONE);
     private ObjectProperty<AbstractEntity> selectedEntity = new SimpleObjectProperty<>(this, "selectedEntity", null);
 
+    private BooleanProperty canSearch = new SimpleBooleanProperty(this, "canSearch", true);
+    private String lastFindText;
+
     @FXML
     public void initialize() {
         mode.addListener(observable -> {
@@ -91,6 +97,13 @@ public class TreeViewController extends WindowController {
             onGetChildren.set(newMode == TreeViewMode.NONE ? null : new TreeViewMode.GetChildrenCallback(this));
             dao.set(newMode == TreeViewMode.NONE ? null : SpringContext.CONTEXT.getBean(newMode.getDaoClass()));
             refresh();
+        });
+
+        tfSearch.visibleProperty().bind(canSearchProperty());
+        tfSearch.setOnAction(event -> {
+            // TODO: chercher le premier élément correspondant au texte tapé, se positionner dessus
+            // ObservableList<TreeItem<AbstractEntity>> lstInitiales = getTreeView().getRoot().getChildren();
+            // lstInitiales.indexOf();
         });
 
         appliedFiltre.bind(Bindings.createStringBinding(() -> {
@@ -125,14 +138,9 @@ public class TreeViewController extends WindowController {
 
         column0.setCellValueFactory(param -> {
             final TreeItem<AbstractEntity> treeViewNode = param.getValue();
-            String label;
-            if (getOnGetLabel() != null)
-                label = treeViewNode == null ? "" : getOnGetLabel().call((TreeViewNode) treeViewNode);
-            else {
-                final AbstractEntity entity = treeViewNode == null ? null : treeViewNode.getValue();
-                label = entity == null ? "" : entity.buildLabel();
-            }
+            String label = getLabelForNode(treeViewNode);
             // l'appel à new String() est peut être redondant mais sans ça, le treeTableView ne fonctionne pas correctement
+            // vérifier si avec l'utilisation de getLabelForNode(treeViewNode) on a encore besoin du new
             //noinspection RedundantStringConstructorCall
             return new ReadOnlyStringWrapper(new String(label));
         });
@@ -200,6 +208,76 @@ public class TreeViewController extends WindowController {
         });
 
         Platform.runLater(this::refresh);
+    }
+
+    private String getLabelForNode(TreeItem<AbstractEntity> treeViewNode) {
+        String label;
+        if (getOnGetLabel() != null)
+            label = treeViewNode == null ? "" : getOnGetLabel().call((TreeViewNode) treeViewNode);
+        else {
+            final AbstractEntity entity = treeViewNode == null ? null : treeViewNode.getValue();
+            label = entity == null ? "" : entity.buildLabel();
+        }
+        return label;
+    }
+
+    public void find(String text) {
+        find(text, false);
+    }
+
+    public void find(String text, boolean next) {
+        text = text == null ? "" : text;
+        next = next && text.equalsIgnoreCase(lastFindText);
+        lastFindText = text;
+
+        if (getMode() == TreeViewMode.NONE) {
+            TreeViewNode nCurrent = null;
+            if (next) nCurrent = getSelected();
+            if (nCurrent == null) nCurrent = getFirst();
+
+            TreeViewNode nFind = null;
+            while (nFind != nCurrent) {
+                if (nFind == null)
+                    if (next)
+                        nFind = getNext(nCurrent);
+                    else
+                        nFind = nCurrent;
+                if (org.apache.commons.lang3.StringUtils.containsIgnoreCase(getLabelForNode(nFind), text)) break;
+                nFind = getNext(nFind);
+                if (nFind == null)
+                    nFind = getFirst();
+            }
+            if (nFind != null)
+                getTreeView().getSelectionModel().select(nFind);
+            else
+                getTreeView().getSelectionModel().clearSelection();
+        } else {
+
+        }
+    }
+
+    private TreeViewNode getNext(TreeViewNode node) {
+        if (!node.isLeaf() && !node.getChildren().isEmpty())
+            return (TreeViewNode) node.getChildren().get(0);
+        else {
+            final TreeItem<AbstractEntity> root = getTreeView().getRoot();
+
+            TreeItem<AbstractEntity> parentNode = node.getParent();
+            TreeItem<AbstractEntity> newNode = node.nextSibling();
+            while (newNode == null && !parentNode.equals(root)) {
+                newNode = parentNode.nextSibling();
+                parentNode = parentNode.getParent();
+            }
+            return (TreeViewNode) newNode;
+        }
+    }
+
+    private TreeViewNode getFirst() {
+        return (TreeViewNode) getTreeView().getRoot().getChildren().get(0);
+    }
+
+    private TreeViewNode getSelected() {
+        return (TreeViewNode) getTreeView().getSelectionModel().getSelectedItem();
     }
 
     public boolean getClickToShow() {
@@ -352,6 +430,18 @@ public class TreeViewController extends WindowController {
 
     public ObjectProperty<AbstractEntity> selectedEntityProperty() {
         return selectedEntity;
+    }
+
+    public boolean getCanSearch() {
+        return canSearch.get();
+    }
+
+    public void setCanSearch(boolean canSearch) {
+        this.canSearch.set(canSearch);
+    }
+
+    public BooleanProperty canSearchProperty() {
+        return canSearch;
     }
 
     public class TreeViewNode extends TreeItem<AbstractEntity> {

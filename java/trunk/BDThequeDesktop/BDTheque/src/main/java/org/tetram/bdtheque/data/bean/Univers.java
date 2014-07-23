@@ -1,9 +1,10 @@
 package org.tetram.bdtheque.data.bean;
 
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.*;
+import javafx.collections.FXCollections;
 import org.tetram.bdtheque.data.bean.abstractentities.BaseUnivers;
+import org.tetram.bdtheque.data.bean.interfaces.ScriptEntity;
+import org.tetram.bdtheque.data.dao.DaoScriptImpl;
 import org.tetram.bdtheque.spring.utils.AutoTrimStringProperty;
 
 import java.util.UUID;
@@ -12,10 +13,12 @@ import java.util.UUID;
  * Created by Thierry on 24/05/2014.
  */
 
-public class Univers extends BaseUnivers {
+@DaoScriptImpl.ScriptInfo(typeData = 15)
+public class Univers extends BaseUnivers implements ScriptEntity {
 
     private final StringProperty description = new AutoTrimStringProperty(this, "description", null);
     private final ObjectProperty<UniversLite> universParent = new SimpleObjectProperty<>(this, "universParent", null);
+    private final ListProperty<String> associations = new SimpleListProperty<>(this, "associations", FXCollections.observableArrayList());
 
     public String getDescription() {
         return description.get();
@@ -45,4 +48,8 @@ public class Univers extends BaseUnivers {
         return getUniversParent() == null ? null : getUniversParent().getId();
     }
 
+    @Override
+    public ListProperty<String> associationsProperty() {
+        return associations;
+    }
 }

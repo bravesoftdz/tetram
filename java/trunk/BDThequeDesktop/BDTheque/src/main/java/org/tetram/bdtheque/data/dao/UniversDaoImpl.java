@@ -18,7 +18,7 @@ import java.util.UUID;
 @Lazy
 @Transactional
 
-public class UniversDaoImpl extends DaoRWImpl<Univers, UUID> implements UniversDao {
+public class UniversDaoImpl extends DaoScriptImpl<Univers, UUID> implements UniversDao {
     @Override
     public int save(@NotNull Univers o) throws ConsistencyException {
         if (!isUnique(o))

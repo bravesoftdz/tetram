@@ -34,12 +34,14 @@
                 <Label styleClass="label-rubrique" text="Biographie :" GridPane.halignment="RIGHT" GridPane.rowIndex="2"
                        GridPane.valignment="TOP"/>
                 <TextArea fx:id="taBiographie" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="2"/>
+
+                <Separator maxWidth="-Infinity" minWidth="-Infinity" prefWidth="200.0" GridPane.columnSpan="3"
+                           GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER"/>
+
                 <Label styleClass="label-rubrique" text="Associations :" GridPane.halignment="RIGHT"
                        GridPane.rowIndex="4" GridPane.valignment="TOP"/>
                 <TextArea fx:id="taAssociations" GridPane.columnIndex="1" GridPane.columnSpan="2"
                           GridPane.rowIndex="4"/>
-                <Separator maxWidth="-Infinity" minWidth="-Infinity" prefWidth="200.0" GridPane.columnSpan="3"
-                           GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER"/>
             </children>
         </GridPane>
     </children>

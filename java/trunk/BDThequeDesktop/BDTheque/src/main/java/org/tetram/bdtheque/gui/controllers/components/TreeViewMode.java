@@ -30,11 +30,9 @@ public enum TreeViewMode {
     ALBUMS_EDITEUR(10, AlbumLite.class, AlbumLiteEditeurDao.class, Constants.FILTRE_SQL_COMPLET),
     ALBUMS_GENRE(11, AlbumLite.class, AlbumLiteGenreDao.class, Constants.FILTRE_SQL_COMPLET),
     ALBUMS_SERIE(12, AlbumLite.class, AlbumLiteSerieDao.class, Constants.FILTRE_SQL_COMPLET),
-    PARAB_SERIE(13, ParaBDLite.class, ParaBDLiteDao.class, Constants.FILTRE_SQL_COMPLET),
+    PARABD_SERIE(13, ParaBDLite.class, ParaBDLiteDao.class, Constants.FILTRE_SQL_COMPLET),
     ACHATS_ALBUMS_EDITEUR(14, AlbumLite.class, AlbumLiteSerieDao.class, Constants.FILTRE_SQL_ACHAT),
-    UNIVERS(15, UniversLite.class, UniversLiteDao.class),
-    ALBUMS_SERIE_UNIVERS(16, AlbumLite.class, AlbumLiteSerieDao.class, Constants.FILTRE_SQL_COMPLET),
-    PARABD_SERIE_UNIVERS(17, ParaBDLite.class, ParaBDLiteDao.class, Constants.FILTRE_SQL_COMPLET);
+    UNIVERS(15, UniversLite.class, UniversLiteDao.class);
 
     private final int value;
     private final Class<? extends AbstractEntity> entityClass;
@@ -87,8 +85,8 @@ public enum TreeViewMode {
 
     static class GetLabelCallback implements Callback<TreeViewController.TreeViewNode, String> {
 
-        private final EnumSet<TreeViewMode> albumSansSerie = EnumSet.copyOf(Arrays.asList(new TreeViewMode[]{ALBUMS_SERIE, ALBUMS_SERIE_UNIVERS}));
-        private final EnumSet<TreeViewMode> parabdSansSerie = EnumSet.copyOf(Arrays.asList(new TreeViewMode[]{PARAB_SERIE, PARABD_SERIE_UNIVERS}));
+        private final EnumSet<TreeViewMode> albumSansSerie = EnumSet.copyOf(Arrays.asList(new TreeViewMode[]{ALBUMS_SERIE}));
+        private final EnumSet<TreeViewMode> parabdSansSerie = EnumSet.copyOf(Arrays.asList(new TreeViewMode[]{PARABD_SERIE}));
 
         private final TreeViewController treeViewController;
 
