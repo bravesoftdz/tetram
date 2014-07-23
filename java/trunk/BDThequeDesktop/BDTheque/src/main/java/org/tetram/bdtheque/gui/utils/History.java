@@ -258,6 +258,19 @@ public class History {
                 addConsultation(item);
             if (HistoryAction.modes.contains(item.action))
                 temporary.clear();
+
+            ModeGestionController gestionController;
+            FicheEditController<?> editController;
+
+            final EventHandler<ActionEvent> closeWindowHandler = event -> {
+                temporary.remove(item);
+                if (temporary.isEmpty() && mainController.getMode() == ApplicationMode.CONSULTATION)
+                    refresh();
+                    // SpringContext.CONTEXT.getBean(ModeConsultationController.class).refreshConsultationForm();
+                else
+                    Forms.setViewToContainer(item.previousView, item.previousContainer);
+            };
+
             switch (item.action) {
                 case MODE_CONSULTATION:
                     newController = Forms.showMode(ApplicationMode.CONSULTATION);
@@ -297,28 +310,29 @@ public class History {
                     doCallback := MAJRunScript(TAlbumFull(Consult.GestionVTV));
                 fcConflitImport:
                     frmFond.SetModalChildForm(TForm(Consult.Reference));
+*/
+                case GESTION_AJOUT:
+                    gestionController = SpringContext.CONTEXT.getBean(ModeGestionController.class);
+                    editController = gestionController.showEditForm(item.entity);
+                    newController = editController;
 
-                fcGestionAjout:
-                    if not IsEqualGUID(GUID_NULL, Consult.ReferenceGUID) then
+                    editController.setLabel(item.string);
+
+                    editController.registerCancelHandler(closeWindowHandler, FicheEditController.HandlerPriority.LOW);
+                    editController.registerOkHandler(closeWindowHandler, FicheEditController.HandlerPriority.LOW);
+
+/*                    if not IsEqualGUID(GUID_NULL, Consult.ReferenceGUID) then
                         doCallback := not IsEqualGUID(GUID_NULL, TActionGestionAddWithRef(Consult.GestionProc)(Consult.GestionVTV, Consult.ReferenceGUID, Consult.GestionValeur))
                     else
                         doCallback := not IsEqualGUID(GUID_NULL, TActionGestionAdd(Consult.GestionProc)(Consult.GestionVTV, Consult.GestionValeur));
 */
                 case GESTION_MODIF:
-                    ModeGestionController gestionController = SpringContext.CONTEXT.getBean(ModeGestionController.class);
-                    FicheEditController<?> editController = gestionController.showEditForm(item.entity);
+                    gestionController = SpringContext.CONTEXT.getBean(ModeGestionController.class);
+                    editController = gestionController.showEditForm(item.entity);
                     newController = editController;
 
-                    final EventHandler<ActionEvent> handler = event -> {
-                        temporary.remove(item);
-                        if (temporary.isEmpty() && mainController.getMode() == ApplicationMode.CONSULTATION)
-                            refresh();
-                            // SpringContext.CONTEXT.getBean(ModeConsultationController.class).refreshConsultationForm();
-                        else
-                            Forms.setViewToContainer(item.previousView, item.previousContainer);
-                    };
-                    editController.registerCancelHandler(handler, FicheEditController.HandlerPriority.LOW);
-                    editController.registerOkHandler(handler, FicheEditController.HandlerPriority.LOW);
+                    editController.registerCancelHandler(closeWindowHandler, FicheEditController.HandlerPriority.LOW);
+                    editController.registerOkHandler(closeWindowHandler, FicheEditController.HandlerPriority.LOW);
 /*
                     if IsEqualGUID(Consult.ReferenceGUID, GUID_NULL) then
                         doCallback := TActionGestionModif(Consult.GestionProc)(Consult.GestionVTV)
@@ -387,6 +401,7 @@ public class History {
 
     private class HistoryItem implements Cloneable {
 
+        public String string = null;
         private HistoryAction action = null;
         private AbstractDBEntity entity;
         private String description = null;
@@ -419,6 +434,7 @@ public class History {
             this.description = item.description;
             this.previousContainer = item.previousContainer;
             this.previousView = item.previousView;
+            this.string = item.string;
         }
     }
 }

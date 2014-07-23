@@ -138,11 +138,7 @@ public class TreeViewController extends WindowController {
 
         column0.setCellValueFactory(param -> {
             final TreeItem<AbstractEntity> treeViewNode = param.getValue();
-            String label = getLabelForNode(treeViewNode);
-            // l'appel à new String() est peut être redondant mais sans ça, le treeTableView ne fonctionne pas correctement
-            // vérifier si avec l'utilisation de getLabelForNode(treeViewNode) on a encore besoin du new
-            //noinspection RedundantStringConstructorCall
-            return new ReadOnlyStringWrapper(new String(label));
+            return new ReadOnlyStringWrapper(getLabelForNode(treeViewNode));
         });
         column0.setCellFactory(param ->
                         new TreeTableCell<AbstractEntity, String>() {
