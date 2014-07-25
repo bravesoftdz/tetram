@@ -67,7 +67,6 @@
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates" />
       <excludeFolder url="file://$MODULE_DIR$/build/libs" />
       <excludeFolder url="file://$MODULE_DIR$/build/lint" />
-      <excludeFolder url="file://$MODULE_DIR$/build/lint-results_files" />
       <excludeFolder url="file://$MODULE_DIR$/build/ndk" />
       <excludeFolder url="file://$MODULE_DIR$/build/outputs" />
       <excludeFolder url="file://$MODULE_DIR$/build/res" />
@@ -78,7 +77,6 @@
     <orderEntry type="jdk" jdkName="Android API 19 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="support-v4-19.1.0" level="project" />
-    <orderEntry type="library" exported="" name="annotations" level="project" />
     <orderEntry type="library" exported="" name="support-v13-18.0.0" level="project" />
     <orderEntry type="module" module-name="bdtheque-dependencies" exported="" />
   </component>
