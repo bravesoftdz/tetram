@@ -1,10 +1,12 @@
 package org.tetram.bdtheque.data.dao;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.tetram.bdtheque.data.bean.InitialeEntity;
+import org.tetram.bdtheque.data.bean.InitialeWithEntity;
 import org.tetram.bdtheque.data.bean.PersonneLite;
 import org.tetram.bdtheque.data.dao.mappers.AuteurMapper;
 
@@ -32,4 +34,11 @@ public class PersonneLiteDaoImpl extends DaoROImpl<PersonneLite, UUID> implement
     public List<PersonneLite> getListEntitiesByInitiale(InitialeEntity<Character> initiale, String filtre) {
         return auteurMapper.getPersonneLiteByInitiale(initiale.getValue(), filtre);
     }
+
+    @Override
+    public List<InitialeWithEntity<Character, PersonneLite>> searchList(@Param("value") String value, @Param("filtre") String filtre) {
+        // TODO
+        return null;
+    }
+
 }

@@ -11,7 +11,6 @@ import org.tetram.bdtheque.data.dao.*;
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * Created by Thierry on 17/07/2014.
@@ -126,7 +125,7 @@ public enum TreeViewMode {
                 return treeViewController.getDao().getInitiales(treeViewController.getAppliedFiltre());
             } else if (entity instanceof InitialeEntity) {
                 // c'est le niveau 1
-                return treeViewController.getDao().getListEntitiesByInitiale((InitialeEntity<UUID>) entity, treeViewController.getAppliedFiltre());
+                return treeViewController.getDao().getListEntitiesByInitiale((InitialeEntity<?>) entity, treeViewController.getAppliedFiltre());
             }
             return null;
         }

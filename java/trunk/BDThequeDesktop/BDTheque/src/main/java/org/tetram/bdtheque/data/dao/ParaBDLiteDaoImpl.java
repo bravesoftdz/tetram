@@ -1,10 +1,12 @@
 package org.tetram.bdtheque.data.dao;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.tetram.bdtheque.data.bean.InitialeEntity;
+import org.tetram.bdtheque.data.bean.InitialeWithEntity;
 import org.tetram.bdtheque.data.bean.ParaBDLite;
 import org.tetram.bdtheque.data.dao.mappers.ParaBDMapper;
 
@@ -32,4 +34,11 @@ public class ParaBDLiteDaoImpl extends DaoROImpl<ParaBDLite, UUID> implements Pa
     public List<ParaBDLite> getListEntitiesByInitiale(InitialeEntity<UUID> initiale, String filtre) {
         return paraBDMapper.getListParaBDLiteBySerieId(initiale.getValue(), filtre);
     }
+
+    @Override
+    public List<InitialeWithEntity<UUID, ParaBDLite>> searchList(@Param("value") String value, @Param("filtre") String filtre) {
+        // TODO
+        return null;
+    }
+
 }

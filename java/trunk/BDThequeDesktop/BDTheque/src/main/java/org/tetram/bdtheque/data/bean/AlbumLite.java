@@ -97,4 +97,8 @@ public class AlbumLite extends BaseAlbum {
         return BeanUtils.formatTitreAlbum(simple, avecSerie, getTitreAlbum(), getTitreSerie(), getTome(), getTomeDebut(), getTomeFin(), isIntegrale(), isHorsSerie());
     }
 
+    public static class AlbumLiteInitialeUUID extends AlbumLite {
+        private ObjectProperty<UUID> initiale = new SimpleObjectProperty<>(this, "initiale", null);
+    }
+
 }

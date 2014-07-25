@@ -1,7 +1,7 @@
 package org.tetram.bdtheque.data.dao;
 
-import org.tetram.bdtheque.data.bean.interfaces.EvaluatedEntity;
 import org.tetram.bdtheque.data.bean.ValeurListe;
+import org.tetram.bdtheque.data.bean.interfaces.EvaluatedEntity;
 
 /**
  * Created by Thierry on 08/07/2014.

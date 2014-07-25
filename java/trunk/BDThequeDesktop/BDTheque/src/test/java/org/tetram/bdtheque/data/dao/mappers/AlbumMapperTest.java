@@ -8,7 +8,11 @@ import org.tetram.bdtheque.SpringTest;
 import org.tetram.bdtheque.data.Constants;
 import org.tetram.bdtheque.data.bean.Album;
 import org.tetram.bdtheque.data.bean.AlbumLite;
+import org.tetram.bdtheque.data.bean.InitialeWithEntity;
 import org.tetram.bdtheque.utils.StringUtils;
+
+import java.util.List;
+import java.util.UUID;
 
 public class AlbumMapperTest extends SpringTest {
 
@@ -43,5 +47,12 @@ public class AlbumMapperTest extends SpringTest {
         Assert.assertNotNull(album.getAuteurs());
         Assert.assertFalse(album.getAuteurs().isEmpty());
         Assert.assertEquals(album.getAuteurs().size(), album.getScenaristes().size() + album.getDessinateurs().size() + album.getColoristes().size());
+    }
+
+    @Test
+    public void testSearchAlbumLiteBySerie() throws Exception {
+        List<InitialeWithEntity<UUID, AlbumLite>> results = mapper.searchAlbumLiteBySerie("lan", null);
+        Assert.assertNotNull(results);
+        Assert.assertNotEquals(0, results.size());
     }
 }

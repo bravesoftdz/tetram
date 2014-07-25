@@ -38,6 +38,11 @@
                     column="{idAlbum=id_album}" fetchType="eager"/>
     </resultMap>
 
+    <resultMap id="AlbumLiteInitialeUUID" type="org.tetram.bdtheque.data.bean.InitialeWithEntity"
+               extends="org.tetram.bdtheque.data.dao.mappers.CommonMapper.InitialeWithEntityUUID">
+        <association property="entity" resultMap="AlbumLite"/>
+    </resultMap>
+
     <sql id="fieldsAlbumLite">
         a.id_album, a.titreAlbum, a.horsSerie, a.integrale, a.tome, a.tomeDebut, a.tomeFin, a.id_serie, a.achat,
         a.complet
@@ -150,6 +155,23 @@
         from
             albums_by_serie(#{idSerie}, #{filtre}) a
         ]]>
+    </select>
+
+    <select id="searchAlbumLiteBySerie" resultMap="AlbumLiteInitialeUUID">
+        select
+        a.id_serie initiale_value,
+        <include refid="fieldsAlbumLite"/>, a.titreSerie, a.notation
+        <![CDATA[
+        from
+            vw_liste_albums a
+        where
+            coalesce(titreAlbum, titreSerie) like '%' || #{value} || '%'
+        ]]>
+        <if test="filtre != null">
+            and #{filtre}
+        </if>
+        order by
+        <include refid="orderAlbum"/>
     </select>
 
     <select id="getInitialesCollections"

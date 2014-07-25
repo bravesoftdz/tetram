@@ -20,6 +20,26 @@
         <result column="value" property="value" javaType="Year"/>
     </resultMap>
 
+    <resultMap id="InitialeWithEntity" type="org.tetram.bdtheque.data.bean.InitialeWithEntity">
+    </resultMap>
+    <resultMap id="InitialeWithEntityUUID" type="org.tetram.bdtheque.data.bean.InitialeWithEntity"
+               extends="InitialeWithEntity">
+        <association property="initiale" resultMap="InitialeEntityUUID" columnPrefix="initiale_"/>
+    </resultMap>
+    <resultMap id="InitialeWithEntityInteger" type="org.tetram.bdtheque.data.bean.InitialeWithEntity"
+               extends="InitialeWithEntity">
+        <association property="initiale" resultMap="InitialeEntityInteger" columnPrefix="initiale_"/>
+    </resultMap>
+    <resultMap id="InitialeWithEntityCharacter" type="org.tetram.bdtheque.data.bean.InitialeWithEntity"
+               extends="InitialeWithEntity">
+        <association property="initiale" resultMap="InitialeEntityCharacter" columnPrefix="initiale_"/>
+    </resultMap>
+    <resultMap id="InitialeWithEntityYear" type="org.tetram.bdtheque.data.bean.InitialeWithEntity"
+               extends="InitialeWithEntity">
+        <association property="initiale" resultMap="InitialeEntityYear" columnPrefix="initiale_"/>
+    </resultMap>
+
+
     <sql id="autoIncKey">select udf_createguid() from rdb$database</sql>
 
     <select id="fillAssociations" resultType="String">

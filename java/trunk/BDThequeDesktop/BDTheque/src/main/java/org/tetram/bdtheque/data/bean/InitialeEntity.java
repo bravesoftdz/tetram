@@ -50,9 +50,34 @@ public class InitialeEntity<T> extends AbstractEntity {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof InitialeEntity)) return false;
+
+        InitialeEntity that = (InitialeEntity) o;
+
+        if (getValue() != null ? !getValue().equals(that.value) : that.getValue() != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return getValue() != null ? getValue().hashCode() : 0;
+    }
+
+    @Override
     public String buildLabel() {
         // return StringUtils.ajoutString(label.getValueSafe(), StringUtils.nonZero(getCount()), " ", "(", ")");
         return label.getValueSafe();
     }
 
+/*
+    @Override
+    public int compareTo(@NotNull InitialeEntity<T> o) {
+        if (this == o) return 0;
+
+        return getValue().compareTo(o.getValue());
+    }
+*/
 }

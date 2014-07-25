@@ -1,5 +1,6 @@
 package org.tetram.bdtheque.data.dao;
 
+import org.apache.ibatis.annotations.Param;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
@@ -7,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.tetram.bdtheque.data.ConsistencyException;
 import org.tetram.bdtheque.data.bean.GenreLite;
 import org.tetram.bdtheque.data.bean.InitialeEntity;
+import org.tetram.bdtheque.data.bean.InitialeWithEntity;
 import org.tetram.bdtheque.utils.I18nSupport;
 import org.tetram.bdtheque.utils.StringUtils;
 
@@ -47,4 +49,11 @@ public class GenreLiteDaoImpl extends DaoScriptImpl<GenreLite, UUID> implements 
         // TODO
         return null;
     }
+
+    @Override
+    public List<InitialeWithEntity<Character, GenreLite>> searchList(@Param("value") String value, @Param("filtre") String filtre) {
+        // TODO
+        return null;
+    }
+
 }

@@ -1,11 +1,13 @@
 package org.tetram.bdtheque.data.dao;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.tetram.bdtheque.data.bean.AlbumLite;
 import org.tetram.bdtheque.data.bean.InitialeEntity;
+import org.tetram.bdtheque.data.bean.InitialeWithEntity;
 import org.tetram.bdtheque.data.dao.mappers.AlbumMapper;
 import org.tetram.bdtheque.utils.I18nSupport;
 
@@ -39,4 +41,11 @@ public class AlbumLiteCollectionDaoImpl extends DaoROImpl<AlbumLite, UUID> imple
     public List<AlbumLite> getListEntitiesByInitiale(InitialeEntity<UUID> initiale, String filtre) {
         return albumMapper.getAlbumLiteByCollection(initiale.getValue(), filtre);
     }
+
+    @Override
+    public List<InitialeWithEntity<UUID, AlbumLite>> searchList(@Param("value") String value, @Param("filtre") String filtre) {
+        // TODO
+        return null;
+    }
+
 }

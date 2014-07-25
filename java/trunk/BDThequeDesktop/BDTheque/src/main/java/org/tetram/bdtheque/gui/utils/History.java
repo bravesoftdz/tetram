@@ -56,7 +56,6 @@ public class History {
         });
     }
 
-    @SuppressWarnings("Convert2MethodRef")
     private synchronized void registerProcessNext() {
         if (!processRegistered) {
             Platform.runLater(() -> {

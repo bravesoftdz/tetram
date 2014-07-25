@@ -11,8 +11,12 @@ import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.util.Callback;
+import javafx.util.Duration;
+import jfxtras.animation.Timer;
+import org.apache.commons.collections4.map.ListOrderedMap;
 import org.jetbrains.annotations.NonNls;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -37,6 +41,7 @@ import org.tetram.bdtheque.utils.I18nSupport;
 import org.tetram.bdtheque.utils.StringUtils;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by Thierry on 09/07/2014.
@@ -70,6 +75,8 @@ public class TreeViewController extends WindowController {
 
     @FXML
     private TextField tfSearch;
+    private boolean findRegistered = false;
+    private Timer searchTimer = new Timer(this::registerFind);
 
     private BooleanProperty clickToShow = new SimpleBooleanProperty(this, "clickToShow", true);
     private ObjectProperty<EventHandler<MouseEvent>> onClickItem = new SimpleObjectProperty<>(this, "onClickItem", null);
@@ -87,6 +94,12 @@ public class TreeViewController extends WindowController {
 
     private BooleanProperty canSearch = new SimpleBooleanProperty(this, "canSearch", true);
     private String lastFindText;
+    private ListOrderedMap<InitialeEntity<?>, List<? extends AbstractDBEntity>> findList;
+
+    public TreeViewController() {
+        searchTimer.setRepeats(false);
+        searchTimer.setDelay(new Duration(800));
+    }
 
     @FXML
     public void initialize() {
@@ -100,10 +113,9 @@ public class TreeViewController extends WindowController {
         });
 
         tfSearch.visibleProperty().bind(canSearchProperty());
-        tfSearch.setOnAction(event -> {
-            // TODO: chercher le premier élément correspondant au texte tapé, se positionner dessus
-            // ObservableList<TreeItem<AbstractEntity>> lstInitiales = getTreeView().getRoot().getChildren();
-            // lstInitiales.indexOf();
+        tfSearch.textProperty().addListener(o -> searchTimer.restart());
+        tfSearch.setOnKeyReleased(event -> {
+            if (event.getCode().equals(KeyCode.F3)) find(true);
         });
 
         appliedFiltre.bind(Bindings.createStringBinding(() -> {
@@ -200,6 +212,7 @@ public class TreeViewController extends WindowController {
 
         treeTableView.getSelectionModel().selectedItemProperty().addListener((observable, oldEntity, newEntity) -> {
             TreeViewNode treeViewNode = (TreeViewNode) newEntity;
+            // ne surtout pas utiliser setSelectedEntity
             selectedEntity.set(treeViewNode != null && treeViewNode.isLeaf() ? treeViewNode.getValue() : null);
         });
 
@@ -217,8 +230,22 @@ public class TreeViewController extends WindowController {
         return label;
     }
 
+    private synchronized void registerFind() {
+        if (!findRegistered) {
+            Platform.runLater(() -> {
+                findRegistered = false;
+                find(tfSearch.getText());
+            });
+            findRegistered = true;
+        }
+    }
+
     public void find(String text) {
         find(text, false);
+    }
+
+    public void find(boolean next) {
+        find(lastFindText, next);
     }
 
     public void find(String text, boolean next) {
@@ -248,7 +275,50 @@ public class TreeViewController extends WindowController {
             else
                 getTreeView().getSelectionModel().clearSelection();
         } else {
+            if (StringUtils.isNullOrEmpty(text)) {
+                setSelectedEntity(null, null);
+                findList.clear();
+            } else if (next && !findList.isEmpty()) {
+                AbstractEntity current = getSelectedEntity();
+                if (current == null) {
+                    setSelectedEntity(findList.firstKey(), findList.get(findList.firstKey()).get(0));
+                } else {
+                    InitialeEntity<?> initialeEntity = (InitialeEntity) getSelected().getParent().getValue();
+                    final List<? extends AbstractEntity> list = findList.get(initialeEntity);
+                    int i = list.indexOf(current);
+                    if (i == list.size() - 1) {
+                        initialeEntity = findList.nextKey(initialeEntity);
+                        if (initialeEntity == null) initialeEntity = findList.firstKey();
+                        current = findList.get(initialeEntity).get(0);
+                    } else
+                        current = list.get(i + 1);
+                    setSelectedEntity(initialeEntity, current);
+                }
+            } else {
+                //noinspection unchecked
+                findList = getDao().searchMap(text, getAppliedFiltre());
+/*
+          SQL.Text := 'SELECT ' + vmModeInfos[FMode].REFFIELDS + ' FROM ' + vmModeInfos[FMode].TABLESEARCH + ' WHERE ' + vmModeInfos[FMode].FIELDSEARCH +
+            ' LIKE ''%'' || ? || ''%''';
+          if FUseFiltre then
+            SQL.Add('AND ' + FFiltre)
+          else if FUseDefaultFiltre and (vmModeInfos[FMode].DEFAULTFILTRE <> '') then
+            SQL.Add('AND ' + vmModeInfos[FMode].DEFAULTFILTRE);
+          SQL.Add('ORDER BY ' + vmModeInfos[FMode].INITIALEFIELDS + ',');
+          if vmModeInfos[FMode].SEARCHORDER <> '' then
+            SQL.Add(vmModeInfos[FMode].SEARCHORDER + ',');
+          SQL.Add(vmModeInfos[FMode].FIELDSEARCH);
+          Prepare(True);
+          Params.AsString[0] := Copy(UpperCase(SansAccents(Text)), 1, Params.MaxStrLen[0] - 2);
 
+          Open;
+*/
+                if (findList.isEmpty())
+                    getTreeView().getSelectionModel().clearSelection();
+                else {
+                    setSelectedEntity(findList.firstKey(), findList.get(findList.firstKey()).get(0));
+                }
+            }
         }
     }
 
@@ -420,8 +490,26 @@ public class TreeViewController extends WindowController {
         return selectedEntity.get();
     }
 
-    private void setSelectedEntity(AbstractEntity selectedEntity) {
-        this.selectedEntity.set(selectedEntity);
+    private void setSelectedEntity(InitialeEntity initialeEntity, AbstractEntity selectedEntity) {
+        // c'est le listener sur selectedItemProperty qui va faire le set
+        // this.selectedEntity.set(selectedEntity);
+        TreeViewNode node = (TreeViewNode) getTreeView().getRoot().getChildren().get(0);
+        while (node != null && !node.getValue().equals(initialeEntity))
+            node = (TreeViewNode) node.nextSibling();
+        if (node == null) return;
+        node = (TreeViewNode) node.getChildren().get(0);
+        while (node != null && !node.getValue().equals(selectedEntity))
+            node = (TreeViewNode) node.nextSibling();
+
+        getTreeView().getSelectionModel().select(node);
+        expandTreeView(node);
+    }
+
+    private void expandTreeView(TreeItem selectedItem) {
+        if (selectedItem != null) {
+            expandTreeView(selectedItem.getParent());
+            if (!selectedItem.isLeaf()) selectedItem.setExpanded(true);
+        }
     }
 
     public ObjectProperty<AbstractEntity> selectedEntityProperty() {
@@ -438,6 +526,10 @@ public class TreeViewController extends WindowController {
 
     public BooleanProperty canSearchProperty() {
         return canSearch;
+    }
+
+    public UUID getCurrentID() {
+        return getSelectedEntity() == null ? null : ((AbstractDBEntity) getSelectedEntity()).getId();
     }
 
     public class TreeViewNode extends TreeItem<AbstractEntity> {

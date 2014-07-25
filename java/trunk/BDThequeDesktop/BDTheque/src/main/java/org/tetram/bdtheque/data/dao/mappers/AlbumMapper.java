@@ -1,10 +1,7 @@
 package org.tetram.bdtheque.data.dao.mappers;
 
 import org.apache.ibatis.annotations.Param;
-import org.tetram.bdtheque.data.bean.Album;
-import org.tetram.bdtheque.data.bean.AlbumLite;
-import org.tetram.bdtheque.data.bean.InitialeEntity;
-import org.tetram.bdtheque.data.bean.ValeurListe;
+import org.tetram.bdtheque.data.bean.*;
 import org.tetram.bdtheque.utils.FileLink;
 
 import java.time.Year;
@@ -49,4 +46,7 @@ public interface AlbumMapper extends BaseMapperInterface {
     List<InitialeEntity<UUID>> getInitialesCollections(@Param("filtre") String filtre);
 
     List<AlbumLite> getAlbumLiteByCollection(@Param("idCollection") UUID idCollection, @Param("filtre") String filtre);
+
+    List<InitialeWithEntity<UUID, AlbumLite>> searchAlbumLiteBySerie(@Param("value") String value, @Param("filtre") String filtre);
+
 }
