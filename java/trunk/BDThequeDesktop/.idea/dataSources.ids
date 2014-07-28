@@ -1,0 +1,1190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component name="dataSourceStorage">
+  <data-source source="LOCAL" name="Firebird - BD.GDB" uuid="ecb281c7-b78f-4387-82c1-9bf213a55af4">
+    <database-info product="Firebird 2.5*WI" version="WI-V2.5.3.26778" jdbc-version="4.2" driver-name="Jaybird JCA/JDBC driver" driver-version="2.2">
+      <extra-name-characters>$</extra-name-characters>
+      <identifier-quote-string>&quot;</identifier-quote-string>
+    </database-info>
+    <case-sensitivity plain-identifiers="upper" quoted-identifiers="exact"/>
+    <schema name="" catalog=""/>
+    <table name="ALBUMS" schema="" catalog="" type="TABLE">
+      <column name="ID_ALBUM" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1"/>
+      <column name="MOISPARUTION" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="ANNEEPARUTION" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="ID_SERIE" sqlType="CHAR" precision="38" scale="0" nullable="true" jdbcType="1"/>
+      <column name="TOME" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" def="TlVMTA=="/>
+      <column name="TOMEDEBUT" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="TOMEFIN" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="HORSSERIE" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="INTEGRALE" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="ACHAT" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="NBEDITIONS" sqlType="INTEGER" precision="10" scale="0" nullable="true" jdbcType="4" def="MA=="/>
+      <column name="COMPLET" sqlType="INTEGER" precision="10" scale="0" nullable="true" jdbcType="4"/>
+      <column name="INITIALETITREALBUM" sqlType="CHAR" precision="1" scale="0" nullable="true" jdbcType="1"/>
+      <column name="DC_ALBUMS" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93"/>
+      <column name="DM_ALBUMS" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93"/>
+      <column name="TITREALBUM" sqlType="VARCHAR" precision="150" scale="0" nullable="true" jdbcType="12"/>
+      <column name="SOUNDEXTITREALBUM" sqlType="VARCHAR" precision="30" scale="0" nullable="true" jdbcType="12"/>
+      <column name="NOTATION" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="SUJETALBUM" sqlType="BLOB SUB_TYPE 1" precision="0" scale="0" nullable="true" jdbcType="-1"/>
+      <column name="REMARQUESALBUM" sqlType="BLOB SUB_TYPE 1" precision="0" scale="0" nullable="true" jdbcType="-1"/>
+      <column name="DS_ALBUMS" sqlType="TIMESTAMP" precision="19" scale="0" nullable="true" jdbcType="93"/>
+      <primary-key name="ALBUMS_PK" columns="ID_ALBUM"/>
+      <exported-key name="FK_ALBUMS_UNIVERS_1" table="ALBUMS_UNIVERS" schema="" catalog="" columns="ID_ALBUM"/>
+      <exported-key name="AUTEURS_FK1" table="AUTEURS" schema="" catalog="" columns="ID_ALBUM"/>
+      <exported-key name="COUVERTURES_FK1" table="COUVERTURES" schema="" catalog="" columns="ID_ALBUM"/>
+      <exported-key name="EDITIONS_FK2" table="EDITIONS" schema="" catalog="" columns="ID_ALBUM"/>
+      <index name="ALBUMS_IDX1" unique="true" columns="ANNEEPARUTION,ID_ALBUM"/>
+      <index name="ALBUMS_IDX2" unique="true" columns="INITIALETITREALBUM,ID_ALBUM"/>
+      <index name="ALBUMS_IDX3" unique="true" columns="TITREALBUM"/>
+      <index name="ALBUMS_IDX4" unique="true" columns="HORSSERIE,INTEGRALE,ID_SERIE,ACHAT,ID_ALBUM"/>
+      <index name="ALBUMS_IDX5" unique="true" columns="TOME,HORSSERIE,INTEGRALE,ID_SERIE"/>
+      <index name="ALBUMS_IDX6" unique="true" columns="TOMEDEBUT,TOMEFIN,HORSSERIE,INTEGRALE,ID_SERIE,ID_ALBUM"/>
+      <index name="ALBUMS_IDX7" unique="true" columns="ANNEEPARUTION,HORSSERIE,INTEGRALE,ACHAT,ID_ALBUM"/>
+      <index name="ALBUMS_IDX8" unique="true" columns="ID_SERIE,ID_ALBUM"/>
+    </table>
+    <table name="ALBUMS_UNIVERS" schema="" catalog="" type="TABLE">
+      <column name="ID_ALBUM" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1"/>
+      <column name="ID_UNIVERS" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1"/>
+      <column name="SOURCE_ALBUM" sqlType="SMALLINT" precision="5" scale="0" nullable="false" jdbcType="5"/>
+      <column name="SOURCE_SERIE" sqlType="SMALLINT" precision="5" scale="0" nullable="false" jdbcType="5"/>
+      <column name="DC_ALBUMS_UNIVERS" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93"/>
+      <column name="DM_ALBUMS_UNIVERS" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93"/>
+      <column name="ID_ALBUM_UNIVERS" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1"/>
+      <column name="DS_ALBUMS_UNIVERS" sqlType="TIMESTAMP" precision="19" scale="0" nullable="true" jdbcType="93"/>
+      <primary-key name="PK_ALBUMS_UNIVERS" columns="ID_ALBUM,ID_UNIVERS"/>
+      <foreign-key name="FK_ALBUMS_UNIVERS_1" columns="ID_ALBUM" ref-table="ALBUMS" ref-schema="" ref-catalog="" ref-columns="ID_ALBUM" update-rule="0" delete-rule="0" deferrability="2"/>
+      <foreign-key name="FK_ALBUMS_UNIVERS_2" columns="ID_UNIVERS" ref-table="UNIVERS" ref-schema="" ref-catalog="" ref-columns="ID_UNIVERS" update-rule="0" delete-rule="0" deferrability="2"/>
+      <index name="UNQ1_ALBUMS_UNIVERS" unique="true" columns="ID_ALBUM_UNIVERS"/>
+    </table>
+    <table name="AUTEURS" schema="" catalog="" type="TABLE">
+      <column name="ID_AUTEUR" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1"/>
+      <column name="ID_ALBUM" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1"/>
+      <column name="ID_PERSONNE" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1"/>
+      <column name="METIER" sqlType="SMALLINT" precision="5" scale="0" nullable="false" jdbcType="5"/>
+      <column name="DC_AUTEURS" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93"/>
+      <column name="DM_AUTEURS" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93"/>
+      <column name="DS_AUTEURS" sqlType="TIMESTAMP" precision="19" scale="0" nullable="true" jdbcType="93"/>
+      <primary-key name="AUTEURS_PK" columns="ID_ALBUM,ID_PERSONNE,METIER"/>
+      <foreign-key name="AUTEURS_FK1" columns="ID_ALBUM" ref-table="ALBUMS" ref-schema="" ref-catalog="" ref-columns="ID_ALBUM" update-rule="0" delete-rule="0" deferrability="2"/>
+      <foreign-key name="AUTEURS_FK2" columns="ID_PERSONNE" ref-table="PERSONNES" ref-schema="" ref-catalog="" ref-columns="ID_PERSONNE" update-rule="0" delete-rule="0" deferrability="2"/>
+      <index name="AUTEURS_UNQID" unique="true" columns="ID_AUTEUR"/>
+    </table>
+    <table name="AUTEURS_PARABD" schema="" catalog="" type="TABLE">
+      <column name="ID_AUTEUR_PARABD" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1"/>
+      <column name="ID_PARABD" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1"/>
+      <column name="ID_PERSONNE" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1"/>
+      <column name="DC_AUTEURS_PARABD" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93"/>
+      <column name="DM_AUTEURS_PARABD" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93"/>
+      <column name="DS_AUTEURS_PARABD" sqlType="TIMESTAMP" precision="19" scale="0" nullable="true" jdbcType="93"/>
+      <primary-key name="AUTEURS_PARABD_PK" columns="ID_PARABD,ID_PERSONNE"/>
+      <foreign-key name="AUTEURS_PARABD_FK1" columns="ID_PARABD" ref-table="PARABD" ref-schema="" ref-catalog="" ref-columns="ID_PARABD" update-rule="0" delete-rule="0" deferrability="2"/>
+      <foreign-key name="AUTEURS_PARABD_FK2" columns="ID_PERSONNE" ref-table="PERSONNES" ref-schema="" ref-catalog="" ref-columns="ID_PERSONNE" update-rule="0" delete-rule="0" deferrability="2"/>
+      <index name="AUTEURS_PARABD_UNQID" unique="true" columns="ID_AUTEUR_PARABD"/>
+    </table>
+    <table name="AUTEURS_SERIES" schema="" catalog="" type="TABLE">
+      <column name="ID_AUTEUR_SERIES" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1"/>
+      <column name="ID_SERIE" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1"/>
+      <column name="ID_PERSONNE" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1"/>
+      <column name="METIER" sqlType="SMALLINT" precision="5" scale="0" nullable="false" jdbcType="5"/>
+      <column name="DC_AUTEURS_SERIES" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93"/>
+      <column name="DM_AUTEURS_SERIES" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93"/>
+      <column name="DS_AUTEURS_SERIES" sqlType="TIMESTAMP" precision="19" scale="0" nullable="true" jdbcType="93"/>
+      <primary-key name="AUTEURS_SERIES_PK" columns="ID_SERIE,ID_PERSONNE,METIER"/>
+      <foreign-key name="AUTEURS_SERIES_FK2" columns="ID_PERSONNE" ref-table="PERSONNES" ref-schema="" ref-catalog="" ref-columns="ID_PERSONNE" update-rule="0" delete-rule="0" deferrability="2"/>
+      <foreign-key name="AUTEURS_SERIES_FK1" columns="ID_SERIE" ref-table="SERIES" ref-schema="" ref-catalog="" ref-columns="ID_SERIE" update-rule="0" delete-rule="0" deferrability="2"/>
+      <index name="AUTEURS_SERIES_UNQID" unique="true" columns="ID_AUTEUR_SERIES"/>
+    </table>
+    <table name="COLLECTIONS" schema="" catalog="" type="TABLE">
+      <column name="ID_COLLECTION" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1"/>
+      <column name="ID_EDITEUR" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1"/>
+      <column name="INITIALENOMCOLLECTION" sqlType="CHAR" precision="1" scale="0" nullable="false" jdbcType="1"/>
+      <column name="DC_COLLECTIONS" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93"/>
+      <column name="DM_COLLECTIONS" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93"/>
+      <column name="NOMCOLLECTION" sqlType="VARCHAR" precision="50" scale="0" nullable="true" jdbcType="12"/>
+      <column name="DS_COLLECTIONS" sqlType="TIMESTAMP" precision="19" scale="0" nullable="true" jdbcType="93"/>
+      <primary-key name="COLLECTIONS_PK" columns="ID_COLLECTION"/>
+      <foreign-key name="COLLECTIONS_FK1" columns="ID_EDITEUR" ref-table="EDITEURS" ref-schema="" ref-catalog="" ref-columns="ID_EDITEUR" update-rule="0" delete-rule="0" deferrability="2"/>
+    </table>
+    <table name="CONVERSIONS" schema="" catalog="" type="TABLE">
+      <column name="ID_CONVERSION" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1"/>
+      <column name="TAUX" sqlType="NUMERIC" precision="5" scale="5" nullable="true" jdbcType="2"/>
+      <column name="DC_CONVERSIONS" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93"/>
+      <column name="DM_CONVERSIONS" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93"/>
+      <column name="MONNAIE1" sqlType="VARCHAR" precision="5" scale="0" nullable="true" jdbcType="12"/>
+      <column name="MONNAIE2" sqlType="VARCHAR" precision="5" scale="0" nullable="true" jdbcType="12"/>
+      <column name="DS_CONVERSIONS" sqlType="TIMESTAMP" precision="19" scale="0" nullable="true" jdbcType="93"/>
+      <index name="CONVERSIONS_UNQID" unique="true" columns="ID_CONVERSION"/>
+    </table>
+    <table name="COTES" schema="" catalog="" type="TABLE">
+      <column name="ID_COTE" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1"/>
+      <column name="ID_EDITION" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1"/>
+      <column name="ANNEECOTE" sqlType="SMALLINT" precision="5" scale="0" nullable="false" jdbcType="5"/>
+      <column name="PRIXCOTE" sqlType="NUMERIC" precision="15" scale="2" nullable="false" jdbcType="2"/>
+      <column name="DC_COTES" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93"/>
+      <column name="DM_COTES" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93"/>
+      <column name="DS_COTES" sqlType="TIMESTAMP" precision="19" scale="0" nullable="true" jdbcType="93"/>
+      <primary-key name="COTES_PK" columns="ANNEECOTE,ID_EDITION"/>
+      <foreign-key name="COTES_FK1" columns="ID_EDITION" ref-table="EDITIONS" ref-schema="" ref-catalog="" ref-columns="ID_EDITION" update-rule="0" delete-rule="0" deferrability="2"/>
+      <index name="COTES_UNQID" unique="true" columns="ID_COTE"/>
+    </table>
+    <table name="COTES_PARABD" schema="" catalog="" type="TABLE">
+      <column name="ID_COTE_PARABD" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1"/>
+      <column name="ID_PARABD" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1"/>
+      <column name="ANNEECOTE" sqlType="SMALLINT" precision="5" scale="0" nullable="false" jdbcType="5"/>
+      <column name="PRIXCOTE" sqlType="NUMERIC" precision="15" scale="2" nullable="false" jdbcType="2"/>
+      <column name="DC_COTES_PARABD" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93"/>
+      <column name="DM_COTES_PARABD" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93"/>
+      <column name="DS_COTES_PARABD" sqlType="TIMESTAMP" precision="19" scale="0" nullable="true" jdbcType="93"/>
+      <primary-key name="COTES_PARABD_PK" columns="ANNEECOTE,ID_PARABD"/>
+      <foreign-key name="COTES_PARABD_FK1" columns="ID_PARABD" ref-table="PARABD" ref-schema="" ref-catalog="" ref-columns="ID_PARABD" update-rule="0" delete-rule="0" deferrability="2"/>
+      <index name="COTES_PARABD_UNQID" unique="true" columns="ID_COTE_PARABD"/>
+    </table>
+    <table name="COUVERTURES" schema="" catalog="" type="TABLE">
+      <column name="ID_COUVERTURE" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1"/>
+      <column name="ID_ALBUM" sqlType="CHAR" precision="38" scale="0" nullable="true" jdbcType="1"/>
+      <column name="ID_EDITION" sqlType="CHAR" precision="38" scale="0" nullable="true" jdbcType="1"/>
+      <column name="ORDRE" sqlType="INTEGER" precision="10" scale="0" nullable="true" jdbcType="4"/>
+      <column name="CATEGORIEIMAGE" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="STOCKAGECOUVERTURE" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="IMAGECOUVERTURE" sqlType="BLOB SUB_TYPE 0" precision="0" scale="0" nullable="true" jdbcType="-4"/>
+      <column name="DC_COUVERTURES" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93"/>
+      <column name="DM_COUVERTURES" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93"/>
+      <column name="FICHIERCOUVERTURE" sqlType="VARCHAR" precision="255" scale="0" nullable="true" jdbcType="12"/>
+      <column name="DS_COUVERTURES" sqlType="TIMESTAMP" precision="19" scale="0" nullable="true" jdbcType="93"/>
+      <primary-key name="COUVERTURES_PK" columns="ID_COUVERTURE"/>
+      <foreign-key name="COUVERTURES_FK1" columns="ID_ALBUM" ref-table="ALBUMS" ref-schema="" ref-catalog="" ref-columns="ID_ALBUM" update-rule="0" delete-rule="0" deferrability="2"/>
+      <index name="COUVERTURES_IDX1" unique="true" columns="ORDRE,ID_COUVERTURE"/>
+      <index name="COUVERTURES_IDX2" unique="true" columns="ID_EDITION,ID_COUVERTURE"/>
+      <index name="COUVERTURES_IDX3" unique="true" columns="CATEGORIEIMAGE,ID_COUVERTURE"/>
+    </table>
+    <table name="CRITERES" schema="" catalog="" type="TABLE">
+      <column name="ID_CRITERE" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1"/>
+      <column name="TYPE_CRITERE" sqlType="VARCHAR" precision="20" scale="0" nullable="true" jdbcType="12"/>
+      <column name="REFCRITERE" sqlType="INTEGER" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="DC_CRITERE" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93"/>
+      <column name="DM_CRITERE" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93"/>
+      <column name="CRITERE" sqlType="VARCHAR" precision="20" scale="0" nullable="true" jdbcType="12"/>
+    </table>
+    <table name="EDITEURS" schema="" catalog="" type="TABLE">
+      <column name="ID_EDITEUR" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1"/>
+      <column name="INITIALENOMEDITEUR" sqlType="CHAR" precision="1" scale="0" nullable="false" jdbcType="1"/>
+      <column name="DC_EDITEURS" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93"/>
+      <column name="DM_EDITEURS" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93"/>
+      <column name="NOMEDITEUR" sqlType="VARCHAR" precision="50" scale="0" nullable="true" jdbcType="12"/>
+      <column name="SITEWEB" sqlType="VARCHAR" precision="255" scale="0" nullable="true" jdbcType="12"/>
+      <column name="DS_EDITEURS" sqlType="TIMESTAMP" precision="19" scale="0" nullable="true" jdbcType="93"/>
+      <primary-key name="EDITEURS_PK" columns="ID_EDITEUR"/>
+      <exported-key name="COLLECTIONS_FK1" table="COLLECTIONS" schema="" catalog="" columns="ID_EDITEUR"/>
+      <exported-key name="EDITIONS_FK1" table="EDITIONS" schema="" catalog="" columns="ID_EDITEUR"/>
+      <index name="EDITEURS_IDX1" unique="true" columns="NOMEDITEUR"/>
+      <index name="EDITEURS_IDX2" unique="true" columns="INITIALENOMEDITEUR,ID_EDITEUR"/>
+    </table>
+    <table name="EDITIONS" schema="" catalog="" type="TABLE">
+      <column name="ID_EDITION" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1"/>
+      <column name="ID_ALBUM" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1"/>
+      <column name="ID_EDITEUR" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1"/>
+      <column name="ID_COLLECTION" sqlType="CHAR" precision="38" scale="0" nullable="true" jdbcType="1"/>
+      <column name="ANNEEEDITION" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="PRIX" sqlType="NUMERIC" precision="15" scale="2" nullable="true" jdbcType="2"/>
+      <column name="VO" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="COULEUR" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="PRETE" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="STOCK" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="DEDICACE" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="ETAT" sqlType="INTEGER" precision="10" scale="0" nullable="true" jdbcType="4"/>
+      <column name="RELIURE" sqlType="INTEGER" precision="10" scale="0" nullable="true" jdbcType="4"/>
+      <column name="TYPEEDITION" sqlType="INTEGER" precision="10" scale="0" nullable="true" jdbcType="4"/>
+      <column name="DATEACHAT" sqlType="DATE" precision="10" scale="0" nullable="true" jdbcType="91"/>
+      <column name="GRATUIT" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="OFFERT" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="NOMBREDEPAGES" sqlType="INTEGER" precision="10" scale="0" nullable="true" jdbcType="4"/>
+      <column name="ORIENTATION" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="FORMATEDITION" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="ANNEECOTE" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="PRIXCOTE" sqlType="NUMERIC" precision="15" scale="2" nullable="true" jdbcType="2"/>
+      <column name="DC_EDITIONS" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93"/>
+      <column name="DM_EDITIONS" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93"/>
+      <column name="SENSLECTURE" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="ISBN" sqlType="CHAR" precision="13" scale="0" nullable="true" jdbcType="1"/>
+      <column name="NUMEROPERSO" sqlType="VARCHAR" precision="25" scale="0" nullable="true" jdbcType="12"/>
+      <column name="NOTES" sqlType="BLOB SUB_TYPE 1" precision="0" scale="0" nullable="true" jdbcType="-1"/>
+      <column name="DS_EDITIONS" sqlType="TIMESTAMP" precision="19" scale="0" nullable="true" jdbcType="93"/>
+      <primary-key name="EDITIONS_PK" columns="ID_EDITION"/>
+      <foreign-key name="EDITIONS_FK2" columns="ID_ALBUM" ref-table="ALBUMS" ref-schema="" ref-catalog="" ref-columns="ID_ALBUM" update-rule="0" delete-rule="0" deferrability="2"/>
+      <foreign-key name="EDITIONS_FK1" columns="ID_EDITEUR" ref-table="EDITEURS" ref-schema="" ref-catalog="" ref-columns="ID_EDITEUR" update-rule="0" delete-rule="0" deferrability="2"/>
+      <exported-key name="COTES_FK1" table="COTES" schema="" catalog="" columns="ID_EDITION"/>
+      <exported-key name="STATUT_FK1" table="STATUT" schema="" catalog="" columns="ID_EDITION"/>
+      <index name="EDITIONS_IDX1" unique="true" columns="ID_COLLECTION,ID_EDITION"/>
+      <index name="EDITIONS_IDX2" unique="true" columns="ETAT,ID_EDITION"/>
+      <index name="EDITIONS_IDX3" unique="true" columns="RELIURE,ID_EDITION"/>
+      <index name="EDITIONS_IDX4" unique="true" columns="TYPEEDITION,ID_EDITION"/>
+      <index name="EDITIONS_IDX5" unique="true" columns="ORIENTATION,ID_EDITION"/>
+      <index name="EDITIONS_IDX6" unique="true" columns="FORMATEDITION,ID_EDITION"/>
+    </table>
+    <table name="EMPRUNTEURS" schema="" catalog="" type="TABLE">
+      <column name="ID_EMPRUNTEUR" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1"/>
+      <column name="INITIALENOMEMPRUNTEUR" sqlType="CHAR" precision="1" scale="0" nullable="true" jdbcType="1"/>
+      <column name="DC_EMPRUNTEURS" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93"/>
+      <column name="DM_EMPRUNTEURS" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93"/>
+      <column name="NOMEMPRUNTEUR" sqlType="VARCHAR" precision="150" scale="0" nullable="true" jdbcType="12"/>
+      <column name="ADRESSEEMPRUNTEUR" sqlType="BLOB SUB_TYPE 1" precision="0" scale="0" nullable="true" jdbcType="-1"/>
+      <column name="DS_EMPRUNTEURS" sqlType="TIMESTAMP" precision="19" scale="0" nullable="true" jdbcType="93"/>
+      <primary-key name="EMPRUNTEURS_PK" columns="ID_EMPRUNTEUR"/>
+      <exported-key name="STATUT_FK2" table="STATUT" schema="" catalog="" columns="ID_EMPRUNTEUR"/>
+      <index name="EMPRUNTEURS_IDX1" unique="true" columns="INITIALENOMEMPRUNTEUR,ID_EMPRUNTEUR"/>
+      <index name="EMPRUNTEURS_IDX2" unique="true" columns="NOMEMPRUNTEUR"/>
+    </table>
+    <table name="GENRES" schema="" catalog="" type="TABLE">
+      <column name="ID_GENRE" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1"/>
+      <column name="DC_GENRES" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93"/>
+      <column name="DM_GENRES" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93"/>
+      <column name="INITIALEGENRE" sqlType="CHAR" precision="1" scale="0" nullable="true" jdbcType="1"/>
+      <column name="GENRE" sqlType="VARCHAR" precision="30" scale="0" nullable="true" jdbcType="12"/>
+      <column name="DS_GENRES" sqlType="TIMESTAMP" precision="19" scale="0" nullable="true" jdbcType="93"/>
+      <primary-key name="GENRES_PK" columns="ID_GENRE"/>
+      <exported-key name="GENRESERIES_FK1" table="GENRESERIES" schema="" catalog="" columns="ID_GENRE"/>
+      <index name="GENRES_IDX2" unique="true" columns="GENRE"/>
+      <index name="GENRES_IDX3" unique="true" columns="INITIALEGENRE,ID_GENRE"/>
+    </table>
+    <table name="GENRESERIES" schema="" catalog="" type="TABLE">
+      <column name="ID_GENRESERIES" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1"/>
+      <column name="ID_SERIE" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1"/>
+      <column name="ID_GENRE" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1"/>
+      <column name="DC_GENRESERIES" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93"/>
+      <column name="DM_GENRESERIES" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93"/>
+      <column name="DS_GENRESERIES" sqlType="TIMESTAMP" precision="19" scale="0" nullable="true" jdbcType="93"/>
+      <primary-key name="GENRESERIES_PK" columns="ID_SERIE,ID_GENRE"/>
+      <foreign-key name="GENRESERIES_FK1" columns="ID_GENRE" ref-table="GENRES" ref-schema="" ref-catalog="" ref-columns="ID_GENRE" update-rule="0" delete-rule="0" deferrability="2"/>
+      <foreign-key name="GENRESERIES_FK2" columns="ID_SERIE" ref-table="SERIES" ref-schema="" ref-catalog="" ref-columns="ID_SERIE" update-rule="0" delete-rule="0" deferrability="2"/>
+      <index name="GENRESERIES_UNQID" unique="true" columns="ID_GENRESERIES"/>
+    </table>
+    <table name="IMPORT_ASSOCIATIONS" schema="" catalog="" type="TABLE">
+      <column name="ID" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1"/>
+      <column name="PARENTID" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1"/>
+      <column name="TYPEDATA" sqlType="SMALLINT" precision="5" scale="0" nullable="false" jdbcType="5"/>
+      <column name="ALWAYS" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="CHAINE" sqlType="VARCHAR" precision="100" scale="0" nullable="false" jdbcType="12"/>
+      <primary-key name="PK_IMPORT_ASSOCIATIONS" columns="CHAINE,TYPEDATA,PARENTID"/>
+    </table>
+    <table name="LISTES" schema="" catalog="" type="TABLE">
+      <column name="ID_LISTE" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1"/>
+      <column name="REF" sqlType="INTEGER" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="CATEGORIE" sqlType="INTEGER" precision="10" scale="0" nullable="false" jdbcType="4"/>
+      <column name="ORDRE" sqlType="INTEGER" precision="10" scale="0" nullable="true" jdbcType="4"/>
+      <column name="DEFAUT" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="DC_LISTES" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93"/>
+      <column name="DM_LISTES" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93"/>
+      <column name="LIBELLE" sqlType="VARCHAR" precision="50" scale="0" nullable="true" jdbcType="12"/>
+      <column name="DS_LISTES" sqlType="TIMESTAMP" precision="19" scale="0" nullable="true" jdbcType="93"/>
+      <primary-key name="LISTES_PK" columns="CATEGORIE,REF"/>
+      <index name="LISTES_IDX1" unique="true" columns="REF,ID_LISTE"/>
+      <index name="LISTES_IDX2" unique="true" columns="CATEGORIE,ID_LISTE"/>
+      <index name="LISTES_UNQID" unique="true" columns="ID_LISTE"/>
+    </table>
+    <table name="OPTIONS" schema="" catalog="" type="TABLE">
+      <column name="ID_OPTION" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1"/>
+      <column name="DC_OPTIONS" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93"/>
+      <column name="DM_OPTIONS" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93"/>
+      <column name="VALEUR" sqlType="VARCHAR" precision="255" scale="0" nullable="true" jdbcType="12"/>
+      <column name="NOM_OPTION" sqlType="VARCHAR" precision="15" scale="0" nullable="false" jdbcType="12"/>
+      <column name="DS_OPTIONS" sqlType="TIMESTAMP" precision="19" scale="0" nullable="true" jdbcType="93"/>
+      <primary-key name="OPTIONS_PK" columns="NOM_OPTION"/>
+      <index name="OPTIONS_UNQID" unique="true" columns="ID_OPTION"/>
+    </table>
+    <table name="OPTIONS_SCRIPTS" schema="" catalog="" type="TABLE">
+      <column name="ID_OPTION" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1"/>
+      <column name="DC_OPTIONS_SCRIPTS" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93"/>
+      <column name="DM_OPTIONS_SCRIPTS" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93"/>
+      <column name="VALEUR" sqlType="VARCHAR" precision="255" scale="0" nullable="true" jdbcType="12"/>
+      <column name="NOM_OPTION" sqlType="VARCHAR" precision="50" scale="0" nullable="false" jdbcType="12"/>
+      <column name="SCRIPT" sqlType="VARCHAR" precision="50" scale="0" nullable="false" jdbcType="12"/>
+      <column name="DS_OPTIONS_SCRIPTS" sqlType="TIMESTAMP" precision="19" scale="0" nullable="true" jdbcType="93"/>
+      <primary-key name="OPTIONS_SCRIPTS_PK" columns="SCRIPT,NOM_OPTION"/>
+      <index name="OPTIONS_SCRIPTS_UNQID" unique="true" columns="ID_OPTION"/>
+    </table>
+    <table name="PARABD" schema="" catalog="" type="TABLE">
+      <column name="ID_PARABD" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1"/>
+      <column name="ID_SERIE" sqlType="CHAR" precision="38" scale="0" nullable="true" jdbcType="1"/>
+      <column name="CATEGORIEPARABD" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="ACHAT" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="COMPLET" sqlType="INTEGER" precision="10" scale="0" nullable="true" jdbcType="4"/>
+      <column name="DEDICACE" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="NUMEROTE" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="ANNEE" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="ANNEECOTE" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="PRIXCOTE" sqlType="NUMERIC" precision="15" scale="2" nullable="true" jdbcType="2"/>
+      <column name="PRETE" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="STOCK" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="DATEACHAT" sqlType="DATE" precision="10" scale="0" nullable="true" jdbcType="91"/>
+      <column name="PRIX" sqlType="NUMERIC" precision="15" scale="2" nullable="true" jdbcType="2"/>
+      <column name="GRATUIT" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="OFFERT" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="INITIALETITREPARABD" sqlType="CHAR" precision="1" scale="0" nullable="true" jdbcType="1"/>
+      <column name="DC_PARABD" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93"/>
+      <column name="DM_PARABD" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93"/>
+      <column name="TITREPARABD" sqlType="VARCHAR" precision="150" scale="0" nullable="true" jdbcType="12"/>
+      <column name="SOUNDEXTITREPARABD" sqlType="VARCHAR" precision="30" scale="0" nullable="true" jdbcType="12"/>
+      <column name="DESCRIPTION" sqlType="BLOB SUB_TYPE 1" precision="0" scale="0" nullable="true" jdbcType="-1"/>
+      <column name="DS_PARABD" sqlType="TIMESTAMP" precision="19" scale="0" nullable="true" jdbcType="93"/>
+      <column name="NOTES" sqlType="BLOB SUB_TYPE 1" precision="0" scale="0" nullable="true" jdbcType="-1"/>
+      <primary-key name="PARABD_PK" columns="ID_PARABD"/>
+      <exported-key name="AUTEURS_PARABD_FK1" table="AUTEURS_PARABD" schema="" catalog="" columns="ID_PARABD"/>
+      <exported-key name="COTES_PARABD_FK1" table="COTES_PARABD" schema="" catalog="" columns="ID_PARABD"/>
+      <exported-key name="FK_PARABD_UNIVERS_1" table="PARABD_UNIVERS" schema="" catalog="" columns="ID_PARABD"/>
+      <exported-key name="PHOTOS_FK1" table="PHOTOS" schema="" catalog="" columns="ID_PARABD"/>
+      <index name="PARABD_IDX1" unique="true" columns="CATEGORIEPARABD,ID_PARABD"/>
+      <index name="PARABD_IDX2" unique="true" columns="ID_SERIE,ID_PARABD"/>
+      <index name="PARABD_IDX3" unique="true" columns="INITIALETITREPARABD,ID_PARABD"/>
+      <index name="PARABD_IDX4" unique="true" columns="TITREPARABD"/>
+    </table>
+    <table name="PARABD_UNIVERS" schema="" catalog="" type="TABLE">
+      <column name="ID_PARABD" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1"/>
+      <column name="ID_UNIVERS" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1"/>
+      <column name="SOURCE_PARABD" sqlType="SMALLINT" precision="5" scale="0" nullable="false" jdbcType="5"/>
+      <column name="SOURCE_SERIE" sqlType="SMALLINT" precision="5" scale="0" nullable="false" jdbcType="5"/>
+      <column name="DC_PARABD_UNIVERS" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93"/>
+      <column name="DM_PARABD_UNIVERS" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93"/>
+      <column name="ID_PARABD_UNIVERS" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1"/>
+      <column name="DS_PARABD_UNIVERS" sqlType="TIMESTAMP" precision="19" scale="0" nullable="true" jdbcType="93"/>
+      <primary-key name="PK_PARABD_UNIVERS" columns="ID_PARABD,ID_UNIVERS"/>
+      <foreign-key name="FK_PARABD_UNIVERS_1" columns="ID_PARABD" ref-table="PARABD" ref-schema="" ref-catalog="" ref-columns="ID_PARABD" update-rule="0" delete-rule="0" deferrability="2"/>
+      <foreign-key name="FK_PARABD_UNIVERS_2" columns="ID_UNIVERS" ref-table="UNIVERS" ref-schema="" ref-catalog="" ref-columns="ID_UNIVERS" update-rule="0" delete-rule="0" deferrability="2"/>
+      <index name="UNQ1_PARABD_UNIVERS" unique="true" columns="ID_PARABD_UNIVERS"/>
+    </table>
+    <table name="PERSONNES" schema="" catalog="" type="TABLE">
+      <column name="ID_PERSONNE" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1"/>
+      <column name="INITIALENOMPERSONNE" sqlType="CHAR" precision="1" scale="0" nullable="true" jdbcType="1"/>
+      <column name="DC_PERSONNES" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93"/>
+      <column name="DM_PERSONNES" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93"/>
+      <column name="NOMPERSONNE" sqlType="VARCHAR" precision="150" scale="0" nullable="true" jdbcType="12"/>
+      <column name="SITEWEB" sqlType="VARCHAR" precision="255" scale="0" nullable="true" jdbcType="12"/>
+      <column name="BIOGRAPHIE" sqlType="BLOB SUB_TYPE 1" precision="0" scale="0" nullable="true" jdbcType="-1"/>
+      <column name="DS_PERSONNES" sqlType="TIMESTAMP" precision="19" scale="0" nullable="true" jdbcType="93"/>
+      <primary-key name="PERSONNES_PK" columns="ID_PERSONNE"/>
+      <exported-key name="AUTEURS_FK2" table="AUTEURS" schema="" catalog="" columns="ID_PERSONNE"/>
+      <exported-key name="AUTEURS_PARABD_FK2" table="AUTEURS_PARABD" schema="" catalog="" columns="ID_PERSONNE"/>
+      <exported-key name="AUTEURS_SERIES_FK2" table="AUTEURS_SERIES" schema="" catalog="" columns="ID_PERSONNE"/>
+      <index name="PERSONNES_IDX1" unique="true" columns="NOMPERSONNE"/>
+      <index name="PERSONNES_IDX2" unique="true" columns="INITIALENOMPERSONNE,ID_PERSONNE"/>
+    </table>
+    <table name="PHOTOS" schema="" catalog="" type="TABLE">
+      <column name="ID_PHOTO" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1"/>
+      <column name="ID_PARABD" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1"/>
+      <column name="ORDRE" sqlType="INTEGER" precision="10" scale="0" nullable="true" jdbcType="4"/>
+      <column name="STOCKAGEPHOTO" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="IMAGEPHOTO" sqlType="BLOB SUB_TYPE 0" precision="0" scale="0" nullable="true" jdbcType="-4"/>
+      <column name="DC_PHOTOS" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93"/>
+      <column name="DM_PHOTOS" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93"/>
+      <column name="FICHIERPHOTO" sqlType="VARCHAR" precision="255" scale="0" nullable="true" jdbcType="12"/>
+      <column name="DS_PHOTOS" sqlType="TIMESTAMP" precision="19" scale="0" nullable="true" jdbcType="93"/>
+      <column name="CATEGORIEIMAGE" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <primary-key name="PHOTOS_PK" columns="ID_PHOTO"/>
+      <foreign-key name="PHOTOS_FK1" columns="ID_PARABD" ref-table="PARABD" ref-schema="" ref-catalog="" ref-columns="ID_PARABD" update-rule="0" delete-rule="0" deferrability="2"/>
+      <index name="PHOTOS_IDX1" unique="true" columns="ORDRE,ID_PHOTO"/>
+    </table>
+    <table name="SERIES" schema="" catalog="" type="TABLE">
+      <column name="ID_SERIE" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1"/>
+      <column name="ID_EDITEUR" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1"/>
+      <column name="ID_COLLECTION" sqlType="CHAR" precision="38" scale="0" nullable="true" jdbcType="1"/>
+      <column name="TERMINEE" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="COMPLETE" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="SUIVREMANQUANTS" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="SUIVRESORTIES" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="INITIALETITRESERIE" sqlType="CHAR" precision="1" scale="0" nullable="false" jdbcType="1"/>
+      <column name="DC_SERIES" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93"/>
+      <column name="DM_SERIES" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93"/>
+      <column name="NB_ALBUMS" sqlType="INTEGER" precision="10" scale="0" nullable="true" jdbcType="4"/>
+      <column name="ETAT" sqlType="INTEGER" precision="10" scale="0" nullable="true" jdbcType="4"/>
+      <column name="RELIURE" sqlType="INTEGER" precision="10" scale="0" nullable="true" jdbcType="4"/>
+      <column name="TYPEEDITION" sqlType="INTEGER" precision="10" scale="0" nullable="true" jdbcType="4"/>
+      <column name="ORIENTATION" sqlType="INTEGER" precision="10" scale="0" nullable="true" jdbcType="4"/>
+      <column name="FORMATEDITION" sqlType="INTEGER" precision="10" scale="0" nullable="true" jdbcType="4"/>
+      <column name="SENSLECTURE" sqlType="INTEGER" precision="10" scale="0" nullable="true" jdbcType="4"/>
+      <column name="VO" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="COULEUR" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="TITRESERIE" sqlType="VARCHAR" precision="150" scale="0" nullable="true" jdbcType="12"/>
+      <column name="SOUNDEXTITRESERIE" sqlType="VARCHAR" precision="30" scale="0" nullable="true" jdbcType="12"/>
+      <column name="NOTATION" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="SITEWEB" sqlType="VARCHAR" precision="255" scale="0" nullable="true" jdbcType="12"/>
+      <column name="SUJETSERIE" sqlType="BLOB SUB_TYPE 1" precision="0" scale="0" nullable="true" jdbcType="-1"/>
+      <column name="REMARQUESSERIE" sqlType="BLOB SUB_TYPE 1" precision="0" scale="0" nullable="true" jdbcType="-1"/>
+      <column name="DS_SERIES" sqlType="TIMESTAMP" precision="19" scale="0" nullable="true" jdbcType="93"/>
+      <primary-key name="SERIES_PK" columns="ID_SERIE"/>
+      <exported-key name="AUTEURS_SERIES_FK1" table="AUTEURS_SERIES" schema="" catalog="" columns="ID_SERIE"/>
+      <exported-key name="GENRESERIES_FK2" table="GENRESERIES" schema="" catalog="" columns="ID_SERIE"/>
+      <exported-key name="FK_SERIES_UNIVERS_1" table="SERIES_UNIVERS" schema="" catalog="" columns="ID_SERIE"/>
+      <index name="SERIES_IDX1" unique="true" columns="INITIALETITRESERIE,ID_SERIE"/>
+      <index name="SERIES_IDX2" unique="true" columns="TERMINEE,ID_SERIE"/>
+      <index name="SERIES_IDX3" unique="true" columns="ID_COLLECTION,ID_SERIE"/>
+      <index name="SERIES_IDX4" unique="true" columns="ID_EDITEUR,ID_SERIE"/>
+      <index name="SERIES_IDX5" unique="true" columns="TITRESERIE"/>
+    </table>
+    <table name="SERIES_UNIVERS" schema="" catalog="" type="TABLE">
+      <column name="ID_SERIE" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1"/>
+      <column name="ID_UNIVERS" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1"/>
+      <column name="DC_SERIES_UNIVERS" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93"/>
+      <column name="DM_SERIES_UNIVERS" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93"/>
+      <column name="ID_SERIE_UNIVERS" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1"/>
+      <column name="DS_SERIES_UNIVERS" sqlType="TIMESTAMP" precision="19" scale="0" nullable="true" jdbcType="93"/>
+      <primary-key name="PK_SERIES_UNIVERS" columns="ID_SERIE,ID_UNIVERS"/>
+      <foreign-key name="FK_SERIES_UNIVERS_1" columns="ID_SERIE" ref-table="SERIES" ref-schema="" ref-catalog="" ref-columns="ID_SERIE" update-rule="0" delete-rule="0" deferrability="2"/>
+      <foreign-key name="FK_SERIES_UNIVERS_2" columns="ID_UNIVERS" ref-table="UNIVERS" ref-schema="" ref-catalog="" ref-columns="ID_UNIVERS" update-rule="0" delete-rule="0" deferrability="2"/>
+      <index name="UNQ1_SERIES_UNIVERS" unique="true" columns="ID_SERIE_UNIVERS"/>
+    </table>
+    <table name="STATUT" schema="" catalog="" type="TABLE">
+      <column name="ID_STATUT" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1"/>
+      <column name="DATEEMPRUNT" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93"/>
+      <column name="ID_EDITION" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1"/>
+      <column name="PRETEMPRUNT" sqlType="SMALLINT" precision="5" scale="0" nullable="false" jdbcType="5"/>
+      <column name="ID_EMPRUNTEUR" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1"/>
+      <column name="DC_STATUT" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93"/>
+      <column name="DM_STATUT" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93"/>
+      <column name="DS_STATUT" sqlType="TIMESTAMP" precision="19" scale="0" nullable="true" jdbcType="93"/>
+      <primary-key name="STATUT_PK" columns="ID_STATUT"/>
+      <foreign-key name="STATUT_FK1" columns="ID_EDITION" ref-table="EDITIONS" ref-schema="" ref-catalog="" ref-columns="ID_EDITION" update-rule="0" delete-rule="0" deferrability="2"/>
+      <foreign-key name="STATUT_FK2" columns="ID_EMPRUNTEUR" ref-table="EMPRUNTEURS" ref-schema="" ref-catalog="" ref-columns="ID_EMPRUNTEUR" update-rule="0" delete-rule="0" deferrability="2"/>
+    </table>
+    <table name="SUPPRESSIONS" schema="" catalog="" type="TABLE">
+      <column name="ID_SUPPRESSION" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1"/>
+      <column name="TABLENAME" sqlType="CHAR" precision="31" scale="0" nullable="true" jdbcType="1"/>
+      <column name="FIELDNAME" sqlType="CHAR" precision="31" scale="0" nullable="true" jdbcType="1"/>
+      <column name="ID" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1"/>
+      <column name="DC_SUPPRESSIONS" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93"/>
+      <column name="DM_SUPPRESSIONS" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93"/>
+      <primary-key name="PK_SUPPRESSIONS" columns="ID_SUPPRESSION"/>
+    </table>
+    <table name="UNIVERS" schema="" catalog="" type="TABLE">
+      <column name="ID_UNIVERS" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1"/>
+      <column name="NOMUNIVERS" sqlType="VARCHAR" precision="150" scale="0" nullable="false" jdbcType="12"/>
+      <column name="DESCRIPTION" sqlType="BLOB SUB_TYPE 1" precision="0" scale="0" nullable="true" jdbcType="-1"/>
+      <column name="INITIALENOMUNIVERS" sqlType="CHAR" precision="1" scale="0" nullable="true" jdbcType="1"/>
+      <column name="SITEWEB" sqlType="VARCHAR" precision="255" scale="0" nullable="true" jdbcType="12"/>
+      <column name="ID_UNIVERS_PARENT" sqlType="CHAR" precision="38" scale="0" nullable="true" jdbcType="1"/>
+      <column name="ID_UNIVERS_RACINE" sqlType="CHAR" precision="38" scale="0" nullable="true" jdbcType="1"/>
+      <column name="DC_UNIVERS" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93"/>
+      <column name="DM_UNIVERS" sqlType="TIMESTAMP" precision="19" scale="0" nullable="false" jdbcType="93"/>
+      <column name="BRANCHE_UNIVERS" sqlType="VARCHAR" precision="2000" scale="0" nullable="false" jdbcType="12"/>
+      <column name="DS_UNIVERS" sqlType="TIMESTAMP" precision="19" scale="0" nullable="true" jdbcType="93"/>
+      <primary-key name="PK_UNIVERS" columns="ID_UNIVERS"/>
+      <exported-key name="FK_ALBUMS_UNIVERS_2" table="ALBUMS_UNIVERS" schema="" catalog="" columns="ID_UNIVERS"/>
+      <exported-key name="FK_PARABD_UNIVERS_2" table="PARABD_UNIVERS" schema="" catalog="" columns="ID_UNIVERS"/>
+      <exported-key name="FK_SERIES_UNIVERS_2" table="SERIES_UNIVERS" schema="" catalog="" columns="ID_UNIVERS"/>
+      <index name="UNIVERS_IDX1" unique="true" columns="ID_UNIVERS_PARENT,ID_UNIVERS"/>
+      <index name="UNIVERS_IDX2" unique="true" columns="BRANCHE_UNIVERS"/>
+    </table>
+    <table name="VW_DERNIERES_MODIFS" schema="" catalog="" type="VIEW">
+      <column name="TYPEDATA" sqlType="CHAR" precision="4" scale="0" nullable="true" jdbcType="1"/>
+      <column name="DATE_CREATION" sqlType="TIMESTAMP" precision="19" scale="0" nullable="true" jdbcType="93"/>
+      <column name="DATE_MODIF" sqlType="TIMESTAMP" precision="19" scale="0" nullable="true" jdbcType="93"/>
+      <column name="ID" sqlType="CHAR" precision="38" scale="0" nullable="true" jdbcType="1"/>
+      <column name="TITREALBUM" sqlType="VARCHAR" precision="600" scale="0" nullable="true" jdbcType="12"/>
+      <column name="TOME" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="TOMEDEBUT" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="TOMEFIN" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="INTEGRALE" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="HORSSERIE" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="TITRESERIE" sqlType="VARCHAR" precision="600" scale="0" nullable="true" jdbcType="12"/>
+      <column name="NOMEDITEUR" sqlType="VARCHAR" precision="200" scale="0" nullable="true" jdbcType="12"/>
+      <column name="NOMCOLLECTION" sqlType="VARCHAR" precision="200" scale="0" nullable="true" jdbcType="12"/>
+      <column name="NOMPERSONNE" sqlType="VARCHAR" precision="600" scale="0" nullable="true" jdbcType="12"/>
+    </table>
+    <table name="VW_EMPRUNTS" schema="" catalog="" type="VIEW">
+      <column name="ID_STATUT" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1"/>
+      <column name="ID_EDITION" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1"/>
+      <column name="ID_ALBUM" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1"/>
+      <column name="TITREALBUM" sqlType="VARCHAR" precision="150" scale="0" nullable="true" jdbcType="12"/>
+      <column name="ID_SERIE" sqlType="CHAR" precision="38" scale="0" nullable="true" jdbcType="1"/>
+      <column name="TOME" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="INTEGRALE" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="TOMEDEBUT" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="TOMEFIN" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="HORSSERIE" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="NOTATION" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="TITRESERIE" sqlType="VARCHAR" precision="150" scale="0" nullable="true" jdbcType="12"/>
+      <column name="ID_EDITEUR" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1"/>
+      <column name="NOMEDITEUR" sqlType="VARCHAR" precision="50" scale="0" nullable="true" jdbcType="12"/>
+      <column name="ID_COLLECTION" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1"/>
+      <column name="NOMCOLLECTION" sqlType="VARCHAR" precision="50" scale="0" nullable="true" jdbcType="12"/>
+      <column name="PRETE" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="ANNEEEDITION" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="ISBN" sqlType="CHAR" precision="13" scale="0" nullable="true" jdbcType="1"/>
+      <column name="ID_EMPRUNTEUR" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1"/>
+      <column name="NOMEMPRUNTEUR" sqlType="VARCHAR" precision="150" scale="0" nullable="true" jdbcType="12"/>
+      <column name="PRETEMPRUNT" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="DATEEMPRUNT" sqlType="TIMESTAMP" precision="19" scale="0" nullable="true" jdbcType="93"/>
+    </table>
+    <table name="VW_INITIALES_EDITEURS" schema="" catalog="" type="VIEW">
+      <column name="INITIALENOMEDITEUR" sqlType="CHAR" precision="4" scale="0" nullable="true" jdbcType="1"/>
+      <column name="COUNTINITIALE" sqlType="INTEGER" precision="10" scale="0" nullable="true" jdbcType="4"/>
+    </table>
+    <table name="VW_INITIALES_EMPRUNTEURS" schema="" catalog="" type="VIEW">
+      <column name="INITIALENOMEMPRUNTEUR" sqlType="CHAR" precision="4" scale="0" nullable="true" jdbcType="1"/>
+      <column name="COUNTINITIALE" sqlType="INTEGER" precision="10" scale="0" nullable="true" jdbcType="4"/>
+    </table>
+    <table name="VW_INITIALES_GENRES" schema="" catalog="" type="VIEW">
+      <column name="INITIALEGENRE" sqlType="CHAR" precision="4" scale="0" nullable="true" jdbcType="1"/>
+      <column name="COUNTINITIALE" sqlType="INTEGER" precision="10" scale="0" nullable="true" jdbcType="4"/>
+    </table>
+    <table name="VW_INITIALES_PERSONNES" schema="" catalog="" type="VIEW">
+      <column name="INITIALENOMPERSONNE" sqlType="CHAR" precision="4" scale="0" nullable="true" jdbcType="1"/>
+      <column name="COUNTINITIALE" sqlType="INTEGER" precision="10" scale="0" nullable="true" jdbcType="4"/>
+    </table>
+    <table name="VW_INITIALES_SERIES" schema="" catalog="" type="VIEW">
+      <column name="INITIALETITRESERIE" sqlType="CHAR" precision="4" scale="0" nullable="true" jdbcType="1"/>
+      <column name="COUNTINITIALE" sqlType="INTEGER" precision="10" scale="0" nullable="true" jdbcType="4"/>
+    </table>
+    <table name="VW_LISTE_ALBUMS" schema="" catalog="" type="VIEW">
+      <column name="ID_ALBUM" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1"/>
+      <column name="TITREALBUM" sqlType="VARCHAR" precision="150" scale="0" nullable="true" jdbcType="12"/>
+      <column name="TOME" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="TOMEDEBUT" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="TOMEFIN" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="HORSSERIE" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="INTEGRALE" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="MOISPARUTION" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="ANNEEPARUTION" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="ID_SERIE" sqlType="CHAR" precision="38" scale="0" nullable="true" jdbcType="1"/>
+      <column name="TITRESERIE" sqlType="VARCHAR" precision="150" scale="0" nullable="true" jdbcType="12"/>
+      <column name="ACHAT" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="COMPLET" sqlType="INTEGER" precision="10" scale="0" nullable="true" jdbcType="4"/>
+      <column name="NOTATION" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="INITIALETITREALBUM" sqlType="CHAR" precision="4" scale="0" nullable="true" jdbcType="1"/>
+      <column name="INITIALETITRESERIE" sqlType="CHAR" precision="1" scale="0" nullable="true" jdbcType="1"/>
+    </table>
+    <table name="VW_LISTE_ALBUMS_UNIVERS" schema="" catalog="" type="VIEW">
+      <column name="ID_ALBUM" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1"/>
+      <column name="TITREALBUM" sqlType="VARCHAR" precision="150" scale="0" nullable="true" jdbcType="12"/>
+      <column name="TOME" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="TOMEDEBUT" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="TOMEFIN" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="HORSSERIE" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="INTEGRALE" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="MOISPARUTION" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="ANNEEPARUTION" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="ID_SERIE" sqlType="CHAR" precision="38" scale="0" nullable="true" jdbcType="1"/>
+      <column name="TITRESERIE" sqlType="VARCHAR" precision="150" scale="0" nullable="true" jdbcType="12"/>
+      <column name="ACHAT" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="COMPLET" sqlType="INTEGER" precision="10" scale="0" nullable="true" jdbcType="4"/>
+      <column name="NOTATION" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="INITIALETITREALBUM" sqlType="CHAR" precision="4" scale="0" nullable="true" jdbcType="1"/>
+      <column name="INITIALETITRESERIE" sqlType="CHAR" precision="1" scale="0" nullable="true" jdbcType="1"/>
+      <column name="ID_UNIVERS" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1"/>
+      <column name="NOMUNIVERS" sqlType="VARCHAR" precision="150" scale="0" nullable="true" jdbcType="12"/>
+      <column name="ID_UNIVERS_RACINE" sqlType="CHAR" precision="38" scale="0" nullable="true" jdbcType="1"/>
+      <column name="ID_UNIVERS_PARENT" sqlType="CHAR" precision="38" scale="0" nullable="true" jdbcType="1"/>
+      <column name="BRANCHE_UNIVERS" sqlType="VARCHAR" precision="2000" scale="0" nullable="true" jdbcType="12"/>
+    </table>
+    <table name="VW_LISTE_COLLECTIONS" schema="" catalog="" type="VIEW">
+      <column name="ID_COLLECTION" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1"/>
+      <column name="NOMCOLLECTION" sqlType="VARCHAR" precision="50" scale="0" nullable="true" jdbcType="12"/>
+      <column name="INITIALENOMCOLLECTION" sqlType="CHAR" precision="1" scale="0" nullable="true" jdbcType="1"/>
+      <column name="ID_EDITEUR" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1"/>
+      <column name="NOMEDITEUR" sqlType="VARCHAR" precision="50" scale="0" nullable="true" jdbcType="12"/>
+    </table>
+    <table name="VW_LISTE_COLLECTIONS_ALBUMS" schema="" catalog="" type="VIEW">
+      <column name="ID_ALBUM" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1"/>
+      <column name="TITREALBUM" sqlType="VARCHAR" precision="150" scale="0" nullable="true" jdbcType="12"/>
+      <column name="TOME" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="TOMEDEBUT" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="TOMEFIN" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="HORSSERIE" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="INTEGRALE" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="MOISPARUTION" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="ANNEEPARUTION" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="NOTATION" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="ID_SERIE" sqlType="CHAR" precision="38" scale="0" nullable="true" jdbcType="1"/>
+      <column name="TITRESERIE" sqlType="VARCHAR" precision="150" scale="0" nullable="true" jdbcType="12"/>
+      <column name="ID_EDITEUR" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1"/>
+      <column name="NOMEDITEUR" sqlType="VARCHAR" precision="50" scale="0" nullable="true" jdbcType="12"/>
+      <column name="ID_COLLECTION" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1"/>
+      <column name="NOMCOLLECTION" sqlType="VARCHAR" precision="50" scale="0" nullable="true" jdbcType="12"/>
+      <column name="ACHAT" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="COMPLET" sqlType="INTEGER" precision="10" scale="0" nullable="true" jdbcType="4"/>
+    </table>
+    <table name="VW_LISTE_EDITEURS_ACHATALBUMS" schema="" catalog="" type="VIEW">
+      <column name="ID_ALBUM" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1"/>
+      <column name="TITREALBUM" sqlType="VARCHAR" precision="150" scale="0" nullable="true" jdbcType="12"/>
+      <column name="TOME" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="TOMEDEBUT" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="TOMEFIN" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="HORSSERIE" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="INTEGRALE" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="MOISPARUTION" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="ANNEEPARUTION" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="NOTATION" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="ID_SERIE" sqlType="CHAR" precision="38" scale="0" nullable="true" jdbcType="1"/>
+      <column name="TITRESERIE" sqlType="VARCHAR" precision="150" scale="0" nullable="true" jdbcType="12"/>
+      <column name="ID_EDITEUR" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1"/>
+      <column name="NOMEDITEUR" sqlType="VARCHAR" precision="50" scale="0" nullable="true" jdbcType="12"/>
+      <column name="ACHAT" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="COMPLET" sqlType="INTEGER" precision="10" scale="0" nullable="true" jdbcType="4"/>
+    </table>
+    <table name="VW_LISTE_EDITEURS_ALBUMS" schema="" catalog="" type="VIEW">
+      <column name="ID_ALBUM" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1"/>
+      <column name="TITREALBUM" sqlType="VARCHAR" precision="150" scale="0" nullable="true" jdbcType="12"/>
+      <column name="TOME" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="TOMEDEBUT" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="TOMEFIN" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="HORSSERIE" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="INTEGRALE" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="MOISPARUTION" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="ANNEEPARUTION" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="NOTATION" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="ID_SERIE" sqlType="CHAR" precision="38" scale="0" nullable="true" jdbcType="1"/>
+      <column name="TITRESERIE" sqlType="VARCHAR" precision="150" scale="0" nullable="true" jdbcType="12"/>
+      <column name="ID_EDITEUR" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1"/>
+      <column name="NOMEDITEUR" sqlType="VARCHAR" precision="50" scale="0" nullable="true" jdbcType="12"/>
+      <column name="ACHAT" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="COMPLET" sqlType="INTEGER" precision="10" scale="0" nullable="true" jdbcType="4"/>
+    </table>
+    <table name="VW_LISTE_GENRES_ALBUMS" schema="" catalog="" type="VIEW">
+      <column name="ID_ALBUM" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1"/>
+      <column name="TITREALBUM" sqlType="VARCHAR" precision="150" scale="0" nullable="true" jdbcType="12"/>
+      <column name="TOME" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="TOMEDEBUT" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="TOMEFIN" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="HORSSERIE" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="INTEGRALE" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="MOISPARUTION" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="ANNEEPARUTION" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="NOTATION" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="ID_SERIE" sqlType="CHAR" precision="38" scale="0" nullable="true" jdbcType="1"/>
+      <column name="TITRESERIE" sqlType="VARCHAR" precision="150" scale="0" nullable="true" jdbcType="12"/>
+      <column name="ID_GENRE" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1"/>
+      <column name="GENRE" sqlType="VARCHAR" precision="30" scale="0" nullable="true" jdbcType="12"/>
+      <column name="ACHAT" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="COMPLET" sqlType="INTEGER" precision="10" scale="0" nullable="true" jdbcType="4"/>
+    </table>
+    <table name="VW_LISTE_PARABD" schema="" catalog="" type="VIEW">
+      <column name="ID_PARABD" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1"/>
+      <column name="TITREPARABD" sqlType="VARCHAR" precision="150" scale="0" nullable="true" jdbcType="12"/>
+      <column name="ID_SERIE" sqlType="CHAR" precision="38" scale="0" nullable="true" jdbcType="1"/>
+      <column name="TITRESERIE" sqlType="VARCHAR" precision="150" scale="0" nullable="true" jdbcType="12"/>
+      <column name="ACHAT" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="COMPLET" sqlType="INTEGER" precision="10" scale="0" nullable="true" jdbcType="4"/>
+      <column name="SCATEGORIE" sqlType="VARCHAR" precision="50" scale="0" nullable="true" jdbcType="12"/>
+    </table>
+    <table name="VW_LISTE_PARABD_UNIVERS" schema="" catalog="" type="VIEW">
+      <column name="ID_PARABD" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1"/>
+      <column name="TITREPARABD" sqlType="VARCHAR" precision="150" scale="0" nullable="true" jdbcType="12"/>
+      <column name="ID_SERIE" sqlType="CHAR" precision="38" scale="0" nullable="true" jdbcType="1"/>
+      <column name="TITRESERIE" sqlType="VARCHAR" precision="150" scale="0" nullable="true" jdbcType="12"/>
+      <column name="ACHAT" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="COMPLET" sqlType="INTEGER" precision="10" scale="0" nullable="true" jdbcType="4"/>
+      <column name="SCATEGORIE" sqlType="VARCHAR" precision="50" scale="0" nullable="true" jdbcType="12"/>
+      <column name="ID_UNIVERS" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1"/>
+      <column name="NOMUNIVERS" sqlType="VARCHAR" precision="150" scale="0" nullable="true" jdbcType="12"/>
+      <column name="ID_UNIVERS_RACINE" sqlType="CHAR" precision="38" scale="0" nullable="true" jdbcType="1"/>
+      <column name="ID_UNIVERS_PARENT" sqlType="CHAR" precision="38" scale="0" nullable="true" jdbcType="1"/>
+      <column name="BRANCHE_UNIVERS" sqlType="VARCHAR" precision="2000" scale="0" nullable="true" jdbcType="12"/>
+    </table>
+    <table name="VW_PRIXALBUMS" schema="" catalog="" type="VIEW">
+      <column name="ID_ALBUM" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1"/>
+      <column name="HORSSERIE" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="TOME" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="INTEGRALE" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="TOMEDEBUT" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="TOMEFIN" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="NBALBUMS" sqlType="BIGINT" precision="19" scale="0" nullable="true" jdbcType="-5"/>
+      <column name="ID_SERIE" sqlType="CHAR" precision="38" scale="0" nullable="true" jdbcType="1"/>
+      <column name="ID_EDITION" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1"/>
+      <column name="ID_EDITEUR" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1"/>
+      <column name="PRIX" sqlType="NUMERIC" precision="15" scale="2" nullable="true" jdbcType="2"/>
+    </table>
+    <table name="VW_PRIXUNITAIRES" schema="" catalog="" type="VIEW">
+      <column name="HORSSERIE" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5"/>
+      <column name="ID_SERIE" sqlType="CHAR" precision="38" scale="0" nullable="true" jdbcType="1"/>
+      <column name="ID_EDITEUR" sqlType="CHAR" precision="38" scale="0" nullable="true" jdbcType="1"/>
+      <column name="PRIXUNITAIRE" sqlType="NUMERIC" precision="0" scale="2" nullable="true" jdbcType="2"/>
+    </table>
+    <procedure name="ACHATALBUMS_BY_EDITEUR" schema="" catalog="" type="2">
+      <prototype>
+        <parameter name="ID_ALBUM" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1" type="4" index="1"/>
+        <parameter name="ID_EDITEUR" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1" type="1" index="1"/>
+        <parameter name="TITREALBUM" sqlType="VARCHAR" precision="600" scale="0" nullable="true" jdbcType="12" type="4" index="2"/>
+        <parameter name="FILTRE" sqlType="VARCHAR" precision="125" scale="0" nullable="true" jdbcType="12" type="1" index="2"/>
+        <parameter name="TOME" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="3"/>
+        <parameter name="TOMEDEBUT" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="4"/>
+        <parameter name="TOMEFIN" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="5"/>
+        <parameter name="HORSSERIE" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="6"/>
+        <parameter name="INTEGRALE" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="7"/>
+        <parameter name="MOISPARUTION" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="8"/>
+        <parameter name="ANNEEPARUTION" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="9"/>
+        <parameter name="NOTATION" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="10"/>
+        <parameter name="ID_SERIE" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1" type="4" index="11"/>
+        <parameter name="TITRESERIE" sqlType="VARCHAR" precision="600" scale="0" nullable="true" jdbcType="12" type="4" index="12"/>
+        <parameter name="ACHAT" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="13"/>
+        <parameter name="COMPLET" sqlType="INTEGER" precision="10" scale="0" nullable="true" jdbcType="4" type="4" index="14"/>
+      </prototype>
+    </procedure>
+    <procedure name="ALBUMS_BY_ANNEE" schema="" catalog="" type="2">
+      <prototype>
+        <parameter name="ID_ALBUM" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1" type="4" index="1"/>
+        <parameter name="ANNEE" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="1" index="1"/>
+        <parameter name="TITREALBUM" sqlType="VARCHAR" precision="600" scale="0" nullable="true" jdbcType="12" type="4" index="2"/>
+        <parameter name="FILTRE" sqlType="VARCHAR" precision="125" scale="0" nullable="true" jdbcType="12" type="1" index="2"/>
+        <parameter name="TOME" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="3"/>
+        <parameter name="TOMEDEBUT" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="4"/>
+        <parameter name="TOMEFIN" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="5"/>
+        <parameter name="HORSSERIE" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="6"/>
+        <parameter name="INTEGRALE" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="7"/>
+        <parameter name="MOISPARUTION" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="8"/>
+        <parameter name="ANNEEPARUTION" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="9"/>
+        <parameter name="NOTATION" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="10"/>
+        <parameter name="ID_SERIE" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1" type="4" index="11"/>
+        <parameter name="TITRESERIE" sqlType="VARCHAR" precision="600" scale="0" nullable="true" jdbcType="12" type="4" index="12"/>
+        <parameter name="ACHAT" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="13"/>
+        <parameter name="COMPLET" sqlType="INTEGER" precision="10" scale="0" nullable="true" jdbcType="4" type="4" index="14"/>
+      </prototype>
+    </procedure>
+    <procedure name="ALBUMS_BY_AUTEUR" schema="" catalog="" type="2">
+      <prototype>
+        <parameter name="ID_ALBUM" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1" type="4" index="1"/>
+        <parameter name="ID_AUTEUR" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1" type="1" index="1"/>
+        <parameter name="TITREALBUM" sqlType="VARCHAR" precision="600" scale="0" nullable="true" jdbcType="12" type="4" index="2"/>
+        <parameter name="FILTRE" sqlType="VARCHAR" precision="125" scale="0" nullable="true" jdbcType="12" type="1" index="2"/>
+        <parameter name="TOME" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="3"/>
+        <parameter name="TOMEDEBUT" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="4"/>
+        <parameter name="TOMEFIN" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="5"/>
+        <parameter name="HORSSERIE" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="6"/>
+        <parameter name="INTEGRALE" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="7"/>
+        <parameter name="MOISPARUTION" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="8"/>
+        <parameter name="ANNEEPARUTION" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="9"/>
+        <parameter name="NOTATION" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="10"/>
+        <parameter name="ID_SERIE" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1" type="4" index="11"/>
+        <parameter name="TITRESERIE" sqlType="VARCHAR" precision="600" scale="0" nullable="true" jdbcType="12" type="4" index="12"/>
+        <parameter name="METIER" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="13"/>
+        <parameter name="ACHAT" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="14"/>
+        <parameter name="COMPLET" sqlType="INTEGER" precision="10" scale="0" nullable="true" jdbcType="4" type="4" index="15"/>
+      </prototype>
+    </procedure>
+    <procedure name="ALBUMS_BY_COLLECTION" schema="" catalog="" type="2">
+      <prototype>
+        <parameter name="ID_ALBUM" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1" type="4" index="1"/>
+        <parameter name="ID_COLLECTION" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1" type="1" index="1"/>
+        <parameter name="TITREALBUM" sqlType="VARCHAR" precision="600" scale="0" nullable="true" jdbcType="12" type="4" index="2"/>
+        <parameter name="FILTRE" sqlType="VARCHAR" precision="125" scale="0" nullable="true" jdbcType="12" type="1" index="2"/>
+        <parameter name="TOME" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="3"/>
+        <parameter name="TOMEDEBUT" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="4"/>
+        <parameter name="TOMEFIN" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="5"/>
+        <parameter name="HORSSERIE" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="6"/>
+        <parameter name="INTEGRALE" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="7"/>
+        <parameter name="MOISPARUTION" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="8"/>
+        <parameter name="ANNEEPARUTION" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="9"/>
+        <parameter name="NOTATION" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="10"/>
+        <parameter name="ID_SERIE" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1" type="4" index="11"/>
+        <parameter name="TITRESERIE" sqlType="VARCHAR" precision="600" scale="0" nullable="true" jdbcType="12" type="4" index="12"/>
+        <parameter name="ACHAT" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="13"/>
+        <parameter name="COMPLET" sqlType="INTEGER" precision="10" scale="0" nullable="true" jdbcType="4" type="4" index="14"/>
+      </prototype>
+    </procedure>
+    <procedure name="ALBUMS_BY_EDITEUR" schema="" catalog="" type="2">
+      <prototype>
+        <parameter name="ID_ALBUM" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1" type="4" index="1"/>
+        <parameter name="ID_EDITEUR" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1" type="1" index="1"/>
+        <parameter name="TITREALBUM" sqlType="VARCHAR" precision="600" scale="0" nullable="true" jdbcType="12" type="4" index="2"/>
+        <parameter name="FILTRE" sqlType="VARCHAR" precision="125" scale="0" nullable="true" jdbcType="12" type="1" index="2"/>
+        <parameter name="TOME" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="3"/>
+        <parameter name="TOMEDEBUT" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="4"/>
+        <parameter name="TOMEFIN" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="5"/>
+        <parameter name="HORSSERIE" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="6"/>
+        <parameter name="INTEGRALE" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="7"/>
+        <parameter name="MOISPARUTION" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="8"/>
+        <parameter name="ANNEEPARUTION" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="9"/>
+        <parameter name="NOTATION" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="10"/>
+        <parameter name="ID_SERIE" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1" type="4" index="11"/>
+        <parameter name="TITRESERIE" sqlType="VARCHAR" precision="600" scale="0" nullable="true" jdbcType="12" type="4" index="12"/>
+        <parameter name="ACHAT" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="13"/>
+        <parameter name="COMPLET" sqlType="INTEGER" precision="10" scale="0" nullable="true" jdbcType="4" type="4" index="14"/>
+      </prototype>
+    </procedure>
+    <procedure name="ALBUMS_BY_GENRE" schema="" catalog="" type="2">
+      <prototype>
+        <parameter name="ID_ALBUM" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1" type="4" index="1"/>
+        <parameter name="ID_GENRE" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1" type="1" index="1"/>
+        <parameter name="TITREALBUM" sqlType="VARCHAR" precision="600" scale="0" nullable="true" jdbcType="12" type="4" index="2"/>
+        <parameter name="FILTRE" sqlType="VARCHAR" precision="125" scale="0" nullable="true" jdbcType="12" type="1" index="2"/>
+        <parameter name="TOME" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="3"/>
+        <parameter name="TOMEDEBUT" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="4"/>
+        <parameter name="TOMEFIN" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="5"/>
+        <parameter name="HORSSERIE" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="6"/>
+        <parameter name="INTEGRALE" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="7"/>
+        <parameter name="MOISPARUTION" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="8"/>
+        <parameter name="ANNEEPARUTION" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="9"/>
+        <parameter name="NOTATION" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="10"/>
+        <parameter name="ID_SERIE" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1" type="4" index="11"/>
+        <parameter name="TITRESERIE" sqlType="VARCHAR" precision="600" scale="0" nullable="true" jdbcType="12" type="4" index="12"/>
+        <parameter name="ACHAT" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="13"/>
+        <parameter name="COMPLET" sqlType="INTEGER" precision="10" scale="0" nullable="true" jdbcType="4" type="4" index="14"/>
+      </prototype>
+    </procedure>
+    <procedure name="ALBUMS_BY_INITIALE" schema="" catalog="" type="2">
+      <prototype>
+        <parameter name="ID_ALBUM" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1" type="4" index="1"/>
+        <parameter name="INITIALE" sqlType="CHAR" precision="1" scale="0" nullable="true" jdbcType="1" type="1" index="1"/>
+        <parameter name="TITREALBUM" sqlType="VARCHAR" precision="600" scale="0" nullable="true" jdbcType="12" type="4" index="2"/>
+        <parameter name="FILTRE" sqlType="VARCHAR" precision="125" scale="0" nullable="true" jdbcType="12" type="1" index="2"/>
+        <parameter name="TOME" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="3"/>
+        <parameter name="TOMEDEBUT" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="4"/>
+        <parameter name="TOMEFIN" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="5"/>
+        <parameter name="HORSSERIE" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="6"/>
+        <parameter name="INTEGRALE" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="7"/>
+        <parameter name="MOISPARUTION" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="8"/>
+        <parameter name="ANNEEPARUTION" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="9"/>
+        <parameter name="NOTATION" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="10"/>
+        <parameter name="ID_SERIE" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1" type="4" index="11"/>
+        <parameter name="TITRESERIE" sqlType="VARCHAR" precision="600" scale="0" nullable="true" jdbcType="12" type="4" index="12"/>
+        <parameter name="ACHAT" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="13"/>
+        <parameter name="COMPLET" sqlType="INTEGER" precision="10" scale="0" nullable="true" jdbcType="4" type="4" index="14"/>
+      </prototype>
+    </procedure>
+    <procedure name="ALBUMS_BY_SERIE" schema="" catalog="" type="2">
+      <prototype>
+        <parameter name="ID_ALBUM" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1" type="4" index="1"/>
+        <parameter name="IN_ID_SERIE" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1" type="1" index="1"/>
+        <parameter name="TITREALBUM" sqlType="VARCHAR" precision="600" scale="0" nullable="true" jdbcType="12" type="4" index="2"/>
+        <parameter name="FILTRE" sqlType="VARCHAR" precision="125" scale="0" nullable="true" jdbcType="12" type="1" index="2"/>
+        <parameter name="TOME" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="3"/>
+        <parameter name="TOMEDEBUT" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="4"/>
+        <parameter name="TOMEFIN" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="5"/>
+        <parameter name="HORSSERIE" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="6"/>
+        <parameter name="INTEGRALE" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="7"/>
+        <parameter name="MOISPARUTION" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="8"/>
+        <parameter name="ANNEEPARUTION" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="9"/>
+        <parameter name="NOTATION" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="10"/>
+        <parameter name="ID_SERIE" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1" type="4" index="11"/>
+        <parameter name="TITRESERIE" sqlType="VARCHAR" precision="600" scale="0" nullable="true" jdbcType="12" type="4" index="12"/>
+        <parameter name="ACHAT" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="13"/>
+        <parameter name="COMPLET" sqlType="INTEGER" precision="10" scale="0" nullable="true" jdbcType="4" type="4" index="14"/>
+      </prototype>
+    </procedure>
+    <procedure name="ALBUMS_BY_UNIVERS" schema="" catalog="" type="2">
+      <prototype>
+        <parameter name="ID_ALBUM" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1" type="4" index="1"/>
+        <parameter name="IN_ID_UNIVERS" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1" type="1" index="1"/>
+        <parameter name="TITREALBUM" sqlType="VARCHAR" precision="600" scale="0" nullable="true" jdbcType="12" type="4" index="2"/>
+        <parameter name="FILTRE" sqlType="VARCHAR" precision="125" scale="0" nullable="true" jdbcType="12" type="1" index="2"/>
+        <parameter name="TOME" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="3"/>
+        <parameter name="TOMEDEBUT" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="4"/>
+        <parameter name="TOMEFIN" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="5"/>
+        <parameter name="HORSSERIE" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="6"/>
+        <parameter name="INTEGRALE" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="7"/>
+        <parameter name="MOISPARUTION" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="8"/>
+        <parameter name="ANNEEPARUTION" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="9"/>
+        <parameter name="NOTATION" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="10"/>
+        <parameter name="ID_SERIE" sqlType="CHAR" precision="38" scale="0" nullable="true" jdbcType="1" type="4" index="11"/>
+        <parameter name="TITRESERIE" sqlType="VARCHAR" precision="600" scale="0" nullable="true" jdbcType="12" type="4" index="12"/>
+        <parameter name="ACHAT" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="13"/>
+        <parameter name="COMPLET" sqlType="INTEGER" precision="10" scale="0" nullable="true" jdbcType="4" type="4" index="14"/>
+        <parameter name="ID_UNIVERS" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1" type="4" index="15"/>
+        <parameter name="ID_UNIVERS_RACINE" sqlType="CHAR" precision="38" scale="0" nullable="true" jdbcType="1" type="4" index="16"/>
+      </prototype>
+    </procedure>
+    <procedure name="ALBUMS_MANQUANTS" schema="" catalog="" type="2">
+      <prototype>
+        <parameter name="ID_SERIE" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1" type="4" index="1"/>
+        <parameter name="WITHINTEGRALE" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="1" index="1"/>
+        <parameter name="COUNTSERIE" sqlType="INTEGER" precision="10" scale="0" nullable="true" jdbcType="4" type="4" index="2"/>
+        <parameter name="WITHACHAT" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="1" index="2"/>
+        <parameter name="TITRESERIE" sqlType="VARCHAR" precision="600" scale="0" nullable="true" jdbcType="12" type="4" index="3"/>
+        <parameter name="IN_IDSERIE" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1" type="1" index="3"/>
+        <parameter name="TOME" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="4"/>
+        <parameter name="ID_EDITEUR" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1" type="4" index="5"/>
+        <parameter name="NOMEDITEUR" sqlType="VARCHAR" precision="200" scale="0" nullable="true" jdbcType="12" type="4" index="6"/>
+        <parameter name="ID_COLLECTION" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1" type="4" index="7"/>
+        <parameter name="NOMCOLLECTION" sqlType="VARCHAR" precision="200" scale="0" nullable="true" jdbcType="12" type="4" index="8"/>
+        <parameter name="ACHAT" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="9"/>
+      </prototype>
+    </procedure>
+    <procedure name="ANNEES_ALBUMS" schema="" catalog="" type="2">
+      <prototype>
+        <parameter name="ANNEEPARUTION" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="1"/>
+        <parameter name="FILTRE" sqlType="VARCHAR" precision="125" scale="0" nullable="true" jdbcType="12" type="1" index="1"/>
+        <parameter name="COUNTANNEE" sqlType="INTEGER" precision="10" scale="0" nullable="true" jdbcType="4" type="4" index="2"/>
+      </prototype>
+    </procedure>
+    <procedure name="CALCUL_ANNEE_SORTIE" schema="" catalog="" type="2">
+      <prototype>
+        <parameter name="ID_SERIE" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1" type="4" index="1"/>
+        <parameter name="WITHACHAT" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="1" index="1"/>
+        <parameter name="TITRESERIE" sqlType="VARCHAR" precision="600" scale="0" nullable="true" jdbcType="12" type="4" index="2"/>
+        <parameter name="IN_IDSERIE" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1" type="1" index="2"/>
+        <parameter name="TOME" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="3"/>
+        <parameter name="SOMMEPONDEREE" sqlType="INTEGER" precision="10" scale="0" nullable="true" jdbcType="4" type="1" index="3"/>
+        <parameter name="ANNEEPARUTION" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="4"/>
+        <parameter name="COMPTEALBUM" sqlType="INTEGER" precision="10" scale="0" nullable="true" jdbcType="4" type="1" index="4"/>
+        <parameter name="MOISPARUTION" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="5"/>
+        <parameter name="MAXTOME" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="1" index="5"/>
+        <parameter name="ID_EDITEUR" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1" type="4" index="6"/>
+        <parameter name="MAXANNEE" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="1" index="6"/>
+        <parameter name="NOMEDITEUR" sqlType="VARCHAR" precision="200" scale="0" nullable="true" jdbcType="12" type="4" index="7"/>
+        <parameter name="MAXMOIS" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="1" index="7"/>
+        <parameter name="ID_COLLECTION" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1" type="4" index="8"/>
+        <parameter name="NOMCOLLECTION" sqlType="VARCHAR" precision="200" scale="0" nullable="true" jdbcType="12" type="4" index="9"/>
+      </prototype>
+    </procedure>
+    <procedure name="COLLECTIONS_ALBUMS" schema="" catalog="" type="2">
+      <prototype>
+        <parameter name="NOMCOLLECTION" sqlType="VARCHAR" precision="200" scale="0" nullable="true" jdbcType="12" type="4" index="1"/>
+        <parameter name="FILTRE" sqlType="VARCHAR" precision="125" scale="0" nullable="true" jdbcType="12" type="1" index="1"/>
+        <parameter name="COUNTCOLLECTION" sqlType="INTEGER" precision="10" scale="0" nullable="true" jdbcType="4" type="4" index="2"/>
+        <parameter name="ID_COLLECTION" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1" type="4" index="3"/>
+        <parameter name="NOMEDITEUR" sqlType="VARCHAR" precision="200" scale="0" nullable="true" jdbcType="12" type="4" index="4"/>
+        <parameter name="ID_EDITEUR" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1" type="4" index="5"/>
+      </prototype>
+    </procedure>
+    <procedure name="COLLECTIONS_BY_INITIALE" schema="" catalog="" type="2">
+      <prototype>
+        <parameter name="ID_COLLECTION" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1" type="4" index="1"/>
+        <parameter name="INITIALE" sqlType="CHAR" precision="1" scale="0" nullable="true" jdbcType="1" type="1" index="1"/>
+        <parameter name="NOMCOLLECTION" sqlType="VARCHAR" precision="200" scale="0" nullable="true" jdbcType="12" type="4" index="2"/>
+        <parameter name="FILTRE" sqlType="VARCHAR" precision="125" scale="0" nullable="true" jdbcType="12" type="1" index="2"/>
+        <parameter name="ID_EDITEUR" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1" type="4" index="3"/>
+        <parameter name="NOMEDITEUR" sqlType="VARCHAR" precision="200" scale="0" nullable="true" jdbcType="12" type="4" index="4"/>
+      </prototype>
+    </procedure>
+    <procedure name="DELETEFILE" schema="" catalog="" type="2">
+      <prototype>
+        <parameter name="RESULT" sqlType="INTEGER" precision="10" scale="0" nullable="true" jdbcType="4" type="4" index="1"/>
+        <parameter name="FICHIER" sqlType="VARCHAR" precision="255" scale="0" nullable="true" jdbcType="12" type="1" index="1"/>
+      </prototype>
+    </procedure>
+    <procedure name="DIRECTORYCONTENT" schema="" catalog="" type="2">
+      <prototype>
+        <parameter name="SEARCHREC" sqlType="INTEGER" precision="10" scale="0" nullable="true" jdbcType="4" type="4" index="1"/>
+        <parameter name="CHEMIN" sqlType="VARCHAR" precision="255" scale="0" nullable="true" jdbcType="12" type="1" index="1"/>
+        <parameter name="FILENAME" sqlType="VARCHAR" precision="255" scale="0" nullable="true" jdbcType="12" type="4" index="2"/>
+        <parameter name="SEARCHATTR" sqlType="INTEGER" precision="10" scale="0" nullable="true" jdbcType="4" type="1" index="2"/>
+        <parameter name="FILESIZE" sqlType="INTEGER" precision="10" scale="0" nullable="true" jdbcType="4" type="4" index="3"/>
+        <parameter name="FILEATTR" sqlType="INTEGER" precision="10" scale="0" nullable="true" jdbcType="4" type="4" index="4"/>
+      </prototype>
+    </procedure>
+    <procedure name="EDITEURS_ACHATALBUMS" schema="" catalog="" type="2">
+      <prototype>
+        <parameter name="NOMEDITEUR" sqlType="VARCHAR" precision="200" scale="0" nullable="true" jdbcType="12" type="4" index="1"/>
+        <parameter name="FILTRE" sqlType="VARCHAR" precision="125" scale="0" nullable="true" jdbcType="12" type="1" index="1"/>
+        <parameter name="COUNTEDITEUR" sqlType="INTEGER" precision="10" scale="0" nullable="true" jdbcType="4" type="4" index="2"/>
+        <parameter name="ID_EDITEUR" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1" type="4" index="3"/>
+      </prototype>
+    </procedure>
+    <procedure name="EDITEURS_ALBUMS" schema="" catalog="" type="2">
+      <prototype>
+        <parameter name="NOMEDITEUR" sqlType="VARCHAR" precision="200" scale="0" nullable="true" jdbcType="12" type="4" index="1"/>
+        <parameter name="FILTRE" sqlType="VARCHAR" precision="125" scale="0" nullable="true" jdbcType="12" type="1" index="1"/>
+        <parameter name="COUNTEDITEUR" sqlType="INTEGER" precision="10" scale="0" nullable="true" jdbcType="4" type="4" index="2"/>
+        <parameter name="ID_EDITEUR" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1" type="4" index="3"/>
+      </prototype>
+    </procedure>
+    <procedure name="EDITEURS_BY_INITIALE" schema="" catalog="" type="2">
+      <prototype>
+        <parameter name="ID_EDITEUR" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1" type="4" index="1"/>
+        <parameter name="INITIALE" sqlType="CHAR" precision="1" scale="0" nullable="true" jdbcType="1" type="1" index="1"/>
+        <parameter name="NOMEDITEUR" sqlType="VARCHAR" precision="200" scale="0" nullable="true" jdbcType="12" type="4" index="2"/>
+      </prototype>
+    </procedure>
+    <procedure name="EMPRUNTEURS_BY_INITIALE" schema="" catalog="" type="2">
+      <prototype>
+        <parameter name="ID_EMPRUNTEUR" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1" type="4" index="1"/>
+        <parameter name="INITIALE" sqlType="CHAR" precision="1" scale="0" nullable="true" jdbcType="1" type="1" index="1"/>
+        <parameter name="NOMEMPRUNTEUR" sqlType="VARCHAR" precision="600" scale="0" nullable="true" jdbcType="12" type="4" index="2"/>
+      </prototype>
+    </procedure>
+    <procedure name="GENRES_ALBUMS" schema="" catalog="" type="2">
+      <prototype>
+        <parameter name="GENRE" sqlType="VARCHAR" precision="120" scale="0" nullable="true" jdbcType="12" type="4" index="1"/>
+        <parameter name="FILTRE" sqlType="VARCHAR" precision="500" scale="0" nullable="true" jdbcType="12" type="1" index="1"/>
+        <parameter name="COUNTGENRE" sqlType="INTEGER" precision="10" scale="0" nullable="true" jdbcType="4" type="4" index="2"/>
+        <parameter name="ID_GENRE" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1" type="4" index="3"/>
+      </prototype>
+    </procedure>
+    <procedure name="GENRES_BY_INITIALE" schema="" catalog="" type="2">
+      <prototype>
+        <parameter name="ID_GENRE" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1" type="4" index="1"/>
+        <parameter name="INITIALE" sqlType="CHAR" precision="4" scale="0" nullable="true" jdbcType="1" type="1" index="1"/>
+        <parameter name="GENRE" sqlType="VARCHAR" precision="120" scale="0" nullable="true" jdbcType="12" type="4" index="2"/>
+      </prototype>
+    </procedure>
+    <procedure name="GET_INITIALE" schema="" catalog="" type="2">
+      <prototype>
+        <parameter name="INITIALE" sqlType="CHAR" precision="1" scale="0" nullable="true" jdbcType="1" type="4" index="1"/>
+        <parameter name="CHAINE" sqlType="VARCHAR" precision="150" scale="0" nullable="true" jdbcType="12" type="1" index="1"/>
+      </prototype>
+    </procedure>
+    <procedure name="INITIALES_ALBUMS" schema="" catalog="" type="2">
+      <prototype>
+        <parameter name="INITIALETITREALBUM" sqlType="CHAR" precision="4" scale="0" nullable="true" jdbcType="1" type="4" index="1"/>
+        <parameter name="FILTRE" sqlType="VARCHAR" precision="125" scale="0" nullable="true" jdbcType="12" type="1" index="1"/>
+        <parameter name="COUNTINITIALE" sqlType="INTEGER" precision="10" scale="0" nullable="true" jdbcType="4" type="4" index="2"/>
+      </prototype>
+    </procedure>
+    <procedure name="INITIALES_COLLECTIONS" schema="" catalog="" type="2">
+      <prototype>
+        <parameter name="INITIALENOMCOLLECTION" sqlType="CHAR" precision="4" scale="0" nullable="true" jdbcType="1" type="4" index="1"/>
+        <parameter name="FILTRE" sqlType="VARCHAR" precision="125" scale="0" nullable="true" jdbcType="12" type="1" index="1"/>
+        <parameter name="COUNTINITIALE" sqlType="INTEGER" precision="10" scale="0" nullable="true" jdbcType="4" type="4" index="2"/>
+      </prototype>
+    </procedure>
+    <procedure name="INITIALES_UNIVERS" schema="" catalog="" type="2">
+      <prototype>
+        <parameter name="INITIALENOMUNIVERS" sqlType="CHAR" precision="4" scale="0" nullable="true" jdbcType="1" type="4" index="1"/>
+        <parameter name="FILTRE" sqlType="VARCHAR" precision="600" scale="0" nullable="true" jdbcType="12" type="1" index="1"/>
+        <parameter name="COUNTINITIALE" sqlType="INTEGER" precision="10" scale="0" nullable="true" jdbcType="4" type="4" index="2"/>
+      </prototype>
+    </procedure>
+    <procedure name="LISTE_TOMES" schema="" catalog="" type="2">
+      <prototype>
+        <parameter name="ID_SERIE" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1" type="4" index="1"/>
+        <parameter name="WITHINTEGRALE" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="1" index="1"/>
+        <parameter name="TOME" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="2"/>
+        <parameter name="IN_IDSERIE" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1" type="1" index="2"/>
+        <parameter name="INTEGRALE" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="3"/>
+        <parameter name="ACHAT" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="4"/>
+      </prototype>
+    </procedure>
+    <procedure name="LOADBLOBFROMFILE" schema="" catalog="" type="2">
+      <prototype>
+        <parameter name="BLOBCONTENT" sqlType="BLOB SUB_TYPE 0" precision="8" scale="0" nullable="true" jdbcType="-4" type="4" index="1"/>
+        <parameter name="CHEMIN" sqlType="VARCHAR" precision="255" scale="0" nullable="true" jdbcType="12" type="1" index="1"/>
+        <parameter name="FICHIER" sqlType="VARCHAR" precision="255" scale="0" nullable="true" jdbcType="12" type="1" index="2"/>
+      </prototype>
+    </procedure>
+    <procedure name="PARABD_BY_SERIE" schema="" catalog="" type="2">
+      <prototype>
+        <parameter name="ID_PARABD" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1" type="4" index="1"/>
+        <parameter name="IN_ID_SERIE" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1" type="1" index="1"/>
+        <parameter name="TITREPARABD" sqlType="VARCHAR" precision="600" scale="0" nullable="true" jdbcType="12" type="4" index="2"/>
+        <parameter name="FILTRE" sqlType="VARCHAR" precision="500" scale="0" nullable="true" jdbcType="12" type="1" index="2"/>
+        <parameter name="ID_SERIE" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1" type="4" index="3"/>
+        <parameter name="TITRESERIE" sqlType="VARCHAR" precision="600" scale="0" nullable="true" jdbcType="12" type="4" index="4"/>
+        <parameter name="ACHAT" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="5"/>
+        <parameter name="COMPLET" sqlType="INTEGER" precision="10" scale="0" nullable="true" jdbcType="4" type="4" index="6"/>
+        <parameter name="SCATEGORIE" sqlType="VARCHAR" precision="200" scale="0" nullable="true" jdbcType="12" type="4" index="7"/>
+      </prototype>
+    </procedure>
+    <procedure name="PERSONNES_BY_INITIALE" schema="" catalog="" type="2">
+      <prototype>
+        <parameter name="ID_PERSONNE" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1" type="4" index="1"/>
+        <parameter name="INITIALE" sqlType="CHAR" precision="1" scale="0" nullable="true" jdbcType="1" type="1" index="1"/>
+        <parameter name="NOMPERSONNE" sqlType="VARCHAR" precision="600" scale="0" nullable="true" jdbcType="12" type="4" index="2"/>
+      </prototype>
+    </procedure>
+    <procedure name="PREVISIONS_SORTIES" schema="" catalog="" type="2">
+      <prototype>
+        <parameter name="ID_SERIE" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1" type="4" index="1"/>
+        <parameter name="WITHACHAT" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="1" index="1"/>
+        <parameter name="TITRESERIE" sqlType="VARCHAR" precision="600" scale="0" nullable="true" jdbcType="12" type="4" index="2"/>
+        <parameter name="IN_ID_SERIE" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1" type="1" index="2"/>
+        <parameter name="TOME" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="3"/>
+        <parameter name="ANNEEPARUTION" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="4"/>
+        <parameter name="MOISPARUTION" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="5"/>
+        <parameter name="ID_EDITEUR" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1" type="4" index="6"/>
+        <parameter name="NOMEDITEUR" sqlType="VARCHAR" precision="200" scale="0" nullable="true" jdbcType="12" type="4" index="7"/>
+        <parameter name="ID_COLLECTION" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1" type="4" index="8"/>
+        <parameter name="NOMCOLLECTION" sqlType="VARCHAR" precision="200" scale="0" nullable="true" jdbcType="12" type="4" index="9"/>
+      </prototype>
+    </procedure>
+    <procedure name="PROC_AJOUTMVT" schema="" catalog="" type="1">
+      <prototype>
+        <parameter name="ID_EDITION" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1" type="1" index="1"/>
+        <parameter name="ID_EMPRUNTEUR" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1" type="1" index="2"/>
+        <parameter name="DATEEMPRUNT" sqlType="TIMESTAMP" precision="19" scale="0" nullable="true" jdbcType="93" type="1" index="3"/>
+        <parameter name="PRET" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="1" index="4"/>
+      </prototype>
+    </procedure>
+    <procedure name="PROC_AUTEURS" schema="" catalog="" type="2">
+      <prototype>
+        <parameter name="ID_PERSONNE" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1" type="4" index="1"/>
+        <parameter name="ALBUM" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1" type="1" index="1"/>
+        <parameter name="NOMPERSONNE" sqlType="VARCHAR" precision="600" scale="0" nullable="true" jdbcType="12" type="4" index="2"/>
+        <parameter name="SERIE" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1" type="1" index="2"/>
+        <parameter name="ID_ALBUM" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1" type="4" index="3"/>
+        <parameter name="PARABD" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1" type="1" index="3"/>
+        <parameter name="ID_SERIE" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1" type="4" index="4"/>
+        <parameter name="ID_PARABD" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1" type="4" index="5"/>
+        <parameter name="METIER" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="6"/>
+      </prototype>
+    </procedure>
+    <procedure name="PROC_EMPRUNTS" schema="" catalog="" type="2">
+      <prototype>
+        <parameter name="ID_EDITION" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1" type="4" index="1"/>
+        <parameter name="ID_ALBUM" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1" type="4" index="2"/>
+        <parameter name="TITREALBUM" sqlType="VARCHAR" precision="600" scale="0" nullable="true" jdbcType="12" type="4" index="3"/>
+        <parameter name="ID_SERIE" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1" type="4" index="4"/>
+        <parameter name="TITRESERIE" sqlType="VARCHAR" precision="600" scale="0" nullable="true" jdbcType="12" type="4" index="5"/>
+        <parameter name="PRETE" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="6"/>
+        <parameter name="ID_EMPRUNTEUR" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1" type="4" index="7"/>
+        <parameter name="NOMEMPRUNTEUR" sqlType="VARCHAR" precision="600" scale="0" nullable="true" jdbcType="12" type="4" index="8"/>
+        <parameter name="PRETEMPRUNT" sqlType="SMALLINT" precision="5" scale="0" nullable="true" jdbcType="5" type="4" index="9"/>
+        <parameter name="DATEEMPRUNT" sqlType="TIMESTAMP" precision="19" scale="0" nullable="true" jdbcType="93" type="4" index="10"/>
+      </prototype>
+    </procedure>
+    <procedure name="SAVEBLOBTOFILE" schema="" catalog="" type="2">
+      <prototype>
+        <parameter name="RESULT" sqlType="INTEGER" precision="10" scale="0" nullable="true" jdbcType="4" type="4" index="1"/>
+        <parameter name="CHEMIN" sqlType="VARCHAR" precision="255" scale="0" nullable="true" jdbcType="12" type="1" index="1"/>
+        <parameter name="FICHIER" sqlType="VARCHAR" precision="255" scale="0" nullable="true" jdbcType="12" type="1" index="2"/>
+        <parameter name="BLOBCONTENT" sqlType="BLOB SUB_TYPE 0" precision="8" scale="0" nullable="true" jdbcType="-4" type="1" index="3"/>
+      </prototype>
+    </procedure>
+    <procedure name="SEARCHFILENAME" schema="" catalog="" type="2">
+      <prototype>
+        <parameter name="NEW_FILENAME" sqlType="VARCHAR" precision="255" scale="0" nullable="true" jdbcType="12" type="4" index="1"/>
+        <parameter name="CHEMIN" sqlType="VARCHAR" precision="255" scale="0" nullable="true" jdbcType="12" type="1" index="1"/>
+        <parameter name="OLD_FILENAME" sqlType="VARCHAR" precision="255" scale="0" nullable="true" jdbcType="12" type="1" index="2"/>
+        <parameter name="RESERVE" sqlType="INTEGER" precision="10" scale="0" nullable="true" jdbcType="4" type="1" index="3"/>
+      </prototype>
+    </procedure>
+    <procedure name="SERIES_ALBUMS" schema="" catalog="" type="2">
+      <prototype>
+        <parameter name="TITRESERIE" sqlType="VARCHAR" precision="600" scale="0" nullable="true" jdbcType="12" type="4" index="1"/>
+        <parameter name="FILTRE" sqlType="VARCHAR" precision="125" scale="0" nullable="true" jdbcType="12" type="1" index="1"/>
+        <parameter name="COUNTSERIE" sqlType="INTEGER" precision="10" scale="0" nullable="true" jdbcType="4" type="4" index="2"/>
+        <parameter name="ID_SERIE" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1" type="4" index="3"/>
+      </prototype>
+    </procedure>
+    <procedure name="SERIES_BY_INITIALE" schema="" catalog="" type="2">
+      <prototype>
+        <parameter name="ID_SERIE" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1" type="4" index="1"/>
+        <parameter name="INITIALE" sqlType="CHAR" precision="1" scale="0" nullable="true" jdbcType="1" type="1" index="1"/>
+        <parameter name="TITRESERIE" sqlType="VARCHAR" precision="600" scale="0" nullable="true" jdbcType="12" type="4" index="2"/>
+        <parameter name="ID_EDITEUR" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1" type="4" index="3"/>
+        <parameter name="NOMEDITEUR" sqlType="VARCHAR" precision="200" scale="0" nullable="true" jdbcType="12" type="4" index="4"/>
+        <parameter name="ID_COLLECTION" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1" type="4" index="5"/>
+        <parameter name="NOMCOLLECTION" sqlType="VARCHAR" precision="200" scale="0" nullable="true" jdbcType="12" type="4" index="6"/>
+      </prototype>
+    </procedure>
+    <procedure name="SERIES_PARABD" schema="" catalog="" type="2">
+      <prototype>
+        <parameter name="TITRESERIE" sqlType="VARCHAR" precision="600" scale="0" nullable="true" jdbcType="12" type="4" index="1"/>
+        <parameter name="FILTRE" sqlType="VARCHAR" precision="125" scale="0" nullable="true" jdbcType="12" type="1" index="1"/>
+        <parameter name="COUNTSERIE" sqlType="INTEGER" precision="10" scale="0" nullable="true" jdbcType="4" type="4" index="2"/>
+        <parameter name="ID_SERIE" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1" type="4" index="3"/>
+      </prototype>
+    </procedure>
+    <procedure name="UNIVERS_ALBUMS" schema="" catalog="" type="2">
+      <prototype>
+        <parameter name="NOMUNIVERS" sqlType="VARCHAR" precision="600" scale="0" nullable="true" jdbcType="12" type="4" index="1"/>
+        <parameter name="FILTRE" sqlType="VARCHAR" precision="125" scale="0" nullable="true" jdbcType="12" type="1" index="1"/>
+        <parameter name="COUNTUNIVERS" sqlType="INTEGER" precision="10" scale="0" nullable="true" jdbcType="4" type="4" index="2"/>
+        <parameter name="ID_UNIVERS" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1" type="4" index="3"/>
+      </prototype>
+    </procedure>
+    <procedure name="UNIVERS_BY_INITIALE" schema="" catalog="" type="2">
+      <prototype>
+        <parameter name="ID_UNIVERS" sqlType="CHAR" precision="38" scale="0" nullable="false" jdbcType="1" type="4" index="1"/>
+        <parameter name="INITIALE" sqlType="CHAR" precision="4" scale="0" nullable="true" jdbcType="1" type="1" index="1"/>
+        <parameter name="NOMUNIVERS" sqlType="VARCHAR" precision="600" scale="0" nullable="true" jdbcType="12" type="4" index="2"/>
+        <parameter name="FILTRE" sqlType="VARCHAR" precision="600" scale="0" nullable="true" jdbcType="12" type="1" index="2"/>
+      </prototype>
+    </procedure>
+  </data-source>
+  <data-source source="LOCAL" name="Firebird - BD.GDB@localhost [E]" uuid="1bd03baf-f7dc-40ac-8a61-175eb2833902">
+    <database-info product="Firebird 2.5" version="WI-V2.5.2.26540" jdbc-version="4.2" driver-name="Jaybird JCA/JDBC driver" driver-version="2.2">
+      <extra-name-characters>$</extra-name-characters>
+      <identifier-quote-string>&quot;</identifier-quote-string>
+    </database-info>
+    <case-sensitivity plain-identifiers="upper" quoted-identifiers="exact"/>
+    <schema name="" catalog=""/>
+  </data-source>
+</component>
