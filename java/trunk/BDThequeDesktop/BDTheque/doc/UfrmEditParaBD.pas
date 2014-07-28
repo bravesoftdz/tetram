@@ -104,9 +104,9 @@ type
     procedure SetParaBD(const Value: TParaBDFull);
     function GetID_ParaBD: TGUID;
     procedure VisuClose(Sender: TObject);
-    { Déclarations privées }
+    { DÃ©clarations privÃ©es }
   public
-    { Déclarations publiques }
+    { DÃ©clarations publiques }
     property isCreation: Boolean read FCreation;
     property isAchat: Boolean read FisAchat write FisAchat;
     property ID_ParaBD: TGUID read GetID_ParaBD;
@@ -160,7 +160,7 @@ begin
   cbOffertClick(nil);
 
   // artifice pour contourner un bug du TDateTimePicker
-  // dtpAchat est initialisé dans le OnShow de la fenêtre
+  // dtpAchat est initialisÃ© dans le OnShow de la fenÃªtre
   FDateAchat := FParaBD.DateAchat;
 
   if FParaBD.Prix = 0 then
@@ -322,7 +322,7 @@ begin
   PrixCote := BDStrToDoubleDef(edPrixCote.Text, 0);
   if (AnneeCote * PrixCote = 0) and (AnneeCote + PrixCote <> 0) then
   begin
-    // une cote doit être composée d'une année ET d'un prix
+    // une cote doit Ãªtre composÃ©e d'une annÃ©e ET d'un prix
     AffMessage(rsCoteIncomplete, mtInformation, [mbOk], True);
     edAnneeCote.SetFocus;
     ModalResult := mrNone;
@@ -466,8 +466,8 @@ begin
   // PP := FParaBD.Photos[Node.Index];
   // Allowed := (PP.Reference <> -1) and (PP.NewStockee) and (PP.NewStockee = PP.OldStockee);
 
-  // devrait être autorisé aussi pour changer le nom de l'image
-  // l'édition de la catégorie d'image n'est pas gérée par le virtualtreeview
+  // devrait Ãªtre autorisÃ© aussi pour changer le nom de l'image
+  // l'Ã©dition de la catÃ©gorie d'image n'est pas gÃ©rÃ©e par le virtualtreeview
   Allowed := False;
 end;
 
@@ -694,7 +694,7 @@ end;
 procedure TfrmEditParaBD.FormShow(Sender: TObject);
 begin
   // code pour contourner un bug du TDateTimePicker
-  // Cheched := False est réinitialisé au premier affichage du compo (à la création de son handle)
+  // Cheched := False est rÃ©initialisÃ© au premier affichage du compo (Ã  la crÃ©ation de son handle)
   dtpAchat.Date := Now;
   dtpAchat.Checked := FDateAchat > 0;
   if dtpAchat.Checked then
@@ -767,7 +767,7 @@ begin
   if cbxCategorie.Value = 700 then
     btCreateur.Caption := 'Auteur'
   else
-    btCreateur.Caption := 'Créateur';
+    btCreateur.Caption := 'CrÃ©ateur';
 end;
 
 end.

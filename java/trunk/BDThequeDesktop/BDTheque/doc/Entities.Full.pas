@@ -162,7 +162,7 @@ type
     property Notation: Integer read FNotation write FNotation;
     property Univers: TObjectList<TUniversLite> read FUnivers;
 
-    // pour rétrocompatibilité pour les scripts
+    // pour rÃ©trocompatibilitÃ© pour les scripts
     property Titre: RAutoTrimString read FTitreSerie write SetTitreSerie;
   end;
 
@@ -345,7 +345,7 @@ type
     property Univers: TObjectList<TUniversLite> read FUnivers;
     property UniversFull: TList<TUniversLite> read FUniversFull;
 
-    // pour rétrocompatibilité pour les scripts
+    // pour rÃ©trocompatibilitÃ© pour les scripts
     property Titre: string read GetTitreAlbum write SetTitreAlbum;
   end;
 
@@ -475,7 +475,7 @@ procedure TAlbumFull.Clear;
 begin
   inherited;
   FReadyToFusion := False;
-  // le statut doit être conservé même si on fait un clear
+  // le statut doit Ãªtre conservÃ© mÃªme si on fait un clear
   // FFusionneEditions := True;
 
   ID_Album := GUID_NULL;

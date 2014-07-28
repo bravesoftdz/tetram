@@ -15,7 +15,7 @@ import java.util.UUID;
  */
 @FileLink("/org/tetram/bdtheque/data/dao/mappers/Serie.xml")
 public interface SerieMapper extends BaseMapperInterface {
-    SerieLite getSerieLiteById(UUID id);
+    SerieLite getSerieLiteById(@Param("id") UUID id);
 
     Serie getSerieById(UUID id);
 

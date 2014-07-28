@@ -6,8 +6,8 @@ uses
   System.Classes, Entities.DaoLambda;
 
 type
-  // surcharge de TDaoListe pour pouvoir accéder aux elements protected
-  // mais dans ce type de classe, ce n'est pas possible de surcharger les méthodes (donc Create/Destroy)
+  // surcharge de TDaoListe pour pouvoir accÃ©der aux elements protected
+  // mais dans ce type de classe, ce n'est pas possible de surcharger les mÃ©thodes (donc Create/Destroy)
   // donc obligation d'utiliser les sections initialization/finalization
   TDaoListeDB = class(TDaoListe)
   protected

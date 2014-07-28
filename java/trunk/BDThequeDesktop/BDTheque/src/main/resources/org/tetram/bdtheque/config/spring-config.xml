@@ -10,8 +10,8 @@
 
     <!--
     géré par le bean databaseProperties (dans org.tetram.bdtheque.spring.SpringContext)
-    <context:property-placeholder location="org/tetram/bdtheque/config/database.properties"/>
     -->
+    <context:property-placeholder location="org/tetram/bdtheque/config/database.properties"/>
 
     <bean id="dataSource" class="org.springframework.jdbc.datasource.SingleConnectionDataSource"
           depends-on="databaseProperties">

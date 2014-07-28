@@ -7,6 +7,7 @@
       <item index="1" class="java.lang.String" itemvalue="org.springframework.beans.factory.annotation.Autowired" />
     </list>
   </component>
+  <component name="IdProvider" IDEtalkID="C77A7AB9E693487D1952D20F230DC6E0" />
   <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" assert-keyword="true" jdk-15="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />
   </component>

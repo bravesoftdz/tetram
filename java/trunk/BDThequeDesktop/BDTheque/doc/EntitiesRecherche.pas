@@ -29,7 +29,7 @@ type
     // sql
     NomTable: string;
     TestSQL: string;
-    // fenêtre
+    // fenÃªtre
     iChamp: Integer;
     iSignes, iCritere2: Integer;
     valeurText: string;
@@ -54,7 +54,7 @@ type
     Champ, NomTable: string;
     Asc: Boolean;
     NullsFirst, NullsLast: Boolean;
-    // fenêtre
+    // fenÃªtre
     iChamp: Integer;
     // impression
     LabelChamp: string;
@@ -435,14 +435,14 @@ procedure TRecherche.LoadFromStream(Stream: TStream);
 
   function CreateCritere(CritereType: Integer; ParentCritere: TBaseCritere): TBaseCritere;
   begin
-    Assert(not Assigned(ParentCritere) or (ParentCritere is TGroupCritere), 'Architecture des critères incorrecte.');
+    Assert(not Assigned(ParentCritere) or (ParentCritere is TGroupCritere), 'Architecture des critÃ¨res incorrecte.');
     case CritereType of
       0:
         Result := AddGroup(ParentCritere as TGroupCritere);
       1:
         Result := AddCritere(ParentCritere as TGroupCritere);
     else
-      raise Exception.Create('Type de critère inconnu: ' + IntToStr(CritereType));
+      raise Exception.Create('Type de critÃ¨re inconnu: ' + IntToStr(CritereType));
     end;
     Result.LoadFromStream(Stream);
   end;
@@ -496,7 +496,7 @@ procedure TRecherche.SaveToStream(Stream: TStream);
     else if Critere is TCritere then
       WriteInteger(1)
     else
-      raise Exception.Create('Type de critère inconnu: ' + Critere.ClassName);
+      raise Exception.Create('Type de critÃ¨re inconnu: ' + Critere.ClassName);
     Critere.SaveToStream(Stream);
   end;
 

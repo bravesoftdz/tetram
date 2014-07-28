@@ -127,7 +127,7 @@ begin
       if IsEqualGUID(pi.ID, GUID_NULL) then
       begin // nouvelles photos
         if (not pi.NewStockee) then
-        begin // photos li�es (q1)
+        begin // photos li?es (q1)
           pi.OldNom := pi.NewNom;
           pi.NewNom := SearchNewFileName(RepImages, ExtractFileName(pi.NewNom), True);
           qry6.Params.ByNameAsString['chemin'] := RepImages;
@@ -150,7 +150,7 @@ begin
           pi.ID := StringToGUID(qry1.Fields.AsString[0]);
         end
         else if TFile.Exists(pi.NewNom) then
-        begin // photos stock�es (q2)
+        begin // photos stock?es (q2)
           qry2.Params.ByNameAsString['pk_parent'] := GUIDToString(ReferenceParent);
           qry2.Params.ByNameAsString['fichier'] := TPath.GetFileNameWithoutExtension(pi.NewNom);
           qry2.Params.ByNameAsInteger['ordre'] := List.IndexOf(pi);
@@ -174,7 +174,7 @@ begin
           Stream := GetCouvertureStream(True, pi.ID, -1, -1, False);
           try
             if (pi.NewStockee) then
-            begin // conversion photos li�es en stock�es (q3)
+            begin // conversion photos li?es en stock?es (q3)
               qry3.ParamsSetBlob('image', Stream);
               qry3.Params.ByNameAsString['pk'] := GUIDToString(pi.ID);
               qry3.Execute;
@@ -185,7 +185,7 @@ begin
               pi.NewNom := TPath.GetFileNameWithoutExtension(pi.NewNom);
             end
             else
-            begin // conversion photos stock�es en li�es
+            begin // conversion photos stock?es en li?es
               pi.NewNom := SearchNewFileName(RepImages, pi.NewNom + '.jpg', True);
               qry6.Params.ByNameAsString['chemin'] := RepImages;
               qry6.Params.ByNameAsString['fichier'] := pi.NewNom;
@@ -199,7 +199,7 @@ begin
             Stream.Free;
           end;
         end;
-        // photos renomm�es, r�ordonn�es, etc (q5)
+        // photos renomm?es, r?ordonn?es, etc (q5)
         // obligatoire pour les changement de stockage
         qry5.Params.ByNameAsString['fichier'] := pi.NewNom;
         qry5.Params.ByNameAsInteger['ordre'] := List.IndexOf(pi);

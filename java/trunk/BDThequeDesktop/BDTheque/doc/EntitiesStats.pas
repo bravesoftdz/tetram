@@ -573,7 +573,7 @@ function TPrevisionSortie.GetsAnnee: string;
 begin
   Result := IntToStr(Annee);
   if Mois > 0 then
-    Result := Choose(Mois - 1, ['début', 'début', 'début', 'début', 'mi', 'mi', 'mi', 'mi', 'fin', 'fin', 'fin', 'fin']) + ' ' + Result;
+    Result := Choose(Mois - 1, ['dÃ©but', 'dÃ©but', 'dÃ©but', 'dÃ©but', 'mi', 'mi', 'mi', 'mi', 'fin', 'fin', 'fin', 'fin']) + ' ' + Result;
 end;
 
 { TSerieIncomplete }
@@ -588,7 +588,7 @@ begin
   begin
     S := NumerosManquants[i];
     if Pos('<>', S) <> 0 then
-      S := StringReplace(S, '<>', ' à ', []);
+      S := StringReplace(S, '<>', ' Ã  ', []);
     AjoutString(Result, S, ', ');
   end;
 end;

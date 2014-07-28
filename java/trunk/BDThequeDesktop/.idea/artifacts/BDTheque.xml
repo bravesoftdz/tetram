@@ -2,10 +2,7 @@
   <artifact type="javafx" build-on-make="true" name="BDTheque">
     <output-path>$PROJECT_DIR$/out/artifacts</output-path>
     <properties id="ant-postprocessing">
-      <options enabled="true">
-        <file>file://$PROJECT_DIR$/BDTheque/ant.xml</file>
-        <target>deploy_firebird_artifact</target>
-      </options>
+      <options enabled="true" />
     </properties>
     <properties id="javafx-properties">
       <options>
