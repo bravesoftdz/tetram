@@ -5,6 +5,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import org.tetram.bdtheque.data.BeanUtils;
 import org.tetram.bdtheque.data.bean.abstractentities.BaseAlbum;
+import org.tetram.bdtheque.data.bean.interfaces.UniversAttachedEntity;
 import org.tetram.bdtheque.spring.utils.AutoTrimStringProperty;
 
 import java.util.ArrayList;
@@ -15,7 +16,7 @@ import java.util.UUID;
  * Created by Thierry on 24/05/2014.
  */
 
-public class Album extends BaseAlbum {
+public class Album extends BaseAlbum implements UniversAttachedEntity {
 
     private static Album defaultAlbum = null;
     private final ObjectProperty<Serie> serie = new SimpleObjectProperty<>(this, "serie", null);
@@ -30,13 +31,7 @@ public class Album extends BaseAlbum {
     private final ListProperty<UniversLite> universFull = new SimpleListProperty<>(this, "universFull", FXCollections.<UniversLite>observableArrayList());
 
     public Album() {
-        final ListChangeListener<UniversLite> universListChangeListener = change -> universFullProperty().set(FXCollections.observableList(BeanUtils.checkAndBuildListUniversFull(getUniversFull(), getUnivers(), getSerie())));
-        serieProperty().addListener((observable, oldValue, newValue) -> {
-            if (oldValue != null) oldValue.universProperty().removeListener(universListChangeListener);
-            if (newValue != null) newValue.universProperty().addListener(universListChangeListener);
-            universFullProperty().set(FXCollections.observableList(BeanUtils.checkAndBuildListUniversFull(getUniversFull(), getUnivers(), newValue)));
-        });
-        universProperty().addListener(universListChangeListener);
+        initUniversProperties();
 
         auteursProperty().addListener((observable, oldValue, newValue) -> buildListsAuteurs());
         auteursProperty().addListener((ListChangeListener<AuteurAlbumLite>) c -> buildListsAuteurs());
@@ -119,12 +114,8 @@ public class Album extends BaseAlbum {
         addAuteur(personne, getColoristes(), MetierAuteur.COLORISTE);
     }
 
-    private void removeAuteur(PersonneLite personne, List<AuteurAlbumLite> listAuteurs) {
-        for (AuteurAlbumLite auteur : listAuteurs)
-            if (auteur.getPersonne() == personne) {
-                auteurs.remove(auteur);
-                return;
-            }
+    private void removeAuteur(PersonneLite personne, List<AuteurAlbumLite> auteurs) {
+        auteurs.removeIf(a -> a.getPersonne().equals(personne));
     }
 
     public void removeScenariste(PersonneLite personne) {
@@ -207,40 +198,14 @@ public class Album extends BaseAlbum {
         return getEditions().remove(edition);
     }
 
-    public List<UniversLite> getUnivers() {
-        return univers.get();
-    }
-
-    public void setUnivers(List<UniversLite> univers) {
-        this.univers.set(FXCollections.observableList(univers));
-    }
-
+    @Override
     public ListProperty<UniversLite> universProperty() {
         return univers;
     }
 
-    public List<UniversLite> getUniversFull() {
-        return universFull.get();
-    }
-
+    @Override
     public ListProperty<UniversLite> universFullProperty() {
         return universFull;
-    }
-
-    public boolean addUnivers(UniversLite universLite) {
-        if (!univers.contains(universLite) && !universFull.contains(universLite)) {
-            universFull.add(universLite);
-            return univers.add(universLite);
-        }
-        return false;
-    }
-
-    public boolean removeUnivers(UniversLite universLite) {
-        if (univers.remove(universLite)) {
-            universFull.remove(universLite);
-            return true;
-        } else
-            return false;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package org.tetram.bdtheque.data.dao.mappers;
 
+import org.jetbrains.annotations.NonNls;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,6 +17,7 @@ import java.util.UUID;
 
 public class AlbumMapperTest extends SpringTest {
 
+    @NonNls
     @Autowired
     private AlbumMapper mapper;
 

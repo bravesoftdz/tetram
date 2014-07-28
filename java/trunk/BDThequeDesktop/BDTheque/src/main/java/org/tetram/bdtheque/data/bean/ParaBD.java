@@ -2,9 +2,9 @@ package org.tetram.bdtheque.data.bean;
 
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import org.tetram.bdtheque.data.BeanUtils;
 import org.tetram.bdtheque.data.bean.abstractentities.BaseParaBD;
+import org.tetram.bdtheque.data.bean.interfaces.UniversAttachedEntity;
 import org.tetram.bdtheque.data.dao.ValeurListeDao;
 import org.tetram.bdtheque.spring.SpringContext;
 import org.tetram.bdtheque.spring.utils.AutoTrimStringProperty;
@@ -19,7 +19,7 @@ import java.util.UUID;
  * Created by Thierry on 24/05/2014.
  */
 
-public class ParaBD extends BaseParaBD {
+public class ParaBD extends BaseParaBD implements UniversAttachedEntity {
 
     private final ObjectProperty<Year> anneeEdition = new SimpleObjectProperty<>(this, "anneeEdition", null);
     private final ObjectProperty<ValeurListe> categorieParaBD = new SimpleObjectProperty<>(this, "categorieParaBD", null);
@@ -44,13 +44,7 @@ public class ParaBD extends BaseParaBD {
         ValeurListeDao valeurListeDao = SpringContext.CONTEXT.getBean(ValeurListeDao.class);
         setCategorieParaBD(valeurListeDao.getDefaultTypeParaBD());
 
-        final ListChangeListener<UniversLite> universListChangeListener = change -> universFullProperty().set(FXCollections.observableList(BeanUtils.checkAndBuildListUniversFull(getUniversFull(), getUnivers(), getSerie())));
-        serieProperty().addListener((observable, oldValue, newValue) -> {
-            if (oldValue != null) oldValue.universProperty().removeListener(universListChangeListener);
-            if (newValue != null) newValue.universProperty().addListener(universListChangeListener);
-            universFullProperty().set(FXCollections.observableList(BeanUtils.checkAndBuildListUniversFull(getUniversFull(), getUnivers(), newValue)));
-        });
-        universProperty().addListener(universListChangeListener);
+        initUniversProperties();
     }
 
     public Year getAnneeEdition() {
@@ -151,18 +145,14 @@ public class ParaBD extends BaseParaBD {
 
     public void addAuteur(PersonneLite personne) {
         for (AuteurParaBDLite auteur : auteurs)
-            if (auteur.getPersonne() == personne) return;
+            if (auteur.getPersonne().equals(personne)) return;
         AuteurParaBDLite auteur = new AuteurParaBDLite();
         auteur.setPersonne(personne);
         auteurs.add(auteur);
     }
 
     public void removeAuteur(PersonneLite personne) {
-        for (AuteurParaBDLite auteur : auteurs)
-            if (auteur.getPersonne() == personne) {
-                auteurs.remove(auteur);
-                return;
-            }
+        auteurs.removeIf(a -> a.getPersonne().equals(personne));
     }
 
     public String getDescription() {
@@ -249,40 +239,14 @@ public class ParaBD extends BaseParaBD {
         return gratuit;
     }
 
-    public List<UniversLite> getUnivers() {
-        return univers.get();
-    }
-
-    public void setUnivers(List<UniversLite> univers) {
-        this.univers.set(FXCollections.observableList(univers));
-    }
-
+    @Override
     public ListProperty<UniversLite> universProperty() {
         return univers;
     }
 
-    public List<UniversLite> getUniversFull() {
-        return universFull.get();
-    }
-
+    @Override
     public ListProperty<UniversLite> universFullProperty() {
         return universFull;
-    }
-
-    public boolean addUnivers(UniversLite universLite) {
-        if (!univers.contains(universLite) && !universFull.contains(universLite)) {
-            universFull.add(universLite);
-            return univers.add(universLite);
-        }
-        return false;
-    }
-
-    public boolean removeUnivers(UniversLite universLite) {
-        if (univers.remove(universLite)) {
-            universFull.remove(universLite);
-            return true;
-        } else
-            return false;
     }
 
     public List<PhotoLite> getPhotos() {
@@ -311,9 +275,7 @@ public class ParaBD extends BaseParaBD {
 
     @Override
     protected String buildLabel(boolean simple, boolean avecSerie) {
-        String lb = getTitreParaBD();
-        if (!simple)
-            lb = BeanUtils.formatTitre(lb);
+        String lb = super.buildLabel(simple, avecSerie);
         String s = "";
         if (avecSerie && getSerie() != null)
             if ("".equals(lb))

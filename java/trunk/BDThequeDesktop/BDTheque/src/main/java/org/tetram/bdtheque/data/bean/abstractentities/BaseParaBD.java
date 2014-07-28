@@ -1,6 +1,7 @@
 package org.tetram.bdtheque.data.bean.abstractentities;
 
 import javafx.beans.property.StringProperty;
+import org.tetram.bdtheque.data.BeanUtils;
 import org.tetram.bdtheque.spring.utils.AutoTrimStringProperty;
 
 /**
@@ -36,5 +37,10 @@ public abstract class BaseParaBD extends AbstractDBEntity {
         return buildLabel(false, avecSerie);
     }
 
-    protected abstract String buildLabel(boolean simple, boolean avecSerie);
+    protected String buildLabel(boolean simple, boolean avecSerie) {
+        String lb = getTitreParaBD();
+        if (!simple)
+            lb = BeanUtils.formatTitre(lb);
+        return lb;
+    }
 }

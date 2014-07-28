@@ -82,9 +82,7 @@ public class ParaBDLite extends BaseParaBD {
 
     @Override
     protected String buildLabel(boolean simple, boolean avecSerie) {
-        String lb = getTitreParaBD();
-        if (!simple)
-            lb = BeanUtils.formatTitre(lb);
+        String lb = super.buildLabel(simple, avecSerie);
         String s = "";
         if (avecSerie)
             if ("".equals(lb))

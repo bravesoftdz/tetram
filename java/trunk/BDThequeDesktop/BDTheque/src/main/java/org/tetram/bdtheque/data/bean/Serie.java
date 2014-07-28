@@ -2,9 +2,9 @@ package org.tetram.bdtheque.data.bean;
 
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import org.tetram.bdtheque.data.BeanUtils;
 import org.tetram.bdtheque.data.bean.abstractentities.BaseSerie;
+import org.tetram.bdtheque.data.bean.interfaces.AuthoredEntity;
 import org.tetram.bdtheque.data.bean.interfaces.ScriptEntity;
 import org.tetram.bdtheque.data.dao.DaoScriptImpl;
 import org.tetram.bdtheque.data.dao.ValeurListeDao;
@@ -12,8 +12,6 @@ import org.tetram.bdtheque.spring.SpringContext;
 import org.tetram.bdtheque.spring.utils.AutoTrimStringProperty;
 import org.tetram.bdtheque.utils.StringUtils;
 
-import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
@@ -22,27 +20,7 @@ import java.util.UUID;
  */
 
 @DaoScriptImpl.ScriptInfo(typeData = 7)
-public class Serie extends BaseSerie implements ScriptEntity {
-
-    public static Comparator<SerieLite> DEFAULT_COMPARATOR = new Comparator<SerieLite>() {
-        @Override
-        public int compare(SerieLite o1, SerieLite o2) {
-            if (o1 == o2) return 0;
-
-            int comparaison;
-
-            comparaison = BeanUtils.compare(o1.getTitreSerie(), o2.getTitreSerie());
-            if (comparaison != 0) return comparaison;
-
-            comparaison = EditeurLite.DEFAULT_COMPARATOR.compare(o1.getEditeur(), o2.getEditeur());
-            if (comparaison != 0) return comparaison;
-
-            comparaison = CollectionLite.DEFAULT_COMPARATOR.compare(o1.getCollection(), o2.getCollection());
-            if (comparaison != 0) return comparaison;
-
-            return 0;
-        }
-    };
+public class Serie extends BaseSerie implements ScriptEntity, AuthoredEntity<AuteurSerieLite> {
 
     private final ObjectProperty<Boolean> terminee = new SimpleObjectProperty<>(this, "terminee", null);
     private final ListProperty<GenreLite> genres = new SimpleListProperty<>(this, "genres", FXCollections.<GenreLite>observableArrayList());
@@ -80,8 +58,7 @@ public class Serie extends BaseSerie implements ScriptEntity {
         setOrientation(valeurListeDao.getDefaultOrientation());
         setSensLecture(valeurListeDao.getDefaultSensLecture());
 
-        auteursProperty().addListener((observable, oldValue, newValue) -> buildListsAuteurs());
-        auteursProperty().addListener((ListChangeListener<AuteurSerieLite>) c -> buildListsAuteurs());
+        initAuthors();
     }
 
     public Boolean isTerminee() {
@@ -245,103 +222,28 @@ public class Serie extends BaseSerie implements ScriptEntity {
         return paraBDs;
     }
 
-    private void buildListsAuteurs() {
-        int countAuteurs = scenaristes.size() + dessinateurs.size() + coloristes.size();
-
-        if (auteurs.size() != countAuteurs) {
-            scenaristes.set(FXCollections.observableList(new ArrayList<>()));
-            dessinateurs.set(FXCollections.observableList(new ArrayList<>()));
-            coloristes.set(FXCollections.observableList(new ArrayList<>()));
-            for (AuteurSerieLite a : auteurs) {
-                switch (a.getMetier()) {
-                    case SCENARISTE:
-                        scenaristes.add(a);
-                        break;
-                    case DESSINATEUR:
-                        dessinateurs.add(a);
-                        break;
-                    case COLORISTE:
-                        coloristes.add(a);
-                        break;
-                }
-            }
-        }
-    }
-
-    public List<AuteurSerieLite> getAuteurs() {
-        return auteurs;
-    }
-
-    public void setAuteurs(List<AuteurSerieLite> auteurs) {
-        this.auteurs.set(FXCollections.observableList(auteurs));
-    }
-
+    @Override
     public ListProperty<AuteurSerieLite> auteursProperty() {
         return auteurs;
     }
 
+    @Override
+    public AuteurSerieLite getNewAuthor() {
+        return new AuteurSerieLite();
+    }
+
+    @Override
     public ListProperty<AuteurSerieLite> scenaristesProperty() {
         return scenaristes;
     }
 
+    @Override
     public ListProperty<AuteurSerieLite> dessinateursProperty() {
         return dessinateurs;
     }
 
+    @Override
     public ListProperty<AuteurSerieLite> coloristesProperty() {
-        return coloristes;
-    }
-
-    private void addAuteur(PersonneLite personne, List<AuteurSerieLite> listAuteurs, MetierAuteur metier) {
-        for (AuteurSerieLite auteur : listAuteurs)
-            if (auteur.getPersonne() == personne) return;
-        AuteurSerieLite auteur = new AuteurAlbumLite();
-        auteur.setPersonne(personne);
-        auteur.setMetier(metier);
-        auteurs.add(auteur);
-    }
-
-    public void addScenariste(PersonneLite personne) {
-        addAuteur(personne, getScenaristes(), MetierAuteur.SCENARISTE);
-    }
-
-    public void addDessinateur(PersonneLite personne) {
-        addAuteur(personne, getDessinateurs(), MetierAuteur.DESSINATEUR);
-    }
-
-    public void addColoriste(PersonneLite personne) {
-        addAuteur(personne, getColoristes(), MetierAuteur.COLORISTE);
-    }
-
-    private void removeAuteur(PersonneLite personne, List<AuteurSerieLite> listAuteurs) {
-        for (AuteurSerieLite auteur : listAuteurs)
-            if (auteur.getPersonne() == personne) {
-                auteurs.remove(auteur);
-                return;
-            }
-    }
-
-    public void removeScenariste(PersonneLite personne) {
-        removeAuteur(personne, getScenaristes());
-    }
-
-    public void removeDessinateur(PersonneLite personne) {
-        removeAuteur(personne, getDessinateurs());
-    }
-
-    public void removeColoriste(PersonneLite personne) {
-        removeAuteur(personne, getColoristes());
-    }
-
-    public List<AuteurSerieLite> getScenaristes() {
-        return scenaristes;
-    }
-
-    public List<AuteurSerieLite> getDessinateurs() {
-        return dessinateurs;
-    }
-
-    public List<AuteurSerieLite> getColoristes() {
         return coloristes;
     }
 

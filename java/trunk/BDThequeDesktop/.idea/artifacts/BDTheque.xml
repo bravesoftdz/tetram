@@ -2,16 +2,21 @@
   <artifact type="javafx" build-on-make="true" name="BDTheque">
     <output-path>$PROJECT_DIR$/out/artifacts</output-path>
     <properties id="ant-postprocessing">
-      <options enabled="true" />
+      <options enabled="true">
+        <file>file://$PROJECT_DIR$/BDTheque/ant.xml</file>
+        <target>deploy_firebird_artifact</target>
+      </options>
     </properties>
     <properties id="javafx-properties">
       <options>
         <option name="appClass" value="org.tetram.bdtheque.Main" />
         <option name="description" value="" />
+        <option name="height" value="800" />
         <option name="htmlParamFile" value="" />
         <option name="paramFile" value="" />
         <option name="title" value="BDTheque" />
         <option name="vendor" value="Tetram Corp" />
+        <option name="width" value="1280" />
       </options>
     </properties>
     <root id="root">
@@ -36,23 +41,27 @@
         <element id="library" level="project" name="Gradle: mybatis-3.2.7" />
         <element id="library" level="project" name="Gradle: mybatis-generator-core-1.3.2" />
         <element id="library" level="project" name="Gradle: mybatis-spring-1.2.2" />
-        <element id="library" level="project" name="Gradle: spring-aop-4.0.5.RELEASE" />
-        <element id="library" level="project" name="Gradle: spring-beans-4.0.5.RELEASE" />
-        <element id="library" level="project" name="Gradle: spring-context-4.0.5.RELEASE" />
-        <element id="library" level="project" name="Gradle: spring-core-4.0.5.RELEASE" />
-        <element id="library" level="project" name="Gradle: spring-expression-4.0.5.RELEASE" />
-        <element id="library" level="project" name="Gradle: spring-jdbc-4.0.5.RELEASE" />
-        <element id="library" level="project" name="Gradle: spring-tx-4.0.5.RELEASE" />
         <element id="library" level="project" name="Gradle: stringtemplate-3.2.1" />
-        <element id="library" level="project" name="Gradle: aspectjweaver-1.7.4" />
         <element id="library" level="project" name="Gradle: commons-io-1.3.2" />
-        <element id="library" level="project" name="Gradle: spring-aspects-4.0.5.RELEASE" />
         <element id="library" level="project" name="Gradle: jfxtras-common-8.0-r1" />
         <element id="library" level="project" name="Gradle: jfxtras-controls-8.0-r1" />
         <element id="library" level="project" name="Gradle: jfxtras-fxml-8.0-r1" />
         <element id="library" level="project" name="Gradle: jfxtras-labs-8.0-r1" />
         <element id="library" level="project" name="Gradle: commons-lang3-3.3.2" />
         <element id="library" level="project" name="Gradle: controlsfx-8.0.6_20" />
+        <element id="library" level="project" name="Gradle: commons-beanutils-1.8.3" />
+        <element id="library" level="project" name="Gradle: commons-collections4-4.0" />
+        <element id="library" level="project" name="Gradle: commons-digester-1.8" />
+        <element id="library" level="project" name="Gradle: commons-validator-1.4.0" />
+        <element id="library" level="project" name="Gradle: spring-aop-4.0.6.RELEASE" />
+        <element id="library" level="project" name="Gradle: spring-aspects-4.0.6.RELEASE" />
+        <element id="library" level="project" name="Gradle: spring-beans-4.0.6.RELEASE" />
+        <element id="library" level="project" name="Gradle: spring-context-4.0.6.RELEASE" />
+        <element id="library" level="project" name="Gradle: spring-core-4.0.6.RELEASE" />
+        <element id="library" level="project" name="Gradle: spring-expression-4.0.6.RELEASE" />
+        <element id="library" level="project" name="Gradle: spring-jdbc-4.0.6.RELEASE" />
+        <element id="library" level="project" name="Gradle: spring-tx-4.0.6.RELEASE" />
+        <element id="file-copy" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.aspectj/aspectjweaver/1.8.1/da75e95c91703667b2ae20acdd3d8ee40ea7aabd/aspectjweaver-1.8.1.jar" />
       </element>
     </root>
   </artifact>

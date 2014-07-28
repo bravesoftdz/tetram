@@ -12,7 +12,7 @@ dependencies {
     testCompile 'junit:junit:4+'
     // 28/05/2014: la version dispo est la version 12 qui ne contient pas l'annotation Contract
     //compile 'com.intellij:annotations:+'
-    compile files('C:\\Program Files (x86)\\JetBrains\\IntelliJ IDEA Community Edition 13.1.4\\lib\\annotations.jar')
+    compile files('C:\\Program Files (x86)\\JetBrains\\IntelliJ IDEA 13.1.4\\lib\\annotations.jar')
 
     // la 2.0-rc2 déclenche une exception "java.lang.ClassNotFoundException: org.apache.logging.log4j.spi.AbstractLoggerWrapper"
     // la classe semble avoir disparu entre la rc1 et la rc2

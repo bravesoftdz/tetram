@@ -2,18 +2,23 @@
   <dictionary name="Thierry">
     <words>
       <w>abrev</w>
+      <w>annee</w>
       <w>annees</w>
       <w>apparament</w>
       <w>bdtheque</w>
       <w>c'est</w>
+      <w>categorie</w>
       <w>chaine</w>
       <w>d'un</w>
       <w>datasource</w>
+      <w>dedicace</w>
       <w>demarrage</w>
       <w>diaporama</w>
       <w>donnees</w>
+      <w>editeur</w>
       <w>editeurs</w>
       <w>entite</w>
+      <w>etat</w>
       <w>firebird</w>
       <w>guid</w>
       <w>horserie</w>
@@ -34,6 +39,8 @@
       <w>rafraichir</w>
       <w>scanne</w>
       <w>scenariste</w>
+      <w>scenaristes</w>
+      <w>serie</w>
       <w>springframework</w>
       <w>stockees</w>
       <w>terminee</w>
