@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <!--
   ~ Copyright (c) 2014, tetram.org. All Rights Reserved.
   ~ notation.fxml
-  ~ Last modified by Tetram, on 2014-07-29T11:33:53CEST
+  ~ Last modified by Tetram, on 2014-07-29T11:34:44CEST
   -->
-
 <?import javafx.scene.image.ImageView?>
 <ImageView xmlns:fx="http://javafx.com/fxml/1" fx:id="ivAppreciation" fitHeight="32.0" fitWidth="32.0"
            pickOnBounds="true"

@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <!--
   ~ Copyright (c) 2014, tetram.org. All Rights Reserved.
   ~ ficheAlbum.fxml
-  ~ Last modified by Tetram, on 2014-07-29T11:18:59CEST
-  --><?import javafx.geometry.Insets?>
+  ~ Last modified by Tetram, on 2014-07-29T11:34:53CEST
+  -->
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.TextFlow?>
-<?import java.net.URL?>VBox xmlns:fx="http://javafx.com/fxml/1" alignment="TOP_CENTER" prefHeight="813.0" prefWidth="843.0" spacing="16.0"
+<?import java.net.URL?>
+<VBox xmlns:fx="http://javafx.com/fxml/1" alignment="TOP_CENTER" prefHeight="813.0" prefWidth="843.0" spacing="16.0"
         styleClass="scene" xmlns="http://javafx.com/javafx/8"
         fx:controller="org.tetram.bdtheque.gui.controllers.consultation.FicheAlbumController">
 <padding>
