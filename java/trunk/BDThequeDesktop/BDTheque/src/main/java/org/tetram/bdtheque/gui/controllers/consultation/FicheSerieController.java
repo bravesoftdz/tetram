@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2014, tetram.org. All Rights Reserved.
+ * FicheSerieController.java
+ * Last modified by Tetram, on 2014-07-29T11:10:36CEST
+ */
+
 package org.tetram.bdtheque.gui.controllers.consultation;
 
 import javafx.beans.binding.Bindings;
@@ -43,6 +49,7 @@ import java.util.UUID;
 })
 public class FicheSerieController extends WindowController implements ConsultationController {
 
+    private final ObjectProperty<Serie> serie = new SimpleObjectProperty<>();
     @FXML
     NotationController notationController;
     @Autowired
@@ -75,8 +82,6 @@ public class FicheSerieController extends WindowController implements Consultati
     private CheckBox cbTerminee;
     @FXML
     private ListView<ParaBDLite> lvParabd;
-
-    private ObjectProperty<Serie> serie = new SimpleObjectProperty<>();
 
     @FXML
     public void initialize() {

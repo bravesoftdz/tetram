@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  ~ Copyright (c) 2014, tetram.org. All Rights Reserved.
+  ~ Editeur.xml
+  ~ Last modified by Tetram, on 2014-07-29T11:19:04CEST
+  -->
+
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="org.tetram.bdtheque.data.dao.mappers.EditeurMapper">
     <resultMap id="EditeurLite" type="beanEditeurLite">
@@ -14,23 +20,27 @@
 
     <select id="getEditeurLiteById" resultMap="EditeurLite">
         <![CDATA[
+
         select
             id_editeur, nomEditeur, siteWeb
         from
             editeurs
         where
             id_editeur = #{id}
+
         ]]>
     </select>
 
     <select id="getEditeurById" resultMap="EditeurFull">
         <![CDATA[
+
         select
             id_editeur, nomEditeur, siteWeb
         from
             editeurs
         where
             id_editeur = #{id}
+
         ]]>
     </select>
 
@@ -52,11 +62,13 @@
 
     <sql id="saveEditeur">
         <![CDATA[
+
         update or insert into editeurs (
             id_editeur, nomEditeur, siteWeb
         ) values (
             #{id}, #{nomEditeur}, #{siteWeb}
         )
+
         ]]>
     </sql>
 
@@ -73,7 +85,9 @@
 
     <delete id="deleteEditeur">
         <![CDATA[
+
         delete from editeurs where id_editeur = #{id}
+
         ]]>
     </delete>
 

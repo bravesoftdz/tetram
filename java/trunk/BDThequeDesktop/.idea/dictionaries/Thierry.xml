@@ -2,6 +2,7 @@
   <dictionary name="Thierry">
     <words>
       <w>abrev</w>
+      <w>achete</w>
       <w>annee</w>
       <w>annees</w>
       <w>apparament</w>
@@ -9,10 +10,12 @@
       <w>c'est</w>
       <w>categorie</w>
       <w>chaine</w>
+      <w>connait</w>
       <w>d'un</w>
       <w>datasource</w>
       <w>dedicace</w>
       <w>demarrage</w>
+      <w>dest</w>
       <w>diaporama</w>
       <w>donnees</w>
       <w>editeur</w>
@@ -23,6 +26,7 @@
       <w>guid</w>
       <w>horserie</w>
       <w>ibatis</w>
+      <w>integrale</w>
       <w>jdbc</w>
       <w>l'annotation</w>
       <w>l'appli</w>
@@ -30,8 +34,11 @@
       <w>l'ordre</w>
       <w>n'est</w>
       <w>necessaire</w>
+      <w>numero</w>
       <w>numerote</w>
       <w>parabd</w>
+      <w>perso</w>
+      <w>prete</w>
       <w>proc</w>
       <w>qu'on</w>
       <w>qu'une</w>
@@ -42,6 +49,7 @@
       <w>scenaristes</w>
       <w>serie</w>
       <w>springframework</w>
+      <w>stockee</w>
       <w>stockees</w>
       <w>terminee</w>
       <w>tetram</w>

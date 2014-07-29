@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2014, tetram.org. All Rights Reserved.
+ * WindowController.java
+ * Last modified by Tetram, on 2014-07-29T11:09:14CEST
+ */
+
 package org.tetram.bdtheque.gui.controllers;
 
 import javafx.beans.property.ObjectProperty;
@@ -10,8 +16,8 @@ import javafx.stage.Stage;
  */
 
 public class WindowController {
-    private ObjectProperty<Stage> dialog = new SimpleObjectProperty<>(this, "dialog", null);
-    private ObjectProperty<Node> view = new SimpleObjectProperty<>(this, "view", null);
+    private final ObjectProperty<Stage> dialog = new SimpleObjectProperty<>(this, "dialog", null);
+    private final ObjectProperty<Node> view = new SimpleObjectProperty<>(this, "view", null);
 
     public Stage getDialog() {
         return dialog.get();

@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2014, tetram.org. All Rights Reserved.
+ * NotationController.java
+ * Last modified by Tetram, on 2014-07-29T11:10:36CEST
+ */
+
 package org.tetram.bdtheque.gui.controllers.components;
 
 import javafx.beans.property.ObjectProperty;
@@ -28,15 +34,13 @@ import org.tetram.bdtheque.gui.utils.NotationResource;
 @Controller
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class NotationController extends WindowController {
+    private final ObjectProperty<ValeurListe> notation = new SimpleObjectProperty<>(this, "notation", null);
+    private final ObjectProperty<EvaluatedEntity> entity = new SimpleObjectProperty<>(this, "entity", null);
+    private final ObjectProperty<EvaluatedEntityDao> dao = new SimpleObjectProperty<>(this, "dao", null);
     @FXML
     public ImageView ivAppreciation;
-
     @Autowired
     private ValeurListeDao valeurListeDao;
-
-    private ObjectProperty<ValeurListe> notation = new SimpleObjectProperty<>(this, "notation", null);
-    private ObjectProperty<EvaluatedEntity> entity = new SimpleObjectProperty<>(this, "entity", null);
-    private ObjectProperty<EvaluatedEntityDao> dao = new SimpleObjectProperty<>(this, "dao", null);
 
     public NotationController() {
         notation.addListener((observable, oldValue, newValue) -> {

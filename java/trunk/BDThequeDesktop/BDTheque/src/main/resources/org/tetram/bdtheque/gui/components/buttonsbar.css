@@ -1,4 +1,10 @@
-#lbMessage{
+/*
+ * Copyright (c) 2014, tetram.org. All Rights Reserved.
+ * buttonsbar.css
+ * Last modified by Tetram, on 2014-07-29T11:10:40CEST
+ */
+
+#lbMessage {
     -fx-font-size: 17;
     -fx-font-weight: bold;
 }

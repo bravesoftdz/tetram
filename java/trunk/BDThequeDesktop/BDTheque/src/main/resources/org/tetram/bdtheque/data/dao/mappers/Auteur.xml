@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  ~ Copyright (c) 2014, tetram.org. All Rights Reserved.
+  ~ Auteur.xml
+  ~ Last modified by Tetram, on 2014-07-29T11:19:04CEST
+  -->
+
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="org.tetram.bdtheque.data.dao.mappers.AuteurMapper">
     <resultMap id="AbstractPersonne" type="org.tetram.bdtheque.data.bean.abstractentities.BasePersonne">
@@ -16,45 +22,55 @@
     </resultMap>
 
     <resultMap id="AuteurLite" type="org.tetram.bdtheque.data.bean.abstractentities.BaseAuteur">
-    <association property="personne" resultMap="PersonneLite"/>
+        <association property="personne" resultMap="PersonneLite"/>
     </resultMap>
     <resultMap id="AuteurSerieLite" extends="AuteurLite" type="beanAuteurSerieLite">
-    <id column="id_auteur_series" property="id"/>
+        <id column="id_auteur_series" property="id"/>
         <result column="id_serie" property="idSerie"/>
         <result column="metier" property="metier"/>
     </resultMap>
     <resultMap id="AuteurAlbumLite" extends="AuteurSerieLite" type="beanAuteurAlbumLite">
-    <id column="id_auteur" property="id"/>
+        <id column="id_auteur" property="id"/>
         <result column="id_album" property="idAlbum"/>
     </resultMap>
     <resultMap id="AuteurParaBDLite" extends="AuteurLite" type="beanAuteurParaBDLite">
-    <id column="id_auteur_paraBD" property="id"/>
+        <id column="id_auteur_paraBD" property="id"/>
         <result column="id_paraBD" property="idParaBD"/>
     </resultMap>
 
     <select id="getPersonneLiteById" resultMap="PersonneLite" parameterType="UUID">
         <![CDATA[
+
+
         select
             id_personne, nomPersonne, siteWeb
         from
             personnes
         where
             id_personne = #{id}
+
+
         ]]>
     </select>
     <select id="getPersonneById" resultMap="PersonneFull" parameterType="UUID">
         <![CDATA[
+
+
         select
             id_personne, nomPersonne, siteWeb, biographie
         from
             personnes
         where
             id_personne = #{id}
+
+
         ]]>
     </select>
 
     <select id="getListAuteurLiteByAlbumId" resultMap="AuteurAlbumLite">
         <![CDATA[
+
+
         select
             p.id_personne, p.nomPersonne, p.siteWeb,
             a.id_auteur, a.id_album, a.metier
@@ -66,12 +82,16 @@
             a.id_album = #{idAlbum}
         order by
             a.metier, p.nomPersonne
+
+
         ]]>
     </select>
     <select id="getListAuteurLiteBySerieId" resultMap="AuteurSerieLite">
         <![CDATA[
+
+
         select
-            p.id_personne, p.nompersonne, p.siteWeb,
+            p.id_personne, p.nomPersonne, p.siteWeb,
             a.id_auteur_series, a.id_serie, a.metier
         from
             personnes p
@@ -81,10 +101,14 @@
             a.id_serie = #{idSerie}
         order by
             a.metier, p.nomPersonne
+
+
         ]]>
     </select>
     <select id="getListAuteurLiteByParaBDId" resultMap="AuteurParaBDLite">
         <![CDATA[
+
+
         select
             p.id_personne, p.nomPersonne, p.siteWeb,
             a.id_auteur_parabd, a.id_parabd
@@ -96,24 +120,34 @@
             a.id_parabd =  #{idParaBD}
         order by
             p.nomPersonne
+
+
         ]]>
     </select>
 
     <select id="getInitiales" resultMap="org.tetram.bdtheque.data.dao.mappers.CommonMapper.InitialeEntityCharacter">
         <![CDATA[
+
+
         select
             initialeNomPersonne "label", countInitiale "count", initialeNomPersonne "value"
         from
             vw_initiales_personnes
+
+
         ]]>
     </select>
 
     <select id="getPersonneLiteByInitiale" resultMap="PersonneLite">
         <![CDATA[
+
+
         select
             id_personne, nomPersonne
         from
             personnes_by_initiale(#{initiale})
+
+
         ]]>
     </select>
 
@@ -135,11 +169,15 @@
 
     <sql id="savePersonne">
         <![CDATA[
+
+
         update or insert into personnes (
             id_personne, nomPersonne, siteWeb, biographie
         ) values (
             #{id}, #{nomPersonne}, #{siteWeb}, #{biographie}
         )
+
+
         ]]>
     </sql>
 
@@ -156,13 +194,21 @@
 
     <delete id="deletePersonne">
         <![CDATA[
+
+
         delete from personnes where id_personne = #{id}
+
+
         ]]>
     </delete>
 
     <delete id="cleanAuteursAlbum">
         <![CDATA[
+
+
         delete from auteurs where id_album = #{id}
+
+
         ]]>
     </delete>
     <insert id="addAuteurAlbum">
@@ -180,7 +226,11 @@
 
     <delete id="cleanAuteursSerie">
         <![CDATA[
+
+
         delete from auteurs_series where id_serie = #{id}
+
+
         ]]>
     </delete>
     <insert id="addAuteurSerie">
@@ -198,7 +248,11 @@
 
     <delete id="cleanAuteursParaBD">
         <![CDATA[
+
+
         delete from auteurs_parabd where id_parabd = #{id}
+
+
         ]]>
     </delete>
     <insert id="addAuteurParaBD">

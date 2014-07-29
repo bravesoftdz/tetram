@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  ~ Copyright (c) 2014, tetram.org. All Rights Reserved.
+  ~ Album.xml
+  ~ Last modified by Tetram, on 2014-07-29T11:19:04CEST
+  -->
+
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="org.tetram.bdtheque.data.dao.mappers.AlbumMapper">
     <resultMap id="AbstractAlbum" type="org.tetram.bdtheque.data.bean.abstractentities.BaseAlbum">
@@ -80,6 +86,7 @@
     </select>
     <select id="getAlbumById" parameterType="UUID" resultMap="AlbumFull">
         <![CDATA[
+
         select
             a.id_album, a.titreAlbum, a.moisParution, a.anneeParution, a.id_serie, a.tome, a.tomeDebut, a.tomeFin, a.sujetAlbum,
             a.remarquesAlbum, a.horsSerie, a.integrale, a.complet, a.notation, n.libelle as lb_notation
@@ -89,6 +96,7 @@
                 (n.ref = a.notation and n.categorie = 9)
         where
             a.id_album = #{id}
+
         ]]>
     </select>
     <select id="getListAlbumLiteBySerieIdByAuteurId" parameterType="map" resultMap="AlbumLite" resultOrdered="true">
@@ -120,10 +128,12 @@
 
     <select id="getInitiales" resultMap="org.tetram.bdtheque.data.dao.mappers.CommonMapper.InitialeEntityCharacter">
         <![CDATA[
+
         select
             initialeTitreAlbum "label", countInitiale "count", initialeTitreAlbum "value"
         from
             initiales_albums(#{filtre})
+
         ]]>
     </select>
 
@@ -138,10 +148,12 @@
 
     <select id="getInitialesSeries" resultMap="org.tetram.bdtheque.data.dao.mappers.CommonMapper.InitialeEntityUUID">
         <![CDATA[
+
         select
             titreSerie "label", countSerie "count", id_serie "value"
         from
             series_albums(#{filtre})
+
         ]]>
     </select>
 
@@ -177,10 +189,12 @@
     <select id="getInitialesCollections"
             resultMap="org.tetram.bdtheque.data.dao.mappers.CommonMapper.InitialeEntityUUID">
         <![CDATA[
+
         select
             nomCollection "label", countCollection "count", id_collection "value"
         from
             collections_albums(#{filtre})
+
         ]]>
     </select>
 
@@ -198,10 +212,12 @@
 
     <select id="getInitialesEditeurs" resultMap="org.tetram.bdtheque.data.dao.mappers.CommonMapper.InitialeEntityUUID">
         <![CDATA[
+
         select
             nomEditeur "label", countEditeur "count", id_editeur "value"
         from
             editeurs_albums(#{filtre})
+
         ]]>
     </select>
 
@@ -219,10 +235,12 @@
 
     <select id="getInitialesGenres" resultMap="org.tetram.bdtheque.data.dao.mappers.CommonMapper.InitialeEntityUUID">
         <![CDATA[
+
         select
             genre "label", countGenre "count", id_genre "value"
         from
             genres_albums(#{filtre})
+
         ]]>
     </select>
 
@@ -240,10 +258,12 @@
 
     <select id="getInitialesAnnees" resultMap="org.tetram.bdtheque.data.dao.mappers.CommonMapper.InitialeEntityYear">
         <![CDATA[
+
         select
             anneeParution "label", countAnnee "count", nullif(anneeParution, -1) "value"
         from
             annees_albums(#{filtre})
+
         ]]>
     </select>
 
@@ -261,17 +281,22 @@
 
     <update id="changeNotation">
         <![CDATA[
+
         update albums set notation = #{notation} where id_album = #{id}
+
         ]]>
     </update>
     <update id="acheter">
         <![CDATA[
+
         update albums set achat = #{achat} where id_album = #{id}
+
         ]]>
     </update>
 
     <sql id="saveAlbum">
         <![CDATA[
+
         update or insert into albums (
             id_album, titreAlbum, moisParution, anneeParution, id_serie, tome, tomeDebut, tomeFin,
             horsSerie, integrale, sujetAlbum, remarquesAlbum
@@ -279,6 +304,7 @@
             #{id}, #{titreAlbum}, #{moisParution}, #{anneeParution}, #{idSerie}, #{tome}, #{tomeDebut}, #{tomeFin},
             #{horsSerie}, #{integrale}, #{sujet}, #{notes}
         )
+
         ]]>
     </sql>
 
@@ -295,7 +321,9 @@
 
     <delete id="deleteAlbum">
         <![CDATA[
+
         delete from albums where id_album = #{id}
+
         ]]>
     </delete>
 

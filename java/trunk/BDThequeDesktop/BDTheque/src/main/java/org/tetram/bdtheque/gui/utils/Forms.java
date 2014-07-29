@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2014, tetram.org. All Rights Reserved.
+ * Forms.java
+ * Last modified by Tetram, on 2014-07-29T11:09:14CEST
+ */
+
 package org.tetram.bdtheque.gui.utils;
 
 import javafx.beans.property.*;
@@ -26,14 +32,14 @@ import java.util.Objects;
 public class Forms {
 
     @NonNls
-    private static Map<Class<? extends AbstractDBEntity>, String> entitiesUrlFiche;
+    private static final Map<Class<? extends AbstractDBEntity>, String> entitiesUrlFiche;
     @NonNls
-    private static Map<Class<? extends AbstractDBEntity>, String> entitiesUrlEdit;
+    private static final Map<Class<? extends AbstractDBEntity>, String> entitiesUrlEdit;
 
-    private static ReadOnlyStringWrapper lastUrl = new ReadOnlyStringWrapper(null, "lastURL", null);
-    private static ReadOnlyObjectWrapper<Object> lastContainer = new ReadOnlyObjectWrapper<>(null, "lastContainer", null);
-    private static ReadOnlyObjectWrapper<Node> lastView = new ReadOnlyObjectWrapper<>(null, "lastView", null);
-    private static ReadOnlyObjectWrapper<WindowController> lastController = new ReadOnlyObjectWrapper<>(null, "lastController", null);
+    private static final ReadOnlyStringWrapper lastUrl = new ReadOnlyStringWrapper(null, "lastURL", null);
+    private static final ReadOnlyObjectWrapper<Object> lastContainer = new ReadOnlyObjectWrapper<>(null, "lastContainer", null);
+    private static final ReadOnlyObjectWrapper<Node> lastView = new ReadOnlyObjectWrapper<>(null, "lastView", null);
+    private static final ReadOnlyObjectWrapper<WindowController> lastController = new ReadOnlyObjectWrapper<>(null, "lastController", null);
 
     static {
         entitiesUrlFiche = new HashMap<>();

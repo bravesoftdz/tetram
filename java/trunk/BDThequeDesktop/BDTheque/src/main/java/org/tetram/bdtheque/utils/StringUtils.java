@@ -1,13 +1,18 @@
-package org.tetram.bdtheque.utils;
+/*
+ * Copyright (c) 2014, tetram.org. All Rights Reserved.
+ * StringUtils.java
+ * Last modified by Tetram, on 2014-07-29T11:09:14CEST
+ */
 
+package org.tetram.bdtheque.utils;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.Locale;
 import java.util.UUID;
-
 
 public abstract class StringUtils {
 
@@ -40,6 +45,7 @@ public abstract class StringUtils {
     }
 
     @SuppressWarnings("CallToStringEquals")
+    @NotNull
     public static String ajoutString(String chaine, final String ajout, final String espace, final String avant, final String apres) {
         final StringBuilder stringBuilder = new StringBuilder(
                 ((chaine == null) ? 0 : chaine.length())
@@ -59,7 +65,7 @@ public abstract class StringUtils {
     }
 
     @SuppressWarnings("CallToStringEquals")
-    @Contract("null -> !null")
+    @NotNull
     public static String nonZero(final String s) {
         if ((s == null) || "0".equals(trim(s)))
             return "";
@@ -67,7 +73,7 @@ public abstract class StringUtils {
     }
 
     @SuppressWarnings("CallToNumericToString")
-    @Contract("null -> !null")
+    @NotNull
     public static String nonZero(final Integer i) {
         if ((i == null) || Integer.valueOf(0).equals(i))
             return "";
@@ -78,15 +84,17 @@ public abstract class StringUtils {
         return org.apache.commons.lang3.StringUtils.stripEnd(v, " \r\n\t\b\u00A0");
     }
 
+    @Contract("null -> true")
     public static boolean isNullOrEmpty(String string) {
         return string == null || string.isEmpty();
     }
 
+    @Contract("null -> true")
     public static <T extends Collection> boolean isNullOrEmpty(T list) {
         return list == null || list.isEmpty();
     }
 
-    @Contract("null -> !null; !null -> !null")
+    @NotNull
     public static String notNull(String s) {
         return s == null ? "" : s;
     }

@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2014, tetram.org. All Rights Reserved.
+ * FicheAuteurController.java
+ * Last modified by Tetram, on 2014-07-29T11:10:36CEST
+ */
+
 package org.tetram.bdtheque.gui.controllers.consultation;
 
 import javafx.beans.property.ObjectProperty;
@@ -40,18 +46,15 @@ import java.util.UUID;
 })
 public class FicheAuteurController extends WindowController implements ConsultationController {
 
+    private final ObjectProperty<Personne> personne = new SimpleObjectProperty<>();
     @Autowired
     private PersonneDao personneDao;
-
     @FXML
     private TreeViewController seriesController;
-
     @FXML
     private Label lbNom;
     @FXML
     private TextFlow tfBiographie;
-
-    private ObjectProperty<Personne> personne = new SimpleObjectProperty<>();
 
     @SuppressWarnings("unchecked")
     @Override

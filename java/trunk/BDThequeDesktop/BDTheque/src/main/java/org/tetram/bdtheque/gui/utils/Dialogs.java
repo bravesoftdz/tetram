@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2014, tetram.org. All Rights Reserved.
+ * Dialogs.java
+ * Last modified by Tetram, on 2014-07-29T11:02:06CEST
+ */
+
 package org.tetram.bdtheque.gui.utils;
 
 import javafx.beans.property.ReadOnlyObjectProperty;
@@ -17,7 +23,7 @@ import org.tetram.bdtheque.spring.SpringFxmlLoader;
  */
 public class Dialogs extends Stage {
 
-    private ReadOnlyObjectWrapper<DialogController> dialogController = new ReadOnlyObjectWrapper<>(this, "dialogController", null);
+    private final ReadOnlyObjectWrapper<DialogController> dialogController = new ReadOnlyObjectWrapper<>(this, "dialogController", null);
 
     private Dialogs(Window owner, @NonNls String url, boolean resizable) {
         initModality(Modality.APPLICATION_MODAL);

@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2014, tetram.org. All Rights Reserved.
+ * FicheAuteurController.java
+ * Last modified by Tetram, on 2014-07-29T11:02:06CEST
+ */
+
 package org.tetram.bdtheque.gui.controllers.gestion;
 
 import javafx.fxml.FXML;
@@ -16,6 +22,7 @@ import org.tetram.bdtheque.spring.utils.ListStringConverter;
 import org.tetram.bdtheque.spring.utils.URLStringConverter;
 import org.tetram.bdtheque.utils.FileLink;
 import org.tetram.bdtheque.utils.FileLinks;
+import org.tetram.bdtheque.utils.I18nSupport;
 
 import java.util.UUID;
 
@@ -50,7 +57,7 @@ public class FicheAuteurController extends GestionControllerImpl {
     void initialize() {
         editControllerProperty().addListener(o -> {
             FicheEditController<?> controller = getEditController();
-            controller.setLabel("Auteur");
+            controller.setLabel(I18nSupport.message("Auteur"));
 
             controller.registerOkHandler(event -> {
                 personneDao.save(personne);

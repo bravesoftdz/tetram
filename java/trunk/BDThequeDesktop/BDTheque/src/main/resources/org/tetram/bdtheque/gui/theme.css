@@ -1,18 +1,24 @@
-.root{
+/*
+ * Copyright (c) 2014, tetram.org. All Rights Reserved.
+ * theme.css
+ * Last modified by Tetram, on 2014-07-29T11:10:40CEST
+ */
+
+.root {
     -fx-font-family: "Segoe UI";
     -fx-font-size: 12px;
 }
 
 .hyperlink {
     -fx-padding: 0;
-/*
-    -fx-padding: 0.166667em;
-    -fx-cursor: hand;
-    -fx-content-display: LEFT;
-    -fx-text-fill: -fx-text-background-color;
-    -fx-border-color: transparent;
-    -fx-border-width: 1px;
-*/
+    /*
+        -fx-padding: 0.166667em;
+        -fx-cursor: hand;
+        -fx-content-display: LEFT;
+        -fx-text-fill: -fx-text-background-color;
+        -fx-border-color: transparent;
+        -fx-border-width: 1px;
+    */
 }
 
 /*
@@ -29,11 +35,11 @@
 
 .hyperlink:focused {
     -fx-border-color: transparent;
-/*
-    -fx-color: -fx-focused-base;
-    -fx-border-color: -fx-focus-color;
-    -fx-border-style: segments(0.166667em, 0.166667em);
-    -fx-border-width: 1px;
-*/
+    /*
+        -fx-color: -fx-focused-base;
+        -fx-border-color: -fx-focus-color;
+        -fx-border-style: segments(0.166667em, 0.166667em);
+        -fx-border-width: 1px;
+    */
 }
 

@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2014, tetram.org. All Rights Reserved.
+ * build.gradle
+ * Last modified by Tetram, on 2014-07-29T11:03:06CEST
+ */
+
 apply plugin: 'java'
 apply plugin: 'idea'
 

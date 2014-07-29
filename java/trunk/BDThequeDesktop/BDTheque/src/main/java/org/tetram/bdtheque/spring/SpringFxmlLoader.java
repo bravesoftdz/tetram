@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2014, tetram.org. All Rights Reserved.
+ * SpringFxmlLoader.java
+ * Last modified by Tetram, on 2014-07-29T11:02:07CEST
+ */
+
 package org.tetram.bdtheque.spring;
 
 import javafx.fxml.FXMLLoader;

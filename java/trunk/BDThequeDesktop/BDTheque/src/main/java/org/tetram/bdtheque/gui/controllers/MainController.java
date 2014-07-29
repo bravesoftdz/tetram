@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2014, tetram.org. All Rights Reserved.
+ * MainController.java
+ * Last modified by Tetram, on 2014-07-29T11:10:36CEST
+ */
+
 package org.tetram.bdtheque.gui.controllers;
 
 import impl.org.controlsfx.i18n.Localization;
@@ -23,9 +29,7 @@ import org.tetram.bdtheque.utils.I18nSupport;
 import org.tetram.bdtheque.utils.StringUtils;
 
 import java.io.IOException;
-import java.net.URL;
 import java.util.Locale;
-import java.util.ResourceBundle;
 import java.util.UUID;
 
 
@@ -35,45 +39,30 @@ public class MainController extends WindowController {
 
     @NonNls
     public static final UUID ID_SERIE_SILLAGE = StringUtils.GUIDStringToUUID("{69302EDB-6ED6-4DA3-A2E1-65B7B12BCB51}");
-
+    private final ObjectProperty<ApplicationMode> mode = new SimpleObjectProperty<>(this, "mode", null);
     @Autowired
     private UserPreferences userPreferences;
     @Autowired
     private History history;
     @Autowired
     private SerieDao serieDao;
-
-    @FXML
-    private ResourceBundle resources;
-    @FXML
-    private URL location;
-
     @FXML
     private MenuBar menuBar;
-
     @FXML
     private ToolBar toolBar;
-
     @FXML
     private Button buttonTest;
-
     @FXML
     private AnchorPane detailPane;
-
     @FXML
     private Menu mnuLanguage;
-
     @FXML
     private MenuItem mnuDBFile;
-
     @FXML
     private ToggleGroup tgMode;
-
     @NonNls
     @Autowired
     private SingleConnectionDataSource dataSource;
-
-    private ObjectProperty<ApplicationMode> mode = new SimpleObjectProperty<>(this, "mode", null);
 
     @FXML
     @FileLink("/org/tetram/bdtheque/config/default_database.properties")
@@ -129,7 +118,7 @@ public class MainController extends WindowController {
         }
     }
 
-    public void showPreferences(@SuppressWarnings("UnusedParameters") ActionEvent actionEvent) throws IOException {
+    public void showPreferences(@SuppressWarnings("UnusedParameters") ActionEvent actionEvent) {
         PreferencesController preferencesController = Dialogs.showPreferences(this.getDialog());
         if (preferencesController.getResult() == DialogController.DialogResult.OK)
             SpringContext.CONTEXT.getBean(RepertoireController.class).refresh();

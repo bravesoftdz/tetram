@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2014, tetram.org. All Rights Reserved.
+ * BeanUtils.java
+ * Last modified by Tetram, on 2014-07-29T11:09:14CEST
+ */
+
 package org.tetram.bdtheque.data;
 
 import org.jetbrains.annotations.Contract;
@@ -17,9 +23,9 @@ import java.util.*;
  */
 public abstract class BeanUtils {
 
-    public static final Map<Boolean, String> RES_TOME;
-    public static final Map<Boolean, String> RES_HORSERIE;
-    public static final Map<Boolean, String> RES_INTEGRALE;
+    private static final Map<Boolean, String> RES_TOME;
+    private static final Map<Boolean, String> RES_HORSERIE;
+    private static final Map<Boolean, String> RES_INTEGRALE;
 
     static {
         Map<Boolean, String> aMap;
@@ -40,7 +46,7 @@ public abstract class BeanUtils {
         RES_INTEGRALE = Collections.unmodifiableMap(aMap);
     }
 
-    private static List<String> prefixes = new ArrayList<String>() {{
+    private static final List<String> prefixes = new ArrayList<String>() {{
         add("un");
         add("une");
         add("des");

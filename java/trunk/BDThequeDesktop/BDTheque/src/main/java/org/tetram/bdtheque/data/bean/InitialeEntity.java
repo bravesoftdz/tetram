@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2014, tetram.org. All Rights Reserved.
+ * InitialeEntity.java
+ * Last modified by Tetram, on 2014-07-29T11:09:14CEST
+ */
+
 package org.tetram.bdtheque.data.bean;
 
 import javafx.beans.property.*;
@@ -9,9 +15,9 @@ import org.tetram.bdtheque.data.bean.abstractentities.AbstractEntity;
 
 public class InitialeEntity<T> extends AbstractEntity {
 
-    private IntegerProperty count = new SimpleIntegerProperty(this, "count", 0);
-    private ObjectProperty<T> value = new SimpleObjectProperty<>(this, "value", null);
-    private StringProperty label = new SimpleStringProperty(this, "label", "");
+    private final IntegerProperty count = new SimpleIntegerProperty(this, "count", 0);
+    private final ObjectProperty<T> value = new SimpleObjectProperty<>(this, "value", null);
+    private final StringProperty label = new SimpleStringProperty(this, "label", "");
 
     public int getCount() {
         return count.get();

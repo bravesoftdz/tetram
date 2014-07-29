@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2014, tetram.org. All Rights Reserved.
+ * FicheUniversController.java
+ * Last modified by Tetram, on 2014-07-29T11:10:36CEST
+ */
+
 package org.tetram.bdtheque.gui.controllers.consultation;
 
 import javafx.beans.property.ObjectProperty;
@@ -38,6 +44,7 @@ import java.util.UUID;
 })
 public class FicheUniversController extends WindowController implements ConsultationController {
 
+    private final ObjectProperty<Univers> univers = new SimpleObjectProperty<>();
     @Autowired
     private UniversDao universDao;
     @Autowired
@@ -46,7 +53,6 @@ public class FicheUniversController extends WindowController implements Consulta
     private ParaBDLiteDao paraBDLiteDao;
     @Autowired
     private History history;
-
     @FXML
     private Label lbNom;
     @FXML
@@ -57,8 +63,6 @@ public class FicheUniversController extends WindowController implements Consulta
     private TreeViewController albumsController;
     @FXML
     private TreeViewController parabdController;
-
-    private ObjectProperty<Univers> univers = new SimpleObjectProperty<>();
 
     @FXML
     public void initialize() {

@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2014, tetram.org. All Rights Reserved.
+ * FicheAlbumController.java
+ * Last modified by Tetram, on 2014-07-29T11:10:36CEST
+ */
+
 package org.tetram.bdtheque.gui.controllers.consultation;
 
 import javafx.beans.binding.Bindings;
@@ -61,7 +67,11 @@ public class FicheAlbumController extends WindowController implements Consultati
 
     @NonNls
     private static final String CSS_FLOW_B0RDER = "flow-border";
-
+    private final ObjectProperty<Album> album = new SimpleObjectProperty<>();
+    private final ObjectProperty<Serie> serie = new SimpleObjectProperty<>();
+    private final ListProperty<Edition> editions = new SimpleListProperty<>();
+    private final ObjectProperty<Edition> currentEdition = new SimpleObjectProperty<>();
+    private final ListProperty<CouvertureLite> images = new SimpleListProperty<>();
     @Autowired
     private History history;
     @Autowired
@@ -70,7 +80,6 @@ public class FicheAlbumController extends WindowController implements Consultati
     private CouvertureLiteDao couvertureDao;
     @Autowired
     private UserPreferences userPreferences;
-
     @FXML
     private NotationController notationController;
     @FXML
@@ -99,18 +108,14 @@ public class FicheAlbumController extends WindowController implements Consultati
     private FlowPane lvColoristes;
     @FXML
     private ListView<AlbumLite> lvSerie;
-
     @FXML
     private TextFlow histoire;
     @FXML
     private TextFlow notes;
-
     @FXML
     private Pagination diaporama;
-
     @FXML
     private ListView<Edition> lvEditions;
-
     @FXML
     private VBox detailEdition;
     @FXML
@@ -155,12 +160,6 @@ public class FicheAlbumController extends WindowController implements Consultati
     private Label lbAchete;
     @FXML
     private TextFlow tfNotesEdition;
-
-    private ObjectProperty<Album> album = new SimpleObjectProperty<>();
-    private ObjectProperty<Serie> serie = new SimpleObjectProperty<>();
-    private ListProperty<Edition> editions = new SimpleListProperty<>();
-    private ObjectProperty<Edition> currentEdition = new SimpleObjectProperty<>();
-    private ListProperty<CouvertureLite> images = new SimpleListProperty<>();
     private Image[] cacheImages = null;
 
     @FXML

@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  ~ Copyright (c) 2014, tetram.org. All Rights Reserved.
+  ~ Univers.xml
+  ~ Last modified by Tetram, on 2014-07-29T11:19:04CEST
+  -->
+
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="org.tetram.bdtheque.data.dao.mappers.UniversMapper">
     <resultMap id="UniversLite" type="beanUniversLite">
@@ -15,26 +21,31 @@
 
     <select id="getUniversLiteById" resultMap="UniversLite">
         <![CDATA[
+
         select
             id_univers, nomUnivers
         from
             univers
         where
             id_univers = #{id}
+
         ]]>
     </select>
     <select id="getUniversById" resultMap="UniversFull">
         <![CDATA[
+
         select
             id_univers, nomUnivers, id_univers_parent, description, siteWeb
         from
             univers
         where
             id_univers = #{id}
+
         ]]>
     </select>
     <select id="getListUniversLiteByParaBDId" resultMap="UniversLite">
         <![CDATA[
+
         select
             u.*
         from
@@ -43,10 +54,12 @@
                 pu.id_univers = u.id_univers
         where
             pu.source_parabd = 1 and pu.id_parabd = #{id}
+
         ]]>
     </select>
     <select id="getListUniversLiteByAlbumId" resultMap="UniversLite">
         <![CDATA[
+
         select
             u.*
         from
@@ -55,10 +68,12 @@
                 au.id_univers = u.id_univers
         where
             au.source_album = 1 and au.id_album = #{id}
+
         ]]>
     </select>
     <select id="getListUniversLiteBySerieId" resultMap="UniversLite">
         <![CDATA[
+
         select
             u.*
         from
@@ -67,24 +82,29 @@
                 su.id_univers = u.id_univers
         where
             su.id_serie = #{id}
+
         ]]>
     </select>
 
     <select id="getInitiales" resultMap="org.tetram.bdtheque.data.dao.mappers.CommonMapper.InitialeEntityCharacter">
         <![CDATA[
+
         select
             initialeNomUnivers "label", countInitiale "count", initialeNomUnivers "value"
         from
             initiales_univers(#{filtre})
+
         ]]>
     </select>
 
     <select id="getUniversLiteByInitiale" resultMap="UniversLite">
         <![CDATA[
+
         select
             id_univers, nomUnivers
         from
             univers_by_initiale(#{initiale}, #{filtre})
+
         ]]>
     </select>
 
@@ -106,11 +126,13 @@
 
     <sql id="saveUnivers">
         <![CDATA[
+
         update or insert into univers (
             id_univers, nomUnivers, id_univers_parent, description, siteWeb
         ) values (
             #{id}, #{nomUnivers}, #{idUniversParent}, #{description}, #{siteWeb}
         )
+
         ]]>
     </sql>
 
@@ -127,7 +149,9 @@
 
     <delete id="deleteUnivers">
         <![CDATA[
+
         delete from univers where id_univers = #{id}
+
         ]]>
     </delete>
 
@@ -146,11 +170,13 @@
     </update>
     <insert id="addUniversAlbum">
         <![CDATA[
+
         update or insert into albums_univers (
             id_album, id_univers, source_album
         ) values (
             #{idAlbum}, #{idUnivers}, 1
         )
+
         ]]>
     </insert>
 
@@ -169,11 +195,13 @@
     </delete>
     <insert id="addUniversSerie">
         <![CDATA[
+
         update or insert into series_univers (
             id_serie, id_univers
         ) values (
             #{idSerie}, #{idUnivers}
         )
+
         ]]>
     </insert>
 
@@ -192,11 +220,13 @@
     </update>
     <insert id="addUniversParaBD">
         <![CDATA[
+
         update or insert into parabd_univers (
             id_parabd, id_univers, source_parabd
         ) values (
             #{idParaBD}, #{idUnivers}, 1
         )
+
         ]]>
     </insert>
 

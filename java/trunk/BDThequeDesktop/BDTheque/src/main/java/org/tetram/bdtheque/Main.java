@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2014, tetram.org. All Rights Reserved.
+ * Main.java
+ * Last modified by Tetram, on 2014-07-29T11:02:08CEST
+ */
+
 package org.tetram.bdtheque;/**
  * Created by Thierry on 24/05/2014.
  */

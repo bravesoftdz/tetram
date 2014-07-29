@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2014, tetram.org. All Rights Reserved.
+ * TreeViewController.java
+ * Last modified by Tetram, on 2014-07-29T11:10:36CEST
+ */
+
 package org.tetram.bdtheque.gui.controllers.components;
 
 import javafx.application.Platform;
@@ -57,42 +63,35 @@ public class TreeViewController extends WindowController {
 
     @NonNls
     private static final String NODE_BOLD_CSS = "node-bold";
+    private final Timer searchTimer = new Timer(this::registerFind);
+    private final BooleanProperty clickToShow = new SimpleBooleanProperty(this, "clickToShow", true);
+    private final ObjectProperty<EventHandler<MouseEvent>> onClickItem = new SimpleObjectProperty<>(this, "onClickItem", null);
+    private final ObjectProperty<Callback<TreeViewNode, List<? extends AbstractEntity>>> onGetChildren = new SimpleObjectProperty<>(this, "onGetChildren", null);
+    private final ObjectProperty<Callback<TreeViewNode, Boolean>> onIsLeaf = new SimpleObjectProperty<>(this, "onIsLeaf", null);
+    private final ObjectProperty<Callback<TreeViewNode, String>> onGetLabel = new SimpleObjectProperty<>(this, "onGetLabel", null);
+    private final ObjectProperty<Class<? extends AbstractEntity>> finalEntityClass = new SimpleObjectProperty<>(this, "finalEntityClass", AbstractEntity.class);
+    private final ReadOnlyStringWrapper appliedFiltre = new ReadOnlyStringWrapper(this, "appliedFiltre", null);
+    private final StringProperty filtre = new SimpleStringProperty(this, "filtre", null);
+    private final BooleanProperty useDefaultFiltre = new SimpleBooleanProperty(this, "useDefaultFiltre", true);
+    private final ReadOnlyObjectWrapper<RepertoireLiteDao> dao = new ReadOnlyObjectWrapper<>(this, "dao", null);
+    private final ObjectProperty<TreeViewMode> mode = new SimpleObjectProperty<>(this, "mode", TreeViewMode.NONE);
+    private final ObjectProperty<AbstractEntity> selectedEntity = new SimpleObjectProperty<>(this, "selectedEntity", null);
+    private final BooleanProperty canSearch = new SimpleBooleanProperty(this, "canSearch", true);
     @Autowired
     private History history;
-
     @Autowired
     private UserPreferences userPreferences;
     @Autowired
     private MainController mainController;
-
     @FXML
     private TreeTableView<AbstractEntity> treeTableView;
-
     @FXML
     private TreeTableColumn<AbstractEntity, String> column0;
     @FXML
     private TreeTableColumn<AbstractEntity, AbstractEntity> column1;
-
     @FXML
     private TextField tfSearch;
     private boolean findRegistered = false;
-    private Timer searchTimer = new Timer(this::registerFind);
-
-    private BooleanProperty clickToShow = new SimpleBooleanProperty(this, "clickToShow", true);
-    private ObjectProperty<EventHandler<MouseEvent>> onClickItem = new SimpleObjectProperty<>(this, "onClickItem", null);
-    private ObjectProperty<Callback<TreeViewNode, List<? extends AbstractEntity>>> onGetChildren = new SimpleObjectProperty<>(this, "onGetChildren", null);
-    private ObjectProperty<Callback<TreeViewNode, Boolean>> onIsLeaf = new SimpleObjectProperty<>(this, "onIsLeaf", null);
-    private ObjectProperty<Callback<TreeViewNode, String>> onGetLabel = new SimpleObjectProperty<>(this, "onGetLabel", null);
-    private ObjectProperty<Class<? extends AbstractEntity>> finalEntityClass = new SimpleObjectProperty<>(this, "finalEntityClass", AbstractEntity.class);
-
-    private ReadOnlyStringWrapper appliedFiltre = new ReadOnlyStringWrapper(this, "appliedFiltre", null);
-    private StringProperty filtre = new SimpleStringProperty(this, "filtre", null);
-    private BooleanProperty useDefaultFiltre = new SimpleBooleanProperty(this, "useDefaultFiltre", true);
-    private ReadOnlyObjectWrapper<RepertoireLiteDao> dao = new ReadOnlyObjectWrapper<>(this, "dao", null);
-    private ObjectProperty<TreeViewMode> mode = new SimpleObjectProperty<>(this, "mode", TreeViewMode.NONE);
-    private ObjectProperty<AbstractEntity> selectedEntity = new SimpleObjectProperty<>(this, "selectedEntity", null);
-
-    private BooleanProperty canSearch = new SimpleBooleanProperty(this, "canSearch", true);
     private String lastFindText;
     private ListOrderedMap<InitialeEntity<?>, List<? extends AbstractDBEntity>> findList;
 

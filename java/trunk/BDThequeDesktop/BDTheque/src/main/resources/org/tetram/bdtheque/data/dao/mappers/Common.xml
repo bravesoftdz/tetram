@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  ~ Copyright (c) 2014, tetram.org. All Rights Reserved.
+  ~ Common.xml
+  ~ Last modified by Tetram, on 2014-07-29T11:19:04CEST
+  -->
+
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="org.tetram.bdtheque.data.dao.mappers.CommonMapper">
     <resultMap id="InitialeEntity" type="org.tetram.bdtheque.data.bean.InitialeEntity">
@@ -44,6 +50,8 @@
 
     <select id="fillAssociations" resultType="String">
         <![CDATA[
+
+
         select
             chaine
         from
@@ -52,48 +60,74 @@
             typedata = #{typeData}
             and id = #{id}
             and always = 1
+
+
         ]]>
     </select>
 
     <delete id="cleanAssociations">
         <![CDATA[
+
+
         delete from
             import_associations
         where
             typedata = #{typeData}
             and id = #{id}
             and always = 1
+
+
         ]]>
     </delete>
 
     <update id="saveAssociations">
         <![CDATA[
+
+
         update or insert into import_associations (
             chaine, id, parentId, typeData, always
         ) values (
             #{chaine}, #{id}, #{parentId}, #{typeData}, 1
         )
+
+
         ]]>
     </update>
 
     <select id="getFileContent" resultType="org.tetram.bdtheque.data.BlobContainer">
         <![CDATA[
+
+
         select blobContent data from loadBlobFromFile(#{path}, #{file})
+
+
         ]]>
     </select>
     <select id="sendFileContent">
         <![CDATA[
+
+
         select result from saveBlobToFile(#{path}, #{file}, #{content})
+
+
         ]]>
     </select>
     <select id="deleteFile">
         <![CDATA[
+
+
         select result from deleteFile(#{file})
+
+
         ]]>
     </select>
     <select id="searchNewFileName">
         <![CDATA[
+
+
         select new_filename from searchFilename(#{path}, #{baseFileName}, #{reserve})
+
+
         ]]>
     </select>
 </mapper>

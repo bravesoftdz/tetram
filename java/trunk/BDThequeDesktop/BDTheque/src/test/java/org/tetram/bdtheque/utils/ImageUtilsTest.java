@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2014, tetram.org. All Rights Reserved.
+ * ImageUtilsTest.java
+ * Last modified by Tetram, on 2014-07-29T11:02:08CEST
+ */
+
 package org.tetram.bdtheque.utils;
 
 import org.apache.commons.io.IOUtils;

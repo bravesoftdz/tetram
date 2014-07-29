@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2014, tetram.org. All Rights Reserved.
+ * FicheEditController.java
+ * Last modified by Tetram, on 2014-07-29T11:10:36CEST
+ */
+
 package org.tetram.bdtheque.gui.controllers.gestion;
 
 import javafx.beans.property.SimpleStringProperty;
@@ -29,16 +35,13 @@ import java.util.Map;
 })
 public class FicheEditController<C extends WindowController & GestionController> extends WindowController {
 
+    private final StringProperty label = new SimpleStringProperty(this, "label", null);
+    private final Map<HandlerPriority, List<EventHandler<ActionEvent>>> cancelHandlers = new HashMap<>();
+    private final Map<HandlerPriority, List<EventHandler<ActionEvent>>> okHandlers = new HashMap<>();
     @FXML
     private ScrollPane detailPane;
-
     @FXML
     private ButtonsBarController buttonsController;
-
-    private StringProperty label = new SimpleStringProperty(this, "label", null);
-    private Map<HandlerPriority, List<EventHandler<ActionEvent>>> cancelHandlers = new HashMap<>();
-    private Map<HandlerPriority, List<EventHandler<ActionEvent>>> okHandlers = new HashMap<>();
-
     private C childController;
 
     @FXML

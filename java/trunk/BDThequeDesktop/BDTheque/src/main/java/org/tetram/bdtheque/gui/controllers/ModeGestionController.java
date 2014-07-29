@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2014, tetram.org. All Rights Reserved.
+ * ModeGestionController.java
+ * Last modified by Tetram, on 2014-07-29T11:10:36CEST
+ */
+
 package org.tetram.bdtheque.gui.controllers;
 
 import javafx.application.Platform;
@@ -37,6 +43,7 @@ import java.util.Map;
 public class ModeGestionController extends WindowController implements ModeController {
     @NonNls
     private static final String FILTRE_ACHAT = "Achat = 1";
+    private final ReadOnlyListWrapper<Class<? extends AbstractEntity>> currentEntities = new ReadOnlyListWrapper<>(this, "currentEntity", FXCollections.observableArrayList());
     @FXML
     private ToolBar tbEntities;
     @FXML
@@ -73,9 +80,6 @@ public class ModeGestionController extends WindowController implements ModeContr
     private ToggleButton btAlbums;
     @FXML
     private TreeViewController entitiesController;
-
-    private ReadOnlyListWrapper<Class<? extends AbstractEntity>> currentEntities = new ReadOnlyListWrapper<>(this, "currentEntity", FXCollections.observableArrayList());
-
     @Autowired
     private History history;
 

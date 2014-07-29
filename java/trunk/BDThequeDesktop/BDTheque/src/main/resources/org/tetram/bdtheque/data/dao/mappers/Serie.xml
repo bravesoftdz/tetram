@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  ~ Copyright (c) 2014, tetram.org. All Rights Reserved.
+  ~ Serie.xml
+  ~ Last modified by Tetram, on 2014-07-29T11:19:04CEST
+  -->
+
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="org.tetram.bdtheque.data.dao.mappers.SerieMapper">
     <resultMap id="AbstractSerie" type="org.tetram.bdtheque.data.bean.abstractentities.BaseSerie">
@@ -52,6 +58,7 @@
 
     <select id="getSerieLiteById" resultMap="SerieLite">
         <![CDATA[
+
         select
             s.id_serie, s.titreSerie, s.id_editeur, s.id_collection, s.notation, n.libelle as lb_notation
         from
@@ -60,11 +67,13 @@
                 (n.ref = s.notation and n.categorie = 9)
         where
             s.id_serie = #{id}
+
         ]]>
     </select>
 
     <select id="getSerieById" resultMap="SerieFull">
         <![CDATA[
+
         select
             s.id_serie, s.titreSerie, coalesce(s.terminee, -1) as terminee, s.sujetSerie, s.remarquesSerie, s.siteWeb, s.complete,
             s.nb_albums, s.id_editeur, s.id_collection, s.suivreSorties, s.suivreManquants,
@@ -94,11 +103,13 @@
                 (n.ref = s.notation and n.categorie = 9)
         where
             id_serie = #{id}
-       ]]>
+
+        ]]>
     </select>
 
     <select id="getListSerieIdByAuteurId" resultMap="SerieLite" parameterType="UUID" resultOrdered="true">
         <![CDATA[
+
         select
             al.id_serie, titreSerie
         from
@@ -126,26 +137,32 @@
 
         order by
             2 nulls first
+
         ]]>
     </select>
 
     <update id="changeNotation">
         <![CDATA[
+
         update series set notation = #{notation} where id_serie = #{id}
+
         ]]>
     </update>
 
     <select id="getInitiales" resultMap="org.tetram.bdtheque.data.dao.mappers.CommonMapper.InitialeEntityCharacter">
         <![CDATA[
+
         select
             initialeTitreSerie "label", countInitiale "count", initialeTitreSerie "value"
         from
             vw_initiales_series
+
         ]]>
     </select>
 
     <select id="getSerieLiteByInitiale" resultMap="SerieLite">
         <![CDATA[
+
         select
             si.id_serie, si.titreSerie, si.id_editeur, si.nomEditeur, si.id_collection, si.nomCollection,
             s.notation, n.libelle as lb_notation
@@ -155,11 +172,13 @@
               s.id_serie = si.id_serie
             left join listes n on
                 (n.ref = s.notation and n.categorie = 9)
+
         ]]>
     </select>
 
     <sql id="saveSerie">
         <![CDATA[
+
         update or insert into series (
             id_serie, titreSerie, terminee, suivreSorties, complete, suivreManquants, siteWeb, id_editeur,
             id_collection, sujetSerie, remarquesSerie, nb_albums, vo, couleur, etat, reliure, typeEdition,
@@ -169,6 +188,7 @@
             #{idCollection}, #{sujet}, #{notes}, #{nbAlbums}, #{vo}, #{couleur}, #{etat}, #{reliure}, #{typeEdition},
             #{orientation}, #{formatEdition}, #{sensLecture}
         )
+
         ]]>
     </sql>
 
@@ -185,7 +205,9 @@
 
     <delete id="deleteSerie">
         <![CDATA[
+
         delete from series where id_serie = #{id}
+
         ]]>
     </delete>
 

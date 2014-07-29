@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2014, tetram.org. All Rights Reserved.
+ * SpringTest.java
+ * Last modified by Tetram, on 2014-07-29T11:02:08CEST
+ */
+
 package org.tetram.bdtheque;
 
 import org.junit.runner.RunWith;

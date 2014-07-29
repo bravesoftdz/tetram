@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  ~ Copyright (c) 2014, tetram.org. All Rights Reserved.
+  ~ Image.xml
+  ~ Last modified by Tetram, on 2014-07-29T11:19:04CEST
+  -->
+
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="org.tetram.bdtheque.data.dao.mappers.ImageMapper">
     <resultMap id="AbstractImage" type="org.tetram.bdtheque.data.bean.abstractentities.BaseImage">
-    <result column="CategorieImage" property="categorie"/>
+        <result column="CategorieImage" property="categorie"/>
         <result column="ordre" property="position"/>
     </resultMap>
     <resultMap id="PhotoLite" extends="AbstractImage" type="beanPhotoLite">
-    <id column="id_photo" property="id"/>
+        <id column="id_photo" property="id"/>
         <result column="FichierPhoto" property="newNom"/>
         <result column="StockagePhoto" property="newStockee"/>
     </resultMap>
@@ -15,7 +21,7 @@
         <result column="StockagePhoto" property="oldStockee"/>
     </resultMap>
     <resultMap id="CouvertureLite" extends="AbstractImage" type="beanCouvertureLite">
-    <id column="id_couverture" property="id"/>
+        <id column="id_couverture" property="id"/>
         <result column="FichierCouverture" property="newNom"/>
         <result column="StockageCouverture" property="newStockee"/>
     </resultMap>
@@ -26,6 +32,8 @@
 
     <select id="getCouvertureLiteById" resultMap="CouvertureLiteSelect">
         <![CDATA[
+
+
         select
             c.id_couverture, c.fichierCouverture, c.stockageCouverture, c.categorieImage, l.libelle as lb_categorieImage, c.ordre
         from
@@ -34,10 +42,14 @@
                 (c.categorieImage = l.ref and l.categorie = 6)
         where
             c.id_couverture = #{id}
+
+
         ]]>
     </select>
     <select id="getListCouvertureLiteByEditionId" resultMap="CouvertureLiteSelect" resultOrdered="true">
         <![CDATA[
+
+
         select
             c.id_couverture, c.fichierCouverture, c.stockageCouverture, c.categorieImage, l.libelle as lb_categorieImage, c.ordre
         from
@@ -48,11 +60,15 @@
             c.id_edition = #{id}
         order by
             l.ordre nulls last, c.ordre
+
+
         ]]>
     </select>
 
     <select id="getPhotoLiteById" resultMap="PhotoLiteSelect">
         <![CDATA[
+
+
         select
             p.id_photo, p.fichierPhoto, p.stockagePhoto, p.categorieImage, l.libelle as lb_categorieImage, p.ordre
         from
@@ -61,10 +77,14 @@
                 (p.categorieImage = l.ref and l.categorie = 10)
         where
             p.id_photo = #{id}
+
+
         ]]>
     </select>
     <select id="getListPhotoLiteByParaBDId" resultMap="PhotoLiteSelect" resultOrdered="true">
         <![CDATA[
+
+
         select
             p.id_photo, p.fichierPhoto, p.stockagePhoto, p.categorieImage, l.libelle as lb_categorieImage, p.ordre
         from
@@ -75,6 +95,8 @@
             p.id_parabd = #{id}
         order by
             p.ordre
+
+
         ]]>
     </select>
 

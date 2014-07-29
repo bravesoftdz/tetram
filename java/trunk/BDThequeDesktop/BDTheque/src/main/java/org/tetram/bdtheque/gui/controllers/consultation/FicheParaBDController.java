@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2014, tetram.org. All Rights Reserved.
+ * FicheParaBDController.java
+ * Last modified by Tetram, on 2014-07-29T11:10:36CEST
+ */
+
 package org.tetram.bdtheque.gui.controllers.consultation;
 
 import javafx.beans.binding.Bindings;
@@ -54,6 +60,8 @@ import java.util.UUID;
 })
 public class FicheParaBDController extends WindowController implements ConsultationController {
 
+    private final ObjectProperty<ParaBD> parabd = new SimpleObjectProperty<>();
+    private final ListProperty<PhotoLite> images = new SimpleListProperty<>();
     @Autowired
     private ParaBDDao paraBDDao;
     @Autowired
@@ -62,7 +70,6 @@ public class FicheParaBDController extends WindowController implements Consultat
     private History history;
     @Autowired
     private UserPreferences userPreferences;
-
     @FXML
     private Label lbTitre;
     @FXML
@@ -95,9 +102,6 @@ public class FicheParaBDController extends WindowController implements Consultat
     private Label lbDateAchat;
     @FXML
     private Label lbCote;
-
-    private ObjectProperty<ParaBD> parabd = new SimpleObjectProperty<>();
-    private ListProperty<PhotoLite> images = new SimpleListProperty<>();
     private Image[] cacheImages = null;
 
     @FXML

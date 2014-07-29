@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  ~ Copyright (c) 2014, tetram.org. All Rights Reserved.
+  ~ Edition.xml
+  ~ Last modified by Tetram, on 2014-07-29T11:19:04CEST
+  -->
+
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="org.tetram.bdtheque.data.dao.mappers.EditionMapper">
     <resultMap id="EditionLite" type="beanEditionLite">
@@ -49,17 +55,20 @@
 
     <select id="getEditionLiteById" resultMap="EditionLite">
         <![CDATA[
+
         select
             id_edition, anneeEdition, isbn, id_editeur, id_collection
         from
             editions
         where
             id_edition = #{id}
+
         ]]>
     </select>
 
     <sql id="selectEditionFull">
         <![CDATA[
+
         select
             e.id_edition, e.id_album, e.id_editeur, e.id_collection, e.anneeEdition, e.prix, e.vo,
             e.couleur, e.isbn, e.dedicace, e.prete, e.stock, e.offert, e.gratuit, e.nombreDePages, e.dateAchat, e.notes,
@@ -84,6 +93,7 @@
                 (lf.ref = e.formatEdition and lf.categorie = 5)
             left join listes lsl on
                 (lsl.ref = e.sensLecture and lsl.categorie = 8)
+
         ]]>
     </sql>
 
@@ -119,6 +129,7 @@
 
     <sql id="saveEdition">
         <![CDATA[
+
         update or insert into editions (
             id_edition, id_album, id_editeur, id_collection, anneeEdition, prix, vo, typeEdition,
             couleur, isbn, stock, dedicace, offert, gratuit, etat, reliure, orientation, formatEdition,
@@ -128,6 +139,7 @@
             #{couleur}, #{isbn}, #{stock}, #{dedicace}, #{offert}, #{gratuit}, #{etat}, #{reliure}, #{orientation}, #{formatEdition},
             #{dateAchat}, #{notes}, #{nombreDePages}, #{anneeCote}, #{prixCote}, #{numeroPerso}, #{sensLecture}
         )
+
         ]]>
     </sql>
 
@@ -144,7 +156,9 @@
 
     <delete id="deleteEdition">
         <![CDATA[
+
         delete from editions where id_edition = #{id}
+
         ]]>
     </delete>
 

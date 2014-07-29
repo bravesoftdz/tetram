@@ -1,4 +1,10 @@
 /*
+ * Copyright (c) 2014, tetram.org. All Rights Reserved.
+ * Range.java
+ * Last modified by Tetram, on 2014-07-29T11:02:08CEST
+ */
+
+/*
  *
  * This file is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by

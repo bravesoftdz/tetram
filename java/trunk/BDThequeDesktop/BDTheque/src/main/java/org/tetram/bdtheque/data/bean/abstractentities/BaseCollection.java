@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2014, tetram.org. All Rights Reserved.
+ * BaseCollection.java
+ * Last modified by Tetram, on 2014-07-29T11:09:14CEST
+ */
+
 package org.tetram.bdtheque.data.bean.abstractentities;
 
 import javafx.beans.property.ObjectProperty;
@@ -16,7 +22,7 @@ import java.util.UUID;
  */
 
 public abstract class BaseCollection<E extends BaseEditeur> extends AbstractDBEntity {
-    public static Comparator<CollectionLite> DEFAULT_COMPARATOR = (o1, o2) -> {
+    public static final Comparator<CollectionLite> DEFAULT_COMPARATOR = (o1, o2) -> {
         if (o1 == o2) return 0;
 
         int comparaison;

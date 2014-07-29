@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  ~ Copyright (c) 2014, tetram.org. All Rights Reserved.
+  ~ Genre.xml
+  ~ Last modified by Tetram, on 2014-07-29T11:19:04CEST
+  -->
+
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="org.tetram.bdtheque.data.dao.mappers.GenreMapper">
     <resultMap id="GenreLite" type="beanGenreLite">
@@ -9,17 +15,23 @@
 
     <select id="getGenreLiteById" resultMap="GenreLite">
         <![CDATA[
+
+
         select
             id_genre, genre
         from
             genres
         where
             id_genre = #{id}
+
+
         ]]>
     </select>
 
     <select id="getListGenreBySerieId" resultMap="GenreLite" resultOrdered="true">
         <![CDATA[
+
+
         select
             g.id_genre, g.genre
         from
@@ -30,6 +42,8 @@
             s.id_serie = #{id}
         order by
             g.genre
+
+
         ]]>
     </select>
 
@@ -51,7 +65,11 @@
 
     <sql id="saveGenreLite">
         <![CDATA[
+
+
         update or insert into genres (id_genre, genre) values (#{id}, #{genre})
+
+
         ]]>
     </sql>
 
@@ -68,18 +86,30 @@
 
     <delete id="deleteGenreLite">
         <![CDATA[
+
+
         delete from genres where id_genre = #{id}
+
+
         ]]>
     </delete>
 
     <delete id="cleanGenresSerie">
         <![CDATA[
+
+
         delete from genreSeries where id_serie = #{id}
+
+
         ]]>
     </delete>
     <insert id="addGenreSerie">
         <![CDATA[
+
+
         insert into genreSeries (id_serie, id_genre) values (#{idSerie}, #{idGenre})
+
+
         ]]>
     </insert>
 </mapper>

@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  ~ Copyright (c) 2014, tetram.org. All Rights Reserved.
+  ~ ParaBD.xml
+  ~ Last modified by Tetram, on 2014-07-29T11:19:04CEST
+  -->
+
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="org.tetram.bdtheque.data.dao.mappers.ParaBDMapper">
     <resultMap id="ParaBDLite" type="beanParaBDLite">
@@ -42,11 +48,12 @@
     <select id="getParaBDLiteById" resultMap="ParaBDLite">
         <![CDATA[
 
-                ]]>
+        ]]>
     </select>
 
     <select id="getParaBDById" resultMap="ParaBDFull">
         <![CDATA[
+
         select
             p.id_paraBD, p.titreParaBD, p.annee, p.id_serie, p.achat, p.description, p.notes, p.dedicace, p.numerote, p.anneeCote, p.prixCote,
             p.gratuit, p.offert, p.dateAchat, p.prix, p.stock, p.categorieParaBD, lc.libelle as lb_categorieParaBD
@@ -56,6 +63,7 @@
                 (lc.ref = p.categorieParaBD and lc.categorie = 7)
         where
             id_paraBD = #{id}
+
         ]]>
     </select>
 
@@ -83,10 +91,12 @@
 
     <select id="getInitiales" resultMap="org.tetram.bdtheque.data.dao.mappers.CommonMapper.InitialeEntityUUID">
         <![CDATA[
+
         select
             titreSerie "label", countSerie "count", id_serie "value"
         from
             series_parabd(#{filtre})
+
         ]]>
     </select>
 
@@ -104,12 +114,15 @@
 
     <update id="acheter">
         <![CDATA[
+
         update paraBD set achat = #{achat} where id_paraBD = #{id}
+
         ]]>
     </update>
 
     <sql id="saveParaBD">
         <![CDATA[
+
         update or insert into parabd (
             id_parabd, titreParabd, annee, id_serie, categorieparabd, dedicace, numerote, anneecote,
             prixcote, gratuit, offert, dateachat, prix, stock, description, notes, complet
@@ -117,6 +130,7 @@
             #{id}, #{titreParabd}, #{annee}, #{idSerie}, #{categorieParaBD}, #{dedicace}, #{numerote}, #{anneeCote},
             #{prixCote}, #{gratuit}, #{offert}, #{dateAchat}, #{prix}, #{stock}, #{description}, #{notes}, 1
         )
+
         ]]>
     </sql>
 
@@ -133,7 +147,9 @@
 
     <delete id="deleteParaBD">
         <![CDATA[
+
         delete from ParaBD where id_paraBD = #{id}
+
         ]]>
     </delete>
 

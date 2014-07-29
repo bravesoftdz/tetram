@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2014, tetram.org. All Rights Reserved.
+ * AbstractEntity.java
+ * Last modified by Tetram, on 2014-07-29T11:09:14CEST
+ */
+
 package org.tetram.bdtheque.data.bean.abstractentities;
 
 import javafx.beans.property.ReadOnlyStringWrapper;
@@ -17,7 +23,7 @@ import java.util.Collection;
 public abstract class AbstractEntity {
 
     @NonNls
-    private StringProperty label = new ReadOnlyStringWrapper(this, "label", null) {
+    private final StringProperty label = new ReadOnlyStringWrapper(this, "label", null) {
         @Override
         public String get() {
             super.get();

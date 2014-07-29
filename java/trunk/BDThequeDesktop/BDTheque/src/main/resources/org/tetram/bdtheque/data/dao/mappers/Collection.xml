@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  ~ Copyright (c) 2014, tetram.org. All Rights Reserved.
+  ~ Collection.xml
+  ~ Last modified by Tetram, on 2014-07-29T11:19:04CEST
+  -->
+
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="org.tetram.bdtheque.data.dao.mappers.CollectionMapper">
     <resultMap id="AbstractCollection" type="org.tetram.bdtheque.data.bean.abstractentities.BaseCollection">
@@ -15,6 +21,7 @@
 
     <select id="getCollectionLiteById" resultMap="CollectionLite">
         <![CDATA[
+
         select
             c.id_collection, c.nomCollection,
             e.id_editeur, e.nomEditeur
@@ -24,22 +31,26 @@
                 e.id_editeur = c.id_editeur
         where
             c.id_collection = #{id}
+
         ]]>
     </select>
 
     <select id="getCollectionById" resultMap="CollectionFull">
         <![CDATA[
+
         select
             id_collection, nomCollection, id_editeur
         from
             collections
         where
             id_collection = #{id}
+
         ]]>
     </select>
 
     <select id="getListCollectionLiteByEditeurId" resultMap="CollectionLite">
         <![CDATA[
+
         select
             c.id_collection, c.nomCollection,
             e.id_editeur, e.nomEditeur
@@ -49,6 +60,7 @@
                 e.id_editeur = c.id_editeur
         where
             e.id_editeur = #{id}
+
         ]]>
     </select>
 
@@ -71,11 +83,13 @@
 
     <sql id="saveCollection">
         <![CDATA[
+
         update or insert into collections (
             id_collection, nomCollection, id_editeur
         ) values (
             #{id}, #{nomCollection}, #{idEditeur}
         )
+
         ]]>
     </sql>
 
@@ -92,7 +106,9 @@
 
     <delete id="deleteCollection">
         <![CDATA[
+
         delete from collections where id_collection = #{id}
+
         ]]>
     </delete>
 </mapper>

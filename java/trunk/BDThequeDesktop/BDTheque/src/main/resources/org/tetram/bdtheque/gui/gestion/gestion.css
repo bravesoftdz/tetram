@@ -1,10 +1,16 @@
+/*
+ * Copyright (c) 2014, tetram.org. All Rights Reserved.
+ * gestion.css
+ * Last modified by Tetram, on 2014-07-29T11:10:40CEST
+ */
+
 /**
   source: jfxrt.jar!/com/sun/javafx/scene/control/skin/caspian/caspian.css
 **/
 
-.label-rubrique{
-//    -fx-text-fill: #152fFF;
-//    -fx-text-fill: #2D8E42;
+.label-rubrique {
+/ / -fx-text-fill : #152fFF;
+/ / -fx-text-fill : #2D8E42;
     -fx-text-fill: #E05E53;
 }
 

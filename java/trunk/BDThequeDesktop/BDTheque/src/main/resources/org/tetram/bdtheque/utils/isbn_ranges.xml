@@ -1,4 +1,10 @@
 <?xml version='1.0' encoding='utf-8'?>
+<!--
+  ~ Copyright (c) 2014, tetram.org. All Rights Reserved.
+  ~ isbn_ranges.xml
+  ~ Last modified by Tetram, on 2014-07-29T11:02:08CEST
+  -->
+
 <!DOCTYPE ISBNRangeMessage [
         <!ELEMENT ISBNRangeMessage (MessageSource?, MessageSerialNumber?, MessageDate, EAN.UCCPrefixes, RegistrationGroups) >
         <!ELEMENT MessageSource (#PCDATA) >

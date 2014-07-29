@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2014, tetram.org. All Rights Reserved.
+ * ApplicationMode.java
+ * Last modified by Tetram, on 2014-07-29T11:02:07CEST
+ */
+
 package org.tetram.bdtheque.gui.controllers;
 
 import org.jetbrains.annotations.NonNls;
@@ -11,7 +17,7 @@ public enum ApplicationMode {
     GESTION("modeGestion.fxml", History.HistoryAction.MODE_GESTION);
 
     private final String resource;
-    private History.HistoryAction historyAction;
+    private final History.HistoryAction historyAction;
 
     ApplicationMode(@NonNls String resource, History.HistoryAction historyAction) {
         this.resource = resource;

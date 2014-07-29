@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2014, tetram.org. All Rights Reserved.
+ * History.java
+ * Last modified by Tetram, on 2014-07-29T11:09:14CEST
+ */
+
 package org.tetram.bdtheque.gui.utils;
 
 import javafx.application.Platform;
@@ -181,12 +187,12 @@ public class History {
     }
 
     public String getDescription(int position) {
-        @NonNls HistoryItem item = getShown().get(position);
-        String s = item.description;
+        HistoryItem item = getShown().get(position);
+        @NonNls String s = item.description;
 
         if (StringUtils.isNullOrEmpty(s)) {
-            item.description = (position == getCurrent() ? "Ask: " : "Unknown: ") + DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(LocalDate.now());
-            s = item.description;
+            s = (position == getCurrent() ? "Ask: " : "Unknown: ") + DateTimeFormatter.ISO_LOCAL_DATE_TIME.format(LocalDate.now());
+            item.description = s;
         }
 
         return s;
@@ -381,14 +387,14 @@ public class History {
         GESTION_MODIF, GESTION_SUPP, GESTION_ACHAT, CONFLIT_IMPORT, GALERIE, MODE_CONSULTATION, MODE_GESTION, UNIVERS,
         CONSOLE, SCRIPTS;
 
-        static EnumSet<HistoryAction> mustRefresh = EnumSet.of(RECHERCHE);
-        static EnumSet<HistoryAction> canRefresh = EnumSet.of(FICHE, SERIES_INCOMPLETES, PREVISIONS_SORTIES, PREVISIONS_ACHATS, GALERIE, UNIVERS);
-        static EnumSet<HistoryAction> usedInGestion = EnumSet.of(GESTION_AJOUT, GESTION_MODIF, GESTION_SUPP, GESTION_ACHAT, CONFLIT_IMPORT);
-        static EnumSet<HistoryAction> modes = EnumSet.of(MODE_CONSULTATION, MODE_GESTION);
-        static EnumSet<HistoryAction> specials = EnumSet.of(BACK, REFRESH, PREVIEW, RECREATE_TOOL_BAR, REFRESH_REPERTOIRE, REFRESH_REPERTOIRE_DATA, CONSOLE, SCRIPTS);
+        static final EnumSet<HistoryAction> mustRefresh = EnumSet.of(RECHERCHE);
+        static final EnumSet<HistoryAction> canRefresh = EnumSet.of(FICHE, SERIES_INCOMPLETES, PREVISIONS_SORTIES, PREVISIONS_ACHATS, GALERIE, UNIVERS);
+        static final EnumSet<HistoryAction> usedInGestion = EnumSet.of(GESTION_AJOUT, GESTION_MODIF, GESTION_SUPP, GESTION_ACHAT, CONFLIT_IMPORT);
+        static final EnumSet<HistoryAction> modes = EnumSet.of(MODE_CONSULTATION, MODE_GESTION);
+        static final EnumSet<HistoryAction> specials = EnumSet.of(BACK, REFRESH, PREVIEW, RECREATE_TOOL_BAR, REFRESH_REPERTOIRE, REFRESH_REPERTOIRE_DATA, CONSOLE, SCRIPTS);
         // à cause des callback, les appels de gestion ne peuvent pas être sauvés dans l'historique
         // et puis je vois pas bien à quoi ça pourrait servir
-        static EnumSet<HistoryAction> noSaveHistorique = buildEnumSet(specials, usedInGestion, modes);
+        static final EnumSet<HistoryAction> noSaveHistorique = buildEnumSet(specials, usedInGestion, modes);
 
         @SafeVarargs
         static EnumSet<HistoryAction> buildEnumSet(EnumSet<HistoryAction>... set) {

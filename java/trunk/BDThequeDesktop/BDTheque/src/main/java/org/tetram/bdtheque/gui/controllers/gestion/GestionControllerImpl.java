@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2014, tetram.org. All Rights Reserved.
+ * GestionControllerImpl.java
+ * Last modified by Tetram, on 2014-07-29T11:09:14CEST
+ */
+
 package org.tetram.bdtheque.gui.controllers.gestion;
 
 import javafx.beans.property.ObjectProperty;
@@ -11,7 +17,7 @@ import java.lang.ref.WeakReference;
  */
 public abstract class GestionControllerImpl extends WindowController implements GestionController {
 
-    private ObjectProperty<WeakReference<FicheEditController<?>>> editController = new SimpleObjectProperty<>(this, "editController", null);
+    private final ObjectProperty<WeakReference<FicheEditController<?>>> editController = new SimpleObjectProperty<>(this, "editController", null);
 
     @Override
     public ObjectProperty<WeakReference<FicheEditController<?>>> editControllerProperty() {

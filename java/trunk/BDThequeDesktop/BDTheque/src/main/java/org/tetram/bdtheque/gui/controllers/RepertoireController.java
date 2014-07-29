@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2014, tetram.org. All Rights Reserved.
+ * RepertoireController.java
+ * Last modified by Tetram, on 2014-07-29T11:10:36CEST
+ */
+
 /**
  * Sample Skeleton for 'repertoire.fxml' Controller Class
  */
@@ -24,40 +30,33 @@ import java.util.HashMap;
 @FileLink("/org/tetram/bdtheque/gui/repertoire.fxml")
 public class RepertoireController extends WindowController {
 
+    private final ObjectProperty<InfoTab> currentInfoTab = new SimpleObjectProperty<>();
     @FXML
     private TabPane tabs;
-
     @FXML
     private Tab tabAlbums;
     @FXML
     private TreeViewController albumsController;
     @FXML
     private ChoiceBox<TypeRepertoireAlbumEntry> repertoireGroup;
-
     @FXML
     private Tab tabSeries;
     @FXML
     private TreeViewController seriesController;
-
     @FXML
     private Tab tabUnivers;
     @FXML
     private TreeViewController universController;
-
     @FXML
     private Tab tabAuteurs;
     @FXML
     private TreeViewController auteursController;
-
     @FXML
     private Tab tabParabd;
     @FXML
     private TreeViewController parabdController;
-
     @Autowired
     private UserPreferences userPreferences;
-
-    private ObjectProperty<InfoTab> currentInfoTab = new SimpleObjectProperty<>();
 
     @SuppressWarnings("unchecked")
     @FXML
@@ -109,8 +108,8 @@ public class RepertoireController extends WindowController {
         PAR_ANNEE(I18nSupport.message("Annee.de.parution"), TreeViewMode.ALBUMS_ANNEE),
         PAR_COLLECTION(I18nSupport.message("Collection"), TreeViewMode.ALBUMS_COLLECTION);
 
-        String label;
-        TreeViewMode mode;
+        final String label;
+        final TreeViewMode mode;
 
         TypeRepertoireAlbumEntry(String label, TreeViewMode mode) {
             this.label = label;
