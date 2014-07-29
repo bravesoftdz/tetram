@@ -3,11 +3,13 @@
 <!--
   ~ Copyright (c) 2014, tetram.org. All Rights Reserved.
   ~ modeGestion.fxml
-  ~ Last modified by Tetram, on 2014-07-29T11:18:59CEST
-  --><?import javafx.geometry.*?>
+  ~ Last modified by Tetram, on 2014-07-29T11:30:24CEST
+  -->
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>BorderPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="573.0" prefWidth="789.0" xmlns="http://javafx.com/javafx/8"
+<?import javafx.scene.layout.*?>
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="573.0" prefWidth="789.0" xmlns="http://javafx.com/javafx/8"
         fx:controller="org.tetram.bdtheque.gui.controllers.ModeGestionController">
 <left>
     <ToolBar fx:id="tbEntities" orientation="VERTICAL" prefHeight="369.0" BorderPane.alignment="CENTER">

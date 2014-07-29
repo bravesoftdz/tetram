@@ -2,7 +2,7 @@
 <!--
   ~ Copyright (c) 2014, tetram.org. All Rights Reserved.
   ~ spring-config.xml
-  ~ Last modified by Tetram, on 2014-07-29T11:02:08CEST
+  ~ Last modified by Tetram, on 2014-07-29T11:28:30CEST
   -->
 
 <beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -16,8 +16,8 @@
 
     <!--
     géré par le bean databaseProperties (dans org.tetram.bdtheque.spring.SpringContext)
-    -->
     <context:property-placeholder location="org/tetram/bdtheque/config/database.properties"/>
+    -->
 
     <bean id="dataSource" class="org.springframework.jdbc.datasource.SingleConnectionDataSource"
           depends-on="databaseProperties">

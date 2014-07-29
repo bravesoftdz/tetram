@@ -3,11 +3,13 @@
 <!--
   ~ Copyright (c) 2014, tetram.org. All Rights Reserved.
   ~ repertoire.fxml
-  ~ Last modified by Tetram, on 2014-07-29T11:18:59CEST
-  --><?import javafx.geometry.Insets?>
+  ~ Last modified by Tetram, on 2014-07-29T11:31:31CEST
+  -->
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import java.net.URL?>TabPane xmlns:fx="http://javafx.com/fxml/1" fx:id="tabs" maxHeight="-Infinity" maxWidth="-Infinity"
+<?import java.net.URL?>
+<TabPane xmlns:fx="http://javafx.com/fxml/1" fx:id="tabs" maxHeight="-Infinity" maxWidth="-Infinity"
         minHeight="-Infinity"
         minWidth="-Infinity" prefHeight="229.0" prefWidth="397.0"
         tabClosingPolicy="UNAVAILABLE"
