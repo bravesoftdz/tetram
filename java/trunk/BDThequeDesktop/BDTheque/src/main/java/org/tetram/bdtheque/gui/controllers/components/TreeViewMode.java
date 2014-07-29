@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * TreeViewMode.java
- * Last modified by Tetram, on 2014-07-29T11:02:07CEST
+ * Last modified by Tetram, on 2014-07-29T14:14:51CEST
  */
 
 package org.tetram.bdtheque.gui.controllers.components;
@@ -88,7 +88,7 @@ public enum TreeViewMode {
         private static final String FILTRE_SQL_ACHAT = "Achat = 1";
     }
 
-    static class GetLabelCallback implements Callback<TreeViewController.TreeViewNode, String> {
+    static class GetLabelCallback implements Callback<AbstractEntity, String> {
 
         private final EnumSet<TreeViewMode> albumSansSerie = EnumSet.copyOf(Arrays.asList(new TreeViewMode[]{ALBUMS_SERIE}));
         private final EnumSet<TreeViewMode> parabdSansSerie = EnumSet.copyOf(Arrays.asList(new TreeViewMode[]{PARABD_SERIE}));
@@ -100,8 +100,7 @@ public enum TreeViewMode {
         }
 
         @Override
-        public String call(TreeViewController.TreeViewNode treeViewNode) {
-            final AbstractEntity entity = treeViewNode.getValue();
+        public String call(AbstractEntity entity) {
             if (entity == null)
                 return null;
             final TreeViewMode mode = treeViewController.getMode();
@@ -125,14 +124,13 @@ public enum TreeViewMode {
         @SuppressWarnings("unchecked")
         @Override
         public List<? extends AbstractEntity> call(TreeViewController.TreeViewNode treeViewNode) {
-            final AbstractEntity entity = treeViewNode.getValue();
-            if (entity == null) {
-                // c'est la racine
-                return treeViewController.getDao().getInitiales(treeViewController.getAppliedFiltre());
-            } else if (entity instanceof InitialeEntity) {
-                // c'est le niveau 1
-                return treeViewController.getDao().getListEntitiesByInitiale((InitialeEntity<?>) entity, treeViewController.getAppliedFiltre());
-            }
+            if (treeViewController.getDao() != null)
+                switch (treeViewController.getTreeView().getTreeItemLevel(treeViewNode)) {
+                    case 0:
+                        return treeViewController.getDao().getInitiales(treeViewController.getAppliedFiltre());
+                    case 1:
+                        return treeViewController.getDao().getListEntitiesByInitiale((InitialeEntity) treeViewNode.getValue(), treeViewController.getAppliedFiltre());
+                }
             return null;
         }
     }

@@ -2,7 +2,7 @@
 <!--
   ~ Copyright (c) 2014, tetram.org. All Rights Reserved.
   ~ Common.xml
-  ~ Last modified by Tetram, on 2014-07-29T11:19:04CEST
+  ~ Last modified by Tetram, on 2014-07-29T17:40:01CEST
   -->
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
@@ -30,7 +30,7 @@
     </resultMap>
     <resultMap id="InitialeWithEntityUUID" type="org.tetram.bdtheque.data.bean.InitialeWithEntity"
                extends="InitialeWithEntity">
-        <association property="initiale" resultMap="InitialeEntityUUID" columnPrefix="initiale_"/>
+        <result property="initiale.value" javaType="UUID" column="initiale_value"/>
     </resultMap>
     <resultMap id="InitialeWithEntityInteger" type="org.tetram.bdtheque.data.bean.InitialeWithEntity"
                extends="InitialeWithEntity">

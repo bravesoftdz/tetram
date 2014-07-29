@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * InitialeWithEntity.java
- * Last modified by Tetram, on 2014-07-29T11:09:14CEST
+ * Last modified by Tetram, on 2014-07-29T17:35:54CEST
  */
 
 package org.tetram.bdtheque.data.bean;
@@ -9,11 +9,12 @@ package org.tetram.bdtheque.data.bean;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import org.tetram.bdtheque.data.bean.abstractentities.AbstractDBEntity;
+import org.tetram.bdtheque.data.bean.abstractentities.AbstractEntity;
 
 /**
  * Created by Thierry on 25/07/2014.
  */
-public class InitialeWithEntity<I, E extends AbstractDBEntity> {
+public class InitialeWithEntity<I, E extends AbstractDBEntity> extends AbstractEntity {
     private final ObjectProperty<InitialeEntity<I>> initiale = new SimpleObjectProperty<>(this, "initiale", null);
     private final ObjectProperty<E> entity = new SimpleObjectProperty<>(this, "entity", null);
 

@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * TreeViewController.java
- * Last modified by Tetram, on 2014-07-29T11:10:36CEST
+ * Last modified by Tetram, on 2014-07-29T17:58:50CEST
  */
 
 package org.tetram.bdtheque.gui.controllers.components;
@@ -68,12 +68,12 @@ public class TreeViewController extends WindowController {
     private final ObjectProperty<EventHandler<MouseEvent>> onClickItem = new SimpleObjectProperty<>(this, "onClickItem", null);
     private final ObjectProperty<Callback<TreeViewNode, List<? extends AbstractEntity>>> onGetChildren = new SimpleObjectProperty<>(this, "onGetChildren", null);
     private final ObjectProperty<Callback<TreeViewNode, Boolean>> onIsLeaf = new SimpleObjectProperty<>(this, "onIsLeaf", null);
-    private final ObjectProperty<Callback<TreeViewNode, String>> onGetLabel = new SimpleObjectProperty<>(this, "onGetLabel", null);
+    private final ObjectProperty<Callback<AbstractEntity, String>> onGetLabel = new SimpleObjectProperty<>(this, "onGetLabel", null);
     private final ObjectProperty<Class<? extends AbstractEntity>> finalEntityClass = new SimpleObjectProperty<>(this, "finalEntityClass", AbstractEntity.class);
     private final ReadOnlyStringWrapper appliedFiltre = new ReadOnlyStringWrapper(this, "appliedFiltre", null);
     private final StringProperty filtre = new SimpleStringProperty(this, "filtre", null);
     private final BooleanProperty useDefaultFiltre = new SimpleBooleanProperty(this, "useDefaultFiltre", true);
-    private final ReadOnlyObjectWrapper<RepertoireLiteDao> dao = new ReadOnlyObjectWrapper<>(this, "dao", null);
+    private final ReadOnlyObjectWrapper<RepertoireLiteDao<?, ?>> dao = new ReadOnlyObjectWrapper<>(this, "dao", null);
     private final ObjectProperty<TreeViewMode> mode = new SimpleObjectProperty<>(this, "mode", TreeViewMode.NONE);
     private final ObjectProperty<AbstractEntity> selectedEntity = new SimpleObjectProperty<>(this, "selectedEntity", null);
     private final BooleanProperty canSearch = new SimpleBooleanProperty(this, "canSearch", true);
@@ -86,14 +86,14 @@ public class TreeViewController extends WindowController {
     @FXML
     private TreeTableView<AbstractEntity> treeTableView;
     @FXML
-    private TreeTableColumn<AbstractEntity, String> column0;
+    private TreeTableColumn<AbstractEntity, AbstractEntity> column0;
     @FXML
     private TreeTableColumn<AbstractEntity, AbstractEntity> column1;
     @FXML
     private TextField tfSearch;
     private boolean findRegistered = false;
     private String lastFindText;
-    private ListOrderedMap<InitialeEntity<?>, List<? extends AbstractDBEntity>> findList;
+    private ListOrderedMap<? extends InitialeEntity<? extends Comparable<?>>, ? extends List<? extends AbstractDBEntity>> findList;
 
     public TreeViewController() {
         searchTimer.setRepeats(false);
@@ -147,63 +147,11 @@ public class TreeViewController extends WindowController {
                 return getOnClickItem();
         }, clickToShowProperty(), onClickItemProperty()));
 
-        column0.setCellValueFactory(param -> {
-            final TreeItem<AbstractEntity> treeViewNode = param.getValue();
-            return new ReadOnlyStringWrapper(getLabelForNode(treeViewNode));
-        });
-        column0.setCellFactory(param ->
-                        new TreeTableCell<AbstractEntity, String>() {
-                            @Override
-                            protected void updateItem(String item, boolean empty) {
-                                super.updateItem(item, empty);
+        column0.setCellValueFactory(param -> param.getValue().valueProperty());
+        column0.setCellFactory(param -> new Column0Cell());
 
-                                final TreeItem<AbstractEntity> treeItem = getTreeTableRow().getTreeItem();
-                                if (treeItem != null && treeItem.getParent() != null && treeItem.getParent().equals(treeTableView.getRoot()))
-                                    getStyleClass().add(NODE_BOLD_CSS);
-                                else
-                                    getStyleClass().remove(NODE_BOLD_CSS);
-
-                                setAlignment(Pos.BASELINE_LEFT);
-                                setContentDisplay(ContentDisplay.RIGHT);
-
-                                if (empty) {
-                                    setText(null);
-                                    setGraphic(null);
-                                } else {
-                                    setText(item);
-                                    AbstractEntity entity = treeItem == null ? null : treeItem.getValue();
-                                    if (entity instanceof InitialeEntity && ((InitialeEntity) entity).getCount() > 0) {
-                                        @NonNls final Label text = new Label("(" + ((InitialeEntity) entity).getCount() + ")");
-                                        text.setStyle("-fx-font-weight: normal;");
-                                        text.setAlignment(Pos.BASELINE_CENTER);
-                                        setGraphicTextGap(8);
-                                        setGraphic(text);
-                                    } else {
-                                        setGraphic(null);
-                                    }
-                                }
-                            }
-                        }
-        );
-
-        column1.setCellValueFactory(param ->
-                        new ReadOnlyObjectWrapper<>(param.getValue().getValue())
-        );
-        column1.setCellFactory(param ->
-                        new TreeTableCell<AbstractEntity, AbstractEntity>() {
-                            @Override
-                            protected void updateItem(AbstractEntity item, boolean empty) {
-                                super.updateItem(item, empty);
-                                setGraphic(null);
-                                if (item instanceof EvaluatedEntity) {
-                                    final ValeurListe notation = ((EvaluatedEntity) item).getNotation();
-                                    final NotationResource resource = NotationResource.fromValue(notation.getValeur());
-                                    if (resource != null && notation.getValeur() > 900)
-                                        setGraphic(new ImageView("/org/tetram/bdtheque/graphics/png/16x16/" + resource.getResource()));
-                                }
-                            }
-                        }
-        );
+        column1.setCellValueFactory(param -> param.getValue().valueProperty());
+        column1.setCellFactory(param -> new Column1Cell());
 
         final BooleanBinding finalEntityClassIsEvaluated = Bindings.createBooleanBinding(() -> EvaluatedEntity.class.isAssignableFrom(getFinalEntityClass()), finalEntityClass);
         final BooleanBinding column1Visible = Bindings.and(userPreferences.afficheNoteListesProperty(), finalEntityClassIsEvaluated);
@@ -218,12 +166,11 @@ public class TreeViewController extends WindowController {
         Platform.runLater(this::refresh);
     }
 
-    private String getLabelForNode(TreeItem<AbstractEntity> treeViewNode) {
+    private String getLabelForItem(AbstractEntity entity) {
         String label;
         if (getOnGetLabel() != null)
-            label = treeViewNode == null ? "" : getOnGetLabel().call((TreeViewNode) treeViewNode);
+            label = entity == null ? "" : getOnGetLabel().call(entity);
         else {
-            final AbstractEntity entity = treeViewNode == null ? null : treeViewNode.getValue();
             label = entity == null ? "" : entity.buildLabel();
         }
         return label;
@@ -247,6 +194,7 @@ public class TreeViewController extends WindowController {
         find(lastFindText, next);
     }
 
+    //@SuppressWarnings("unchecked")
     public void find(String text, boolean next) {
         text = text == null ? "" : text;
         next = next && text.equalsIgnoreCase(lastFindText);
@@ -264,15 +212,13 @@ public class TreeViewController extends WindowController {
                         nFind = getNext(nCurrent);
                     else
                         nFind = nCurrent;
-                if (org.apache.commons.lang3.StringUtils.containsIgnoreCase(getLabelForNode(nFind), text)) break;
+                if (org.apache.commons.lang3.StringUtils.containsIgnoreCase(getLabelForItem(nFind.getValue()), text))
+                    break;
                 nFind = getNext(nFind);
                 if (nFind == null)
                     nFind = getFirst();
             }
-            if (nFind != null)
-                getTreeView().getSelectionModel().select(nFind);
-            else
-                getTreeView().getSelectionModel().clearSelection();
+            selectNode(nFind);
         } else {
             if (StringUtils.isNullOrEmpty(text)) {
                 setSelectedEntity(null, null);
@@ -281,8 +227,15 @@ public class TreeViewController extends WindowController {
                 AbstractEntity current = getSelectedEntity();
                 if (current == null) {
                     setSelectedEntity(findList.firstKey(), findList.get(findList.firstKey()).get(0));
+                } else if (current instanceof InitialeEntity) {
+                    final List<? extends AbstractEntity> list = findList.get(current);
+                    if (list == null) {
+                        setSelectedEntity(findList.firstKey(), findList.get(findList.firstKey()).get(0));
+                    } else
+                        setSelectedEntity((InitialeEntity) current, list.get(0));
                 } else {
-                    InitialeEntity<?> initialeEntity = (InitialeEntity) getSelected().getParent().getValue();
+                    AbstractEntity initialeEntity = getSelected().getParent().getValue();
+                    assert initialeEntity instanceof InitialeEntity;
                     final List<? extends AbstractEntity> list = findList.get(initialeEntity);
                     int i = list.indexOf(current);
                     if (i == list.size() - 1) {
@@ -291,10 +244,9 @@ public class TreeViewController extends WindowController {
                         current = findList.get(initialeEntity).get(0);
                     } else
                         current = list.get(i + 1);
-                    setSelectedEntity(initialeEntity, current);
+                    setSelectedEntity((InitialeEntity) initialeEntity, current);
                 }
             } else {
-                //noinspection unchecked
                 findList = getDao().searchMap(text, getAppliedFiltre());
 /*
           SQL.Text := 'SELECT ' + vmModeInfos[FMode].REFFIELDS + ' FROM ' + vmModeInfos[FMode].TABLESEARCH + ' WHERE ' + vmModeInfos[FMode].FIELDSEARCH +
@@ -393,15 +345,15 @@ public class TreeViewController extends WindowController {
         return onIsLeaf;
     }
 
-    public Callback<TreeViewNode, String> getOnGetLabel() {
+    public Callback<AbstractEntity, String> getOnGetLabel() {
         return onGetLabel.get();
     }
 
-    public void setOnGetLabel(Callback<TreeViewNode, String> onGetLabel) {
+    public void setOnGetLabel(Callback<AbstractEntity, String> onGetLabel) {
         this.onGetLabel.set(onGetLabel);
     }
 
-    public ObjectProperty<Callback<TreeViewNode, String>> onGetLabelProperty() {
+    public ObjectProperty<Callback<AbstractEntity, String>> onGetLabelProperty() {
         return onGetLabel;
     }
 
@@ -409,7 +361,7 @@ public class TreeViewController extends WindowController {
         return treeTableView;
     }
 
-    public TreeTableColumn<AbstractEntity, String> getColumn0() {
+    public TreeTableColumn<AbstractEntity, AbstractEntity> getColumn0() {
         return column0;
     }
 
@@ -465,11 +417,11 @@ public class TreeViewController extends WindowController {
         return appliedFiltre.getReadOnlyProperty();
     }
 
-    public RepertoireLiteDao getDao() {
+    public RepertoireLiteDao<?, ?> getDao() {
         return dao.get();
     }
 
-    public ReadOnlyObjectProperty<RepertoireLiteDao> daoProperty() {
+    public ReadOnlyObjectProperty<RepertoireLiteDao<?, ?>> daoProperty() {
         return dao.getReadOnlyProperty();
     }
 
@@ -500,9 +452,18 @@ public class TreeViewController extends WindowController {
         while (node != null && !node.getValue().equals(selectedEntity))
             node = (TreeViewNode) node.nextSibling();
 
-        getTreeView().getSelectionModel().select(node);
-        expandTreeView(node);
+        selectNode(node);
     }
+
+    private void selectNode(TreeViewNode node) {
+        getTreeView().getSelectionModel().select(node);
+        if (node != null) {
+            expandTreeView(node);
+            getTreeView().getFocusModel().focus(treeTableView.getRow(node), column0);
+            getTreeView().scrollTo(treeTableView.getRow(node));
+        }
+    }
+
 
     private void expandTreeView(TreeItem selectedItem) {
         if (selectedItem != null) {
@@ -575,4 +536,52 @@ public class TreeViewController extends WindowController {
 
     }
 
+    private class Column0Cell extends TreeTableCell<AbstractEntity, AbstractEntity> {
+        @Override
+        protected void updateItem(AbstractEntity item, boolean empty) {
+            if (getItem() == item) return;
+
+            super.updateItem(item, empty);
+
+            setAlignment(Pos.BASELINE_LEFT);
+            setContentDisplay(ContentDisplay.RIGHT);
+
+            getStyleClass().remove(NODE_BOLD_CSS);
+
+            if (empty) {
+                setText(null);
+                setGraphic(null);
+            } else {
+                setText(getLabelForItem(item));
+
+                if (item instanceof InitialeEntity) {
+                    getStyleClass().add(NODE_BOLD_CSS);
+                    int count = ((InitialeEntity) item).getCount();
+                    if (count > 0) {
+                        @NonNls final Label text = new Label("(" + count + ")");
+                        text.setStyle("-fx-font-weight: normal;");
+                        text.setAlignment(Pos.BASELINE_CENTER);
+                        setGraphicTextGap(8);
+                        setGraphic(text);
+                    } else {
+                        setGraphic(null);
+                    }
+                }
+            }
+        }
+    }
+
+    private class Column1Cell extends TreeTableCell<AbstractEntity, AbstractEntity> {
+        @Override
+        protected void updateItem(AbstractEntity item, boolean empty) {
+            super.updateItem(item, empty);
+            setGraphic(null);
+            if (item instanceof EvaluatedEntity) {
+                final ValeurListe notation = ((EvaluatedEntity) item).getNotation();
+                final NotationResource resource = NotationResource.fromValue(notation.getValeur());
+                if (resource != null && notation.getValeur() > 900)
+                    setGraphic(new ImageView("/org/tetram/bdtheque/graphics/png/16x16/" + resource.getResource()));
+            }
+        }
+    }
 }

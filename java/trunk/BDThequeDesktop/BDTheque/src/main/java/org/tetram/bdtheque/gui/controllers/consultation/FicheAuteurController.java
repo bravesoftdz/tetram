@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * FicheAuteurController.java
- * Last modified by Tetram, on 2014-07-29T11:10:36CEST
+ * Last modified by Tetram, on 2014-07-29T14:26:02CEST
  */
 
 package org.tetram.bdtheque.gui.controllers.consultation;
@@ -17,22 +17,21 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.tetram.bdtheque.data.BeanUtils;
-import org.tetram.bdtheque.data.bean.AlbumLite;
 import org.tetram.bdtheque.data.bean.Personne;
 import org.tetram.bdtheque.data.bean.Serie;
-import org.tetram.bdtheque.data.bean.abstractentities.AbstractDBEntity;
 import org.tetram.bdtheque.data.bean.abstractentities.AbstractEntity;
 import org.tetram.bdtheque.data.bean.abstractentities.BaseAlbum;
-import org.tetram.bdtheque.data.dao.AlbumLiteSerieDaoImpl;
 import org.tetram.bdtheque.data.dao.PersonneDao;
 import org.tetram.bdtheque.gui.controllers.WindowController;
 import org.tetram.bdtheque.gui.controllers.components.TreeViewController;
+import org.tetram.bdtheque.gui.controllers.components.TreeViewMode;
 import org.tetram.bdtheque.gui.utils.EntityNotFoundException;
 import org.tetram.bdtheque.gui.utils.EntityWebHyperlink;
 import org.tetram.bdtheque.utils.FileLink;
 import org.tetram.bdtheque.utils.FileLinks;
-import org.tetram.bdtheque.utils.TypeUtils;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -67,29 +66,19 @@ public class FicheAuteurController extends WindowController implements Consultat
         EntityWebHyperlink.addToLabeled(lbNom, _personne.siteWebProperty());
         tfBiographie.getChildren().add(new Text(_personne.getBiographie()));
 
-        seriesController.setClickToShow(true);
-        seriesController.setOnGetLabel(treeItem -> {
-            final AbstractEntity entity = treeItem.getValue();
-            if (entity == null)
-                return null;
-            else if (BaseAlbum.class.isAssignableFrom(entity.getClass()))
-                return ((BaseAlbum) entity).buildLabel(false);
-            else if (TypeUtils.isNullOrZero(((AbstractDBEntity) entity).getId()))
-                return AlbumLiteSerieDaoImpl.UNKNOWN_LABEL;
-            else
-                return entity.buildLabel();
-        });
-        seriesController.setOnIsLeaf(treeItem -> {
-            return treeItem.getValue() != null && AlbumLite.class.isAssignableFrom(treeItem.getValue().getClass());
-        });
+        seriesController.setMode(TreeViewMode.NONE);
+        seriesController.setFinalEntityClass(BaseAlbum.class);
         seriesController.onGetChildrenProperty().setValue(treeItem -> {
             final AbstractEntity entity = treeItem.getValue();
-            if (entity == null) {
-                // c'est la racine
-                return _personne.getSeries();
-            } else if (Serie.class.isAssignableFrom(entity.getClass())) {
-                // c'est le niveau 1
-                return ((Serie) entity).getAlbums();
+            switch (seriesController.getTreeView().getTreeItemLevel(treeItem)) {
+                case 0:
+                    return _personne.getSeries();
+                case 1:
+                    Serie serie = (Serie) entity;
+                    List<AbstractEntity> list = new ArrayList<>();
+                    list.addAll(serie.getAlbums());
+                    list.addAll(serie.getParaBDs());
+                    return list;
             }
             return null;
         });

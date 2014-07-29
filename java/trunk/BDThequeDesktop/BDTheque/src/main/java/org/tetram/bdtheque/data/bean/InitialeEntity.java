@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * InitialeEntity.java
- * Last modified by Tetram, on 2014-07-29T11:09:14CEST
+ * Last modified by Tetram, on 2014-07-29T13:00:05CEST
  */
 
 package org.tetram.bdtheque.data.bean;
@@ -62,7 +62,7 @@ public class InitialeEntity<T> extends AbstractEntity {
 
         InitialeEntity that = (InitialeEntity) o;
 
-        if (getValue() != null ? !getValue().equals(that.value) : that.getValue() != null) return false;
+        if (getValue() != null ? !getValue().equals(that.getValue()) : that.getValue() != null) return false;
 
         return true;
     }
