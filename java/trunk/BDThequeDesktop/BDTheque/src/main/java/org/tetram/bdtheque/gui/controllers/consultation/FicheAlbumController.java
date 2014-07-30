@@ -1,11 +1,12 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * FicheAlbumController.java
- * Last modified by Tetram, on 2014-07-29T11:10:36CEST
+ * Last modified by Tetram, on 2014-07-30T16:43:34CEST
  */
 
 package org.tetram.bdtheque.gui.controllers.consultation;
 
+import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.ObjectProperty;
@@ -31,27 +32,32 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.tetram.bdtheque.data.BeanUtils;
-import org.tetram.bdtheque.data.bean.*;
+import org.tetram.bdtheque.data.bean.Album;
+import org.tetram.bdtheque.data.bean.CouvertureLite;
+import org.tetram.bdtheque.data.bean.Edition;
+import org.tetram.bdtheque.data.bean.Serie;
 import org.tetram.bdtheque.data.bean.abstractentities.AbstractDBEntity;
+import org.tetram.bdtheque.data.bean.abstractentities.BaseAlbum;
 import org.tetram.bdtheque.data.dao.AlbumDao;
 import org.tetram.bdtheque.data.dao.CouvertureLiteDao;
 import org.tetram.bdtheque.data.dao.EvaluatedEntityDao;
 import org.tetram.bdtheque.data.services.UserPreferences;
 import org.tetram.bdtheque.gui.controllers.WindowController;
 import org.tetram.bdtheque.gui.controllers.components.NotationController;
+import org.tetram.bdtheque.gui.controllers.components.TreeViewController;
 import org.tetram.bdtheque.gui.utils.EntityNotFoundException;
 import org.tetram.bdtheque.gui.utils.EntityWebHyperlink;
 import org.tetram.bdtheque.gui.utils.FlowItem;
 import org.tetram.bdtheque.gui.utils.History;
-import org.tetram.bdtheque.utils.FileLink;
-import org.tetram.bdtheque.utils.FileLinks;
-import org.tetram.bdtheque.utils.I18nSupport;
-import org.tetram.bdtheque.utils.ISBNUtils;
+import org.tetram.bdtheque.spring.utils.LocalDateStringConverter;
+import org.tetram.bdtheque.spring.utils.YearStringConverter;
+import org.tetram.bdtheque.utils.*;
 
 import java.io.ByteArrayInputStream;
 import java.text.MessageFormat;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
+import java.util.EnumSet;
 import java.util.UUID;
 
 /**
@@ -107,8 +113,6 @@ public class FicheAlbumController extends WindowController implements Consultati
     @FXML
     private FlowPane lvColoristes;
     @FXML
-    private ListView<AlbumLite> lvSerie;
-    @FXML
     private TextFlow histoire;
     @FXML
     private TextFlow notes;
@@ -163,6 +167,9 @@ public class FicheAlbumController extends WindowController implements Consultati
     private Image[] cacheImages = null;
 
     @FXML
+    private TreeViewController tvSerieController;
+
+    @FXML
     public void initialize() {
         album.addListener((observable, oldAlbum, album) -> {
             serie.unbind();
@@ -172,26 +179,20 @@ public class FicheAlbumController extends WindowController implements Consultati
             serie.bind(album.serieProperty());
         });
 
+        tvSerieController.setCanSearch(false);
         serie.addListener((observable, oldSerie, serie) -> {
             if (serie == null) return;
             titreSerie.setText(BeanUtils.formatTitre(serie.getTitreSerie()));
             EntityWebHyperlink.addToLabeled(titreSerie, serie.siteWebProperty());
 
             FlowItem.fillViewFromList(serie.genresProperty(), lvGenres);
-            lvSerie.itemsProperty().bind(serie.albumsProperty());
-            if (album.get() != null) // ça devrait pas arriver mais on sait jamais
-                serie.getAlbums().forEach(albumLite -> {
-                    if (album.get().getId().equals(albumLite.getId())) {
-                        lvSerie.getSelectionModel().select(albumLite);
-                        lvSerie.scrollTo(albumLite);
-                    }
-                });
-            lvSerie.setOnMouseClicked(event -> {
-                if (event.getClickCount() == 2) {
-                    AlbumLite entity = lvSerie.getSelectionModel().getSelectedItem();
-                    if (entity != null)
-                        history.addWaiting(History.HistoryAction.FICHE, entity);
-                }
+
+            tvSerieController.setFinalEntityClass(BaseAlbum.class);
+            tvSerieController.setOnIsLeaf(param -> tvSerieController.getNodeLevel(param) == 1);
+            tvSerieController.setOnGetLabel(param -> ((BaseAlbum) param).buildLabel(false));
+            tvSerieController.setOnGetChildren(param -> serie.albumsProperty());
+            tvSerieController.setOnRenderCell(cell -> {
+                cell.underlineProperty().bind(Bindings.equal(cell.itemProperty(), album));
             });
         });
 
@@ -203,12 +204,6 @@ public class FicheAlbumController extends WindowController implements Consultati
         notationController.entityProperty().bind(album);
         notationController.setDao(((EvaluatedEntityDao) albumDao));
 
-        lvSerie.setCellFactory(param -> {
-            ListCell<AlbumLite> cell = new ListCell<>();
-            cell.underlineProperty().bind(Bindings.equal(cell.itemProperty(), album));
-            cell.textProperty().bind(Bindings.createStringBinding(() -> cell.itemProperty().get() == null ? null : cell.itemProperty().get().buildLabel(false), cell.itemProperty()));
-            return cell;
-        });
         lvEditions.setCellFactory(param -> {
             ListCell<Edition> cell = new ListCell<>();
             cell.underlineProperty().bind(Bindings.equal(cell.itemProperty(), currentEdition));
@@ -241,10 +236,10 @@ public class FicheAlbumController extends WindowController implements Consultati
             lbCollection.setText(edition.getCollection() == null ? null : edition.getCollection().buildLabel(true));
             lbCote.setText(edition.getAnneeCote() == null ? null : MessageFormat.format("{0} ({0})", I18nSupport.getCurrencyFormatter().format(edition.getPrixCote()), edition.getAnneeCote().format(DateTimeFormatter.ofPattern(I18nSupport.message("format.year")))));
             lbAchete.setText(edition.isOffert() ? "Offert le :" : "Acheté le :");
-            lbDateAchat.setText(edition.getDateAchat() == null ? null : edition.getDateAchat().format(DateTimeFormatter.ofPattern(I18nSupport.message("format.date"))));
+            lbDateAchat.setText(new LocalDateStringConverter().toString(edition.getDateAchat()));
             lbPrix.setText(edition.getPrix() == null ? null : I18nSupport.getCurrencyFormatter().format(edition.getPrix()));
 
-            lbAnneeEdition.setText(edition.getAnneeEdition().format(DateTimeFormatter.ofPattern(I18nSupport.message("format.year"))));
+            lbAnneeEdition.setText(new YearStringConverter().toString(edition.getAnneeEdition()));
             cbOffert.setSelected(edition.isOffert());
             cbStock.setSelected(edition.isStock());
             lbReliure.setText(edition.getReliure().getTexte());
@@ -253,7 +248,7 @@ public class FicheAlbumController extends WindowController implements Consultati
             lbFormat.setText(edition.getFormatEdition().getTexte());
             lbEtat.setText(edition.getEtat().getTexte());
             lbNumeroPerso.setText(edition.getNumeroPerso());
-            lbPages.textProperty().bindBidirectional(edition.nombreDePagesProperty(), new IntegerStringConverter());
+            lbPages.setText(new IntegerStringConverter().toString(edition.getNombreDePages()));
             cbDedicace.setSelected(edition.isDedicace());
             cbVO.setSelected(edition.isVo());
             cbCouleur.setSelected(edition.isCouleur());
@@ -313,6 +308,8 @@ public class FicheAlbumController extends WindowController implements Consultati
         //if (!StringUtils.isNullOrEmpty(album.getNotes())) notes.getStyleClass().add(CSS_FLOW_B0RDER);
         notes.getChildren().add(new Text(_album.getNotes()));
 
+        Platform.runLater(() -> tvSerieController.setSelectedEntity(album.get()));
+
         // le getEditions force le lazy loading de la liste
         editions.set(FXCollections.observableList(_album.getEditions()));
         currentEdition.set(editions.get(0));
@@ -330,7 +327,7 @@ public class FicheAlbumController extends WindowController implements Consultati
         Image image = cacheImages[pageIndex];
         if (image == null) {
             final int height = ((Double) (diaporama.getPrefHeight() - desc.getPrefHeight())).intValue() - 50;
-            final byte[] imageStream = couvertureDao.getImageStream(couvertureLite, height, ((Double) diaporama.getPrefWidth()).intValue());
+            final byte[] imageStream = couvertureDao.getImageStream(couvertureLite, height, ((Double) diaporama.getPrefWidth()).intValue(), EnumSet.of(ImageUtils.ScaleOption.ALLOW_DOWN));
             image = new Image(new ByteArrayInputStream(imageStream));
             cacheImages[pageIndex] = image;
         }

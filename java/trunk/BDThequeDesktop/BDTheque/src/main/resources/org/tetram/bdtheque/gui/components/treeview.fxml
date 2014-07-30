@@ -2,13 +2,13 @@
 <!--
   ~ Copyright (c) 2014, tetram.org. All Rights Reserved.
   ~ treeview.fxml
-  ~ Last modified by Tetram, on 2014-07-29T11:34:44CEST
+  ~ Last modified by Tetram, on 2014-07-30T14:23:53CEST
   -->
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.BorderPane?>
 <BorderPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="200.0" prefWidth="200.0" xmlns="http://javafx.com/javafx/8"
-            fx:controller="org.tetram.bdtheque.gui.controllers.components.TreeViewController">
+            fx:controller="org.tetram.bdtheque.gui.controllers.components.TreeViewController" fx:id="containerPane">
     <center>
         <TreeTableView fx:id="treeTableView" showRoot="false" stylesheets="@treeview.css" BorderPane.alignment="CENTER">
             <columnResizePolicy>

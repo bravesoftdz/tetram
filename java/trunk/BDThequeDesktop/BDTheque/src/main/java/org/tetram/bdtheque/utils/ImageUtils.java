@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * ImageUtils.java
- * Last modified by Tetram, on 2014-07-29T11:02:07CEST
+ * Last modified by Tetram, on 2014-07-30T16:31:57CEST
  */
 
 package org.tetram.bdtheque.utils;
@@ -14,6 +14,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.EnumSet;
 
 /**
  * Created by Thierry on 16/06/2014.
@@ -37,10 +38,14 @@ public class ImageUtils {
     }
 
     public static BufferedImage resizePicture(BufferedImage bufferedImage, Integer height, Integer width, boolean antiAliasing) {
-        return resizePicture(bufferedImage, height, width, antiAliasing, false, 0);
+        return resizePicture(bufferedImage, height, width, ScaleOption.ALL, antiAliasing);
     }
 
-    public static BufferedImage resizePicture(BufferedImage bufferedImage, Integer height, Integer width, boolean antiAliasing, boolean cadre, int effet3D) {
+    public static BufferedImage resizePicture(BufferedImage bufferedImage, Integer height, Integer width, EnumSet<ScaleOption> scaleOptions, boolean antiAliasing) {
+        return resizePicture(bufferedImage, height, width, scaleOptions, antiAliasing, false, 0);
+    }
+
+    public static BufferedImage resizePicture(BufferedImage bufferedImage, Integer height, Integer width, EnumSet<ScaleOption> scaleOptions, boolean antiAliasing, boolean cadre, int effet3D) {
         int newHeight, newWidth;
         if (height == null && width == null) {
             newHeight = bufferedImage.getHeight();
@@ -56,6 +61,15 @@ public class ImageUtils {
                     newWidth = width;
                     newHeight = newWidth * bufferedImage.getHeight() / bufferedImage.getWidth();
                 }
+            }
+
+            if (((height == null ? Integer.MIN_VALUE : height) > bufferedImage.getHeight() || (width == null ? Integer.MIN_VALUE : width) > bufferedImage.getWidth()) && !scaleOptions.contains(ScaleOption.ALLOW_UP)) {
+                newHeight = bufferedImage.getHeight();
+                newWidth = bufferedImage.getWidth();
+            }
+            if (((height == null ? Integer.MAX_VALUE : height) < bufferedImage.getHeight() || (width == null ? Integer.MAX_VALUE : width) < bufferedImage.getWidth()) && !scaleOptions.contains(ScaleOption.ALLOW_DOWN)) {
+                newHeight = bufferedImage.getHeight();
+                newWidth = bufferedImage.getWidth();
             }
         }
         newHeight -= effet3D;
@@ -90,19 +104,28 @@ public class ImageUtils {
     }
 
     public static byte[] getJPEGStream(File file, Integer height, Integer width, boolean antiAliasing) {
-        return getJPEGStream(file, height, width, antiAliasing, false, 0);
+        return getJPEGStream(file, height, width, ScaleOption.ALL, antiAliasing);
     }
 
-    public static byte[] getJPEGStream(File file, Integer height, Integer width, boolean antiAliasing, boolean cadre, int effet3D) {
+    public static byte[] getJPEGStream(File file, Integer height, Integer width, EnumSet<ScaleOption> scaleOptions, boolean antiAliasing) {
+        return getJPEGStream(file, height, width, scaleOptions, antiAliasing, false, 0);
+    }
+
+    public static byte[] getJPEGStream(File file, Integer height, Integer width, EnumSet<ScaleOption> scaleOptions, boolean antiAliasing, boolean cadre, int effet3D) {
         try {
             ByteArrayOutputStream output = new ByteArrayOutputStream();
             // write to jpeg file
-            ImageIO.write(resizePicture(ImageIO.read(file), height, width, antiAliasing, cadre, effet3D), JPG_FORMAT, output);
+            ImageIO.write(resizePicture(ImageIO.read(file), height, width, scaleOptions, antiAliasing, cadre, effet3D), JPG_FORMAT, output);
 
             return output.toByteArray();
         } catch (IOException e) {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public enum ScaleOption {
+        ALLOW_UP, ALLOW_DOWN;
+        public static final EnumSet<ScaleOption> ALL = EnumSet.allOf(ScaleOption.class);
     }
 }

@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <!--
   ~ Copyright (c) 2014, tetram.org. All Rights Reserved.
   ~ ficheAlbum.fxml
-  ~ Last modified by Tetram, on 2014-07-30T11:29:56CEST
+  ~ Last modified by Tetram, on 2014-07-30T16:47:12CEST
   -->
+
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
@@ -42,7 +44,7 @@
                 <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" vgrow="SOMETIMES"/>
                 <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" vgrow="SOMETIMES"/>
                 <RowConstraints vgrow="ALWAYS"/>
-                <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" vgrow="NEVER"/>
+                <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="96.0" vgrow="NEVER"/>
             </rowConstraints>
             <children>
                 <Label styleClass="label-rubrique" text="Série :" GridPane.columnIndex="2" GridPane.columnSpan="2"
@@ -95,9 +97,8 @@
                           GridPane.halignment="LEFT" GridPane.rowIndex="9" GridPane.valignment="TOP"/>
                 <Label styleClass="label-rubrique" text="Série" GridPane.columnSpan="3" GridPane.halignment="RIGHT"
                        GridPane.rowIndex="14" GridPane.valignment="TOP"/>
-                <ListView fx:id="lvSerie" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="69.0"
-                          GridPane.columnIndex="3" GridPane.columnSpan="4" GridPane.rowIndex="14"
-                          GridPane.valignment="TOP"/>
+                <fx:include fx:id="tvSerie" source="../components/treeview.fxml" GridPane.columnIndex="3"
+                            GridPane.columnSpan="4" GridPane.rowIndex="14" GridPane.valignment="TOP"/>
                 <FlowPane fx:id="lvUnivers" GridPane.columnIndex="3" GridPane.columnSpan="4" GridPane.halignment="LEFT"
                           GridPane.rowIndex="4" GridPane.valignment="TOP"/>
                 <Label styleClass="label-rubrique" text="Histoire :" GridPane.columnSpan="3" GridPane.halignment="RIGHT"

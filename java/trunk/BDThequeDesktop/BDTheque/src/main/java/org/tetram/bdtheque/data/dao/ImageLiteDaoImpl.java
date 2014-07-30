@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * ImageLiteDaoImpl.java
- * Last modified by Tetram, on 2014-07-29T11:09:14CEST
+ * Last modified by Tetram, on 2014-07-30T15:59:40CEST
  */
 
 package org.tetram.bdtheque.data.dao;
@@ -55,7 +55,7 @@ public abstract class ImageLiteDaoImpl<T extends BaseImage, K> extends DaoRWImpl
     }
 
     @Override
-    public byte[] getImageStream(T image, Integer height, Integer width, boolean antiAliasing, boolean cadre, int effet3D) {
+    public byte[] getImageStream(T image, Integer height, Integer width, EnumSet<ImageUtils.ScaleOption> scaleOptions, boolean antiAliasing, boolean cadre, int effet3D) {
         ImageStream imageInfo = imageMapper.getImageStream(image, tableName, fieldPk, fieldFile, fieldModeStockage, fieldBlob);
         if (imageInfo.getData().length == 0 && StringUtils.isNullOrEmpty(imageInfo.getFileName()))
             return null;
@@ -76,7 +76,7 @@ public abstract class ImageLiteDaoImpl<T extends BaseImage, K> extends DaoRWImpl
         try {
             ByteArrayOutputStream output = new ByteArrayOutputStream();
             // write to jpeg file
-            ImageIO.write(ImageUtils.resizePicture(ImageIO.read(new ByteArrayInputStream(imageBytes)), height, width, antiAliasing, cadre, effet3D), ImageUtils.JPG_FORMAT, output);
+            ImageIO.write(ImageUtils.resizePicture(ImageIO.read(new ByteArrayInputStream(imageBytes)), height, width, scaleOptions, antiAliasing, cadre, effet3D), ImageUtils.JPG_FORMAT, output);
 
             return output.toByteArray();
         } catch (IOException e) {

@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * FicheUniversController.java
- * Last modified by Tetram, on 2014-07-29T11:10:36CEST
+ * Last modified by Tetram, on 2014-07-30T13:53:48CEST
  */
 
 package org.tetram.bdtheque.gui.controllers.consultation;
@@ -88,8 +88,10 @@ public class FicheUniversController extends WindowController implements Consulta
 
         albumsController.setMode(TreeViewMode.ALBUMS_SERIE);
         albumsController.setFiltre(filtreBrancheUnivers);
+        albumsController.setCanSearch(false);
 
         parabdController.setMode(TreeViewMode.PARABD_SERIE);
-        albumsController.setFiltre(filtreBrancheUnivers);
+        parabdController.setFiltre(filtreBrancheUnivers);
+        parabdController.setCanSearch(false);
     }
 }

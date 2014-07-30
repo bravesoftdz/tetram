@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * ImageLiteDao.java
- * Last modified by Tetram, on 2014-07-29T11:09:14CEST
+ * Last modified by Tetram, on 2014-07-30T16:02:26CEST
  */
 
 package org.tetram.bdtheque.data.dao;
@@ -9,7 +9,9 @@ package org.tetram.bdtheque.data.dao;
 import org.tetram.bdtheque.data.bean.abstractentities.BaseImage;
 import org.tetram.bdtheque.data.services.UserPreferences;
 import org.tetram.bdtheque.spring.SpringContext;
+import org.tetram.bdtheque.utils.ImageUtils;
 
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -19,10 +21,18 @@ import java.util.UUID;
  */
 public interface ImageLiteDao<T extends BaseImage, K> extends DaoRW<T, K> {
 
-    byte[] getImageStream(T image, Integer height, Integer width, boolean antiAliasing, boolean cadre, int effet3D);
+    byte[] getImageStream(T image, Integer height, Integer width, EnumSet<ImageUtils.ScaleOption> scaleOptions, boolean antiAliasing, boolean cadre, int effet3D);
+
+    default byte[] getImageStream(T image, Integer height, Integer width, EnumSet<ImageUtils.ScaleOption> scaleOptions, boolean antiAliasing) {
+        return getImageStream(image, height, width, scaleOptions, antiAliasing, false, 0);
+    }
 
     default byte[] getImageStream(T image, Integer height, Integer width, boolean antiAliasing) {
-        return getImageStream(image, height, width, antiAliasing, false, 0);
+        return getImageStream(image, height, width, ImageUtils.ScaleOption.ALL, antiAliasing);
+    }
+
+    default byte[] getImageStream(T image, Integer height, Integer width, EnumSet<ImageUtils.ScaleOption> scaleOptions) {
+        return getImageStream(image, height, width, scaleOptions, SpringContext.CONTEXT.getBean(UserPreferences.class).isAntiAliasing());
     }
 
     default byte[] getImageStream(T image, Integer height, Integer width) {

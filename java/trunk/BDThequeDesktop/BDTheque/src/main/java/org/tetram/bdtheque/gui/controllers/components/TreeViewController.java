@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * TreeViewController.java
- * Last modified by Tetram, on 2014-07-30T11:36:59CEST
+ * Last modified by Tetram, on 2014-07-30T15:35:12CEST
  */
 
 package org.tetram.bdtheque.gui.controllers.components;
@@ -20,6 +20,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.util.Callback;
 import javafx.util.Duration;
 import jfxtras.animation.Timer;
@@ -49,6 +50,7 @@ import org.tetram.bdtheque.utils.StringUtils;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.function.Consumer;
 
 /**
  * Created by Thierry on 09/07/2014.
@@ -70,6 +72,7 @@ public class TreeViewController extends WindowController {
     private final ObjectProperty<Callback<TreeViewNode, List<? extends AbstractEntity>>> onGetChildren = new SimpleObjectProperty<>(this, "onGetChildren", null);
     private final ObjectProperty<Callback<TreeViewNode, Boolean>> onIsLeaf = new SimpleObjectProperty<>(this, "onIsLeaf", null);
     private final ObjectProperty<Callback<AbstractEntity, String>> onGetLabel = new SimpleObjectProperty<>(this, "onGetLabel", new TreeViewMode.GetLabelCallback(this));
+    private final ObjectProperty<Consumer<TreeTableCell<AbstractEntity, AbstractEntity>>> onRenderCell = new SimpleObjectProperty<>(this, "onRenderCell", null);
     private final ObjectProperty<Class<? extends AbstractEntity>> finalEntityClass = new SimpleObjectProperty<>(this, "finalEntityClass", AbstractEntity.class);
     private final ReadOnlyStringWrapper appliedFiltre = new ReadOnlyStringWrapper(this, "appliedFiltre", null);
     private final StringProperty filtre = new SimpleStringProperty(this, "filtre", null);
@@ -84,6 +87,8 @@ public class TreeViewController extends WindowController {
     private UserPreferences userPreferences;
     @Autowired
     private MainController mainController;
+    @FXML
+    private BorderPane containerPane;
     @FXML
     private TreeTableView<AbstractEntity> treeTableView;
     @FXML
@@ -119,6 +124,15 @@ public class TreeViewController extends WindowController {
         };
         tfSearch.setOnKeyPressed(onKeyPressed);
         treeTableView.setOnKeyPressed(onKeyPressed);
+        canSearchProperty().addListener((o, oV, newValue) -> {
+            if (newValue) {
+                treeTableView.setOnKeyPressed(onKeyPressed);
+                containerPane.setTop(tfSearch);
+            } else {
+                treeTableView.setOnKeyPressed(null);
+                containerPane.setTop(null);
+            }
+        });
 
         appliedFiltre.bind(Bindings.createStringBinding(() -> {
             String s = getFiltre();
@@ -160,9 +174,25 @@ public class TreeViewController extends WindowController {
         final BooleanBinding column1Visible = Bindings.and(userPreferences.afficheNoteListesProperty(), finalEntityClassIsEvaluated);
         column1.visibleProperty().bind(column1Visible);
 
+        selectedEntity.addListener((o, oldEntity, newEntity) -> {
+            if (getSelected() != null) {
+                AbstractEntity current = getSelected().getValue();
+                if (current == null && newEntity == null) return;
+                if (current != null && current.equals(newEntity))
+                    return;
+            }
+
+            TreeViewNode node = null;
+            if (newEntity != null) {
+                node = getFirst();
+                while (node != null && !node.getValue().equals(newEntity))
+                    node = getNext(node);
+            }
+            selectNode(node);
+        });
+
         treeTableView.getSelectionModel().selectedItemProperty().addListener((observable, oldEntity, newEntity) -> {
             TreeViewNode treeViewNode = (TreeViewNode) newEntity;
-            // ne surtout pas utiliser setSelectedEntity
             selectedEntity.set(treeViewNode != null && treeViewNode.isLeaf() ? treeViewNode.getValue() : null);
         });
 
@@ -293,7 +323,11 @@ public class TreeViewController extends WindowController {
     }
 
     private TreeViewNode getFirst() {
-        return (TreeViewNode) getTreeView().getRoot().getChildren().get(0);
+        try {
+            return (TreeViewNode) getTreeView().getRoot().getChildren().get(0);
+        } catch (NullPointerException e) {
+            return null;
+        }
     }
 
     private TreeViewNode getSelected() {
@@ -358,6 +392,18 @@ public class TreeViewController extends WindowController {
 
     public ObjectProperty<Callback<AbstractEntity, String>> onGetLabelProperty() {
         return onGetLabel;
+    }
+
+    public Consumer<TreeTableCell<AbstractEntity, AbstractEntity>> getOnRenderCell() {
+        return onRenderCell.get();
+    }
+
+    public void setOnRenderCell(Consumer<TreeTableCell<AbstractEntity, AbstractEntity>> onRenderCell) {
+        this.onRenderCell.set(onRenderCell);
+    }
+
+    public ObjectProperty<Consumer<TreeTableCell<AbstractEntity, AbstractEntity>>> onRenderCellProperty() {
+        return onRenderCell;
     }
 
     public TreeTableView<AbstractEntity> getTreeView() {
@@ -444,17 +490,26 @@ public class TreeViewController extends WindowController {
         return selectedEntity.get();
     }
 
-    private void setSelectedEntity(InitialeEntity initialeEntity, AbstractEntity selectedEntity) {
+    public void setSelectedEntity(AbstractEntity selectedEntity) {
+        this.selectedEntity.set(selectedEntity);
+    }
+
+    public void setSelectedEntity(InitialeEntity initialeEntity, AbstractEntity selectedEntity) {
         // c'est le listener sur selectedItemProperty qui va faire le set
         // this.selectedEntity.set(selectedEntity);
-        TreeViewNode node = (TreeViewNode) getTreeView().getRoot().getChildren().get(0);
-        while (node != null && !node.getValue().equals(initialeEntity))
-            node = (TreeViewNode) node.nextSibling();
-        if (node == null) return;
-        node = (TreeViewNode) node.getChildren().get(0);
-        while (node != null && !node.getValue().equals(selectedEntity))
-            node = (TreeViewNode) node.nextSibling();
+        TreeViewNode node = null;
+        if (initialeEntity != null) {
+            node = (TreeViewNode) getTreeView().getRoot().getChildren().get(0);
+            while (node != null && !node.getValue().equals(initialeEntity))
+                node = (TreeViewNode) node.nextSibling();
+            if (node == null) return;
 
+            if (selectedEntity != null) {
+                node = (TreeViewNode) node.getChildren().get(0);
+                while (node != null && !node.getValue().equals(selectedEntity))
+                    node = (TreeViewNode) node.nextSibling();
+            }
+        }
         selectNode(node);
     }
 
@@ -497,6 +552,10 @@ public class TreeViewController extends WindowController {
 
     public UUID getCurrentID() {
         return getSelectedEntity() == null ? null : ((AbstractDBEntity) getSelectedEntity()).getId();
+    }
+
+    public int getNodeLevel(TreeViewNode node) {
+        return treeTableView.getTreeItemLevel(node);
     }
 
     public class TreeViewNode extends TreeItem<AbstractEntity> {
@@ -572,6 +631,9 @@ public class TreeViewController extends WindowController {
                     }
                 }
             }
+
+            if (getOnRenderCell() != null)
+                getOnRenderCell().accept(this);
         }
     }
 
