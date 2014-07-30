@@ -1,0 +1,72 @@
+/* */
+.layout-bounds {
+    -fx-fill: green;
+    -fx-opacity: 0.9;
+}
+
+.bounds-locator-child {
+    -fx-fill: transparent;
+    -fx-stroke: blue;
+    -fx-stroke-type: inside;
+    -fx-stroke-width: 5px;
+    -fx-stroke-dash-array: 2 2;
+    -fx-stroke-dash-offset: 4;
+    -fx-stroke-line-cap: butt;
+}
+
+.bounds-in-local {
+    -fx-fill: transparent;
+    -fx-stroke: green;
+    -fx-stroke-type: inside;
+    -fx-stroke-width: 5px;
+    -fx-stroke-line-cap: butt;
+}
+
+.fxct-text-class-name {
+    -fx-stroke: blue;
+}
+
+.tree-cell:selected .fxct-text-class-name {
+    -fx-stroke: white;
+}
+
+.fxct-text-css-id {
+    -fx-stroke: darkgrey;
+}
+
+.tree-cell:selected .fxct-text-css-id {
+    /*    -fx-font: 12pt "monospace";*/
+    -fx-stroke: black;
+}
+
+.fxct-text-style-class {
+    /*    -fx-font: 12pt "monospace";*/
+    -fx-stroke: orange;
+}
+
+.tree-cell:selected:odd {
+    -fx-background-color: -fx-selection-bar;
+}
+
+/*
+.tree-cell:filled:hover:odd {
+    -fx-background-color: -fx-cell-hover-color;
+    -fx-text-fill: -fx-text-inner-color;
+}
+*/
+.tree-cell:odd {
+    -fx-background-color: #f0f0f0;
+}
+
+.fxct-pseudoclass-flow {
+    -fx-hgap: 5;
+}
+
+.fxsct-bounds-grid {
+    -fx-hgap: 10;
+    -fx-vgap: 2;
+}
+
+.fxsct-constraint-header {
+    -fx-font-weight: bold;
+}

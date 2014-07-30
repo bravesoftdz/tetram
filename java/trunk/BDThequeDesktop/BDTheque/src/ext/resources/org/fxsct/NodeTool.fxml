@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<StackPane xmlns:fx="http://javafx.com/fxml" id="nodeTool" fx:id="root" prefHeight="600" prefWidth="250"
+           fx:controller="org.fxsct.NodeToolController">
+    <children>
+        <VBox>
+            <children>
+                <TabPane prefHeight="300" minHeight="200">
+                    <tabs>
+                        <Tab fx:id="sceneGraphTab" text="Scene Graph" closable="false"/>
+                        <Tab fx:id="stylesTab" text="Style Classes" closable="false"/>
+                        <Tab fx:id="idTab" text="Id" closable="false"/>
+                        <!-- <Tab text="Search" /> -->
+                    </tabs>
+                </TabPane>
+                <StackPane fx:id="pseudoClassContent"/>
+                <HBox>
+                    <children>
+                        <ToggleButton fx:id="mouseTrackButton" text="Track Mouse"/>
+                        <ToggleButton fx:id="focusTrackButton" text="Track Focus"/>
+                    </children>
+                </HBox>
+                <TitledPane fx:id="boundsContent" text="Bounds"/>
+                <TitledPane fx:id="constraintsContent" text="Constraints"/>
+                <TitledPane fx:id="propertiesPane" text="Properties"/>
+                <!-- <TitledPane text="Watch" /> -->
+            </children>
+        </VBox>
+    </children>
+</StackPane>
