@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * Main.java
- * Last modified by Tetram, on 2014-07-29T11:02:08CEST
+ * Last modified by Tetram, on 2014-07-30T13:36:06CEST
  */
 
 package org.tetram.bdtheque;/**
@@ -180,6 +180,8 @@ public class Main extends Application {
         Scene scene = new Scene((Parent) mainController.getView(), 1280, 800);
         primaryStage.setScene(scene);
         primaryStage.show();
+        // ça dépanne mais c'est plein de petits bugs que j'ai pas envie de résoudre
+        // SceneToolPlugin.load(primaryStage);
     }
 
 }

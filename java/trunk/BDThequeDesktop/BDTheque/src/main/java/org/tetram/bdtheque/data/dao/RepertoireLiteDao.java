@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * RepertoireLiteDao.java
- * Last modified by Tetram, on 2014-07-29T14:47:56CEST
+ * Last modified by Tetram, on 2014-07-30T13:39:53CEST
  */
 
 package org.tetram.bdtheque.data.dao;
@@ -44,11 +44,15 @@ public interface RepertoireLiteDao<T extends AbstractDBEntity, InitialeValueType
     default ListOrderedMap<InitialeEntity<InitialeValueType>, List<T>> searchMap(String value, String filtre) {
         ListOrderedMap<InitialeEntity<InitialeValueType>, List<T>> m = new ListOrderedMap<>();
         List<InitialeWithEntity<InitialeValueType, T>> entities = searchList(value, filtre);
+        final InitialeEntity<InitialeValueType> nullInitiale = new InitialeEntity<>();
         entities.forEach(i -> {
-            List<T> list = m.get(i.getInitiale());
+            InitialeEntity<InitialeValueType> initiale = i.getInitiale();
+            // si la requête a retourné "null" dans initiale_value, il n'y a pas d'objet InitialeEntity qui a été créé
+            initiale = initiale == null ? nullInitiale : initiale;
+            List<T> list = m.get(initiale);
             if (list == null) list = new ArrayList<>();
             list.add(i.getEntity());
-            m.put(i.getInitiale(), list);
+            m.put(initiale, list);
         });
         return m;
     }

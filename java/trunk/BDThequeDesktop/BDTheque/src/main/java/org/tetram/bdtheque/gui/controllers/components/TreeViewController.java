@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * TreeViewController.java
- * Last modified by Tetram, on 2014-07-29T17:58:50CEST
+ * Last modified by Tetram, on 2014-07-30T11:36:59CEST
  */
 
 package org.tetram.bdtheque.gui.controllers.components;
@@ -18,6 +18,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.util.Callback;
 import javafx.util.Duration;
@@ -68,7 +69,7 @@ public class TreeViewController extends WindowController {
     private final ObjectProperty<EventHandler<MouseEvent>> onClickItem = new SimpleObjectProperty<>(this, "onClickItem", null);
     private final ObjectProperty<Callback<TreeViewNode, List<? extends AbstractEntity>>> onGetChildren = new SimpleObjectProperty<>(this, "onGetChildren", null);
     private final ObjectProperty<Callback<TreeViewNode, Boolean>> onIsLeaf = new SimpleObjectProperty<>(this, "onIsLeaf", null);
-    private final ObjectProperty<Callback<AbstractEntity, String>> onGetLabel = new SimpleObjectProperty<>(this, "onGetLabel", null);
+    private final ObjectProperty<Callback<AbstractEntity, String>> onGetLabel = new SimpleObjectProperty<>(this, "onGetLabel", new TreeViewMode.GetLabelCallback(this));
     private final ObjectProperty<Class<? extends AbstractEntity>> finalEntityClass = new SimpleObjectProperty<>(this, "finalEntityClass", AbstractEntity.class);
     private final ReadOnlyStringWrapper appliedFiltre = new ReadOnlyStringWrapper(this, "appliedFiltre", null);
     private final StringProperty filtre = new SimpleStringProperty(this, "filtre", null);
@@ -105,17 +106,19 @@ public class TreeViewController extends WindowController {
         mode.addListener(observable -> {
             final TreeViewMode newMode = getMode() == null ? TreeViewMode.NONE : getMode();
             finalEntityClass.set(newMode == TreeViewMode.NONE ? AbstractEntity.class : newMode.getEntityClass());
-            onGetLabel.set(newMode == TreeViewMode.NONE ? null : new TreeViewMode.GetLabelCallback(this));
-            onGetChildren.set(newMode == TreeViewMode.NONE ? null : new TreeViewMode.GetChildrenCallback(this));
+            onGetChildren.set(newMode == TreeViewMode.NONE ? null : new TreeViewMode.GetChildrenFromDaoCallback(this));
             dao.set(newMode == TreeViewMode.NONE ? null : SpringContext.CONTEXT.getBean(newMode.getDaoClass()));
             refresh();
         });
 
         tfSearch.visibleProperty().bind(canSearchProperty());
         tfSearch.textProperty().addListener(o -> searchTimer.restart());
-        tfSearch.setOnKeyReleased(event -> {
-            if (event.getCode().equals(KeyCode.F3)) find(true);
-        });
+        EventHandler<KeyEvent> onKeyPressed = event -> {
+            if (event.getCode().equals(KeyCode.F3) && !event.isAltDown() && !event.isControlDown() && !event.isShiftDown() && !event.isMetaDown())
+                find(true);
+        };
+        tfSearch.setOnKeyPressed(onKeyPressed);
+        treeTableView.setOnKeyPressed(onKeyPressed);
 
         appliedFiltre.bind(Bindings.createStringBinding(() -> {
             String s = getFiltre();
@@ -456,11 +459,15 @@ public class TreeViewController extends WindowController {
     }
 
     private void selectNode(TreeViewNode node) {
-        getTreeView().getSelectionModel().select(node);
-        if (node != null) {
+        if (node == null) {
+            getTreeView().getSelectionModel().clearSelection();
+        } else {
             expandTreeView(node);
-            getTreeView().getFocusModel().focus(treeTableView.getRow(node), column0);
-            getTreeView().scrollTo(treeTableView.getRow(node));
+            double rowCount = treeTableView.getHeight() / 24;
+            int row = treeTableView.getRow(node);
+            getTreeView().getSelectionModel().clearAndSelect(row, column0);
+            int middleRow = (int) (row - (rowCount / 2.0)) + 1;
+            getTreeView().scrollTo(middleRow);
         }
     }
 
@@ -547,11 +554,10 @@ public class TreeViewController extends WindowController {
             setContentDisplay(ContentDisplay.RIGHT);
 
             getStyleClass().remove(NODE_BOLD_CSS);
+            setText(null);
+            setGraphic(null);
 
-            if (empty) {
-                setText(null);
-                setGraphic(null);
-            } else {
+            if (!empty && item != null) {
                 setText(getLabelForItem(item));
 
                 if (item instanceof InitialeEntity) {
@@ -563,8 +569,6 @@ public class TreeViewController extends WindowController {
                         text.setAlignment(Pos.BASELINE_CENTER);
                         setGraphicTextGap(8);
                         setGraphic(text);
-                    } else {
-                        setGraphic(null);
                     }
                 }
             }

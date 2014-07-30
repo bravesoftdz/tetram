@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * consultation.css
- * Last modified by Tetram, on 2014-07-29T11:10:40CEST
+ * Last modified by Tetram, on 2014-07-30T13:39:54CEST
  */
 
 /**
@@ -13,8 +13,10 @@
 }
 
 .label-rubrique {
-/ / -fx-text-fill : #152fFF;
-/ / -fx-text-fill : #2D8E42;
+    /*
+        -fx-text-fill : #152fFF;
+        -fx-text-fill : #2D8E42;
+    */
     -fx-text-fill: #E05E53;
 }
 

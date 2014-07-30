@@ -2,7 +2,7 @@
 <!--
   ~ Copyright (c) 2014, tetram.org. All Rights Reserved.
   ~ Album.xml
-  ~ Last modified by Tetram, on 2014-07-29T17:38:25CEST
+  ~ Last modified by Tetram, on 2014-07-30T13:39:54CEST
   -->
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
@@ -85,17 +85,16 @@
         </if>
     </select>
     <select id="getAlbumById" parameterType="UUID" resultMap="AlbumFull">
-        <![CDATA[
         select
-            a.id_album, a.titreAlbum, a.moisParution, a.anneeParution, a.id_serie, a.tome, a.tomeDebut, a.tomeFin, a.sujetAlbum,
-            a.remarquesAlbum, a.horsSerie, a.integrale, a.complet, a.notation, n.libelle as lb_notation
+        a.id_album, a.titreAlbum, a.moisParution, a.anneeParution, a.id_serie, a.tome, a.tomeDebut, a.tomeFin,
+        a.sujetAlbum,
+        a.remarquesAlbum, a.horsSerie, a.integrale, a.complet, a.notation, n.libelle as lb_notation
         from
-            albums a
-            left join listes n on
-                (n.ref = a.notation and n.categorie = 9)
+        albums a
+        left join listes n on
+        (n.ref = a.notation and n.categorie = 9)
         where
-            a.id_album = #{id}
-        ]]>
+        a.id_album = #{id}
     </select>
     <select id="getListAlbumLiteBySerieIdByAuteurId" parameterType="map" resultMap="AlbumLite" resultOrdered="true">
         select
@@ -125,12 +124,10 @@
     </select>
 
     <select id="getInitiales" resultMap="org.tetram.bdtheque.data.dao.mappers.CommonMapper.InitialeEntityCharacter">
-        <![CDATA[
         select
-            initialeTitreAlbum "label", countInitiale "count", initialeTitreAlbum "value"
+        initialeTitreAlbum "label", countInitiale "count", initialeTitreAlbum "value"
         from
-            initiales_albums(#{filtre})
-        ]]>
+        initiales_albums(#{filtre})
     </select>
 
     <select id="getAlbumLiteByInitiale" resultMap="AlbumLite">
@@ -143,12 +140,10 @@
     </select>
 
     <select id="getInitialesSeries" resultMap="org.tetram.bdtheque.data.dao.mappers.CommonMapper.InitialeEntityUUID">
-        <![CDATA[
         select
-            titreSerie "label", countSerie "count", id_serie "value"
+        titreSerie "label", countSerie "count", id_serie "value"
         from
-            series_albums(#{filtre})
-        ]]>
+        series_albums(#{filtre})
     </select>
 
     <select id="getListAlbumLiteBySerie" resultMap="AlbumLite">
@@ -163,9 +158,9 @@
         ]]>
     </select>
 
-    <select id="searchAlbumLiteBySerie" resultMap="AlbumLiteInitialeUUID">
+    <select id="searchAlbumLiteBySerie" resultMap="AlbumLiteInitialeUUID" resultOrdered="true">
         select
-        a.id_serie initiale_value,
+        a.id_album initiale_key, a.id_serie initiale_value,
         <include refid="fieldsAlbumLite"/>, a.titreSerie, a.notation
         <![CDATA[
         from
@@ -177,18 +172,17 @@
             and #{filtre}
         </if>
         order by
-        coalesce(a.titreAlbum, a.titreSerie) ,
-        <include refid="orderAlbum"/>
+        a.titreSerie nulls first,
+        <include refid="orderAlbum"/>,
+        coalesce(a.titreAlbum, a.titreSerie)
     </select>
 
     <select id="getInitialesCollections"
             resultMap="org.tetram.bdtheque.data.dao.mappers.CommonMapper.InitialeEntityUUID">
-        <![CDATA[
         select
-            nomCollection "label", countCollection "count", id_collection "value"
+        nomCollection "label", countCollection "count", id_collection "value"
         from
-            collections_albums(#{filtre})
-        ]]>
+        collections_albums(#{filtre})
     </select>
 
     <select id="getAlbumLiteByCollection" resultMap="AlbumLite">
@@ -204,12 +198,10 @@
     </select>
 
     <select id="getInitialesEditeurs" resultMap="org.tetram.bdtheque.data.dao.mappers.CommonMapper.InitialeEntityUUID">
-        <![CDATA[
         select
-            nomEditeur "label", countEditeur "count", id_editeur "value"
+        nomEditeur "label", countEditeur "count", id_editeur "value"
         from
-            editeurs_albums(#{filtre})
-        ]]>
+        editeurs_albums(#{filtre})
     </select>
 
     <select id="getAlbumLiteByEditeur" resultMap="AlbumLite">
@@ -225,12 +217,10 @@
     </select>
 
     <select id="getInitialesGenres" resultMap="org.tetram.bdtheque.data.dao.mappers.CommonMapper.InitialeEntityUUID">
-        <![CDATA[
         select
-            genre "label", countGenre "count", id_genre "value"
+        genre "label", countGenre "count", id_genre "value"
         from
-            genres_albums(#{filtre})
-        ]]>
+        genres_albums(#{filtre})
     </select>
 
     <select id="getAlbumLiteByGenre" resultMap="AlbumLite">
@@ -246,12 +236,10 @@
     </select>
 
     <select id="getInitialesAnnees" resultMap="org.tetram.bdtheque.data.dao.mappers.CommonMapper.InitialeEntityYear">
-        <![CDATA[
         select
-            anneeParution "label", countAnnee "count", nullif(anneeParution, -1) "value"
+        anneeParution "label", countAnnee "count", nullif(anneeParution, -1) "value"
         from
-            annees_albums(#{filtre})
-        ]]>
+        annees_albums(#{filtre})
     </select>
 
     <select id="getAlbumLiteByAnnee" resultMap="AlbumLite">
@@ -274,15 +262,13 @@
     </update>
 
     <sql id="saveAlbum">
-        <![CDATA[
         update or insert into albums (
-            id_album, titreAlbum, moisParution, anneeParution, id_serie, tome, tomeDebut, tomeFin,
-            horsSerie, integrale, sujetAlbum, remarquesAlbum
+        id_album, titreAlbum, moisParution, anneeParution, id_serie, tome, tomeDebut, tomeFin,
+        horsSerie, integrale, sujetAlbum, remarquesAlbum
         ) values (
-            #{id}, #{titreAlbum}, #{moisParution}, #{anneeParution}, #{idSerie}, #{tome}, #{tomeDebut}, #{tomeFin},
-            #{horsSerie}, #{integrale}, #{sujet}, #{notes}
+        #{id}, #{titreAlbum}, #{moisParution}, #{anneeParution}, #{idSerie}, #{tome}, #{tomeDebut}, #{tomeFin},
+        #{horsSerie}, #{integrale}, #{sujet}, #{notes}
         )
-        ]]>
     </sql>
 
     <insert id="createAlbum">
@@ -297,9 +283,7 @@
     </update>
 
     <delete id="deleteAlbum">
-        <![CDATA[
         delete from albums where id_album = #{id}
-        ]]>
     </delete>
 
 </mapper>

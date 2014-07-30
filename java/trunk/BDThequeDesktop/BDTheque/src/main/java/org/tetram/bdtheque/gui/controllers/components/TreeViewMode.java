@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * TreeViewMode.java
- * Last modified by Tetram, on 2014-07-29T14:14:51CEST
+ * Last modified by Tetram, on 2014-07-30T11:35:02CEST
  */
 
 package org.tetram.bdtheque.gui.controllers.components;
@@ -113,11 +113,11 @@ public enum TreeViewMode {
         }
     }
 
-    static class GetChildrenCallback implements Callback<TreeViewController.TreeViewNode, List<? extends AbstractEntity>> {
+    static class GetChildrenFromDaoCallback implements Callback<TreeViewController.TreeViewNode, List<? extends AbstractEntity>> {
 
         private final TreeViewController treeViewController;
 
-        public GetChildrenCallback(TreeViewController treeViewController) {
+        public GetChildrenFromDaoCallback(TreeViewController treeViewController) {
             this.treeViewController = treeViewController;
         }
 
