@@ -1,13 +1,14 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * UserPreferences.java
- * Last modified by Tetram, on 2014-07-29T11:09:14CEST
+ * Last modified by Tetram, on 2014-07-31T16:06:28CEST
  */
 
 package org.tetram.bdtheque.data.services;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.StringProperty;
 import org.tetram.bdtheque.gui.controllers.ApplicationMode;
 
 import java.io.File;
@@ -22,61 +23,111 @@ public interface UserPreferences {
 
     ObjectProperty<Locale> localeProperty();
 
-    Locale getLocale();
+    default Locale getLocale() {
+        return localeProperty().get();
+    }
 
-    void setLocale(Locale locale);
+    default void setLocale(Locale locale) {
+        localeProperty().set(locale);
+    }
 
     ObjectProperty<File> repImagesProperty();
 
-    File getRepImages();
+    default File getRepImages() {
+        return repImagesProperty().get();
+    }
 
-    void setRepImages(File value);
+    default void setRepImages(File value) {
+        repImagesProperty().set(value);
+    }
 
     ObjectProperty<FormatTitreAlbum> formatTitreAlbumProperty();
 
-    FormatTitreAlbum getFormatTitreAlbum();
+    default FormatTitreAlbum getFormatTitreAlbum() {
+        return formatTitreAlbumProperty().get();
+    }
 
-    void setFormatTitreAlbum(FormatTitreAlbum value);
+    default void setFormatTitreAlbum(FormatTitreAlbum value) {
+        formatTitreAlbumProperty().set(value);
+    }
 
     BooleanProperty serieObligatoireAlbumsProperty();
 
-    boolean isSerieObligatoireAlbums();
+    default boolean isSerieObligatoireAlbums() {
+        return serieObligatoireAlbumsProperty().get();
+    }
 
-    void setSerieObligatoireAlbums(boolean value);
+    default void setSerieObligatoireAlbums(boolean value) {
+        serieObligatoireAlbumsProperty().set(value);
+    }
 
     BooleanProperty serieObligatoireParaBDProperty();
 
-    boolean isSerieObligatoireParaBD();
+    default boolean isSerieObligatoireParaBD() {
+        return serieObligatoireParaBDProperty().get();
+    }
 
-    void setSerieObligatoireParaBD(boolean value);
+    default void setSerieObligatoireParaBD(boolean value) {
+        serieObligatoireParaBDProperty().set(value);
+    }
 
     BooleanProperty antiAliasingProperty();
 
-    boolean isAntiAliasing();
+    default boolean isAntiAliasing() {
+        return antiAliasingProperty().get();
+    }
 
-    void setAntiAliasing(boolean value);
+    default void setAntiAliasing(boolean value) {
+        antiAliasingProperty().set(value);
+    }
 
     BooleanProperty afficheNoteListesProperty();
 
-    boolean isAfficheNoteListes();
+    default boolean isAfficheNoteListes() {
+        return afficheNoteListesProperty().get();
+    }
 
-    void setAfficheNoteListes(boolean value);
+    default void setAfficheNoteListes(boolean value) {
+        afficheNoteListesProperty().set(value);
+    }
 
     BooleanProperty imagesStockeesProperty();
 
-    boolean isImagesStockees();
+    default boolean isImagesStockees() {
+        return imagesStockeesProperty().get();
+    }
 
-    void setImagesStockees(boolean value);
+    default void setImagesStockees(boolean value) {
+        imagesStockeesProperty().set(value);
+    }
 
     ObjectProperty<File> databaseProperty();
 
-    File getDatabase();
+    default File getDatabase() {
+        return databaseProperty().get();
+    }
 
-    void setDatabase(File value);
+    default void setDatabase(File value) {
+        databaseProperty().set(value);
+    }
 
-    ApplicationMode getModeOuverture();
+    StringProperty databaseServerProperty();
 
-    void setModeOuverture(ApplicationMode value);
+    default String getDatabaseServer() {
+        return databaseServerProperty().get();
+    }
+
+    default void setDatabaseServer(String value) {
+        databaseServerProperty().set(value);
+    }
 
     ObjectProperty<ApplicationMode> modeOuvertureProperty();
+
+    default ApplicationMode getModeOuverture() {
+        return modeOuvertureProperty().get();
+    }
+
+    default void setModeOuverture(ApplicationMode value) {
+        modeOuvertureProperty().set(value);
+    }
 }

@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * TreeViewController.java
- * Last modified by Tetram, on 2014-07-31T13:39:06CEST
+ * Last modified by Tetram, on 2014-07-31T16:27:08CEST
  */
 
 package org.tetram.bdtheque.gui.controllers.components;
@@ -43,10 +43,7 @@ import org.tetram.bdtheque.gui.controllers.WindowController;
 import org.tetram.bdtheque.gui.utils.History;
 import org.tetram.bdtheque.gui.utils.NotationResource;
 import org.tetram.bdtheque.spring.SpringContext;
-import org.tetram.bdtheque.utils.FileLink;
-import org.tetram.bdtheque.utils.FileLinks;
-import org.tetram.bdtheque.utils.I18nSupport;
-import org.tetram.bdtheque.utils.StringUtils;
+import org.tetram.bdtheque.utils.*;
 
 import java.util.List;
 import java.util.UUID;
@@ -114,6 +111,7 @@ public class TreeViewController extends WindowController {
             finalEntityClass.set(newMode == TreeViewMode.NONE ? AbstractEntity.class : newMode.getEntityClass());
             onGetChildren.set(newMode == TreeViewMode.NONE ? null : new TreeViewMode.GetChildrenFromDaoCallback(this));
             dao.set(newMode == TreeViewMode.NONE ? null : SpringContext.CONTEXT.getBean(newMode.getDaoClass()));
+            resetSearch();
             refresh();
         });
 
@@ -257,8 +255,8 @@ public class TreeViewController extends WindowController {
         } else {
             if (StringUtils.isNullOrEmpty(text)) {
                 setSelectedEntity(null, null);
-                findList.clear();
-            } else if (next && !findList.isEmpty()) {
+                resetSearch();
+            } else if (next && !TypeUtils.isNullOrEmpty(findList)) {
                 AbstractEntity current = getSelectedEntity();
                 if (current == null) {
                     setSelectedEntity(findList.firstKey(), findList.get(findList.firstKey()).get(0));
@@ -283,22 +281,6 @@ public class TreeViewController extends WindowController {
                 }
             } else {
                 findList = getDao().searchMap(text, getAppliedFiltre());
-/*
-          SQL.Text := 'SELECT ' + vmModeInfos[FMode].REFFIELDS + ' FROM ' + vmModeInfos[FMode].TABLESEARCH + ' WHERE ' + vmModeInfos[FMode].FIELDSEARCH +
-            ' LIKE ''%'' || ? || ''%''';
-          if FUseFiltre then
-            SQL.Add('AND ' + FFiltre)
-          else if FUseDefaultFiltre and (vmModeInfos[FMode].DEFAULTFILTRE <> '') then
-            SQL.Add('AND ' + vmModeInfos[FMode].DEFAULTFILTRE);
-          SQL.Add('ORDER BY ' + vmModeInfos[FMode].INITIALEFIELDS + ',');
-          if vmModeInfos[FMode].SEARCHORDER <> '' then
-            SQL.Add(vmModeInfos[FMode].SEARCHORDER + ',');
-          SQL.Add(vmModeInfos[FMode].FIELDSEARCH);
-          Prepare(True);
-          Params.AsString[0] := Copy(UpperCase(SansAccents(Text)), 1, Params.MaxStrLen[0] - 2);
-
-          Open;
-*/
                 if (findList.isEmpty())
                     getTreeView().getSelectionModel().clearSelection();
                 else {
@@ -306,6 +288,10 @@ public class TreeViewController extends WindowController {
                 }
             }
         }
+    }
+
+    private void resetSearch() {
+        if (findList != null) findList.clear();
     }
 
     private TreeViewNode getNext(TreeViewNode node) {

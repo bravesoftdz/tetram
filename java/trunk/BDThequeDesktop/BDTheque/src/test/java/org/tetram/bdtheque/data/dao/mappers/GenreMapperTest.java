@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * GenreMapperTest.java
- * Last modified by Tetram, on 2014-07-29T11:02:08CEST
+ * Last modified by Tetram, on 2014-07-31T15:23:52CEST
  */
 
 package org.tetram.bdtheque.data.dao.mappers;
@@ -24,7 +24,7 @@ public class GenreMapperTest extends SpringTest {
         GenreLite genre = mapper.getGenreLiteById(Constants.ID_GENRE_AVENTURES);
         Assert.assertNotNull(genre);
         Assert.assertNotNull(genre.getId());
-        Assert.assertNotNull(genre.getGenre());
+        Assert.assertNotNull(genre.getNomGenre());
     }
 
     @Test
@@ -38,7 +38,7 @@ public class GenreMapperTest extends SpringTest {
 
         GenreLite genre;
         genre = new GenreLite();
-        genre.setGenre(Constants.TEST_CREATE);
+        genre.setNomGenre(Constants.TEST_CREATE);
 
         rowCount = mapper.createGenreLite(genre);
         Assert.assertEquals(1, rowCount);
@@ -46,14 +46,14 @@ public class GenreMapperTest extends SpringTest {
         Assert.assertNotEquals(TypeUtils.GUID_NULL, genre.getId());
 
         genre = mapper.getGenreLiteById(genre.getId());
-        Assert.assertEquals(Constants.TEST_CREATE, genre.getGenre());
+        Assert.assertEquals(Constants.TEST_CREATE, genre.getNomGenre());
 
-        genre.setGenre(Constants.TEST_UPDATE);
+        genre.setNomGenre(Constants.TEST_UPDATE);
         rowCount = mapper.updateGenreLite(genre);
         Assert.assertEquals(1, rowCount);
 
         genre = mapper.getGenreLiteById(genre.getId());
-        Assert.assertEquals(Constants.TEST_UPDATE, genre.getGenre());
+        Assert.assertEquals(Constants.TEST_UPDATE, genre.getNomGenre());
 
         rowCount = mapper.deleteGenreLite(genre.getId());
         Assert.assertEquals(1, rowCount);

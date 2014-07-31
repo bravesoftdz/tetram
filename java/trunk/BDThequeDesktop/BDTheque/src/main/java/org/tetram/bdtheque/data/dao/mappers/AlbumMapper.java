@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * AlbumMapper.java
- * Last modified by Tetram, on 2014-07-31T14:22:46CEST
+ * Last modified by Tetram, on 2014-07-31T16:47:13CEST
  */
 
 package org.tetram.bdtheque.data.dao.mappers;
@@ -51,22 +51,21 @@ public interface AlbumMapper extends BaseMapperInterface {
 
     List<InitialeEntity<UUID>> getInitialesCollections(@Param("filtre") String filtre);
 
+    /*
+     TODO: modifier la procédure stockée pour qu'elle utilise la vue VW_LISTE_COLLECTIONS_ALBUMS
+           ou qu'elle teste id_collection sur la table COLLECTIONS par un left join
+    */
     List<AlbumLite> getAlbumLiteByCollection(@Param("idCollection") UUID idCollection, @Param("filtre") String filtre);
 
     List<InitialeWithEntity<UUID, AlbumLite>> searchAlbumLiteBySerie(@Param("value") String value, @Param("filtre") String filtre);
 
-    // TODO
     List<InitialeWithEntity<Year, AlbumLite>> searchAlbumLiteByAnnee(@Param("value") String value, @Param("filtre") String filtre);
 
-    // TODO
     List<InitialeWithEntity<UUID, AlbumLite>> searchAlbumLiteByCollection(@Param("value") String value, @Param("filtre") String filtre);
 
-    // TODO
     List<InitialeWithEntity<UUID, AlbumLite>> searchAlbumLiteByEditeur(@Param("value") String value, @Param("filtre") String filtre);
 
-    // TODO
     List<InitialeWithEntity<UUID, AlbumLite>> searchAlbumLiteByGenre(@Param("value") String value, @Param("filtre") String filtre);
 
-    // TODO
     List<InitialeWithEntity<Character, AlbumLite>> searchAlbumLiteByInitiale(@Param("value") String value, @Param("filtre") String filtre);
 }

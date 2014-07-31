@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * GenreLiteDaoImpl.java
- * Last modified by Tetram, on 2014-07-31T12:09:02CEST
+ * Last modified by Tetram, on 2014-07-31T15:23:52CEST
  */
 
 package org.tetram.bdtheque.data.dao;
@@ -37,7 +37,7 @@ public class GenreLiteDaoImpl extends DaoScriptImpl<GenreLite, UUID> implements 
     @Override
     public void validate(@NotNull GenreLite object) throws ConsistencyException {
         super.validate(object);
-        if (StringUtils.isNullOrEmpty(object.getGenre()))
+        if (StringUtils.isNullOrEmpty(object.getNomGenre()))
             throw new ConsistencyException(I18nSupport.message("nom.obligatoire"));
     }
 

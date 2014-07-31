@@ -2,14 +2,14 @@
 <!--
   ~ Copyright (c) 2014, tetram.org. All Rights Reserved.
   ~ GenreMapper.xml
-  ~ Last modified by Tetram, on 2014-07-31T14:33:37CEST
+  ~ Last modified by Tetram, on 2014-07-31T15:23:52CEST
   -->
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="org.tetram.bdtheque.data.dao.mappers.GenreMapper">
     <resultMap id="GenreLite" type="beanGenreLite">
         <id column="id_genre" property="id"/>
-        <result column="genre" property="genre"/>
+        <result column="genre" property="nomGenre"/>
         <result column="quantite" property="quantite"/>
     </resultMap>
 
@@ -43,7 +43,7 @@
         from
             genres
         where
-            genre = #{genre}
+            genre = #{nomGenre}
         ]]>
         <if test="id != null">
             <![CDATA[
@@ -53,7 +53,7 @@
     </select>
 
     <sql id="saveGenreLite">
-        update or insert into genres (id_genre, genre) values (#{id}, #{genre})
+        update or insert into genres (id_genre, genre) values (#{id}, #{nomGenre})
     </sql>
 
     <!--suppress MapperXml -->

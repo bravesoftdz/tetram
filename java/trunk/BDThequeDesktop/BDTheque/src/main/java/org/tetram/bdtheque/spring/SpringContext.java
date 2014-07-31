@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * SpringContext.java
- * Last modified by Tetram, on 2014-07-29T11:02:08CEST
+ * Last modified by Tetram, on 2014-07-31T16:08:54CEST
  */
 
 package org.tetram.bdtheque.spring;
@@ -21,6 +21,7 @@ import org.springframework.core.io.Resource;
 import org.tetram.bdtheque.data.services.ApplicationContextImpl;
 import org.tetram.bdtheque.data.services.UserPreferences;
 import org.tetram.bdtheque.data.services.UserPreferencesImpl;
+import org.tetram.bdtheque.utils.StringUtils;
 
 import java.util.ArrayList;
 
@@ -51,7 +52,7 @@ public class SpringContext {
     @NonNls
     private static final String ORG_TETRAM_BDTHEQUE_CONFIG_DATABASE_PROPERTIES = "/org/tetram/bdtheque/config/database.properties";
     @NonNls
-    private static final String JDBC_PREFIX = "database.url=jdbc:firebirdsql:embedded:";
+    private static final String JDBC_PREFIX = "database.url=jdbc:firebirdsql:%s:%s";
 
     @Bean(name = "databaseProperties")
     public static PropertySourcesPlaceholderConfigurer properties() {
@@ -68,7 +69,9 @@ public class SpringContext {
         //resources.add(new FileSystemResource(applicationContext.getUserConfigFile()));
         if (userPreferences.getDatabase() != null && userPreferences.getDatabase().exists()) {
             final String s = StringEscapeUtils.escapeJava(userPreferences.getDatabase().getAbsolutePath());
-            resources.add(new ByteArrayResource((JDBC_PREFIX + s).getBytes()));
+            @NonNls String serveur = userPreferences.getDatabaseServer();
+            if (StringUtils.isNullOrEmpty(serveur)) serveur = "embedded";
+            resources.add(new ByteArrayResource(String.format(JDBC_PREFIX, serveur, s).getBytes()));
         }
 
         configurer.setLocations(resources.toArray(new Resource[resources.size()]));

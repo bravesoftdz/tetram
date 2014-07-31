@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * GenreLiteDaoTest.java
- * Last modified by Tetram, on 2014-07-29T11:02:08CEST
+ * Last modified by Tetram, on 2014-07-31T15:23:52CEST
  */
 
 package org.tetram.bdtheque.data.dao;
@@ -36,7 +36,7 @@ public class GenreLiteDaoTest extends SpringTest {
         GenreLite genre = dao.get(Constants.ID_GENRE_AVENTURES);
         Assert.assertNotNull(genre);
         Assert.assertNotNull(genre.getId());
-        Assert.assertNotNull(genre.getGenre());
+        Assert.assertNotNull(genre.getNomGenre());
     }
 
     @Test
@@ -46,7 +46,7 @@ public class GenreLiteDaoTest extends SpringTest {
         GenreLite genre;
 
         genre = new GenreLite();
-        genre.setGenre(Constants.TEST_CREATE);
+        genre.setNomGenre(Constants.TEST_CREATE);
 
         rowCount = dao.save(genre);
         Assert.assertEquals(1, rowCount);
@@ -54,14 +54,14 @@ public class GenreLiteDaoTest extends SpringTest {
         Assert.assertNotEquals(TypeUtils.GUID_NULL, genre.getId());
 
         genre = dao.get(genre.getId());
-        Assert.assertEquals(Constants.TEST_CREATE, genre.getGenre());
+        Assert.assertEquals(Constants.TEST_CREATE, genre.getNomGenre());
 
-        genre.setGenre(Constants.TEST_UPDATE);
+        genre.setNomGenre(Constants.TEST_UPDATE);
         rowCount = dao.save(genre);
         Assert.assertEquals(1, rowCount);
 
         genre = dao.get(genre.getId());
-        Assert.assertEquals(Constants.TEST_UPDATE, genre.getGenre());
+        Assert.assertEquals(Constants.TEST_UPDATE, genre.getNomGenre());
 
         rowCount = dao.delete(genre.getId());
         Assert.assertEquals(1, rowCount);
@@ -73,7 +73,7 @@ public class GenreLiteDaoTest extends SpringTest {
     @Test(expected = ConsistencyException.class)
     public void testCreateIsUnique() throws Exception {
         @NonNls GenreLite genre = new GenreLite();
-        genre.setGenre(Constants.NOM_GENRE_AVENTURES);
+        genre.setNomGenre(Constants.NOM_GENRE_AVENTURES);
 
         dao.save(genre);
         Assert.fail();
@@ -82,7 +82,7 @@ public class GenreLiteDaoTest extends SpringTest {
     @Test(expected = ConsistencyException.class)
     public void testUpdateIsUnique() throws Exception {
         @NonNls GenreLite genre = new GenreLite();
-        genre.setGenre(Constants.NOM_GENRE_AVENTURES);
+        genre.setNomGenre(Constants.NOM_GENRE_AVENTURES);
         genre.setId(TypeUtils.GUID_FULL);
 
         dao.save(genre);

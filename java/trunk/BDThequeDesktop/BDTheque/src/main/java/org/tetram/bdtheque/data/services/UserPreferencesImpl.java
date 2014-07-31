@@ -1,14 +1,11 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * UserPreferencesImpl.java
- * Last modified by Tetram, on 2014-07-29T11:02:06CEST
+ * Last modified by Tetram, on 2014-07-31T16:06:09CEST
  */
 package org.tetram.bdtheque.data.services;
 
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.*;
 import org.jetbrains.annotations.NonNls;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -37,6 +34,10 @@ public class UserPreferencesImpl implements UserPreferences {
     public static final String PREF_DATABASE = "database";
     @NonNls
     public static final String PREF_DATABASE_DEFAULT = null;
+    @NonNls
+    public static final String PREF_DATABASE_SERVER = "databaseServer";
+    @NonNls
+    public static final String PREF_DATABASE_SERVER_DEFAULT = null;
     @NonNls
     public static final String PREF_REP_IMAGES = "RepImages";
     @NonNls
@@ -81,7 +82,8 @@ public class UserPreferencesImpl implements UserPreferences {
     private BooleanProperty antiAliasing = null;
     private BooleanProperty imagesStockees = null;
     private ObjectProperty<File> database = null;
-    private ObjectProperty<ApplicationMode> modeOuverture;
+    private ObjectProperty<ApplicationMode> modeOuverture = null;
+    private StringProperty databaseServer = null;
 
     public UserPreferencesImpl() {
     }
@@ -211,16 +213,6 @@ public class UserPreferencesImpl implements UserPreferences {
     }
 
     @Override
-    public File getRepImages() {
-        return repImagesProperty().get();
-    }
-
-    @Override
-    public void setRepImages(File value) {
-        repImagesProperty().set(value);
-    }
-
-    @Override
     public ObjectProperty<File> repImagesProperty() {
         if (repImages == null)
             repImages = new SimpleObjectProperty<File>(this, "repImages", getFilePref(PREF_REP_IMAGES)) {
@@ -231,17 +223,6 @@ public class UserPreferencesImpl implements UserPreferences {
                 }
             };
         return repImages;
-    }
-
-
-    @Override
-    public FormatTitreAlbum getFormatTitreAlbum() {
-        return formatTitreAlbumProperty().get();
-    }
-
-    @Override
-    public void setFormatTitreAlbum(FormatTitreAlbum value) {
-        formatTitreAlbumProperty().set(value);
     }
 
     @Override
@@ -258,16 +239,6 @@ public class UserPreferencesImpl implements UserPreferences {
     }
 
     @Override
-    public boolean isSerieObligatoireAlbums() {
-        return serieObligatoireAlbumsProperty().get();
-    }
-
-    @Override
-    public void setSerieObligatoireAlbums(boolean value) {
-        serieObligatoireAlbumsProperty().set(value);
-    }
-
-    @Override
     public BooleanProperty serieObligatoireAlbumsProperty() {
         if (serieObligatoireAlbums == null)
             serieObligatoireAlbums = new SimpleBooleanProperty(this, "serieObligatoireAlbums", getBooleanPref(PREF_SERIE_OBLIGATOIRE_ALBUMS)) {
@@ -281,18 +252,6 @@ public class UserPreferencesImpl implements UserPreferences {
     }
 
     @Override
-    public boolean isSerieObligatoireParaBD() {
-        return serieObligatoireParaBDProperty().get();
-    }
-
-
-    @Override
-    public void setSerieObligatoireParaBD(boolean value) {
-        serieObligatoireParaBDProperty().set(value);
-    }
-
-
-    @Override
     public BooleanProperty serieObligatoireParaBDProperty() {
         if (serieObligatoireParaBD == null)
             serieObligatoireParaBD = new SimpleBooleanProperty(this, "serieObligatoireParaBD", getBooleanPref(PREF_SERIE_OBLIGATOIRE_PARABD)) {
@@ -303,16 +262,6 @@ public class UserPreferencesImpl implements UserPreferences {
                 }
             };
         return serieObligatoireParaBD;
-    }
-
-    @Override
-    public boolean isAntiAliasing() {
-        return antiAliasingProperty().get();
-    }
-
-    @Override
-    public void setAntiAliasing(boolean value) {
-        antiAliasingProperty().set(value);
     }
 
     @Override
@@ -329,16 +278,6 @@ public class UserPreferencesImpl implements UserPreferences {
     }
 
     @Override
-    public boolean isAfficheNoteListes() {
-        return afficheNoteListesProperty().get();
-    }
-
-    @Override
-    public void setAfficheNoteListes(boolean value) {
-        afficheNoteListesProperty().set(value);
-    }
-
-    @Override
     public BooleanProperty afficheNoteListesProperty() {
         if (afficheNoteListes == null)
             afficheNoteListes = new SimpleBooleanProperty(this, "afficheNoteListes", getBooleanPref(PREF_AFFICHE_NOTE_LISTES)) {
@@ -352,16 +291,6 @@ public class UserPreferencesImpl implements UserPreferences {
     }
 
     @Override
-    public boolean isImagesStockees() {
-        return imagesStockeesProperty().get();
-    }
-
-    @Override
-    public void setImagesStockees(boolean value) {
-        imagesStockeesProperty().set(value);
-    }
-
-    @Override
     public BooleanProperty imagesStockeesProperty() {
         if (imagesStockees == null)
             imagesStockees = new SimpleBooleanProperty(this, "imagesStockees", getBooleanPref(PREF_IMAGES_STOCKEES)) {
@@ -372,26 +301,6 @@ public class UserPreferencesImpl implements UserPreferences {
                 }
             };
         return imagesStockees;
-    }
-
-    @Override
-    public File getDatabase() {
-        return databaseProperty().get();
-    }
-
-    @Override
-    public void setDatabase(File value) {
-        databaseProperty().set(value);
-    }
-
-    @Override
-    public ApplicationMode getModeOuverture() {
-        return modeOuvertureProperty().get();
-    }
-
-    @Override
-    public void setModeOuverture(ApplicationMode value) {
-        modeOuvertureProperty().set(value);
     }
 
     @Override
@@ -422,13 +331,16 @@ public class UserPreferencesImpl implements UserPreferences {
     }
 
     @Override
-    public Locale getLocale() {
-        return localeProperty().get();
-    }
-
-    @Override
-    public void setLocale(Locale locale) {
-        this.localeProperty().set(locale);
+    public StringProperty databaseServerProperty() {
+        if (databaseServer == null)
+            databaseServer = new SimpleStringProperty(this, "databaseServer", getStringPref(PREF_DATABASE_SERVER)) {
+                @Override
+                public void set(String newValue) {
+                    setPref(PREF_DATABASE_SERVER, newValue);
+                    super.set(newValue);
+                }
+            };
+        return databaseServer;
     }
 
     @Override

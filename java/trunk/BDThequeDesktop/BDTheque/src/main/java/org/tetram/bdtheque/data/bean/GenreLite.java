@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * GenreLite.java
- * Last modified by Tetram, on 2014-07-29T11:09:14CEST
+ * Last modified by Tetram, on 2014-07-31T15:23:52CEST
  */
 
 package org.tetram.bdtheque.data.bean;
@@ -28,12 +28,12 @@ public class GenreLite extends AbstractDBEntity implements ScriptEntity {
 
         int comparaison;
 
-        comparaison = BeanUtils.compare(o1.getGenre(), o2.getGenre());
+        comparaison = BeanUtils.compare(o1.getNomGenre(), o2.getNomGenre());
         if (comparaison != 0) return comparaison;
 
         return 0;
     };
-    private final StringProperty genre = new AutoTrimStringProperty(this, "genre", null);
+    private final StringProperty nomGenre = new AutoTrimStringProperty(this, "genre", null);
     private final IntegerProperty quantite = new SimpleIntegerProperty(this, "quantite", 0);
     private final ListProperty<String> associations = new SimpleListProperty<>(this, "associations", FXCollections.observableArrayList());
 
@@ -43,16 +43,16 @@ public class GenreLite extends AbstractDBEntity implements ScriptEntity {
     }
 
 
-    public String getGenre() {
-        return genre.get();
+    public String getNomGenre() {
+        return nomGenre.get();
     }
 
-    public void setGenre(String genre) {
-        this.genre.set(genre);
+    public void setNomGenre(String nomGenre) {
+        this.nomGenre.set(nomGenre);
     }
 
-    public StringProperty genreProperty() {
-        return genre;
+    public StringProperty nomGenreProperty() {
+        return nomGenre;
     }
 
     public int getQuantite() {
@@ -74,7 +74,7 @@ public class GenreLite extends AbstractDBEntity implements ScriptEntity {
 
     @Override
     public String buildLabel() {
-        return getGenre();
+        return getNomGenre();
     }
 
 }

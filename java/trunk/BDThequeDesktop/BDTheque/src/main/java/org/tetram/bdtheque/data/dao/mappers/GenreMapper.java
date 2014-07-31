@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * GenreMapper.java
- * Last modified by Tetram, on 2014-07-31T14:33:19CEST
+ * Last modified by Tetram, on 2014-07-31T15:27:44CEST
  */
 
 package org.tetram.bdtheque.data.dao.mappers;
@@ -24,9 +24,11 @@ public interface GenreMapper extends BaseMapperInterface {
 
     List<GenreLite> getListGenreBySerieId(@Param("id") UUID id);
 
-    int createGenreLite(@Param("genre") GenreLite genre);
+    // ne surtout pas mettre de @Param
+    int createGenreLite(GenreLite genre);
 
-    int updateGenreLite(@Param("genre") GenreLite genre);
+    // ne surtout pas mettre de @Param
+    int updateGenreLite(GenreLite genre);
 
     int deleteGenreLite(@Param("id") UUID id);
 

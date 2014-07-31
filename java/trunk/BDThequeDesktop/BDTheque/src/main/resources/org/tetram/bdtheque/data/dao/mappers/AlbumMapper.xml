@@ -2,7 +2,7 @@
 <!--
   ~ Copyright (c) 2014, tetram.org. All Rights Reserved.
   ~ AlbumMapper.xml
-  ~ Last modified by Tetram, on 2014-07-31T14:53:46CEST
+  ~ Last modified by Tetram, on 2014-07-31T15:43:53CEST
   -->
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
@@ -48,14 +48,18 @@
                extends="org.tetram.bdtheque.data.dao.mappers.CommonMapper.InitialeWithEntityUUID">
         <association property="entity" resultMap="AlbumLite"/>
     </resultMap>
-    <resultMap id="AlbumLiteInitialeInteger" type="org.tetram.bdtheque.data.bean.InitialeWithEntity"
-               extends="org.tetram.bdtheque.data.dao.mappers.CommonMapper.InitialeWithEntityInteger">
+    <resultMap id="AlbumLiteInitialeYear" type="org.tetram.bdtheque.data.bean.InitialeWithEntity"
+               extends="org.tetram.bdtheque.data.dao.mappers.CommonMapper.InitialeWithEntityYear">
+        <association property="entity" resultMap="AlbumLite"/>
+    </resultMap>
+    <resultMap id="AlbumLiteInitialeCharacter" type="org.tetram.bdtheque.data.bean.InitialeWithEntity"
+               extends="org.tetram.bdtheque.data.dao.mappers.CommonMapper.InitialeWithEntityCharacter">
         <association property="entity" resultMap="AlbumLite"/>
     </resultMap>
 
     <sql id="fieldsAlbumLite">
         a.id_album, a.titreAlbum, a.horsSerie, a.integrale, a.tome, a.tomeDebut, a.tomeFin, a.id_serie, a.achat,
-        a.complet
+        a.complet, a.notation
     </sql>
     <sql id="orderAlbum">
         a.horsSerie nulls first, a.integrale nulls first, a.tome nulls first, a.anneeParution, a.moisParution
@@ -63,8 +67,7 @@
 
     <select id="getAlbumLiteById" resultMap="AlbumLite">
         select
-        <include refid="fieldsAlbumLite"/>
-        , a.titreSerie
+        <include refid="fieldsAlbumLite"/>, a.titreSerie
         <if test="idEdition != null">
             , e.stock
         </if>
@@ -90,9 +93,9 @@
     </select>
     <select id="getAlbumById" parameterType="UUID" resultMap="AlbumFull">
         select
-        a.id_album, a.titreAlbum, a.moisParution, a.anneeParution, a.id_serie, a.tome, a.tomeDebut, a.tomeFin,
-        a.sujetAlbum,
-        a.remarquesAlbum, a.horsSerie, a.integrale, a.complet, a.notation, n.libelle as lb_notation
+            a.id_album, a.titreAlbum, a.horsSerie, a.integrale, a.tome, a.tomeDebut, a.tomeFin, a.id_serie,
+            a.complet, a.sujetAlbum, a.remarquesAlbum, a.moisParution, a.anneeParution,
+            a.notation, n.libelle as lb_notation
         from
         albums a
         left join listes n on
@@ -104,7 +107,7 @@
         select
         <include refid="fieldsAlbumLite"/>
         <![CDATA[
-          , a.notation, n.libelle as lb_notation
+           , n.libelle as lb_notation
         from
             albums a
             left join listes n on
@@ -133,14 +136,34 @@
         from
         initiales_albums(#{filtre})
     </select>
-
     <select id="getAlbumLiteByInitiale" resultMap="AlbumLite">
         select
-        <include refid="fieldsAlbumLite"/>, a.titreSerie, a.notation
+        <include refid="fieldsAlbumLite"/>, a.titreSerie
         <![CDATA[
         from
             albums_by_initiale(#{initiale}, #{filtre}) a
         ]]>
+    </select>
+    <select id="searchAlbumLiteByInitiale" resultMap="AlbumLiteInitialeCharacter" resultOrdered="true">
+        <![CDATA[
+        select
+            a.id_album initiale_key, a.initialeTitreAlbum initiale_value,
+        ]]>
+        <include refid="fieldsAlbumLite"/>, a.titreSerie
+        <![CDATA[
+        from
+            vw_liste_albums a
+        where
+            coalesce(a.titreAlbum, a.titreSerie) like '%' || #{value} || '%'
+        ]]>
+        <if test="filtre != null">
+            and #{filtre}
+        </if>
+        <![CDATA[
+        order by
+            coalesce(a.titreAlbum, a.titreSerie),
+        ]]>
+        <include refid="orderAlbum"/>
     </select>
 
     <select id="getInitialesSeries" resultMap="org.tetram.bdtheque.data.dao.mappers.CommonMapper.InitialeEntityUUID">
@@ -149,25 +172,23 @@
         from
         series_albums(#{filtre})
     </select>
-
     <select id="getListAlbumLiteBySerie" resultMap="AlbumLite">
         <if test="idSerie == null">
             <bind name="idSerie" value="''"/>
         </if>
         select
-        <include refid="fieldsAlbumLite"/>, a.titreSerie, a.notation
+        <include refid="fieldsAlbumLite"/>, a.titreSerie
         <![CDATA[
         from
             albums_by_serie(#{idSerie}, #{filtre}) a
         ]]>
     </select>
-
     <select id="searchAlbumLiteBySerie" resultMap="AlbumLiteInitialeUUID" resultOrdered="true">
         <![CDATA[
         select
             a.id_album initiale_key, a.id_serie initiale_value,
         ]]>
-        <include refid="fieldsAlbumLite"/>, a.titreSerie, a.notation
+        <include refid="fieldsAlbumLite"/>, a.titreSerie
         <![CDATA[
         from
             vw_liste_albums a
@@ -179,37 +200,9 @@
         </if>
         <![CDATA[
         order by
-            a.titreSerie nulls first,
+            a.titreSerie nulls first, coalesce(a.titreAlbum, a.titreSerie),
         ]]>
-        <include refid="orderAlbum"/>,
-        <![CDATA[
-            coalesce(a.titreAlbum, a.titreSerie)
-        ]]>
-    </select>
-
-    <select id="searchAlbumLiteByAnnee" resultMap="AlbumLiteInitialeInteger" resultOrdered="true">
-        <![CDATA[
-        select
-            a.id_album initiale_key, a.anneeParution initiale_value,
-        ]]>
-        <include refid="fieldsAlbumLite"/>, a.titreSerie, a.notation
-        <![CDATA[
-        from
-            vw_liste_albums a
-        where
-            coalesce(a.titreAlbum, a.titreSerie) like '%' || #{value} || '%'
-        ]]>
-        <if test="filtre != null">
-            and #{filtre}
-        </if>
-        <![CDATA[
-        order by
-            a.titreSerie nulls first,
-        ]]>
-        <include refid="orderAlbum"/>,
-        <![CDATA[
-            coalesce(a.titreAlbum, a.titreSerie)
-        ]]>
+        <include refid="orderAlbum"/>
     </select>
 
     <select id="getInitialesCollections"
@@ -219,17 +212,37 @@
         from
         collections_albums(#{filtre})
     </select>
-
     <select id="getAlbumLiteByCollection" resultMap="AlbumLite">
         <if test="idCollection == null">
             <bind name="idCollection" value="''"/>
         </if>
         select
-        <include refid="fieldsAlbumLite"/>, a.titreSerie, a.notation
+        <include refid="fieldsAlbumLite"/>, a.titreSerie
         <![CDATA[
         from
             albums_by_collection(#{idCollection}, #{filtre}) a
         ]]>
+    </select>
+    <select id="searchAlbumLiteByCollection" resultMap="AlbumLiteInitialeUUID" resultOrdered="true">
+        <![CDATA[
+        select
+            a.id_album initiale_key, a.id_collection initiale_value,
+        ]]>
+        <include refid="fieldsAlbumLite"/>, a.titreSerie
+        <![CDATA[
+        from
+            vw_liste_collections_albums a
+        where
+            coalesce(a.titreAlbum, a.titreSerie) like '%' || #{value} || '%'
+        ]]>
+        <if test="filtre != null">
+            and #{filtre}
+        </if>
+        <![CDATA[
+        order by
+            a.nomCollection nulls first, coalesce(a.titreAlbum, a.titreSerie),
+        ]]>
+        <include refid="orderAlbum"/>
     </select>
 
     <select id="getInitialesEditeurs" resultMap="org.tetram.bdtheque.data.dao.mappers.CommonMapper.InitialeEntityUUID">
@@ -238,17 +251,37 @@
         from
         editeurs_albums(#{filtre})
     </select>
-
     <select id="getAlbumLiteByEditeur" resultMap="AlbumLite">
         <if test="idEditeur == null">
             <bind name="idEditeur" value="''"/>
         </if>
         select
-        <include refid="fieldsAlbumLite"/>, a.titreSerie, a.notation
+        <include refid="fieldsAlbumLite"/>, a.titreSerie
         <![CDATA[
         from
             albums_by_editeur(#{idEditeur}, #{filtre}) a
         ]]>
+    </select>
+    <select id="searchAlbumLiteByEditeur" resultMap="AlbumLiteInitialeUUID" resultOrdered="true">
+        <![CDATA[
+        select
+            a.id_album initiale_key, a.id_editeur initiale_value,
+        ]]>
+        <include refid="fieldsAlbumLite"/>, a.titreSerie
+        <![CDATA[
+        from
+            vw_liste_editeurs_albums a
+        where
+            coalesce(a.titreAlbum, a.titreSerie) like '%' || #{value} || '%'
+        ]]>
+        <if test="filtre != null">
+            and #{filtre}
+        </if>
+        <![CDATA[
+        order by
+            a.nomEditeur nulls first, coalesce(a.titreAlbum, a.titreSerie),
+        ]]>
+        <include refid="orderAlbum"/>
     </select>
 
     <select id="getInitialesGenres" resultMap="org.tetram.bdtheque.data.dao.mappers.CommonMapper.InitialeEntityUUID">
@@ -257,17 +290,37 @@
         from
         genres_albums(#{filtre})
     </select>
-
     <select id="getAlbumLiteByGenre" resultMap="AlbumLite">
         <if test="idGenre == null">
             <bind name="idGenre" value="''"/>
         </if>
         select
-        <include refid="fieldsAlbumLite"/>, a.titreSerie, a.notation
+        <include refid="fieldsAlbumLite"/>, a.titreSerie
         <![CDATA[
         from
             albums_by_genre(#{idGenre}, #{filtre}) a
         ]]>
+    </select>
+    <select id="searchAlbumLiteByGenre" resultMap="AlbumLiteInitialeUUID" resultOrdered="true">
+        <![CDATA[
+        select
+            a.id_album initiale_key, a.id_genre initiale_value,
+        ]]>
+        <include refid="fieldsAlbumLite"/>, a.titreSerie
+        <![CDATA[
+        from
+            vw_liste_genres_albums a
+        where
+            coalesce(a.titreAlbum, a.titreSerie) like '%' || #{value} || '%'
+        ]]>
+        <if test="filtre != null">
+            and #{filtre}
+        </if>
+        <![CDATA[
+        order by
+            a.genre nulls first, coalesce(a.titreAlbum, a.titreSerie),
+        ]]>
+        <include refid="orderAlbum"/>
     </select>
 
     <select id="getInitialesAnnees" resultMap="org.tetram.bdtheque.data.dao.mappers.CommonMapper.InitialeEntityYear">
@@ -276,17 +329,37 @@
         from
         annees_albums(#{filtre})
     </select>
-
     <select id="getAlbumLiteByAnnee" resultMap="AlbumLite">
         <if test="annee == null">
             <bind name="annee" value="-1"/>
         </if>
         select
-        <include refid="fieldsAlbumLite"/>, a.titreSerie, a.notation
+        <include refid="fieldsAlbumLite"/>, a.titreSerie
         <![CDATA[
         from
             albums_by_annee(#{annee}, #{filtre}) a
         ]]>
+    </select>
+    <select id="searchAlbumLiteByAnnee" resultMap="AlbumLiteInitialeYear" resultOrdered="true">
+        <![CDATA[
+        select
+            a.id_album initiale_key, a.anneeParution initiale_value,
+        ]]>
+        <include refid="fieldsAlbumLite"/>, a.titreSerie
+        <![CDATA[
+        from
+            vw_liste_albums a
+        where
+            coalesce(a.titreAlbum, a.titreSerie) like '%' || #{value} || '%'
+        ]]>
+        <if test="filtre != null">
+            and #{filtre}
+        </if>
+        <![CDATA[
+        order by
+            a.anneeParution nulls first, coalesce(a.titreAlbum, a.titreSerie),
+        ]]>
+        <include refid="orderAlbum"/>
     </select>
 
     <update id="changeNotation">
