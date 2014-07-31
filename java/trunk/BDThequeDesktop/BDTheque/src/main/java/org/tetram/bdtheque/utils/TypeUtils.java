@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * TypeUtils.java
- * Last modified by Tetram, on 2014-07-31T15:38:18CEST
+ * Last modified by Tetram, on 2014-07-31T16:50:01CEST
  */
 
 package org.tetram.bdtheque.utils;
