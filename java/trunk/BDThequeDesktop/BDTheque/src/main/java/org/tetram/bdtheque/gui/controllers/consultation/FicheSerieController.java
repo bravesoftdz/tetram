@@ -1,18 +1,19 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * FicheSerieController.java
- * Last modified by Tetram, on 2014-07-29T11:10:36CEST
+ * Last modified by Tetram, on 2014-07-31T11:39:39CEST
  */
 
 package org.tetram.bdtheque.gui.controllers.consultation;
 
-import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.Labeled;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
@@ -21,14 +22,15 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.tetram.bdtheque.data.BeanUtils;
-import org.tetram.bdtheque.data.bean.AlbumLite;
-import org.tetram.bdtheque.data.bean.ParaBDLite;
 import org.tetram.bdtheque.data.bean.Serie;
 import org.tetram.bdtheque.data.bean.abstractentities.AbstractDBEntity;
+import org.tetram.bdtheque.data.bean.abstractentities.BaseAlbum;
+import org.tetram.bdtheque.data.bean.abstractentities.BaseParaBD;
 import org.tetram.bdtheque.data.dao.EvaluatedEntityDao;
 import org.tetram.bdtheque.data.dao.SerieDao;
 import org.tetram.bdtheque.gui.controllers.WindowController;
 import org.tetram.bdtheque.gui.controllers.components.NotationController;
+import org.tetram.bdtheque.gui.controllers.components.TreeViewController;
 import org.tetram.bdtheque.gui.utils.EntityNotFoundException;
 import org.tetram.bdtheque.gui.utils.EntityWebHyperlink;
 import org.tetram.bdtheque.gui.utils.FlowItem;
@@ -67,7 +69,7 @@ public class FicheSerieController extends WindowController implements Consultati
     @FXML
     private FlowPane lvColoristes;
     @FXML
-    private ListView<AlbumLite> lvAlbums;
+    private TreeViewController tvAlbumsController;
     @FXML
     private FlowPane lvUnivers;
     @FXML
@@ -81,37 +83,22 @@ public class FicheSerieController extends WindowController implements Consultati
     @FXML
     private CheckBox cbTerminee;
     @FXML
-    private ListView<ParaBDLite> lvParabd;
+    private TreeViewController tvParabdController;
 
     @FXML
     public void initialize() {
         notationController.entityProperty().bind(serie);
         notationController.setDao(((EvaluatedEntityDao) serieDao));
-        lvAlbums.setOnMouseClicked(event -> {
-            if (event.getClickCount() == 2) {
-                AbstractDBEntity entity = lvAlbums.getSelectionModel().getSelectedItem();
-                if (entity != null)
-                    history.addWaiting(History.HistoryAction.FICHE, entity);
-            }
-        });
-        lvAlbums.setCellFactory(param -> {
-            ListCell<AlbumLite> cell = new ListCell<>();
-            cell.textProperty().bind(Bindings.createStringBinding(() -> cell.itemProperty().get() == null ? null : cell.itemProperty().get().buildLabel(false), cell.itemProperty()));
-            return cell;
-        });
 
-        lvParabd.setOnMouseClicked(event -> {
-            if (event.getClickCount() == 2) {
-                AbstractDBEntity entity = lvParabd.getSelectionModel().getSelectedItem();
-                if (entity != null)
-                    history.addWaiting(History.HistoryAction.FICHE, entity);
-            }
-        });
-        lvParabd.setCellFactory(param -> {
-            ListCell<ParaBDLite> cell = new ListCell<>();
-            cell.textProperty().bind(Bindings.createStringBinding(() -> cell.itemProperty().get() == null ? null : cell.itemProperty().get().buildLabel(false), cell.itemProperty()));
-            return cell;
-        });
+        tvAlbumsController.setCanSearch(false);
+        tvAlbumsController.setFinalEntityClass(BaseAlbum.class);
+        tvAlbumsController.setOnIsLeaf(param -> tvAlbumsController.getNodeLevel(param) == 1);
+        tvAlbumsController.setOnGetLabel(param -> ((BaseAlbum) param).buildLabel(false));
+
+        tvParabdController.setCanSearch(false);
+        tvParabdController.setFinalEntityClass(BaseParaBD.class);
+        tvParabdController.setOnIsLeaf(param -> tvParabdController.getNodeLevel(param) == 1);
+        tvParabdController.setOnGetLabel(param -> ((BaseParaBD) param).buildLabel(false));
     }
 
     @Override
@@ -144,8 +131,8 @@ public class FicheSerieController extends WindowController implements Consultati
         notes.getChildren().add(new Text(_serie.getNotes()));
 
         _serie.getAlbums();
-        lvAlbums.itemsProperty().bind(_serie.albumsProperty());
+        tvAlbumsController.setOnGetChildren(param -> _serie.albumsProperty());
         _serie.getParaBDs();
-        lvParabd.itemsProperty().bind(_serie.paraBDsProperty());
+        tvParabdController.setOnGetChildren(param -> _serie.paraBDsProperty());
     }
 }

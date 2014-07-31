@@ -1,12 +1,11 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * AlbumLiteAnneeDaoImpl.java
- * Last modified by Tetram, on 2014-07-29T11:09:14CEST
+ * Last modified by Tetram, on 2014-07-31T11:52:45CEST
  */
 
 package org.tetram.bdtheque.data.dao;
 
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
@@ -49,9 +48,8 @@ public class AlbumLiteAnneeDaoImpl extends DaoROImpl<AlbumLite, UUID> implements
     }
 
     @Override
-    public List<InitialeWithEntity<Year, AlbumLite>> searchList(@Param("value") String value, @Param("filtre") String filtre) {
-        // TODO
-        return null;
+    public List<InitialeWithEntity<Year, AlbumLite>> searchList(String value, String filtre) {
+        return albumMapper.searchAlbumLiteByAnnee(value, filtre);
     }
 
 }

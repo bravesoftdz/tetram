@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!--
   ~ Copyright (c) 2014, tetram.org. All Rights Reserved.
-  ~ Album.xml
-  ~ Last modified by Tetram, on 2014-07-30T13:39:54CEST
+  ~ AlbumMapper.xml
+  ~ Last modified by Tetram, on 2014-07-31T14:26:30CEST
   -->
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
@@ -271,6 +271,7 @@
         )
     </sql>
 
+    <!--suppress MapperXml -->
     <insert id="createAlbum">
         <selectKey keyProperty="id" order="BEFORE" resultType="UUID">
             <include refid="org.tetram.bdtheque.data.dao.mappers.CommonMapper.autoIncKey"/>
@@ -278,10 +279,12 @@
         <include refid="saveAlbum"/>
     </insert>
 
+    <!--suppress MapperXml -->
     <update id="updateAlbum">
         <include refid="saveAlbum"/>
     </update>
 
+    <!--suppress MapperXml -->
     <delete id="deleteAlbum">
         delete from albums where id_album = #{id}
     </delete>

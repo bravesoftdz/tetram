@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!--
   ~ Copyright (c) 2014, tetram.org. All Rights Reserved.
-  ~ ValeurListe.xml
-  ~ Last modified by Tetram, on 2014-07-29T11:19:04CEST
+  ~ ValeurListeMapper.xml
+  ~ Last modified by Tetram, on 2014-07-31T14:41:16CEST
   -->
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
@@ -18,16 +18,12 @@
     </resultMap>
 
     <select id="getListDefaultValeur" resultMap="DefaultValeurListe">
-        <![CDATA[
-
         select
-            ref, libelle as lb_ref, categorie
+        ref, libelle as lb_ref, categorie
         from
-            listes
+        listes
         where
-            defaut = 1
-
-        ]]>
+        defaut = 1
     </select>
 
     <!--
@@ -35,17 +31,13 @@
         il faudrait trouver un moyen de le forcer à ne pas l'utiliser
     -->
     <select id="getListValeurListe" resultMap="ValeurListe">
-        <![CDATA[
-
         select
-            ref, libelle as lb_ref, ordre as pos_ref
+        ref, libelle as lb_ref, ordre as pos_ref
         from
-            listes
+        listes
         where
-            categorie = #{categorie}
+        categorie = #{categorie}
         order by
-            ordre
-
-        ]]>
+        ordre
     </select>
 </mapper>

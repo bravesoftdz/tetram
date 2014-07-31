@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * FicheAuteurController.java
- * Last modified by Tetram, on 2014-07-29T14:26:02CEST
+ * Last modified by Tetram, on 2014-07-31T12:25:53CEST
  */
 
 package org.tetram.bdtheque.gui.controllers.consultation;
@@ -21,10 +21,10 @@ import org.tetram.bdtheque.data.bean.Personne;
 import org.tetram.bdtheque.data.bean.Serie;
 import org.tetram.bdtheque.data.bean.abstractentities.AbstractEntity;
 import org.tetram.bdtheque.data.bean.abstractentities.BaseAlbum;
+import org.tetram.bdtheque.data.bean.abstractentities.BaseSerie;
 import org.tetram.bdtheque.data.dao.PersonneDao;
 import org.tetram.bdtheque.gui.controllers.WindowController;
 import org.tetram.bdtheque.gui.controllers.components.TreeViewController;
-import org.tetram.bdtheque.gui.controllers.components.TreeViewMode;
 import org.tetram.bdtheque.gui.utils.EntityNotFoundException;
 import org.tetram.bdtheque.gui.utils.EntityWebHyperlink;
 import org.tetram.bdtheque.utils.FileLink;
@@ -49,13 +49,12 @@ public class FicheAuteurController extends WindowController implements Consultat
     @Autowired
     private PersonneDao personneDao;
     @FXML
-    private TreeViewController seriesController;
+    private TreeViewController tvSeriesController;
     @FXML
     private Label lbNom;
     @FXML
     private TextFlow tfBiographie;
 
-    @SuppressWarnings("unchecked")
     @Override
     public void setIdEntity(UUID id) {
         personne.set(personneDao.get(id));
@@ -66,11 +65,16 @@ public class FicheAuteurController extends WindowController implements Consultat
         EntityWebHyperlink.addToLabeled(lbNom, _personne.siteWebProperty());
         tfBiographie.getChildren().add(new Text(_personne.getBiographie()));
 
-        seriesController.setMode(TreeViewMode.NONE);
-        seriesController.setFinalEntityClass(BaseAlbum.class);
-        seriesController.onGetChildrenProperty().setValue(treeItem -> {
+        tvSeriesController.setCanSearch(false);
+        tvSeriesController.setFinalEntityClass(BaseAlbum.class);
+        tvSeriesController.setOnIsLeaf(treeItem -> tvSeriesController.getNodeLevel(treeItem) == 2);
+        tvSeriesController.setOnRenderCell(cell -> {
+            if (cell.getItem() instanceof BaseSerie)
+                cell.getStyleClass().add(TreeViewController.NODE_BOLD_CSS);
+        });
+        tvSeriesController.setOnGetChildren(treeItem -> {
             final AbstractEntity entity = treeItem.getValue();
-            switch (seriesController.getTreeView().getTreeItemLevel(treeItem)) {
+            switch (tvSeriesController.getTreeView().getTreeItemLevel(treeItem)) {
                 case 0:
                     return _personne.getSeries();
                 case 1:

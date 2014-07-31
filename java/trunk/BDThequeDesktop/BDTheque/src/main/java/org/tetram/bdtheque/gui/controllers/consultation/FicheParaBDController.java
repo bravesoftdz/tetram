@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * FicheParaBDController.java
- * Last modified by Tetram, on 2014-07-29T11:10:36CEST
+ * Last modified by Tetram, on 2014-07-31T12:17:03CEST
  */
 
 package org.tetram.bdtheque.gui.controllers.consultation;
@@ -43,10 +43,12 @@ import org.tetram.bdtheque.gui.utils.History;
 import org.tetram.bdtheque.utils.FileLink;
 import org.tetram.bdtheque.utils.FileLinks;
 import org.tetram.bdtheque.utils.I18nSupport;
+import org.tetram.bdtheque.utils.ImageUtils;
 
 import java.io.ByteArrayInputStream;
 import java.text.MessageFormat;
 import java.time.format.DateTimeFormatter;
+import java.util.EnumSet;
 import java.util.UUID;
 
 /**
@@ -161,7 +163,7 @@ public class FicheParaBDController extends WindowController implements Consultat
         Image image = cacheImages[pageIndex];
         if (image == null) {
             final int height = ((Double) (diaporama.getPrefHeight() - desc.getPrefHeight())).intValue() - 50;
-            final byte[] imageStream = photoLiteDao.getImageStream(photoLite, height, ((Double) diaporama.getPrefWidth()).intValue());
+            final byte[] imageStream = photoLiteDao.getImageStream(photoLite, height, ((Double) diaporama.getPrefWidth()).intValue(), EnumSet.of(ImageUtils.ScaleOption.ALLOW_UP));
             image = new Image(new ByteArrayInputStream(imageStream));
             cacheImages[pageIndex] = image;
         }

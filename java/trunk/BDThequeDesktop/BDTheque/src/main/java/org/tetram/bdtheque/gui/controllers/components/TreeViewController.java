@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * TreeViewController.java
- * Last modified by Tetram, on 2014-07-30T15:35:12CEST
+ * Last modified by Tetram, on 2014-07-31T13:39:06CEST
  */
 
 package org.tetram.bdtheque.gui.controllers.components;
@@ -65,7 +65,8 @@ import java.util.function.Consumer;
 public class TreeViewController extends WindowController {
 
     @NonNls
-    private static final String NODE_BOLD_CSS = "node-bold";
+    public static final String NODE_BOLD_CSS = "node-bold";
+
     private final Timer searchTimer = new Timer(this::registerFind);
     private final BooleanProperty clickToShow = new SimpleBooleanProperty(this, "clickToShow", true);
     private final ObjectProperty<EventHandler<MouseEvent>> onClickItem = new SimpleObjectProperty<>(this, "onClickItem", null);
@@ -175,12 +176,10 @@ public class TreeViewController extends WindowController {
         column1.visibleProperty().bind(column1Visible);
 
         selectedEntity.addListener((o, oldEntity, newEntity) -> {
-            if (getSelected() != null) {
-                AbstractEntity current = getSelected().getValue();
-                if (current == null && newEntity == null) return;
-                if (current != null && current.equals(newEntity))
-                    return;
-            }
+            AbstractEntity current = getNodeValue(getSelected());
+            if (current == null && newEntity == null) return;
+            if (current != null && current.equals(newEntity))
+                return;
 
             TreeViewNode node = null;
             if (newEntity != null) {
@@ -192,11 +191,14 @@ public class TreeViewController extends WindowController {
         });
 
         treeTableView.getSelectionModel().selectedItemProperty().addListener((observable, oldEntity, newEntity) -> {
-            TreeViewNode treeViewNode = (TreeViewNode) newEntity;
-            selectedEntity.set(treeViewNode != null && treeViewNode.isLeaf() ? treeViewNode.getValue() : null);
+            selectedEntity.set(getNodeValue((TreeViewNode) newEntity));
         });
 
         Platform.runLater(this::refresh);
+    }
+
+    private AbstractEntity getNodeValue(TreeViewNode treeViewNode) {
+        return treeViewNode != null && treeViewNode.isLeaf() ? treeViewNode.getValue() : null;
     }
 
     private String getLabelForItem(AbstractEntity entity) {
@@ -499,7 +501,7 @@ public class TreeViewController extends WindowController {
         // this.selectedEntity.set(selectedEntity);
         TreeViewNode node = null;
         if (initialeEntity != null) {
-            node = (TreeViewNode) getTreeView().getRoot().getChildren().get(0);
+            node = getFirst();
             while (node != null && !node.getValue().equals(initialeEntity))
                 node = (TreeViewNode) node.nextSibling();
             if (node == null) return;

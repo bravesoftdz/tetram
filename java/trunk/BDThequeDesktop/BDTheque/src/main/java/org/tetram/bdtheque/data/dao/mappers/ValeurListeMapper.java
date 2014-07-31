@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * ValeurListeMapper.java
- * Last modified by Tetram, on 2014-07-29T11:09:14CEST
+ * Last modified by Tetram, on 2014-07-31T14:24:23CEST
  */
 
 package org.tetram.bdtheque.data.dao.mappers;
@@ -19,7 +19,7 @@ import java.util.Map;
 /**
  * Created by Thierry on 28/05/2014.
  */
-@FileLink("/org/tetram/bdtheque/data/dao/mappers/ValeurListe.xml")
+@FileLink("/org/tetram/bdtheque/data/dao/mappers/ValeurListeMapper.xml")
 public interface ValeurListeMapper extends BaseMapperInterface {
     @MapKey("categorie")
     Map<CategorieValeurListe, DefaultValeurListe> getListDefaultValeur();

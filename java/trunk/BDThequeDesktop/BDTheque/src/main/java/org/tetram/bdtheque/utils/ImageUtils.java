@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * ImageUtils.java
- * Last modified by Tetram, on 2014-07-30T16:31:57CEST
+ * Last modified by Tetram, on 2014-07-31T12:17:18CEST
  */
 
 package org.tetram.bdtheque.utils;
@@ -38,7 +38,7 @@ public class ImageUtils {
     }
 
     public static BufferedImage resizePicture(BufferedImage bufferedImage, Integer height, Integer width, boolean antiAliasing) {
-        return resizePicture(bufferedImage, height, width, ScaleOption.ALL, antiAliasing);
+        return resizePicture(bufferedImage, height, width, ScaleOption.AllOW_ALL, antiAliasing);
     }
 
     public static BufferedImage resizePicture(BufferedImage bufferedImage, Integer height, Integer width, EnumSet<ScaleOption> scaleOptions, boolean antiAliasing) {
@@ -104,7 +104,7 @@ public class ImageUtils {
     }
 
     public static byte[] getJPEGStream(File file, Integer height, Integer width, boolean antiAliasing) {
-        return getJPEGStream(file, height, width, ScaleOption.ALL, antiAliasing);
+        return getJPEGStream(file, height, width, ScaleOption.AllOW_ALL, antiAliasing);
     }
 
     public static byte[] getJPEGStream(File file, Integer height, Integer width, EnumSet<ScaleOption> scaleOptions, boolean antiAliasing) {
@@ -126,6 +126,6 @@ public class ImageUtils {
 
     public enum ScaleOption {
         ALLOW_UP, ALLOW_DOWN;
-        public static final EnumSet<ScaleOption> ALL = EnumSet.allOf(ScaleOption.class);
+        public static final EnumSet<ScaleOption> AllOW_ALL = EnumSet.allOf(ScaleOption.class);
     }
 }

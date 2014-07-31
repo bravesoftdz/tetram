@@ -2,7 +2,7 @@
 <!--
   ~ Copyright (c) 2014, tetram.org. All Rights Reserved.
   ~ mybatis-config.xml
-  ~ Last modified by Tetram, on 2014-07-29T11:02:08CEST
+  ~ Last modified by Tetram, on 2014-07-31T14:28:42CEST
   -->
 
 <!DOCTYPE configuration
@@ -28,6 +28,9 @@
     </settings>
 
     <typeAliases>
+        <typeAlias type="java.lang.Integer" alias="Integer"/>
+        <typeAlias type="java.lang.String" alias="String"/>
+
         <typeAlias type="java.util.UUID" alias="UUID"/>
         <typeAlias type="org.tetram.bdtheque.data.UUIDTypeHandler" alias="UUIDTypeHandler"/>
         <typeAlias type="java.net.URL" alias="URL"/>
@@ -99,17 +102,17 @@
     </environments>
 
     <!--mappers>
-        <mapper resource="org/tetram/bdtheque/data/bean/Album.xml"/>
-        <mapper resource="org/tetram/bdtheque/data/bean/Auteur.xml"/>
-        <mapper resource="org/tetram/bdtheque/data/bean/Collection.xml"/>
-        <mapper resource="org/tetram/bdtheque/data/bean/Editeur.xml"/>
-        <mapper resource="org/tetram/bdtheque/data/bean/Edition.xml"/>
-        <mapper resource="org/tetram/bdtheque/data/bean/Genre.xml"/>
-        <mapper resource="org/tetram/bdtheque/data/bean/Image.xml"/>
-        <mapper resource="org/tetram/bdtheque/data/bean/ParaBD.xml"/>
-        <mapper resource="org/tetram/bdtheque/data/bean/Serie.xml"/>
-        <mapper resource="org/tetram/bdtheque/data/bean/Univers.xml"/>
-        <mapper resource="org/tetram/bdtheque/data/bean/ValeurListe.xml"/>
+        <mapper resource="org/tetram/bdtheque/data/bean/AlbumMapper.xml"/>
+        <mapper resource="org/tetram/bdtheque/data/bean/AuteurMapper.xml"/>
+        <mapper resource="org/tetram/bdtheque/data/bean/CollectionMapper.xml"/>
+        <mapper resource="org/tetram/bdtheque/data/bean/EditeurMapper.xml"/>
+        <mapper resource="org/tetram/bdtheque/data/bean/EditionMapper.xml"/>
+        <mapper resource="org/tetram/bdtheque/data/bean/GenreMapper.xml"/>
+        <mapper resource="org/tetram/bdtheque/data/bean/ImageMapper.xml"/>
+        <mapper resource="org/tetram/bdtheque/data/bean/ParaBDMapper.xml"/>
+        <mapper resource="org/tetram/bdtheque/data/bean/SerieMapper.xml"/>
+        <mapper resource="org/tetram/bdtheque/data/bean/UniversMapper.xml"/>
+        <mapper resource="org/tetram/bdtheque/data/bean/ValeurListeMapper.xml"/>
     </mappers-->
 
 </configuration>

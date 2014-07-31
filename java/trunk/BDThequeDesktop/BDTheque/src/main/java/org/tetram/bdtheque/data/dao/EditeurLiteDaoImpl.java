@@ -1,18 +1,19 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * EditeurLiteDaoImpl.java
- * Last modified by Tetram, on 2014-07-29T11:09:14CEST
+ * Last modified by Tetram, on 2014-07-31T12:09:02CEST
  */
 
 package org.tetram.bdtheque.data.dao;
 
-import org.apache.ibatis.annotations.Param;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.tetram.bdtheque.data.bean.EditeurLite;
 import org.tetram.bdtheque.data.bean.InitialeEntity;
 import org.tetram.bdtheque.data.bean.InitialeWithEntity;
+import org.tetram.bdtheque.data.dao.mappers.EditeurMapper;
 
 import java.util.List;
 import java.util.UUID;
@@ -23,24 +24,24 @@ import java.util.UUID;
 @Repository
 @Lazy
 @Transactional
-
 public class EditeurLiteDaoImpl extends DaoROImpl<EditeurLite, UUID> implements EditeurLiteDao {
+    @Autowired
+    private EditeurMapper editeurMapper;
+
     @Override
     public List<InitialeEntity<Character>> getListInitiales(String filtre) {
-        // TODO
-        return null;
+        return editeurMapper.getInitiales(filtre);
     }
 
     @Override
     public List<EditeurLite> getListEntitiesByInitiale(InitialeEntity<Character> initiale, String filtre) {
-        // TODO
-        return null;
+        return editeurMapper.getListEditeurLiteByInitiale(initiale.getValue(), filtre);
     }
 
     @Override
-    public List<InitialeWithEntity<Character, EditeurLite>> searchList(@Param("value") String value, @Param("filtre") String filtre) {
-        // TODO
-        return null;
+    public List<InitialeWithEntity<Character, EditeurLite>> searchList(String value, String filtre) {
+        return editeurMapper.searchEditeurLiteByInitiale(value, filtre);
     }
+
 
 }

@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * AuteurMapper.java
- * Last modified by Tetram, on 2014-07-29T11:02:06CEST
+ * Last modified by Tetram, on 2014-07-31T14:22:53CEST
  */
 package org.tetram.bdtheque.data.dao.mappers;
 
@@ -15,9 +15,9 @@ import java.util.UUID;
 /**
  * Created by Thierry on 30/05/2014.
  */
-@FileLink("/org/tetram/bdtheque/data/dao/mappers/Auteur.xml")
+@FileLink("/org/tetram/bdtheque/data/dao/mappers/AuteurMapper.xml")
 public interface AuteurMapper extends BaseMapperInterface {
-    PersonneLite getPersonneLiteById(UUID id);
+    PersonneLite getPersonneLiteById(@Param("id") UUID id);
 
     List<AuteurAlbumLite> getListAuteurLiteByAlbumId(@Param("idAlbum") UUID idAlbum);
 
@@ -25,7 +25,7 @@ public interface AuteurMapper extends BaseMapperInterface {
 
     List<AuteurParaBDLite> getListAuteurLiteByParaBDId(@Param("idParaBD") UUID idParaBD);
 
-    Personne getPersonneById(UUID id);
+    Personne getPersonneById(@Param("id") UUID id);
 
     int cleanAuteursAlbum(@Param("id") UUID idAlbum);
 
@@ -42,4 +42,7 @@ public interface AuteurMapper extends BaseMapperInterface {
     List<InitialeEntity<Character>> getInitiales(@Param("filtre") String filtre);
 
     List<PersonneLite> getPersonneLiteByInitiale(@Param("initiale") Character initiale, @Param("filtre") String filtre);
+
+    // TODO
+    List<InitialeWithEntity<Character, PersonneLite>> searchPersonneLiteByInitiale(@Param("value") String value, @Param("filtre") String filtre);
 }

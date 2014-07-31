@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * ImageMapper.java
- * Last modified by Tetram, on 2014-07-29T11:09:14CEST
+ * Last modified by Tetram, on 2014-07-31T14:39:35CEST
  */
 
 package org.tetram.bdtheque.data.dao.mappers;
@@ -22,11 +22,11 @@ import java.util.UUID;
 /**
  * Created by Thierry on 25/05/2014.
  */
-@FileLink("/org/tetram/bdtheque/data/dao/mappers/Image.xml")
+@FileLink("/org/tetram/bdtheque/data/dao/mappers/ImageMapper.xml")
 public interface ImageMapper extends BaseMapperInterface {
-    List<CouvertureLite> getListCouvertureLiteByEditionId(UUID id);
+    List<CouvertureLite> getListCouvertureLiteByEditionId(@Param("id") UUID id);
 
-    List<PhotoLite> getListPhotoLiteByParaBDId(UUID id);
+    List<PhotoLite> getListPhotoLiteByParaBDId(@Param("id") UUID id);
 
     <T extends BaseImage>
     int cleanImageLite(

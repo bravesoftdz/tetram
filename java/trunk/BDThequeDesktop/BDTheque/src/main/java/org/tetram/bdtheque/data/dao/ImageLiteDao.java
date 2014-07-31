@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * ImageLiteDao.java
- * Last modified by Tetram, on 2014-07-30T16:02:26CEST
+ * Last modified by Tetram, on 2014-07-31T12:17:18CEST
  */
 
 package org.tetram.bdtheque.data.dao;
@@ -28,7 +28,7 @@ public interface ImageLiteDao<T extends BaseImage, K> extends DaoRW<T, K> {
     }
 
     default byte[] getImageStream(T image, Integer height, Integer width, boolean antiAliasing) {
-        return getImageStream(image, height, width, ImageUtils.ScaleOption.ALL, antiAliasing);
+        return getImageStream(image, height, width, ImageUtils.ScaleOption.AllOW_ALL, antiAliasing);
     }
 
     default byte[] getImageStream(T image, Integer height, Integer width, EnumSet<ImageUtils.ScaleOption> scaleOptions) {

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!--
   ~ Copyright (c) 2014, tetram.org. All Rights Reserved.
-  ~ ParaBD.xml
-  ~ Last modified by Tetram, on 2014-07-29T11:19:04CEST
+  ~ ParaBDMapper.xml
+  ~ Last modified by Tetram, on 2014-07-31T14:41:16CEST
   -->
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
@@ -46,16 +46,12 @@
     </resultMap>
 
     <select id="getParaBDLiteById" resultMap="ParaBDLite">
-        <![CDATA[
-
-        ]]>
     </select>
 
     <select id="getParaBDById" resultMap="ParaBDFull">
-        <![CDATA[
-
         select
-            p.id_paraBD, p.titreParaBD, p.annee, p.id_serie, p.achat, p.description, p.notes, p.dedicace, p.numerote, p.anneeCote, p.prixCote,
+            p.id_paraBD, p.titreParaBD, p.annee, p.id_serie, p.achat, p.description, p.notes, p.dedicace, p.numerote,
+            p.anneeCote, p.prixCote,
             p.gratuit, p.offert, p.dateAchat, p.prix, p.stock, p.categorieParaBD, lc.libelle as lb_categorieParaBD
         from
             paraBD p
@@ -63,8 +59,6 @@
                 (lc.ref = p.categorieParaBD and lc.categorie = 7)
         where
             id_paraBD = #{id}
-
-        ]]>
     </select>
 
     <select id="getListParaBDLiteBySerieIdByAuteurId" parameterType="map" resultMap="ParaBDLite" resultOrdered="true">
@@ -89,15 +83,11 @@
         ]]>
     </select>
 
-    <select id="getInitiales" resultMap="org.tetram.bdtheque.data.dao.mappers.CommonMapper.InitialeEntityUUID">
-        <![CDATA[
-
+    <select id="getInitialesSeries" resultMap="org.tetram.bdtheque.data.dao.mappers.CommonMapper.InitialeEntityUUID">
         select
             titreSerie "label", countSerie "count", id_serie "value"
         from
             series_parabd(#{filtre})
-
-        ]]>
     </select>
 
     <select id="getListParaBDLiteBySerieId" resultMap="ParaBDLite">
@@ -113,27 +103,20 @@
     </select>
 
     <update id="acheter">
-        <![CDATA[
-
         update paraBD set achat = #{achat} where id_paraBD = #{id}
-
-        ]]>
     </update>
 
     <sql id="saveParaBD">
-        <![CDATA[
-
         update or insert into parabd (
-            id_parabd, titreParabd, annee, id_serie, categorieparabd, dedicace, numerote, anneecote,
-            prixcote, gratuit, offert, dateachat, prix, stock, description, notes, complet
+        id_parabd, titreParabd, annee, id_serie, categorieParaBD, dedicace, numerote, anneeCote,
+        prixCote, gratuit, offert, dateAchat, prix, stock, description, notes, complet
         ) values (
-            #{id}, #{titreParabd}, #{annee}, #{idSerie}, #{categorieParaBD}, #{dedicace}, #{numerote}, #{anneeCote},
-            #{prixCote}, #{gratuit}, #{offert}, #{dateAchat}, #{prix}, #{stock}, #{description}, #{notes}, 1
+        #{id}, #{titreParabd}, #{annee}, #{idSerie}, #{categorieParaBD}, #{dedicace}, #{numerote}, #{anneeCote},
+        #{prixCote}, #{gratuit}, #{offert}, #{dateAchat}, #{prix}, #{stock}, #{description}, #{notes}, 1
         )
-
-        ]]>
     </sql>
 
+    <!--suppress MapperXml -->
     <insert id="createParaBD">
         <selectKey keyProperty="id" order="BEFORE" resultType="UUID">
             <include refid="org.tetram.bdtheque.data.dao.mappers.CommonMapper.autoIncKey"/>
@@ -141,16 +124,14 @@
         <include refid="saveParaBD"/>
     </insert>
 
+    <!--suppress MapperXml -->
     <update id="updateParaBD">
         <include refid="saveParaBD"/>
     </update>
 
+    <!--suppress MapperXml -->
     <delete id="deleteParaBD">
-        <![CDATA[
-
         delete from ParaBD where id_paraBD = #{id}
-
-        ]]>
     </delete>
 
 </mapper>

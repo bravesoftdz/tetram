@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!--
   ~ Copyright (c) 2014, tetram.org. All Rights Reserved.
-  ~ Auteur.xml
-  ~ Last modified by Tetram, on 2014-07-29T13:10:39CEST
+  ~ AuteurMapper.xml
+  ~ Last modified by Tetram, on 2014-07-31T14:41:16CEST
   -->
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="org.tetram.bdtheque.data.dao.mappers.AuteurMapper">
@@ -38,87 +38,75 @@
     </resultMap>
 
     <select id="getPersonneLiteById" resultMap="PersonneLite" parameterType="UUID">
-        <![CDATA[
         select
-            id_personne, nomPersonne, siteWeb
+        id_personne, nomPersonne, siteWeb
         from
-            personnes
+        personnes
         where
-            id_personne = #{id}
-        ]]>
+        id_personne = #{id}
     </select>
     <select id="getPersonneById" resultMap="PersonneFull" parameterType="UUID">
-        <![CDATA[
         select
-            id_personne, nomPersonne, siteWeb, biographie
+        id_personne, nomPersonne, siteWeb, biographie
         from
-            personnes
+        personnes
         where
-            id_personne = #{id}
-        ]]>
+        id_personne = #{id}
     </select>
 
     <select id="getListAuteurLiteByAlbumId" resultMap="AuteurAlbumLite">
-        <![CDATA[
         select
-            p.id_personne, p.nomPersonne, p.siteWeb,
-            a.id_auteur, a.id_album, a.metier
+        p.id_personne, p.nomPersonne, p.siteWeb,
+        a.id_auteur, a.id_album, a.metier
         from
-            personnes p
-            inner join auteurs a on
-                a.id_personne = p.id_personne
+        personnes p
+        inner join auteurs a on
+        a.id_personne = p.id_personne
         where
-            a.id_album = #{idAlbum}
+        a.id_album = #{idAlbum}
         order by
-            a.metier, p.nomPersonne
-        ]]>
+        a.metier, p.nomPersonne
     </select>
     <select id="getListAuteurLiteBySerieId" resultMap="AuteurSerieLite">
-        <![CDATA[
         select
-            p.id_personne, p.nomPersonne, p.siteWeb,
-            a.id_auteur_series, a.id_serie, a.metier
+        p.id_personne, p.nomPersonne, p.siteWeb,
+        a.id_auteur_series, a.id_serie, a.metier
         from
-            personnes p
-            inner join auteurs_series a on
-                a.id_personne = p.id_personne
+        personnes p
+        inner join auteurs_series a on
+        a.id_personne = p.id_personne
         where
-            a.id_serie = #{idSerie}
+        a.id_serie = #{idSerie}
         order by
-            a.metier, p.nomPersonne
-        ]]>
+        a.metier, p.nomPersonne
     </select>
     <select id="getListAuteurLiteByParaBDId" resultMap="AuteurParaBDLite">
-        <![CDATA[
         select
-            p.id_personne, p.nomPersonne, p.siteWeb,
-            a.id_auteur_parabd, a.id_parabd
+        p.id_personne, p.nomPersonne, p.siteWeb,
+        a.id_auteur_parabd, a.id_parabd
         from
-            personnes p
-            inner join auteurs_parabd a on
-                a.id_personne = p.id_personne
+        personnes p
+        inner join auteurs_parabd a on
+        a.id_personne = p.id_personne
         where
-            a.id_parabd =  #{idParaBD}
+        a.id_parabd = #{idParaBD}
         order by
-            p.nomPersonne
-        ]]>
+        p.nomPersonne
     </select>
     <select id="getInitiales" resultMap="org.tetram.bdtheque.data.dao.mappers.CommonMapper.InitialeEntityCharacter">
-        <![CDATA[
         select
-            initialeNomPersonne "label", countInitiale "count", initialeNomPersonne "value"
+        initialeNomPersonne "label", countInitiale "count", initialeNomPersonne "value"
         from
-            vw_initiales_personnes
-        ]]>
+        vw_initiales_personnes
     </select>
     <select id="getPersonneLiteByInitiale" resultMap="PersonneLite">
-        <![CDATA[
         select
-            id_personne, nomPersonne
+        id_personne, nomPersonne
         from
-            personnes_by_initiale(#{initiale})
-        ]]>
+        personnes_by_initiale(#{initiale})
     </select>
+
+    <!--suppress MapperXml -->
     <select id="checkUniquePersonne" resultType="UUID">
         <![CDATA[
         select
@@ -136,15 +124,14 @@
     </select>
 
     <sql id="savePersonne">
-        <![CDATA[
         update or insert into personnes (
-            id_personne, nomPersonne, siteWeb, biographie
+        id_personne, nomPersonne, siteWeb, biographie
         ) values (
-            #{id}, #{nomPersonne}, #{siteWeb}, #{biographie}
+        #{id}, #{nomPersonne}, #{siteWeb}, #{biographie}
         )
-        ]]>
     </sql>
 
+    <!--suppress MapperXml -->
     <insert id="createPersonne">
         <selectKey keyProperty="id" order="BEFORE" resultType="UUID">
             <include refid="org.tetram.bdtheque.data.dao.mappers.CommonMapper.autoIncKey"/>
@@ -152,20 +139,18 @@
         <include refid="savePersonne"/>
     </insert>
 
+    <!--suppress MapperXml -->
     <update id="updatePersonne">
         <include refid="savePersonne"/>
     </update>
 
+    <!--suppress MapperXml -->
     <delete id="deletePersonne">
-        <![CDATA[
         delete from personnes where id_personne = #{id}
-        ]]>
     </delete>
 
     <delete id="cleanAuteursAlbum">
-        <![CDATA[
         delete from auteurs where id_album = #{id}
-        ]]>
     </delete>
     <insert id="addAuteurAlbum">
         <selectKey keyProperty="auteur.id" order="BEFORE" resultType="UUID">
@@ -181,9 +166,7 @@
     </insert>
 
     <delete id="cleanAuteursSerie">
-        <![CDATA[
         delete from auteurs_series where id_serie = #{id}
-        ]]>
     </delete>
     <insert id="addAuteurSerie">
         <selectKey keyProperty="auteur.id" order="BEFORE" resultType="UUID">
@@ -199,9 +182,7 @@
     </insert>
 
     <delete id="cleanAuteursParaBD">
-        <![CDATA[
         delete from auteurs_parabd where id_parabd = #{id}
-        ]]>
     </delete>
     <insert id="addAuteurParaBD">
         <selectKey keyProperty="auteur.id" order="BEFORE" resultType="UUID">

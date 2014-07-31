@@ -1,12 +1,11 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * ParaBDLiteDaoImpl.java
- * Last modified by Tetram, on 2014-07-29T11:09:14CEST
+ * Last modified by Tetram, on 2014-07-31T12:08:08CEST
  */
 
 package org.tetram.bdtheque.data.dao;
 
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
@@ -25,7 +24,6 @@ import java.util.UUID;
 @Repository
 @Lazy
 @Transactional
-
 public class ParaBDLiteDaoImpl extends DaoROImpl<ParaBDLite, UUID> implements ParaBDLiteDao {
 
     @Autowired
@@ -33,7 +31,7 @@ public class ParaBDLiteDaoImpl extends DaoROImpl<ParaBDLite, UUID> implements Pa
 
     @Override
     public List<InitialeEntity<UUID>> getListInitiales(String filtre) {
-        return paraBDMapper.getInitiales(filtre);
+        return paraBDMapper.getInitialesSeries(filtre);
     }
 
     @Override
@@ -42,9 +40,8 @@ public class ParaBDLiteDaoImpl extends DaoROImpl<ParaBDLite, UUID> implements Pa
     }
 
     @Override
-    public List<InitialeWithEntity<UUID, ParaBDLite>> searchList(@Param("value") String value, @Param("filtre") String filtre) {
-        // TODO
-        return null;
+    public List<InitialeWithEntity<UUID, ParaBDLite>> searchList(String value, String filtre) {
+        return paraBDMapper.searchParaBDLiteByInitiale(value, filtre);
     }
 
 }

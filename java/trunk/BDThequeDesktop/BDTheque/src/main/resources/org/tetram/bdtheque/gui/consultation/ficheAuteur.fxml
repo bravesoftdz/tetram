@@ -2,7 +2,7 @@
 <!--
   ~ Copyright (c) 2014, tetram.org. All Rights Reserved.
   ~ ficheAuteur.fxml
-  ~ Last modified by Tetram, on 2014-07-29T11:36:11CEST
+  ~ Last modified by Tetram, on 2014-07-31T12:21:08CEST
   -->
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
@@ -40,7 +40,7 @@
                 <VBox minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="350.0"
                       GridPane.columnIndex="1" GridPane.rowIndex="2">
                     <children>
-                        <fx:include fx:id="series" source="../components/treeview.fxml"/>
+                        <fx:include fx:id="tvSeries" source="../components/treeview.fxml"/>
                     </children>
                 </VBox>
             </children>

@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * EditionMapper.java
- * Last modified by Tetram, on 2014-07-29T11:09:14CEST
+ * Last modified by Tetram, on 2014-07-31T14:39:35CEST
  */
 
 package org.tetram.bdtheque.data.dao.mappers;
@@ -18,11 +18,11 @@ import java.util.UUID;
 /**
  * Created by Thierry on 29/05/2014.
  */
-@FileLink("/org/tetram/bdtheque/data/dao/mappers/Edition.xml")
+@FileLink("/org/tetram/bdtheque/data/dao/mappers/EditionMapper.xml")
 public interface EditionMapper extends BaseMapperInterface {
-    EditionLite getEditionLiteById(UUID id);
+    EditionLite getEditionLiteById(@Param("id") UUID id);
 
-    Edition getEditionById(UUID id);
+    Edition getEditionById(@Param("id") UUID id);
 
     List<Edition> getListEditionByAlbumId(@Param("id") UUID id, @Param("stock") Boolean stock);
 

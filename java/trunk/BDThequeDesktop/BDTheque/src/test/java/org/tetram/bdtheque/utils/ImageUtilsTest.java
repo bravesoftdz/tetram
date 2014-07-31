@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * ImageUtilsTest.java
- * Last modified by Tetram, on 2014-07-30T16:04:49CEST
+ * Last modified by Tetram, on 2014-07-31T12:17:18CEST
  */
 
 package org.tetram.bdtheque.utils;
@@ -91,7 +91,7 @@ public class ImageUtilsTest {
                 new File(this.getClass().getResource(ORG_TETRAM_BDTHEQUE_UTILS_PLANCHE_SOURCE_JPG).toURI()),
                 500,
                 null,
-                ImageUtils.ScaleOption.ALL,
+                ImageUtils.ScaleOption.AllOW_ALL,
                 true,
                 true,
                 3

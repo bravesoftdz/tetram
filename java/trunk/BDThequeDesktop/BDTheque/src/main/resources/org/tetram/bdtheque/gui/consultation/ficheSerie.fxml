@@ -2,7 +2,7 @@
 <!--
   ~ Copyright (c) 2014, tetram.org. All Rights Reserved.
   ~ ficheSerie.fxml
-  ~ Last modified by Tetram, on 2014-07-29T11:36:11CEST
+  ~ Last modified by Tetram, on 2014-07-31T14:14:31CEST
   -->
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
@@ -41,8 +41,8 @@
                 <RowConstraints vgrow="SOMETIMES"/>
                 <RowConstraints vgrow="SOMETIMES"/>
                 <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="8.0" vgrow="SOMETIMES"/>
-                <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" vgrow="SOMETIMES"/>
-                <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" vgrow="SOMETIMES"/>
+                <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="96" vgrow="SOMETIMES"/>
+                <RowConstraints maxHeight="-Infinity" minHeight="-Infinity" prefHeight="96" vgrow="SOMETIMES"/>
                 <RowConstraints maxHeight="0.0" minHeight="-Infinity" prefHeight="0.0" vgrow="SOMETIMES"/>
             </rowConstraints>
             <children>
@@ -67,8 +67,9 @@
                 <FlowPane fx:id="lvColoristes" GridPane.columnIndex="3" GridPane.columnSpan="4" GridPane.rowIndex="9"/>
                 <Label styleClass="label-rubrique" text="Albums" GridPane.columnSpan="3" GridPane.halignment="RIGHT"
                        GridPane.rowIndex="14" GridPane.valignment="TOP"/>
-                <ListView fx:id="lvAlbums" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="69.0"
-                          GridPane.columnIndex="3" GridPane.columnSpan="4" GridPane.rowIndex="14"/>
+                <fx:include source="../components/treeview.fxml" fx:id="tvAlbums"
+                            GridPane.columnIndex="3" GridPane.columnSpan="4" GridPane.rowIndex="14"/>
+
                 <FlowPane fx:id="lvUnivers" GridPane.columnIndex="3" GridPane.columnSpan="4" GridPane.rowIndex="4"
                           GridPane.valignment="TOP"/>
                 <Label styleClass="label-rubrique" text="Histoire :" GridPane.columnSpan="3" GridPane.halignment="RIGHT"
@@ -97,8 +98,8 @@
                           styleClass="label-rubrique" text="Terminée" GridPane.columnIndex="6" GridPane.rowIndex="1"/>
                 <Label styleClass="label-rubrique" text="Para-bd" GridPane.columnSpan="3" GridPane.halignment="RIGHT"
                        GridPane.rowIndex="15" GridPane.valignment="TOP"/>
-                <ListView fx:id="lvParabd" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="69.0"
-                          GridPane.columnIndex="3" GridPane.columnSpan="4" GridPane.rowIndex="15"/>
+                <fx:include source="../components/treeview.fxml" fx:id="tvParabd"
+                            GridPane.columnIndex="3" GridPane.columnSpan="4" GridPane.rowIndex="15"/>
             </children>
         </GridPane>
     </children>

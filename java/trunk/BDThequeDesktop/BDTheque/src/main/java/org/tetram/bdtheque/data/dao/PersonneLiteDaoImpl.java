@@ -1,12 +1,11 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * PersonneLiteDaoImpl.java
- * Last modified by Tetram, on 2014-07-29T11:09:14CEST
+ * Last modified by Tetram, on 2014-07-31T12:09:02CEST
  */
 
 package org.tetram.bdtheque.data.dao;
 
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
@@ -25,7 +24,6 @@ import java.util.UUID;
 @Repository
 @Lazy
 @Transactional
-
 public class PersonneLiteDaoImpl extends DaoROImpl<PersonneLite, UUID> implements PersonneLiteDao {
 
     @Autowired
@@ -42,9 +40,8 @@ public class PersonneLiteDaoImpl extends DaoROImpl<PersonneLite, UUID> implement
     }
 
     @Override
-    public List<InitialeWithEntity<Character, PersonneLite>> searchList(@Param("value") String value, @Param("filtre") String filtre) {
-        // TODO
-        return null;
+    public List<InitialeWithEntity<Character, PersonneLite>> searchList(String value, String filtre) {
+        return auteurMapper.searchPersonneLiteByInitiale(value, filtre);
     }
 
 }
