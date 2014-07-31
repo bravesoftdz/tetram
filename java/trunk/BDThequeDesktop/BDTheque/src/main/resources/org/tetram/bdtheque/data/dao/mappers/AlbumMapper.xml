@@ -2,7 +2,7 @@
 <!--
   ~ Copyright (c) 2014, tetram.org. All Rights Reserved.
   ~ AlbumMapper.xml
-  ~ Last modified by Tetram, on 2014-07-31T14:26:30CEST
+  ~ Last modified by Tetram, on 2014-07-31T14:53:46CEST
   -->
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
@@ -46,6 +46,10 @@
 
     <resultMap id="AlbumLiteInitialeUUID" type="org.tetram.bdtheque.data.bean.InitialeWithEntity"
                extends="org.tetram.bdtheque.data.dao.mappers.CommonMapper.InitialeWithEntityUUID">
+        <association property="entity" resultMap="AlbumLite"/>
+    </resultMap>
+    <resultMap id="AlbumLiteInitialeInteger" type="org.tetram.bdtheque.data.bean.InitialeWithEntity"
+               extends="org.tetram.bdtheque.data.dao.mappers.CommonMapper.InitialeWithEntityInteger">
         <association property="entity" resultMap="AlbumLite"/>
     </resultMap>
 
@@ -159,8 +163,10 @@
     </select>
 
     <select id="searchAlbumLiteBySerie" resultMap="AlbumLiteInitialeUUID" resultOrdered="true">
+        <![CDATA[
         select
-        a.id_album initiale_key, a.id_serie initiale_value,
+            a.id_album initiale_key, a.id_serie initiale_value,
+        ]]>
         <include refid="fieldsAlbumLite"/>, a.titreSerie, a.notation
         <![CDATA[
         from
@@ -171,10 +177,39 @@
         <if test="filtre != null">
             and #{filtre}
         </if>
+        <![CDATA[
         order by
-        a.titreSerie nulls first,
+            a.titreSerie nulls first,
+        ]]>
         <include refid="orderAlbum"/>,
-        coalesce(a.titreAlbum, a.titreSerie)
+        <![CDATA[
+            coalesce(a.titreAlbum, a.titreSerie)
+        ]]>
+    </select>
+
+    <select id="searchAlbumLiteByAnnee" resultMap="AlbumLiteInitialeInteger" resultOrdered="true">
+        <![CDATA[
+        select
+            a.id_album initiale_key, a.anneeParution initiale_value,
+        ]]>
+        <include refid="fieldsAlbumLite"/>, a.titreSerie, a.notation
+        <![CDATA[
+        from
+            vw_liste_albums a
+        where
+            coalesce(a.titreAlbum, a.titreSerie) like '%' || #{value} || '%'
+        ]]>
+        <if test="filtre != null">
+            and #{filtre}
+        </if>
+        <![CDATA[
+        order by
+            a.titreSerie nulls first,
+        ]]>
+        <include refid="orderAlbum"/>,
+        <![CDATA[
+            coalesce(a.titreAlbum, a.titreSerie)
+        ]]>
     </select>
 
     <select id="getInitialesCollections"
