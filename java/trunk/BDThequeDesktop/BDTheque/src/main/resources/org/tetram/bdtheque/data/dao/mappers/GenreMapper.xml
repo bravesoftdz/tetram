@@ -2,7 +2,7 @@
 <!--
   ~ Copyright (c) 2014, tetram.org. All Rights Reserved.
   ~ GenreMapper.xml
-  ~ Last modified by Tetram, on 2014-07-31T16:50:01CEST
+  ~ Last modified by Tetram, on 2014-08-01T12:19:54CEST
   -->
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
@@ -11,6 +11,11 @@
         <id column="id_genre" property="id"/>
         <result column="genre" property="nomGenre"/>
         <result column="quantite" property="quantite"/>
+    </resultMap>
+
+    <resultMap id="GenreLiteInitialeCharacter" type="org.tetram.bdtheque.data.bean.InitialeWithEntity"
+               extends="org.tetram.bdtheque.data.dao.mappers.CommonMapper.InitialeWithEntityCharacter">
+        <association property="entity" resultMap="GenreLite"/>
     </resultMap>
 
     <select id="getGenreLiteById" resultMap="GenreLite">
@@ -22,7 +27,7 @@
             id_genre = #{id}
     </select>
 
-    <select id="getListGenreBySerieId" resultMap="GenreLite" resultOrdered="true">
+    <select id="getListGenreBySerie" resultMap="GenreLite" resultOrdered="true">
         select
             g.id_genre, g.genre
         from
@@ -35,7 +40,37 @@
             g.genre
     </select>
 
-    <!--suppress MapperXml -->
+    <select id="getInitiales" resultMap="org.tetram.bdtheque.data.dao.mappers.CommonMapper.InitialeEntityCharacter">
+        select
+            initialeGenre "label", countInitiale "count", initialeGenre "value"
+        from
+            vw_initiales_genres
+    </select>
+    <select id="getListGenreLiteByInitiale" resultMap="GenreLite">
+        select
+            id_genre, genre
+        from
+            genres_by_initiale(#{initiale})
+    </select>
+    <select id="searchListGenreLiteByInitiale" resultMap="GenreLiteInitialeCharacter" resultOrdered="true">
+        <![CDATA[
+        select
+            g.id_genre initiale_key, g.initialeGenre initiale_value,
+            g.id_genre, g.genre
+        from
+            genres g
+        where
+            g.genre like '%' || #{value} || '%'
+        ]]>
+        <if test="filtre != null">
+            and #{filtre}
+        </if>
+        <![CDATA[
+        order by
+            g.initialeGenre, g.genre
+        ]]>
+    </select>
+
     <select id="checkUniqueGenreLite" resultType="UUID">
         <![CDATA[
         select
@@ -56,20 +91,17 @@
         update or insert into genres (id_genre, genre) values (#{id}, #{nomGenre})
     </sql>
 
-    <!--suppress MapperXml -->
-    <insert id="createGenreLite">
+    <insert id="createGenreLite" parameterType="beanGenreLite">
         <selectKey keyProperty="id" order="BEFORE" resultType="UUID">
             <include refid="org.tetram.bdtheque.data.dao.mappers.CommonMapper.autoIncKey"/>
         </selectKey>
         <include refid="saveGenreLite"/>
     </insert>
 
-    <!--suppress MapperXml -->
-    <update id="updateGenreLite">
+    <update id="updateGenreLite" parameterType="beanGenreLite">
         <include refid="saveGenreLite"/>
     </update>
 
-    <!--suppress MapperXml -->
     <delete id="deleteGenreLite">
         delete from genres where id_genre = #{id}
     </delete>

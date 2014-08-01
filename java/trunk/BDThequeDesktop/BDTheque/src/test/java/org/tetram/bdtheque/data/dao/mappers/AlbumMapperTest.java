@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * AlbumMapperTest.java
- * Last modified by Tetram, on 2014-07-29T11:02:08CEST
+ * Last modified by Tetram, on 2014-08-01T10:06:30CEST
  */
 
 package org.tetram.bdtheque.data.dao.mappers;
@@ -59,7 +59,7 @@ public class AlbumMapperTest extends SpringTest {
 
     @Test
     public void testSearchAlbumLiteBySerie() throws Exception {
-        List<InitialeWithEntity<UUID, AlbumLite>> results = mapper.searchAlbumLiteBySerie("lan", null);
+        List<InitialeWithEntity<UUID, AlbumLite>> results = mapper.searchListAlbumLiteBySerie("lan", null);
         Assert.assertNotNull(results);
         Assert.assertNotEquals(0, results.size());
     }

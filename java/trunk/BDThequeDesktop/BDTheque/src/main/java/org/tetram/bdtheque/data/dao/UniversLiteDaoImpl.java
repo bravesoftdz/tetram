@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * UniversLiteDaoImpl.java
- * Last modified by Tetram, on 2014-07-31T12:09:02CEST
+ * Last modified by Tetram, on 2014-08-01T10:42:50CEST
  */
 
 package org.tetram.bdtheque.data.dao;
@@ -36,12 +36,12 @@ public class UniversLiteDaoImpl extends DaoROImpl<UniversLite, UUID> implements 
 
     @Override
     public List<UniversLite> getListEntitiesByInitiale(InitialeEntity<Character> initiale, String filtre) {
-        return universMapper.getUniversLiteByInitiale(initiale.getValue(), filtre);
+        return universMapper.getListUniversLiteByInitiale(initiale.getValue(), filtre);
     }
 
     @Override
     public List<InitialeWithEntity<Character, UniversLite>> searchList(String value, String filtre) {
-        return universMapper.searchUniversLiteByInitiale(value, filtre);
+        return universMapper.searchListUniversLiteByInitiale(value, filtre);
     }
 
 }

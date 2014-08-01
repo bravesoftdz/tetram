@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * ImageMapperTest.java
- * Last modified by Tetram, on 2014-07-29T11:02:08CEST
+ * Last modified by Tetram, on 2014-08-01T12:27:01CEST
  */
 
 package org.tetram.bdtheque.data.dao.mappers;
@@ -23,7 +23,7 @@ public class ImageMapperTest extends SpringTest {
 
     @Test
     public void testGetListCouvertureLiteByEditionId() throws Exception {
-        List<CouvertureLite> lstCouvertureLite = mapper.getListCouvertureLiteByEditionId(Constants.ID_EDITION_SILLAGE_TOME_16);
+        List<CouvertureLite> lstCouvertureLite = mapper.getListCouvertureLiteByEdition(Constants.ID_EDITION_SILLAGE_TOME_16);
         Assert.assertFalse(lstCouvertureLite.isEmpty());
         Assert.assertNotNull(lstCouvertureLite.get(0).getId());
         Assert.assertNotEquals("", lstCouvertureLite.get(0).getCategorie().getTexte());
@@ -31,7 +31,7 @@ public class ImageMapperTest extends SpringTest {
 
     @Test
     public void testGetListPhotoLiteByParaBDId() throws Exception {
-        List<PhotoLite> lstPhotoLite = mapper.getListPhotoLiteByParaBDId(Constants.ID_PARABD_SPIROU_BLOC_3D);
+        List<PhotoLite> lstPhotoLite = mapper.getListPhotoLiteByParaBD(Constants.ID_PARABD_SPIROU_BLOC_3D);
         Assert.assertFalse(lstPhotoLite.isEmpty());
         Assert.assertNotNull(lstPhotoLite.get(0).getId());
         Assert.assertNotEquals("", lstPhotoLite.get(0).getCategorie().getTexte());

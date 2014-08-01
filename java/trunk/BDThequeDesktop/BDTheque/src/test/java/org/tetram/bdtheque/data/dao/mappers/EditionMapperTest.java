@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * EditionMapperTest.java
- * Last modified by Tetram, on 2014-07-29T11:02:08CEST
+ * Last modified by Tetram, on 2014-08-01T12:25:23CEST
  */
 
 package org.tetram.bdtheque.data.dao.mappers;
@@ -43,7 +43,7 @@ public class EditionMapperTest extends SpringTest {
 
     @Test
     public void testGetListEditionByAlbumId() throws Exception {
-        List<Edition> lstEditionLite = mapper.getListEditionByAlbumId(Constants.ID_ALBUM_MAGASIN_GENERAL_TOME_11, null);
+        List<Edition> lstEditionLite = mapper.getListEditionByAlbum(Constants.ID_ALBUM_MAGASIN_GENERAL_TOME_11, null);
         // pour le moment on suppose que si le résultat n'est pas null, c'est que tous les champs sont biens chargés
         Assert.assertNotNull(lstEditionLite);
         Assert.assertEquals(2, lstEditionLite.size());

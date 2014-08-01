@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * PersonneLiteDaoImpl.java
- * Last modified by Tetram, on 2014-07-31T12:09:02CEST
+ * Last modified by Tetram, on 2014-08-01T10:06:40CEST
  */
 
 package org.tetram.bdtheque.data.dao;
@@ -36,12 +36,12 @@ public class PersonneLiteDaoImpl extends DaoROImpl<PersonneLite, UUID> implement
 
     @Override
     public List<PersonneLite> getListEntitiesByInitiale(InitialeEntity<Character> initiale, String filtre) {
-        return auteurMapper.getPersonneLiteByInitiale(initiale.getValue(), filtre);
+        return auteurMapper.getListPersonneLiteByInitiale(initiale.getValue(), filtre);
     }
 
     @Override
     public List<InitialeWithEntity<Character, PersonneLite>> searchList(String value, String filtre) {
-        return auteurMapper.searchPersonneLiteByInitiale(value, filtre);
+        return auteurMapper.searchListPersonneLiteByInitiale(value, filtre);
     }
 
 }

@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * SerieMapper.java
- * Last modified by Tetram, on 2014-07-31T14:20:44CEST
+ * Last modified by Tetram, on 2014-08-01T12:28:08CEST
  */
 
 package org.tetram.bdtheque.data.dao.mappers;
@@ -22,14 +22,35 @@ public interface SerieMapper extends BaseMapperInterface {
 
     Serie getSerieById(@Param("id") UUID id);
 
-    List<SerieLite> getListSerieIdByAuteurId(@Param("id") UUID id);
+    /**
+     * ne surtout pas mettre @Param
+     *
+     * @deprecated utiliser le dao correspondant
+     */
+    @Deprecated
+    int createSerie(Serie serie);
+
+    /**
+     * ne surtout pas mettre @Param
+     *
+     * @deprecated utiliser le dao correspondant
+     */
+    @Deprecated
+    int updateSerie(Serie serie);
+
+    /**
+     * @deprecated utiliser le dao correspondant
+     */
+    @Deprecated
+    int deleteSerie(UUID id);
+
+    List<SerieLite> getListSerieIdByAuteur(@Param("id") UUID idPersonne);
 
     int changeNotation(@Param("id") UUID id, @Param("notation") ValeurListe note);
 
     List<InitialeEntity<Character>> getInitiales(@Param("filtre") String filtre);
 
-    List<SerieLite> getSerieLiteByInitiale(@Param("initiale") Character initiale, @Param("filtre") String filtre);
+    List<SerieLite> getListSerieLiteByInitiale(@Param("initiale") Character initiale, @Param("filtre") String filtre);
 
-    // TODO
-    List<InitialeWithEntity<Character, SerieLite>> searchSerieLiteByInitiale(@Param("value") String value, @Param("filtre") String filtre);
+    List<InitialeWithEntity<Character, SerieLite>> searchListSerieLiteByInitiale(@Param("value") String value, @Param("filtre") String filtre);
 }

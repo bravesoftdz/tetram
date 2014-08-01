@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * AlbumLiteGenreDaoImpl.java
- * Last modified by Tetram, on 2014-07-31T11:52:45CEST
+ * Last modified by Tetram, on 2014-08-01T10:06:30CEST
  */
 
 package org.tetram.bdtheque.data.dao;
@@ -43,12 +43,12 @@ public class AlbumLiteGenreDaoImpl extends DaoROImpl<AlbumLite, UUID> implements
 
     @Override
     public List<AlbumLite> getListEntitiesByInitiale(InitialeEntity<UUID> initiale, String filtre) {
-        return albumMapper.getAlbumLiteByGenre(initiale.getValue(), filtre);
+        return albumMapper.getListAlbumLiteByGenre(initiale.getValue(), filtre);
     }
 
     @Override
     public List<InitialeWithEntity<UUID, AlbumLite>> searchList(String value, String filtre) {
-        return albumMapper.searchAlbumLiteByGenre(value, filtre);
+        return albumMapper.searchListAlbumLiteByGenre(value, filtre);
     }
 
 }

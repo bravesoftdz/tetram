@@ -2,7 +2,7 @@
 <!--
   ~ Copyright (c) 2014, tetram.org. All Rights Reserved.
   ~ AuteurMapper.xml
-  ~ Last modified by Tetram, on 2014-07-31T14:41:16CEST
+  ~ Last modified by Tetram, on 2014-08-01T12:22:38CEST
   -->
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="org.tetram.bdtheque.data.dao.mappers.AuteurMapper">
@@ -37,6 +37,11 @@
         <result column="id_paraBD" property="idParaBD"/>
     </resultMap>
 
+    <resultMap id="PersonneLiteInitialeCharacter" type="org.tetram.bdtheque.data.bean.InitialeWithEntity"
+               extends="org.tetram.bdtheque.data.dao.mappers.CommonMapper.InitialeWithEntityCharacter">
+        <association property="entity" resultMap="PersonneLite"/>
+    </resultMap>
+
     <select id="getPersonneLiteById" resultMap="PersonneLite" parameterType="UUID">
         select
         id_personne, nomPersonne, siteWeb
@@ -54,7 +59,7 @@
         id_personne = #{id}
     </select>
 
-    <select id="getListAuteurLiteByAlbumId" resultMap="AuteurAlbumLite">
+    <select id="getListAuteurLiteByAlbum" resultMap="AuteurAlbumLite" resultOrdered="true">
         select
         p.id_personne, p.nomPersonne, p.siteWeb,
         a.id_auteur, a.id_album, a.metier
@@ -67,7 +72,7 @@
         order by
         a.metier, p.nomPersonne
     </select>
-    <select id="getListAuteurLiteBySerieId" resultMap="AuteurSerieLite">
+    <select id="getListAuteurLiteBySerie" resultMap="AuteurSerieLite" resultOrdered="true">
         select
         p.id_personne, p.nomPersonne, p.siteWeb,
         a.id_auteur_series, a.id_serie, a.metier
@@ -80,7 +85,7 @@
         order by
         a.metier, p.nomPersonne
     </select>
-    <select id="getListAuteurLiteByParaBDId" resultMap="AuteurParaBDLite">
+    <select id="getListAuteurLiteByParaBD" resultMap="AuteurParaBDLite" resultOrdered="true">
         select
         p.id_personne, p.nomPersonne, p.siteWeb,
         a.id_auteur_parabd, a.id_parabd
@@ -93,20 +98,38 @@
         order by
         p.nomPersonne
     </select>
+
     <select id="getInitiales" resultMap="org.tetram.bdtheque.data.dao.mappers.CommonMapper.InitialeEntityCharacter">
         select
         initialeNomPersonne "label", countInitiale "count", initialeNomPersonne "value"
         from
         vw_initiales_personnes
     </select>
-    <select id="getPersonneLiteByInitiale" resultMap="PersonneLite">
+    <select id="getListPersonneLiteByInitiale" resultMap="PersonneLite">
         select
         id_personne, nomPersonne
         from
         personnes_by_initiale(#{initiale})
     </select>
+    <select id="searchListPersonneLiteByInitiale" resultMap="PersonneLiteInitialeCharacter" resultOrdered="true">
+        <![CDATA[
+        select
+            p.id_personne initiale_key, p.initialeNomPersonne initiale_value,
+            p.id_personne, p.nomPersonne
+        from
+            personnes p
+        where
+            p.nomPersonne like '%' || #{value} || '%'
+        ]]>
+        <if test="filtre != null">
+            and #{filtre}
+        </if>
+        <![CDATA[
+        order by
+            p.initialeNomPersonne, p.nomPersonne
+        ]]>
+    </select>
 
-    <!--suppress MapperXml -->
     <select id="checkUniquePersonne" resultType="UUID">
         <![CDATA[
         select
@@ -131,7 +154,6 @@
         )
     </sql>
 
-    <!--suppress MapperXml -->
     <insert id="createPersonne">
         <selectKey keyProperty="id" order="BEFORE" resultType="UUID">
             <include refid="org.tetram.bdtheque.data.dao.mappers.CommonMapper.autoIncKey"/>
@@ -139,12 +161,10 @@
         <include refid="savePersonne"/>
     </insert>
 
-    <!--suppress MapperXml -->
     <update id="updatePersonne">
         <include refid="savePersonne"/>
     </update>
 
-    <!--suppress MapperXml -->
     <delete id="deletePersonne">
         delete from personnes where id_personne = #{id}
     </delete>

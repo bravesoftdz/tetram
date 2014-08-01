@@ -2,7 +2,7 @@
 <!--
   ~ Copyright (c) 2014, tetram.org. All Rights Reserved.
   ~ CollectionMapper.xml
-  ~ Last modified by Tetram, on 2014-07-31T14:41:16CEST
+  ~ Last modified by Tetram, on 2014-08-01T12:24:45CEST
   -->
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
@@ -19,40 +19,75 @@
                      column="id_editeur"/>
     </resultMap>
 
+    <resultMap id="CollectionLiteInitialeCharacter" type="org.tetram.bdtheque.data.bean.InitialeWithEntity"
+               extends="org.tetram.bdtheque.data.dao.mappers.CommonMapper.InitialeWithEntityCharacter">
+        <association property="entity" resultMap="CollectionLite"/>
+    </resultMap>
+
     <select id="getCollectionLiteById" resultMap="CollectionLite">
         select
-        c.id_collection, c.nomCollection,
-        e.id_editeur, e.nomEditeur
+            c.id_collection, c.nomCollection, e.id_editeur, e.nomEditeur
         from
-        collections c
-        inner join editeurs e on
-        e.id_editeur = c.id_editeur
+            collections c
+            inner join editeurs e on
+                e.id_editeur = c.id_editeur
         where
-        c.id_collection = #{id}
+            c.id_collection = #{id}
     </select>
 
     <select id="getCollectionById" resultMap="CollectionFull">
         select
-        id_collection, nomCollection, id_editeur
+            id_collection, nomCollection, id_editeur
         from
-        collections
+            collections
         where
-        id_collection = #{id}
+            id_collection = #{id}
     </select>
 
-    <select id="getListCollectionLiteByEditeurId" resultMap="CollectionLite">
+    <select id="getListCollectionLiteByEditeur" resultMap="CollectionLite">
         select
-        c.id_collection, c.nomCollection,
-        e.id_editeur, e.nomEditeur
+            c.id_collection, c.nomCollection, e.id_editeur, e.nomEditeur
         from
-        collections c
-        inner join editeurs e on
-        e.id_editeur = c.id_editeur
+            collections c
+            inner join editeurs e on
+                e.id_editeur = c.id_editeur
         where
-        e.id_editeur = #{id}
+            e.id_editeur = #{id}
     </select>
 
-    <!--suppress MapperXml -->
+    <select id="getInitiales" resultMap="org.tetram.bdtheque.data.dao.mappers.CommonMapper.InitialeEntityCharacter">
+        select
+            initialeNomCollection "label", countInitiale "count", initialeNomCollection "value"
+        from
+            initiales_collections(?)
+    </select>
+    <select id="getListCollectionLiteByInitiale" resultMap="CollectionLite">
+        select
+            id_collection, nomCollection, id_editeur, nomEditeur
+        from
+            collections_by_initiale(#{initiale}, #{filtre})
+    </select>
+    <select id="searchListCollectionLiteByInitiale" resultMap="CollectionLiteInitialeCharacter" resultOrdered="true">
+        <![CDATA[
+        select
+            c.id_collection initiale_key, c.initialeNomCollection initiale_value,
+            c.id_collection, c.nomCollection, e.id_editeur, e.nomEditeur
+        from
+            collections c
+            inner join editeurs e on
+                e.id_editeur = c.id_editeur
+        where
+            c.nomCollection like '%' || #{value} || '%'
+        ]]>
+        <if test="filtre != null">
+            and #{filtre}
+        </if>
+        <![CDATA[
+        order by
+            c.initialeNomCollection, c.nomCollection
+        ]]>
+    </select>
+
     <select id="checkUniqueCollection" resultType="UUID">
         <![CDATA[
         select
@@ -78,7 +113,6 @@
         )
     </sql>
 
-    <!--suppress MapperXml -->
     <insert id="createCollection">
         <selectKey keyProperty="id" order="BEFORE" resultType="UUID">
             <include refid="org.tetram.bdtheque.data.dao.mappers.CommonMapper.autoIncKey"/>
@@ -86,12 +120,10 @@
         <include refid="saveCollection"/>
     </insert>
 
-    <!--suppress MapperXml -->
     <update id="updateCollection">
         <include refid="saveCollection"/>
     </update>
 
-    <!--suppress MapperXml -->
     <delete id="deleteCollection">
         delete from collections where id_collection = #{id}
     </delete>

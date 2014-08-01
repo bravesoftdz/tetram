@@ -2,7 +2,7 @@
 <!--
   ~ Copyright (c) 2014, tetram.org. All Rights Reserved.
   ~ UniversMapper.xml
-  ~ Last modified by Tetram, on 2014-07-31T14:41:16CEST
+  ~ Last modified by Tetram, on 2014-08-01T12:29:10CEST
   -->
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
@@ -19,68 +19,89 @@
         <association property="universParent" select="getUniversLiteById" column="id_univers_parent"/>
     </resultMap>
 
+    <resultMap id="UniversLiteInitialeCharacter" type="org.tetram.bdtheque.data.bean.InitialeWithEntity"
+               extends="org.tetram.bdtheque.data.dao.mappers.CommonMapper.InitialeWithEntityCharacter">
+        <association property="entity" resultMap="UniversLite"/>
+    </resultMap>
+
     <select id="getUniversLiteById" resultMap="UniversLite">
         select
-        id_univers, nomUnivers
+            id_univers, nomUnivers
         from
-        univers
+            univers
         where
-        id_univers = #{id}
+            id_univers = #{id}
     </select>
     <select id="getUniversById" resultMap="UniversFull">
         select
-        id_univers, nomUnivers, id_univers_parent, description, siteWeb
+            id_univers, nomUnivers, id_univers_parent, description, siteWeb
         from
-        univers
+            univers
         where
-        id_univers = #{id}
+            id_univers = #{id}
     </select>
-    <select id="getListUniversLiteByParaBDId" resultMap="UniversLite">
+    <select id="getListUniversLiteByParaBD" resultMap="UniversLite">
         select
-        u.*
+            u.*
         from
-        univers u
-        inner join parabd_univers pu on
-        pu.id_univers = u.id_univers
+            univers u
+            inner join parabd_univers pu on
+                pu.id_univers = u.id_univers
         where
-        pu.source_parabd = 1 and pu.id_parabd = #{id}
+            pu.source_parabd = 1 and pu.id_parabd = #{id}
     </select>
-    <select id="getListUniversLiteByAlbumId" resultMap="UniversLite">
+    <select id="getListUniversLiteByAlbum" resultMap="UniversLite">
         select
-        u.*
+            u.*
         from
-        univers u
-        inner join albums_univers au on
-        au.id_univers = u.id_univers
+            univers u
+            inner join albums_univers au on
+                au.id_univers = u.id_univers
         where
-        au.source_album = 1 and au.id_album = #{id}
+            au.source_album = 1 and au.id_album = #{id}
     </select>
-    <select id="getListUniversLiteBySerieId" resultMap="UniversLite">
+    <select id="getListUniversLiteBySerie" resultMap="UniversLite">
         select
-        u.*
+            u.*
         from
-        univers u
-        inner join series_univers su on
-        su.id_univers = u.id_univers
+            univers u
+            inner join series_univers su on
+                su.id_univers = u.id_univers
         where
-        su.id_serie = #{id}
+            su.id_serie = #{id}
     </select>
 
     <select id="getInitiales" resultMap="org.tetram.bdtheque.data.dao.mappers.CommonMapper.InitialeEntityCharacter">
         select
-        initialeNomUnivers "label", countInitiale "count", initialeNomUnivers "value"
+            initialeNomUnivers "label", countInitiale "count", initialeNomUnivers "value"
         from
-        initiales_univers(#{filtre})
+            initiales_univers(#{filtre})
     </select>
-
-    <select id="getUniversLiteByInitiale" resultMap="UniversLite">
+    <select id="getListUniversLiteByInitiale" resultMap="UniversLite">
         select
-        id_univers, nomUnivers
+            id_univers, nomUnivers
         from
-        univers_by_initiale(#{initiale}, #{filtre})
+            univers_by_initiale(#{initiale}, #{filtre})
+    </select>
+    <select id="searchListUniversLiteByInitiale" resultMap="UniversLiteInitialeCharacter" resultOrdered="true">
+        <![CDATA[
+        select
+            u.id_univers initiale_key, u.initialeNomUnivers initiale_value,
+            u.id_univers, u.nomUnivers
+        from
+            univers u
+        where
+            u.nomUnivers like '%' || #{value} || '%'
+        ]]>
+        <if test="filtre != null">
+            and #{filtre}
+        </if>
+        <![CDATA[
+        order by
+            u.initialeNomUnivers, u.nomUnivers
+        ]]>
     </select>
 
-    <!--suppress MapperXml -->
     <select id="checkUniqueUnivers" resultType="UUID">
         <![CDATA[
         select
@@ -99,13 +120,12 @@
 
     <sql id="saveUnivers">
         update or insert into univers (
-        id_univers, nomUnivers, id_univers_parent, description, siteWeb
+            id_univers, nomUnivers, id_univers_parent, description, siteWeb
         ) values (
-        #{id}, #{nomUnivers}, #{idUniversParent}, #{description}, #{siteWeb}
+            #{id}, #{nomUnivers}, #{idUniversParent}, #{description}, #{siteWeb}
         )
     </sql>
 
-    <!--suppress MapperXml -->
     <insert id="createUnivers">
         <selectKey keyProperty="id" order="BEFORE" resultType="UUID">
             <include refid="org.tetram.bdtheque.data.dao.mappers.CommonMapper.autoIncKey"/>
@@ -113,12 +133,10 @@
         <include refid="saveUnivers"/>
     </insert>
 
-    <!--suppress MapperXml -->
     <update id="updateUnivers">
         <include refid="saveUnivers"/>
     </update>
 
-    <!--suppress MapperXml -->
     <delete id="deleteUnivers">
         delete from univers where id_univers = #{id}
     </delete>
@@ -138,9 +156,9 @@
     </update>
     <insert id="addUniversAlbum">
         update or insert into albums_univers (
-        id_album, id_univers, source_album
+            id_album, id_univers, source_album
         ) values (
-        #{idAlbum}, #{idUnivers}, 1
+            #{idAlbum}, #{idUnivers}, 1
         )
     </insert>
 
@@ -159,9 +177,9 @@
     </delete>
     <insert id="addUniversSerie">
         update or insert into series_univers (
-        id_serie, id_univers
+            id_serie, id_univers
         ) values (
-        #{idSerie}, #{idUnivers}
+            #{idSerie}, #{idUnivers}
         )
     </insert>
 
@@ -180,9 +198,9 @@
     </update>
     <insert id="addUniversParaBD">
         update or insert into parabd_univers (
-        id_parabd, id_univers, source_parabd
+            id_parabd, id_univers, source_parabd
         ) values (
-        #{idParaBD}, #{idUnivers}, 1
+            #{idParaBD}, #{idUnivers}, 1
         )
     </insert>
 

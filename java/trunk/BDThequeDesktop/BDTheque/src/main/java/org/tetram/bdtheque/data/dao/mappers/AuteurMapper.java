@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * AuteurMapper.java
- * Last modified by Tetram, on 2014-07-31T14:22:53CEST
+ * Last modified by Tetram, on 2014-08-01T12:22:38CEST
  */
 package org.tetram.bdtheque.data.dao.mappers;
 
@@ -19,13 +19,43 @@ import java.util.UUID;
 public interface AuteurMapper extends BaseMapperInterface {
     PersonneLite getPersonneLiteById(@Param("id") UUID id);
 
-    List<AuteurAlbumLite> getListAuteurLiteByAlbumId(@Param("idAlbum") UUID idAlbum);
+    List<AuteurAlbumLite> getListAuteurLiteByAlbum(@Param("idAlbum") UUID idAlbum);
 
-    List<AuteurSerieLite> getListAuteurLiteBySerieId(@Param("idSerie") UUID idSerie);
+    List<AuteurSerieLite> getListAuteurLiteBySerie(@Param("idSerie") UUID idSerie);
 
-    List<AuteurParaBDLite> getListAuteurLiteByParaBDId(@Param("idParaBD") UUID idParaBD);
+    List<AuteurParaBDLite> getListAuteurLiteByParaBD(@Param("idParaBD") UUID idParaBD);
 
     Personne getPersonneById(@Param("id") UUID id);
+
+    /**
+     * ne surtout pas mettre @Param
+     *
+     * @deprecated utiliser le dao correspondant
+     */
+    @Deprecated
+    UUID checkUniquePersonne(Personne personne);
+
+    /**
+     * ne surtout pas mettre @Param
+     *
+     * @deprecated utiliser le dao correspondant
+     */
+    @Deprecated
+    int createPersonne(Personne personne);
+
+    /**
+     * ne surtout pas mettre @Param
+     *
+     * @deprecated utiliser le dao correspondant
+     */
+    @Deprecated
+    int updatePersonne(Personne personne);
+
+    /**
+     * @deprecated utiliser le dao correspondant
+     */
+    @Deprecated
+    int deletePersonne(UUID id);
 
     int cleanAuteursAlbum(@Param("id") UUID idAlbum);
 
@@ -41,8 +71,7 @@ public interface AuteurMapper extends BaseMapperInterface {
 
     List<InitialeEntity<Character>> getInitiales(@Param("filtre") String filtre);
 
-    List<PersonneLite> getPersonneLiteByInitiale(@Param("initiale") Character initiale, @Param("filtre") String filtre);
+    List<PersonneLite> getListPersonneLiteByInitiale(@Param("initiale") Character initiale, @Param("filtre") String filtre);
 
-    // TODO
-    List<InitialeWithEntity<Character, PersonneLite>> searchPersonneLiteByInitiale(@Param("value") String value, @Param("filtre") String filtre);
+    List<InitialeWithEntity<Character, PersonneLite>> searchListPersonneLiteByInitiale(@Param("value") String value, @Param("filtre") String filtre);
 }

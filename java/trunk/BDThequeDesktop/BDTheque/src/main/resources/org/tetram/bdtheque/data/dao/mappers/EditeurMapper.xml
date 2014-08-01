@@ -2,7 +2,7 @@
 <!--
   ~ Copyright (c) 2014, tetram.org. All Rights Reserved.
   ~ EditeurMapper.xml
-  ~ Last modified by Tetram, on 2014-07-31T14:41:16CEST
+  ~ Last modified by Tetram, on 2014-08-01T10:35:20CEST
   -->
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
@@ -16,6 +16,11 @@
         <id column="id_editeur" property="id"/>
         <result column="NomEditeur" property="nomEditeur"/>
         <result column="SiteWeb" property="siteWeb"/>
+    </resultMap>
+
+    <resultMap id="EditeurLiteInitialeCharacter" type="org.tetram.bdtheque.data.bean.InitialeWithEntity"
+               extends="org.tetram.bdtheque.data.dao.mappers.CommonMapper.InitialeWithEntityCharacter">
+        <association property="entity" resultMap="EditeurLite"/>
     </resultMap>
 
     <select id="getEditeurLiteById" resultMap="EditeurLite">
@@ -36,7 +41,37 @@
         id_editeur = #{id}
     </select>
 
-    <!--suppress MapperXml -->
+    <select id="getInitiales" resultMap="org.tetram.bdtheque.data.dao.mappers.CommonMapper.InitialeEntityCharacter">
+        select
+            initialeNomEditeur "label", countInitiale "count", initialeNomEditeur "value"
+        from
+            vw_initiales_editeurs
+    </select>
+    <select id="getListEditeurLiteByInitiale" resultMap="EditeurLite">
+        select
+            id_editeur, nomEditeur
+        from
+            editeurs_by_initiale(#{initiale})
+    </select>
+    <select id="searchListEditeurLiteByInitiale" resultMap="EditeurLiteInitialeCharacter" resultOrdered="true">
+        <![CDATA[
+        select
+            e.id_editeur initiale_key, e.initialeNomEditeur initiale_value,
+            e.id_editeur, e.nomEditeur
+        from
+            editeurs e
+        where
+            e.nomEditeur like '%' || #{value} || '%'
+        ]]>
+        <if test="filtre != null">
+            and #{filtre}
+        </if>
+        <![CDATA[
+        order by
+            e.initialeNomEditeur, e.nomEditeur
+        ]]>
+    </select>
+
     <select id="checkUniqueEditeur" resultType="UUID">
         <![CDATA[
         select
@@ -61,7 +96,6 @@
         )
     </sql>
 
-    <!--suppress MapperXml -->
     <insert id="createEditeur">
         <selectKey keyProperty="id" order="BEFORE" resultType="UUID">
             <include refid="org.tetram.bdtheque.data.dao.mappers.CommonMapper.autoIncKey"/>
@@ -69,12 +103,10 @@
         <include refid="saveEditeur"/>
     </insert>
 
-    <!--suppress MapperXml -->
     <update id="updateEditeur">
         <include refid="saveEditeur"/>
     </update>
 
-    <!--suppress MapperXml -->
     <delete id="deleteEditeur">
         delete from editeurs where id_editeur = #{id}
     </delete>

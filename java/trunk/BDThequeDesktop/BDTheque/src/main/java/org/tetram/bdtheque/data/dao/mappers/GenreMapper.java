@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * GenreMapper.java
- * Last modified by Tetram, on 2014-07-31T16:50:01CEST
+ * Last modified by Tetram, on 2014-08-01T12:37:04CEST
  */
 
 package org.tetram.bdtheque.data.dao.mappers;
@@ -22,28 +22,47 @@ import java.util.UUID;
 public interface GenreMapper extends BaseMapperInterface {
     GenreLite getGenreLiteById(@Param("id") UUID id);
 
-    List<GenreLite> getListGenreBySerieId(@Param("id") UUID id);
+    List<GenreLite> getListGenreBySerie(@Param("id") UUID idSerie);
 
-    // ne surtout pas mettre de @Param
+    /**
+     * ne surtout pas mettre @Param
+     *
+     * @deprecated utiliser le dao correspondant
+     */
+    @Deprecated
+    UUID checkUniqueGenreLite(GenreLite genre);
+
+    /**
+     * ne surtout pas mettre @Param
+     *
+     * @deprecated utiliser le dao correspondant
+     */
+    @Deprecated
     int createGenreLite(GenreLite genre);
 
-    // ne surtout pas mettre de @Param
+    /**
+     * ne surtout pas mettre @Param
+     *
+     * @deprecated utiliser le dao correspondant
+     */
+    @Deprecated
     int updateGenreLite(GenreLite genre);
 
+    /**
+     * @deprecated utiliser le dao correspondant
+     */
+    @Deprecated
     int deleteGenreLite(@Param("id") UUID id);
 
     int cleanGenresSerie(@Param("id") UUID idSerie);
 
     int addGenreSerie(@Param("idSerie") UUID idSerie, @Param("idGenre") UUID idGenre);
 
-    // TODO
     List<InitialeEntity<Character>> getInitiales(@Param("filtre") String filtre);
 
-    // TODO
     List<GenreLite> getListGenreLiteByInitiale(@Param("initiale") Character initiale, @Param("filtre") String filtre);
 
-    // TODO
-    List<InitialeWithEntity<Character, GenreLite>> searchGenreLiteByInitiale(@Param("value") String value, @Param("filtre") String filtre);
+    List<InitialeWithEntity<Character, GenreLite>> searchListGenreLiteByInitiale(@Param("value") String value, @Param("filtre") String filtre);
 }
 
 

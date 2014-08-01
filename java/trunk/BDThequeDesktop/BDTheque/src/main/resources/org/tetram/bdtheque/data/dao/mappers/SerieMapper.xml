@@ -2,7 +2,7 @@
 <!--
   ~ Copyright (c) 2014, tetram.org. All Rights Reserved.
   ~ SerieMapper.xml
-  ~ Last modified by Tetram, on 2014-07-31T14:41:16CEST
+  ~ Last modified by Tetram, on 2014-08-01T12:28:08CEST
   -->
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
@@ -42,92 +42,97 @@
                      select="org.tetram.bdtheque.data.dao.mappers.CollectionMapper.getCollectionLiteById"
                      column="id_collection"/>
         <collection property="univers"
-                    select="org.tetram.bdtheque.data.dao.mappers.UniversMapper.getListUniversLiteBySerieId"
+                    select="org.tetram.bdtheque.data.dao.mappers.UniversMapper.getListUniversLiteBySerie"
                     column="id_serie"/>
-        <collection property="genres" select="org.tetram.bdtheque.data.dao.mappers.GenreMapper.getListGenreBySerieId"
+        <collection property="genres" select="org.tetram.bdtheque.data.dao.mappers.GenreMapper.getListGenreBySerie"
                     column="id_serie"/>
         <collection property="albums" select="org.tetram.bdtheque.data.dao.mappers.AlbumMapper.getListAlbumLiteBySerie"
                     column="{idSerie=id_serie}"/>
         <collection property="paraBDs"
-                    select="org.tetram.bdtheque.data.dao.mappers.ParaBDMapper.getListParaBDLiteBySerieId"
+                    select="org.tetram.bdtheque.data.dao.mappers.ParaBDMapper.getListParaBDLiteBySerie"
                     column="{idSerie=id_serie}" fetchType="eager"/>
         <collection property="auteurs"
-                    select="org.tetram.bdtheque.data.dao.mappers.AuteurMapper.getListAuteurLiteBySerieId"
+                    select="org.tetram.bdtheque.data.dao.mappers.AuteurMapper.getListAuteurLiteBySerie"
                     column="{idSerie=id_serie}" fetchType="eager"/>
+    </resultMap>
+
+    <resultMap id="SerieLiteInitialeCharacter" type="org.tetram.bdtheque.data.bean.InitialeWithEntity"
+               extends="org.tetram.bdtheque.data.dao.mappers.CommonMapper.InitialeWithEntityCharacter">
+        <association property="entity" resultMap="SerieLite"/>
     </resultMap>
 
     <select id="getSerieLiteById" resultMap="SerieLite">
         select
-        s.id_serie, s.titreSerie, s.id_editeur, s.id_collection, s.notation, n.libelle as lb_notation
+            s.id_serie, s.titreSerie, s.id_editeur, s.id_collection, s.notation, n.libelle as lb_notation
         from
-        series s
-        left join listes n on
-        (n.ref = s.notation and n.categorie = 9)
+            series s
+            left join listes n on
+                (n.ref = s.notation and n.categorie = 9)
         where
-        s.id_serie = #{id}
+            s.id_serie = #{id}
     </select>
 
     <select id="getSerieById" resultMap="SerieFull">
         select
-        s.id_serie, s.titreSerie, coalesce(s.terminee, -1) as terminee, s.sujetSerie, s.remarquesSerie, s.siteWeb,
-        s.complete,
-        s.nb_albums, s.id_editeur, s.id_collection, s.suivreSorties, s.suivreManquants,
-        coalesce(s.vo, -1) as vo, coalesce(s.couleur, -1) as couleur,
-        coalesce(s.etat, -1) as etat, le.libelle as lb_etat,
-        coalesce(s.reliure, -1) as reliure, lr.libelle as lb_reliure,
-        coalesce(s.orientation, -1) as orientation, lo.libelle as lb_orientation,
-        coalesce(s.formatEdition, -1) as formatEdition, lf.libelle as lb_formatEdition,
-        coalesce(s.typeEdition, -1) as typeEdition, lte.libelle as lb_typeEdition,
-        coalesce(s.sensLecture, -1) as sensLecture, lsl.libelle as lb_sensLecture,
-        s.notation, n.libelle as lb_notation
+            s.id_serie, s.titreSerie, coalesce(s.terminee, -1) as terminee, s.sujetSerie, s.remarquesSerie, s.siteWeb,
+            s.complete,
+            s.nb_albums, s.id_editeur, s.id_collection, s.suivreSorties, s.suivreManquants,
+            coalesce(s.vo, -1) as vo, coalesce(s.couleur, -1) as couleur,
+            coalesce(s.etat, -1) as etat, le.libelle as lb_etat,
+            coalesce(s.reliure, -1) as reliure, lr.libelle as lb_reliure,
+            coalesce(s.orientation, -1) as orientation, lo.libelle as lb_orientation,
+            coalesce(s.formatEdition, -1) as formatEdition, lf.libelle as lb_formatEdition,
+            coalesce(s.typeEdition, -1) as typeEdition, lte.libelle as lb_typeEdition,
+            coalesce(s.sensLecture, -1) as sensLecture, lsl.libelle as lb_sensLecture,
+            s.notation, n.libelle as lb_notation
         from
-        series s
-        left join listes le on
-        (le.ref = s.etat and le.categorie = 1)
-        left join listes lr on
-        (lr.ref = s.reliure and lr.categorie = 2)
-        left join listes lte on
-        (lte.ref = s.typeEdition and lte.categorie = 3)
-        left join listes lo on
-        (lo.ref = s.orientation and lo.categorie = 4)
-        left join listes lf on
-        (lf.ref = s.formatEdition and lf.categorie = 5)
-        left join listes lsl on
-        (lsl.ref = s.sensLecture and lsl.categorie = 8)
-        left join listes n on
-        (n.ref = s.notation and n.categorie = 9)
+            series s
+            left join listes le on
+                (le.ref = s.etat and le.categorie = 1)
+            left join listes lr on
+                (lr.ref = s.reliure and lr.categorie = 2)
+            left join listes lte on
+                (lte.ref = s.typeEdition and lte.categorie = 3)
+            left join listes lo on
+                (lo.ref = s.orientation and lo.categorie = 4)
+            left join listes lf on
+                (lf.ref = s.formatEdition and lf.categorie = 5)
+            left join listes lsl on
+                (lsl.ref = s.sensLecture and lsl.categorie = 8)
+            left join listes n on
+                (n.ref = s.notation and n.categorie = 9)
         where
-        id_serie = #{id}
+            id_serie = #{id}
     </select>
 
-    <select id="getListSerieIdByAuteurId" resultMap="SerieLite" parameterType="UUID" resultOrdered="true">
+    <select id="getListSerieIdByAuteur" resultMap="SerieLite" parameterType="UUID" resultOrdered="true">
         select
-        al.id_serie, titreSerie
+            al.id_serie, titreSerie
         from
-        vw_liste_albums al
-        inner join auteurs au on
-        al.id_album = au.id_album and au.id_personne = #{id}
+            vw_liste_albums al
+            inner join auteurs au on
+                al.id_album = au.id_album and au.id_personne = #{id}
 
         union
 
         select
-        s.id_serie, titreSerie
+            s.id_serie, titreSerie
         from
-        auteurs_series au
-        inner join series s on
-        s.id_serie = au.id_serie and au.id_personne = #{id}
+            auteurs_series au
+            inner join series s on
+                s.id_serie = au.id_serie and au.id_personne = #{id}
 
         union
 
         select
-        p.id_serie, titreSerie
+            p.id_serie, titreSerie
         from
-        auteurs_paraBD ap
-        inner join vw_liste_paraBD p on
-        ap.id_paraBD = p.id_paraBD and ap.id_personne = #{id}
+            auteurs_paraBD ap
+            inner join vw_liste_paraBD p on
+                ap.id_paraBD = p.id_paraBD and ap.id_personne = #{id}
 
         order by
-        2 nulls first
+            2 nulls first
     </select>
 
     <update id="changeNotation">
@@ -140,32 +145,48 @@
         from
         vw_initiales_series
     </select>
-
-    <select id="getSerieLiteByInitiale" resultMap="SerieLite">
+    <select id="getListSerieLiteByInitiale" resultMap="SerieLite">
         select
-        si.id_serie, si.titreSerie, si.id_editeur, si.nomEditeur, si.id_collection, si.nomCollection,
-        s.notation, n.libelle as lb_notation
+            si.id_serie, si.titreSerie, si.id_editeur, si.nomEditeur, si.id_collection, si.nomCollection,
+            s.notation, n.libelle as lb_notation
         from
-        series_by_initiale(#{initiale}) si
-        inner join series s on
-        s.id_serie = si.id_serie
-        left join listes n on
-        (n.ref = s.notation and n.categorie = 9)
+            series_by_initiale(#{initiale}) si
+            inner join series s on
+                s.id_serie = si.id_serie
+            left join listes n on
+                (n.ref = s.notation and n.categorie = 9)
+    </select>
+    <select id="searchListSerieLiteByInitiale" resultMap="SerieLiteInitialeCharacter" resultOrdered="true">
+        <![CDATA[
+        select
+            s.id_serie initiale_key, s.initialeTitreSerie initiale_value,
+            s.id_serie, s.titreSerie
+        from
+            series s
+        where
+            s.titreSerie like '%' || #{value} || '%'
+        ]]>
+        <if test="filtre != null">
+            and #{filtre}
+        </if>
+        <![CDATA[
+        order by
+            s.initialeTitreSerie, s.titreSerie
+        ]]>
     </select>
 
     <sql id="saveSerie">
         update or insert into series (
-        id_serie, titreSerie, terminee, suivreSorties, complete, suivreManquants, siteWeb, id_editeur,
-        id_collection, sujetSerie, remarquesSerie, nb_albums, vo, couleur, etat, reliure, typeEdition,
-        orientation, formatEdition, sensLecture
+            id_serie, titreSerie, terminee, suivreSorties, complete, suivreManquants, siteWeb, id_editeur,
+            id_collection, sujetSerie, remarquesSerie, nb_albums, vo, couleur, etat, reliure, typeEdition,
+            orientation, formatEdition, sensLecture
         ) values (
-        #{id}, #{titreSerie}, #{terminee}, #{suivreSorties}, #{complete}, #{suivreManquants}, #{siteWeb}, #{idEditeur},
-        #{idCollection}, #{sujet}, #{notes}, #{nbAlbums}, #{vo}, #{couleur}, #{etat}, #{reliure}, #{typeEdition},
-        #{orientation}, #{formatEdition}, #{sensLecture}
+            #{id}, #{titreSerie}, #{terminee}, #{suivreSorties}, #{complete}, #{suivreManquants}, #{siteWeb}, #{idEditeur},
+            #{idCollection}, #{sujet}, #{notes}, #{nbAlbums}, #{vo}, #{couleur}, #{etat}, #{reliure}, #{typeEdition},
+            #{orientation}, #{formatEdition}, #{sensLecture}
         )
     </sql>
 
-    <!--suppress MapperXml -->
     <insert id="createSerie">
         <selectKey keyProperty="id" order="BEFORE" resultType="UUID">
             <include refid="org.tetram.bdtheque.data.dao.mappers.CommonMapper.autoIncKey"/>
@@ -173,12 +194,10 @@
         <include refid="saveSerie"/>
     </insert>
 
-    <!--suppress MapperXml -->
     <update id="updateSerie">
         <include refid="saveSerie"/>
     </update>
 
-    <!--suppress MapperXml -->
     <delete id="deleteSerie">
         delete from series where id_serie = #{id}
     </delete>

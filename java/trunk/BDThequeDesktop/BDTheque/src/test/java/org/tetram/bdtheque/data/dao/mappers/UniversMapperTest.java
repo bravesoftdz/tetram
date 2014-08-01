@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * UniversMapperTest.java
- * Last modified by Tetram, on 2014-07-29T11:02:08CEST
+ * Last modified by Tetram, on 2014-08-01T12:29:10CEST
  */
 
 package org.tetram.bdtheque.data.dao.mappers;
@@ -14,7 +14,7 @@ import org.tetram.bdtheque.data.Constants;
 import org.tetram.bdtheque.data.bean.Univers;
 import org.tetram.bdtheque.data.bean.UniversLite;
 
-import java.util.Set;
+import java.util.List;
 
 public class UniversMapperTest extends SpringTest {
 
@@ -31,21 +31,21 @@ public class UniversMapperTest extends SpringTest {
 
     @Test
     public void testGetListUniversLiteByParaBDId() throws Exception {
-        Set<UniversLite> lstUniversLite = mapper.getListUniversLiteByParaBDId(Constants.ID_PARABD_SPIROU_BLOC_3D);
+        List<UniversLite> lstUniversLite = mapper.getListUniversLiteByParaBD(Constants.ID_PARABD_SPIROU_BLOC_3D);
         Assert.assertFalse(lstUniversLite.isEmpty());
         Assert.assertNotNull(lstUniversLite.iterator().next().getId());
     }
 
     @Test
     public void testGetListUniversLiteAlbumId() throws Exception {
-        Set<UniversLite> lstUniversLite = mapper.getListUniversLiteByAlbumId(Constants.ID_ALBUM_SPIROU_GALLERIE_DES_ILLUSTRES);
+        List<UniversLite> lstUniversLite = mapper.getListUniversLiteByAlbum(Constants.ID_ALBUM_SPIROU_GALLERIE_DES_ILLUSTRES);
         Assert.assertFalse(lstUniversLite.isEmpty());
         Assert.assertNotNull(lstUniversLite.iterator().next().getId());
     }
 
     @Test
     public void testGetListUniversLiteBySerieId() throws Exception {
-        Set<UniversLite> lstUniversLite = mapper.getListUniversLiteBySerieId(Constants.ID_SERIE_LANFEUST_DE_TROY);
+        List<UniversLite> lstUniversLite = mapper.getListUniversLiteBySerie(Constants.ID_SERIE_LANFEUST_DE_TROY);
         Assert.assertFalse(lstUniversLite.isEmpty());
         Assert.assertNotNull(lstUniversLite.iterator().next().getId());
     }

@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * EditeurLiteDaoImpl.java
- * Last modified by Tetram, on 2014-07-31T12:09:02CEST
+ * Last modified by Tetram, on 2014-08-01T10:30:19CEST
  */
 
 package org.tetram.bdtheque.data.dao;
@@ -40,7 +40,7 @@ public class EditeurLiteDaoImpl extends DaoROImpl<EditeurLite, UUID> implements 
 
     @Override
     public List<InitialeWithEntity<Character, EditeurLite>> searchList(String value, String filtre) {
-        return editeurMapper.searchEditeurLiteByInitiale(value, filtre);
+        return editeurMapper.searchListEditeurLiteByInitiale(value, filtre);
     }
 
 

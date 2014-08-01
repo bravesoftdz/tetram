@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * AlbumLiteSerieDaoImpl.java
- * Last modified by Tetram, on 2014-07-29T11:09:14CEST
+ * Last modified by Tetram, on 2014-08-01T10:06:30CEST
  */
 
 package org.tetram.bdtheque.data.dao;
@@ -52,7 +52,7 @@ public class AlbumLiteSerieDaoImpl extends DaoROImpl<AlbumLite, UUID> implements
 
     @Override
     public List<InitialeWithEntity<UUID, AlbumLite>> searchList(@Param("value") String value, @Param("filtre") String filtre) {
-        return albumMapper.searchAlbumLiteBySerie(value, filtre);
+        return albumMapper.searchListAlbumLiteBySerie(value, filtre);
     }
 
 }

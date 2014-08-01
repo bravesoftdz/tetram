@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * CollectionLiteDaoImpl.java
- * Last modified by Tetram, on 2014-07-31T12:09:02CEST
+ * Last modified by Tetram, on 2014-08-01T10:07:11CEST
  */
 
 package org.tetram.bdtheque.data.dao;
@@ -41,7 +41,7 @@ public class CollectionLiteDaoImpl extends DaoROImpl<CollectionLite, UUID> imple
 
     @Override
     public List<InitialeWithEntity<Character, CollectionLite>> searchList(String value, String filtre) {
-        return collectionMapper.searchCollectionLiteByInitiale(value, filtre);
+        return collectionMapper.searchListCollectionLiteByInitiale(value, filtre);
     }
 
 }

@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * SerieLiteDaoImpl.java
- * Last modified by Tetram, on 2014-07-31T12:09:02CEST
+ * Last modified by Tetram, on 2014-08-01T11:33:19CEST
  */
 
 package org.tetram.bdtheque.data.dao;
@@ -37,12 +37,12 @@ public class SerieLiteDaoImpl extends DaoROImpl<SerieLite, UUID> implements Seri
 
     @Override
     public List<SerieLite> getListEntitiesByInitiale(InitialeEntity<Character> initiale, String filtre) {
-        return serieMapper.getSerieLiteByInitiale(initiale.getValue(), filtre);
+        return serieMapper.getListSerieLiteByInitiale(initiale.getValue(), filtre);
     }
 
     @Override
     public List<InitialeWithEntity<Character, SerieLite>> searchList(String value, String filtre) {
-        return serieMapper.searchSerieLiteByInitiale(value, filtre);
+        return serieMapper.searchListSerieLiteByInitiale(value, filtre);
     }
 
     @Override

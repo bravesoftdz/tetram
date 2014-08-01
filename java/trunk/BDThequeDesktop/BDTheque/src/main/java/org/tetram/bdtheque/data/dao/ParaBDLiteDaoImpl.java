@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * ParaBDLiteDaoImpl.java
- * Last modified by Tetram, on 2014-07-31T12:08:08CEST
+ * Last modified by Tetram, on 2014-08-01T11:41:33CEST
  */
 
 package org.tetram.bdtheque.data.dao;
@@ -36,12 +36,12 @@ public class ParaBDLiteDaoImpl extends DaoROImpl<ParaBDLite, UUID> implements Pa
 
     @Override
     public List<ParaBDLite> getListEntitiesByInitiale(InitialeEntity<UUID> initiale, String filtre) {
-        return paraBDMapper.getListParaBDLiteBySerieId(initiale.getValue(), filtre);
+        return paraBDMapper.getListParaBDLiteBySerie(initiale.getValue(), filtre);
     }
 
     @Override
     public List<InitialeWithEntity<UUID, ParaBDLite>> searchList(String value, String filtre) {
-        return paraBDMapper.searchParaBDLiteByInitiale(value, filtre);
+        return paraBDMapper.searchListParaBDLiteBySerie(value, filtre);
     }
 
 }

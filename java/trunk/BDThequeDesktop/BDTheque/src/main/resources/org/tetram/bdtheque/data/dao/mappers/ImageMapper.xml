@@ -2,7 +2,7 @@
 <!--
   ~ Copyright (c) 2014, tetram.org. All Rights Reserved.
   ~ ImageMapper.xml
-  ~ Last modified by Tetram, on 2014-07-31T14:41:16CEST
+  ~ Last modified by Tetram, on 2014-08-01T12:35:12CEST
   -->
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
@@ -30,7 +30,6 @@
         <result column="StockageCouverture" property="oldStockee"/>
     </resultMap>
 
-    <!--suppress MapperXml -->
     <select id="getCouvertureLiteById" resultMap="CouvertureLiteSelect">
         select
             c.id_couverture, c.fichierCouverture, c.stockageCouverture, c.categorieImage, l.libelle as lb_categorieImage, c.ordre
@@ -41,7 +40,7 @@
         where
             c.id_couverture = #{id}
     </select>
-    <select id="getListCouvertureLiteByEditionId" resultMap="CouvertureLiteSelect" resultOrdered="true">
+    <select id="getListCouvertureLiteByEdition" resultMap="CouvertureLiteSelect" resultOrdered="true">
         select
             c.id_couverture, c.fichierCouverture, c.stockageCouverture, c.categorieImage, l.libelle as lb_categorieImage, c.ordre
         from
@@ -54,7 +53,6 @@
             l.ordre nulls last, c.ordre
     </select>
 
-    <!--suppress MapperXml -->
     <select id="getPhotoLiteById" resultMap="PhotoLiteSelect">
         select
             p.id_photo, p.fichierPhoto, p.stockagePhoto, p.categorieImage, l.libelle as lb_categorieImage, p.ordre
@@ -65,7 +63,7 @@
         where
             p.id_photo = #{id}
     </select>
-    <select id="getListPhotoLiteByParaBDId" resultMap="PhotoLiteSelect" resultOrdered="true">
+    <select id="getListPhotoLiteByParaBD" resultMap="PhotoLiteSelect" resultOrdered="true">
         select
         p.id_photo, p.fichierPhoto, p.stockagePhoto, p.categorieImage, l.libelle as lb_categorieImage, p.ordre
         from

@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * PersonneDaoImpl.java
- * Last modified by Tetram, on 2014-07-29T11:09:14CEST
+ * Last modified by Tetram, on 2014-08-01T12:32:46CEST
  */
 
 package org.tetram.bdtheque.data.dao;
@@ -50,7 +50,7 @@ public class PersonneDaoImpl extends DaoScriptImpl<Personne, UUID> implements Pe
         if (personne != null) {
             List<Serie> lst = new ArrayList<>();
             Serie serie;
-            List<SerieLite> lstSerie = serieMapper.getListSerieIdByAuteurId(id);
+            List<SerieLite> lstSerie = serieMapper.getListSerieIdByAuteur(id);
             for (SerieLite serieLite : lstSerie) {
                 if (serieLite == null || serieLite.getId() == null) {
                     serie = serieDao.get(null);
@@ -59,8 +59,8 @@ public class PersonneDaoImpl extends DaoScriptImpl<Personne, UUID> implements Pe
                     serie = serieDao.get(serieLite.getId());
                     lst.add(serie);
                 }
-                serie.setAlbums(albumMapper.getListAlbumLiteBySerieIdByAuteurId(serie.getId(), id));
-                serie.setParaBDs(paraBDMapper.getListParaBDLiteBySerieIdByAuteurId(serie.getId(), id));
+                serie.setAlbums(albumMapper.getListAlbumLiteBySerieByAuteur(serie.getId(), id));
+                serie.setParaBDs(paraBDMapper.getListParaBDLiteBySerieByAuteur(serie.getId(), id));
             }
             personne.setSeries(lst);
         }

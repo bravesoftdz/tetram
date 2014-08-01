@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * AlbumLiteDaoImpl.java
- * Last modified by Tetram, on 2014-07-31T11:53:59CEST
+ * Last modified by Tetram, on 2014-08-01T10:06:30CEST
  */
 
 package org.tetram.bdtheque.data.dao;
@@ -38,12 +38,12 @@ public class AlbumLiteDaoImpl extends DaoROImpl<AlbumLite, UUID> implements Albu
 
     @Override
     public List<AlbumLite> getListEntitiesByInitiale(InitialeEntity<Character> initiale, String filtre) {
-        return albumMapper.getAlbumLiteByInitiale(initiale.getValue(), filtre);
+        return albumMapper.getListAlbumLiteByInitiale(initiale.getValue(), filtre);
     }
 
     @Override
     public List<InitialeWithEntity<Character, AlbumLite>> searchList(String value, String filtre) {
-        return albumMapper.searchAlbumLiteByInitiale(value, filtre);
+        return albumMapper.searchListAlbumLiteByInitiale(value, filtre);
     }
 
     @Override

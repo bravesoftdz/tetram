@@ -2,7 +2,7 @@
 <!--
   ~ Copyright (c) 2014, tetram.org. All Rights Reserved.
   ~ AlbumMapper.xml
-  ~ Last modified by Tetram, on 2014-07-31T16:50:01CEST
+  ~ Last modified by Tetram, on 2014-08-01T12:32:46CEST
   -->
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
@@ -34,13 +34,13 @@
         <association property="serie" select="org.tetram.bdtheque.data.dao.mappers.SerieMapper.getSerieById"
                      column="id_serie"/>
         <collection property="univers"
-                    select="org.tetram.bdtheque.data.dao.mappers.UniversMapper.getListUniversLiteByAlbumId"
+                    select="org.tetram.bdtheque.data.dao.mappers.UniversMapper.getListUniversLiteByAlbum"
                     column="id_album" fetchType="eager"/>
         <collection property="editions"
-                    select="org.tetram.bdtheque.data.dao.mappers.EditionMapper.getListEditionByAlbumId"
+                    select="org.tetram.bdtheque.data.dao.mappers.EditionMapper.getListEditionByAlbum"
                     column="{id=id_album}"/>
         <collection property="auteurs"
-                    select="org.tetram.bdtheque.data.dao.mappers.AuteurMapper.getListAuteurLiteByAlbumId"
+                    select="org.tetram.bdtheque.data.dao.mappers.AuteurMapper.getListAuteurLiteByAlbum"
                     column="{idAlbum=id_album}" fetchType="eager"/>
     </resultMap>
 
@@ -103,7 +103,7 @@
         where
         a.id_album = #{id}
     </select>
-    <select id="getListAlbumLiteBySerieIdByAuteurId" parameterType="map" resultMap="AlbumLite" resultOrdered="true">
+    <select id="getListAlbumLiteBySerieByAuteur" parameterType="map" resultMap="AlbumLite" resultOrdered="true">
         select
         <include refid="fieldsAlbumLite"/>
         <![CDATA[
@@ -136,7 +136,7 @@
         from
         initiales_albums(#{filtre})
     </select>
-    <select id="getAlbumLiteByInitiale" resultMap="AlbumLite">
+    <select id="getListAlbumLiteByInitiale" resultMap="AlbumLite">
         select
         <include refid="fieldsAlbumLite"/>, a.titreSerie
         <![CDATA[
@@ -144,7 +144,7 @@
             albums_by_initiale(#{initiale}, #{filtre}) a
         ]]>
     </select>
-    <select id="searchAlbumLiteByInitiale" resultMap="AlbumLiteInitialeCharacter" resultOrdered="true">
+    <select id="searchListAlbumLiteByInitiale" resultMap="AlbumLiteInitialeCharacter" resultOrdered="true">
         <![CDATA[
         select
             a.id_album initiale_key, a.initialeTitreAlbum initiale_value,
@@ -183,7 +183,7 @@
             albums_by_serie(#{idSerie}, #{filtre}) a
         ]]>
     </select>
-    <select id="searchAlbumLiteBySerie" resultMap="AlbumLiteInitialeUUID" resultOrdered="true">
+    <select id="searchListAlbumLiteBySerie" resultMap="AlbumLiteInitialeUUID" resultOrdered="true">
         <![CDATA[
         select
             a.id_album initiale_key, a.id_serie initiale_value,
@@ -212,7 +212,11 @@
         from
         collections_albums(#{filtre})
     </select>
-    <select id="getAlbumLiteByCollection" resultMap="AlbumLite">
+    <select id="getListAlbumLiteByCollection" resultMap="AlbumLite">
+        <!--
+            TODO: modifier la procédure stockée ALBUMS_BY_COLLECTION pour qu'elle utilise la vue VW_LISTE_COLLECTIONS_ALBUMS
+                    ou qu'elle teste id_collection sur la table COLLECTIONS par un left join
+        -->
         <if test="idCollection == null">
             <bind name="idCollection" value="''"/>
         </if>
@@ -223,7 +227,7 @@
             albums_by_collection(#{idCollection}, #{filtre}) a
         ]]>
     </select>
-    <select id="searchAlbumLiteByCollection" resultMap="AlbumLiteInitialeUUID" resultOrdered="true">
+    <select id="searchListAlbumLiteByCollection" resultMap="AlbumLiteInitialeUUID" resultOrdered="true">
         <![CDATA[
         select
             a.id_album initiale_key, a.id_collection initiale_value,
@@ -251,7 +255,7 @@
         from
         editeurs_albums(#{filtre})
     </select>
-    <select id="getAlbumLiteByEditeur" resultMap="AlbumLite">
+    <select id="getListAlbumLiteByEditeur" resultMap="AlbumLite">
         <if test="idEditeur == null">
             <bind name="idEditeur" value="''"/>
         </if>
@@ -262,7 +266,7 @@
             albums_by_editeur(#{idEditeur}, #{filtre}) a
         ]]>
     </select>
-    <select id="searchAlbumLiteByEditeur" resultMap="AlbumLiteInitialeUUID" resultOrdered="true">
+    <select id="searchListAlbumLiteByEditeur" resultMap="AlbumLiteInitialeUUID" resultOrdered="true">
         <![CDATA[
         select
             a.id_album initiale_key, a.id_editeur initiale_value,
@@ -290,7 +294,7 @@
         from
         genres_albums(#{filtre})
     </select>
-    <select id="getAlbumLiteByGenre" resultMap="AlbumLite">
+    <select id="getListAlbumLiteByGenre" resultMap="AlbumLite">
         <if test="idGenre == null">
             <bind name="idGenre" value="''"/>
         </if>
@@ -301,7 +305,7 @@
             albums_by_genre(#{idGenre}, #{filtre}) a
         ]]>
     </select>
-    <select id="searchAlbumLiteByGenre" resultMap="AlbumLiteInitialeUUID" resultOrdered="true">
+    <select id="searchListAlbumLiteByGenre" resultMap="AlbumLiteInitialeUUID" resultOrdered="true">
         <![CDATA[
         select
             a.id_album initiale_key, a.id_genre initiale_value,
@@ -329,7 +333,7 @@
         from
         annees_albums(#{filtre})
     </select>
-    <select id="getAlbumLiteByAnnee" resultMap="AlbumLite">
+    <select id="getListAlbumLiteByAnnee" resultMap="AlbumLite">
         <if test="annee == null">
             <bind name="annee" value="-1"/>
         </if>
@@ -340,7 +344,7 @@
             albums_by_annee(#{annee}, #{filtre}) a
         ]]>
     </select>
-    <select id="searchAlbumLiteByAnnee" resultMap="AlbumLiteInitialeYear" resultOrdered="true">
+    <select id="searchListAlbumLiteByAnnee" resultMap="AlbumLiteInitialeYear" resultOrdered="true">
         <![CDATA[
         select
             a.id_album initiale_key, a.anneeParution initiale_value,
@@ -379,7 +383,6 @@
         )
     </sql>
 
-    <!--suppress MapperXml -->
     <insert id="createAlbum">
         <selectKey keyProperty="id" order="BEFORE" resultType="UUID">
             <include refid="org.tetram.bdtheque.data.dao.mappers.CommonMapper.autoIncKey"/>
@@ -387,12 +390,10 @@
         <include refid="saveAlbum"/>
     </insert>
 
-    <!--suppress MapperXml -->
     <update id="updateAlbum">
         <include refid="saveAlbum"/>
     </update>
 
-    <!--suppress MapperXml -->
     <delete id="deleteAlbum">
         delete from albums where id_album = #{id}
     </delete>

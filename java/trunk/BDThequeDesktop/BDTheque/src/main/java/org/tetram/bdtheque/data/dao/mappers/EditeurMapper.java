@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * EditeurMapper.java
- * Last modified by Tetram, on 2014-07-31T14:23:21CEST
+ * Last modified by Tetram, on 2014-08-01T12:33:57CEST
  */
 
 package org.tetram.bdtheque.data.dao.mappers;
@@ -25,12 +25,39 @@ public interface EditeurMapper extends BaseMapperInterface {
 
     Editeur getEditeurById(@Param("id") UUID id);
 
-    // TODO
+    /**
+     * ne surtout pas mettre @Param
+     *
+     * @deprecated utiliser le dao correspondant
+     */
+    @Deprecated
+    UUID checkUniqueEditeur(Editeur editeur);
+
+    /**
+     * ne surtout pas mettre @Param
+     *
+     * @deprecated utiliser le dao correspondant
+     */
+    @Deprecated
+    int createEditeur(Editeur editeur);
+
+    /**
+     * ne surtout pas mettre @Param
+     *
+     * @deprecated utiliser le dao correspondant
+     */
+    @Deprecated
+    int updateEditeur(Editeur editeur);
+
+    /**
+     * @deprecated utiliser le dao correspondant
+     */
+    @Deprecated
+    int deleteEditeur(UUID id);
+
     List<InitialeEntity<Character>> getInitiales(@Param("filtre") String filtre);
 
-    // TODO
     List<EditeurLite> getListEditeurLiteByInitiale(@Param("initiale") Character initiale, @Param("filtre") String filtre);
 
-    // TODO
-    List<InitialeWithEntity<Character, EditeurLite>> searchEditeurLiteByInitiale(@Param("value") String value, @Param("filtre") String filtre);
+    List<InitialeWithEntity<Character, EditeurLite>> searchListEditeurLiteByInitiale(@Param("value") String value, @Param("filtre") String filtre);
 }

@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * CollectionMapper.java
- * Last modified by Tetram, on 2014-07-31T14:23:07CEST
+ * Last modified by Tetram, on 2014-08-01T12:33:57CEST
  */
 
 package org.tetram.bdtheque.data.dao.mappers;
@@ -23,16 +23,43 @@ import java.util.UUID;
 public interface CollectionMapper extends BaseMapperInterface {
     CollectionLite getCollectionLiteById(@Param("id") UUID id);
 
-    List<CollectionLite> getListCollectionLiteByEditeurId(@Param("id") UUID id);
+    List<CollectionLite> getListCollectionLiteByEditeur(@Param("id") UUID id);
 
     Collection getCollectionById(@Param("id") UUID id);
 
-    // TODO
+    /**
+     * ne surtout pas mettre @Param
+     *
+     * @deprecated utiliser le dao correspondant
+     */
+    @Deprecated
+    UUID checkUniqueCollection(Collection collection);
+
+    /**
+     * ne surtout pas mettre @Param
+     *
+     * @deprecated utiliser le dao correspondant
+     */
+    @Deprecated
+    int createCollection(Collection collection);
+
+    /**
+     * ne surtout pas mettre @Param
+     *
+     * @deprecated utiliser le dao correspondant
+     */
+    @Deprecated
+    int updateCollection(Collection collection);
+
+    /**
+     * @deprecated utiliser le dao correspondant
+     */
+    @Deprecated
+    int deleteCollection(UUID id);
+
     List<CollectionLite> getListCollectionLiteByInitiale(@Param("initiale") Character initiale, @Param("filtre") String filtre);
 
-    // TODO
     List<InitialeEntity<Character>> getInitiales(@Param("filtre") String filtre);
 
-    // TODO
-    List<InitialeWithEntity<Character, CollectionLite>> searchCollectionLiteByInitiale(@Param("value") String value, @Param("filtre") String filtre);
+    List<InitialeWithEntity<Character, CollectionLite>> searchListCollectionLiteByInitiale(@Param("value") String value, @Param("filtre") String filtre);
 }

@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * CollectionMapperTest.java
- * Last modified by Tetram, on 2014-07-29T11:02:08CEST
+ * Last modified by Tetram, on 2014-08-01T12:24:45CEST
  */
 
 package org.tetram.bdtheque.data.dao.mappers;
@@ -31,7 +31,7 @@ public class CollectionMapperTest extends SpringTest {
 
     @Test
     public void testGetListCollectionLiteByEditeurId() throws Exception {
-        List<CollectionLite> lstCollectionLite = mapper.getListCollectionLiteByEditeurId(Constants.ID_EDITEUR_GLENAT);
+        List<CollectionLite> lstCollectionLite = mapper.getListCollectionLiteByEditeur(Constants.ID_EDITEUR_GLENAT);
         Assert.assertFalse(lstCollectionLite.isEmpty());
         Assert.assertNotNull(lstCollectionLite.get(0).getId());
     }

@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * EditionMapper.java
- * Last modified by Tetram, on 2014-07-31T14:39:35CEST
+ * Last modified by Tetram, on 2014-08-01T12:33:57CEST
  */
 
 package org.tetram.bdtheque.data.dao.mappers;
@@ -24,7 +24,29 @@ public interface EditionMapper extends BaseMapperInterface {
 
     Edition getEditionById(@Param("id") UUID id);
 
-    List<Edition> getListEditionByAlbumId(@Param("id") UUID id, @Param("stock") Boolean stock);
+    /**
+     * ne surtout pas mettre @Param
+     *
+     * @deprecated utiliser le dao correspondant
+     */
+    @Deprecated
+    int createEdition(Edition edition);
+
+    /**
+     * ne surtout pas mettre @Param
+     *
+     * @deprecated utiliser le dao correspondant
+     */
+    @Deprecated
+    int updateEdition(Edition edition);
+
+    /**
+     * @deprecated utiliser le dao correspondant
+     */
+    @Deprecated
+    int deleteEdition(@Param("id") UUID id);
+
+    List<Edition> getListEditionByAlbum(@Param("id") UUID idAlbum, @Param("stock") Boolean stock);
 
     int cleanEditionsAlbum(@Param("IdAlbum") UUID idAlbum, @Param("editions") Collection<Edition> editions);
 }

@@ -2,7 +2,7 @@
 <!--
   ~ Copyright (c) 2014, tetram.org. All Rights Reserved.
   ~ EditionMapper.xml
-  ~ Last modified by Tetram, on 2014-07-31T14:41:16CEST
+  ~ Last modified by Tetram, on 2014-08-01T12:30:25CEST
   -->
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
@@ -49,7 +49,7 @@
                      select="org.tetram.bdtheque.data.dao.mappers.CollectionMapper.getCollectionById"
                      column="id_collection"/>
         <collection property="couvertures"
-                    select="org.tetram.bdtheque.data.dao.mappers.ImageMapper.getListCouvertureLiteByEditionId"
+                    select="org.tetram.bdtheque.data.dao.mappers.ImageMapper.getListCouvertureLiteByEdition"
                     column="id_edition"/>
     </resultMap>
 
@@ -95,7 +95,7 @@
             e.id_edition = #{id}
         </where>
     </select>
-    <select id="getListEditionByAlbumId" resultMap="EditionFull">
+    <select id="getListEditionByAlbum" resultMap="EditionFull">
         <include refid="selectEditionFull"/>
         <where>
             e.id_album = #{id}
@@ -132,7 +132,6 @@
         )
     </sql>
 
-    <!--suppress MapperXml -->
     <insert id="createEdition">
         <selectKey keyProperty="id" order="BEFORE" resultType="UUID">
             <include refid="org.tetram.bdtheque.data.dao.mappers.CommonMapper.autoIncKey"/>
@@ -140,12 +139,10 @@
         <include refid="saveEdition"/>
     </insert>
 
-    <!--suppress MapperXml -->
     <update id="updateEdition">
         <include refid="saveEdition"/>
     </update>
 
-    <!--suppress MapperXml -->
     <delete id="deleteEdition">
         delete from editions where id_edition = #{id}
     </delete>

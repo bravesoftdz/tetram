@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * GenreLiteDaoImpl.java
- * Last modified by Tetram, on 2014-07-31T16:50:01CEST
+ * Last modified by Tetram, on 2014-08-01T10:37:27CEST
  */
 
 package org.tetram.bdtheque.data.dao;
@@ -60,7 +60,7 @@ public class GenreLiteDaoImpl extends DaoScriptImpl<GenreLite, UUID> implements 
 
     @Override
     public List<InitialeWithEntity<Character, GenreLite>> searchList(String value, String filtre) {
-        return genreMapper.searchGenreLiteByInitiale(value, filtre);
+        return genreMapper.searchListGenreLiteByInitiale(value, filtre);
     }
 
 }

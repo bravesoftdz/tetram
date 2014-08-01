@@ -2,7 +2,7 @@
 <!--
   ~ Copyright (c) 2014, tetram.org. All Rights Reserved.
   ~ ParaBDMapper.xml
-  ~ Last modified by Tetram, on 2014-07-31T14:41:16CEST
+  ~ Last modified by Tetram, on 2014-08-01T12:30:18CEST
   -->
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
@@ -35,14 +35,19 @@
         <association property="serie" select="org.tetram.bdtheque.data.dao.mappers.SerieMapper.getSerieById"
                      column="id_serie"/>
         <collection property="univers"
-                    select="org.tetram.bdtheque.data.dao.mappers.UniversMapper.getListUniversLiteByParaBDId"
+                    select="org.tetram.bdtheque.data.dao.mappers.UniversMapper.getListUniversLiteByParaBD"
                     column="id_paraBD" fetchType="eager"/>
         <collection property="photos"
-                    select="org.tetram.bdtheque.data.dao.mappers.ImageMapper.getListPhotoLiteByParaBDId"
+                    select="org.tetram.bdtheque.data.dao.mappers.ImageMapper.getListPhotoLiteByParaBD"
                     column="id_paraBD"/>
         <collection property="auteurs"
-                    select="org.tetram.bdtheque.data.dao.mappers.AuteurMapper.getListAuteurLiteByParaBDId"
+                    select="org.tetram.bdtheque.data.dao.mappers.AuteurMapper.getListAuteurLiteByParaBD"
                     column="{idParaBD=id_paraBD}"/>
+    </resultMap>
+
+    <resultMap id="ParaBDLiteInitialeUUID" type="org.tetram.bdtheque.data.bean.InitialeWithEntity"
+               extends="org.tetram.bdtheque.data.dao.mappers.CommonMapper.InitialeWithEntityUUID">
+        <association property="entity" resultMap="ParaBDLite"/>
     </resultMap>
 
     <select id="getParaBDLiteById" resultMap="ParaBDLite">
@@ -61,7 +66,7 @@
             id_paraBD = #{id}
     </select>
 
-    <select id="getListParaBDLiteBySerieIdByAuteurId" parameterType="map" resultMap="ParaBDLite" resultOrdered="true">
+    <select id="getListParaBDLiteBySerieByAuteur" parameterType="map" resultMap="ParaBDLite" resultOrdered="true">
         <![CDATA[
         select
             id_paraBD, titreParaBD, id_serie, titreSerie, achat, complet, sCategorie
@@ -89,8 +94,7 @@
         from
             series_parabd(#{filtre})
     </select>
-
-    <select id="getListParaBDLiteBySerieId" resultMap="ParaBDLite">
+    <select id="getListParaBDLiteBySerie" resultMap="ParaBDLite">
         <if test="idSerie == null">
             <bind name="idSerie" value="''"/>
         </if>
@@ -100,6 +104,20 @@
         from
             parabd_by_serie(#{idSerie}, #{filtre}) a
         ]]>
+    </select>
+    <select id="searchListParaBDLiteBySerie" resultMap="ParaBDLiteInitialeUUID" resultOrdered="true">
+        select
+        p.id_parabd initiale_key, p.id_serie initiale_value,
+        p.id_parabd, p.titreParaBD
+        from
+        vw_liste_parabd p
+        where
+        coalesce(p.titreParaBD, p.titreSerie) like '%' || #{value} || '%'
+        <if test="filtre != null">
+            and #{filtre}
+        </if>
+        order by
+        p.titreSerie nulls first, coalesce(p.titreParaBD, p.titreSerie)
     </select>
 
     <update id="acheter">

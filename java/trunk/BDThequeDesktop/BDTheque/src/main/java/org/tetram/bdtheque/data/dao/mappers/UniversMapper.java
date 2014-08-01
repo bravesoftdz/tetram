@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * UniversMapper.java
- * Last modified by Tetram, on 2014-07-31T14:24:20CEST
+ * Last modified by Tetram, on 2014-08-01T12:29:10CEST
  */
 
 package org.tetram.bdtheque.data.dao.mappers;
@@ -15,7 +15,6 @@ import org.tetram.bdtheque.utils.FileLink;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -25,13 +24,43 @@ import java.util.UUID;
 public interface UniversMapper extends BaseMapperInterface {
     UniversLite getUniversLiteById(@Param("id") UUID id);
 
-    Set<UniversLite> getListUniversLiteByParaBDId(@Param("id") UUID id);
+    List<UniversLite> getListUniversLiteByParaBD(@Param("id") UUID idParaBD);
 
-    Set<UniversLite> getListUniversLiteByAlbumId(@Param("id") UUID id);
+    List<UniversLite> getListUniversLiteByAlbum(@Param("id") UUID idAlbum);
 
-    Set<UniversLite> getListUniversLiteBySerieId(@Param("id") UUID id);
+    List<UniversLite> getListUniversLiteBySerie(@Param("id") UUID idSerie);
 
     Univers getUniversById(@Param("id") UUID id);
+
+    /**
+     * ne surtout pas mettre @Param
+     *
+     * @deprecated utiliser le dao correspondant
+     */
+    @Deprecated
+    UUID checkUniqueUnivers(Univers univers);
+
+    /**
+     * ne surtout pas mettre @Param
+     *
+     * @deprecated utiliser le dao correspondant
+     */
+    @Deprecated
+    int createUnivers(Univers univers);
+
+    /**
+     * ne surtout pas mettre @Param
+     *
+     * @deprecated utiliser le dao correspondant
+     */
+    @Deprecated
+    int updateUnivers(Univers univers);
+
+    /**
+     * @deprecated utiliser le dao correspondant
+     */
+    @Deprecated
+    int deleteUnivers(UUID id);
 
     int cleanUniversAlbum(@Param("idAlbum") UUID idAlbum, @Param("univers") Collection<UniversLite> universToKeep);
 
@@ -47,8 +76,7 @@ public interface UniversMapper extends BaseMapperInterface {
 
     List<InitialeEntity<Character>> getInitiales(@Param("filtre") String filtre);
 
-    List<UniversLite> getUniversLiteByInitiale(@Param("initiale") Character initiale, @Param("filtre") String filtre);
+    List<UniversLite> getListUniversLiteByInitiale(@Param("initiale") Character initiale, @Param("filtre") String filtre);
 
-    // TODO
-    List<InitialeWithEntity<Character, UniversLite>> searchUniversLiteByInitiale(@Param("value") String value, @Param("filtre") String filtre);
+    List<InitialeWithEntity<Character, UniversLite>> searchListUniversLiteByInitiale(@Param("value") String value, @Param("filtre") String filtre);
 }
