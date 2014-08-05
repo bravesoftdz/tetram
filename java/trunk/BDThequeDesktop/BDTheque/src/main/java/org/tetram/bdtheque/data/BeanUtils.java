@@ -168,6 +168,9 @@ public abstract class BeanUtils {
                 break;
         }
 
+        if (result.isEmpty())
+            result = formatTitre(serie);
+
         return result;
     }
 

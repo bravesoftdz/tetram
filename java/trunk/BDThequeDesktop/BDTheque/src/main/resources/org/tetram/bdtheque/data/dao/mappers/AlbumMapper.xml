@@ -105,11 +105,10 @@
     </select>
     <select id="getListAlbumLiteBySerieByAuteur" parameterType="map" resultMap="AlbumLite" resultOrdered="true">
         select
-        <include refid="fieldsAlbumLite"/>
+        <include refid="fieldsAlbumLite"/>, a.titreSerie, n.libelle as lb_notation
         <![CDATA[
-           , n.libelle as lb_notation
         from
-            albums a
+            vw_liste_albums a
             left join listes n on
                 (n.ref = a.notation and n.categorie = 9)
         ]]>

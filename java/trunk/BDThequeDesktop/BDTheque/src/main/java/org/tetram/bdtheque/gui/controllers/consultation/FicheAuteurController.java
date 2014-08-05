@@ -19,9 +19,11 @@ import org.springframework.stereotype.Controller;
 import org.tetram.bdtheque.data.BeanUtils;
 import org.tetram.bdtheque.data.bean.Personne;
 import org.tetram.bdtheque.data.bean.Serie;
+import org.tetram.bdtheque.data.bean.abstractentities.AbstractDBEntity;
 import org.tetram.bdtheque.data.bean.abstractentities.AbstractEntity;
 import org.tetram.bdtheque.data.bean.abstractentities.BaseAlbum;
 import org.tetram.bdtheque.data.bean.abstractentities.BaseSerie;
+import org.tetram.bdtheque.data.dao.AlbumLiteSerieDao;
 import org.tetram.bdtheque.data.dao.PersonneDao;
 import org.tetram.bdtheque.gui.controllers.WindowController;
 import org.tetram.bdtheque.gui.controllers.components.TreeViewController;
@@ -48,6 +50,8 @@ public class FicheAuteurController extends WindowController implements Consultat
     private final ObjectProperty<Personne> personne = new SimpleObjectProperty<>();
     @Autowired
     private PersonneDao personneDao;
+    @Autowired
+    private AlbumLiteSerieDao albumDao;
     @FXML
     private TreeViewController tvSeriesController;
     @FXML
@@ -71,6 +75,14 @@ public class FicheAuteurController extends WindowController implements Consultat
         tvSeriesController.setOnRenderCell(cell -> {
             if (cell.getItem() instanceof BaseSerie)
                 cell.getStyleClass().add(TreeViewController.NODE_BOLD_CSS);
+        });
+        tvSeriesController.setOnGetLabel(entity -> {
+            if (entity instanceof BaseAlbum)
+                return ((BaseAlbum) entity).buildLabel(false);
+            else if (((AbstractDBEntity) entity).getId() == null)
+                return albumDao.getUnknownLabel();
+            else
+                return entity.buildLabel();
         });
         tvSeriesController.setOnGetChildren(treeItem -> {
             final AbstractEntity entity = treeItem.getValue();
