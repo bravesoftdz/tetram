@@ -29,32 +29,25 @@ public interface AuteurMapper extends BaseMapperInterface {
 
     /**
      * ne surtout pas mettre @Param
-     *
-     * @deprecated utiliser le dao correspondant
+     * utiliser le dao correspondant
      */
-    @Deprecated
     UUID checkUniquePersonne(Personne personne);
 
     /**
      * ne surtout pas mettre @Param
-     *
-     * @deprecated utiliser le dao correspondant
+     * utiliser le dao correspondant
      */
-    @Deprecated
     int createPersonne(Personne personne);
 
     /**
      * ne surtout pas mettre @Param
-     *
-     * @deprecated utiliser le dao correspondant
+     * utiliser le dao correspondant
      */
-    @Deprecated
     int updatePersonne(Personne personne);
 
     /**
-     * @deprecated utiliser le dao correspondant
+     * utiliser le dao correspondant
      */
-    @Deprecated
     int deletePersonne(UUID id);
 
     int cleanAuteursAlbum(@Param("id") UUID idAlbum);

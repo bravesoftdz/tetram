@@ -36,7 +36,7 @@ dependencies {
 
     compile 'org.mybatis:mybatis:+'
     compile 'org.mybatis:mybatis-spring:+'
-    compile 'org.mybatis.generator:mybatis-generator-core:+'
+    //compile 'org.mybatis.generator:mybatis-generator-core:+'
 
     runtime 'cglib:cglib:+'
 

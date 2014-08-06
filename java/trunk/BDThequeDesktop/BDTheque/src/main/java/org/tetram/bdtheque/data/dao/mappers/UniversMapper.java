@@ -34,32 +34,25 @@ public interface UniversMapper extends BaseMapperInterface {
 
     /**
      * ne surtout pas mettre @Param
-     *
-     * @deprecated utiliser le dao correspondant
+     * utiliser le dao correspondant
      */
-    @Deprecated
     UUID checkUniqueUnivers(Univers univers);
 
     /**
      * ne surtout pas mettre @Param
-     *
-     * @deprecated utiliser le dao correspondant
+     * utiliser le dao correspondant
      */
-    @Deprecated
     int createUnivers(Univers univers);
 
     /**
      * ne surtout pas mettre @Param
-     *
-     * @deprecated utiliser le dao correspondant
+     * utiliser le dao correspondant
      */
-    @Deprecated
     int updateUnivers(Univers univers);
 
     /**
-     * @deprecated utiliser le dao correspondant
+     * utiliser le dao correspondant
      */
-    @Deprecated
     int deleteUnivers(UUID id);
 
     int cleanUniversAlbum(@Param("idAlbum") UUID idAlbum, @Param("univers") Collection<UniversLite> universToKeep);

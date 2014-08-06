@@ -24,24 +24,19 @@ public interface SerieMapper extends BaseMapperInterface {
 
     /**
      * ne surtout pas mettre @Param
-     *
-     * @deprecated utiliser le dao correspondant
+     * utiliser le dao correspondant
      */
-    @Deprecated
     int createSerie(Serie serie);
 
     /**
      * ne surtout pas mettre @Param
-     *
-     * @deprecated utiliser le dao correspondant
+     * utiliser le dao correspondant
      */
-    @Deprecated
     int updateSerie(Serie serie);
 
     /**
-     * @deprecated utiliser le dao correspondant
+     * utiliser le dao correspondant
      */
-    @Deprecated
     int deleteSerie(UUID id);
 
     List<SerieLite> getListSerieIdByAuteur(@Param("id") UUID idPersonne);

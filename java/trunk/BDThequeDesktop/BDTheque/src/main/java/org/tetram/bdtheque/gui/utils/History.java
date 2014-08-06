@@ -125,36 +125,6 @@ public class History {
             } else
                 addItem(item);
         }
-/*
-        procedure Modifie;
-        begin
-            EditConsultation(Consult);
-        end;
-
-        procedure Ajoute;
-        begin
-            Inc(FCurrentConsultation);
-            FListConsultation.Count := FCurrentConsultation + 1;
-            if not Assigned(FListConsultation[FCurrentConsultation]) then
-                FListConsultation[FCurrentConsultation] := TConsult.Create;
-            Modifie;
-        end;
-
-            if not LongBool(FLockCount) then
-            begin
-                if (FCurrentConsultation > -1) and (Consult.Action = CurrentConsult.Action) then
-                    with CurrentConsult do
-                    begin
-                        if Consult.Action in MustRefresh then
-                            Modifie
-                        else if not(Consult.Action in CanRefresh) or (Reference <> Consult.Reference) or (not IsEqualGUID(ReferenceGUID, Consult.ReferenceGUID)) or
-                                (Reference2 <> Consult.Reference2) or (not IsEqualGUID(ReferenceGUID2, Consult.ReferenceGUID2)) then
-                            Ajoute;
-                    end
-                else
-                    Ajoute;
-            end;
-*/
     }
 
     public void addWaiting(HistoryAction action) {
@@ -287,7 +257,8 @@ public class History {
                     back();
                     break;
                 case REFRESH:
-                    result = open(shown.get(getCurrent()), true);
+                    if (!shown.isEmpty())
+                        result = open(shown.get(getCurrent()), true);
                     break;
                 case FICHE:
                     newController = Forms.showFiche(item.entity);

@@ -25,24 +25,19 @@ public interface AlbumMapper extends BaseMapperInterface {
 
     /**
      * ne surtout pas mettre @Param
-     *
-     * @deprecated utiliser le dao correspondant
+     * utiliser le dao correspondant
      */
-    @Deprecated
     int createAlbum(Album album);
 
     /**
      * ne surtout pas mettre @Param
-     *
-     * @deprecated utiliser le dao correspondant
+     * utiliser le dao correspondant
      */
-    @Deprecated
     int updateAlbum(Album album);
 
     /**
-     * @deprecated utiliser le dao correspondant
+     * utiliser le dao correspondant
      */
-    @Deprecated
     int deleteAlbum(@Param("id") UUID id);
 
     List<AlbumLite> getListAlbumLiteBySerieByAuteur(@Param("idSerie") UUID idSerie, @Param("idAuteur") UUID idAuteur);

@@ -26,24 +26,19 @@ public interface EditionMapper extends BaseMapperInterface {
 
     /**
      * ne surtout pas mettre @Param
-     *
-     * @deprecated utiliser le dao correspondant
+     * utiliser le dao correspondant
      */
-    @Deprecated
     int createEdition(Edition edition);
 
     /**
      * ne surtout pas mettre @Param
-     *
-     * @deprecated utiliser le dao correspondant
+     * utiliser le dao correspondant
      */
-    @Deprecated
     int updateEdition(Edition edition);
 
     /**
-     * @deprecated utiliser le dao correspondant
+     * utiliser le dao correspondant
      */
-    @Deprecated
     int deleteEdition(@Param("id") UUID id);
 
     List<Edition> getListEditionByAlbum(@Param("id") UUID idAlbum, @Param("stock") Boolean stock);

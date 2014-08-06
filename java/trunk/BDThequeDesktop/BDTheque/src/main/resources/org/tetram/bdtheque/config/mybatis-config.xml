@@ -30,6 +30,7 @@
     <typeAliases>
         <typeAlias type="java.lang.Integer" alias="Integer"/>
         <typeAlias type="java.lang.String" alias="String"/>
+        <typeAlias type="java.lang.Character" alias="Character"/>
 
         <typeAlias type="java.util.UUID" alias="UUID"/>
         <typeAlias type="org.tetram.bdtheque.data.UUIDTypeHandler" alias="UUIDTypeHandler"/>

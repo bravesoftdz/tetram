@@ -32,36 +32,38 @@
 
     <select id="getCouvertureLiteById" resultMap="CouvertureLiteSelect">
         select
-            c.id_couverture, c.fichierCouverture, c.stockageCouverture, c.categorieImage, l.libelle as lb_categorieImage, c.ordre
+        c.id_couverture, c.fichierCouverture, c.stockageCouverture, c.categorieImage, l.libelle as lb_categorieImage,
+        c.ordre
         from
-            couvertures c
-            left join listes l on
-                (c.categorieImage = l.ref and l.categorie = 6)
+        couvertures c
+        left join listes l on
+        (c.categorieImage = l.ref and l.categorie = 6)
         where
-            c.id_couverture = #{id}
+        c.id_couverture = #{id}
     </select>
     <select id="getListCouvertureLiteByEdition" resultMap="CouvertureLiteSelect" resultOrdered="true">
         select
-            c.id_couverture, c.fichierCouverture, c.stockageCouverture, c.categorieImage, l.libelle as lb_categorieImage, c.ordre
+        c.id_couverture, c.fichierCouverture, c.stockageCouverture, c.categorieImage, l.libelle as lb_categorieImage,
+        c.ordre
         from
-            couvertures c
-            left join listes l on
-                (c.categorieImage = l.ref and l.categorie = 6)
+        couvertures c
+        left join listes l on
+        (c.categorieImage = l.ref and l.categorie = 6)
         where
-            c.id_edition = #{id}
+        c.id_edition = #{id}
         order by
-            l.ordre nulls last, c.ordre
+        l.ordre nulls last, c.ordre
     </select>
 
     <select id="getPhotoLiteById" resultMap="PhotoLiteSelect">
         select
-            p.id_photo, p.fichierPhoto, p.stockagePhoto, p.categorieImage, l.libelle as lb_categorieImage, p.ordre
+        p.id_photo, p.fichierPhoto, p.stockagePhoto, p.categorieImage, l.libelle as lb_categorieImage, p.ordre
         from
-            photos p
-            left join listes l on
-                (p.categorieImage = l.ref and l.categorie = 10)
+        photos p
+        left join listes l on
+        (p.categorieImage = l.ref and l.categorie = 10)
         where
-            p.id_photo = #{id}
+        p.id_photo = #{id}
     </select>
     <select id="getListPhotoLiteByParaBD" resultMap="PhotoLiteSelect" resultOrdered="true">
         select

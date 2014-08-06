@@ -12,6 +12,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import org.controlsfx.dialog.Dialogs;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
 import org.tetram.bdtheque.data.bean.abstractentities.*;
@@ -57,6 +58,7 @@ public class Forms {
         entitiesUrlEdit.put(BaseAuteur.class, "gestion/ficheAuteur.fxml");
         entitiesUrlEdit.put(BaseUnivers.class, "gestion/ficheUnivers.fxml");
         //entitiesUrlEdit.put(BaseParaBD.class, "gestion/ficheParabd.fxml");
+        //entitiesUrlEdit.put(BaseGenre.class, "gestion/ficheGenre.fxml");
     }
 
     public static String getLastUrl() {
@@ -158,7 +160,7 @@ public class Forms {
     public static <T extends WindowController & ConsultationController> T showFiche(AbstractDBEntity entity) {
         String url = entitiesUrlFiche.get(entity.getBaseClass());
         if (url == null) {
-            org.controlsfx.dialog.Dialogs.create().message(entity.toString()).showInformation();
+            Dialogs.create().message(entity.toString()).showInformation();
             return null;
         }
 
@@ -171,7 +173,7 @@ public class Forms {
     public static <T extends WindowController & GestionController> FicheEditController<T> showEdit(AbstractDBEntity entity) {
         String url = entitiesUrlEdit.get(entity.getBaseClass());
         if (url == null) {
-            org.controlsfx.dialog.Dialogs.create().message(entity.toString()).showInformation();
+            Dialogs.create().message(entity.toString()).showInformation();
             return null;
         }
 

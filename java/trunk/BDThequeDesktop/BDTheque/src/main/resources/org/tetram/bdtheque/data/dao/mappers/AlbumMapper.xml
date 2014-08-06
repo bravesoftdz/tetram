@@ -93,9 +93,9 @@
     </select>
     <select id="getAlbumById" parameterType="UUID" resultMap="AlbumFull">
         select
-            a.id_album, a.titreAlbum, a.horsSerie, a.integrale, a.tome, a.tomeDebut, a.tomeFin, a.id_serie,
-            a.complet, a.sujetAlbum, a.remarquesAlbum, a.moisParution, a.anneeParution,
-            a.notation, n.libelle as lb_notation
+        a.id_album, a.titreAlbum, a.horsSerie, a.integrale, a.tome, a.tomeDebut, a.tomeFin, a.id_serie,
+        a.complet, a.sujetAlbum, a.remarquesAlbum, a.moisParution, a.anneeParution,
+        a.notation, n.libelle as lb_notation
         from
         albums a
         left join listes n on

@@ -43,15 +43,15 @@
 
     <select id="getInitiales" resultMap="org.tetram.bdtheque.data.dao.mappers.CommonMapper.InitialeEntityCharacter">
         select
-            initialeNomEditeur "label", countInitiale "count", initialeNomEditeur "value"
+        initialeNomEditeur "label", countInitiale "count", initialeNomEditeur "value"
         from
-            vw_initiales_editeurs
+        vw_initiales_editeurs
     </select>
     <select id="getListEditeurLiteByInitiale" resultMap="EditeurLite">
         select
-            id_editeur, nomEditeur
+        id_editeur, nomEditeur
         from
-            editeurs_by_initiale(#{initiale})
+        editeurs_by_initiale(#{initiale})
     </select>
     <select id="searchListEditeurLiteByInitiale" resultMap="EditeurLiteInitialeCharacter" resultOrdered="true">
         <![CDATA[

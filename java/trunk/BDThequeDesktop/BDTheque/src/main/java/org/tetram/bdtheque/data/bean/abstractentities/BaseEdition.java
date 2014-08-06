@@ -26,7 +26,7 @@ import java.util.Comparator;
  * Created by Thierry on 11/07/2014.
  */
 
-public class BaseEdition<E extends BaseEditeur, C extends BaseCollection> extends AbstractDBEntity {
+public abstract class BaseEdition<E extends BaseEditeur, C extends BaseCollection> extends AbstractDBEntity {
 
     public static Comparator<EditionLite> DEFAULT_COMPARATOR = (o1, o2) -> {
         if (o1 == o2) return 0;

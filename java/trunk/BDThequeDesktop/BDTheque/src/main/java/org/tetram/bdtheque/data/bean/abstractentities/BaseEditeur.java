@@ -20,7 +20,7 @@ import java.util.Comparator;
  * Created by Thierry on 24/05/2014.
  */
 
-public class BaseEditeur extends AbstractDBEntity implements WebLinkedEntity {
+public abstract class BaseEditeur extends AbstractDBEntity implements WebLinkedEntity {
 
     public final static Comparator<BaseEditeur> DEFAULT_COMPARATOR = (o1, o2) -> {
         if (o1 == o2) return 0;

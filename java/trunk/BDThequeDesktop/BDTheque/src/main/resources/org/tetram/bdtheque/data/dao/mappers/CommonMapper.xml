@@ -19,7 +19,7 @@
     </resultMap>
     <resultMap id="InitialeEntityCharacter" type="org.tetram.bdtheque.data.bean.InitialeEntity"
                extends="InitialeEntity">
-        <result column="value" property="value" javaType="java.lang.Character"/>
+        <result column="value" property="value" javaType="Character"/>
     </resultMap>
     <resultMap id="InitialeEntityYear" type="org.tetram.bdtheque.data.bean.InitialeEntity"
                extends="InitialeEntity">

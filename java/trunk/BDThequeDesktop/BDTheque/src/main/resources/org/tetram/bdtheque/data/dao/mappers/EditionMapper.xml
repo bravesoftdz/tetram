@@ -55,11 +55,11 @@
 
     <select id="getEditionLiteById" resultMap="EditionLite">
         select
-        id_edition, anneeEdition, isbn, id_editeur, id_collection
+            id_edition, anneeEdition, isbn, id_editeur, id_collection
         from
-        editions
+            editions
         where
-        id_edition = #{id}
+            id_edition = #{id}
     </select>
 
     <sql id="selectEditionFull">

@@ -55,15 +55,15 @@
 
     <select id="getParaBDById" resultMap="ParaBDFull">
         select
-            p.id_paraBD, p.titreParaBD, p.annee, p.id_serie, p.achat, p.description, p.notes, p.dedicace, p.numerote,
-            p.anneeCote, p.prixCote,
-            p.gratuit, p.offert, p.dateAchat, p.prix, p.stock, p.categorieParaBD, lc.libelle as lb_categorieParaBD
+        p.id_paraBD, p.titreParaBD, p.annee, p.id_serie, p.achat, p.description, p.notes, p.dedicace, p.numerote,
+        p.anneeCote, p.prixCote,
+        p.gratuit, p.offert, p.dateAchat, p.prix, p.stock, p.categorieParaBD, lc.libelle as lb_categorieParaBD
         from
-            paraBD p
-            left join listes lc on
-                (lc.ref = p.categorieParaBD and lc.categorie = 7)
+        paraBD p
+        left join listes lc on
+        (lc.ref = p.categorieParaBD and lc.categorie = 7)
         where
-            id_paraBD = #{id}
+        id_paraBD = #{id}
     </select>
 
     <select id="getListParaBDLiteBySerieByAuteur" parameterType="map" resultMap="ParaBDLite" resultOrdered="true">
@@ -90,9 +90,9 @@
 
     <select id="getInitialesSeries" resultMap="org.tetram.bdtheque.data.dao.mappers.CommonMapper.InitialeEntityUUID">
         select
-            titreSerie "label", countSerie "count", id_serie "value"
+        titreSerie "label", countSerie "count", id_serie "value"
         from
-            series_parabd(#{filtre})
+        series_parabd(#{filtre})
     </select>
     <select id="getListParaBDLiteBySerie" resultMap="ParaBDLite">
         <if test="idSerie == null">
@@ -134,7 +134,6 @@
         )
     </sql>
 
-    <!--suppress MapperXml -->
     <insert id="createParaBD">
         <selectKey keyProperty="id" order="BEFORE" resultType="UUID">
             <include refid="org.tetram.bdtheque.data.dao.mappers.CommonMapper.autoIncKey"/>
@@ -142,12 +141,10 @@
         <include refid="saveParaBD"/>
     </insert>
 
-    <!--suppress MapperXml -->
     <update id="updateParaBD">
         <include refid="saveParaBD"/>
     </update>
 
-    <!--suppress MapperXml -->
     <delete id="deleteParaBD">
         delete from ParaBD where id_paraBD = #{id}
     </delete>

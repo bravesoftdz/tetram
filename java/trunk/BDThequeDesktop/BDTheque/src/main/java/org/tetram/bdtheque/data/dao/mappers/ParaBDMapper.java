@@ -27,26 +27,20 @@ public interface ParaBDMapper extends BaseMapperInterface {
 
     /**
      * ne surtout pas mettre @Param
-     *
-     * @deprecated utiliser le dao correspondant
+     * utiliser le dao correspondant
      */
-    @Deprecated
     int createParaBD(ParaBD parabd);
 
     /**
      * ne surtout pas mettre @Param
-     *
-     * @deprecated utiliser le dao correspondant
+     * utiliser le dao correspondant
      */
-    @Deprecated
     int updateParaBD(ParaBD parabd);
 
     /**
-     * @deprecated utiliser le dao correspondant
+     * utiliser le dao correspondant
      */
-    @Deprecated
     int deleteParaBD(UUID id);
-
 
     List<ParaBDLite> getListParaBDLiteBySerieByAuteur(@Param("idSerie") UUID idSerie, @Param("idAuteur") UUID idAuteur);
 
