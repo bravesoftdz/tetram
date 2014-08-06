@@ -24,7 +24,7 @@ import java.util.UUID;
 @Repository
 @Lazy
 @Transactional
-public class PersonneLiteDaoImpl extends DaoROImpl<PersonneLite, UUID> implements PersonneLiteDao {
+class PersonneLiteDaoImpl extends DaoROImpl<PersonneLite, UUID> implements PersonneLiteDao {
 
     @Autowired
     private AuteurMapper auteurMapper;

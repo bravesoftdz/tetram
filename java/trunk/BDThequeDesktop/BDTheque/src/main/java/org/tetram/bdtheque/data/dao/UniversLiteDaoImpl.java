@@ -24,7 +24,7 @@ import java.util.UUID;
 @Repository
 @Lazy
 @Transactional
-public class UniversLiteDaoImpl extends DaoROImpl<UniversLite, UUID> implements UniversLiteDao {
+class UniversLiteDaoImpl extends DaoROImpl<UniversLite, UUID> implements UniversLiteDao {
 
     @Autowired
     private UniversMapper universMapper;

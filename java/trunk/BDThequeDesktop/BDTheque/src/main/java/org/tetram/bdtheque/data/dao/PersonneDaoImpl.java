@@ -32,8 +32,7 @@ import java.util.UUID;
 @Repository
 @Lazy
 @Transactional
-
-public class PersonneDaoImpl extends DaoScriptImpl<Personne, UUID> implements PersonneDao {
+class PersonneDaoImpl extends DaoScriptImpl<Personne, UUID> implements PersonneDao {
 
     @Autowired
     private SerieMapper serieMapper;

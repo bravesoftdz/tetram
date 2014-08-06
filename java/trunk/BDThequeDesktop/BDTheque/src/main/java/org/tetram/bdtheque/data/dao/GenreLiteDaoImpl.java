@@ -28,8 +28,7 @@ import java.util.UUID;
 @Repository
 @Lazy
 @Transactional
-
-public class GenreLiteDaoImpl extends DaoScriptImpl<GenreLite, UUID> implements GenreLiteDao {
+class GenreLiteDaoImpl extends DaoScriptImpl<GenreLite, UUID> implements GenreLiteDao {
 
     @Autowired
     private GenreMapper genreMapper;

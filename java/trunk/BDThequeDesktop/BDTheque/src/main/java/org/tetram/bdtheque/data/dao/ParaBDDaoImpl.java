@@ -30,8 +30,7 @@ import java.util.UUID;
 @Repository
 @Lazy
 @Transactional
-
-public class ParaBDDaoImpl extends DaoRWImpl<ParaBD, UUID> implements ParaBDDao {
+class ParaBDDaoImpl extends DaoRWImpl<ParaBD, UUID> implements ParaBDDao {
 
     @Autowired
     AuteurMapper auteurMapper;

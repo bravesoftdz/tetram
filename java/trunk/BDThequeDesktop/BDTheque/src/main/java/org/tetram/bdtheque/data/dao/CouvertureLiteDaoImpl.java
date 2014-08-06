@@ -19,8 +19,7 @@ import java.util.UUID;
 @Repository
 @Lazy
 @Transactional
-
-public class CouvertureLiteDaoImpl extends ImageLiteDaoImpl<CouvertureLite, UUID> implements CouvertureLiteDao {
+class CouvertureLiteDaoImpl extends ImageLiteDaoImpl<CouvertureLite, UUID> implements CouvertureLiteDao {
 
     public CouvertureLiteDaoImpl() {
         super(

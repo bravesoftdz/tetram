@@ -29,8 +29,7 @@ import java.util.UUID;
 @Repository
 @Lazy
 @Transactional
-
-public class EditionDaoImpl extends DaoRWImpl<Edition, UUID> implements EditionDao {
+class EditionDaoImpl extends DaoRWImpl<Edition, UUID> implements EditionDao {
 
     @Autowired
     private CouvertureLiteDao couvertureLiteDao;

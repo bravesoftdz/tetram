@@ -24,7 +24,7 @@ import java.util.UUID;
 @Repository
 @Lazy
 @Transactional
-public class ParaBDLiteDaoImpl extends DaoROImpl<ParaBDLite, UUID> implements ParaBDLiteDao {
+class ParaBDLiteDaoImpl extends DaoROImpl<ParaBDLite, UUID> implements ParaBDLiteDao {
 
     @Autowired
     private ParaBDMapper paraBDMapper;

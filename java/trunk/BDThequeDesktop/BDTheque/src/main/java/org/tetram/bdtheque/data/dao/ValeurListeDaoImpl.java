@@ -25,8 +25,7 @@ import java.util.Map;
 @Repository
 @Lazy
 @Transactional(propagation = Propagation.NOT_SUPPORTED)
-
-public class ValeurListeDaoImpl implements ValeurListeDao {
+class ValeurListeDaoImpl implements ValeurListeDao {
 
     @Autowired
     private ValeurListeMapper valeurListeMapper;

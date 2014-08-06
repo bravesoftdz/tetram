@@ -24,7 +24,7 @@ import java.util.UUID;
 @Repository
 @Lazy
 @Transactional
-public class CollectionLiteDaoImpl extends DaoROImpl<CollectionLite, UUID> implements CollectionLiteDao {
+class CollectionLiteDaoImpl extends DaoROImpl<CollectionLite, UUID> implements CollectionLiteDao {
 
     @Autowired
     private CollectionMapper collectionMapper;

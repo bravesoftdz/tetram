@@ -25,7 +25,7 @@ import java.util.UUID;
 @Repository
 @Lazy
 @Transactional
-public class SerieLiteDaoImpl extends DaoROImpl<SerieLite, UUID> implements SerieLiteDao, EvaluatedEntityDao<SerieLite> {
+class SerieLiteDaoImpl extends DaoROImpl<SerieLite, UUID> implements SerieLiteDao, EvaluatedEntityDao<SerieLite> {
 
     @Autowired
     private SerieMapper serieMapper;

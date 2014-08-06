@@ -12,7 +12,7 @@ import org.tetram.bdtheque.data.BeanUtils;
 import org.tetram.bdtheque.data.bean.abstractentities.BaseSerie;
 import org.tetram.bdtheque.data.bean.interfaces.AuthoredEntity;
 import org.tetram.bdtheque.data.bean.interfaces.ScriptEntity;
-import org.tetram.bdtheque.data.dao.DaoScriptImpl;
+import org.tetram.bdtheque.data.dao.ScriptInfo;
 import org.tetram.bdtheque.data.dao.ValeurListeDao;
 import org.tetram.bdtheque.spring.SpringContext;
 import org.tetram.bdtheque.spring.utils.AutoTrimStringProperty;
@@ -25,7 +25,7 @@ import java.util.UUID;
  * Created by Thierry on 24/05/2014.
  */
 
-@DaoScriptImpl.ScriptInfo(typeData = 7)
+@ScriptInfo(typeData = 7)
 public class Serie extends BaseSerie implements ScriptEntity, AuthoredEntity<AuteurSerieLite> {
 
     private final ObjectProperty<Boolean> terminee = new SimpleObjectProperty<>(this, "terminee", null);

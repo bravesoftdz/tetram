@@ -19,8 +19,7 @@ import java.util.UUID;
 @Repository
 @Lazy
 @Transactional
-
-public class PhotoLiteDaoImpl extends ImageLiteDaoImpl<PhotoLite, UUID> implements PhotoLiteDao {
+class PhotoLiteDaoImpl extends ImageLiteDaoImpl<PhotoLite, UUID> implements PhotoLiteDao {
 
     public PhotoLiteDaoImpl() {
         super(

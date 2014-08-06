@@ -23,8 +23,7 @@ import java.util.UUID;
 @Repository
 @Lazy
 @Transactional
-
-public class CollectionDaoImpl extends DaoScriptImpl<Collection, UUID> implements CollectionDao {
+class CollectionDaoImpl extends DaoScriptImpl<Collection, UUID> implements CollectionDao {
 
     @Override
     public void validate(@NotNull Collection object) throws ConsistencyException {

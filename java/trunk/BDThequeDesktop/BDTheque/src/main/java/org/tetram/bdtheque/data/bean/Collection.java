@@ -11,13 +11,13 @@ import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
 import org.tetram.bdtheque.data.bean.abstractentities.BaseCollection;
 import org.tetram.bdtheque.data.bean.interfaces.ScriptEntity;
-import org.tetram.bdtheque.data.dao.DaoScriptImpl;
+import org.tetram.bdtheque.data.dao.ScriptInfo;
 
 /**
  * Created by Thierry on 24/05/2014.
  */
 
-@DaoScriptImpl.ScriptInfo(typeData = 2, getParentIdMethod = "getIdEditeur")
+@ScriptInfo(typeData = 2, getParentIdMethod = "getIdEditeur")
 public class Collection extends BaseCollection<Editeur> implements ScriptEntity {
 
     private final ListProperty<String> associations = new SimpleListProperty<>(this, "associations", FXCollections.observableArrayList());

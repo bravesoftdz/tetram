@@ -24,7 +24,7 @@ import java.util.UUID;
 @Repository
 @Lazy
 @Transactional
-public class EditeurLiteDaoImpl extends DaoROImpl<EditeurLite, UUID> implements EditeurLiteDao {
+class EditeurLiteDaoImpl extends DaoROImpl<EditeurLite, UUID> implements EditeurLiteDao {
     @Autowired
     private EditeurMapper editeurMapper;
 

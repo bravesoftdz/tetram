@@ -15,10 +15,6 @@ import org.tetram.bdtheque.data.dao.mappers.CommonMapper;
 import org.tetram.bdtheque.utils.StringUtils;
 import org.tetram.bdtheque.utils.TypeUtils;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.UUID;
@@ -26,7 +22,7 @@ import java.util.UUID;
 /**
  * Created by Thierry on 12/06/2014.
  */
-public abstract class DaoScriptImpl<T extends AbstractDBEntity & ScriptEntity, PK> extends DaoRWImpl<T, PK> implements DaoScript<T> {
+abstract class DaoScriptImpl<T extends AbstractDBEntity & ScriptEntity, PK> extends DaoRWImpl<T, PK> implements DaoScript<T> {
 
     @Autowired
     private CommonMapper commonMapper;
@@ -81,14 +77,4 @@ public abstract class DaoScriptImpl<T extends AbstractDBEntity & ScriptEntity, P
 
     }
 
-    /**
-     * Created by Thierry on 12/06/2014.
-     */
-    @Retention(RetentionPolicy.RUNTIME)
-    @Target(ElementType.TYPE)
-    public static @interface ScriptInfo {
-        int typeData();
-
-        String getParentIdMethod() default "";
-    }
 }

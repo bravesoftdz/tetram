@@ -25,7 +25,7 @@ import java.util.UUID;
 @Repository
 @Lazy
 @Transactional
-public class AlbumLiteGenreDaoImpl extends DaoROImpl<AlbumLite, UUID> implements AlbumLiteGenreDao {
+class AlbumLiteGenreDaoImpl extends DaoROImpl<AlbumLite, UUID> implements AlbumLiteGenreDao {
 
     private static final String UNKNOWN_LABEL = I18nSupport.message("initiale.inconnu.genre");
     @Autowired

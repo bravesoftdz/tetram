@@ -12,7 +12,7 @@ import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import org.tetram.bdtheque.data.bean.abstractentities.BasePersonne;
 import org.tetram.bdtheque.data.bean.interfaces.ScriptEntity;
-import org.tetram.bdtheque.data.dao.DaoScriptImpl;
+import org.tetram.bdtheque.data.dao.ScriptInfo;
 import org.tetram.bdtheque.spring.utils.AutoTrimStringProperty;
 
 import java.util.ArrayList;
@@ -22,7 +22,7 @@ import java.util.List;
  * Created by Thierry on 24/05/2014.
  */
 
-@DaoScriptImpl.ScriptInfo(typeData = 6)
+@ScriptInfo(typeData = 6)
 public class Personne extends BasePersonne implements ScriptEntity {
 
     private final StringProperty biographie = new AutoTrimStringProperty(this, "biographie", null);

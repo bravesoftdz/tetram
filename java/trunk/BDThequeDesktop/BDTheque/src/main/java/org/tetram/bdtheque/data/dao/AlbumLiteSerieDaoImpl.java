@@ -26,8 +26,7 @@ import java.util.UUID;
 @Repository
 @Lazy
 @Transactional
-
-public class AlbumLiteSerieDaoImpl extends DaoROImpl<AlbumLite, UUID> implements AlbumLiteSerieDao {
+class AlbumLiteSerieDaoImpl extends DaoROImpl<AlbumLite, UUID> implements AlbumLiteSerieDao {
 
     public static final String UNKNOWN_LABEL = I18nSupport.message("initiale.inconnu.serie");
 

@@ -29,7 +29,7 @@ import java.util.*;
 /**
  * Created by Thierry on 13/06/2014.
  */
-public abstract class ImageLiteDaoImpl<T extends BaseImage, K> extends DaoRWImpl<T, K> implements ImageLiteDao<T, K> {
+abstract class ImageLiteDaoImpl<T extends BaseImage, K> extends DaoRWImpl<T, K> implements ImageLiteDao<T, K> {
 
     private final String tableName;
     private final String fieldPk;

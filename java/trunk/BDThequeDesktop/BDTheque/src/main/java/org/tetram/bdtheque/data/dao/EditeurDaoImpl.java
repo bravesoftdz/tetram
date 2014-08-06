@@ -23,8 +23,7 @@ import java.util.UUID;
 @Repository
 @Lazy
 @Transactional
-
-public class EditeurDaoImpl extends DaoScriptImpl<Editeur, UUID> implements EditeurDao {
+class EditeurDaoImpl extends DaoScriptImpl<Editeur, UUID> implements EditeurDao {
     @Override
     public void validate(@NotNull Editeur object) throws ConsistencyException {
         super.validate(object);
