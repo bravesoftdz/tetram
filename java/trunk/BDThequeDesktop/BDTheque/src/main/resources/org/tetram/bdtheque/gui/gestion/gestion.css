@@ -9,8 +9,10 @@
 **/
 
 .label-rubrique {
-/ / -fx-text-fill : #152fFF;
-/ / -fx-text-fill : #2D8E42;
+    /*
+        -fx-text-fill : #152fFF;
+        -fx-text-fill : #2D8E42;
+    */
     -fx-text-fill: #E05E53;
 }
 

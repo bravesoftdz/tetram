@@ -26,7 +26,12 @@ public abstract class BaseGenre extends AbstractDBEntity {
 
         return 0;
     };
-    private final StringProperty nomGenre = new AutoTrimStringProperty(this, "genre", null);
+    private final StringProperty nomGenre = new AutoTrimStringProperty(this, "nomGenre", null);
+
+    @Override
+    public Class<? extends AbstractDBEntity> getBaseClass() {
+        return BaseGenre.class;
+    }
 
     public String getNomGenre() {
         return nomGenre.get();

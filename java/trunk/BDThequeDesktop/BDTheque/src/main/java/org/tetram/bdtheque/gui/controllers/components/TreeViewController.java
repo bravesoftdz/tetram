@@ -99,6 +99,8 @@ public class TreeViewController extends WindowController {
     private String lastFindText;
     private ListOrderedMap<? extends InitialeEntity<? extends Comparable<?>>, ? extends List<? extends AbstractDBEntity>> findList;
 
+    private StringProperty searchText = new SimpleStringProperty(this, "searchText");
+
     public TreeViewController() {
         searchTimer.setRepeats(false);
         searchTimer.setDelay(new Duration(800));
@@ -114,6 +116,8 @@ public class TreeViewController extends WindowController {
             resetSearch();
             refresh();
         });
+
+        searchText.bindBidirectional(tfSearch.textProperty());
 
         tfSearch.visibleProperty().bind(canSearchProperty());
         tfSearch.textProperty().addListener(o -> searchTimer.restart());
@@ -546,6 +550,18 @@ public class TreeViewController extends WindowController {
         return treeTableView.getTreeItemLevel(node);
     }
 
+    public String getSearchText() {
+        return searchText.get();
+    }
+
+    public void setSearchText(String searchText) {
+        this.searchText.set(searchText);
+    }
+
+    public StringProperty searchTextProperty() {
+        return searchText;
+    }
+
     public class TreeViewNode extends TreeItem<AbstractEntity> {
         private boolean isLeaf;
         private boolean isFirstTimeChildren = true;
@@ -638,4 +654,5 @@ public class TreeViewController extends WindowController {
             }
         }
     }
+
 }

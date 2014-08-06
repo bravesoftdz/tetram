@@ -161,8 +161,8 @@ public class ModeGestionController extends WindowController implements ModeContr
     }
 
     @FXML
-    public void clickNew(ActionEvent actionEvent) {
-        history.addWaiting(History.HistoryAction.GESTION_AJOUT);
+    public void clickNew(ActionEvent actionEvent) throws IllegalAccessException, InstantiationException {
+        history.addWaiting(History.HistoryAction.GESTION_AJOUT, (AbstractDBEntity) entitiesController.getFinalEntityClass().newInstance(), entitiesController.getSearchText());
     }
 
     @FXML

@@ -11,7 +11,6 @@ import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
-import org.tetram.bdtheque.data.bean.abstractentities.AbstractDBEntity;
 import org.tetram.bdtheque.data.bean.abstractentities.BaseGenre;
 import org.tetram.bdtheque.data.bean.interfaces.ScriptEntity;
 import org.tetram.bdtheque.data.dao.ScriptInfo;
@@ -25,12 +24,6 @@ public class GenreLite extends BaseGenre implements ScriptEntity {
 
     private final IntegerProperty quantite = new SimpleIntegerProperty(this, "quantite", 0);
     private final ListProperty<String> associations = new SimpleListProperty<>(this, "associations", FXCollections.observableArrayList());
-
-    @Override
-    public Class<? extends AbstractDBEntity> getBaseClass() {
-        return GenreLite.class;
-    }
-
 
     public int getQuantite() {
         return quantite.get();

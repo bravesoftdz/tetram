@@ -4,7 +4,8 @@
  * Last modified by Tetram, on 2014-07-30T13:36:06CEST
  */
 
-package org.tetram.bdtheque;/**
+package org.tetram.bdtheque;
+/**
  * Created by Thierry on 24/05/2014.
  */
 
@@ -16,11 +17,14 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import org.controlsfx.dialog.Dialogs;
 import org.jetbrains.annotations.NonNls;
+import org.tetram.bdtheque.data.ConsistencyException;
 import org.tetram.bdtheque.data.services.UserPreferences;
 import org.tetram.bdtheque.gui.controllers.MainController;
 import org.tetram.bdtheque.spring.SpringContext;
 import org.tetram.bdtheque.spring.SpringFxmlLoader;
 import org.tetram.bdtheque.utils.I18nSupport;
+import org.tetram.bdtheque.utils.logging.Log;
+import org.tetram.bdtheque.utils.logging.LogManager;
 
 import java.io.*;
 import java.lang.reflect.Field;
@@ -43,6 +47,8 @@ public class Main extends Application {
     @NonNls
     private static final String FB32_CLASSPATH = "firebird_x86";
 
+    private static Log log = LogManager.getLog(Main.class);
+
     static {
 // 23/06/2014: peut être que ça servira un jour, quand FB Embedded n'imposera plus que les fichiers icu soit à la racine de l'appli
 /*
@@ -58,6 +64,17 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
+        Thread.setDefaultUncaughtExceptionHandler((t, e) -> {
+
+            if (e instanceof ConsistencyException) {
+                Dialogs.create().message(e.getMessage()).showWarning();
+            } else if (e instanceof RuntimeException) {
+                Dialogs.create().message(e.getLocalizedMessage()).showInformation();
+            } else {
+                log.error("", e);
+                Dialogs.create().showException(e);
+            }
+        });
         launch(args);
     }
 

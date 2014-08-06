@@ -6,15 +6,19 @@
 
 package org.tetram.bdtheque.gui.controllers.gestion;
 
+import javafx.fxml.FXML;
+import javafx.scene.control.TextField;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
+import org.tetram.bdtheque.data.bean.GenreLite;
+import org.tetram.bdtheque.data.dao.GenreLiteDao;
 import org.tetram.bdtheque.utils.FileLink;
 import org.tetram.bdtheque.utils.FileLinks;
+import org.tetram.bdtheque.utils.I18nSupport;
 
 import java.util.UUID;
-
-// TODO
 
 /**
  * Created by Thierry on 06/08/2014.
@@ -26,13 +30,37 @@ import java.util.UUID;
         @FileLink("/org/tetram/bdtheque/gui/gestion/ficheGenre-screenshot.jpg")
 })
 public class FicheGenreController extends GestionControllerImpl {
+
+    @Autowired
+    private GenreLiteDao genreDao;
+
+    @FXML
+    private TextField tfNom;
+
+    private GenreLite genre;
+
+    @FXML
+    void initialize() {
+        editControllerProperty().addListener(o -> {
+            FicheEditController<?> controller = getEditController();
+            controller.setLabel(I18nSupport.message("Genre"));
+
+            controller.registerOkHandler(event -> {
+                genreDao.save(genre);
+            }, FicheEditController.HandlerPriority.HIGH);
+        });
+    }
+
     @Override
     public void setIdEntity(UUID id) {
+        genre = genreDao.get(id);
+        if (genre == null) genre = new GenreLite();
 
+        tfNom.textProperty().bindBidirectional(genre.nomGenreProperty());
     }
 
     @Override
     public void setDefaultLabel(String label) {
-
+        genre.setNomGenre(label);
     }
 }

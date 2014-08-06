@@ -135,6 +135,12 @@ public class History {
         waiting.add(new HistoryItem(action, entity));
     }
 
+    public void addWaiting(HistoryAction action, AbstractDBEntity entity, String searchText) {
+        HistoryItem historyItem = new HistoryItem(action, entity);
+        historyItem.string = searchText;
+        waiting.add(historyItem);
+    }
+
     public void clear() {
         current.set(-1);
         first();
@@ -302,6 +308,7 @@ public class History {
                     else
                         doCallback := not IsEqualGUID(GUID_NULL, TActionGestionAdd(Consult.GestionProc)(Consult.GestionVTV, Consult.GestionValeur));
 */
+                    break;
                 case GESTION_MODIF:
                     gestionController = SpringContext.CONTEXT.getBean(ModeGestionController.class);
                     editController = gestionController.showEditForm(item.entity);

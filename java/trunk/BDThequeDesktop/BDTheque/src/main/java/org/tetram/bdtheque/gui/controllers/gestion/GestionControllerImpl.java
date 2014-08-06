@@ -15,7 +15,7 @@ import java.lang.ref.WeakReference;
 /**
  * Created by Thierry on 21/07/2014.
  */
-public abstract class GestionControllerImpl extends WindowController implements GestionController {
+abstract class GestionControllerImpl extends WindowController implements GestionController {
 
     private final ObjectProperty<WeakReference<FicheEditController<?>>> editController = new SimpleObjectProperty<>(this, "editController", null);
 

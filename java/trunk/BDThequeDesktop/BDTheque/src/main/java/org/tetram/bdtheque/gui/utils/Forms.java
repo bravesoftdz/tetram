@@ -58,7 +58,7 @@ public class Forms {
         entitiesUrlEdit.put(BaseAuteur.class, "gestion/ficheAuteur.fxml");
         entitiesUrlEdit.put(BaseUnivers.class, "gestion/ficheUnivers.fxml");
         //entitiesUrlEdit.put(BaseParaBD.class, "gestion/ficheParabd.fxml");
-        //entitiesUrlEdit.put(BaseGenre.class, "gestion/ficheGenre.fxml");
+        entitiesUrlEdit.put(BaseGenre.class, "gestion/ficheGenre.fxml");
     }
 
     public static String getLastUrl() {
