@@ -47,7 +47,7 @@ class ParaBDDaoImpl extends DaoRWImpl<ParaBD, UUID> implements ParaBDDao {
         if (userPreferences.isSerieObligatoireParaBD() && object.getSerie() == null)
             throw new ConsistencyException(I18nSupport.message("serie.obligatoire"));
         if (StringUtils.isNullOrEmpty(object.getTitreParaBD()) && object.getSerie() == null)
-            throw new ConsistencyException(I18nSupport.message("titre.obligatoire.parabd.sans.serie"));
+            throw new ConsistencyException(I18nSupport.message("titre.obligatoire/parabd.sans.serie"));
         if (object.getCategorieParaBD() == null)
             throw new ConsistencyException(I18nSupport.message("type.parabd.obligatoire"));
 

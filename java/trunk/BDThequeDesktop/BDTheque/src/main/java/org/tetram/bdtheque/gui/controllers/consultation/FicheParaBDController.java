@@ -127,7 +127,7 @@ public class FicheParaBDController extends WindowController implements Consultat
         }
         lbType.setText(_parabd.getCategorieParaBD().getTexte());
         if (_parabd.getAnneeEdition() != null)
-            lbAnnee.setText(_parabd.getAnneeEdition().format(DateTimeFormatter.ofPattern(I18nSupport.message("format.year"))));
+            lbAnnee.setText(_parabd.getAnneeEdition().format(DateTimeFormatter.ofPattern(I18nSupport.message("format/year"))));
         cbDedicace.setSelected(_parabd.isDedicace());
         cbNumerote.setSelected(_parabd.isNumerote());
 
@@ -142,9 +142,9 @@ public class FicheParaBDController extends WindowController implements Consultat
 
         cbOffert.setSelected(_parabd.isOffert());
         cbStock.setSelected(_parabd.isStock());
-        lbCote.setText(_parabd.getAnneeCote() == null ? null : MessageFormat.format("{0} ({0})", I18nSupport.getCurrencyFormatter().format(_parabd.getPrixCote()), _parabd.getAnneeCote().format(DateTimeFormatter.ofPattern(I18nSupport.message("format.year")))));
+        lbCote.setText(_parabd.getAnneeCote() == null ? null : MessageFormat.format("{0} ({0})", I18nSupport.getCurrencyFormatter().format(_parabd.getPrixCote()), _parabd.getAnneeCote().format(DateTimeFormatter.ofPattern(I18nSupport.message("format/year")))));
         lbAcheteLe.setText(_parabd.isOffert() ? "Offert le :" : "Acheté le :");
-        lbDateAchat.setText(_parabd.getDateAchat() == null ? null : _parabd.getDateAchat().format(DateTimeFormatter.ofPattern(I18nSupport.message("format.date"))));
+        lbDateAchat.setText(_parabd.getDateAchat() == null ? null : _parabd.getDateAchat().format(DateTimeFormatter.ofPattern(I18nSupport.message("format/date"))));
         lbPrix.setText(_parabd.getPrix() == null ? null : I18nSupport.getCurrencyFormatter().format(_parabd.getPrix()));
 
         cacheImages = new Image[_parabd.getPhotos().size()];

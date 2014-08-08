@@ -57,7 +57,7 @@ public class FicheAuteurController extends GestionControllerImpl {
     void initialize() {
         editControllerProperty().addListener(o -> {
             FicheEditController<?> controller = getEditController();
-            controller.setLabel(I18nSupport.message("Auteur"));
+            controller.setLabel(I18nSupport.message("Auteur/one"));
 
             controller.registerOkHandler(event -> {
                 personneDao.save(personne);

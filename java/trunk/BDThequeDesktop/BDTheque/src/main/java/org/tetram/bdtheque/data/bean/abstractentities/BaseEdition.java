@@ -49,8 +49,8 @@ public abstract class BaseEdition<E extends BaseEditeur, C extends BaseCollectio
     };
     private final ObjectProperty<Year> anneeEdition = new SimpleObjectProperty<>(this, "anneeEdition", null);
     private final StringProperty isbn = new AutoTrimStringProperty(this, "isbn", null);
-    private final ObjectProperty<E> editeur = new SimpleObjectProperty<>(this, "editeur", null);
-    private final ObjectProperty<C> collection = new SimpleObjectProperty<>(this, "collection", null);
+    private final ObjectProperty<E> editeur = new SimpleObjectProperty<>(this, "editeur/one", null);
+    private final ObjectProperty<C> collection = new SimpleObjectProperty<>(this, "collection/one", null);
 
     @Override
     public Class<? extends AbstractDBEntity> getBaseClass() {

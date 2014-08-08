@@ -31,17 +31,17 @@ public abstract class BeanUtils {
         Map<Boolean, String> aMap;
 
         aMap = new HashMap<>();
-        aMap.put(false, I18nSupport.message("Tome.abrev"));
+        aMap.put(false, I18nSupport.message("Tome/abrev"));
         aMap.put(true, I18nSupport.message("Tome"));
         RES_TOME = Collections.unmodifiableMap(aMap);
 
         aMap = new HashMap<>();
-        aMap.put(false, I18nSupport.message("Hors.serie.abrev"));
+        aMap.put(false, I18nSupport.message("Hors.serie/abrev"));
         aMap.put(true, I18nSupport.message("Hors.serie"));
         RES_HORSERIE = Collections.unmodifiableMap(aMap);
 
         aMap = new HashMap<>();
-        aMap.put(false, I18nSupport.message("Integrale.abrev"));
+        aMap.put(false, I18nSupport.message("Integrale/abrev"));
         aMap.put(true, I18nSupport.message("Integrale"));
         RES_INTEGRALE = Collections.unmodifiableMap(aMap);
     }
@@ -137,7 +137,7 @@ public abstract class BeanUtils {
         String sTome;
         if (integrale) {
             // (Int.|Intégrale)[ #tome][ \[(#tomeDebut|#tomeFin|#tomeDebut à #tomeFin)\]]
-            final String s = StringUtils.ajoutString(StringUtils.nonZero(tomeDebut), StringUtils.nonZero(tomeFin), " " + I18nSupport.message("from.to") + " ");
+            final String s = StringUtils.ajoutString(StringUtils.nonZero(tomeDebut), StringUtils.nonZero(tomeFin), " " + I18nSupport.message("from/to") + " ");
             sTome = StringUtils.ajoutString(null, RES_INTEGRALE.get("".equals(sAlbum)), " - ", "", StringUtils.trimRight(" " + StringUtils.nonZero(tome)));
             sTome = StringUtils.ajoutString(sTome, s, " ", "[", "]");
         } else if (horsSerie)

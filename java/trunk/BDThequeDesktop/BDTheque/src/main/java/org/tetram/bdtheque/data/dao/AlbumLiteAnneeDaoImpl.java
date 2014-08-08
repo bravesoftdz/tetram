@@ -28,7 +28,7 @@ import java.util.UUID;
 @Transactional
 class AlbumLiteAnneeDaoImpl extends DaoROImpl<AlbumLite, UUID> implements AlbumLiteAnneeDao {
 
-    private static final String UNKNOWN_LABEL = I18nSupport.message("initiale.inconnu.annee");
+    private static final String UNKNOWN_LABEL = I18nSupport.message("initiale.inconnu/annee");
     @Autowired
     private AlbumMapper albumMapper;
 

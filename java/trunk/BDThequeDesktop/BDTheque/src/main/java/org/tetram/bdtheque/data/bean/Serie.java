@@ -32,8 +32,8 @@ public class Serie extends BaseSerie implements ScriptEntity, AuthoredEntity<Aut
     private final ListProperty<GenreLite> genres = new SimpleListProperty<>(this, "genres", FXCollections.<GenreLite>observableArrayList());
     private final StringProperty sujet = new AutoTrimStringProperty(this, "sujet", null);
     private final StringProperty notes = new AutoTrimStringProperty(this, "notes", null);
-    private final ObjectProperty<EditeurLite> editeur = new SimpleObjectProperty<>(this, "editeur", null);
-    private final ObjectProperty<CollectionLite> collection = new SimpleObjectProperty<>(this, "collection", null);
+    private final ObjectProperty<EditeurLite> editeur = new SimpleObjectProperty<>(this, "editeur/one", null);
+    private final ObjectProperty<CollectionLite> collection = new SimpleObjectProperty<>(this, "collection/one", null);
     private final BooleanProperty complete = new SimpleBooleanProperty(this, "complete", false);
     private final BooleanProperty suivreManquants = new SimpleBooleanProperty(this, "suivreManquants", false);
     private final BooleanProperty suivreSorties = new SimpleBooleanProperty(this, "suivreSorties", false);

@@ -50,7 +50,7 @@ public class FicheUniversController extends GestionControllerImpl {
     @FXML
     private Label lbSiteWeb;
     @FXML
-    private TextField tfUniversParent;
+    private TextField tfUniversParent; // TODO: remplacer par la sélection d'un univers
     @FXML
     private TreeViewController tvAlbumsController;
     @FXML
@@ -64,7 +64,7 @@ public class FicheUniversController extends GestionControllerImpl {
     void initialize() {
         editControllerProperty().addListener(o -> {
             FicheEditController<?> controller = getEditController();
-            controller.setLabel(I18nSupport.message("Univers"));
+            controller.setLabel(I18nSupport.message("Univers/one"));
 
             controller.registerOkHandler(event -> {
                 universDao.save(univers);

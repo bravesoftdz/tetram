@@ -22,7 +22,7 @@ public class AlbumLite extends BaseAlbum {
     private final ObjectProperty<UUID> idSerie = new SimpleObjectProperty<>(this, "idSerie", null);
     private final StringProperty titreSerie = new AutoTrimStringProperty(this, "titreSerie", "");
     private final ObjectProperty<UUID> idEditeur = new SimpleObjectProperty<>(this, "idEditeur", null);
-    private final StringProperty editeur = new AutoTrimStringProperty(this, "serie", "");
+    private final StringProperty editeur = new AutoTrimStringProperty(this, "serie/one", "");
     private final BooleanProperty stock = new SimpleBooleanProperty(this, "stock", true);
     private final BooleanProperty achat = new SimpleBooleanProperty(this, "achat", true);
 

@@ -13,7 +13,7 @@ import org.tetram.bdtheque.utils.I18nSupport;
  */
 public enum MetierAuteur {
 
-    SCENARISTE(0, I18nSupport.message("Scenariste")), DESSINATEUR(1, I18nSupport.message("Dessinateur")), COLORISTE(2, I18nSupport.message("Coloriste"));
+    SCENARISTE(0, I18nSupport.message("Scenariste/one")), DESSINATEUR(1, I18nSupport.message("Dessinateur/one")), COLORISTE(2, I18nSupport.message("Coloriste/one"));
 
     private final int value;
     private final String label;

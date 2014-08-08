@@ -62,6 +62,7 @@
         <typeAlias type="org.tetram.bdtheque.data.bean.EditeurLite" alias="beanEditeurLite"/>
         <typeAlias type="org.tetram.bdtheque.data.bean.Edition" alias="beanEdition"/>
         <typeAlias type="org.tetram.bdtheque.data.bean.EditionLite" alias="beanEditionLite"/>
+        <typeAlias type="org.tetram.bdtheque.data.bean.Genre" alias="beanGenre"/>
         <typeAlias type="org.tetram.bdtheque.data.bean.GenreLite" alias="beanGenreLite"/>
         <typeAlias type="org.tetram.bdtheque.data.bean.ParaBD" alias="beanParaBD"/>
         <typeAlias type="org.tetram.bdtheque.data.bean.ParaBDLite" alias="beanParaBDLite"/>

@@ -99,7 +99,7 @@ public class TreeViewController extends WindowController {
     private String lastFindText;
     private ListOrderedMap<? extends InitialeEntity<? extends Comparable<?>>, ? extends List<? extends AbstractDBEntity>> findList;
 
-    private StringProperty searchText = new SimpleStringProperty(this, "searchText");
+    private StringProperty searchText = new SimpleStringProperty(this, "searchText", null);
 
     public TreeViewController() {
         searchTimer.setRepeats(false);
@@ -196,7 +196,9 @@ public class TreeViewController extends WindowController {
             selectedEntity.set(getNodeValue((TreeViewNode) newEntity));
         });
 
-        Platform.runLater(this::refresh);
+        Platform.runLater(() -> {
+            if (treeTableView.getRoot() == null) refresh();
+        });
     }
 
     private AbstractEntity getNodeValue(TreeViewNode treeViewNode) {
@@ -526,7 +528,7 @@ public class TreeViewController extends WindowController {
         }
     }
 
-    public ObjectProperty<AbstractEntity> selectedEntityProperty() {
+    public ObjectProperty<? extends AbstractEntity> selectedEntityProperty() {
         return selectedEntity;
     }
 

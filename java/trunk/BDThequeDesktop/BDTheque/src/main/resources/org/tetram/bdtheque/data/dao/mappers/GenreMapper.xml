@@ -7,10 +7,14 @@
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="org.tetram.bdtheque.data.dao.mappers.GenreMapper">
-    <resultMap id="GenreLite" type="beanGenreLite">
+    <resultMap id="AbstractGenre" type="org.tetram.bdtheque.data.bean.abstractentities.BaseGenre">
         <id column="id_genre" property="id"/>
         <result column="genre" property="nomGenre"/>
+    </resultMap>
+    <resultMap id="GenreLite" extends="AbstractGenre" type="beanGenreLite">
         <result column="quantite" property="quantite"/>
+    </resultMap>
+    <resultMap id="GenreFull" extends="AbstractGenre" type="beanGenre">
     </resultMap>
 
     <resultMap id="GenreLiteInitialeCharacter" type="org.tetram.bdtheque.data.bean.InitialeWithEntity"
@@ -19,6 +23,14 @@
     </resultMap>
 
     <select id="getGenreLiteById" resultMap="GenreLite">
+        select
+            id_genre, genre
+        from
+            genres
+        where
+            id_genre = #{id}
+    </select>
+    <select id="getGenreById" resultMap="GenreFull">
         select
             id_genre, genre
         from
@@ -71,7 +83,7 @@
         ]]>
     </select>
 
-    <select id="checkUniqueGenreLite" resultType="UUID">
+    <select id="checkUniqueGenre" resultType="UUID">
         <![CDATA[
         select
             id_genre
@@ -91,18 +103,18 @@
         update or insert into genres (id_genre, genre) values (#{id}, #{nomGenre})
     </sql>
 
-    <insert id="createGenreLite" parameterType="beanGenreLite">
+    <insert id="createGenre" parameterType="beanGenre">
         <selectKey keyProperty="id" order="BEFORE" resultType="UUID">
             <include refid="org.tetram.bdtheque.data.dao.mappers.CommonMapper.autoIncKey"/>
         </selectKey>
         <include refid="saveGenreLite"/>
     </insert>
 
-    <update id="updateGenreLite" parameterType="beanGenreLite">
+    <update id="updateGenre" parameterType="beanGenre">
         <include refid="saveGenreLite"/>
     </update>
 
-    <delete id="deleteGenreLite">
+    <delete id="deleteGenre">
         delete from genres where id_genre = #{id}
     </delete>
 

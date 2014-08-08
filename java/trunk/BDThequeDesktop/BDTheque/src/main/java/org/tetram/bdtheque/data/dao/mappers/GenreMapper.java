@@ -7,6 +7,7 @@
 package org.tetram.bdtheque.data.dao.mappers;
 
 import org.apache.ibatis.annotations.Param;
+import org.tetram.bdtheque.data.bean.Genre;
 import org.tetram.bdtheque.data.bean.GenreLite;
 import org.tetram.bdtheque.data.bean.InitialeEntity;
 import org.tetram.bdtheque.data.bean.InitialeWithEntity;
@@ -22,30 +23,32 @@ import java.util.UUID;
 public interface GenreMapper extends BaseMapperInterface {
     GenreLite getGenreLiteById(@Param("id") UUID id);
 
+    Genre getGenreById(@Param("id") UUID id);
+
     List<GenreLite> getListGenreBySerie(@Param("id") UUID idSerie);
 
     /**
      * ne surtout pas mettre @Param
      * utiliser le dao correspondant
      */
-    UUID checkUniqueGenreLite(GenreLite genre);
+    UUID checkUniqueGenre(Genre genre);
 
     /**
      * ne surtout pas mettre @Param
      * utiliser le dao correspondant
      */
-    int createGenreLite(GenreLite genre);
+    int createGenre(Genre genre);
 
     /**
      * ne surtout pas mettre @Param
      * utiliser le dao correspondant
      */
-    int updateGenreLite(GenreLite genre);
+    int updateGenre(Genre genre);
 
     /**
      * utiliser le dao correspondant
      */
-    int deleteGenreLite(@Param("id") UUID id);
+    int deleteGenre(@Param("id") UUID id);
 
     int cleanGenresSerie(@Param("id") UUID idSerie);
 

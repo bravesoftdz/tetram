@@ -65,16 +65,17 @@ public class Main extends Application {
 
     public static void main(String[] args) {
         Thread.setDefaultUncaughtExceptionHandler((t, e) -> {
-
             if (e instanceof ConsistencyException) {
                 Dialogs.create().message(e.getMessage()).showWarning();
             } else if (e instanceof RuntimeException) {
                 Dialogs.create().message(e.getLocalizedMessage()).showInformation();
+                log.error("", e);
             } else {
                 log.error("", e);
                 Dialogs.create().showException(e);
             }
         });
+
         launch(args);
     }
 

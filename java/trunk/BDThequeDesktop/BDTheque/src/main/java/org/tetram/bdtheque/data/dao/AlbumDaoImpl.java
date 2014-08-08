@@ -56,7 +56,7 @@ class AlbumDaoImpl extends DaoRWImpl<Album, UUID> implements AlbumDao, Evaluated
             throw new ConsistencyException(I18nSupport.message("serie.obligatoire"));
 
         if (StringUtils.isNullOrEmpty(object.getTitreAlbum()) && object.getSerie() == null)
-            throw new ConsistencyException(I18nSupport.message("titre.obligatoire.album.sans.serie"));
+            throw new ConsistencyException(I18nSupport.message("titre.obligatoire/album.sans.serie"));
 
         if (object.isIntegrale() && (object.getTomeDebut() == null ^ object.getTomeFin() == null))
             throw new ConsistencyException(I18nSupport.message("vous.devez.saisir.un.tome.de.debut.ou.de.fin.pour.une.integrale.ou.ne.rien.saisir.du.tout"));

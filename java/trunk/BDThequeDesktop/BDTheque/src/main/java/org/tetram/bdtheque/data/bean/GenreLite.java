@@ -7,23 +7,16 @@
 package org.tetram.bdtheque.data.bean;
 
 import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleListProperty;
-import javafx.collections.FXCollections;
 import org.tetram.bdtheque.data.bean.abstractentities.BaseGenre;
-import org.tetram.bdtheque.data.bean.interfaces.ScriptEntity;
-import org.tetram.bdtheque.data.dao.ScriptInfo;
 
 /**
  * Created by Thierry on 24/05/2014.
  */
 
-@ScriptInfo(typeData = 5)
-public class GenreLite extends BaseGenre implements ScriptEntity {
+public class GenreLite extends BaseGenre {
 
     private final IntegerProperty quantite = new SimpleIntegerProperty(this, "quantite", 0);
-    private final ListProperty<String> associations = new SimpleListProperty<>(this, "associations", FXCollections.observableArrayList());
 
     public int getQuantite() {
         return quantite.get();
@@ -35,16 +28,6 @@ public class GenreLite extends BaseGenre implements ScriptEntity {
 
     public IntegerProperty quantiteProperty() {
         return quantite;
-    }
-
-    @Override
-    public ListProperty<String> associationsProperty() {
-        return associations;
-    }
-
-    @Override
-    public String buildLabel() {
-        return getNomGenre();
     }
 
 }

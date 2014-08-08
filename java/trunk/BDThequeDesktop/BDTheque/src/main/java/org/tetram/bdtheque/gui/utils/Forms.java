@@ -57,6 +57,8 @@ public class Forms {
         entitiesUrlEdit.put(BasePersonne.class, "gestion/ficheAuteur.fxml");
         entitiesUrlEdit.put(BaseAuteur.class, "gestion/ficheAuteur.fxml");
         entitiesUrlEdit.put(BaseUnivers.class, "gestion/ficheUnivers.fxml");
+        entitiesUrlEdit.put(BaseEditeur.class, "gestion/ficheEditeur.fxml");
+        entitiesUrlEdit.put(BaseCollection.class, "gestion/ficheCollection.fxml");
         //entitiesUrlEdit.put(BaseParaBD.class, "gestion/ficheParabd.fxml");
         entitiesUrlEdit.put(BaseGenre.class, "gestion/ficheGenre.fxml");
     }

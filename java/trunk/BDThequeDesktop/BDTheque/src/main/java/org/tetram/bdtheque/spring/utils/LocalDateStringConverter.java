@@ -17,7 +17,7 @@ import java.time.format.DateTimeFormatter;
  */
 public class LocalDateStringConverter extends StringConverter<LocalDate> {
 
-    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern(I18nSupport.message("format.date"));
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern(I18nSupport.message("format/date"));
 
     @Override
     public String toString(LocalDate value) {

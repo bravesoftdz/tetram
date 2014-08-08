@@ -11,6 +11,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.tetram.bdtheque.SpringTest;
 import org.tetram.bdtheque.data.Constants;
+import org.tetram.bdtheque.data.bean.Genre;
 import org.tetram.bdtheque.data.bean.GenreLite;
 import org.tetram.bdtheque.utils.TypeUtils;
 
@@ -36,29 +37,29 @@ public class GenreMapperTest extends SpringTest {
     public void testCreateGenre() throws Exception {
         int rowCount;
 
-        GenreLite genre;
-        genre = new GenreLite();
+        Genre genre;
+        genre = new Genre();
         genre.setNomGenre(Constants.TEST_CREATE);
 
-        rowCount = mapper.createGenreLite(genre);
+        rowCount = mapper.createGenre(genre);
         Assert.assertEquals(1, rowCount);
         Assert.assertNotNull(genre.getId());
         Assert.assertNotEquals(TypeUtils.GUID_NULL, genre.getId());
 
-        genre = mapper.getGenreLiteById(genre.getId());
+        genre = mapper.getGenreById(genre.getId());
         Assert.assertEquals(Constants.TEST_CREATE, genre.getNomGenre());
 
         genre.setNomGenre(Constants.TEST_UPDATE);
-        rowCount = mapper.updateGenreLite(genre);
+        rowCount = mapper.updateGenre(genre);
         Assert.assertEquals(1, rowCount);
 
-        genre = mapper.getGenreLiteById(genre.getId());
+        genre = mapper.getGenreById(genre.getId());
         Assert.assertEquals(Constants.TEST_UPDATE, genre.getNomGenre());
 
-        rowCount = mapper.deleteGenreLite(genre.getId());
+        rowCount = mapper.deleteGenre(genre.getId());
         Assert.assertEquals(1, rowCount);
 
-        genre = mapper.getGenreLiteById(genre.getId());
+        genre = mapper.getGenreById(genre.getId());
         Assert.assertNull(genre);
     }
 }

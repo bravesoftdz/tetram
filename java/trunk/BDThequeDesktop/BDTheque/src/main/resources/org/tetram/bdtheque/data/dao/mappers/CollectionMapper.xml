@@ -59,7 +59,7 @@
         select
         initialeNomCollection "label", countInitiale "count", initialeNomCollection "value"
         from
-        initiales_collections(?)
+        initiales_collections(#{filtre})
     </select>
     <select id="getListCollectionLiteByInitiale" resultMap="CollectionLite">
         select

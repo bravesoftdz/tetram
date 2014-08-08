@@ -102,11 +102,11 @@ public class RepertoireController extends WindowController {
 
     private enum TypeRepertoireAlbumEntry {
         PAR_TITRE(I18nSupport.message("Titre"), TreeViewMode.ALBUMS),
-        PAR_SERIE(I18nSupport.message("Série"), TreeViewMode.ALBUMS_SERIE),
-        PAR_EDITEUR(I18nSupport.message("Editeur"), TreeViewMode.ALBUMS_EDITEUR),
-        PAR_GENRE(I18nSupport.message("Genre"), TreeViewMode.ALBUMS_GENRE),
+        PAR_SERIE(I18nSupport.message("Série/one"), TreeViewMode.ALBUMS_SERIE),
+        PAR_EDITEUR(I18nSupport.message("Editeur/one"), TreeViewMode.ALBUMS_EDITEUR),
+        PAR_GENRE(I18nSupport.message("Genre/one"), TreeViewMode.ALBUMS_GENRE),
         PAR_ANNEE(I18nSupport.message("Annee.de.parution"), TreeViewMode.ALBUMS_ANNEE),
-        PAR_COLLECTION(I18nSupport.message("Collection"), TreeViewMode.ALBUMS_COLLECTION);
+        PAR_COLLECTION(I18nSupport.message("Collection/one"), TreeViewMode.ALBUMS_COLLECTION);
 
         final String label;
         final TreeViewMode mode;

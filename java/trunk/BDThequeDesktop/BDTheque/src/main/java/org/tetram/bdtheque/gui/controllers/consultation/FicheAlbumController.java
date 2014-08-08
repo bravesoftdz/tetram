@@ -234,7 +234,7 @@ public class FicheAlbumController extends WindowController implements Consultati
             lbEditeur.setText(edition.getEditeur() == null ? null : edition.getEditeur().toString());
             EntityWebHyperlink.addToLabeled(lbEditeur, edition.getEditeur().siteWebProperty());
             lbCollection.setText(edition.getCollection() == null ? null : edition.getCollection().buildLabel(true));
-            lbCote.setText(edition.getAnneeCote() == null ? null : MessageFormat.format("{0} ({0})", I18nSupport.getCurrencyFormatter().format(edition.getPrixCote()), edition.getAnneeCote().format(DateTimeFormatter.ofPattern(I18nSupport.message("format.year")))));
+            lbCote.setText(edition.getAnneeCote() == null ? null : MessageFormat.format("{0} ({0})", I18nSupport.getCurrencyFormatter().format(edition.getPrixCote()), edition.getAnneeCote().format(DateTimeFormatter.ofPattern(I18nSupport.message("format/year")))));
             lbAchete.setText(edition.isOffert() ? "Offert le :" : "Acheté le :");
             lbDateAchat.setText(new LocalDateStringConverter().toString(edition.getDateAchat()));
             lbPrix.setText(edition.getPrix() == null ? null : I18nSupport.getCurrencyFormatter().format(edition.getPrix()));
@@ -276,14 +276,14 @@ public class FicheAlbumController extends WindowController implements Consultati
         String valueParution;
         if (_album.getMoisParution() == null) {
             if (_album.getAnneeParution() != null) {
-                DateTimeFormatter format = DateTimeFormatter.ofPattern(I18nSupport.message("format.year"));
+                DateTimeFormatter format = DateTimeFormatter.ofPattern(I18nSupport.message("format/year"));
                 valueParution = _album.getAnneeParution().format(format);
             } else {
                 valueParution = null;
             }
         } else {
             YearMonth parution = _album.getAnneeParution().atMonth(_album.getMoisParution());
-            DateTimeFormatter format = DateTimeFormatter.ofPattern(I18nSupport.message("format.month-year"));
+            DateTimeFormatter format = DateTimeFormatter.ofPattern(I18nSupport.message("format/month-year"));
             valueParution = parution.format(format);
         }
         dateParution.setText(valueParution);

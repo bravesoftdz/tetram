@@ -17,7 +17,7 @@ import java.time.format.DateTimeFormatter;
  */
 public class YearStringConverter extends StringConverter<Year> {
 
-    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern(I18nSupport.message("format.year"));
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern(I18nSupport.message("format/year"));
 
     @Override
     public String toString(Year value) {

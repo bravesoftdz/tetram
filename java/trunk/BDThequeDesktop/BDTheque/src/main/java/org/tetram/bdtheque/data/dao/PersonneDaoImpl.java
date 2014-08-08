@@ -76,7 +76,7 @@ class PersonneDaoImpl extends DaoScriptImpl<Personne, UUID> implements PersonneD
     @Override
     public int save(@NotNull Personne o) throws PersistenceException {
         if (!isUnique(o))
-            throw new ConsistencyException(I18nSupport.message("title.still.used", I18nSupport.message("auteur")));
+            throw new ConsistencyException(I18nSupport.message("title.still.used", I18nSupport.message("auteur/one")));
         return super.save(o);
     }
 

@@ -27,7 +27,7 @@ import java.util.UUID;
 @Transactional
 class AlbumLiteEditeurDaoImpl extends DaoROImpl<AlbumLite, UUID> implements AlbumLiteEditeurDao {
 
-    private static final String UNKNOWN_LABEL = I18nSupport.message("initiale.inconnu.editeur");
+    private static final String UNKNOWN_LABEL = I18nSupport.message("initiale.inconnu/editeur");
     @Autowired
     private AlbumMapper albumMapper;
 

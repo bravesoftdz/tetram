@@ -52,15 +52,15 @@ public interface AuteurMapper extends BaseMapperInterface {
 
     int cleanAuteursAlbum(@Param("id") UUID idAlbum);
 
-    int addAuteurAlbum(@Param("idAlbum") UUID idAlbum, @Param("auteur") AuteurAlbumLite auteur);
+    int addAuteurAlbum(@Param("idAlbum") UUID idAlbum, @Param("auteur/one") AuteurAlbumLite auteur);
 
     int cleanAuteursSerie(@Param("id") UUID idSerie);
 
-    int addAuteurSerie(@Param("idSerie") UUID idSerie, @Param("auteur") AuteurSerieLite auteur);
+    int addAuteurSerie(@Param("idSerie") UUID idSerie, @Param("auteur/one") AuteurSerieLite auteur);
 
     int cleanAuteursParaBD(@Param("id") UUID idParaBD);
 
-    int addAuteurParaBD(@Param("idParaBD") UUID idParaBD, @Param("auteur") AuteurParaBDLite auteur);
+    int addAuteurParaBD(@Param("idParaBD") UUID idParaBD, @Param("auteur/one") AuteurParaBDLite auteur);
 
     List<InitialeEntity<Character>> getInitiales(@Param("filtre") String filtre);
 

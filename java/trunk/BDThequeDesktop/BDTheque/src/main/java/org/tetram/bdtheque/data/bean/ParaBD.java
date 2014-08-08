@@ -33,7 +33,7 @@ public class ParaBD extends BaseParaBD implements UniversAttachedEntity {
     private final ListProperty<AuteurParaBDLite> auteurs = new SimpleListProperty<>(this, "auteurs", FXCollections.observableArrayList());
     private final StringProperty description = new AutoTrimStringProperty(this, "description", null);
     private final StringProperty notes = new AutoTrimStringProperty(this, "notes", null);
-    private final ObjectProperty<Serie> serie = new SimpleObjectProperty<>(this, "serie", null);
+    private final ObjectProperty<Serie> serie = new SimpleObjectProperty<>(this, "serie/one", null);
     private final ObjectProperty<Double> prix = new SimpleObjectProperty<>(this, "prix", null);
     private final ObjectProperty<Double> prixCote = new SimpleObjectProperty<>(this, "prixCote", null);
     private final BooleanProperty dedicace = new SimpleBooleanProperty(this, "dedicace", false);

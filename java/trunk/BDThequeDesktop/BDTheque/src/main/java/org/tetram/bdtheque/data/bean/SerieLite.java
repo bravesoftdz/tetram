@@ -39,8 +39,8 @@ public class SerieLite extends BaseSerie {
             return 0;
         }
     };
-    private final ObjectProperty<EditeurLite> editeur = new SimpleObjectProperty<>(this, "editeur", null);
-    private final ObjectProperty<CollectionLite> collection = new SimpleObjectProperty<>(this, "collection", null);
+    private final ObjectProperty<EditeurLite> editeur = new SimpleObjectProperty<>(this, "editeur/one", null);
+    private final ObjectProperty<CollectionLite> collection = new SimpleObjectProperty<>(this, "collection/one", null);
 
     public EditeurLite getEditeur() {
         return editeur.get();

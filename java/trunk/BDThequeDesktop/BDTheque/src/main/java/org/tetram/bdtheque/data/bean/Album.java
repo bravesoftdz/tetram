@@ -25,7 +25,7 @@ import java.util.UUID;
 public class Album extends BaseAlbum implements UniversAttachedEntity {
 
     private static Album defaultAlbum = null;
-    private final ObjectProperty<Serie> serie = new SimpleObjectProperty<>(this, "serie", null);
+    private final ObjectProperty<Serie> serie = new SimpleObjectProperty<>(this, "serie/one", null);
     private final ListProperty<AuteurAlbumLite> auteurs = new SimpleListProperty<>(this, "auteurs", FXCollections.<AuteurAlbumLite>observableArrayList());
     private final ListProperty<AuteurAlbumLite> scenaristes = new SimpleListProperty<>(this, "scenaristes", FXCollections.<AuteurAlbumLite>observableArrayList());
     private final ListProperty<AuteurAlbumLite> dessinateurs = new SimpleListProperty<>(this, "dessinateurs", FXCollections.<AuteurAlbumLite>observableArrayList());

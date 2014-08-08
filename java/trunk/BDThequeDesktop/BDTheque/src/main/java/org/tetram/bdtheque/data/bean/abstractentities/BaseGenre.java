@@ -44,4 +44,9 @@ public abstract class BaseGenre extends AbstractDBEntity {
     public StringProperty nomGenreProperty() {
         return nomGenre;
     }
+
+    @Override
+    public String buildLabel() {
+        return getNomGenre();
+    }
 }

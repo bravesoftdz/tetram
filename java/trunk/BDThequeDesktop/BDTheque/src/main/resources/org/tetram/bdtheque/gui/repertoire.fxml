@@ -15,7 +15,7 @@
          xmlns="http://javafx.com/javafx/8"
          fx:controller="org.tetram.bdtheque.gui.controllers.RepertoireController">
     <tabs>
-        <Tab id="tabAlbums" fx:id="tabAlbums" text="%Albums">
+        <Tab id="tabAlbums" fx:id="tabAlbums" text="%Album/multiple">
             <content>
                 <BorderPane prefHeight="200.0" prefWidth="200.0">
                     <top>
@@ -36,7 +36,7 @@
                 </BorderPane>
             </content>
         </Tab>
-        <Tab id="tabSeries" fx:id="tabSeries" text="%Series">
+        <Tab id="tabSeries" fx:id="tabSeries" text="%Série/multiple">
             <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                     <children>
@@ -47,7 +47,7 @@
                 </AnchorPane>
             </content>
         </Tab>
-        <Tab id="tabUnivers" fx:id="tabUnivers" text="%Univers">
+        <Tab id="tabUnivers" fx:id="tabUnivers" text="%Univers/multiple">
             <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                     <children>
@@ -58,7 +58,7 @@
                 </AnchorPane>
             </content>
         </Tab>
-        <Tab id="tabAuteurs" fx:id="tabAuteurs" text="%Auteurs">
+        <Tab id="tabAuteurs" fx:id="tabAuteurs" text="%Auteur/multiple">
             <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                     <children>
@@ -69,7 +69,7 @@
                 </AnchorPane>
             </content>
         </Tab>
-        <Tab id="tabParabd" fx:id="tabParabd" text="%ParaBD">
+        <Tab id="tabParabd" fx:id="tabParabd" text="%ParaBD/multiple">
             <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                     <children>

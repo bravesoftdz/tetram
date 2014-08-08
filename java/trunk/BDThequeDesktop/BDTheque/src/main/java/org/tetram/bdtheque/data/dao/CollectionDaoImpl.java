@@ -36,7 +36,7 @@ class CollectionDaoImpl extends DaoScriptImpl<Collection, UUID> implements Colle
     @Override
     public int save(@NotNull Collection o) throws ConsistencyException {
         if (!isUnique(o))
-            throw new ConsistencyException(I18nSupport.message("title.still.used", I18nSupport.message("collection")));
+            throw new ConsistencyException(I18nSupport.message("title.still.used", I18nSupport.message("collection/one")));
         return super.save(o);
     }
 }

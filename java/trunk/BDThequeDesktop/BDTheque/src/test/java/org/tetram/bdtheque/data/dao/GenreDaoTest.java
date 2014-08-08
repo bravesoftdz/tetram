@@ -14,14 +14,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.tetram.bdtheque.SpringTest;
 import org.tetram.bdtheque.data.ConsistencyException;
 import org.tetram.bdtheque.data.Constants;
-import org.tetram.bdtheque.data.bean.GenreLite;
+import org.tetram.bdtheque.data.bean.Genre;
 import org.tetram.bdtheque.data.dao.mappers.SqlMapper;
 import org.tetram.bdtheque.utils.TypeUtils;
 
-public class GenreLiteDaoTest extends SpringTest {
+public class GenreDaoTest extends SpringTest {
 
     @Autowired
-    private GenreLiteDao dao;
+    private GenreDao dao;
     @Autowired
     private SqlMapper sqlMapper;
 
@@ -33,7 +33,7 @@ public class GenreLiteDaoTest extends SpringTest {
 
     @Test
     public void testGet() throws Exception {
-        GenreLite genre = dao.get(Constants.ID_GENRE_AVENTURES);
+        Genre genre = dao.get(Constants.ID_GENRE_AVENTURES);
         Assert.assertNotNull(genre);
         Assert.assertNotNull(genre.getId());
         Assert.assertNotNull(genre.getNomGenre());
@@ -43,9 +43,9 @@ public class GenreLiteDaoTest extends SpringTest {
     public void testCreate() throws Exception {
         int rowCount;
 
-        GenreLite genre;
+        Genre genre;
 
-        genre = new GenreLite();
+        genre = new Genre();
         genre.setNomGenre(Constants.TEST_CREATE);
 
         rowCount = dao.save(genre);
@@ -72,7 +72,7 @@ public class GenreLiteDaoTest extends SpringTest {
 
     @Test(expected = ConsistencyException.class)
     public void testCreateIsUnique() throws Exception {
-        @NonNls GenreLite genre = new GenreLite();
+        @NonNls Genre genre = new Genre();
         genre.setNomGenre(Constants.NOM_GENRE_AVENTURES);
 
         dao.save(genre);
@@ -81,7 +81,7 @@ public class GenreLiteDaoTest extends SpringTest {
 
     @Test(expected = ConsistencyException.class)
     public void testUpdateIsUnique() throws Exception {
-        @NonNls GenreLite genre = new GenreLite();
+        @NonNls Genre genre = new Genre();
         genre.setNomGenre(Constants.NOM_GENRE_AVENTURES);
         genre.setId(TypeUtils.GUID_FULL);
 
