@@ -16,7 +16,7 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.tetram.bdtheque.gui.controllers.WindowController;
-import org.tetram.bdtheque.gui.controllers.components.ButtonsBarController;
+import org.tetram.bdtheque.gui.controllers.includes.ButtonsBarController;
 import org.tetram.bdtheque.utils.FileLink;
 import org.tetram.bdtheque.utils.FileLinks;
 

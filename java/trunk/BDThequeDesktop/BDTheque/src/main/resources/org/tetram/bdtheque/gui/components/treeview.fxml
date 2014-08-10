@@ -8,7 +8,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.BorderPane?>
 <BorderPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="200.0" prefWidth="200.0" xmlns="http://javafx.com/javafx/8"
-            fx:controller="org.tetram.bdtheque.gui.controllers.components.TreeViewController" fx:id="containerPane">
+            fx:controller="org.tetram.bdtheque.gui.controllers.includes.TreeViewController" fx:id="containerPane">
     <center>
         <TreeTableView fx:id="treeTableView" showRoot="false" stylesheets="@treeview.css" BorderPane.alignment="CENTER">
             <columnResizePolicy>

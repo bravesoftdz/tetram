@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.*?>
 <GridPane xmlns:fx="http://javafx.com/fxml/1" hgap="8.0" maxHeight="-Infinity" maxWidth="1.7976931348623157E308"
           minHeight="-Infinity" minWidth="-Infinity" stylesheets="@buttonsbar.css" xmlns="http://javafx.com/javafx/8"
-          fx:controller="org.tetram.bdtheque.gui.controllers.components.ButtonsBarController">
+          fx:controller="org.tetram.bdtheque.gui.controllers.includes.ButtonsBarController">
     <columnConstraints>
         <ColumnConstraints hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="-Infinity"/>
         <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity"/>

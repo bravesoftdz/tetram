@@ -26,7 +26,7 @@ import org.tetram.bdtheque.data.bean.abstractentities.BaseSerie;
 import org.tetram.bdtheque.data.dao.AlbumLiteSerieDao;
 import org.tetram.bdtheque.data.dao.PersonneDao;
 import org.tetram.bdtheque.gui.controllers.WindowController;
-import org.tetram.bdtheque.gui.controllers.components.TreeViewController;
+import org.tetram.bdtheque.gui.controllers.includes.TreeViewController;
 import org.tetram.bdtheque.gui.utils.EntityNotFoundException;
 import org.tetram.bdtheque.gui.utils.EntityWebHyperlink;
 import org.tetram.bdtheque.utils.FileLink;

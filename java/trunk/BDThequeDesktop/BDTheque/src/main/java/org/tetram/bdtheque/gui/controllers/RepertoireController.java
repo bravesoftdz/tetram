@@ -19,8 +19,8 @@ import javafx.scene.control.TabPane;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.tetram.bdtheque.data.services.UserPreferences;
-import org.tetram.bdtheque.gui.controllers.components.TreeViewController;
-import org.tetram.bdtheque.gui.controllers.components.TreeViewMode;
+import org.tetram.bdtheque.gui.controllers.includes.TreeViewController;
+import org.tetram.bdtheque.gui.controllers.includes.TreeViewMode;
 import org.tetram.bdtheque.utils.FileLink;
 import org.tetram.bdtheque.utils.I18nSupport;
 

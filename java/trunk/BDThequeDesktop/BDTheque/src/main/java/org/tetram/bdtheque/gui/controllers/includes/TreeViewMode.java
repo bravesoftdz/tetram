@@ -4,7 +4,7 @@
  * Last modified by Tetram, on 2014-07-30T11:35:02CEST
  */
 
-package org.tetram.bdtheque.gui.controllers.components;
+package org.tetram.bdtheque.gui.controllers.includes;
 
 import javafx.util.Callback;
 import org.jetbrains.annotations.NonNls;

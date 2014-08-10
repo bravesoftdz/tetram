@@ -4,7 +4,7 @@
  * Last modified by Tetram, on 2014-07-29T11:10:36CEST
  */
 
-package org.tetram.bdtheque.gui.controllers.components;
+package org.tetram.bdtheque.gui.controllers.includes;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;

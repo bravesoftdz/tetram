@@ -4,7 +4,7 @@
  * Last modified by Tetram, on 2014-07-31T16:50:01CEST
  */
 
-package org.tetram.bdtheque.gui.controllers.components;
+package org.tetram.bdtheque.gui.controllers.includes;
 
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
