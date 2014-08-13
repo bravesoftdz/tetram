@@ -15,7 +15,7 @@
         <Insets bottom="8.0" left="8.0" right="8.0" top="8.0"/>
     </padding>
     <children>
-        <GridPane hgap="4.0" vgap="4.0">
+        <GridPane hgap="4.0" vgap="4.0" fx:id="gpGrid">
             <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity"/>
                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="-Infinity"/>
@@ -29,8 +29,6 @@
                 <Label fx:id="lbSiteWeb" text="Label" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
                 <Label styleClass="label-rubrique" text="Univers parent :" GridPane.halignment="RIGHT"
                        GridPane.rowIndex="2"/>
-                <TextField fx:id="tfUniversParent" GridPane.columnIndex="1" GridPane.columnSpan="2"
-                           GridPane.rowIndex="2"/>
 
                 <Separator maxWidth="-Infinity" minWidth="-Infinity" prefWidth="200.0" GridPane.columnSpan="3"
                            GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER"/>

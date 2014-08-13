@@ -84,12 +84,12 @@ public abstract class StringUtils {
         return org.apache.commons.lang3.StringUtils.stripEnd(v, " \r\n\t\b\u00A0");
     }
 
-    @Contract("null -> true")
+    @Contract("null->true")
     public static boolean isNullOrEmpty(String string) {
         return string == null || string.isEmpty();
     }
 
-    @Contract("null -> true")
+    @Contract("null->true")
     public static <T extends Collection> boolean isNullOrEmpty(T list) {
         return list == null || list.isEmpty();
     }
@@ -99,8 +99,16 @@ public abstract class StringUtils {
         return s == null ? "" : s;
     }
 
-    @Contract("null -> null")
+    @Contract("null->null")
     public static String trim(String v) {
         return org.apache.commons.lang3.StringUtils.strip(v, " \r\n\t\b\u00A0");
+    }
+
+    @Contract("null->null;!null->!null")
+    public static String quotedStr(String s) {
+        if (isNullOrEmpty(s))
+            return s;
+        else
+            return "'" + s.replace("'", "''") + "'";
     }
 }

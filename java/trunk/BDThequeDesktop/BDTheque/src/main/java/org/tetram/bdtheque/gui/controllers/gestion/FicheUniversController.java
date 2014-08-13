@@ -11,12 +11,15 @@ import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.GridPane;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.tetram.bdtheque.data.bean.Univers;
+import org.tetram.bdtheque.data.bean.UniversLite;
 import org.tetram.bdtheque.data.dao.UniversDao;
+import org.tetram.bdtheque.gui.components.EntityPicker;
 import org.tetram.bdtheque.gui.controllers.includes.TreeViewController;
 import org.tetram.bdtheque.gui.controllers.includes.TreeViewMode;
 import org.tetram.bdtheque.gui.utils.EntityWebHyperlink;
@@ -39,10 +42,11 @@ import java.util.UUID;
         @FileLink("/org/tetram/bdtheque/gui/gestion/ficheUnivers-screenshot.jpg")
 })
 public class FicheUniversController extends GestionControllerImpl {
-
     @Autowired
     private UniversDao universDao;
 
+    @FXML
+    private GridPane gpGrid;
     @FXML
     private TextField tfNom;
     @FXML
@@ -50,18 +54,25 @@ public class FicheUniversController extends GestionControllerImpl {
     @FXML
     private Label lbSiteWeb;
     @FXML
-    private TextField tfUniversParent; // TODO: remplacer par la sélection d'un univers
-    @FXML
     private TreeViewController tvAlbumsController;
     @FXML
     private TreeViewController tvParabdController;
     @FXML
     private TextArea taAssociations;
 
+    private EntityPicker tfUniversParent;
+
     private Univers univers;
 
     @FXML
     void initialize() {
+        tfUniversParent = new EntityPicker();
+        GridPane.setColumnIndex(tfUniversParent, 1);
+        GridPane.setColumnSpan(tfUniversParent, 2);
+        GridPane.setRowIndex(tfUniversParent, 2);
+        tfUniversParent.setMode(TreeViewMode.UNIVERS);
+        gpGrid.getChildren().add(tfUniversParent);
+
         editControllerProperty().addListener(o -> {
             FicheEditController<?> controller = getEditController();
             controller.setLabel(I18nSupport.message("Univers/one"));
@@ -86,6 +97,10 @@ public class FicheUniversController extends GestionControllerImpl {
         tfSiteWeb.setText(urlConverter.toString(univers.getSiteWeb()));
         tfSiteWeb.textProperty().addListener(o -> univers.setSiteWeb(urlConverter.fromString(tfSiteWeb.getText())));
         EntityWebHyperlink.addToLabeled(lbSiteWeb, univers.siteWebProperty(), ContentDisplay.GRAPHIC_ONLY, true);
+
+        tfUniversParent.setParentValue(id);
+        tfUniversParent.setValue(univers.getUniversParent());
+        tfUniversParent.valueProperty().addListener(o -> univers.setUniversParent((UniversLite) tfUniversParent.getValue()));
 
         @SuppressWarnings("HardCodedStringLiteral") final String filtreBrancheUnivers = String.format("branche_univers containing '%s'", StringUtils.UUIDToGUIDString(univers.getId()));
         //tvAlbumsController.setClickToShow(false);

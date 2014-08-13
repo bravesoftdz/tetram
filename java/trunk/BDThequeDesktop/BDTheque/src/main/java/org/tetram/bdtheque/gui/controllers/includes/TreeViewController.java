@@ -148,6 +148,7 @@ public class TreeViewController extends WindowController {
 
         final EventHandler<MouseEvent> onMouseClicked = event -> {
             if (event.getClickCount() == 2) {
+                event.consume();
                 final TreeItem<AbstractEntity> selectedItem = treeTableView.getSelectionModel().getSelectedItem();
                 if (selectedItem != null && selectedItem.isLeaf()) {
                     final AbstractEntity entity = selectedItem.getValue();
@@ -402,6 +403,10 @@ public class TreeViewController extends WindowController {
 
     public TreeTableView<AbstractEntity> getTreeView() {
         return treeTableView;
+    }
+
+    public TextField getTextFieldSearch() {
+        return tfSearch;
     }
 
     public TreeTableColumn<AbstractEntity, AbstractEntity> getColumn0() {

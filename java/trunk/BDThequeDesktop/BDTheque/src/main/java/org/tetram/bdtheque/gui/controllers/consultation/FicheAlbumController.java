@@ -215,8 +215,10 @@ public class FicheAlbumController extends WindowController implements Consultati
         lvEditions.visibleProperty().bind(Bindings.greaterThan(editions.sizeProperty(), 1));
         lvEditions.itemsProperty().bind(editions);
         lvEditions.setOnMouseClicked((event) -> {
-            if (event.getClickCount() == 2)
+            if (event.getClickCount() == 2) {
+                event.consume();
                 currentEdition.set(lvEditions.getSelectionModel().getSelectedItem());
+            }
         });
 
         diaporama.pageCountProperty().bind(images.sizeProperty());
