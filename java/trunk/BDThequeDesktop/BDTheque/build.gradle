@@ -56,4 +56,5 @@ dependencies {
     compile 'org.jfxtras:jfxtras-fxml:+'
     compile 'org.jfxtras:jfxtras-controls:+'
     compile 'org.jfxtras:jfxtras-labs:+'
+    // runtime files('libraries/ScenicView.jar')
 }

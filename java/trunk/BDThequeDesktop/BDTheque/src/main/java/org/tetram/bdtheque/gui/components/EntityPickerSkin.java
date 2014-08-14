@@ -7,8 +7,9 @@
 package org.tetram.bdtheque.gui.components;
 
 import com.sun.javafx.scene.control.skin.ComboBoxPopupControl;
+import javafx.css.PseudoClass;
 import javafx.scene.Node;
-import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import org.tetram.bdtheque.data.bean.abstractentities.AbstractDBEntity;
 import org.tetram.bdtheque.gui.controllers.includes.TreeViewController;
 
@@ -18,22 +19,34 @@ import org.tetram.bdtheque.gui.controllers.includes.TreeViewController;
 @SuppressWarnings("HardCodedStringLiteral")
 public class EntityPickerSkin extends ComboBoxPopupControl<AbstractDBEntity> {
 
-    private final Label displayNode;
+    private static PseudoClass CONTAINS_FOCUS_PSEUDOCLASS_STATE = PseudoClass.getPseudoClass("contains-focus");
+    private final EntityPicker entityPicker;
+    private TextField textField;
+    private TextField displayNode;
     private EntityTreeView popupContent;
+
 
     public EntityPickerSkin(final EntityPicker entityPicker) {
         super(entityPicker, new EntityPickerBehavior(entityPicker));
-        displayNode = new Label();
+
+        this.entityPicker = entityPicker;
+        this.textField = getEditableInputNode();
+        // Fix for RT-29565. Without this the textField does not have a correct
+        // pref width at startup, as it is not part of the scenegraph (and therefore
+        // has no pref width until after the first measurements have been taken).
+        if (this.textField != null) {
+            getChildren().add(textField);
+        }
+
         registerChangeListener(entityPicker.valueProperty(), "VALUE");
     }
-
 
     @Override
     protected Node getPopupContent() {
         return getEntityTreeView();
     }
 
-    private EntityTreeView getEntityTreeView(){
+    private EntityTreeView getEntityTreeView() {
         if (popupContent == null) {
             popupContent = new EntityTreeView((EntityPicker) getSkinnable());
             popupContent.setPopupControl(getPopup());
@@ -60,7 +73,7 @@ public class EntityPickerSkin extends ComboBoxPopupControl<AbstractDBEntity> {
                 hide();
             }
         } else if ("VALUE".equals(p)) {
-            updateLabel();
+            updateDisplayNode();
             // Change the current selected color in the grid if ColorPicker value changes
 //            if (popupContent != null) {
 //                popupContent.updateSelection(getSkinnable().getValue());
@@ -69,13 +82,43 @@ public class EntityPickerSkin extends ComboBoxPopupControl<AbstractDBEntity> {
 
     }
 
-    private void updateLabel() {
+    private TextField getEditableInputNode() {
+        if (textField != null) return textField;
+
+        textField = entityPicker.getEditor();
+        textField.focusTraversableProperty().bindBidirectional(entityPicker.focusTraversableProperty());
+        textField.promptTextProperty().bind(entityPicker.promptTextProperty());
+
+        textField.focusedProperty().addListener((ov, t, hasFocus) -> {
+            entityPicker.getProperties().put("FOCUSED", hasFocus);
+            if (!hasFocus) {
+                pseudoClassStateChanged(CONTAINS_FOCUS_PSEUDOCLASS_STATE, false);
+            } else {
+                pseudoClassStateChanged(CONTAINS_FOCUS_PSEUDOCLASS_STATE, true);
+            }
+        });
+
+        return textField;
+    }
+
+    private void updateDisplayNode() {
         final EntityPicker entityPicker = (EntityPicker) getSkinnable();
-        displayNode.setText(entityPicker.getValue().toString());
+        AbstractDBEntity value = entityPicker.getValue();
+        if (value != null)
+            displayNode.setText(value.toString());
+        else
+            displayNode.setText("");
     }
 
     @Override
     public Node getDisplayNode() {
+        if (displayNode == null) {
+            // displayNode et textField contiennent le même objet: la variable displayNode ne sert que pour passer dans ce test
+            displayNode = getEditableInputNode();
+            updateDisplayNode();
+        }
+        displayNode.setEditable(entityPicker.isEditable());
+
         return displayNode;
     }
 

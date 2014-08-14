@@ -6,10 +6,14 @@
 
 package org.tetram.bdtheque.gui.components;
 
+import com.sun.javafx.scene.control.skin.ComboBoxListViewSkin;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.control.ComboBoxBase;
 import javafx.scene.control.Skin;
+import javafx.scene.control.TextField;
 import org.jetbrains.annotations.NonNls;
 import org.tetram.bdtheque.data.bean.abstractentities.AbstractDBEntity;
 import org.tetram.bdtheque.gui.controllers.includes.TreeViewController;
@@ -32,6 +36,7 @@ public class EntityPicker extends ComboBoxBase<AbstractDBEntity> {
     private static final String DEFAULT_STYLE_CLASS = "entity-picker";
     private EntityPickerSkin entityPickerSkin;
     private ObjectProperty<UUID> parentValue = new SimpleObjectProperty<>(this, "parentValue", null);
+    private ReadOnlyObjectWrapper<TextField> editor;
 
     public EntityPicker() {
         this(null);
@@ -41,6 +46,8 @@ public class EntityPicker extends ComboBoxBase<AbstractDBEntity> {
     public EntityPicker(AbstractDBEntity entity) {
         setValue(entity);
         getStyleClass().add(DEFAULT_STYLE_CLASS);
+        setEditable(true);
+
         parentValue.addListener(o -> {
             String filtre = null;
             if (getParentValue() != null) {
@@ -93,5 +100,15 @@ public class EntityPicker extends ComboBoxBase<AbstractDBEntity> {
 
     public void setParentValue(UUID parentValue) {
         this.parentValue.set(parentValue);
+    }
+
+    public final TextField getEditor() {
+        return editorProperty().get();
+    }
+    public final ReadOnlyObjectProperty<TextField> editorProperty() {
+        if (editor == null) {
+            editor = new ReadOnlyObjectWrapper<>(this, "editor", new ComboBoxListViewSkin.FakeFocusTextField());
+        }
+        return editor.getReadOnlyProperty();
     }
 }

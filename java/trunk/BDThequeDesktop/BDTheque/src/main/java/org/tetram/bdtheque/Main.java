@@ -198,6 +198,7 @@ public class Main extends Application {
         Scene scene = new Scene((Parent) mainController.getView(), 1280, 800);
         primaryStage.setScene(scene);
         primaryStage.show();
+
         // ça dépanne mais c'est plein de petits bugs que j'ai pas envie de résoudre
         // SceneToolPlugin.load(primaryStage);
     }

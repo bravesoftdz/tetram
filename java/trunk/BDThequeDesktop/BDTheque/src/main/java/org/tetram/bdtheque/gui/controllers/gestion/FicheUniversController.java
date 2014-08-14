@@ -7,10 +7,7 @@
 package org.tetram.bdtheque.gui.controllers.gestion;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.ContentDisplay;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -71,7 +68,14 @@ public class FicheUniversController extends GestionControllerImpl {
         GridPane.setColumnSpan(tfUniversParent, 2);
         GridPane.setRowIndex(tfUniversParent, 2);
         tfUniversParent.setMode(TreeViewMode.UNIVERS);
+        tfUniversParent.prefWidthProperty().bind(tfNom.widthProperty());
         gpGrid.getChildren().add(tfUniversParent);
+
+        DatePicker fTest = new DatePicker();
+        GridPane.setColumnIndex(fTest, 1);
+        GridPane.setColumnSpan(fTest, 2);
+        GridPane.setRowIndex(fTest, 2);
+//        gpGrid.getChildren().add(fTest);
 
         editControllerProperty().addListener(o -> {
             FicheEditController<?> controller = getEditController();
