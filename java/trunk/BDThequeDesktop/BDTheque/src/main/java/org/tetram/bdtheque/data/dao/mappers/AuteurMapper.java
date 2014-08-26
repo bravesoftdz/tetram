@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * AuteurMapper.java
- * Last modified by Tetram, on 2014-08-01T12:22:38CEST
+ * Last modified by Tetram, on 2014-08-26T09:26:19CEST
  */
 package org.tetram.bdtheque.data.dao.mappers;
 
@@ -52,15 +52,15 @@ public interface AuteurMapper extends BaseMapperInterface {
 
     int cleanAuteursAlbum(@Param("id") UUID idAlbum);
 
-    int addAuteurAlbum(@Param("idAlbum") UUID idAlbum, @Param("auteur/one") AuteurAlbumLite auteur);
+    int addAuteurAlbum(@Param("idAlbum") UUID idAlbum, @Param("auteur") AuteurAlbumLite auteur);
 
     int cleanAuteursSerie(@Param("id") UUID idSerie);
 
-    int addAuteurSerie(@Param("idSerie") UUID idSerie, @Param("auteur/one") AuteurSerieLite auteur);
+    int addAuteurSerie(@Param("idSerie") UUID idSerie, @Param("auteur") AuteurSerieLite auteur);
 
     int cleanAuteursParaBD(@Param("id") UUID idParaBD);
 
-    int addAuteurParaBD(@Param("idParaBD") UUID idParaBD, @Param("auteur/one") AuteurParaBDLite auteur);
+    int addAuteurParaBD(@Param("idParaBD") UUID idParaBD, @Param("auteur") AuteurParaBDLite auteur);
 
     List<InitialeEntity<Character>> getInitiales(@Param("filtre") String filtre);
 

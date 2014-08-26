@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * UniversDaoImpl.java
- * Last modified by Tetram, on 2014-07-29T11:09:14CEST
+ * Last modified by Tetram, on 2014-08-26T09:36:34CEST
  */
 
 package org.tetram.bdtheque.data.dao;
@@ -27,7 +27,7 @@ class UniversDaoImpl extends DaoScriptImpl<Univers, UUID> implements UniversDao 
     @Override
     public int save(@NotNull Univers o) throws ConsistencyException {
         if (!isUnique(o))
-            throw new ConsistencyException(I18nSupport.message("title.still.used", I18nSupport.message("univers")));
+            throw new ConsistencyException(I18nSupport.message("title.still.used", I18nSupport.message("univers/one")));
         return super.save(o);
     }
 
