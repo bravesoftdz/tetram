@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * EntityTreeView.java
- * Last modified by Thierry, on 2014-08-10T16:04:53CEST
+ * Last modified by Tetram, on 2014-08-26T15:32:44CEST
  */
 
 package org.tetram.bdtheque.gui.components;
@@ -22,6 +22,7 @@ public class EntityTreeView extends Region {
 
     public EntityTreeView(EntityPicker entityPicker) {
         treeviewController = SpringFxmlLoader.load("components/treeview.fxml");
+        treeviewController.getTreeView().minWidthProperty().bind(entityPicker.getEditor().widthProperty());
         treeviewController.setCanSearch(false);
         treeviewController.setClickToShow(false);
         treeviewController.setOnClickItem(event -> {

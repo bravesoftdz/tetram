@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * TreeViewController.java
- * Last modified by Tetram, on 2014-07-31T16:50:01CEST
+ * Last modified by Tetram, on 2014-08-26T16:33:39CEST
  */
 
 package org.tetram.bdtheque.gui.controllers.includes;
@@ -117,15 +117,11 @@ public class TreeViewController extends WindowController {
             refresh();
         });
 
-        searchText.bindBidirectional(tfSearch.textProperty());
-
         tfSearch.visibleProperty().bind(canSearchProperty());
-        tfSearch.textProperty().addListener(o -> searchTimer.restart());
         EventHandler<KeyEvent> onKeyPressed = event -> {
             if (event.getCode().equals(KeyCode.F3) && !event.isAltDown() && !event.isControlDown() && !event.isShiftDown() && !event.isMetaDown())
                 find(true);
         };
-        tfSearch.setOnKeyPressed(onKeyPressed);
         treeTableView.setOnKeyPressed(onKeyPressed);
         canSearchProperty().addListener((o, oV, newValue) -> {
             if (newValue) {
@@ -136,6 +132,12 @@ public class TreeViewController extends WindowController {
                 containerPane.setTop(null);
             }
         });
+
+        registerSearchableField(tfSearch);
+
+        searchTextProperty().addListener(
+                (o, ov, nv) -> searchTimer.restart()
+        );
 
         appliedFiltre.bind(Bindings.createStringBinding(() -> {
             String s = getFiltre();
@@ -218,12 +220,19 @@ public class TreeViewController extends WindowController {
 
     private synchronized void registerFind() {
         if (!findRegistered) {
-            Platform.runLater(() -> {
-                findRegistered = false;
-                find(tfSearch.getText());
-            });
+            Platform.runLater(this::fireRegisteredFind);
             findRegistered = true;
         }
+    }
+
+    private void fireRegisteredFind() {
+        // on ne fait rien si on est déclenché par searchTimer et que l'utilisateur a utilisé la touche ENTER
+        // ou que l'utilisateur a utilisé la touche ENTER sans rien tapé
+        if (!findRegistered) return;
+
+        findRegistered = false;
+        String newSearchText = searchTextProperty().getValueSafe();
+        find(newSearchText, newSearchText.equalsIgnoreCase(lastFindText));
     }
 
     public void find(String text) {
@@ -567,6 +576,54 @@ public class TreeViewController extends WindowController {
 
     public StringProperty searchTextProperty() {
         return searchText;
+    }
+
+    public void registerSearchableField(TextField textField) {
+        textField.setOnKeyPressed(event -> {
+            if (!event.isAltDown() && !event.isControlDown() && !event.isShiftDown() && !event.isMetaDown())
+                switch (event.getCode()) {
+                    case F3:
+                        find(true);
+                        break;
+                    case ENTER:
+                        fireRegisteredFind();
+                        break;
+                }
+        });
+        searchTextProperty().unbind();
+        searchTextProperty().bind(textField.textProperty());
+    }
+
+    public ReadOnlyDoubleProperty widthProperty() {
+        return containerPane.widthProperty();
+    }
+
+    public ReadOnlyDoubleProperty heightProperty() {
+        return containerPane.heightProperty();
+    }
+
+    public DoubleProperty prefWidthProperty() {
+        return containerPane.prefWidthProperty();
+    }
+
+    public DoubleProperty prefHeightProperty() {
+        return containerPane.prefHeightProperty();
+    }
+
+    public DoubleProperty minWidthProperty() {
+        return containerPane.minWidthProperty();
+    }
+
+    public DoubleProperty minHeightProperty() {
+        return containerPane.minHeightProperty();
+    }
+
+    public DoubleProperty maxWidthProperty() {
+        return containerPane.maxWidthProperty();
+    }
+
+    public DoubleProperty maxHeightProperty() {
+        return containerPane.maxHeightProperty();
     }
 
     public class TreeViewNode extends TreeItem<AbstractEntity> {

@@ -2,7 +2,7 @@
 <!--
   ~ Copyright (c) 2014, tetram.org. All Rights Reserved.
   ~ EditeurMapper.xml
-  ~ Last modified by Tetram, on 2014-08-01T10:35:20CEST
+  ~ Last modified by Tetram, on 2014-08-26T15:56:17CEST
   -->
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
@@ -64,7 +64,7 @@
             e.nomEditeur like '%' || #{value} || '%'
         ]]>
         <if test="filtre != null">
-            and #{filtre}
+            and ${filtre}
         </if>
         <![CDATA[
         order by

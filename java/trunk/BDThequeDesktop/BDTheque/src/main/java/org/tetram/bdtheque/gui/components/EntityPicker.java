@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * EntityPicker.java
- * Last modified by Thierry, on 2014-08-10T15:00:53CEST
+ * Last modified by Tetram, on 2014-08-26T15:43:28CEST
  */
 
 package org.tetram.bdtheque.gui.components;
@@ -69,7 +69,7 @@ public class EntityPicker extends ComboBoxBase<AbstractDBEntity> {
         return getEntityPickerSkin();
     }
 
-    private EntityPickerSkin getEntityPickerSkin() {
+    public EntityPickerSkin getEntityPickerSkin() {
         if (entityPickerSkin == null) entityPickerSkin = new EntityPickerSkin(this);
         return entityPickerSkin;
     }
