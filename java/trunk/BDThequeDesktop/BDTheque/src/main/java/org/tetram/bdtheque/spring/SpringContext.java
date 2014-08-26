@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * SpringContext.java
- * Last modified by Tetram, on 2014-07-31T16:50:01CEST
+ * Last modified by Tetram, on 2014-08-26T11:39:31CEST
  */
 
 package org.tetram.bdtheque.spring;
@@ -56,7 +56,7 @@ public class SpringContext {
 
     @Bean(name = "databaseProperties")
     public static PropertySourcesPlaceholderConfigurer properties() {
-        // on utilise par getBean puisque Spring n'est pas encore chargé
+        // on utilise pas getBean puisque Spring n'est pas encore chargé
         ApplicationContextImpl applicationContext = new ApplicationContextImpl();
         UserPreferences userPreferences = new UserPreferencesImpl(applicationContext);
 

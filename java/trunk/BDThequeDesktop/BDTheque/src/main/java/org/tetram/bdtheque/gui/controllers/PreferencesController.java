@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * PreferencesController.java
- * Last modified by Tetram, on 2014-07-29T11:09:14CEST
+ * Last modified by Tetram, on 2014-08-26T12:00:40CEST
  */
 
 package org.tetram.bdtheque.gui.controllers;
@@ -17,6 +17,7 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.DirectoryChooser;
+import javafx.util.StringConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.tetram.bdtheque.data.services.FormatTitreAlbum;
@@ -103,6 +104,17 @@ public class PreferencesController extends DialogController {
         // on ne peut pas utiliser le bind des propriétés: ça pourrait avoir une influence directe (et non contrôlée) sur l'appli
 
         formatTitreAlbum.getItems().addAll(FormatTitreAlbum.values());
+        formatTitreAlbum.setConverter(new StringConverter<FormatTitreAlbum>() {
+            @Override
+            public String toString(FormatTitreAlbum object) {
+                return object.getLabel();
+            }
+
+            @Override
+            public FormatTitreAlbum fromString(String string) {
+                return null;
+            }
+        });
         formatTitreAlbum.setValue(userPreferences.getFormatTitreAlbum());
 
         serieObligatoireAlbums.setSelected(userPreferences.isSerieObligatoireAlbums());

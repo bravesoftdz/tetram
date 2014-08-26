@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * UserPreferencesImpl.java
- * Last modified by Tetram, on 2014-07-31T16:50:01CEST
+ * Last modified by Tetram, on 2014-08-26T11:56:46CEST
  */
 package org.tetram.bdtheque.data.services;
 
@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import org.tetram.bdtheque.gui.controllers.ApplicationMode;
+import org.tetram.bdtheque.utils.I18nSupport;
 import org.tetram.bdtheque.utils.StringUtils;
 
 import java.io.*;
@@ -67,23 +68,28 @@ public class UserPreferencesImpl implements UserPreferences {
     @NonNls
     private static final String PREF_MODE_OUVERTURE = "ModeOuverture";
     private static final ApplicationMode PREF_MODE_OUVERTURE_DEFAULT = ApplicationMode.CONSULTATION;
+    @NonNls
+    private static final String PREF_CURRENCY_SYMBOL = "CurrencySymbol";
+    private static final String PREF_CURRENCY_SYMBOL_DEFAULT = "€";
 
     @Autowired
     private ApplicationContext applicationContext;
     private Properties defaultPrefs = null;
     private Properties prefs = null;
 
-    private BooleanProperty afficheNoteListes = null;
+    // ATTENTION: toutes les propriétés doivent être initialisées en Lazy (= dans le getter)
+    private PreferenceBooleanProperty afficheNoteListes = null;
     private ObjectProperty<Locale> locale = null;
-    private ObjectProperty<File> repImages = null;
-    private ObjectProperty<FormatTitreAlbum> formatTitreAlbum = null;
-    private BooleanProperty serieObligatoireAlbums = null;
-    private BooleanProperty serieObligatoireParaBD = null;
-    private BooleanProperty antiAliasing = null;
-    private BooleanProperty imagesStockees = null;
-    private ObjectProperty<File> database = null;
-    private ObjectProperty<ApplicationMode> modeOuverture = null;
-    private StringProperty databaseServer = null;
+    private PreferenceFileProperty repImages = null;
+    private PreferenceEnumProperty<FormatTitreAlbum> formatTitreAlbum = null;
+    private PreferenceBooleanProperty serieObligatoireAlbums = null;
+    private PreferenceBooleanProperty serieObligatoireParaBD = null;
+    private PreferenceBooleanProperty antiAliasing = null;
+    private PreferenceBooleanProperty imagesStockees = null;
+    private PreferenceFileProperty database = null;
+    private PreferenceEnumProperty<ApplicationMode> modeOuverture = null;
+    private PreferenceStringProperty databaseServer = null;
+    private PreferenceStringProperty currencySymbol = null;
 
     public UserPreferencesImpl() {
     }
@@ -119,13 +125,14 @@ public class UserPreferencesImpl implements UserPreferences {
             // RepWebServer := TPath.Combine(parentPath, RepWebServer);
         }
 
-        defaultPrefs.setProperty(PREF_FORMAT_TITRE_ALBUM, String.valueOf(PREF_FORMAT_TITRE_ALBUM_DEFAULT.getValue()));
+        defaultPrefs.setProperty(PREF_FORMAT_TITRE_ALBUM, String.valueOf(PREF_FORMAT_TITRE_ALBUM_DEFAULT));
         defaultPrefs.setProperty(PREF_SERIE_OBLIGATOIRE_ALBUMS, String.valueOf(PREF_SERIE_OBLIGATOIRE_ALBUMS_DEFAULT));
         defaultPrefs.setProperty(PREF_SERIE_OBLIGATOIRE_PARABD, String.valueOf(PREF_SERIE_OBLIGATOIRE_PARABD_DEFAULT));
         defaultPrefs.setProperty(PREF_ANTI_ALIASING, String.valueOf(PREF_ANTI_ALIASING_DEFAULT));
         defaultPrefs.setProperty(PREF_AFFICHE_NOTE_LISTES, String.valueOf(PREF_AFFICHE_NOTE_LISTES_DEFAULT));
         defaultPrefs.setProperty(PREF_IMAGES_STOCKEES, String.valueOf(PREF_IMAGES_STOCKEES_DEFAULT));
         defaultPrefs.setProperty(PREF_LOCALE, PREF_LOCALE_DEFAULT.toLanguageTag());
+        defaultPrefs.setProperty(PREF_CURRENCY_SYMBOL, PREF_CURRENCY_SYMBOL_DEFAULT);
         defaultPrefs.setProperty(PREF_MODE_OUVERTURE, String.valueOf(PREF_MODE_OUVERTURE_DEFAULT));
 
         return defaultPrefs;
@@ -215,131 +222,70 @@ public class UserPreferencesImpl implements UserPreferences {
     @Override
     public ObjectProperty<File> repImagesProperty() {
         if (repImages == null)
-            repImages = new SimpleObjectProperty<File>(this, "repImages", getFilePref(PREF_REP_IMAGES)) {
-                @Override
-                public void set(File newValue) {
-                    setPref(PREF_REP_IMAGES, newValue);
-                    super.set(newValue);
-                }
-            };
+            repImages = new PreferenceFileProperty("repImages", PREF_REP_IMAGES);
         return repImages;
     }
 
     @Override
     public ObjectProperty<FormatTitreAlbum> formatTitreAlbumProperty() {
         if (formatTitreAlbum == null)
-            formatTitreAlbum = new SimpleObjectProperty<FormatTitreAlbum>(this, "formatTitreAlbum", FormatTitreAlbum.fromValue(getIntPref(PREF_FORMAT_TITRE_ALBUM))) {
-                @Override
-                public void set(FormatTitreAlbum newValue) {
-                    setPref(PREF_FORMAT_TITRE_ALBUM, String.valueOf(newValue.getValue()));
-                    super.set(newValue);
-                }
-            };
+            formatTitreAlbum = new PreferenceEnumProperty<>("formatTitreAlbum", PREF_FORMAT_TITRE_ALBUM, FormatTitreAlbum.class);
         return formatTitreAlbum;
     }
 
     @Override
     public BooleanProperty serieObligatoireAlbumsProperty() {
         if (serieObligatoireAlbums == null)
-            serieObligatoireAlbums = new SimpleBooleanProperty(this, "serieObligatoireAlbums", getBooleanPref(PREF_SERIE_OBLIGATOIRE_ALBUMS)) {
-                @Override
-                public void set(boolean newValue) {
-                    setPref(PREF_SERIE_OBLIGATOIRE_ALBUMS, newValue);
-                    super.set(newValue);
-                }
-            };
+            serieObligatoireAlbums = new PreferenceBooleanProperty("serieObligatoireAlbums", PREF_SERIE_OBLIGATOIRE_ALBUMS);
         return serieObligatoireAlbums;
     }
 
     @Override
     public BooleanProperty serieObligatoireParaBDProperty() {
         if (serieObligatoireParaBD == null)
-            serieObligatoireParaBD = new SimpleBooleanProperty(this, "serieObligatoireParaBD", getBooleanPref(PREF_SERIE_OBLIGATOIRE_PARABD)) {
-                @Override
-                public void set(boolean newValue) {
-                    setPref(PREF_SERIE_OBLIGATOIRE_PARABD, newValue);
-                    super.set(newValue);
-                }
-            };
+            serieObligatoireParaBD = new PreferenceBooleanProperty("serieObligatoireParaBD", PREF_SERIE_OBLIGATOIRE_PARABD);
         return serieObligatoireParaBD;
     }
 
     @Override
     public BooleanProperty antiAliasingProperty() {
         if (antiAliasing == null)
-            antiAliasing = new SimpleBooleanProperty(this, "antiAliasing", getBooleanPref(PREF_ANTI_ALIASING)) {
-                @Override
-                public void set(boolean newValue) {
-                    setPref(PREF_ANTI_ALIASING, newValue);
-                    super.set(newValue);
-                }
-            };
+            antiAliasing = new PreferenceBooleanProperty("antiAliasing", PREF_ANTI_ALIASING);
         return antiAliasing;
     }
 
     @Override
     public BooleanProperty afficheNoteListesProperty() {
         if (afficheNoteListes == null)
-            afficheNoteListes = new SimpleBooleanProperty(this, "afficheNoteListes", getBooleanPref(PREF_AFFICHE_NOTE_LISTES)) {
-                @Override
-                public void set(boolean newValue) {
-                    setPref(PREF_AFFICHE_NOTE_LISTES, newValue);
-                    super.set(newValue);
-                }
-            };
+            afficheNoteListes = new PreferenceBooleanProperty("afficheNoteListes", PREF_AFFICHE_NOTE_LISTES);
         return afficheNoteListes;
     }
 
     @Override
     public BooleanProperty imagesStockeesProperty() {
         if (imagesStockees == null)
-            imagesStockees = new SimpleBooleanProperty(this, "imagesStockees", getBooleanPref(PREF_IMAGES_STOCKEES)) {
-                @Override
-                public void set(boolean newValue) {
-                    setPref(PREF_IMAGES_STOCKEES, newValue);
-                    super.set(newValue);
-                }
-            };
+            imagesStockees = new PreferenceBooleanProperty("imagesStockees", PREF_IMAGES_STOCKEES);
         return imagesStockees;
     }
 
     @Override
     public ObjectProperty<ApplicationMode> modeOuvertureProperty() {
-        if (modeOuverture == null) {
-            modeOuverture = new SimpleObjectProperty<ApplicationMode>(this, "modeOuverture", ApplicationMode.valueOf(getStringPref(PREF_MODE_OUVERTURE))) {
-                @Override
-                public void set(ApplicationMode newValue) {
-                    setPref(PREF_MODE_OUVERTURE, String.valueOf(newValue));
-                    super.set(newValue);
-                }
-            };
-        }
+        if (modeOuverture == null)
+            modeOuverture = new PreferenceEnumProperty<>("modeOuverture", PREF_MODE_OUVERTURE, ApplicationMode.class);
         return modeOuverture;
     }
 
     @Override
     public ObjectProperty<File> databaseProperty() {
         if (database == null)
-            database = new SimpleObjectProperty<File>(this, "database", getFilePref(PREF_DATABASE)) {
-                @Override
-                public void set(File newValue) {
-                    setPref(PREF_DATABASE, newValue);
-                    super.set(newValue);
-                }
-            };
+            database = new PreferenceFileProperty("database", PREF_DATABASE);
         return database;
     }
 
     @Override
     public StringProperty databaseServerProperty() {
         if (databaseServer == null)
-            databaseServer = new SimpleStringProperty(this, "databaseServer", getStringPref(PREF_DATABASE_SERVER)) {
-                @Override
-                public void set(String newValue) {
-                    setPref(PREF_DATABASE_SERVER, newValue);
-                    super.set(newValue);
-                }
-            };
+            databaseServer = new PreferenceStringProperty("databaseServer", PREF_DATABASE_SERVER);
         return databaseServer;
     }
 
@@ -348,11 +294,88 @@ public class UserPreferencesImpl implements UserPreferences {
         if (locale == null)
             locale = new SimpleObjectProperty<Locale>(this, "locale", Locale.forLanguageTag(getStringPref(PREF_LOCALE))) {
                 @Override
-                public void set(Locale newValue) {
-                    setPref(PREF_LOCALE, newValue.toLanguageTag());
-                    super.set(newValue);
+                protected void invalidated() {
+                    super.invalidated();
+                    setPref(PREF_LOCALE, getValue().toLanguageTag());
                 }
             };
         return locale;
+    }
+
+    @Override
+    public StringProperty currencySymbolProperty() {
+        if (currencySymbol == null) {
+            currencySymbol = new PreferenceStringProperty("currencySymbol", PREF_CURRENCY_SYMBOL);
+            I18nSupport.currencySymbolProperty().bindBidirectional(currencySymbol);
+        }
+        return currencySymbol;
+    }
+
+    private class PreferenceBooleanProperty extends SimpleBooleanProperty {
+
+        private String key;
+
+        public PreferenceBooleanProperty(@NonNls String name, String key) {
+            super(UserPreferencesImpl.this, name, getBooleanPref(key));
+            this.key = key;
+        }
+
+        @Override
+        protected void invalidated() {
+            super.invalidated();
+            setPref(key, getValue());
+        }
+
+    }
+
+    private class PreferenceStringProperty extends SimpleStringProperty {
+
+        private String key;
+
+        public PreferenceStringProperty(@NonNls String name, String key) {
+            super(UserPreferencesImpl.this, name, getStringPref(key));
+            this.key = key;
+        }
+
+        @Override
+        protected void invalidated() {
+            super.invalidated();
+            setPref(key, getValue());
+        }
+
+    }
+
+    private class PreferenceFileProperty extends SimpleObjectProperty<File> {
+
+        private String key;
+
+        public PreferenceFileProperty(@NonNls String name, String key) {
+            super(UserPreferencesImpl.this, name, getFilePref(key));
+            this.key = key;
+        }
+
+        @Override
+        protected void invalidated() {
+            super.invalidated();
+            setPref(key, getValue());
+        }
+
+    }
+
+    private class PreferenceEnumProperty<E extends Enum<E>> extends SimpleObjectProperty<E> {
+
+        private String key;
+
+        public PreferenceEnumProperty(@NonNls String name, String key, Class<E> enumClass) {
+            super(UserPreferencesImpl.this, name, E.valueOf(enumClass, getStringPref(key)));
+            this.key = key;
+        }
+
+        @Override
+        protected void invalidated() {
+            super.invalidated();
+            setPref(key, String.valueOf(getValue()));
+        }
+
     }
 }

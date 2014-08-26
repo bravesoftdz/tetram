@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * UserPreferences.java
- * Last modified by Tetram, on 2014-07-31T16:50:01CEST
+ * Last modified by Tetram, on 2014-08-26T09:54:40CEST
  */
 
 package org.tetram.bdtheque.data.services;
@@ -29,6 +29,16 @@ public interface UserPreferences {
 
     default void setLocale(Locale locale) {
         localeProperty().set(locale);
+    }
+
+    StringProperty currencySymbolProperty();
+
+    default String getCurrencySymbol() {
+        return currencySymbolProperty().get();
+    }
+
+    default void setCurrencySymbol(String currencySymbol) {
+        currencySymbolProperty().set(currencySymbol);
     }
 
     ObjectProperty<File> repImagesProperty();

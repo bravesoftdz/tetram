@@ -1,10 +1,12 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * I18nSupport.java
- * Last modified by Tetram, on 2014-07-29T11:02:07CEST
+ * Last modified by Tetram, on 2014-08-26T10:54:23CEST
  */
 package org.tetram.bdtheque.utils;
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.PropertyKey;
 
@@ -27,6 +29,7 @@ public class I18nSupport {
     private static ResourceBundle currentResourceBundle = getLocaleBundle(Locale.getDefault());
     private static Map<Locale, ResourceBundle> resources = null;
     private static NumberFormat currencyFormatter = null;
+    private static StringProperty currencySymbol = null;
 
     private static String message(ResourceBundle resourceBundle, @PropertyKey(resourceBundle = ORG_TETRAM_BDTHEQUE_LANG_BD) String key, Object... params) {
         String value = resourceBundle.getString(key);
@@ -68,13 +71,37 @@ public class I18nSupport {
     public static NumberFormat getCurrencyFormatter() {
         if (currencyFormatter == null) {
             currencyFormatter = NumberFormat.getCurrencyInstance(getLocale());
-            final DecimalFormatSymbols symbols = ((DecimalFormat) currencyFormatter).getDecimalFormatSymbols();
-            // TODO: récupérer le symbole dans les préférences de l'utilisateur
-            symbols.setCurrencySymbol("€");
-            ((DecimalFormat) currencyFormatter).setDecimalFormatSymbols(symbols);
+            useCurrencySymbol();
         }
         return currencyFormatter;
     }
 
+    private static void useCurrencySymbol() {
+        if (currencyFormatter != null) {
+            final DecimalFormatSymbols symbols = ((DecimalFormat) currencyFormatter).getDecimalFormatSymbols();
+            symbols.setCurrencySymbol(getCurrencySymbol());
+            ((DecimalFormat) currencyFormatter).setDecimalFormatSymbols(symbols);
+        }
+    }
 
+    public static StringProperty currencySymbolProperty() {
+        if (currencySymbol == null) {
+            currencySymbol = new SimpleStringProperty(null, "currencySymbol", "€") {
+                @Override
+                protected void invalidated() {
+                    super.invalidated();
+                    useCurrencySymbol();
+                }
+            };
+        }
+        return currencySymbol;
+    }
+
+    public static String getCurrencySymbol() {
+        return currencySymbolProperty().get();
+    }
+
+    public static void setCurrencySymbol(String currencySymbol) {
+        currencySymbolProperty().set(currencySymbol);
+    }
 }

@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * FormatTitreAlbum.java
- * Last modified by Tetram, on 2014-07-29T11:02:07CEST
+ * Last modified by Tetram, on 2014-08-26T12:05:12CEST
  */
 package org.tetram.bdtheque.data.services;
 
@@ -14,31 +14,16 @@ import java.text.MessageFormat;
  */
 public enum FormatTitreAlbum {
 
-    ALBUM_SERIE_TOME(0, "{0} ({1} - {2})"), TOME_ALBUM_SERIE(1, "{2} - {0} ({1})");
+    ALBUM_SERIE_TOME("{0} ({1} - {2})"), TOME_ALBUM_SERIE("{2} - {0} ({1})");
 
-    private final int value;
-    private final String format;
+    private final String labelFormat;
 
-    FormatTitreAlbum(int value, String format) {
-        this.value = value;
-        this.format = format;
-    }
-
-    public static FormatTitreAlbum fromValue(int value) {
-        for (FormatTitreAlbum formatTitreAlbum : values()) if (formatTitreAlbum.value == value) return formatTitreAlbum;
-        return null;
+    FormatTitreAlbum(String labelFormat) {
+        this.labelFormat = labelFormat;
     }
 
     public String getLabel() {
-        return MessageFormat.format(format, I18nSupport.message("Album/one"), I18nSupport.message("Série/one"), I18nSupport.message("Tome"));
+        return MessageFormat.format(labelFormat, I18nSupport.message("Album/one"), I18nSupport.message("Série/one"), I18nSupport.message("Tome"));
     }
 
-    public int getValue() {
-        return value;
-    }
-
-    @Override
-    public String toString() {
-        return getLabel();
-    }
 }
