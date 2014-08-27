@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * FicheAlbumController.java
- * Last modified by Tetram, on 2014-07-30T16:43:34CEST
+ * Last modified by Tetram, on 2014-08-27T10:16:39CEST
  */
 
 package org.tetram.bdtheque.gui.controllers.consultation;
@@ -179,7 +179,6 @@ public class FicheAlbumController extends WindowController implements Consultati
             serie.bind(album.serieProperty());
         });
 
-        tvSerieController.setCanSearch(false);
         serie.addListener((observable, oldSerie, serie) -> {
             if (serie == null) return;
             titreSerie.setText(BeanUtils.formatTitre(serie.getTitreSerie()));

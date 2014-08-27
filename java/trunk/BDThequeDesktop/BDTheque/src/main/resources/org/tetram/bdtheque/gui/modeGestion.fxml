@@ -2,7 +2,7 @@
 <!--
   ~ Copyright (c) 2014, tetram.org. All Rights Reserved.
   ~ modeGestion.fxml
-  ~ Last modified by Tetram, on 2014-07-29T11:36:25CEST
+  ~ Last modified by Tetram, on 2014-08-27T10:25:31CEST
   -->
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
@@ -74,7 +74,7 @@
         </ToolBar>
     </left>
     <center>
-        <fx:include fx:id="entities" source="components/treeview.fxml" AnchorPane.bottomAnchor="0.0"
+        <fx:include fx:id="entities" source="components/treeviewsearch.fxml" AnchorPane.bottomAnchor="0.0"
                     AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>
     </center>
     <top>

@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * ModeGestionController.java
- * Last modified by Tetram, on 2014-07-29T11:10:36CEST
+ * Last modified by Tetram, on 2014-08-27T10:32:03CEST
  */
 
 package org.tetram.bdtheque.gui.controllers;
@@ -26,6 +26,7 @@ import org.tetram.bdtheque.gui.controllers.gestion.FicheEditController;
 import org.tetram.bdtheque.gui.controllers.gestion.GestionController;
 import org.tetram.bdtheque.gui.controllers.includes.TreeViewController;
 import org.tetram.bdtheque.gui.controllers.includes.TreeViewMode;
+import org.tetram.bdtheque.gui.controllers.includes.TreeViewSearchController;
 import org.tetram.bdtheque.gui.utils.Forms;
 import org.tetram.bdtheque.gui.utils.History;
 import org.tetram.bdtheque.utils.FileLink;
@@ -79,7 +80,7 @@ public class ModeGestionController extends WindowController implements ModeContr
     @FXML
     private ToggleButton btAlbums;
     @FXML
-    private TreeViewController entitiesController;
+    private TreeViewSearchController entitiesController;
     @Autowired
     private History history;
 
@@ -112,8 +113,8 @@ public class ModeGestionController extends WindowController implements ModeContr
             toggleButton.setUserData(buttonNodeHashMap.get(toggleButton));
         }
 
-        entitiesController.setClickToShow(true);
-        entitiesController.filtreProperty().bind(Bindings.createStringBinding(() -> {
+        getTreeViewController().setClickToShow(true);
+        getTreeViewController().filtreProperty().bind(Bindings.createStringBinding(() -> {
             Toggle button = entitiesType.getSelectedToggle();
             if (button == btAchatsAlbums || button == btAchatsParaBD)
                 return FILTRE_ACHAT;
@@ -123,16 +124,16 @@ public class ModeGestionController extends WindowController implements ModeContr
         entitiesType.selectedToggleProperty().addListener((observable, oldButton, newButton) -> {
             if (newButton == null) return;
             final TreeViewMode newMode = (TreeViewMode) newButton.getUserData();
-            if (entitiesController.getMode().equals(newMode))
-                entitiesController.refresh();
+            if (getTreeViewController().getMode().equals(newMode))
+                getTreeViewController().refreshTree();
             else
-                entitiesController.setMode(newMode);
+                getTreeViewController().setMode(newMode);
         });
 
-        btModifier.disableProperty().bind(entitiesController.selectedEntityProperty().isNull());
-        btSupprimer.disableProperty().bind(entitiesController.selectedEntityProperty().isNull());
+        btModifier.disableProperty().bind(getTreeViewController().selectedEntityProperty().isNull());
+        btSupprimer.disableProperty().bind(getTreeViewController().selectedEntityProperty().isNull());
         btAcheter.disableProperty().bind(
-                entitiesController.selectedEntityProperty().isNull().or(
+                getTreeViewController().selectedEntityProperty().isNull().or(
                         Bindings.and(
                                 Bindings.createBooleanBinding(() -> !btAchatsAlbums.equals(entitiesType.getSelectedToggle()), entitiesType.selectedToggleProperty()),
                                 Bindings.createBooleanBinding(() -> !btAchatsParaBD.equals(entitiesType.getSelectedToggle()), entitiesType.selectedToggleProperty())
@@ -157,26 +158,30 @@ public class ModeGestionController extends WindowController implements ModeContr
 
     @FXML
     public void clickRefresh(ActionEvent actionEvent) {
-        entitiesController.refresh();
+        getTreeViewController().refreshTree();
     }
 
     @FXML
     public void clickNew(ActionEvent actionEvent) throws IllegalAccessException, InstantiationException {
-        history.addWaiting(History.HistoryAction.GESTION_AJOUT, (AbstractDBEntity) entitiesController.getFinalEntityClass().newInstance(), entitiesController.getSearchText());
+        history.addWaiting(History.HistoryAction.GESTION_AJOUT, (AbstractDBEntity) getTreeViewController().getFinalEntityClass().newInstance(), getTreeViewController().getSearchText());
     }
 
     @FXML
     public void clickEdit(ActionEvent actionEvent) {
-        history.addWaiting(History.HistoryAction.GESTION_MODIF, (AbstractDBEntity) entitiesController.getSelectedEntity());
+        history.addWaiting(History.HistoryAction.GESTION_MODIF, (AbstractDBEntity) getTreeViewController().getSelectedEntity());
     }
 
     @FXML
     public void clickDel(ActionEvent actionEvent) {
-        history.addWaiting(History.HistoryAction.GESTION_SUPP, (AbstractDBEntity) entitiesController.getSelectedEntity());
+        history.addWaiting(History.HistoryAction.GESTION_SUPP, (AbstractDBEntity) getTreeViewController().getSelectedEntity());
     }
 
     @FXML
     public void clickAchat(ActionEvent actionEvent) {
-        history.addWaiting(History.HistoryAction.GESTION_ACHAT, (AbstractDBEntity) entitiesController.getSelectedEntity());
+        history.addWaiting(History.HistoryAction.GESTION_ACHAT, (AbstractDBEntity) getTreeViewController().getSelectedEntity());
+    }
+
+    private TreeViewController getTreeViewController() {
+        return entitiesController.getTreeViewController();
     }
 }

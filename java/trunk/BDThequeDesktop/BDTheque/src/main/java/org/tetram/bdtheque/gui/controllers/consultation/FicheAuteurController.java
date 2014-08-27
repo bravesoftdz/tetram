@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * FicheAuteurController.java
- * Last modified by Tetram, on 2014-07-31T12:25:53CEST
+ * Last modified by Tetram, on 2014-08-27T10:24:16CEST
  */
 
 package org.tetram.bdtheque.gui.controllers.consultation;
@@ -69,7 +69,6 @@ public class FicheAuteurController extends WindowController implements Consultat
         EntityWebHyperlink.addToLabeled(lbNom, _personne.siteWebProperty());
         tfBiographie.getChildren().add(new Text(_personne.getBiographie()));
 
-        tvSeriesController.setCanSearch(false);
         tvSeriesController.setFinalEntityClass(BaseAlbum.class);
         tvSeriesController.setOnIsLeaf(treeItem -> tvSeriesController.getNodeLevel(treeItem) == 2);
         tvSeriesController.setOnRenderCell(cell -> {

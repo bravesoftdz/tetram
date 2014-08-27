@@ -2,7 +2,7 @@
 <!--
   ~ Copyright (c) 2014, tetram.org. All Rights Reserved.
   ~ repertoire.fxml
-  ~ Last modified by Tetram, on 2014-07-29T11:36:25CEST
+  ~ Last modified by Tetram, on 2014-08-27T10:26:22CEST
   -->
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
@@ -29,7 +29,7 @@
                         </Label>
                     </top>
                     <center>
-                        <fx:include fx:id="albums" source="components/treeview.fxml" AnchorPane.bottomAnchor="0.0"
+                        <fx:include fx:id="albums" source="components/treeviewsearch.fxml" AnchorPane.bottomAnchor="0.0"
                                     AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
                                     AnchorPane.topAnchor="0.0"/>
                     </center>
@@ -40,7 +40,7 @@
             <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                     <children>
-                        <fx:include fx:id="series" source="components/treeview.fxml" AnchorPane.bottomAnchor="0.0"
+                        <fx:include fx:id="series" source="components/treeviewsearch.fxml" AnchorPane.bottomAnchor="0.0"
                                     AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
                                     AnchorPane.topAnchor="0.0"/>
                     </children>
@@ -51,7 +51,7 @@
             <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                     <children>
-                        <fx:include fx:id="univers" source="components/treeview.fxml" AnchorPane.bottomAnchor="0.0"
+                        <fx:include fx:id="univers" source="components/treeviewsearch.fxml" AnchorPane.bottomAnchor="0.0"
                                     AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
                                     AnchorPane.topAnchor="0.0"/>
                     </children>
@@ -62,7 +62,7 @@
             <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                     <children>
-                        <fx:include fx:id="auteurs" source="components/treeview.fxml" AnchorPane.bottomAnchor="0.0"
+                        <fx:include fx:id="auteurs" source="components/treeviewsearch.fxml" AnchorPane.bottomAnchor="0.0"
                                     AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
                                     AnchorPane.topAnchor="0.0"/>
                     </children>
@@ -73,7 +73,7 @@
             <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                     <children>
-                        <fx:include fx:id="parabd" source="components/treeview.fxml" AnchorPane.bottomAnchor="0.0"
+                        <fx:include fx:id="parabd" source="components/treeviewsearch.fxml" AnchorPane.bottomAnchor="0.0"
                                     AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
                                     AnchorPane.topAnchor="0.0"/>
                     </children>

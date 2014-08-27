@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * EntityPickerSkin.java
- * Last modified by Tetram, on 2014-08-26T16:09:04CEST
+ * Last modified by Tetram, on 2014-08-27T09:51:01CEST
  */
 
 package org.tetram.bdtheque.gui.components;
@@ -23,7 +23,7 @@ public class EntityPickerSkin extends ComboBoxPopupControl<AbstractDBEntity> {
     private final EntityPicker entityPicker;
     private TextField textField;
     private TextField displayNode;
-    private EntityTreeView popupContent;
+    private EntityPickerTreeView popupContent;
 
 
     public EntityPickerSkin(final EntityPicker entityPicker) {
@@ -46,9 +46,9 @@ public class EntityPickerSkin extends ComboBoxPopupControl<AbstractDBEntity> {
         return getEntityTreeView();
     }
 
-    private EntityTreeView getEntityTreeView() {
+    private EntityPickerTreeView getEntityTreeView() {
         if (popupContent == null) {
-            popupContent = new EntityTreeView((EntityPicker) getSkinnable());
+            popupContent = new EntityPickerTreeView((EntityPicker) getSkinnable());
             popupContent.setPopupControl(getPopup());
             getPopup().setAutoHide(false);
         }

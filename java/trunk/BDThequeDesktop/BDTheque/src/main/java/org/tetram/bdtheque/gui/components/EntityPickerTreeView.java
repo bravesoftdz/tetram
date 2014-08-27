@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
- * EntityTreeView.java
- * Last modified by Tetram, on 2014-08-26T15:32:44CEST
+ * EntityPickerTreeView.java
+ * Last modified by Tetram, on 2014-08-27T10:15:56CEST
  */
 
 package org.tetram.bdtheque.gui.components;
@@ -15,15 +15,14 @@ import org.tetram.bdtheque.spring.SpringFxmlLoader;
 /**
  * Created by Thierry on 10/08/2014.
  */
-public class EntityTreeView extends Region {
+public class EntityPickerTreeView extends Region {
 
     private final TreeViewController treeviewController;
     private PopupControl popupControl;
 
-    public EntityTreeView(EntityPicker entityPicker) {
+    public EntityPickerTreeView(EntityPicker entityPicker) {
         treeviewController = SpringFxmlLoader.load("components/treeview.fxml");
         treeviewController.getTreeView().minWidthProperty().bind(entityPicker.getEditor().widthProperty());
-        treeviewController.setCanSearch(false);
         treeviewController.setClickToShow(false);
         treeviewController.setOnClickItem(event -> {
             if (event.getClickCount() == 2) {
@@ -32,7 +31,6 @@ public class EntityTreeView extends Region {
                 entityPicker.hide();
             }
         });
-        // on ne veut que le treeview
         getChildren().add(treeviewController.getTreeView());
     }
 

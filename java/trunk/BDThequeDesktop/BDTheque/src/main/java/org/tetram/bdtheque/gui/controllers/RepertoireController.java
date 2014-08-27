@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * RepertoireController.java
- * Last modified by Tetram, on 2014-07-29T11:10:36CEST
+ * Last modified by Tetram, on 2014-08-27T10:27:44CEST
  */
 
 /**
@@ -19,8 +19,8 @@ import javafx.scene.control.TabPane;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.tetram.bdtheque.data.services.UserPreferences;
-import org.tetram.bdtheque.gui.controllers.includes.TreeViewController;
 import org.tetram.bdtheque.gui.controllers.includes.TreeViewMode;
+import org.tetram.bdtheque.gui.controllers.includes.TreeViewSearchController;
 import org.tetram.bdtheque.utils.FileLink;
 import org.tetram.bdtheque.utils.I18nSupport;
 
@@ -36,25 +36,25 @@ public class RepertoireController extends WindowController {
     @FXML
     private Tab tabAlbums;
     @FXML
-    private TreeViewController albumsController;
+    private TreeViewSearchController albumsController;
     @FXML
     private ChoiceBox<TypeRepertoireAlbumEntry> repertoireGroup;
     @FXML
     private Tab tabSeries;
     @FXML
-    private TreeViewController seriesController;
+    private TreeViewSearchController seriesController;
     @FXML
     private Tab tabUnivers;
     @FXML
-    private TreeViewController universController;
+    private TreeViewSearchController universController;
     @FXML
     private Tab tabAuteurs;
     @FXML
-    private TreeViewController auteursController;
+    private TreeViewSearchController auteursController;
     @FXML
     private Tab tabParabd;
     @FXML
-    private TreeViewController parabdController;
+    private TreeViewSearchController parabdController;
     @Autowired
     private UserPreferences userPreferences;
 
@@ -72,7 +72,7 @@ public class RepertoireController extends WindowController {
 
         infoTabAlbums.modeProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null)
-                infoTabAlbums.treeViewController.setMode(infoTabAlbums.getMode());
+                infoTabAlbums.treeViewController.getTreeViewController().setMode(infoTabAlbums.getMode());
         });
 
         repertoireGroup.getItems().addAll(TypeRepertoireAlbumEntry.values());
@@ -84,7 +84,7 @@ public class RepertoireController extends WindowController {
 
         currentInfoTab.addListener((observable, oldValue, newValue) -> {
             if (newValue != null)
-                newValue.treeViewController.setMode(newValue.getMode());
+                newValue.treeViewController.getTreeViewController().setMode(newValue.getMode());
         });
 
         // on se fiche du tab, il doit juste être différent de tabAlbums
@@ -97,7 +97,7 @@ public class RepertoireController extends WindowController {
     }
 
     public void refresh() {
-        currentInfoTab.getValue().treeViewController.refresh();
+        currentInfoTab.getValue().treeViewController.getTreeViewController().refreshTree();
     }
 
     private enum TypeRepertoireAlbumEntry {
@@ -125,9 +125,9 @@ public class RepertoireController extends WindowController {
 
     private class InfoTab {
         private final ObjectProperty<TreeViewMode> mode = new SimpleObjectProperty<>(this, "mode", null);
-        private final TreeViewController treeViewController;
+        private final TreeViewSearchController treeViewController;
 
-        public InfoTab(TreeViewMode mode, TreeViewController treeViewController) {
+        public InfoTab(TreeViewMode mode, TreeViewSearchController treeViewController) {
             setMode(mode);
             this.treeViewController = treeViewController;
         }

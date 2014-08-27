@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * TreeViewController.java
- * Last modified by Tetram, on 2014-08-26T16:33:39CEST
+ * Last modified by Tetram, on 2014-08-27T10:45:18CEST
  */
 
 package org.tetram.bdtheque.gui.controllers.includes;
@@ -18,9 +18,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
 import javafx.util.Callback;
 import javafx.util.Duration;
 import jfxtras.animation.Timer;
@@ -45,6 +43,7 @@ import org.tetram.bdtheque.gui.utils.NotationResource;
 import org.tetram.bdtheque.spring.SpringContext;
 import org.tetram.bdtheque.utils.*;
 
+import java.lang.ref.WeakReference;
 import java.util.List;
 import java.util.UUID;
 import java.util.function.Consumer;
@@ -78,7 +77,6 @@ public class TreeViewController extends WindowController {
     private final ReadOnlyObjectWrapper<RepertoireLiteDao<?, ?>> dao = new ReadOnlyObjectWrapper<>(this, "dao", null);
     private final ObjectProperty<TreeViewMode> mode = new SimpleObjectProperty<>(this, "mode", TreeViewMode.NONE);
     private final ObjectProperty<AbstractEntity> selectedEntity = new SimpleObjectProperty<>(this, "selectedEntity", null);
-    private final BooleanProperty canSearch = new SimpleBooleanProperty(this, "canSearch", true);
     @Autowired
     private History history;
     @Autowired
@@ -86,20 +84,18 @@ public class TreeViewController extends WindowController {
     @Autowired
     private MainController mainController;
     @FXML
-    private BorderPane containerPane;
-    @FXML
     private TreeTableView<AbstractEntity> treeTableView;
     @FXML
     private TreeTableColumn<AbstractEntity, AbstractEntity> column0;
     @FXML
     private TreeTableColumn<AbstractEntity, AbstractEntity> column1;
-    @FXML
-    private TextField tfSearch;
+
     private boolean findRegistered = false;
     private String lastFindText;
     private ListOrderedMap<? extends InitialeEntity<? extends Comparable<?>>, ? extends List<? extends AbstractDBEntity>> findList;
 
     private StringProperty searchText = new SimpleStringProperty(this, "searchText", null);
+    private WeakReference<TextInputControl> searchTextField = new WeakReference<>(null);
 
     public TreeViewController() {
         searchTimer.setRepeats(false);
@@ -114,26 +110,8 @@ public class TreeViewController extends WindowController {
             onGetChildren.set(newMode == TreeViewMode.NONE ? null : new TreeViewMode.GetChildrenFromDaoCallback(this));
             dao.set(newMode == TreeViewMode.NONE ? null : SpringContext.CONTEXT.getBean(newMode.getDaoClass()));
             resetSearch();
-            refresh();
+            refreshTree();
         });
-
-        tfSearch.visibleProperty().bind(canSearchProperty());
-        EventHandler<KeyEvent> onKeyPressed = event -> {
-            if (event.getCode().equals(KeyCode.F3) && !event.isAltDown() && !event.isControlDown() && !event.isShiftDown() && !event.isMetaDown())
-                find(true);
-        };
-        treeTableView.setOnKeyPressed(onKeyPressed);
-        canSearchProperty().addListener((o, oV, newValue) -> {
-            if (newValue) {
-                treeTableView.setOnKeyPressed(onKeyPressed);
-                containerPane.setTop(tfSearch);
-            } else {
-                treeTableView.setOnKeyPressed(null);
-                containerPane.setTop(null);
-            }
-        });
-
-        registerSearchableField(tfSearch);
 
         searchTextProperty().addListener(
                 (o, ov, nv) -> searchTimer.restart()
@@ -200,7 +178,7 @@ public class TreeViewController extends WindowController {
         });
 
         Platform.runLater(() -> {
-            if (treeTableView.getRoot() == null) refresh();
+            if (treeTableView.getRoot() == null) refreshTree();
         });
     }
 
@@ -328,7 +306,11 @@ public class TreeViewController extends WindowController {
 
     private TreeViewNode getFirst() {
         try {
-            return (TreeViewNode) getTreeView().getRoot().getChildren().get(0);
+            ObservableList<TreeItem<AbstractEntity>> children = getTreeView().getRoot().getChildren();
+            if (children.isEmpty())
+                return null;
+            else
+                return (TreeViewNode) children.get(0);
         } catch (NullPointerException e) {
             return null;
         }
@@ -414,10 +396,6 @@ public class TreeViewController extends WindowController {
         return treeTableView;
     }
 
-    public TextField getTextFieldSearch() {
-        return tfSearch;
-    }
-
     public TreeTableColumn<AbstractEntity, AbstractEntity> getColumn0() {
         return column0;
     }
@@ -438,7 +416,7 @@ public class TreeViewController extends WindowController {
         this.finalEntityClass.set(finalEntityClass);
     }
 
-    public void refresh() {
+    public void refreshTree() {
         treeTableView.setRoot(new TreeViewNode(null));
     }
 
@@ -546,18 +524,6 @@ public class TreeViewController extends WindowController {
         return selectedEntity;
     }
 
-    public boolean getCanSearch() {
-        return canSearch.get();
-    }
-
-    public void setCanSearch(boolean canSearch) {
-        this.canSearch.set(canSearch);
-    }
-
-    public BooleanProperty canSearchProperty() {
-        return canSearch;
-    }
-
     public UUID getCurrentID() {
         return getSelectedEntity() == null ? null : ((AbstractDBEntity) getSelectedEntity()).getId();
     }
@@ -578,52 +544,63 @@ public class TreeViewController extends WindowController {
         return searchText;
     }
 
-    public void registerSearchableField(TextField textField) {
-        textField.setOnKeyPressed(event -> {
-            if (!event.isAltDown() && !event.isControlDown() && !event.isShiftDown() && !event.isMetaDown())
-                switch (event.getCode()) {
-                    case F3:
-                        find(true);
-                        break;
-                    case ENTER:
-                        fireRegisteredFind();
-                        break;
-                }
-        });
-        searchTextProperty().unbind();
-        searchTextProperty().bind(textField.textProperty());
+    public void registerSearchableField(TextInputControl inputControl) {
+        if (searchTextField.get() != null)
+            searchTextProperty().unbindBidirectional(searchTextField.get().textProperty());
+
+        if (inputControl != null) {
+            getTreeView().setOnKeyPressed(event -> {
+                if (event.getCode().equals(KeyCode.F3) && !event.isAltDown() && !event.isControlDown() && !event.isShiftDown() && !event.isMetaDown())
+                    find(true);
+            });
+            inputControl.setOnKeyPressed(event -> {
+                if (!event.isAltDown() && !event.isControlDown() && !event.isShiftDown() && !event.isMetaDown())
+                    switch (event.getCode()) {
+                        case F3:
+                            find(true);
+                            break;
+                        case ENTER:
+                            fireRegisteredFind();
+                            break;
+                    }
+            });
+            searchTextProperty().bindBidirectional(inputControl.textProperty());
+        } else {
+            getTreeView().setOnKeyPressed(null);
+        }
+        searchTextField = new WeakReference<>(inputControl);
     }
 
     public ReadOnlyDoubleProperty widthProperty() {
-        return containerPane.widthProperty();
+        return treeTableView.widthProperty();
     }
 
     public ReadOnlyDoubleProperty heightProperty() {
-        return containerPane.heightProperty();
+        return treeTableView.heightProperty();
     }
 
     public DoubleProperty prefWidthProperty() {
-        return containerPane.prefWidthProperty();
+        return treeTableView.prefWidthProperty();
     }
 
     public DoubleProperty prefHeightProperty() {
-        return containerPane.prefHeightProperty();
+        return treeTableView.prefHeightProperty();
     }
 
     public DoubleProperty minWidthProperty() {
-        return containerPane.minWidthProperty();
+        return treeTableView.minWidthProperty();
     }
 
     public DoubleProperty minHeightProperty() {
-        return containerPane.minHeightProperty();
+        return treeTableView.minHeightProperty();
     }
 
     public DoubleProperty maxWidthProperty() {
-        return containerPane.maxWidthProperty();
+        return treeTableView.maxWidthProperty();
     }
 
     public DoubleProperty maxHeightProperty() {
-        return containerPane.maxHeightProperty();
+        return treeTableView.maxHeightProperty();
     }
 
     public class TreeViewNode extends TreeItem<AbstractEntity> {

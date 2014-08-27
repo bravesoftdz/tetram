@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2014, tetram.org. All Rights Reserved.
+  ~ treeviewsearch.fxml
+  ~ Last modified by Tetram, on 2014-08-27T10:46:54CEST
+  -->
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="200.0" prefWidth="200.0" xmlns="http://javafx.com/javafx/8"
+            fx:controller="org.tetram.bdtheque.gui.controllers.includes.TreeViewSearchController" fx:id="containerPane">
+    <center>
+        <fx:include fx:id="treeView" source="treeview.fxml" BorderPane.alignment="CENTER"/>
+    </center>
+    <top>
+        <TextField fx:id="tfSearch" promptText="%searchHint" BorderPane.alignment="CENTER">
+            <BorderPane.margin>
+                <Insets bottom="4.0" left="4.0" right="4.0" top="4.0"/>
+            </BorderPane.margin>
+        </TextField>
+    </top>
+</BorderPane>

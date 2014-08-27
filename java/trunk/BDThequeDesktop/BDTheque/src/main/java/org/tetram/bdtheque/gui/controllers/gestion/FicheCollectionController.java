@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * FicheCollectionController.java
- * Last modified by Thierry, on 2014-08-06T10:53:56CEST
+ * Last modified by Tetram, on 2014-08-27T10:32:26CEST
  */
 
 package org.tetram.bdtheque.gui.controllers.gestion;
@@ -18,8 +18,8 @@ import org.springframework.stereotype.Controller;
 import org.tetram.bdtheque.data.bean.Collection;
 import org.tetram.bdtheque.data.bean.Editeur;
 import org.tetram.bdtheque.data.dao.CollectionDao;
-import org.tetram.bdtheque.gui.controllers.includes.TreeViewController;
 import org.tetram.bdtheque.gui.controllers.includes.TreeViewMode;
+import org.tetram.bdtheque.gui.controllers.includes.TreeViewSearchController;
 import org.tetram.bdtheque.spring.utils.ListStringConverter;
 import org.tetram.bdtheque.utils.FileLink;
 import org.tetram.bdtheque.utils.FileLinks;
@@ -41,7 +41,7 @@ public class FicheCollectionController extends GestionControllerImpl {
     @Autowired
     CollectionDao collectionDao;
     @FXML
-    TreeViewController tvEditeurController; // TODO: remplacer par la sélection d'un éditeur
+    TreeViewSearchController tvEditeurController; // TODO: remplacer par la sélection d'un éditeur
     @FXML
     private TextField tfNom;
     @FXML
@@ -60,7 +60,7 @@ public class FicheCollectionController extends GestionControllerImpl {
             }, FicheEditController.HandlerPriority.HIGH);
         });
 
-        tvEditeurController.setMode(TreeViewMode.EDITEURS);
+        tvEditeurController.getTreeViewController().setMode(TreeViewMode.EDITEURS);
     }
 
     @SuppressWarnings("unchecked")
@@ -71,7 +71,7 @@ public class FicheCollectionController extends GestionControllerImpl {
 
         tfNom.textProperty().bindBidirectional(collection.nomCollectionProperty());
         // TODO: ça ne fonctionne pas comme prévu, mais comme le composant doit être changé, ce n'est pas grave
-        Bindings.bindBidirectional((Property<Editeur>) tvEditeurController.selectedEntityProperty(), collection.editeurProperty());
+        Bindings.bindBidirectional((Property<Editeur>) tvEditeurController.getTreeViewController().selectedEntityProperty(), collection.editeurProperty());
         taAssociations.textProperty().bindBidirectional(collection.associationsProperty(), new ListStringConverter());
     }
 
