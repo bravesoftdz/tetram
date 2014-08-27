@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * EntityPickerBehavior.java
- * Last modified by Tetram, on 2014-08-27T14:13:31CEST
+ * Last modified by Tetram, on 2014-08-27T15:15:45CEST
  */
 
 package org.tetram.bdtheque.gui.components;
@@ -10,6 +10,8 @@ import com.sun.javafx.scene.control.behavior.ComboBoxBaseBehavior;
 import com.sun.javafx.scene.control.behavior.KeyBinding;
 import org.jetbrains.annotations.NonNls;
 import org.tetram.bdtheque.data.bean.abstractentities.AbstractDBEntity;
+import org.tetram.bdtheque.utils.ClassLink;
+import org.tetram.bdtheque.utils.ClassLinks;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +22,10 @@ import static javafx.scene.input.KeyEvent.KEY_PRESSED;
 /**
  * Created by Thierry on 10/08/2014.
  */
+@ClassLinks({
+        @ClassLink(com.sun.javafx.scene.control.behavior.ColorPickerBehavior.class),
+        @ClassLink(com.sun.javafx.scene.control.behavior.DatePickerBehavior.class)
+})
 public class EntityPickerBehavior extends ComboBoxBaseBehavior<AbstractDBEntity> {
     @NonNls
     protected static final String OPEN_ACTION = "Open";

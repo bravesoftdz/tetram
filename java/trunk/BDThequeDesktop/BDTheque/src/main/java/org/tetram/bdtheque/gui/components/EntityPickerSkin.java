@@ -1,24 +1,29 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * EntityPickerSkin.java
- * Last modified by Tetram, on 2014-08-27T14:32:29CEST
+ * Last modified by Tetram, on 2014-08-27T16:33:51CEST
  */
 
 package org.tetram.bdtheque.gui.components;
 
 import com.sun.javafx.scene.control.skin.ComboBoxListViewSkin;
-import com.sun.javafx.scene.control.skin.ComboBoxPopupControl;
 import javafx.css.PseudoClass;
 import javafx.scene.Node;
 import javafx.scene.control.TextField;
 import org.tetram.bdtheque.data.bean.abstractentities.AbstractDBEntity;
 import org.tetram.bdtheque.gui.controllers.includes.TreeViewController;
+import org.tetram.bdtheque.utils.ClassLink;
+import org.tetram.bdtheque.utils.ClassLinks;
 
 /**
  * Created by Thierry on 10/08/2014.
  */
+@ClassLinks({
+        @ClassLink(com.sun.javafx.scene.control.skin.ColorPickerSkin.class),
+        @ClassLink(com.sun.javafx.scene.control.skin.DatePickerSkin.class)
+})
 @SuppressWarnings("HardCodedStringLiteral")
-public class EntityPickerSkin extends ComboBoxPopupControl<AbstractDBEntity> {
+public class EntityPickerSkin extends EntityPickerPopupControl<AbstractDBEntity> {
 
     private static PseudoClass CONTAINS_FOCUS_PSEUDOCLASS_STATE = PseudoClass.getPseudoClass("contains-focus");
     private final EntityPicker entityPicker;
@@ -98,6 +103,7 @@ public class EntityPickerSkin extends ComboBoxPopupControl<AbstractDBEntity> {
         textField = entityPicker.getEditor();
         textField.focusTraversableProperty().bindBidirectional(entityPicker.focusTraversableProperty());
         textField.promptTextProperty().bind(entityPicker.promptTextProperty());
+        textField.editableProperty().bind(entityPicker.editableProperty());
 
         textField.focusedProperty().addListener((ov, t, hasFocus) -> {
             entityPicker.getProperties().put("FOCUSED", hasFocus);
@@ -120,19 +126,18 @@ public class EntityPickerSkin extends ComboBoxPopupControl<AbstractDBEntity> {
         final EntityPicker entityPicker = (EntityPicker) getSkinnable();
         AbstractDBEntity value = entityPicker.getValue();
         if (value != null)
-            displayNode.setText(value.toString());
+            textField.setText(value.toString());
         else
-            displayNode.setText("");
+            textField.setText("");
     }
 
     @Override
     public Node getDisplayNode() {
         if (displayNode == null) {
-            // displayNode et textField contiennent le même objet: la variable displayNode ne sert que pour passer dans ce test
+            // TODO: à terme, displayNode devra contenir le StackPane + textField + Boutons
             displayNode = getEditableInputNode();
             updateDisplayNode();
         }
-        displayNode.setEditable(entityPicker.isEditable());
 
         return displayNode;
     }

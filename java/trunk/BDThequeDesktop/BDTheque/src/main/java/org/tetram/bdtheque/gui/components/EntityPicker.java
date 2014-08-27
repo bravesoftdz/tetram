@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * EntityPicker.java
- * Last modified by Tetram, on 2014-08-26T15:43:28CEST
+ * Last modified by Tetram, on 2014-08-27T16:23:55CEST
  */
 
 package org.tetram.bdtheque.gui.components;
@@ -111,4 +111,10 @@ public class EntityPicker extends ComboBoxBase<AbstractDBEntity> {
         }
         return editor.getReadOnlyProperty();
     }
+
+    @Override
+    protected double computeMinWidth(double height) {
+        return super.computeMinWidth(height);
+    }
+
 }

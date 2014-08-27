@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * EntityPickerContent.java
- * Last modified by Tetram, on 2014-08-27T14:30:21CEST
+ * Last modified by Tetram, on 2014-08-27T16:05:54CEST
  */
 
 package org.tetram.bdtheque.gui.components;
@@ -11,10 +11,16 @@ import javafx.scene.layout.Region;
 import org.tetram.bdtheque.data.bean.abstractentities.AbstractDBEntity;
 import org.tetram.bdtheque.gui.controllers.includes.TreeViewController;
 import org.tetram.bdtheque.spring.SpringFxmlLoader;
+import org.tetram.bdtheque.utils.ClassLink;
+import org.tetram.bdtheque.utils.ClassLinks;
 
 /**
  * Created by Thierry on 10/08/2014.
  */
+@ClassLinks({
+        @ClassLink(com.sun.javafx.scene.control.skin.ColorPalette.class),
+        @ClassLink(com.sun.javafx.scene.control.skin.DatePickerContent.class)
+})
 public class EntityPickerContent extends Region {
 
     private final TreeViewController treeviewController;
@@ -22,7 +28,6 @@ public class EntityPickerContent extends Region {
 
     public EntityPickerContent(EntityPicker entityPicker) {
         treeviewController = SpringFxmlLoader.load("components/treeview.fxml");
-        treeviewController.minWidthProperty().bind(entityPicker.getEditor().widthProperty());
         treeviewController.setClickToShow(false);
         treeviewController.setOnClickItem(event -> {
             if (event.getClickCount() == 2) {
