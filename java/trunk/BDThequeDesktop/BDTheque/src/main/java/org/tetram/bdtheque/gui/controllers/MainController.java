@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * MainController.java
- * Last modified by Tetram, on 2014-07-29T11:10:36CEST
+ * Last modified by Tetram, on 2014-08-27T14:36:14CEST
  */
 
 package org.tetram.bdtheque.gui.controllers;
@@ -77,7 +77,10 @@ public class MainController extends WindowController {
             toggle.setUserData(applicationMode);
             toggle.setSelected(userPreferences.getModeOuverture().equals(applicationMode));
         }
-        tgMode.selectedToggleProperty().addListener(o -> history.addWaiting(((ApplicationMode) tgMode.getSelectedToggle().getUserData()).getHistoryAction()));
+        tgMode.selectedToggleProperty().addListener((o, ov, nv) -> {
+            if (nv != null)
+                history.addWaiting(((ApplicationMode) nv.getUserData()).getHistoryAction());
+        });
 
         mode.addListener((observable, oldMode, newMode) -> {
             if (newMode == null) return;
