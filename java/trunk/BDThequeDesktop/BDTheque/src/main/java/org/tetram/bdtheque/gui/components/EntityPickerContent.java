@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
- * EntityPickerTreeView.java
- * Last modified by Tetram, on 2014-08-27T10:47:59CEST
+ * EntityPickerContent.java
+ * Last modified by Tetram, on 2014-08-27T14:30:21CEST
  */
 
 package org.tetram.bdtheque.gui.components;
@@ -15,12 +15,12 @@ import org.tetram.bdtheque.spring.SpringFxmlLoader;
 /**
  * Created by Thierry on 10/08/2014.
  */
-public class EntityPickerTreeView extends Region {
+public class EntityPickerContent extends Region {
 
     private final TreeViewController treeviewController;
     private PopupControl popupControl;
 
-    public EntityPickerTreeView(EntityPicker entityPicker) {
+    public EntityPickerContent(EntityPicker entityPicker) {
         treeviewController = SpringFxmlLoader.load("components/treeview.fxml");
         treeviewController.minWidthProperty().bind(entityPicker.getEditor().widthProperty());
         treeviewController.setClickToShow(false);
@@ -31,6 +31,7 @@ public class EntityPickerTreeView extends Region {
                 entityPicker.hide();
             }
         });
+        // getView devrait aussi fonctionner mais comme ça, on est sûr que c'est bien que le treeview qui est affiché
         getChildren().add(treeviewController.getTreeView());
     }
 

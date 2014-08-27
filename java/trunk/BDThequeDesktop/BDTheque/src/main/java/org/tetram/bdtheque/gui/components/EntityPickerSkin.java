@@ -1,11 +1,12 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * EntityPickerSkin.java
- * Last modified by Tetram, on 2014-08-27T09:51:01CEST
+ * Last modified by Tetram, on 2014-08-27T14:32:29CEST
  */
 
 package org.tetram.bdtheque.gui.components;
 
+import com.sun.javafx.scene.control.skin.ComboBoxListViewSkin;
 import com.sun.javafx.scene.control.skin.ComboBoxPopupControl;
 import javafx.css.PseudoClass;
 import javafx.scene.Node;
@@ -23,7 +24,7 @@ public class EntityPickerSkin extends ComboBoxPopupControl<AbstractDBEntity> {
     private final EntityPicker entityPicker;
     private TextField textField;
     private TextField displayNode;
-    private EntityPickerTreeView popupContent;
+    private EntityPickerContent popupContent;
 
 
     public EntityPickerSkin(final EntityPicker entityPicker) {
@@ -38,6 +39,10 @@ public class EntityPickerSkin extends ComboBoxPopupControl<AbstractDBEntity> {
             getChildren().add(textField);
         }
 
+        this.entityPicker.focusedProperty().addListener((ov, t, hasFocus) -> {
+            ((ComboBoxListViewSkin.FakeFocusTextField) textField).setFakeFocus(hasFocus);
+        });
+
         registerChangeListener(entityPicker.valueProperty(), "VALUE");
     }
 
@@ -46,11 +51,10 @@ public class EntityPickerSkin extends ComboBoxPopupControl<AbstractDBEntity> {
         return getEntityTreeView();
     }
 
-    private EntityPickerTreeView getEntityTreeView() {
+    private EntityPickerContent getEntityTreeView() {
         if (popupContent == null) {
-            popupContent = new EntityPickerTreeView((EntityPicker) getSkinnable());
+            popupContent = new EntityPickerContent((EntityPicker) getSkinnable());
             popupContent.setPopupControl(getPopup());
-            getPopup().setAutoHide(false);
         }
         return popupContent;
     }
@@ -61,6 +65,11 @@ public class EntityPickerSkin extends ComboBoxPopupControl<AbstractDBEntity> {
         final EntityPicker entityPicker = (EntityPicker) getSkinnable();
         popupContent.updateSelection(entityPicker.getValue());
         popupContent.clearFocus();
+    }
+
+    @Override
+    protected void focusLost() {
+        // do nothing
     }
 
     @Override

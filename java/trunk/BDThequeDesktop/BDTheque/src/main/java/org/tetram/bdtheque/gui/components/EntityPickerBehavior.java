@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * EntityPickerBehavior.java
- * Last modified by Thierry, on 2014-08-10T15:16:29CEST
+ * Last modified by Tetram, on 2014-08-27T14:13:31CEST
  */
 
 package org.tetram.bdtheque.gui.components;
@@ -55,8 +55,8 @@ public class EntityPickerBehavior extends ComboBoxBaseBehavior<AbstractDBEntity>
         // when we click on some non  interactive part of the
         // Color Palette - we do not want to hide.
         EntityPicker entityPicker = (EntityPicker)getControl();
-        EntityPickerSkin cpSkin = (EntityPickerSkin)entityPicker.getSkin();
-        cpSkin.syncWithAutoUpdate();
+        EntityPickerSkin epSkin = (EntityPickerSkin)entityPicker.getSkin();
+        epSkin.syncWithAutoUpdate();
         // if the ColorPicker is no longer showing, then invoke the super method
         // to keep its show/hide state in sync.
         if (!entityPicker.isShowing()) super.onAutoHide();
