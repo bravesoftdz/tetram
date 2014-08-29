@@ -1,14 +1,13 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * AbstractEntity.java
- * Last modified by Tetram, on 2014-07-29T11:09:14CEST
+ * Last modified by Tetram, on 2014-08-29T15:21:24CEST
  */
 
 package org.tetram.bdtheque.data.bean.abstractentities;
 
+import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.beans.property.ReadOnlyStringWrapper;
-import javafx.beans.property.StringProperty;
-import javafx.beans.value.ObservableValue;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.TestOnly;
 import org.springframework.util.ClassUtils;
@@ -23,7 +22,7 @@ import java.util.Collection;
 public abstract class AbstractEntity {
 
     @NonNls
-    private final StringProperty label = new ReadOnlyStringWrapper(this, "label", null) {
+    private final ReadOnlyStringWrapper label = new ReadOnlyStringWrapper(this, "label", null) {
         @Override
         public String get() {
             super.get();
@@ -134,8 +133,12 @@ public abstract class AbstractEntity {
         return 0;
     }
 
-    public ObservableValue<String> labelProperty() {
-        return label;
+    public ReadOnlyStringProperty labelProperty() {
+        return label.getReadOnlyProperty();
+    }
+
+    public String getLabel() {
+        return label.get();
     }
 
     @SuppressWarnings("unchecked")

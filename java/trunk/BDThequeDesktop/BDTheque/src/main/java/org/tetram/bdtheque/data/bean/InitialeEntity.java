@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * InitialeEntity.java
- * Last modified by Tetram, on 2014-07-29T13:00:05CEST
+ * Last modified by Tetram, on 2014-08-29T15:22:51CEST
  */
 
 package org.tetram.bdtheque.data.bean;
@@ -43,6 +43,7 @@ public class InitialeEntity<T> extends AbstractEntity {
         return value;
     }
 
+    @Override
     public String getLabel() {
         return label.get();
     }
@@ -51,6 +52,7 @@ public class InitialeEntity<T> extends AbstractEntity {
         this.label.set(label);
     }
 
+    @Override
     public StringProperty labelProperty() {
         return label;
     }

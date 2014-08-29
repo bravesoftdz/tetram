@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * EntityPickerSkin.java
- * Last modified by Tetram, on 2014-08-29T12:20:44CEST
+ * Last modified by Tetram, on 2014-08-29T15:28:02CEST
  */
 
 package org.tetram.bdtheque.gui.components;
@@ -9,9 +9,13 @@ package org.tetram.bdtheque.gui.components;
 import com.sun.javafx.scene.control.skin.ComboBoxListViewSkin;
 import javafx.beans.binding.Bindings;
 import javafx.css.PseudoClass;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
 import org.tetram.bdtheque.data.bean.abstractentities.AbstractDBEntity;
 import org.tetram.bdtheque.gui.controllers.includes.TreeViewController;
 import org.tetram.bdtheque.utils.ClassLink;
@@ -78,7 +82,8 @@ public class EntityPickerSkin extends EntityPickerPopupControl<AbstractDBEntity>
 
     @Override
     protected void focusLost() {
-        // do nothing
+        AbstractDBEntity entity = entityPicker.getValue();
+        textField.setText(entity == null ? null : entity.getLabel());
     }
 
     @Override
@@ -156,7 +161,25 @@ public class EntityPickerSkin extends EntityPickerPopupControl<AbstractDBEntity>
     public Region getDisplayRegion() {
         if (displayRegion == null) {
             // TODO: à terme, displayRegion devra contenir StackPane + textField + Boutons
-            displayRegion = getEditableInputNode();
+            StackPane pane = new StackPane();
+
+            getEditableInputNode(); // pour initialiser textField
+            StackPane.setAlignment(textField, Pos.CENTER);
+            pane.getChildren().add(textField);
+
+            Button btnReset = new Button();
+            btnReset.setMinWidth(10);
+            btnReset.minHeightProperty().bind(textField.heightProperty());
+            btnReset.visibleProperty().bind(entityPicker.valueProperty().isNotNull());
+            btnReset.setFocusTraversable(false);
+            btnReset.setBackground(Background.EMPTY);
+            btnReset.setText("X");
+            btnReset.setOnAction(event -> entityPicker.setValue(null));
+            StackPane.setAlignment(btnReset, Pos.CENTER_RIGHT);
+            pane.getChildren().add(btnReset);
+
+            displayRegion = pane;
+
             updateDisplayNode();
         }
 
