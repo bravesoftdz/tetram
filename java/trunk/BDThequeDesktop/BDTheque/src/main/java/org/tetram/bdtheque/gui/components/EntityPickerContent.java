@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * EntityPickerContent.java
- * Last modified by Tetram, on 2014-08-29T11:09:18CEST
+ * Last modified by Tetram, on 2014-08-29T14:13:17CEST
  */
 
 package org.tetram.bdtheque.gui.components;
@@ -36,8 +36,7 @@ public class EntityPickerContent extends Region {
                 entityPicker.hide();
             }
         });
-        // getView devrait aussi fonctionner mais comme ça, on est sûr que c'est bien que le treeview qui est affiché
-        getChildren().add(treeviewController.getTreeView());
+        getChildren().add(treeviewController.getView());
     }
 
     public void setPopupControl(PopupControl popupControl) {
@@ -59,4 +58,5 @@ public class EntityPickerContent extends Region {
     public void setContentMinWidth(double minWidth) {
         treeviewController.getTreeView().setMinWidth(minWidth);
     }
+
 }
