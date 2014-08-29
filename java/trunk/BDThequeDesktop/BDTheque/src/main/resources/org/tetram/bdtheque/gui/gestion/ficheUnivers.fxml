@@ -2,7 +2,7 @@
 <!--
   ~ Copyright (c) 2014, tetram.org. All Rights Reserved.
   ~ ficheUnivers.fxml
-  ~ Last modified by Tetram, on 2014-07-29T11:36:11CEST
+  ~ Last modified by Tetram, on 2014-08-29T12:05:53CEST
   -->
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
@@ -27,7 +27,7 @@
                 <Label styleClass="label-rubrique" text="Site web :" GridPane.halignment="RIGHT" GridPane.rowIndex="1"/>
                 <TextField fx:id="tfSiteWeb" minWidth="-Infinity" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
                 <Label fx:id="lbSiteWeb" text="Label" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
-                <Label styleClass="label-rubrique" text="Univers parent :" GridPane.halignment="RIGHT"
+                <Label fx:id="lbUniversParent" styleClass="label-rubrique" text="Univers parent :" GridPane.halignment="RIGHT"
                        GridPane.rowIndex="2"/>
 
                 <Separator maxWidth="-Infinity" minWidth="-Infinity" prefWidth="200.0" GridPane.columnSpan="3"

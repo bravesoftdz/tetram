@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * EntityPickerBehavior.java
- * Last modified by Tetram, on 2014-08-27T15:15:45CEST
+ * Last modified by Tetram, on 2014-08-29T12:23:56CEST
  */
 
 package org.tetram.bdtheque.gui.components;
@@ -10,6 +10,7 @@ import com.sun.javafx.scene.control.behavior.ComboBoxBaseBehavior;
 import com.sun.javafx.scene.control.behavior.KeyBinding;
 import org.jetbrains.annotations.NonNls;
 import org.tetram.bdtheque.data.bean.abstractentities.AbstractDBEntity;
+import org.tetram.bdtheque.data.bean.abstractentities.AbstractEntity;
 import org.tetram.bdtheque.utils.ClassLink;
 import org.tetram.bdtheque.utils.ClassLinks;
 
@@ -28,6 +29,8 @@ import static javafx.scene.input.KeyEvent.KEY_PRESSED;
 })
 public class EntityPickerBehavior extends ComboBoxBaseBehavior<AbstractDBEntity> {
     @NonNls
+    protected static final String ACCEPT_ACTION = "Accept";
+    @NonNls
     protected static final String OPEN_ACTION = "Open";
     @NonNls
     protected static final String CLOSE_ACTION = "Close";
@@ -36,7 +39,7 @@ public class EntityPickerBehavior extends ComboBoxBaseBehavior<AbstractDBEntity>
 //        ENTITY_PICKER_BINDINGS.addAll(COMBO_BOX_BASE_BINDINGS);
         ENTITY_PICKER_BINDINGS.add(new KeyBinding(ESCAPE, KEY_PRESSED, CLOSE_ACTION));
         ENTITY_PICKER_BINDINGS.add(new KeyBinding(SPACE, KEY_PRESSED, OPEN_ACTION));
-        ENTITY_PICKER_BINDINGS.add(new KeyBinding(ENTER, KEY_PRESSED, OPEN_ACTION));
+        ENTITY_PICKER_BINDINGS.add(new KeyBinding(ENTER, KEY_PRESSED, ACCEPT_ACTION));
 
     }
     public EntityPickerBehavior(EntityPicker entityPicker) {
@@ -45,6 +48,17 @@ public class EntityPickerBehavior extends ComboBoxBaseBehavior<AbstractDBEntity>
 
     @Override protected void callAction(String name) {
         switch (name) {
+            case ACCEPT_ACTION:
+                EntityPicker entityPicker = (EntityPicker)getControl();
+                EntityPickerSkin epSkin = (EntityPickerSkin)entityPicker.getSkin();
+                AbstractEntity selectedEntity = epSkin.getTreeViewController().getSelectedEntity();
+                if (selectedEntity != null) {
+                    entityPicker.setValue((AbstractDBEntity) selectedEntity);
+                    hide();
+                }
+                else
+                    epSkin.getTreeViewController().fireRegisteredFind();
+                break;
             case OPEN_ACTION:
                 show();
                 break;

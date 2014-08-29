@@ -1,15 +1,17 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * EntityPickerSkin.java
- * Last modified by Tetram, on 2014-08-27T16:33:51CEST
+ * Last modified by Tetram, on 2014-08-29T12:20:44CEST
  */
 
 package org.tetram.bdtheque.gui.components;
 
 import com.sun.javafx.scene.control.skin.ComboBoxListViewSkin;
+import javafx.beans.binding.Bindings;
 import javafx.css.PseudoClass;
 import javafx.scene.Node;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.Region;
 import org.tetram.bdtheque.data.bean.abstractentities.AbstractDBEntity;
 import org.tetram.bdtheque.gui.controllers.includes.TreeViewController;
 import org.tetram.bdtheque.utils.ClassLink;
@@ -25,10 +27,11 @@ import org.tetram.bdtheque.utils.ClassLinks;
 @SuppressWarnings("HardCodedStringLiteral")
 public class EntityPickerSkin extends EntityPickerPopupControl<AbstractDBEntity> {
 
-    private static PseudoClass CONTAINS_FOCUS_PSEUDOCLASS_STATE = PseudoClass.getPseudoClass("contains-focus");
+    private static final PseudoClass CONTAINS_FOCUS_PSEUDOCLASS_STATE = PseudoClass.getPseudoClass("contains-focus");
+
     private final EntityPicker entityPicker;
     private TextField textField;
-    private TextField displayNode;
+    private Region displayRegion;
     private EntityPickerContent popupContent;
 
 
@@ -53,10 +56,10 @@ public class EntityPickerSkin extends EntityPickerPopupControl<AbstractDBEntity>
 
     @Override
     protected Node getPopupContent() {
-        return getEntityTreeView();
+        return getEntityPickerContent();
     }
 
-    private EntityPickerContent getEntityTreeView() {
+    private EntityPickerContent getEntityPickerContent() {
         if (popupContent == null) {
             popupContent = new EntityPickerContent((EntityPicker) getSkinnable());
             popupContent.setPopupControl(getPopup());
@@ -68,6 +71,7 @@ public class EntityPickerSkin extends EntityPickerPopupControl<AbstractDBEntity>
     public void show() {
         super.show();
         final EntityPicker entityPicker = (EntityPicker) getSkinnable();
+        popupContent.setContentMinWidth(entityPicker.getEntityPickerSkin().getDisplayRegion().getWidth());
         popupContent.updateSelection(entityPicker.getValue());
         popupContent.clearFocus();
     }
@@ -101,7 +105,8 @@ public class EntityPickerSkin extends EntityPickerPopupControl<AbstractDBEntity>
         if (textField != null) return textField;
 
         textField = entityPicker.getEditor();
-        textField.focusTraversableProperty().bindBidirectional(entityPicker.focusTraversableProperty());
+        //getPopup().isShowing()
+        textField.focusTraversableProperty().bind(Bindings.and(entityPicker.focusTraversableProperty(), getPopup().showingProperty()));
         textField.promptTextProperty().bind(entityPicker.promptTextProperty());
         textField.editableProperty().bind(entityPicker.editableProperty());
 
@@ -114,7 +119,7 @@ public class EntityPickerSkin extends EntityPickerPopupControl<AbstractDBEntity>
             }
         });
 
-        getTreeViewController().registerSearchableField(textField);
+        getTreeViewController().registerSearchableField(textField, false);
         textField.setOnKeyTyped(event -> {
             if (!event.getCharacter().isEmpty()) show();
         });
@@ -133,13 +138,7 @@ public class EntityPickerSkin extends EntityPickerPopupControl<AbstractDBEntity>
 
     @Override
     public Node getDisplayNode() {
-        if (displayNode == null) {
-            // TODO: à terme, displayNode devra contenir le StackPane + textField + Boutons
-            displayNode = getEditableInputNode();
-            updateDisplayNode();
-        }
-
-        return displayNode;
+        return getDisplayRegion();
     }
 
     public void syncWithAutoUpdate() {
@@ -151,6 +150,16 @@ public class EntityPickerSkin extends EntityPickerPopupControl<AbstractDBEntity>
     }
 
     public TreeViewController getTreeViewController() {
-        return getEntityTreeView().getTreeviewController();
+        return getEntityPickerContent().getTreeviewController();
+    }
+
+    public Region getDisplayRegion() {
+        if (displayRegion == null) {
+            // TODO: à terme, displayRegion devra contenir StackPane + textField + Boutons
+            displayRegion = getEditableInputNode();
+            updateDisplayNode();
+        }
+
+        return displayRegion;
     }
 }

@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * EntityPickerContent.java
- * Last modified by Tetram, on 2014-08-27T16:05:54CEST
+ * Last modified by Tetram, on 2014-08-29T11:09:18CEST
  */
 
 package org.tetram.bdtheque.gui.components;
@@ -54,5 +54,9 @@ public class EntityPickerContent extends Region {
 
     public TreeViewController getTreeviewController() {
         return treeviewController;
+    }
+
+    public void setContentMinWidth(double minWidth) {
+        treeviewController.getTreeView().setMinWidth(minWidth);
     }
 }

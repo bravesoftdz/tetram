@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * EntityPickerPopupControl.java
- * Last modified by Tetram, on 2014-08-27T16:33:56CEST
+ * Last modified by Tetram, on 2014-08-29T12:31:58CEST
  */
 
 package org.tetram.bdtheque.gui.components;
@@ -20,10 +20,12 @@ import javafx.scene.control.Skinnable;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Region;
 import javafx.stage.WindowEvent;
+import org.tetram.bdtheque.utils.ClassLink;
 
 /**
  * Created by Tetram on 27/08/2014.
  */
+@ClassLink(com.sun.javafx.scene.control.skin.ComboBoxPopupControl.class)
 public abstract class EntityPickerPopupControl<T> extends ComboBoxBaseSkin<T> {
 
     public static final String COMBO_BOX_STYLE_CLASS = "combo-box-popup";

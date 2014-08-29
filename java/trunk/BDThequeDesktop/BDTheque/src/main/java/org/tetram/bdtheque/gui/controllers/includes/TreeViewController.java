@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * TreeViewController.java
- * Last modified by Tetram, on 2014-08-27T10:45:18CEST
+ * Last modified by Tetram, on 2014-08-29T13:00:17CEST
  */
 
 package org.tetram.bdtheque.gui.controllers.includes;
@@ -104,8 +104,8 @@ public class TreeViewController extends WindowController {
 
     @FXML
     public void initialize() {
-        mode.addListener(observable -> {
-            final TreeViewMode newMode = getMode() == null ? TreeViewMode.NONE : getMode();
+        mode.addListener((o, oldMode, newMode) -> {
+            newMode = newMode == null ? TreeViewMode.NONE : newMode;
             finalEntityClass.set(newMode == TreeViewMode.NONE ? AbstractEntity.class : newMode.getEntityClass());
             onGetChildren.set(newMode == TreeViewMode.NONE ? null : new TreeViewMode.GetChildrenFromDaoCallback(this));
             dao.set(newMode == TreeViewMode.NONE ? null : SpringContext.CONTEXT.getBean(newMode.getDaoClass()));
@@ -122,7 +122,10 @@ public class TreeViewController extends WindowController {
             if (!StringUtils.isNullOrEmpty(s)) return s;
             if (getUseDefaultFiltre()) return getMode().getDefaultFiltre();
             return null;
-        }, filtreProperty()));
+        }, modeProperty(), useDefaultFiltreProperty(), filtreProperty()));
+
+        useDefaultFiltre.addListener(o -> refreshTree());
+        filtre.addListener(o -> refreshTree());
 
         treeTableView.setPlaceholder(new Label(I18nSupport.message("pas.de.donnees.a.afficher")));
 
@@ -203,7 +206,7 @@ public class TreeViewController extends WindowController {
         }
     }
 
-    private void fireRegisteredFind() {
+    public void fireRegisteredFind() {
         // on ne fait rien si on est déclenché par searchTimer et que l'utilisateur a utilisé la touche ENTER
         // ou que l'utilisateur a utilisé la touche ENTER sans rien tapé
         if (!findRegistered) return;
@@ -545,6 +548,10 @@ public class TreeViewController extends WindowController {
     }
 
     public void registerSearchableField(TextInputControl inputControl) {
+        registerSearchableField(inputControl, true);
+    }
+
+    public void registerSearchableField(TextInputControl inputControl, final boolean acceptEnter) {
         if (searchTextField.get() != null)
             searchTextProperty().unbindBidirectional(searchTextField.get().textProperty());
 
@@ -560,7 +567,7 @@ public class TreeViewController extends WindowController {
                             find(true);
                             break;
                         case ENTER:
-                            fireRegisteredFind();
+                            if (acceptEnter) fireRegisteredFind();
                             break;
                     }
             });

@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * EntityPicker.java
- * Last modified by Tetram, on 2014-08-27T16:23:55CEST
+ * Last modified by Tetram, on 2014-08-29T11:10:44CEST
  */
 
 package org.tetram.bdtheque.gui.components;
@@ -21,6 +21,8 @@ import org.tetram.bdtheque.gui.controllers.includes.TreeViewMode;
 import org.tetram.bdtheque.utils.ClassLink;
 import org.tetram.bdtheque.utils.ClassLinks;
 import org.tetram.bdtheque.utils.StringUtils;
+import org.tetram.bdtheque.utils.logging.Log;
+import org.tetram.bdtheque.utils.logging.LogManager;
 
 import java.util.UUID;
 
@@ -32,6 +34,8 @@ import java.util.UUID;
         @ClassLink(javafx.scene.control.DatePicker.class)
 })
 public class EntityPicker extends ComboBoxBase<AbstractDBEntity> {
+
+    private static final Log log = LogManager.getLog(EntityPicker.class);
     @NonNls
     private static final String DEFAULT_STYLE_CLASS = "entity-picker";
     private EntityPickerSkin entityPickerSkin;
@@ -105,6 +109,7 @@ public class EntityPicker extends ComboBoxBase<AbstractDBEntity> {
     public final TextField getEditor() {
         return editorProperty().get();
     }
+
     public final ReadOnlyObjectProperty<TextField> editorProperty() {
         if (editor == null) {
             editor = new ReadOnlyObjectWrapper<>(this, "editor", new ComboBoxListViewSkin.FakeFocusTextField());
@@ -114,7 +119,9 @@ public class EntityPicker extends ComboBoxBase<AbstractDBEntity> {
 
     @Override
     protected double computeMinWidth(double height) {
-        return super.computeMinWidth(height);
+        // 29/08/2014: les ComboBox (et toutes les classes qui vont avec) sont pensés pour avoir une taille fixe
+        return 20.0;
+        // et pourtant, on peut quand même faire un bind de leur prefWidth pour faire un redimensionnement dynamique
     }
 
 }

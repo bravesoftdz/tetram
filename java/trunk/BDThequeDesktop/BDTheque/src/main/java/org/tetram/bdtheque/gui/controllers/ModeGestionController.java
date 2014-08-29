@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * ModeGestionController.java
- * Last modified by Tetram, on 2014-08-27T10:32:03CEST
+ * Last modified by Tetram, on 2014-08-29T13:32:18CEST
  */
 
 package org.tetram.bdtheque.gui.controllers;
@@ -31,7 +31,9 @@ import org.tetram.bdtheque.gui.utils.Forms;
 import org.tetram.bdtheque.gui.utils.History;
 import org.tetram.bdtheque.utils.FileLink;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -114,19 +116,23 @@ public class ModeGestionController extends WindowController implements ModeContr
         }
 
         getTreeViewController().setClickToShow(true);
-        getTreeViewController().filtreProperty().bind(Bindings.createStringBinding(() -> {
-            Toggle button = entitiesType.getSelectedToggle();
-            if (button == btAchatsAlbums || button == btAchatsParaBD)
-                return FILTRE_ACHAT;
-            else
-                return null;
-        }, entitiesType.selectedToggleProperty()));
         entitiesType.selectedToggleProperty().addListener((observable, oldButton, newButton) -> {
+            List<Toggle> buttonsAchat = new ArrayList<>();
+            buttonsAchat.add(btAchatsAlbums);
+            buttonsAchat.add(btAchatsParaBD);
+
             if (newButton == null) return;
             final TreeViewMode newMode = (TreeViewMode) newButton.getUserData();
-            if (getTreeViewController().getMode().equals(newMode))
-                getTreeViewController().refreshTree();
+
+            if (!getTreeViewController().getMode().equals(newMode))
+                getTreeViewController().setMode(TreeViewMode.NONE);
+
+            if (buttonsAchat.contains(newButton))
+                getTreeViewController().setFiltre(FILTRE_ACHAT);
             else
+                getTreeViewController().setFiltre(null);
+
+            if (!getTreeViewController().getMode().equals(newMode))
                 getTreeViewController().setMode(newMode);
         });
 
@@ -143,7 +149,8 @@ public class ModeGestionController extends WindowController implements ModeContr
         entitiesType.selectToggle(btAlbums);
     }
 
-    public <T extends WindowController & GestionController> FicheEditController<T> showEditForm(AbstractDBEntity entity) {
+    public <T extends WindowController & GestionController> FicheEditController<T> showEditForm(AbstractDBEntity
+                                                                                                        entity) {
         FicheEditController<T> controller = null;
         if (entity != null && !currentEntities.contains(entity.getEntityClass())) {
             controller = Forms.showEdit(entity);

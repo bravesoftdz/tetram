@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * FicheUniversController.java
- * Last modified by Tetram, on 2014-07-29T11:02:07CEST
+ * Last modified by Tetram, on 2014-08-29T12:06:13CEST
  */
 
 package org.tetram.bdtheque.gui.controllers.gestion;
@@ -56,7 +56,8 @@ public class FicheUniversController extends GestionControllerImpl {
     private TreeViewController tvParabdController;
     @FXML
     private TextArea taAssociations;
-
+    @FXML
+    private Label lbUniversParent;
     private EntityPicker tfUniversParent;
 
     private Univers univers;
@@ -69,7 +70,7 @@ public class FicheUniversController extends GestionControllerImpl {
         GridPane.setRowIndex(tfUniversParent, 2);
         tfUniversParent.setMode(TreeViewMode.UNIVERS);
         tfUniversParent.prefWidthProperty().bind(tfNom.widthProperty());
-        gpGrid.getChildren().add(tfUniversParent);
+        gpGrid.getChildren().add(gpGrid.getChildren().indexOf(lbUniversParent) + 1, tfUniversParent);
 
         DatePicker fTest = new DatePicker();
         GridPane.setColumnIndex(fTest, 1);
