@@ -1,13 +1,12 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * EntityPickerContent.java
- * Last modified by Tetram, on 2014-09-03T16:40:59CEST
+ * Last modified by Tetram, on 2014-09-03T14:06:44CEST
  */
 
-package org.tetram.bdtheque.gui.components;
+package org.tetram.bdtheque.gui.components.old;
 
-import javafx.beans.property.StringProperty;
-import javafx.scene.Node;
+import javafx.scene.control.PopupControl;
 import javafx.scene.layout.Region;
 import org.tetram.bdtheque.data.bean.abstractentities.AbstractDBEntity;
 import org.tetram.bdtheque.gui.controllers.includes.TreeViewController;
@@ -25,6 +24,7 @@ import org.tetram.bdtheque.utils.ClassLinks;
 public class EntityPickerContent extends Region {
 
     private final TreeViewController treeviewController;
+    private PopupControl popupControl;
 
     public EntityPickerContent(EntityPicker entityPicker) {
         treeviewController = SpringFxmlLoader.load("components/treeview.fxml");
@@ -36,35 +36,27 @@ public class EntityPickerContent extends Region {
                 entityPicker.hide();
             }
         });
-
-        treeviewController.filtreProperty().bindBidirectional(entityPicker.filtreProperty());
-        treeviewController.modeProperty().bindBidirectional(entityPicker.modeProperty());
-
-        treeviewController.getTreeView().minWidthProperty().bind(this.minWidthProperty());
-        treeviewController.getTreeView().prefWidthProperty().bind(this.prefWidthProperty());
-        treeviewController.getTreeView().maxWidthProperty().bind(this.maxWidthProperty());
-        treeviewController.getTreeView().minHeightProperty().bind(this.minHeightProperty());
-        treeviewController.getTreeView().prefHeightProperty().bind(this.prefHeightProperty());
-        treeviewController.getTreeView().maxHeightProperty().bind(this.maxHeightProperty());
-
-        treeviewController.registerSearchableField(entityPicker.getEditor());
-
         getChildren().add(treeviewController.getView());
     }
 
-    public Node getView() {
-        return treeviewController.getView();
+    public void setPopupControl(PopupControl popupControl) {
+        this.popupControl = popupControl;
     }
 
-    public String getFiltre() {
-        return treeviewController.getFiltre();
+    public void updateSelection(AbstractDBEntity value) {
+        treeviewController.setSelectedEntity(value);
     }
 
-    public void setFiltre(String filtre) {
-        treeviewController.setFiltre(filtre);
+    public void clearFocus() {
+        treeviewController.getTreeView().requestFocus();
     }
 
-    public StringProperty filtreProperty() {
-        return treeviewController.filtreProperty();
+    public TreeViewController getTreeviewController() {
+        return treeviewController;
     }
+
+    public void setContentMinWidth(double minWidth) {
+        treeviewController.getTreeView().setMinWidth(minWidth);
+    }
+
 }

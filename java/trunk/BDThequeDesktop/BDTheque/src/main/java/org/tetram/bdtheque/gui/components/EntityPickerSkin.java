@@ -1,173 +1,53 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * EntityPickerSkin.java
- * Last modified by Tetram, on 2014-08-29T15:28:02CEST
+ * Last modified by Tetram, on 2014-09-03T16:44:23CEST
  */
 
 package org.tetram.bdtheque.gui.components;
 
-import com.sun.javafx.scene.control.skin.ComboBoxListViewSkin;
-import javafx.beans.binding.Bindings;
-import javafx.css.PseudoClass;
+import javafx.beans.property.StringProperty;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Background;
-import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
+import org.jetbrains.annotations.NonNls;
 import org.tetram.bdtheque.data.bean.abstractentities.AbstractDBEntity;
-import org.tetram.bdtheque.gui.controllers.includes.TreeViewController;
-import org.tetram.bdtheque.utils.ClassLink;
-import org.tetram.bdtheque.utils.ClassLinks;
 
 /**
- * Created by Thierry on 10/08/2014.
+ * Created by Tetram on 03/09/2014.
  */
-@ClassLinks({
-        @ClassLink(com.sun.javafx.scene.control.skin.ColorPickerSkin.class),
-        @ClassLink(com.sun.javafx.scene.control.skin.DatePickerSkin.class)
-})
-@SuppressWarnings("HardCodedStringLiteral")
 public class EntityPickerSkin extends EntityPickerPopupControl<AbstractDBEntity> {
 
-    private static final PseudoClass CONTAINS_FOCUS_PSEUDOCLASS_STATE = PseudoClass.getPseudoClass("contains-focus");
-
     private final EntityPicker entityPicker;
+    private StackPane displayNode;
     private TextField textField;
-    private Region displayRegion;
     private EntityPickerContent popupContent;
-
 
     public EntityPickerSkin(final EntityPicker entityPicker) {
         super(entityPicker, new EntityPickerBehavior(entityPicker));
-
         this.entityPicker = entityPicker;
-        this.textField = getEditableInputNode();
-        // Fix for RT-29565. Without this the textField does not have a correct
-        // pref width at startup, as it is not part of the scenegraph (and therefore
-        // has no pref width until after the first measurements have been taken).
-        if (this.textField != null) {
-            getChildren().add(textField);
-        }
-
-        this.entityPicker.focusedProperty().addListener((ov, t, hasFocus) -> {
-            ((ComboBoxListViewSkin.FakeFocusTextField) textField).setFakeFocus(hasFocus);
-        });
 
         registerChangeListener(entityPicker.valueProperty(), "VALUE");
     }
 
     @Override
-    protected Node getPopupContent() {
-        return getEntityPickerContent();
-    }
-
-    private EntityPickerContent getEntityPickerContent() {
-        if (popupContent == null) {
-            popupContent = new EntityPickerContent((EntityPicker) getSkinnable());
-            popupContent.setPopupControl(getPopup());
-        }
-        return popupContent;
-    }
-
-    @Override
-    public void show() {
-        super.show();
-        final EntityPicker entityPicker = (EntityPicker) getSkinnable();
-        popupContent.setContentMinWidth(entityPicker.getEntityPickerSkin().getDisplayRegion().getWidth());
-        popupContent.updateSelection(entityPicker.getValue());
-        popupContent.clearFocus();
-    }
-
-    @Override
-    protected void focusLost() {
-        AbstractDBEntity entity = entityPicker.getValue();
-        textField.setText(entity == null ? null : entity.getLabel());
-    }
-
-    @Override
-    protected void handleControlPropertyChanged(String p) {
-        super.handleControlPropertyChanged(p);
-
-        if ("SHOWING".equals(p)) {
-            if (getSkinnable().isShowing()) {
-                show();
-            } else {
-                hide();
-            }
-        } else if ("VALUE".equals(p)) {
-            updateDisplayNode();
-            // Change the current selected color in the grid if ColorPicker value changes
-//            if (popupContent != null) {
-//                popupContent.updateSelection(getSkinnable().getValue());
-//            }
-        }
-
-    }
-
-    private TextField getEditableInputNode() {
-        if (textField != null) return textField;
-
-        textField = entityPicker.getEditor();
-        //getPopup().isShowing()
-        textField.focusTraversableProperty().bind(Bindings.and(entityPicker.focusTraversableProperty(), getPopup().showingProperty()));
-        textField.promptTextProperty().bind(entityPicker.promptTextProperty());
-        textField.editableProperty().bind(entityPicker.editableProperty());
-
-        textField.focusedProperty().addListener((ov, t, hasFocus) -> {
-            entityPicker.getProperties().put("FOCUSED", hasFocus);
-            if (!hasFocus) {
-                pseudoClassStateChanged(CONTAINS_FOCUS_PSEUDOCLASS_STATE, false);
-            } else {
-                pseudoClassStateChanged(CONTAINS_FOCUS_PSEUDOCLASS_STATE, true);
-            }
-        });
-
-        getTreeViewController().registerSearchableField(textField, false);
-        textField.setOnKeyTyped(event -> {
-            if (!event.getCharacter().isEmpty()) show();
-        });
-
-        return textField;
-    }
-
-    private void updateDisplayNode() {
-        final EntityPicker entityPicker = (EntityPicker) getSkinnable();
-        AbstractDBEntity value = entityPicker.getValue();
-        if (value != null)
-            textField.setText(value.toString());
-        else
-            textField.setText("");
-    }
-
-    @Override
     public Node getDisplayNode() {
-        return getDisplayRegion();
-    }
+        if (displayNode == null) {
+            StackPane rootStack = new StackPane();
 
-    public void syncWithAutoUpdate() {
-        if (!getPopup().isShowing() && getSkinnable().isShowing()) {
-            // Popup was dismissed. Maybe user clicked outside or typed ESCAPE.
-            // Make sure EntityPicker button is in sync.
-            getSkinnable().hide();
-        }
-    }
-
-    public TreeViewController getTreeViewController() {
-        return getEntityPickerContent().getTreeviewController();
-    }
-
-    public Region getDisplayRegion() {
-        if (displayRegion == null) {
-            // TODO: à terme, displayRegion devra contenir StackPane + textField + Boutons
-            StackPane pane = new StackPane();
-
-            getEditableInputNode(); // pour initialiser textField
+            textField = new TextField();
             StackPane.setAlignment(textField, Pos.CENTER);
-            pane.getChildren().add(textField);
+            textField.promptTextProperty().bind(entityPicker.promptTextProperty());
+            textField.editableProperty().bind(entityPicker.editableProperty());
 
-            Button btnReset = new Button();
+            entityPicker.focusedProperty().addListener((ov, t, hasFocus) -> {
+                textField.requestFocus();
+            });
+
+            @NonNls Button btnReset = new Button();
             btnReset.setMinWidth(10);
             btnReset.minHeightProperty().bind(textField.heightProperty());
             btnReset.visibleProperty().bind(entityPicker.valueProperty().isNotNull());
@@ -176,13 +56,53 @@ public class EntityPickerSkin extends EntityPickerPopupControl<AbstractDBEntity>
             btnReset.setText("X");
             btnReset.setOnAction(event -> entityPicker.setValue(null));
             StackPane.setAlignment(btnReset, Pos.CENTER_RIGHT);
-            pane.getChildren().add(btnReset);
 
-            displayRegion = pane;
+            rootStack.getChildren().addAll(textField, btnReset);
 
-            updateDisplayNode();
+            displayNode = rootStack;
         }
+        return displayNode;
+    }
 
-        return displayRegion;
+    @Override
+    protected Node getPopupContent() {
+        if (popupContent == null) {
+            popupContent = new EntityPickerContent(entityPicker);
+            popupContent.minWidthProperty().bind(textField.widthProperty());
+        }
+        return popupContent.getView();
+    }
+
+    @Override
+    protected void handleControlPropertyChanged(@NonNls String p) {
+        super.handleControlPropertyChanged(p);
+
+        if ("VALUE".equals(p))
+            updateDisplayNode();
+    }
+
+    private void updateDisplayNode() {
+        AbstractDBEntity value = entityPicker.getValue();
+        getEditor().setText(value == null ? null : value.getLabel());
+    }
+
+    public TextField getEditor() {
+        getDisplayNode();
+        return textField;
+    }
+
+    public String getFiltre() {
+        getPopupContent();
+        return popupContent.getFiltre();
+    }
+
+    public void setFiltre(String filtre) {
+        getPopupContent();
+        popupContent.setFiltre(filtre);
+    }
+
+    public StringProperty filtreProperty() {
+        getPopupContent();
+        return popupContent.filtreProperty();
     }
 }

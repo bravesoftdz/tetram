@@ -1,11 +1,12 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * FicheUniversController.java
- * Last modified by Tetram, on 2014-08-29T12:06:13CEST
+ * Last modified by Tetram, on 2014-09-03T16:42:18CEST
  */
 
 package org.tetram.bdtheque.gui.controllers.gestion;
 
+import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
@@ -17,6 +18,7 @@ import org.tetram.bdtheque.data.bean.Univers;
 import org.tetram.bdtheque.data.bean.UniversLite;
 import org.tetram.bdtheque.data.dao.UniversDao;
 import org.tetram.bdtheque.gui.components.EntityPicker;
+import org.tetram.bdtheque.gui.controllers.MainController;
 import org.tetram.bdtheque.gui.controllers.includes.TreeViewController;
 import org.tetram.bdtheque.gui.controllers.includes.TreeViewMode;
 import org.tetram.bdtheque.gui.utils.EntityWebHyperlink;
@@ -41,6 +43,11 @@ import java.util.UUID;
 public class FicheUniversController extends GestionControllerImpl {
     @Autowired
     private UniversDao universDao;
+    @Autowired
+    private MainController mainController;
+
+    @FXML
+    private Label lbFocused;
 
     @FXML
     private GridPane gpGrid;
@@ -86,6 +93,15 @@ public class FicheUniversController extends GestionControllerImpl {
                 universDao.save(univers);
             }, FicheEditController.HandlerPriority.HIGH);
         });
+
+        lbFocused.textProperty().bind(Bindings.createStringBinding(() -> {
+            String s = String.valueOf(lbUniversParent.focusedProperty().get());
+            if (mainController.getDialog().getScene().focusOwnerProperty().get() != null)
+                s = mainController.getDialog().getScene().focusOwnerProperty().get().toString();
+            return s;
+        }, mainController.getDialog().getScene().focusOwnerProperty(), lbUniversParent.focusedProperty()));
+
+
     }
 
     @Override

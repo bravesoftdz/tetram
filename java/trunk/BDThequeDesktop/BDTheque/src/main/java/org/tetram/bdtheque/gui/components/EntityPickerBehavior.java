@@ -1,85 +1,20 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * EntityPickerBehavior.java
- * Last modified by Tetram, on 2014-08-29T12:23:56CEST
+ * Last modified by Tetram, on 2014-09-03T15:10:32CEST
  */
 
 package org.tetram.bdtheque.gui.components;
 
 import com.sun.javafx.scene.control.behavior.ComboBoxBaseBehavior;
-import com.sun.javafx.scene.control.behavior.KeyBinding;
-import org.jetbrains.annotations.NonNls;
+import javafx.scene.control.ComboBoxBase;
 import org.tetram.bdtheque.data.bean.abstractentities.AbstractDBEntity;
-import org.tetram.bdtheque.data.bean.abstractentities.AbstractEntity;
-import org.tetram.bdtheque.utils.ClassLink;
-import org.tetram.bdtheque.utils.ClassLinks;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static javafx.scene.input.KeyCode.*;
-import static javafx.scene.input.KeyEvent.KEY_PRESSED;
 
 /**
- * Created by Thierry on 10/08/2014.
+ * Created by Tetram on 03/09/2014.
  */
-@ClassLinks({
-        @ClassLink(com.sun.javafx.scene.control.behavior.ColorPickerBehavior.class),
-        @ClassLink(com.sun.javafx.scene.control.behavior.DatePickerBehavior.class)
-})
 public class EntityPickerBehavior extends ComboBoxBaseBehavior<AbstractDBEntity> {
-    @NonNls
-    protected static final String ACCEPT_ACTION = "Accept";
-    @NonNls
-    protected static final String OPEN_ACTION = "Open";
-    @NonNls
-    protected static final String CLOSE_ACTION = "Close";
-    protected static final List<KeyBinding> ENTITY_PICKER_BINDINGS = new ArrayList<KeyBinding>();
-    static {
-//        ENTITY_PICKER_BINDINGS.addAll(COMBO_BOX_BASE_BINDINGS);
-        ENTITY_PICKER_BINDINGS.add(new KeyBinding(ESCAPE, KEY_PRESSED, CLOSE_ACTION));
-        ENTITY_PICKER_BINDINGS.add(new KeyBinding(SPACE, KEY_PRESSED, OPEN_ACTION));
-        ENTITY_PICKER_BINDINGS.add(new KeyBinding(ENTER, KEY_PRESSED, ACCEPT_ACTION));
-
+    public EntityPickerBehavior(ComboBoxBase<AbstractDBEntity> entityPicker) {
+        super(entityPicker, null);
     }
-    public EntityPickerBehavior(EntityPicker entityPicker) {
-        super(entityPicker, ENTITY_PICKER_BINDINGS);
-    }
-
-    @Override protected void callAction(String name) {
-        switch (name) {
-            case ACCEPT_ACTION:
-                EntityPicker entityPicker = (EntityPicker)getControl();
-                EntityPickerSkin epSkin = (EntityPickerSkin)entityPicker.getSkin();
-                AbstractEntity selectedEntity = epSkin.getTreeViewController().getSelectedEntity();
-                if (selectedEntity != null) {
-                    entityPicker.setValue((AbstractDBEntity) selectedEntity);
-                    hide();
-                }
-                else
-                    epSkin.getTreeViewController().fireRegisteredFind();
-                break;
-            case OPEN_ACTION:
-                show();
-                break;
-            case CLOSE_ACTION:
-                hide();
-                break;
-            default:
-                super.callAction(name);
-                break;
-        }
-    }
-
-    @Override public void onAutoHide() {
-        // when we click on some non  interactive part of the
-        // Color Palette - we do not want to hide.
-        EntityPicker entityPicker = (EntityPicker)getControl();
-        EntityPickerSkin epSkin = (EntityPickerSkin)entityPicker.getSkin();
-        epSkin.syncWithAutoUpdate();
-        // if the ColorPicker is no longer showing, then invoke the super method
-        // to keep its show/hide state in sync.
-        if (!entityPicker.isShowing()) super.onAutoHide();
-    }
-
 }
