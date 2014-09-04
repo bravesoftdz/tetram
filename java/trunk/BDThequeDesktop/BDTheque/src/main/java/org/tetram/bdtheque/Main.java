@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * Main.java
- * Last modified by Tetram, on 2014-07-30T13:36:06CEST
+ * Last modified by Tetram, on 2014-09-04T17:04:17CEST
  */
 
 package org.tetram.bdtheque;
@@ -68,8 +68,8 @@ public class Main extends Application {
             if (e instanceof ConsistencyException) {
                 Dialogs.create().message(e.getMessage()).showWarning();
             } else if (e instanceof RuntimeException) {
-                Dialogs.create().message(e.getLocalizedMessage()).showInformation();
                 log.error("", e);
+                Dialogs.create().message(e.getLocalizedMessage()).showInformation();
             } else {
                 log.error("", e);
                 Dialogs.create().showException(e);
