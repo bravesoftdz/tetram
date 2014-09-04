@@ -45,22 +45,22 @@
     <orderEntry type="library" exported="" name="Gradle: commons-validator-1.4.0" level="project" />
     <orderEntry type="library" exported="" name="Gradle: commons-beanutils-1.8.3" level="project" />
     <orderEntry type="library" exported="" name="Gradle: commons-digester-1.8" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: spring-aop-4.0.6.RELEASE" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: spring-aspects-4.0.6.RELEASE" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: spring-context-4.0.6.RELEASE" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: spring-jdbc-4.0.6.RELEASE" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: spring-core-4.0.6.RELEASE" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: spring-beans-4.0.6.RELEASE" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: aspectjweaver-1.8.1" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: spring-expression-4.0.6.RELEASE" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: spring-tx-4.0.6.RELEASE" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: spring-test-4.0.6.RELEASE" level="project" />
     <orderEntry type="library" exported="" name="Gradle: commons-collections4-4.0" level="project" />
     <orderEntry type="library" exported="" name="Gradle: log4j-core-2.0-rc1" level="project" />
     <orderEntry type="library" exported="" name="Gradle: log4j-api-2.0-rc1" level="project" />
     <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: log4j-1.2-api-2.0-rc1" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: junit-4.12-beta-1" level="project" />
     <orderEntry type="library" exported="" name="Gradle: annotations" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: spring-aop-4.0.7.RELEASE" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: spring-aspects-4.0.7.RELEASE" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: spring-context-4.0.7.RELEASE" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: spring-jdbc-4.0.7.RELEASE" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: spring-core-4.0.7.RELEASE" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: spring-beans-4.0.7.RELEASE" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: aspectjweaver-1.8.2" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: spring-expression-4.0.7.RELEASE" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: spring-tx-4.0.7.RELEASE" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: spring-test-4.0.7.RELEASE" level="project" />
   </component>
 </module>
 
