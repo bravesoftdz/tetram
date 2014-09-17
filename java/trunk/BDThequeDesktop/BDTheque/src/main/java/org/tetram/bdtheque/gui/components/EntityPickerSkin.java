@@ -1,94 +1,112 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * EntityPickerSkin.java
- * Last modified by Tetram, on 2014-09-03T16:44:23CEST
+ * Last modified by Tetram, on 2014-09-05T14:16:23CEST
  */
 
 package org.tetram.bdtheque.gui.components;
 
+import com.sun.javafx.scene.control.skin.ComboBoxPopupControl;
 import javafx.beans.property.StringProperty;
-import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
+import javafx.scene.control.ContentDisplay;
+import javafx.scene.control.Label;
+import javafx.scene.effect.ColorAdjust;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
-import javafx.scene.layout.StackPane;
 import org.jetbrains.annotations.NonNls;
 import org.tetram.bdtheque.data.bean.abstractentities.AbstractDBEntity;
+import org.tetram.bdtheque.utils.ClassLink;
+import org.tetram.bdtheque.utils.ClassLinks;
 
 /**
  * Created by Tetram on 03/09/2014.
  */
-public class EntityPickerSkin extends EntityPickerPopupControl<AbstractDBEntity> {
+@ClassLinks({
+        @ClassLink(com.sun.javafx.scene.control.skin.ColorPickerSkin.class),
+        @ClassLink(com.sun.javafx.scene.control.skin.DatePickerSkin.class)
+})
+public class EntityPickerSkin extends ComboBoxPopupControl<AbstractDBEntity> {
 
-    private final EntityPicker entityPicker;
-    private StackPane displayNode;
-    private TextField textField;
+    private final Label displayNode = new Label();
+
     private EntityPickerContent popupContent;
 
+    @SuppressWarnings("HardCodedStringLiteral")
     public EntityPickerSkin(final EntityPicker entityPicker) {
         super(entityPicker, new EntityPickerBehavior(entityPicker));
-        this.entityPicker = entityPicker;
 
         registerChangeListener(entityPicker.valueProperty(), "VALUE");
-    }
 
-    @Override
-    public Node getDisplayNode() {
-        if (displayNode == null) {
-            StackPane rootStack = new StackPane();
+        displayNode.getStyleClass().add("entity-picker-label");
+        displayNode.setBackground(Background.EMPTY);
 
-            textField = new TextField();
-            StackPane.setAlignment(textField, Pos.CENTER);
-            textField.promptTextProperty().bind(entityPicker.promptTextProperty());
-            textField.editableProperty().bind(entityPicker.editableProperty());
+        Button btReset = new Button();
+        btReset.getStyleClass().add("entity-picker-button-reset");
+        btReset.setMinWidth(10);
+        btReset.minHeightProperty().bind(displayNode.heightProperty());
+        btReset.visibleProperty().bind(entityPicker.valueProperty().isNotNull());
+        btReset.setFocusTraversable(false);
+        btReset.setBackground(Background.EMPTY);
+        btReset.setOnAction(event -> entityPicker.setValue(null));
 
-            entityPicker.focusedProperty().addListener((ov, t, hasFocus) -> {
-                textField.requestFocus();
-            });
+        btReset.setText("X");
 
-            @NonNls Button btnReset = new Button();
-            btnReset.setMinWidth(10);
-            btnReset.minHeightProperty().bind(textField.heightProperty());
-            btnReset.visibleProperty().bind(entityPicker.valueProperty().isNotNull());
-            btnReset.setFocusTraversable(false);
-            btnReset.setBackground(Background.EMPTY);
-            btnReset.setText("X");
-            btnReset.setOnAction(event -> entityPicker.setValue(null));
-            StackPane.setAlignment(btnReset, Pos.CENTER_RIGHT);
+        btReset.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+        btReset.setGraphic(new ImageView("org/tetram/bdtheque/gui/components/entityPicker-reset.png"));
+        ColorAdjust colorAdjust = new ColorAdjust(0, -0.75, 0, 0);
+        btReset.getGraphic().setEffect(colorAdjust);
+        btReset.setOnMouseEntered(event -> btReset.getGraphic().setEffect(null));
+        btReset.setOnMouseExited(event -> btReset.getGraphic().setEffect(colorAdjust));
 
-            rootStack.getChildren().addAll(textField, btnReset);
+        displayNode.setContentDisplay(ContentDisplay.LEFT);
+        displayNode.setGraphic(btReset);
 
-            displayNode = rootStack;
-        }
-        return displayNode;
+        updateDisplayNode();
+
     }
 
     @Override
     protected Node getPopupContent() {
         if (popupContent == null) {
-            popupContent = new EntityPickerContent(entityPicker);
-            popupContent.minWidthProperty().bind(textField.widthProperty());
+            popupContent = new EntityPickerContent((EntityPicker) getSkinnable());
+            popupContent.setPopupControl(getPopup());
+            popupContent.minWidthProperty().bind(displayNode.widthProperty());
         }
         return popupContent.getView();
+    }
+
+    @Override
+    protected void focusLost() {
+        // do nothing
+        syncWithAutoUpdate();
     }
 
     @Override
     protected void handleControlPropertyChanged(@NonNls String p) {
         super.handleControlPropertyChanged(p);
 
-        if ("VALUE".equals(p))
+        if ("SHOWING".equals(p)) {
+            if (getSkinnable().isShowing()) {
+                final EntityPicker entityPicker = (EntityPicker) getSkinnable();
+                popupContent.updateSelection(entityPicker.getValue());
+                popupContent.clearFocus();
+            }
+        } else if ("VALUE".equals(p)) {
             updateDisplayNode();
+        }
+    }
+
+    @Override
+    public Node getDisplayNode() {
+        return displayNode;
     }
 
     private void updateDisplayNode() {
+        final EntityPicker entityPicker = (EntityPicker) getSkinnable();
         AbstractDBEntity value = entityPicker.getValue();
-        getEditor().setText(value == null ? null : value.getLabel());
-    }
-
-    public TextField getEditor() {
-        getDisplayNode();
-        return textField;
+        displayNode.setText(value == null ? null : value.getLabel());
     }
 
     public String getFiltre() {
@@ -104,5 +122,13 @@ public class EntityPickerSkin extends EntityPickerPopupControl<AbstractDBEntity>
     public StringProperty filtreProperty() {
         getPopupContent();
         return popupContent.filtreProperty();
+    }
+
+    public void syncWithAutoUpdate() {
+        if (!getPopup().isShowing() && getSkinnable().isShowing()) {
+            // Popup was dismissed. Maybe user clicked outside or typed ESCAPE.
+            // Make sure EntityPicker button is in sync.
+            getSkinnable().hide();
+        }
     }
 }

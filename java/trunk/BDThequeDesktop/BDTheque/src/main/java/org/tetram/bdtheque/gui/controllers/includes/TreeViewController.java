@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * TreeViewController.java
- * Last modified by Tetram, on 2014-08-29T13:00:17CEST
+ * Last modified by Tetram, on 2014-09-17T09:29:15CEST
  */
 
 package org.tetram.bdtheque.gui.controllers.includes;
@@ -63,7 +63,7 @@ public class TreeViewController extends WindowController {
     @NonNls
     public static final String NODE_BOLD_CSS = "node-bold";
 
-    private final Timer searchTimer = new Timer(this::registerFind);
+    private final Timer searchTimer = new Timer(false, this::registerFind);
     private final BooleanProperty clickToShow = new SimpleBooleanProperty(this, "clickToShow", true);
     private final ObjectProperty<EventHandler<MouseEvent>> onClickItem = new SimpleObjectProperty<>(this, "onClickItem", null);
     private final ObjectProperty<Callback<TreeViewNode, List<? extends AbstractEntity>>> onGetChildren = new SimpleObjectProperty<>(this, "onGetChildren", null);
@@ -94,7 +94,7 @@ public class TreeViewController extends WindowController {
     private String lastFindText;
     private ListOrderedMap<? extends InitialeEntity<? extends Comparable<?>>, ? extends List<? extends AbstractDBEntity>> findList;
 
-    private StringProperty searchText = new SimpleStringProperty(this, "searchText", null);
+    private StringProperty searchText = new SimpleStringProperty(this, "searchText", "");
     private WeakReference<TextInputControl> searchTextField = new WeakReference<>(null);
 
     public TreeViewController() {
@@ -114,7 +114,11 @@ public class TreeViewController extends WindowController {
         });
 
         searchTextProperty().addListener(
-                (o, ov, nv) -> searchTimer.restart()
+                (o, ov, nv) -> {
+                    // la valeur de searchText peut passer de null à "" ou inversement mais il faut les considérer égaux
+                    if (StringUtils.isNullOrEmpty(ov) != StringUtils.isNullOrEmpty(nv))
+                        searchTimer.restart();
+                }
         );
 
         appliedFiltre.bind(Bindings.createStringBinding(() -> {
@@ -207,25 +211,33 @@ public class TreeViewController extends WindowController {
     }
 
     public void fireRegisteredFind() {
-        // on ne fait rien si on est déclenché par searchTimer et que l'utilisateur a utilisé la touche ENTER
-        // ou que l'utilisateur a utilisé la touche ENTER sans rien tapé
+        fireRegisteredFind(false);
+    }
+
+    public void fireRegisteredFind(boolean changeFocus) {
+        // on ne fait rien si on est déclenché par searchTimer et que l'utilisateur a utilisé la touche ENTER (= on est déjà passé par là)
+        // ou que l'utilisateur a utilisé la touche ENTER sans rien taper (= il n'y a rien à chercher)
         if (!findRegistered) return;
 
         findRegistered = false;
         String newSearchText = searchTextProperty().getValueSafe();
-        find(newSearchText, newSearchText.equalsIgnoreCase(lastFindText));
+        find(newSearchText, newSearchText.equalsIgnoreCase(lastFindText), changeFocus);
     }
 
     public void find(String text) {
-        find(text, false);
+        find(text, false, false);
+    }
+
+    public void find(boolean next, boolean changeFocus) {
+        find(lastFindText, next, changeFocus);
     }
 
     public void find(boolean next) {
-        find(lastFindText, next);
+        find(lastFindText, next, false);
     }
 
     //@SuppressWarnings("unchecked")
-    public void find(String text, boolean next) {
+    public void find(String text, boolean next, boolean changeFocus) {
         text = text == null ? "" : text;
         next = next && text.equalsIgnoreCase(lastFindText);
         lastFindText = text;
@@ -249,12 +261,14 @@ public class TreeViewController extends WindowController {
                     nFind = getFirst();
             }
             selectNode(nFind);
+            if (changeFocus) treeTableView.requestFocus();
         } else {
             if (StringUtils.isNullOrEmpty(text)) {
                 setSelectedEntity(null, null);
                 resetSearch();
             } else if (next && !TypeUtils.isNullOrEmpty(findList)) {
-                AbstractEntity current = getSelectedEntity();
+                AbstractEntity oldCurrent = getSelectedEntity();
+                AbstractEntity current = oldCurrent;
                 if (current == null) {
                     setSelectedEntity(findList.firstKey(), findList.get(findList.firstKey()).get(0));
                 } else if (current instanceof InitialeEntity) {
@@ -266,6 +280,7 @@ public class TreeViewController extends WindowController {
                 } else {
                     AbstractEntity initialeEntity = getSelected().getParent().getValue();
                     assert initialeEntity instanceof InitialeEntity;
+                    if (!findList.containsKey(initialeEntity)) initialeEntity = findList.firstKey();
                     final List<? extends AbstractEntity> list = findList.get(initialeEntity);
                     int i = list.indexOf(current);
                     if (i == list.size() - 1) {
@@ -276,12 +291,15 @@ public class TreeViewController extends WindowController {
                         current = list.get(i + 1);
                     setSelectedEntity((InitialeEntity) initialeEntity, current);
                 }
+                if (oldCurrent != getSelectedEntity() && changeFocus)
+                    treeTableView.requestFocus();
             } else {
                 findList = getDao().searchMap(text, getAppliedFiltre());
                 if (findList.isEmpty())
                     getTreeView().getSelectionModel().clearSelection();
                 else {
                     setSelectedEntity(findList.firstKey(), findList.get(findList.firstKey()).get(0));
+                    if (changeFocus) treeTableView.requestFocus();
                 }
             }
         }
@@ -552,22 +570,29 @@ public class TreeViewController extends WindowController {
     }
 
     public void registerSearchableField(TextInputControl inputControl, final boolean acceptEnter) {
-        if (searchTextField.get() != null)
-            searchTextProperty().unbindBidirectional(searchTextField.get().textProperty());
+        TextInputControl oldInputControl = searchTextField.get();
+        if (oldInputControl != null)
+            searchTextProperty().unbindBidirectional(oldInputControl.textProperty());
 
         if (inputControl != null) {
             getTreeView().setOnKeyPressed(event -> {
-                if (event.getCode().equals(KeyCode.F3) && !event.isAltDown() && !event.isControlDown() && !event.isShiftDown() && !event.isMetaDown())
-                    find(true);
+                if (event.getCode().equals(KeyCode.F3) && !event.isAltDown() && !event.isControlDown() && !event.isShiftDown() && !event.isMetaDown()) {
+                    event.consume();
+                    find(true, true);
+                }
             });
             inputControl.setOnKeyPressed(event -> {
                 if (!event.isAltDown() && !event.isControlDown() && !event.isShiftDown() && !event.isMetaDown())
                     switch (event.getCode()) {
                         case F3:
-                            find(true);
+                            event.consume();
+                            find(true, true);
                             break;
                         case ENTER:
-                            if (acceptEnter) fireRegisteredFind();
+                            if (acceptEnter) {
+                                event.consume();
+                                fireRegisteredFind(true);
+                            }
                             break;
                     }
             });
@@ -608,6 +633,10 @@ public class TreeViewController extends WindowController {
 
     public DoubleProperty maxHeightProperty() {
         return treeTableView.maxHeightProperty();
+    }
+
+    public boolean getFindRegistered() {
+        return findRegistered;
     }
 
     public class TreeViewNode extends TreeItem<AbstractEntity> {

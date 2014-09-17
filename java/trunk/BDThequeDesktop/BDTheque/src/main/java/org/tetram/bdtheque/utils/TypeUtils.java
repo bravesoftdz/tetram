@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * TypeUtils.java
- * Last modified by Tetram, on 2014-07-31T16:50:01CEST
+ * Last modified by Tetram, on 2014-09-05T14:23:39CEST
  */
 
 package org.tetram.bdtheque.utils;
@@ -9,6 +9,7 @@ package org.tetram.bdtheque.utils;
 import org.jetbrains.annotations.NonNls;
 
 import java.time.Year;
+import java.util.Collection;
 import java.util.Map;
 import java.util.UUID;
 
@@ -53,5 +54,8 @@ public class TypeUtils {
 
     public static boolean isNullOrEmpty(Map map) {
         return map == null || map.isEmpty();
+    }
+    public static boolean isNullOrEmpty(Collection collection) {
+        return collection == null || collection.isEmpty();
     }
 }

@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * EntityPicker.java
- * Last modified by Tetram, on 2014-09-03T16:43:10CEST
+ * Last modified by Tetram, on 2014-09-05T10:50:18CEST
  */
 
 package org.tetram.bdtheque.gui.components;
@@ -12,10 +12,11 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.control.ComboBoxBase;
 import javafx.scene.control.Skin;
-import javafx.scene.control.TextField;
 import org.jetbrains.annotations.NonNls;
 import org.tetram.bdtheque.data.bean.abstractentities.AbstractDBEntity;
 import org.tetram.bdtheque.gui.controllers.includes.TreeViewMode;
+import org.tetram.bdtheque.utils.ClassLink;
+import org.tetram.bdtheque.utils.ClassLinks;
 import org.tetram.bdtheque.utils.StringUtils;
 
 import java.util.UUID;
@@ -23,6 +24,10 @@ import java.util.UUID;
 /**
  * Created by Tetram on 03/09/2014.
  */
+@ClassLinks({
+        @ClassLink(javafx.scene.control.ColorPicker.class),
+        @ClassLink(javafx.scene.control.DatePicker.class)
+})
 public class EntityPicker extends ComboBoxBase<AbstractDBEntity> {
     @NonNls
     private static final String DEFAULT_STYLE_CLASS = "entity-picker";
@@ -37,7 +42,6 @@ public class EntityPicker extends ComboBoxBase<AbstractDBEntity> {
     public EntityPicker() {
         setValue(null);
         getStyleClass().add(DEFAULT_STYLE_CLASS);
-        setEditable(true);
 
         parentValue.addListener((o, ov, nv) -> {
             String newFiltre = null;
@@ -53,8 +57,6 @@ public class EntityPicker extends ComboBoxBase<AbstractDBEntity> {
             }
             setFiltre(newFiltre);
         });
-
-        super.setFocusTraversable(false);
     }
 
     @Override
@@ -106,13 +108,4 @@ public class EntityPicker extends ComboBoxBase<AbstractDBEntity> {
         filtreProperty().set(filtre);
     }
 
-    public TextField getEditor() {
-        createDefaultSkin();
-        return entityPickerSkin.getEditor();
-    }
-
-    @Override
-    public void requestFocus() {
-        getEditor().requestFocus();
-    }
 }
