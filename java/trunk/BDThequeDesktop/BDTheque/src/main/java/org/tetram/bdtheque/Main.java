@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * Main.java
- * Last modified by Tetram, on 2014-09-04T17:04:17CEST
+ * Last modified by Tetram, on 2014-10-23T14:51:03CEST
  */
 
 package org.tetram.bdtheque;
@@ -13,9 +13,10 @@ import impl.org.controlsfx.i18n.Localization;
 import javafx.application.Application;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import org.controlsfx.dialog.Dialogs;
+import org.controlsfx.dialog.ExceptionDialog;
 import org.jetbrains.annotations.NonNls;
 import org.tetram.bdtheque.data.ConsistencyException;
 import org.tetram.bdtheque.data.services.UserPreferences;
@@ -66,13 +67,13 @@ public class Main extends Application {
     public static void main(String[] args) {
         Thread.setDefaultUncaughtExceptionHandler((t, e) -> {
             if (e instanceof ConsistencyException) {
-                Dialogs.create().message(e.getMessage()).showWarning();
+                new Alert(Alert.AlertType.WARNING, e.getMessage()).showAndWait();
             } else if (e instanceof RuntimeException) {
                 log.error("", e);
-                Dialogs.create().message(e.getLocalizedMessage()).showInformation();
+                new Alert(Alert.AlertType.INFORMATION, e.getLocalizedMessage()).show();
             } else {
                 log.error("", e);
-                Dialogs.create().showException(e);
+                new ExceptionDialog(e).showAndWait();
             }
         });
 
@@ -176,11 +177,11 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
         if (is64bitJVM()) {
-            Dialogs.create()
-                    .title(I18nSupport.message("erreur.de.chargement"))
-                            //.masthead(I18nSupport.message("mauvaise.version.de.jvm"))
-                    .message(I18nSupport.message("vous.devez.utiliser.la.version.32bits.de.la.jvm"))
-                    .showError();
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle(I18nSupport.message("erreur.de.chargement"));
+            // alert.setHeaderText(I18nSupport.message("mauvaise.version.de.jvm"));
+            alert.setContentText(I18nSupport.message("vous.devez.utiliser.la.version.32bits.de.la.jvm"));
+            alert.showAndWait();
             return;
         }
 

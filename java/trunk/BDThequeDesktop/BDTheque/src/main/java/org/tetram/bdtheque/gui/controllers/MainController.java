@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * MainController.java
- * Last modified by Tetram, on 2014-08-27T14:36:14CEST
+ * Last modified by Tetram, on 2014-10-23T14:32:05CEST
  */
 
 package org.tetram.bdtheque.gui.controllers;
@@ -109,11 +109,13 @@ public class MainController extends WindowController {
             final MenuItem menuItem = (MenuItem) event.getSource();
             final Locale newLocale = Locale.forLanguageTag(menuItem.getId().substring(4).replace('_', '-'));
             Localization.setLocale(newLocale);
-            org.controlsfx.dialog.Dialogs.create()
-                    .title(I18nSupport.message(newLocale, "nouvelle.langue"))
-                            //.masthead(I18nSupport.message(newLocale, "redemarrage.necessaire"))
-                    .message(I18nSupport.message(newLocale, "le.changement.de.langue.sera.effectif.au.prochain.demarrage.de.l.application"))
-                    .showInformation();
+
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle(I18nSupport.message(newLocale, "nouvelle.langue"));
+            // alert.setHeaderText(I18nSupport.message(newLocale, "redemarrage.necessaire"));
+            alert.setContentText(I18nSupport.message(newLocale, "le.changement.de.langue.sera.effectif.au.prochain.demarrage.de.l.application"));
+            alert.show();
+
             userPreferences.setLocale(newLocale);
             userPreferences.save();
         } finally {

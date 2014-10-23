@@ -25,7 +25,6 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" scope="TEST" name="Gradle: hamcrest-core-1.3" level="project" />
     <orderEntry type="library" exported="" name="Gradle: jaybird-jdk18-2.2.5" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: mybatis-3.2.7" level="project" />
     <orderEntry type="library" exported="" name="Gradle: connector-api-1.5" level="project" />
     <orderEntry type="library" exported="" name="Gradle: antlr-2.7.7" level="project" />
     <orderEntry type="library" exported="" name="Gradle: stringtemplate-3.2.1" level="project" />
@@ -36,31 +35,33 @@
     <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: cglib-3.1" level="project" />
     <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: asm-4.2" level="project" />
     <orderEntry type="library" exported="" name="Gradle: commons-io-1.3.2" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: jfxtras-common-8.0-r1" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: jfxtras-fxml-8.0-r1" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: jfxtras-controls-8.0-r1" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: jfxtras-labs-8.0-r1" level="project" />
     <orderEntry type="library" exported="" name="Gradle: commons-lang3-3.3.2" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: controlsfx-8.0.6_20" level="project" />
     <orderEntry type="library" exported="" name="Gradle: commons-validator-1.4.0" level="project" />
     <orderEntry type="library" exported="" name="Gradle: commons-beanutils-1.8.3" level="project" />
     <orderEntry type="library" exported="" name="Gradle: commons-digester-1.8" level="project" />
     <orderEntry type="library" exported="" name="Gradle: commons-collections4-4.0" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: log4j-core-2.0-rc1" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: log4j-api-2.0-rc1" level="project" />
-    <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: log4j-1.2-api-2.0-rc1" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: junit-4.12-beta-1" level="project" />
     <orderEntry type="library" exported="" name="Gradle: annotations" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: spring-aop-4.0.7.RELEASE" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: spring-aspects-4.0.7.RELEASE" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: spring-context-4.0.7.RELEASE" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: spring-jdbc-4.0.7.RELEASE" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: spring-core-4.0.7.RELEASE" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: spring-beans-4.0.7.RELEASE" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: mybatis-3.2.8" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: spring-aop-4.1.1.RELEASE" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: spring-aspects-4.1.1.RELEASE" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: spring-context-4.1.1.RELEASE" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: spring-jdbc-4.1.1.RELEASE" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: controlsfx-8.20.8" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: jfxtras-common-8.0-r3" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: jfxtras-fxml-8.0-r3" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: jfxtras-controls-8.0-r3" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: jfxtras-labs-8.0-r3" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: spring-core-4.1.1.RELEASE" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: spring-beans-4.1.1.RELEASE" level="project" />
     <orderEntry type="library" exported="" name="Gradle: aspectjweaver-1.8.2" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: spring-expression-4.0.7.RELEASE" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: spring-tx-4.0.7.RELEASE" level="project" />
-    <orderEntry type="library" scope="TEST" name="Gradle: spring-test-4.0.7.RELEASE" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: spring-expression-4.1.1.RELEASE" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: spring-tx-4.1.1.RELEASE" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: openjfx-dialogs-1.0.2" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: junit-4.12-beta-2" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: spring-test-4.1.1.RELEASE" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: log4j-core-2.0.2" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: log4j-api-2.0.2" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: log4j-1.2-api-2.0.2" level="project" />
   </component>
 </module>
 

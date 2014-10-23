@@ -1,18 +1,18 @@
 /*
  * Copyright (c) 2014, tetram.org. All Rights Reserved.
  * Forms.java
- * Last modified by Tetram, on 2014-07-29T11:09:14CEST
+ * Last modified by Tetram, on 2014-10-23T14:37:39CEST
  */
 
 package org.tetram.bdtheque.gui.utils;
 
 import javafx.beans.property.*;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
-import org.controlsfx.dialog.Dialogs;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
 import org.tetram.bdtheque.data.bean.abstractentities.*;
@@ -162,7 +162,7 @@ public class Forms {
     public static <T extends WindowController & ConsultationController> T showFiche(AbstractDBEntity entity) {
         String url = entitiesUrlFiche.get(entity.getBaseClass());
         if (url == null) {
-            Dialogs.create().message(entity.toString()).showInformation();
+            new Alert(Alert.AlertType.INFORMATION, entity.toString()).show();
             return null;
         }
 
@@ -175,7 +175,7 @@ public class Forms {
     public static <T extends WindowController & GestionController> FicheEditController<T> showEdit(AbstractDBEntity entity) {
         String url = entitiesUrlEdit.get(entity.getBaseClass());
         if (url == null) {
-            Dialogs.create().message(entity.toString()).showInformation();
+            new Alert(Alert.AlertType.INFORMATION, entity.toString()).show();
             return null;
         }
 
