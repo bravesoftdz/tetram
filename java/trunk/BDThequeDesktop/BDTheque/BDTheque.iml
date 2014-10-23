@@ -5,6 +5,7 @@
       <configuration>
         <fileset id="fileset" name="Spring Application Context" removed="false">
           <file>file://$MODULE_DIR$/src/main/resources/org/tetram/bdtheque/config/spring-config.xml</file>
+          <file>file://$MODULE_DIR$/src/main/java/org/tetram/bdtheque/spring/SpringContext.java</file>
         </fileset>
       </configuration>
     </facet>
