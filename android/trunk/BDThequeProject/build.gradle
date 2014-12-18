@@ -5,7 +5,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:+'
+        classpath 'com.android.tools.build:gradle:1.0.0'
     }
 }
 
@@ -18,7 +18,7 @@ allprojects {
         if (it.hasProperty('android')) {
             android {
                 compileSdkVersion 19
-                buildToolsVersion "19.1"
+                buildToolsVersion "21.1.2"
 
                 compileOptions {
                     sourceCompatibility JavaVersion.VERSION_1_7

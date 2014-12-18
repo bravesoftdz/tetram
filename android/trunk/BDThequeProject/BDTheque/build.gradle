@@ -1,4 +1,4 @@
-apply plugin: 'android'
+apply plugin: 'com.android.application'
 
 android {
     dexOptions {
@@ -14,7 +14,6 @@ android {
           versionCode 1
           versionName "1.0"
         */
-        testPackageName "org.tetram.bdtheque.test"
         testInstrumentationRunner 'android.test.InstrumentationTestRunner'
         testApplicationId 'org.tetram.bdtheque.test'
     }
@@ -33,7 +32,7 @@ android {
 
     buildTypes {
         release {
-            runProguard false
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
             signingConfig signingConfigs.release
             buildConfigField "boolean", "TRIAL", "false"
@@ -44,7 +43,7 @@ android {
             buildConfigField "boolean", "TRIAL", "true"
         }
         debug {
-            runProguard false
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
             buildConfigField "boolean", "TRIAL", "false"
             applicationIdSuffix '.debug'
