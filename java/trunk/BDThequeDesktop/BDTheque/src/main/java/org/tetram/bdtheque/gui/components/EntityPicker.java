@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2014, tetram.org. All Rights Reserved.
+ * Copyright (c) 2015, tetram.org. All Rights Reserved.
  * EntityPicker.java
- * Last modified by Tetram, on 2014-09-05T10:50:18CEST
+ * Last modified by Thierry, on 2014-10-31T18:20:43CET
  */
 
 package org.tetram.bdtheque.gui.components;
@@ -28,7 +28,7 @@ import java.util.UUID;
         @ClassLink(javafx.scene.control.ColorPicker.class),
         @ClassLink(javafx.scene.control.DatePicker.class)
 })
-public class EntityPicker extends ComboBoxBase<AbstractDBEntity> {
+public class EntityPicker<E extends AbstractDBEntity> extends ComboBoxBase<E> {
     @NonNls
     private static final String DEFAULT_STYLE_CLASS = "entity-picker";
 
@@ -61,7 +61,7 @@ public class EntityPicker extends ComboBoxBase<AbstractDBEntity> {
 
     @Override
     protected Skin<?> createDefaultSkin() {
-        if (entityPickerSkin == null) entityPickerSkin = new EntityPickerSkin(this);
+        if (entityPickerSkin == null) entityPickerSkin = new EntityPickerSkin<>(this);
         return entityPickerSkin;
     }
 

@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2014, tetram.org. All Rights Reserved.
+ * Copyright (c) 2015, tetram.org. All Rights Reserved.
  * EntityWebHyperlink.java
- * Last modified by Tetram, on 2014-07-29T11:02:07CEST
+ * Last modified by Thierry, on 2014-10-31T17:39:52CET
  */
 
 package org.tetram.bdtheque.gui.utils;
@@ -44,9 +44,8 @@ public class EntityWebHyperlink extends Hyperlink {
         });
 
         BooleanBinding urlValid = Bindings.createBooleanBinding(() -> url.get() != null && !StringUtils.isNullOrEmpty(url.get().getHost()), url);
-        if (alwaysVisible)
-            disableProperty().bind(urlValid.not());
-        else
+        disableProperty().bind(urlValid.not());
+        if (!alwaysVisible)
             visibleProperty().bind(urlValid);
     }
 

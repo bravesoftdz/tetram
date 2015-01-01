@@ -6,9 +6,6 @@
       <synchronize>true</synchronize>
       <jdbc-driver>org.firebirdsql.jdbc.FBDriver</jdbc-driver>
       <jdbc-url>jdbc:firebirdsql://localhost:3050/D:\\MEDIA.KIT\\BDTheque\\bin\\BD.GDB</jdbc-url>
-      <user-name>SYSDBA</user-name>
-      <user-password>dfc7dfcbdfd9dfdedfcfdfd8dfc1dfcfdfd3</user-password>
-      <table-pattern>[^\$]*</table-pattern>
       <default-dialect>SQL92</default-dialect>
       <vm-options>-Djava.library.path=&quot;D:\Outils\Firebird\Jaybird-2.2.5-JDK_1.8;%PATH%&quot;</vm-options>
       <driver-properties>
@@ -21,9 +18,6 @@
       <synchronize>true</synchronize>
       <jdbc-driver>org.firebirdsql.jdbc.FBDriver</jdbc-driver>
       <jdbc-url>jdbc:firebirdsql:embedded:D:\\MEDIA.KIT\\BDTheque\\bin\\BD.GDB</jdbc-url>
-      <user-name>SYSDBA</user-name>
-      <user-password>dfc7dfcbdfd9dfdedfcfdfd8dfc1dfcfdfd3</user-password>
-      <table-pattern>[^\$]*</table-pattern>
       <default-dialect>GenericSQL</default-dialect>
       <vm-options>-Djava.library.path=&quot;D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\firebird;%PATH%&quot;</vm-options>
       <driver-properties>
@@ -33,4 +27,3 @@
     </data-source>
   </component>
 </project>
-

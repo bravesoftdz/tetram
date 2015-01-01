@@ -1,13 +1,11 @@
 /*
- * Copyright (c) 2014, tetram.org. All Rights Reserved.
+ * Copyright (c) 2015, tetram.org. All Rights Reserved.
  * FicheCollectionController.java
- * Last modified by Tetram, on 2014-08-27T10:32:26CEST
+ * Last modified by Thierry, on 2014-10-31T18:19:45CET
  */
 
 package org.tetram.bdtheque.gui.controllers.gestion;
 
-import javafx.beans.binding.Bindings;
-import javafx.beans.property.Property;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -16,10 +14,10 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.tetram.bdtheque.data.bean.Collection;
-import org.tetram.bdtheque.data.bean.Editeur;
+import org.tetram.bdtheque.data.bean.abstractentities.BaseEditeur;
 import org.tetram.bdtheque.data.dao.CollectionDao;
+import org.tetram.bdtheque.gui.components.EntityPicker;
 import org.tetram.bdtheque.gui.controllers.includes.TreeViewMode;
-import org.tetram.bdtheque.gui.controllers.includes.TreeViewSearchController;
 import org.tetram.bdtheque.spring.utils.ListStringConverter;
 import org.tetram.bdtheque.utils.FileLink;
 import org.tetram.bdtheque.utils.FileLinks;
@@ -41,7 +39,7 @@ public class FicheCollectionController extends GestionControllerImpl {
     @Autowired
     CollectionDao collectionDao;
     @FXML
-    TreeViewSearchController tvEditeurController; // TODO: remplacer par la sélection d'un éditeur
+    EntityPicker<BaseEditeur> epEditeur;
     @FXML
     private TextField tfNom;
     @FXML
@@ -60,7 +58,8 @@ public class FicheCollectionController extends GestionControllerImpl {
             }, FicheEditController.HandlerPriority.HIGH);
         });
 
-        tvEditeurController.getTreeViewController().setMode(TreeViewMode.EDITEURS);
+        epEditeur.setMode(TreeViewMode.EDITEURS);
+        epEditeur.prefWidthProperty().bind(tfNom.widthProperty());
     }
 
     @SuppressWarnings("unchecked")
@@ -70,8 +69,8 @@ public class FicheCollectionController extends GestionControllerImpl {
         if (collection == null) collection = new Collection();
 
         tfNom.textProperty().bindBidirectional(collection.nomCollectionProperty());
-        // TODO: ça ne fonctionne pas comme prévu, mais comme le composant doit être changé, ce n'est pas grave
-        Bindings.bindBidirectional((Property<Editeur>) tvEditeurController.getTreeViewController().selectedEntityProperty(), collection.editeurProperty());
+        epEditeur.setValue(collection.getEditeur());
+        epEditeur.valueProperty().addListener(o -> collection.setIdEditeur(epEditeur.getValue().getId()));
         taAssociations.textProperty().bindBidirectional(collection.associationsProperty(), new ListStringConverter());
     }
 

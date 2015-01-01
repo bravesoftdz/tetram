@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright (c) 2014, tetram.org. All Rights Reserved.
+  ~ Copyright (c) 2015, tetram.org. All Rights Reserved.
   ~ ficheUnivers.fxml
-  ~ Last modified by Tetram, on 2014-09-04T17:04:35CEST
+  ~ Last modified by Thierry, on 2014-10-30T18:20:11CET
   -->
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import org.tetram.bdtheque.gui.components.EntityPicker?>
 <?import java.net.URL?>
 <VBox xmlns:fx="http://javafx.com/fxml/1" alignment="TOP_CENTER" prefHeight="584.0" prefWidth="579.0" spacing="16.0"
       styleClass="scene" xmlns="http://javafx.com/javafx/8"
@@ -29,6 +30,7 @@
                 <Label fx:id="lbSiteWeb" text="Label" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
                 <Label fx:id="lbUniversParent" styleClass="label-rubrique" text="Univers parent :" GridPane.halignment="RIGHT"
                        GridPane.rowIndex="2"/>
+                <EntityPicker fx:id="epUniversParent" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="2"/>
 
                 <Separator maxWidth="-Infinity" minWidth="-Infinity" prefWidth="200.0" GridPane.columnSpan="3"
                            GridPane.halignment="CENTER" GridPane.rowIndex="3" GridPane.valignment="CENTER"/>

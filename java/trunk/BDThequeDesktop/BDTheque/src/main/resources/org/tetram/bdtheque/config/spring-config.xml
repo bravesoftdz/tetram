@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright (c) 2014, tetram.org. All Rights Reserved.
+  ~ Copyright (c) 2015, tetram.org. All Rights Reserved.
   ~ spring-config.xml
-  ~ Last modified by Tetram, on 2014-07-29T11:28:30CEST
+  ~ Last modified by Thierry, on 2015-01-01T16:36:19CET
   -->
 
 <beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:tx="http://www.springframework.org/schema/tx" xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:mybatis="http://mybatis.org/schema/mybatis-spring"
        xmlns="http://www.springframework.org/schema/beans"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
         http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
-        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+        http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring.xsd">
 
     <!--
     géré par le bean databaseProperties (dans org.tetram.bdtheque.spring.SpringContext)
@@ -24,9 +26,13 @@
         <property name="suppressClose" value="true"/>
         <property name="autoCommit" value="false"/>
 
+        <!--suppress MybatisMapperXmlInspection -->
         <property name="driverClassName" value="${database.driver}"/>
+        <!--suppress MybatisMapperXmlInspection -->
         <property name="url" value="${database.url}"/>
+        <!--suppress MybatisMapperXmlInspection -->
         <property name="username" value="${database.username}"/>
+        <!--suppress MybatisMapperXmlInspection -->
         <property name="password" value="${database.password}"/>
 
         <property name="connectionProperties">
@@ -79,13 +85,16 @@
     -->
     <aop:aspectj-autoproxy/>
 
+    <mybatis:scan base-package="org.tetram.bdtheque.**.mappers"/>
+    <context:annotation-config/>
     <!-- on scanne toute l'appli... si ça devient trop long on verra à spécifier les emplacements -->
-    <context:component-scan base-package="org.tetram.bdtheque"/>
+    <context:component-scan base-package="org.tetram.bdtheque" />
+
     <!--
     <context:component-scan base-package="org.tetram.bdtheque.data.dao"/>
     <context:component-scan base-package="org.tetram.bdtheque.data.services"/>
     -->
-
+<!--
     <bean id="baseMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
         <property name="mapperInterface" value="org.tetram.bdtheque.data.dao.mappers.BaseMapperInterface"/>
         <property name="sqlSessionFactory" ref="sqlSessionFactory"/>
@@ -130,6 +139,7 @@
     <bean id="valeurlisteMapper" parent="baseMapper">
         <property name="mapperInterface" value="org.tetram.bdtheque.data.dao.mappers.ValeurListeMapper"/>
     </bean>
+    -->
 
     <!--
     <context:spring-configured/>

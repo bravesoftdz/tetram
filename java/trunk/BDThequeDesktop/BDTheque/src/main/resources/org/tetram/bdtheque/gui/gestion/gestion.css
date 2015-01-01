@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2014, tetram.org. All Rights Reserved.
+ * Copyright (c) 2015, tetram.org. All Rights Reserved.
  * gestion.css
- * Last modified by Tetram, on 2014-07-29T11:10:40CEST
+ * Last modified by Thierry, on 2015-01-01T16:34:13CET
  */
 
 /**
@@ -27,4 +27,47 @@
 .flow-border {
     -fx-background-color: -fx-box-border, -fx-control-inner-background;
     -fx-background-insets: 0, 1;
+}
+
+.flowtext-area {
+    -fx-background-color: -fx-shadow-highlight-color, -fx-text-box-border, -fx-control-inner-background;
+    -fx-background-insets: 0, 1, 2;
+    -fx-background-radius: 3, 2, 2;
+    -fx-padding: 1;
+    /*noinspection CssInvalidFunction*/
+    -fx-prompt-text-fill: derive(-fx-control-inner-background,-30%);
+
+    /*
+    inherits from text-input;
+    */
+    -fx-text-fill: -fx-text-inner-color;
+    /*noinspection CssInvalidFunction*/
+    -fx-highlight-fill: derive(-fx-control-inner-background,-20%);
+    -fx-highlight-text-fill: -fx-text-inner-color;
+}
+
+.flowtext-area > .scroll-pane {
+    -fx-background-color: transparent;
+}
+
+.flowtext-area .content {
+    -fx-padding: 3 5 3 5;
+    -fx-cursor: text;
+}
+
+.flowtext-area:focused {
+    -fx-background-color: -fx-focus-color, -fx-text-box-border, -fx-control-inner-background;
+    -fx-background-insets: -0.4, 1, 2;
+    -fx-background-radius: 3.4, 2, 2;
+    -fx-prompt-text-fill: transparent;
+
+    /*
+    inherits from text-input;
+    */
+    -fx-highlight-fill: -fx-accent;
+    -fx-highlight-text-fill: white;
+}
+
+.flowtext-area:disabled {
+    -fx-opacity: -fx-disabled-opacity;
 }

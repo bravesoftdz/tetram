@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2014, tetram.org. All Rights Reserved.
+ * Copyright (c) 2015, tetram.org. All Rights Reserved.
  * TreeViewSearchController.java
- * Last modified by Tetram, on 2014-08-27T10:33:30CEST
+ * Last modified by Thierry, on 2014-10-30T17:18:51CET
  */
 
 package org.tetram.bdtheque.gui.controllers.includes;
@@ -12,6 +12,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeTableView;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Region;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -87,4 +88,7 @@ public class TreeViewSearchController extends WindowController {
         return getTreeView().maxHeightProperty();
     }
 
+    public Region getContainer() {
+        return containerPane;
+    }
 }

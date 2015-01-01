@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2014, tetram.org. All Rights Reserved.
+ * Copyright (c) 2015, tetram.org. All Rights Reserved.
  * FicheAlbumController.java
- * Last modified by Tetram, on 2014-08-27T10:16:39CEST
+ * Last modified by Thierry, on 2014-10-30T19:34:07CET
  */
 
 package org.tetram.bdtheque.gui.controllers.consultation;
@@ -187,8 +187,8 @@ public class FicheAlbumController extends WindowController implements Consultati
             FlowItem.fillViewFromList(serie.genresProperty(), lvGenres);
 
             tvSerieController.setFinalEntityClass(BaseAlbum.class);
-            tvSerieController.setOnIsLeaf(param -> tvSerieController.getNodeLevel(param) == 1);
-            tvSerieController.setOnGetLabel(param -> ((BaseAlbum) param).buildLabel(false));
+            tvSerieController.setOnIsLeaf((param, defaultValue) -> tvSerieController.getNodeLevel(param) == 1);
+            tvSerieController.setOnGetLabel((param, defaultValue) -> ((BaseAlbum) param).buildLabel(false));
             tvSerieController.setOnGetChildren(param -> serie.albumsProperty());
             tvSerieController.setOnRenderCell(cell -> {
                 cell.underlineProperty().bind(Bindings.equal(cell.itemProperty(), album));

@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2014, tetram.org. All Rights Reserved.
+ * Copyright (c) 2015, tetram.org. All Rights Reserved.
  * build.gradle
- * Last modified by Tetram, on 2014-10-23T14:57:36CEST
+ * Last modified by Thierry, on 2014-12-22T17:58:44CET
  */
 
 apply plugin: 'java'
@@ -14,11 +14,25 @@ repositories {
     mavenCentral()
 }
 
+sourceSets {
+    // 22/12/2014: le packager javafx attends toutes les classes et toutes les ressources au même endroit
+    // mais le plugin java les dispatch dans deux répertoires
+    // 22/12/2014 NE PAS FACTORISER EN output.resourcesDir = output.classesDir
+    main {
+        output.classesDir = file("..\\out\\production")
+        output.resourcesDir = file("..\\out\\production")
+    }
+    test {
+        output.classesDir = file("..\\out\\test")
+        output.resourcesDir = file("..\\out\\test")
+    }
+}
+
 dependencies {
     testCompile 'junit:junit:4+'
     // 28/05/2014: la version dispo est la version 12 qui ne contient pas l'annotation Contract
-    //compile 'com.intellij:annotations:+'
-    compile files('C:\\Program Files (x86)\\JetBrains\\IntelliJ IDEA 13.1.4\\lib\\annotations.jar')
+    // compile 'com.intellij:annotations:+'
+    compile files('C:\\Program Files (x86)\\JetBrains\\IntelliJ IDEA 14.0.2\\lib\\annotations.jar')
 
     compile 'org.apache.logging.log4j:log4j-core:+'
     // permet de rediriger, dans la plupart des cas, les appels à Log4j vers Log4j2

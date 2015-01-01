@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2014, tetram.org. All Rights Reserved.
+ * Copyright (c) 2015, tetram.org. All Rights Reserved.
  * FicheSerieController.java
- * Last modified by Tetram, on 2014-08-27T10:24:16CEST
+ * Last modified by Thierry, on 2014-10-30T19:34:26CET
  */
 
 package org.tetram.bdtheque.gui.controllers.consultation;
@@ -91,12 +91,12 @@ public class FicheSerieController extends WindowController implements Consultati
         notationController.setDao(((EvaluatedEntityDao) serieDao));
 
         tvAlbumsController.setFinalEntityClass(BaseAlbum.class);
-        tvAlbumsController.setOnIsLeaf(param -> tvAlbumsController.getNodeLevel(param) == 1);
-        tvAlbumsController.setOnGetLabel(param -> ((BaseAlbum) param).buildLabel(false));
+        tvAlbumsController.setOnIsLeaf((param, defaultValue) -> tvAlbumsController.getNodeLevel(param) == 1);
+        tvAlbumsController.setOnGetLabel((param, defaultValue) -> ((BaseAlbum) param).buildLabel(false));
 
         tvParabdController.setFinalEntityClass(BaseParaBD.class);
-        tvParabdController.setOnIsLeaf(param -> tvParabdController.getNodeLevel(param) == 1);
-        tvParabdController.setOnGetLabel(param -> ((BaseParaBD) param).buildLabel(false));
+        tvParabdController.setOnIsLeaf((param, defaultValue) -> tvParabdController.getNodeLevel(param) == 1);
+        tvParabdController.setOnGetLabel((param, defaultValue) -> ((BaseParaBD) param).buildLabel(false));
     }
 
     @Override

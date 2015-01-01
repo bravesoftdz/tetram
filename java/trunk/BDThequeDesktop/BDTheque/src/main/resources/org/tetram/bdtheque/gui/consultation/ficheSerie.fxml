@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright (c) 2014, tetram.org. All Rights Reserved.
+  ~ Copyright (c) 2015, tetram.org. All Rights Reserved.
   ~ ficheSerie.fxml
-  ~ Last modified by Tetram, on 2014-07-31T14:14:31CEST
+  ~ Last modified by Thierry, on 2014-10-31T11:31:36CET
   -->
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
@@ -49,7 +49,7 @@
                 <Label styleClass="label-rubrique" text="Titre :" GridPane.columnIndex="2" GridPane.columnSpan="2"
                        GridPane.halignment="RIGHT"/>
                 <Label fx:id="titreSerie" style="-fx-font-size: 13px; -fx-font-weight: bold;"
-                       text="Sillage - Premières Armes" GridPane.columnIndex="4" GridPane.columnSpan="3"/>
+                       text="Titre" GridPane.columnIndex="4" GridPane.columnSpan="3"/>
                 <Label styleClass="label-rubrique" text="Genres :" GridPane.columnSpan="3" GridPane.halignment="RIGHT"
                        GridPane.rowIndex="5" GridPane.valignment="TOP"/>
                 <FlowPane fx:id="lvGenres" GridPane.columnIndex="3" GridPane.columnSpan="4" GridPane.rowIndex="5"

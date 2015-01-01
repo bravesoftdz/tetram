@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2014, tetram.org. All Rights Reserved.
+ * Copyright (c) 2015, tetram.org. All Rights Reserved.
  * ModeGestionController.java
- * Last modified by Tetram, on 2014-08-29T13:32:18CEST
+ * Last modified by Thierry, on 2014-10-30T19:38:49CET
  */
 
 package org.tetram.bdtheque.gui.controllers;
@@ -22,6 +22,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.tetram.bdtheque.data.bean.abstractentities.AbstractDBEntity;
 import org.tetram.bdtheque.data.bean.abstractentities.AbstractEntity;
+import org.tetram.bdtheque.data.bean.abstractentities.BaseCollection;
 import org.tetram.bdtheque.gui.controllers.gestion.FicheEditController;
 import org.tetram.bdtheque.gui.controllers.gestion.GestionController;
 import org.tetram.bdtheque.gui.controllers.includes.TreeViewController;
@@ -136,6 +137,15 @@ public class ModeGestionController extends WindowController implements ModeContr
                 getTreeViewController().setMode(newMode);
         });
 
+        getTreeViewController().setOnGetLabel(
+                (entity, defaultValue) -> {
+                    if (entity instanceof BaseCollection)
+                        return ((BaseCollection) entity).buildLabel(false);
+                    else
+                        return defaultValue;
+                }
+        );
+
         btModifier.disableProperty().bind(getTreeViewController().selectedEntityProperty().isNull());
         btSupprimer.disableProperty().bind(getTreeViewController().selectedEntityProperty().isNull());
         btAcheter.disableProperty().bind(
@@ -149,8 +159,7 @@ public class ModeGestionController extends WindowController implements ModeContr
         entitiesType.selectToggle(btAlbums);
     }
 
-    public <T extends WindowController & GestionController> FicheEditController<T> showEditForm(AbstractDBEntity
-                                                                                                        entity) {
+    public <T extends WindowController & GestionController> FicheEditController<T> showEditForm(AbstractDBEntity entity) {
         FicheEditController<T> controller = null;
         if (entity != null && !currentEntities.contains(entity.getEntityClass())) {
             controller = Forms.showEdit(entity);

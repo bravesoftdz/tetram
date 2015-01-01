@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2014, tetram.org. All Rights Reserved.
+ * Copyright (c) 2015, tetram.org. All Rights Reserved.
  * EntityPickerContent.java
- * Last modified by Tetram, on 2014-09-05T14:32:21CEST
+ * Last modified by Thierry, on 2014-12-18T02:23:03CET
  */
 
 package org.tetram.bdtheque.gui.components;
@@ -11,13 +11,18 @@ import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.control.PopupControl;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Region;
+import javafx.scene.paint.Color;
 import org.tetram.bdtheque.data.bean.abstractentities.AbstractDBEntity;
 import org.tetram.bdtheque.gui.controllers.includes.TreeViewController;
 import org.tetram.bdtheque.gui.controllers.includes.TreeViewSearchController;
 import org.tetram.bdtheque.spring.SpringFxmlLoader;
 import org.tetram.bdtheque.utils.ClassLink;
 import org.tetram.bdtheque.utils.ClassLinks;
+import org.tetram.bdtheque.utils.FileLink;
+import org.tetram.bdtheque.utils.FileLinks;
 
 /**
  * Created by Thierry on 10/08/2014.
@@ -25,6 +30,9 @@ import org.tetram.bdtheque.utils.ClassLinks;
 @ClassLinks({
         @ClassLink(com.sun.javafx.scene.control.skin.ColorPalette.class),
         @ClassLink(com.sun.javafx.scene.control.skin.DatePickerContent.class)
+})
+@FileLinks({
+        @FileLink("/org/tetram/bdtheque/gui/components/treeviewsearch.fxml")
 })
 public class EntityPickerContent extends Region {
 
@@ -97,10 +105,12 @@ public class EntityPickerContent extends Region {
         });
 
         getChildren().add(treeViewSearchController.getView());
+        Background background = new Background(new BackgroundFill(Color.LIGHTGRAY, null, null));
+        treeViewSearchController.getContainer().setBackground(background);
     }
 
     private void acceptValue(EntityPicker entityPicker) {
-        entityPicker.setValue((AbstractDBEntity) treeViewController.getSelectedEntity());
+        entityPicker.setValue(treeViewController.getSelectedEntity());
         entityPicker.hide();
     }
 

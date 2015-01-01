@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2014, tetram.org. All Rights Reserved.
+ * Copyright (c) 2015, tetram.org. All Rights Reserved.
  * TreeViewController.java
- * Last modified by Tetram, on 2014-09-17T09:29:15CEST
+ * Last modified by Thierry, on 2015-01-01T16:26:52CET
  */
 
 package org.tetram.bdtheque.gui.controllers.includes;
@@ -67,8 +67,8 @@ public class TreeViewController extends WindowController {
     private final BooleanProperty clickToShow = new SimpleBooleanProperty(this, "clickToShow", true);
     private final ObjectProperty<EventHandler<MouseEvent>> onClickItem = new SimpleObjectProperty<>(this, "onClickItem", null);
     private final ObjectProperty<Callback<TreeViewNode, List<? extends AbstractEntity>>> onGetChildren = new SimpleObjectProperty<>(this, "onGetChildren", null);
-    private final ObjectProperty<Callback<TreeViewNode, Boolean>> onIsLeaf = new SimpleObjectProperty<>(this, "onIsLeaf", null);
-    private final ObjectProperty<Callback<AbstractEntity, String>> onGetLabel = new SimpleObjectProperty<>(this, "onGetLabel", new TreeViewMode.GetLabelCallback(this));
+    private final ObjectProperty<CallbackDefault<TreeViewNode, Boolean>> onIsLeaf = new SimpleObjectProperty<>(this, "onIsLeaf", null);
+    private final ObjectProperty<CallbackDefault<AbstractEntity, String>> onGetLabel = new SimpleObjectProperty<>(this, "onGetLabel", new TreeViewMode.GetLabelCallback(this));
     private final ObjectProperty<Consumer<TreeTableCell<AbstractEntity, AbstractEntity>>> onRenderCell = new SimpleObjectProperty<>(this, "onRenderCell", null);
     private final ObjectProperty<Class<? extends AbstractEntity>> finalEntityClass = new SimpleObjectProperty<>(this, "finalEntityClass", AbstractEntity.class);
     private final ReadOnlyStringWrapper appliedFiltre = new ReadOnlyStringWrapper(this, "appliedFiltre", null);
@@ -77,6 +77,7 @@ public class TreeViewController extends WindowController {
     private final ReadOnlyObjectWrapper<RepertoireLiteDao<?, ?>> dao = new ReadOnlyObjectWrapper<>(this, "dao", null);
     private final ObjectProperty<TreeViewMode> mode = new SimpleObjectProperty<>(this, "mode", TreeViewMode.NONE);
     private final ObjectProperty<AbstractEntity> selectedEntity = new SimpleObjectProperty<>(this, "selectedEntity", null);
+    private final StringProperty searchText = new SimpleStringProperty(this, "searchText", "");
     @Autowired
     private History history;
     @Autowired
@@ -89,12 +90,9 @@ public class TreeViewController extends WindowController {
     private TreeTableColumn<AbstractEntity, AbstractEntity> column0;
     @FXML
     private TreeTableColumn<AbstractEntity, AbstractEntity> column1;
-
     private boolean findRegistered = false;
     private String lastFindText;
     private ListOrderedMap<? extends InitialeEntity<? extends Comparable<?>>, ? extends List<? extends AbstractDBEntity>> findList;
-
-    private StringProperty searchText = new SimpleStringProperty(this, "searchText", "");
     private WeakReference<TextInputControl> searchTextField = new WeakReference<>(null);
 
     public TreeViewController() {
@@ -196,7 +194,7 @@ public class TreeViewController extends WindowController {
     private String getLabelForItem(AbstractEntity entity) {
         String label;
         if (getOnGetLabel() != null)
-            label = entity == null ? "" : getOnGetLabel().call(entity);
+            label = entity == null ? "" : getOnGetLabel().call(entity, entity.buildLabel());
         else {
             label = entity == null ? "" : entity.buildLabel();
         }
@@ -377,27 +375,27 @@ public class TreeViewController extends WindowController {
         return onGetChildren;
     }
 
-    public Callback<TreeViewNode, Boolean> getOnIsLeaf() {
+    public CallbackDefault<TreeViewNode, Boolean> getOnIsLeaf() {
         return onIsLeaf.get();
     }
 
-    public void setOnIsLeaf(Callback<TreeViewNode, Boolean> onIsLeaf) {
+    public void setOnIsLeaf(CallbackDefault<TreeViewNode, Boolean> onIsLeaf) {
         this.onIsLeaf.set(onIsLeaf);
     }
 
-    public ObjectProperty<Callback<TreeViewNode, Boolean>> onIsLeafProperty() {
+    public ObjectProperty<CallbackDefault<TreeViewNode, Boolean>> onIsLeafProperty() {
         return onIsLeaf;
     }
 
-    public Callback<AbstractEntity, String> getOnGetLabel() {
+    public CallbackDefault<AbstractEntity, String> getOnGetLabel() {
         return onGetLabel.get();
     }
 
-    public void setOnGetLabel(Callback<AbstractEntity, String> onGetLabel) {
+    public void setOnGetLabel(CallbackDefault<AbstractEntity, String> onGetLabel) {
         this.onGetLabel.set(onGetLabel);
     }
 
-    public ObjectProperty<Callback<AbstractEntity, String>> onGetLabelProperty() {
+    public ObjectProperty<CallbackDefault<AbstractEntity, String>> onGetLabelProperty() {
         return onGetLabel;
     }
 
@@ -661,7 +659,8 @@ public class TreeViewController extends WindowController {
         public boolean isLeaf() {
             if (isFirstTimeLeaf) {
                 isFirstTimeLeaf = false;
-                isLeaf = getOnIsLeaf() == null ? (this.getValue() != null && !(this.getValue() instanceof InitialeEntity)) : getOnIsLeaf().call(this);
+                isLeaf = (this.getValue() != null && !(this.getValue() instanceof InitialeEntity));
+                if (getOnIsLeaf() != null) isLeaf = getOnIsLeaf().call(this, isLeaf);
             }
             return isLeaf;
         }

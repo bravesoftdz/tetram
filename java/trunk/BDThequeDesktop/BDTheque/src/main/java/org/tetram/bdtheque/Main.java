@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2014, tetram.org. All Rights Reserved.
+ * Copyright (c) 2015, tetram.org. All Rights Reserved.
  * Main.java
- * Last modified by Tetram, on 2014-10-23T14:51:03CEST
+ * Last modified by Thierry, on 2014-12-18T02:27:26CET
  */
 
 package org.tetram.bdtheque;
@@ -48,7 +48,7 @@ public class Main extends Application {
     @NonNls
     private static final String FB32_CLASSPATH = "firebird_x86";
 
-    private static Log log = LogManager.getLog(Main.class);
+    private static final Log log = LogManager.getLog(Main.class);
 
     static {
 // 23/06/2014: peut être que ça servira un jour, quand FB Embedded n'imposera plus que les fichiers icu soit à la racine de l'appli

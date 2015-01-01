@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2014, tetram.org. All Rights Reserved.
+ * Copyright (c) 2015, tetram.org. All Rights Reserved.
  * Forms.java
- * Last modified by Tetram, on 2014-10-23T14:37:39CEST
+ * Last modified by Thierry, on 2014-10-31T17:41:51CET
  */
 
 package org.tetram.bdtheque.gui.utils;
@@ -53,7 +53,7 @@ public class Forms {
 
         entitiesUrlEdit = new HashMap<>();
         //entitiesUrlEdit.put(BaseAlbum.class, "gestion/ficheAlbum.fxml");
-        //entitiesUrlEdit.put(BaseSerie.class, "gestion/ficheSerie.fxml");
+        entitiesUrlEdit.put(BaseSerie.class, "gestion/ficheSerie.fxml");
         entitiesUrlEdit.put(BasePersonne.class, "gestion/ficheAuteur.fxml");
         entitiesUrlEdit.put(BaseAuteur.class, "gestion/ficheAuteur.fxml");
         entitiesUrlEdit.put(BaseUnivers.class, "gestion/ficheUnivers.fxml");

@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2014, tetram.org. All Rights Reserved.
+ * Copyright (c) 2015, tetram.org. All Rights Reserved.
  * AlbumDaoImpl.java
- * Last modified by Tetram, on 2014-07-29T11:09:14CEST
+ * Last modified by Thierry, on 2014-12-20T13:06:37CET
  */
 
 package org.tetram.bdtheque.data.dao;
@@ -32,9 +32,9 @@ import java.util.UUID;
 class AlbumDaoImpl extends DaoRWImpl<Album, UUID> implements AlbumDao, EvaluatedEntityDao<Album> {
 
     @Autowired
-    AlbumMapper albumMapper;
+    private AlbumMapper albumMapper;
     @Autowired
-    AuteurMapper auteurMapper;
+    private AuteurMapper auteurMapper;
     @Autowired
     private UserPreferences userPreferences;
     @Autowired

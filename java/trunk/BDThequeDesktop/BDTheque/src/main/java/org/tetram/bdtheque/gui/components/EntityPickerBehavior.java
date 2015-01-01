@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2014, tetram.org. All Rights Reserved.
+ * Copyright (c) 2015, tetram.org. All Rights Reserved.
  * EntityPickerBehavior.java
- * Last modified by Tetram, on 2014-09-05T11:07:23CEST
+ * Last modified by Thierry, on 2014-10-31T18:16:41CET
  */
 
 package org.tetram.bdtheque.gui.components;
@@ -20,7 +20,7 @@ import static javafx.scene.input.KeyEvent.KEY_PRESSED;
 /**
  * Created by Tetram on 03/09/2014.
  */
-public class EntityPickerBehavior extends ComboBoxBaseBehavior<AbstractDBEntity> {
+public class EntityPickerBehavior<E extends AbstractDBEntity> extends ComboBoxBaseBehavior<E> {
 
     @NonNls
     protected static final String OPEN_ACTION = "Open";
@@ -37,7 +37,7 @@ public class EntityPickerBehavior extends ComboBoxBaseBehavior<AbstractDBEntity>
 
     }
 
-    public EntityPickerBehavior(final EntityPicker entityPicker) {
+    public EntityPickerBehavior(final EntityPicker<E> entityPicker) {
         super(entityPicker, ENTITY_PICKER_BINDINGS);
     }
 

@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2014, tetram.org. All Rights Reserved.
+ * Copyright (c) 2015, tetram.org. All Rights Reserved.
  * EntityPickerSkin.java
- * Last modified by Tetram, on 2014-09-05T14:16:23CEST
+ * Last modified by Thierry, on 2014-10-31T18:17:24CET
  */
 
 package org.tetram.bdtheque.gui.components;
@@ -27,15 +27,15 @@ import org.tetram.bdtheque.utils.ClassLinks;
         @ClassLink(com.sun.javafx.scene.control.skin.ColorPickerSkin.class),
         @ClassLink(com.sun.javafx.scene.control.skin.DatePickerSkin.class)
 })
-public class EntityPickerSkin extends ComboBoxPopupControl<AbstractDBEntity> {
+public class EntityPickerSkin<E extends AbstractDBEntity> extends ComboBoxPopupControl<E> {
 
     private final Label displayNode = new Label();
 
     private EntityPickerContent popupContent;
 
     @SuppressWarnings("HardCodedStringLiteral")
-    public EntityPickerSkin(final EntityPicker entityPicker) {
-        super(entityPicker, new EntityPickerBehavior(entityPicker));
+    public EntityPickerSkin(final EntityPicker<E> entityPicker) {
+        super(entityPicker, new EntityPickerBehavior<>(entityPicker));
 
         registerChangeListener(entityPicker.valueProperty(), "VALUE");
 
@@ -89,7 +89,7 @@ public class EntityPickerSkin extends ComboBoxPopupControl<AbstractDBEntity> {
 
         if ("SHOWING".equals(p)) {
             if (getSkinnable().isShowing()) {
-                final EntityPicker entityPicker = (EntityPicker) getSkinnable();
+                final EntityPicker<E> entityPicker = (EntityPicker<E>) getSkinnable();
                 popupContent.updateSelection(entityPicker.getValue());
                 popupContent.clearFocus();
             }
@@ -104,7 +104,7 @@ public class EntityPickerSkin extends ComboBoxPopupControl<AbstractDBEntity> {
     }
 
     private void updateDisplayNode() {
-        final EntityPicker entityPicker = (EntityPicker) getSkinnable();
+        final EntityPicker<E> entityPicker = (EntityPicker<E>) getSkinnable();
         AbstractDBEntity value = entityPicker.getValue();
         displayNode.setText(value == null ? null : value.getLabel());
     }

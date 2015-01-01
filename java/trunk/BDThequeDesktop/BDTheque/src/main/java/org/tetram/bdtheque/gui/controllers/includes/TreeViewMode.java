@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2014, tetram.org. All Rights Reserved.
+ * Copyright (c) 2015, tetram.org. All Rights Reserved.
  * TreeViewMode.java
- * Last modified by Tetram, on 2014-07-30T11:35:02CEST
+ * Last modified by Thierry, on 2014-12-18T02:33:38CET
  */
 
 package org.tetram.bdtheque.gui.controllers.includes;
@@ -13,6 +13,7 @@ import org.tetram.bdtheque.data.bean.abstractentities.AbstractEntity;
 import org.tetram.bdtheque.data.bean.abstractentities.BaseAlbum;
 import org.tetram.bdtheque.data.bean.abstractentities.BaseParaBD;
 import org.tetram.bdtheque.data.dao.*;
+import org.tetram.bdtheque.utils.CallbackDefault;
 
 import java.util.Arrays;
 import java.util.EnumSet;
@@ -88,7 +89,7 @@ public enum TreeViewMode {
         private static final String FILTRE_SQL_ACHAT = "Achat = 1";
     }
 
-    static class GetLabelCallback implements Callback<AbstractEntity, String> {
+    static class GetLabelCallback implements CallbackDefault<AbstractEntity, String> {
 
         private final EnumSet<TreeViewMode> albumSansSerie = EnumSet.copyOf(Arrays.asList(new TreeViewMode[]{ALBUMS_SERIE}));
         private final EnumSet<TreeViewMode> parabdSansSerie = EnumSet.copyOf(Arrays.asList(new TreeViewMode[]{PARABD_SERIE}));
@@ -100,7 +101,7 @@ public enum TreeViewMode {
         }
 
         @Override
-        public String call(AbstractEntity entity) {
+        public String call(AbstractEntity entity, String defaultValue) {
             if (entity == null)
                 return null;
             final TreeViewMode mode = treeViewController.getMode();

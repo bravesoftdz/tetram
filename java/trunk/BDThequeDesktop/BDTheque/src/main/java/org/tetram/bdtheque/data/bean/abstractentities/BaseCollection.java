@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2014, tetram.org. All Rights Reserved.
+ * Copyright (c) 2015, tetram.org. All Rights Reserved.
  * BaseCollection.java
- * Last modified by Tetram, on 2014-07-29T11:09:14CEST
+ * Last modified by Thierry, on 2014-10-30T19:14:27CET
  */
 
 package org.tetram.bdtheque.data.bean.abstractentities;
@@ -68,6 +68,8 @@ public abstract class BaseCollection<E extends BaseEditeur> extends AbstractDBEn
         return getEditeur() == null ? null : getEditeur().getId();
     }
 
+    public abstract void setIdEditeur(UUID idEditeur);
+
     @Override
     public String toString() {
         return buildLabel(false);
@@ -84,4 +86,5 @@ public abstract class BaseCollection<E extends BaseEditeur> extends AbstractDBEn
             lb = StringUtils.ajoutString(lb, getEditeur().buildLabel(), " ", "(", ")");
         return lb;
     }
+
 }

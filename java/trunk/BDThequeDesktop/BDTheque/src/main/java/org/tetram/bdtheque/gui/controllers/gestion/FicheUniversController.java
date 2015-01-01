@@ -1,13 +1,16 @@
 /*
- * Copyright (c) 2014, tetram.org. All Rights Reserved.
+ * Copyright (c) 2015, tetram.org. All Rights Reserved.
  * FicheUniversController.java
- * Last modified by Tetram, on 2014-09-04T17:02:02CEST
+ * Last modified by Thierry, on 2015-01-01T16:26:48CET
  */
 
 package org.tetram.bdtheque.gui.controllers.gestion;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.ContentDisplay;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -58,25 +61,16 @@ public class FicheUniversController extends GestionControllerImpl {
     private TextArea taAssociations;
     @FXML
     private Label lbUniversParent;
-    private EntityPicker tfUniversParent;
+    @FXML
+    private EntityPicker<UniversLite> epUniversParent;
 
     private Univers univers;
 
     @FXML
     void initialize() {
-        tfUniversParent = new EntityPicker();
-        GridPane.setColumnIndex(tfUniversParent, 1);
-        GridPane.setColumnSpan(tfUniversParent, 2);
-        GridPane.setRowIndex(tfUniversParent, 2);
-        tfUniversParent.setMode(TreeViewMode.UNIVERS);
-        tfUniversParent.prefWidthProperty().bind(tfNom.widthProperty());
-        gpGrid.getChildren().add(gpGrid.getChildren().indexOf(lbUniversParent) + 1, tfUniversParent);
-
-        DatePicker fTest = new DatePicker();
-        GridPane.setColumnIndex(fTest, 1);
-        GridPane.setColumnSpan(fTest, 2);
-        GridPane.setRowIndex(fTest, 2);
-//        gpGrid.getChildren().add(fTest);
+        epUniversParent.setMode(TreeViewMode.UNIVERS);
+        epUniversParent.prefWidthProperty().bind(tfNom.widthProperty());
+        //gpGrid.getChildren().add(gpGrid.getChildren().indexOf(lbUniversParent) + 1, epUniversParent);
 
         editControllerProperty().addListener(o -> {
             FicheEditController<?> controller = getEditController();
@@ -103,9 +97,9 @@ public class FicheUniversController extends GestionControllerImpl {
         tfSiteWeb.textProperty().addListener(o -> univers.setSiteWeb(urlConverter.fromString(tfSiteWeb.getText())));
         EntityWebHyperlink.addToLabeled(lbSiteWeb, univers.siteWebProperty(), ContentDisplay.GRAPHIC_ONLY, true);
 
-        tfUniversParent.setParentValue(id);
-        tfUniversParent.setValue(univers.getUniversParent());
-        tfUniversParent.valueProperty().addListener(o -> univers.setUniversParent((UniversLite) tfUniversParent.getValue()));
+        epUniversParent.setParentValue(id);
+        epUniversParent.setValue(univers.getUniversParent());
+        epUniversParent.valueProperty().addListener(o -> univers.setUniversParent(epUniversParent.getValue()));
 
         @SuppressWarnings("HardCodedStringLiteral") final String filtreBrancheUnivers = String.format("branche_univers containing '%s'", StringUtils.UUIDToGUIDString(univers.getId()));
         //tvAlbumsController.setClickToShow(false);

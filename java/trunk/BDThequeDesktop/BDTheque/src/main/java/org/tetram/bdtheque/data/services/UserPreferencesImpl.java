@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2014, tetram.org. All Rights Reserved.
+ * Copyright (c) 2015, tetram.org. All Rights Reserved.
  * UserPreferencesImpl.java
- * Last modified by Tetram, on 2014-08-26T11:56:46CEST
+ * Last modified by Thierry, on 2014-12-18T02:27:26CET
  */
 package org.tetram.bdtheque.data.services;
 
@@ -313,7 +313,7 @@ public class UserPreferencesImpl implements UserPreferences {
 
     private class PreferenceBooleanProperty extends SimpleBooleanProperty {
 
-        private String key;
+        private final String key;
 
         public PreferenceBooleanProperty(@NonNls String name, String key) {
             super(UserPreferencesImpl.this, name, getBooleanPref(key));
@@ -330,7 +330,7 @@ public class UserPreferencesImpl implements UserPreferences {
 
     private class PreferenceStringProperty extends SimpleStringProperty {
 
-        private String key;
+        private final String key;
 
         public PreferenceStringProperty(@NonNls String name, String key) {
             super(UserPreferencesImpl.this, name, getStringPref(key));
@@ -347,7 +347,7 @@ public class UserPreferencesImpl implements UserPreferences {
 
     private class PreferenceFileProperty extends SimpleObjectProperty<File> {
 
-        private String key;
+        private final String key;
 
         public PreferenceFileProperty(@NonNls String name, String key) {
             super(UserPreferencesImpl.this, name, getFilePref(key));
@@ -364,7 +364,7 @@ public class UserPreferencesImpl implements UserPreferences {
 
     private class PreferenceEnumProperty<E extends Enum<E>> extends SimpleObjectProperty<E> {
 
-        private String key;
+        private final String key;
 
         public PreferenceEnumProperty(@NonNls String name, String key, Class<E> enumClass) {
             super(UserPreferencesImpl.this, name, E.valueOf(enumClass, getStringPref(key)));
