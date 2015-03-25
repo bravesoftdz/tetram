@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2015, tetram.org. All Rights Reserved.
  * build.gradle
- * Last modified by Thierry, on 2014-12-22T17:58:44CET
+ * Last modified by Thierry, on 2015-03-26T00:26:13CET
  */
 
 apply plugin: 'java'
@@ -32,7 +32,7 @@ dependencies {
     testCompile 'junit:junit:4+'
     // 28/05/2014: la version dispo est la version 12 qui ne contient pas l'annotation Contract
     // compile 'com.intellij:annotations:+'
-    compile files('C:\\Program Files (x86)\\JetBrains\\IntelliJ IDEA 14.0.2\\lib\\annotations.jar')
+    compile files('C:\\Program Files (x86)\\JetBrains\\IntelliJ IDEA 14.1\\lib\\annotations.jar')
 
     compile 'org.apache.logging.log4j:log4j-core:+'
     // permet de rediriger, dans la plupart des cas, les appels à Log4j vers Log4j2
