@@ -65,7 +65,7 @@ type
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
-    procedure DoGetText(Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var Text: UnicodeString); override;
+    procedure DoGetText(var pEventArgs: TVSTGetCellTextEventArgs); override;
   protected
     procedure DoFreeNode(Node: PVirtualNode); override;
     function DoInitChildren(Node: PVirtualNode; var ChildCount: Cardinal): Boolean; override;
@@ -311,86 +311,84 @@ begin
   inherited;
 end;
 
-procedure TVirtualStringTree.DoGetText(Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var Text: UnicodeString);
+procedure TVirtualStringTree.DoGetText(var pEventArgs: TVSTGetCellTextEventArgs);
 var
   PA: TAlbumLite;
 begin
-  Text := '';
+  pEventArgs.CellText := '';
   if FMode <> vmNone then
-    if GetNodeLevel(Node) > 0 then
+    if GetNodeLevel(pEventArgs.Node) > 0 then
     begin
-      if TextType = ttStatic then
-        Exit;
       case FMode of
         vmAlbums, vmAlbumsAnnee, vmAlbumsCollection, vmAlbumsEditeur, vmAlbumsGenre, vmAlbumsSerie, vmAchatsAlbumsEditeur, vmAlbumsSerieUnivers:
           begin
-            PA := RNodeInfo(GetNodeData(Node)^).Detail as TAlbumLite;
+            PA := RNodeInfo(GetNodeData(pEventArgs.Node)^).Detail as TAlbumLite;
             case Header.Columns.Count of
               2:
-                case Column of
+                case pEventArgs.Column of
                   0:
                     begin
-                      Text := PA.ChaineAffichage(False);
+                      pEventArgs.CellText := PA.ChaineAffichage(False);
                       if FShowDateParutionAlbum then
-                        AjoutString(Text, IfThen(PA.MoisParution > 0, FormatSettings.ShortMonthNames[PA.MoisParution] + ' ', '') +
+                        AjoutString(pEventArgs.CellText, IfThen(PA.MoisParution > 0, FormatSettings.ShortMonthNames[PA.MoisParution] + ' ', '') +
                           NonZero(IntToStr(PA.AnneeParution)), ' - ');
                     end;
                   1:
-                    Text := FormatTitre(PA.Serie);
+                    pEventArgs.CellText := FormatTitre(PA.Serie);
                 end;
               4:
-                case Column of
+                case pEventArgs.Column of
                   0:
-                    Text := FormatTitre(PA.Titre);
+                    pEventArgs.CellText := FormatTitre(PA.Titre);
                   1:
-                    Text := NonZero(IntToStr(PA.Tome));
+                    pEventArgs.CellText := NonZero(IntToStr(PA.Tome));
                   2:
-                    Text := IfThen(PA.MoisParution > 0, FormatSettings.ShortMonthNames[PA.MoisParution] + ' ', '') + NonZero(IntToStr(PA.AnneeParution));
+                    pEventArgs.CellText := IfThen(PA.MoisParution > 0, FormatSettings.ShortMonthNames[PA.MoisParution] + ' ', '') + NonZero(IntToStr(PA.AnneeParution));
                   3:
-                    Text := FormatTitre(PA.Serie);
+                    pEventArgs.CellText := FormatTitre(PA.Serie);
                 end;
             else
               begin
-                Text := PA.ChaineAffichage(FMode <> vmAlbumsSerie);
+                pEventArgs.CellText := PA.ChaineAffichage(FMode <> vmAlbumsSerie);
                 if FShowDateParutionAlbum then
-                  AjoutString(Text, IfThen(PA.MoisParution > 0, FormatSettings.ShortMonthNames[PA.MoisParution] + ' ', '') +
+                  AjoutString(pEventArgs.CellText, IfThen(PA.MoisParution > 0, FormatSettings.ShortMonthNames[PA.MoisParution] + ' ', '') +
                     NonZero(IntToStr(PA.AnneeParution)), ' - ');
               end;
             end;
           end;
         vmPersonnes, vmGenres, vmEditeurs, vmUnivers:
           begin
-            Text := RNodeInfo(GetNodeData(Node)^).Detail.ChaineAffichage(True);
+            pEventArgs.CellText := RNodeInfo(GetNodeData(pEventArgs.Node)^).Detail.ChaineAffichage(True);
           end;
         vmCollections:
           begin
-            Text := RNodeInfo(GetNodeData(Node)^).Detail.ChaineAffichage(FUseFiltre and (Pos('id_editeur', LowerCase(FFiltre)) > 0));
+            pEventArgs.CellText := RNodeInfo(GetNodeData(pEventArgs.Node)^).Detail.ChaineAffichage(FUseFiltre and (Pos('id_editeur', LowerCase(FFiltre)) > 0));
           end;
         vmSeries:
           begin
-            Text := RNodeInfo(GetNodeData(Node)^).Detail.ChaineAffichage(False);
+            pEventArgs.CellText := RNodeInfo(GetNodeData(pEventArgs.Node)^).Detail.ChaineAffichage(False);
           end;
         vmParaBDSerie, vmParaBDSerieUnivers:
           begin
-            Text := RNodeInfo(GetNodeData(Node)^).Detail.ChaineAffichage(False);
+            pEventArgs.CellText := RNodeInfo(GetNodeData(pEventArgs.Node)^).Detail.ChaineAffichage(False);
           end;
       end;
     end
     else
     begin
-      if (Column = 0) or (Column = -1) then
-        if TextType = ttNormal then
-          if FCountPointers[Node.Index].Initiale <> '-1' then
-            Text := FCountPointers[Node.Index].Initiale
-          else
-            case FMode of
-              vmAlbumsSerie, vmAlbumsSerieUnivers, vmParaBDSerie, vmParaBDSerieUnivers:
-                Text := '<Sans série>';
-            else
-              Text := '<Inconnu>';
-            end
+      if (pEventArgs.Column = 0) or (pEventArgs.Column = -1) then
+      begin
+        if FCountPointers[pEventArgs.Node.Index].Initiale <> '-1' then
+          pEventArgs.CellText := FCountPointers[pEventArgs.Node.Index].Initiale
         else
-          AjoutString(Text, NonZero(IntToStr(FCountPointers[Node.Index].Count)), ' ', '(', ')');
+          case FMode of
+            vmAlbumsSerie, vmAlbumsSerieUnivers, vmParaBDSerie, vmParaBDSerieUnivers:
+              pEventArgs.CellText := '<Sans série>';
+          else
+            pEventArgs.CellText := '<Inconnu>';
+          end;
+        AjoutString(pEventArgs.StaticText, NonZero(IntToStr(FCountPointers[pEventArgs.Node.Index].Count)), ' ', '(', ')');
+      end;
     end;
   inherited;
 end;
@@ -611,9 +609,9 @@ begin
   Node := GetFirstSelected;
   if GetNodeLevel(Node) > 0 then
     if Header.Columns.Count = 0 then
-      DoGetText(Node, -1, ttNormal, Result)
+      Result := Text[Node, -1]
     else
-      DoGetText(Node, 0, ttNormal, Result);
+      Result := Text[Node, 0];
 end;
 
 function TVirtualStringTree.GetFocusedNodeFullCaption: UnicodeString;
@@ -626,9 +624,9 @@ begin
     if GetNodeBasePointer(Node) is TAlbumLite then
       Result := TAlbumLite(GetNodeBasePointer(Node)).ChaineAffichage(True)
     else if Header.Columns.Count = 0 then
-      DoGetText(Node, -1, ttNormal, Result)
+      Result := Text[Node, -1]
     else
-      DoGetText(Node, 0, ttNormal, Result);
+      Result := Text[Node, 0];
 end;
 
 function TVirtualStringTree.GetNodeBasePointer(Node: PVirtualNode): TBaseLite;
