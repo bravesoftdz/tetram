@@ -31,8 +31,10 @@ uses
 {$R *.dfm}
 
 type
-  TSynchoWeb = class(TWeb)
+  TSynchroWeb = class(TWeb)
   private
+    FStartTime: TDateTime;
+    FUpgradeFromDate: TDate;
     FDeviceID: string;
     procedure SetDeviceID(const Value: string);
   public const
@@ -48,6 +50,7 @@ type
 
     procedure AskForSynchro;
     procedure EndSynchro;
+    procedure Synchro;
 
     property DeviceID: string read FDeviceID write SetDeviceID;
   end;
@@ -55,12 +58,9 @@ type
 procedure TfrmSynchroniser.Button1Click(Sender: TObject);
 var
   UpgradeFromDate: TDate;
-  web: TSynchoWeb;
-  StartTime: TDateTime;
+  web: TSynchroWeb;
 begin
-  StartTime := Now;
-
-  web := TSynchoWeb.Create;
+  web := TSynchroWeb.Create;
   try
     web.AskForSynchro;
     try
@@ -68,11 +68,11 @@ begin
       web.UpgradeDB;
 
       if RadioButton1.Checked then
-        UpgradeFromDate := StrToDateDef(web.GetOption('lastsynchro'), -1, TGlobalVar.SQLSettings)
+        web.FUpgradeFromDate := StrToDateDef(web.GetOption('lastsynchro'), -1, TGlobalVar.SQLSettings)
       else
-        UpgradeFromDate := -1;
+        web.FUpgradeFromDate := -1;
 
-      web.SendOption('lastsynchro', DateToStr(StartTime, TGlobalVar.SQLSettings));
+      web.Synchro;
     finally
       web.EndSynchro;
     end;
@@ -81,13 +81,14 @@ begin
   end;
 end;
 
-{ TSynchoWeb }
+{ TSynchroWeb }
 
-procedure TSynchoWeb.AskForSynchro;
+procedure TSynchroWeb.AskForSynchro;
 var
   s: string;
   i: Integer;
 begin
+  FStartTime := Now;
   SendData(ActionAskSynchro);
   i := 0;
   s := GetLabel(i);
@@ -96,14 +97,14 @@ begin
   DeviceID := s;
 end;
 
-constructor TSynchoWeb.Create;
+constructor TSynchroWeb.Create;
 begin
   inherited Create(TGlobalVar.Utilisateur.Options.ServerSynchro, 'synchro.php');
   FParam[inherited GetParamLengthMin + 0].Nom := 'deviceid';
   FParam[inherited GetParamLengthMin + 0].Valeur := '';
 end;
 
-procedure TSynchoWeb.EndSynchro;
+procedure TSynchroWeb.EndSynchro;
 begin
   if DeviceID = '' then
     Exit;
@@ -114,14 +115,14 @@ begin
   SendData(ActionEndSynchro);
 end;
 
-function TSynchoWeb.GetParamLengthMin: Integer;
+function TSynchroWeb.GetParamLengthMin: Integer;
 begin
   Result := inherited GetParamLengthMin + 1;
 end;
 
-procedure TSynchoWeb.SendOption(const cle, Valeur: string);
+procedure TSynchroWeb.SendOption(const cle, Valeur: string);
 var
-  obj, rec, data: TdwsJSONObject;
+  obj: TdwsJSONObject;
 begin
   obj := TdwsJSONObject.Create;
   try
@@ -133,10 +134,71 @@ begin
   end;
 end;
 
-procedure TSynchoWeb.SetDeviceID(const Value: string);
+procedure TSynchroWeb.SetDeviceID(const Value: string);
 begin
   FDeviceID := Value;
   FParam[inherited GetParamLengthMin + 0].Valeur := FDeviceID;
+end;
+
+procedure TSynchroWeb.Synchro;
+begin
+(*
+  principe:
+    * 3 modes de synchro: classique, reset du client, reset du serveur
+    * le serveur ne fait aucune résolution de conflit: elles sont faites par les applis, le serveur accepte tout ce qu'on lui envoie
+    * l'appli applique les modifs distantes et résoud les conflits
+      et envoie ses modifs locales restantes
+    * la synchro peut être annulée pendant la résolution de conflit: on applique toutes les modifs ou on n'en applique aucune
+    * un élément (par ex un album) est en conflit si un élément dont il dépend (par ex un auteur) est en conflit ou supprimé
+    * si un élément n'est plus en conflit, tous les éléments qui en dépendent en conflit uniquement à cause de lui ne sont plus en conflit
+      donc le conflit d'un élément à cause d'un élément supprimé ne peut être résolu que manuellement
+    * un conflit se résoud sur un élément dans son intégralité (et non propriété par propriété)
+      mais si le conflit porte sur des propriétés différentes, la résolution est automatique
+
+  implementation (cf svn):
+    * update (recupération des modifs du serveur)
+    * resolution des conflits
+    * commit des modifs restantes
+  nécessite d'avoir
+    - la date de dernière synchro (ok),
+    - et l'état "modifié localement" (soit par comparaison avec une copie de ce qu'a le serveur, soit par un flag, soit...)
+
+  Avant update:
+    Date synchro = Null -> jamais synchronisé, création à envoyer
+    Date synchro < Date modif -> modifié, modifications à envoyer
+    Date synchro > Date modif -> non modifié, rien à faire
+
+  Pendant update:
+    Date synchro < Date modif -> modifié, conflit à résoudre
+    Date synchro > Date modif -> non modifié, mettre à jour -> Date synchro := Now
+    Element supprimé -> conflit à résoudre
+
+  Resolution du conflit:
+/!\ la différence de date n'implique pas une différence réelle de données !!
+/!\ Appliquer le revert complet dans le cas où il n'y a aucune modif réelle
+    Revert complet: Date modif := old Date synchro, Date synchro := Now
+    Revert partiel: eventuellement Date modif := Now
+    Aucun revert: eventuellement Date modif := Now
+
+  Après résolution de conflit:
+    Date synchro = Null -> jamais synchronisé, création à envoyer
+    Date synchro < Date modif -> modifié, pas/plus de conflit, modifications à envoyer
+    Date synchro > Date modif -> non modifié, rien à faire
+
+Problème:
+  lors du diff, comment identifier une modif locale et une modif distante
+
+*)
+
+  try
+    // charger la liste des modifications locales à envoyer
+    // demander la liste des modifications distantes à appliquer
+    // faire une résolution entre les modifs restantes et à envoyer
+    // appliquer les modifs distantes
+    // envoyer les modifs locales restantes
+  finally
+    SendOption('lastsynchro', DateToStr(FStartTime, TGlobalVar.SQLSettings));
+  end;
 end;
 
 end.

@@ -7,7 +7,7 @@
         <TargetedPlatforms>3</TargetedPlatforms>
         <AppType>Library</AppType>
         <FrameworkType>None</FrameworkType>
-        <ProjectVersion>15.3</ProjectVersion>
+        <ProjectVersion>16.0</ProjectVersion>
         <Platform Condition="'$(Platform)'==''">Win64</Platform>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Config)'=='Base' or '$(Base)'!=''">
@@ -58,6 +58,7 @@
         <Base>true</Base>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base)'!=''">
+        <SanitizedProjectName>BDT_UDF</SanitizedProjectName>
         <Manifest_File>None</Manifest_File>
         <DCC_UnitSearchPath>$(Composants)\Perso\icu\lib;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
         <DCC_K>false</DCC_K>

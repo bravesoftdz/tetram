@@ -106,7 +106,7 @@ type
 implementation
 
 uses
-  UDWScriptEditor, Procedures, dwsSymbols, dwsSuggestions, dwsUtils;
+  UDWScriptEditor, Procedures, dwsSymbols, dwsSuggestions, dwsUtils, dwsXPlatform;
 
 { TDWScriptEngineFactory }
 

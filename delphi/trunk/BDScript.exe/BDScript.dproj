@@ -1,7 +1,7 @@
 ﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup>
         <ProjectGuid>{5E022C95-04FD-4378-B040-C7F9ECAB1946}</ProjectGuid>
-        <ProjectVersion>15.3</ProjectVersion>
+        <ProjectVersion>16.0</ProjectVersion>
         <FrameworkType>VCL</FrameworkType>
         <MainSource>BDScript.dpr</MainSource>
         <Base>True</Base>
@@ -52,6 +52,7 @@
         <Base>true</Base>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base)'!=''">
+        <SanitizedProjectName>BDScript</SanitizedProjectName>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <DCC_Define>FB25;FBEMBED;GIFGraphic;UseLZW;PortableNetworkGraphic;PS_USESSUPPORT;PCRE_STATICLINK;7ZIP_LINKONREQUEST;NO_ADVANCED_HTTP_CLIENT_FEATURES;UseContentCoding;USE_SSL;NO_OSSL_VERSION_CHECK;$(DCC_Define)</DCC_Define>
         <DCC_UnitSearchPath>D:\Composants\Perso;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
@@ -88,6 +89,7 @@ $(PostBuildEvent)]]></PostBuildEvent>
         <DCC_RemoteDebug>true</DCC_RemoteDebug>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_Win32)'!=''">
+        <DCC_DUPLICATES_IGNORED>false</DCC_DUPLICATES_IGNORED>
         <Manifest_File>$(BDS)\bin\default_app.manifest</Manifest_File>
         <VerInfo_Locale>1033</VerInfo_Locale>
         <DCC_RemoteDebug>false</DCC_RemoteDebug>
@@ -103,8 +105,8 @@ $(PostBuildEvent)]]></PostBuildEvent>
         <DCC_DebugInformation>0</DCC_DebugInformation>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2_Win32)'!=''">
-        <VerInfo_Build>5</VerInfo_Build>
-        <VerInfo_Keys>CompanyName=;FileDescription=;FileVersion=1.0.0.5;InternalName=;LegalCopyright=Teträm Corp 1997-2014;LegalTrademarks=;OriginalFilename=;ProductName=;ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
+        <VerInfo_Build>6</VerInfo_Build>
+        <VerInfo_Keys>CompanyName=;FileDescription=;FileVersion=1.0.0.6;InternalName=;LegalCopyright=Teträm Corp 1997-2014;LegalTrademarks=;OriginalFilename=;ProductName=;ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
     </PropertyGroup>
     <ItemGroup>
         <DelphiCompile Include="$(MainSource)">
@@ -303,8 +305,8 @@ $(PostBuildEvent)]]></PostBuildEvent>
                     <Source Name="MainSource">BDScript.dpr</Source>
                 </Source>
                 <Excluded_Packages>
-                    <Excluded_Packages Name="$(BDSBIN)\dcloffice2k180.bpl">Composants Microsoft Office 2000 Sample Automation Server Wrapper</Excluded_Packages>
-                    <Excluded_Packages Name="$(BDSBIN)\dclofficexp180.bpl">Composants Microsoft Office XP Sample Automation Server Wrapper</Excluded_Packages>
+                    <Excluded_Packages Name="$(BDSBIN)\dcloffice2k210.bpl">Composants Microsoft Office 2000 Sample Automation Server Wrapper</Excluded_Packages>
+                    <Excluded_Packages Name="$(BDSBIN)\dclofficexp210.bpl">Composants Microsoft Office XP Sample Automation Server Wrapper</Excluded_Packages>
                 </Excluded_Packages>
             </Delphi.Personality>
             <Deployment/>
