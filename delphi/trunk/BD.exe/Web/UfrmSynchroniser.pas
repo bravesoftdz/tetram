@@ -154,6 +154,7 @@ begin
       donc le conflit d'un élément à cause d'un élément supprimé ne peut être résolu que manuellement
     * un conflit se résoud sur un élément dans son intégralité (et non propriété par propriété)
       mais si le conflit porte sur des propriétés différentes, la résolution est automatique
+    * le serveur conserve les différentes versions (nécessaire pour la résolution de conflit)
 
   implementation (cf svn):
     * update (recupération des modifs du serveur)
@@ -185,19 +186,17 @@ begin
     Date synchro < Date modif -> modifié, pas/plus de conflit, modifications à envoyer
     Date synchro > Date modif -> non modifié, rien à faire
 
-Problème:
-  lors du diff, comment identifier une modif locale et une modif distante
+  pour la résolution de conflit:
+    - récupération de la dernière version synchronisée (le serveur a toutes les versions)
+    - comparer à la version locale pour connaitre les modifs locales
+    - comparer à la version distante pour connaitre les modifs à intégrer
 
 *)
 
   try
-    // charger la liste des modifications locales à envoyer
-    // demander la liste des modifications distantes à appliquer
-    // faire une résolution entre les modifs restantes et à envoyer
-    // appliquer les modifs distantes
-    // envoyer les modifs locales restantes
+
   finally
-    SendOption('lastsynchro', DateToStr(FStartTime, TGlobalVar.SQLSettings));
+    SendOption('lastsynchro', DateToStr(FStartTime, TGlobalVar.SQLSettings)); // ??
   end;
 end;
 
