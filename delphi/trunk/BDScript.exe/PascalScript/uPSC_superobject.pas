@@ -305,7 +305,6 @@ begin
   // CL.AddTypeS('TSuperAvlBitArray', 'set of Integer');
   CL.AddTypeS('TSuperAvlSearchType', '( stEQual, stLess, stGreater )');
   CL.AddTypeS('TSuperAvlSearchTypes', 'set of TSuperAvlSearchType');
-  CL.AddClass(CL.FindClass('TOBJECT'), TSuperAvlIterator);
   SIRegister_TSuperAvlEntry(CL);
   SIRegister_TSuperAvlTree(CL);
   SIRegister_TSuperTableString(CL);

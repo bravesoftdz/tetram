@@ -106,9 +106,6 @@ object frmScripts: TfrmScripts
             Top = 0
             Height = 257
             Align = alRight
-            ExplicitLeft = 629
-            ExplicitTop = 4
-            ExplicitHeight = 39
           end
           object ListBox2: TListBox
             Left = 644
@@ -285,8 +282,6 @@ object frmScripts: TfrmScripts
         Height = 4
         Cursor = crVSplit
         Align = alBottom
-        ExplicitTop = 369
-        ExplicitWidth = 854
       end
       object ToolBar2: TToolBar
         Left = 0
@@ -363,8 +358,6 @@ object frmScripts: TfrmScripts
           Top = 0
           Height = 186
           Align = alRight
-          ExplicitLeft = 542
-          ExplicitTop = 6
         end
         object PageControl1: TPageControl
           Left = 0
@@ -383,15 +376,11 @@ object frmScripts: TfrmScripts
               Height = 158
               Align = alClient
               TabOrder = 0
-              ExplicitWidth = 595
-              ExplicitHeight = 158
               inherited vstMessages: TVirtualStringTree
                 Width = 595
                 Height = 158
                 OnDblClick = vstMessagesDblClick
                 OnGetText = framMessages1vstMessagesGetText
-                ExplicitLeft = 0
-                ExplicitWidth = 595
                 Columns = <
                   item
                     Position = 0
@@ -426,13 +415,9 @@ object frmScripts: TfrmScripts
               Height = 158
               Align = alClient
               TabOrder = 0
-              ExplicitWidth = 595
-              ExplicitHeight = 158
               inherited vstSuivis: TVirtualStringTree
                 Width = 595
                 Height = 158
-                ExplicitLeft = 0
-                ExplicitWidth = 595
                 Columns = <
                   item
                     Position = 0
@@ -457,14 +442,10 @@ object frmScripts: TfrmScripts
               Height = 158
               Align = alClient
               TabOrder = 0
-              ExplicitWidth = 595
-              ExplicitHeight = 158
               inherited vstBreakpoints: TVirtualStringTree
                 Width = 595
                 Height = 158
                 OnDblClick = vstBreakpointsDblClick
-                ExplicitLeft = 0
-                ExplicitWidth = 595
                 Columns = <
                   item
                     Position = 0
@@ -504,31 +485,16 @@ object frmScripts: TfrmScripts
           Height = 186
           Align = alRight
           TabOrder = 1
-          ExplicitLeft = 606
-          ExplicitWidth = 268
-          ExplicitHeight = 186
           inherited Panel3: TPageControl
             Width = 268
             Height = 186
-            ExplicitWidth = 268
-            ExplicitHeight = 186
             inherited TabSheet4: TTabSheet
-              ExplicitLeft = 4
-              ExplicitTop = 24
-              ExplicitWidth = 260
-              ExplicitHeight = 158
               inherited ListBox1: TListBox
                 Width = 260
                 Height = 158
-                ExplicitWidth = 260
-                ExplicitHeight = 158
               end
             end
             inherited TabSheet5: TTabSheet
-              ExplicitLeft = 4
-              ExplicitTop = 24
-              ExplicitWidth = 312
-              ExplicitHeight = 212
               inherited EditLabeled1: TEditLabeled
                 LinkControls = <
                   item
@@ -553,12 +519,6 @@ object frmScripts: TfrmScripts
                     Control = framScriptInfos1.Label13
                   end>
               end
-            end
-            inherited Alias: TTabSheet
-              ExplicitLeft = 4
-              ExplicitTop = 24
-              ExplicitWidth = 312
-              ExplicitHeight = 212
             end
           end
           inherited PopupMenu2: TPopupMenu

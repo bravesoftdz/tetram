@@ -52,7 +52,7 @@ uses
   UfrmScriptEditOption in 'UfrmScriptEditOption.pas' {frmScriptEditOption},
   UfrmScriptGotoLine in 'UfrmScriptGotoLine.pas' {frmScriptGotoLine},
   UfrmScriptOption in '..\Commun\Scripts\UfrmScriptOption.pas' {frmScriptOption},
-  UfrmScripts in 'UfrmScripts.pas',
+  UfrmScripts in 'UfrmScripts.pas' {frmScripts},
   UfrmScriptSearch in 'UfrmScriptSearch.pas' {frmScriptSearch},
   UfrmScriptsUpdate in 'UfrmScriptsUpdate.pas' {frmScriptsUpdate},
   UMasterEngine in 'UMasterEngine.pas',
