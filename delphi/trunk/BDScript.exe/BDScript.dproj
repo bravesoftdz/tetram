@@ -52,12 +52,13 @@
         <Base>true</Base>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base)'!=''">
+        <DCC_DUPLICATE_CTOR_DTOR>false</DCC_DUPLICATE_CTOR_DTOR>
         <SanitizedProjectName>BDScript</SanitizedProjectName>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <DCC_Define>FB25;FBEMBED;GIFGraphic;UseLZW;PortableNetworkGraphic;PS_USESSUPPORT;PCRE_STATICLINK;7ZIP_LINKONREQUEST;NO_ADVANCED_HTTP_CLIENT_FEATURES;UseContentCoding;USE_SSL;NO_OSSL_VERSION_CHECK;$(DCC_Define)</DCC_Define>
         <DCC_UnitSearchPath>D:\Composants\Perso;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
         <VerInfo_Locale>1036</VerInfo_Locale>
-        <Manifest_File>None</Manifest_File>
+        <Manifest_File>$(BDS)\bin\default_app.manifest</Manifest_File>
         <PostBuildEvent><![CDATA[copy ..\..\bin\$(Platform)\$(OUTPUTFILENAME) ..\..\bin\Win64\$(OUTPUTFILENAME)
 $(PostBuildEvent)]]></PostBuildEvent>
         <VerInfo_Keys>CompanyName=;FileDescription=;FileVersion=1.0.0.0;InternalName=;LegalCopyright=Teträm Corp 1997-2014;LegalTrademarks=;OriginalFilename=;ProductName=;ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
