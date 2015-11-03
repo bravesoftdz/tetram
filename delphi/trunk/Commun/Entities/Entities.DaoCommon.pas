@@ -152,7 +152,6 @@ begin
     Transaction := UseTransaction
   else
     Transaction := DBConnection.GetTransaction;
-  Transaction := DBConnection.GetTransaction;
   try
     SaveEntity(Entity, Transaction);
     Transaction.Commit;

@@ -61,8 +61,6 @@ function SupprimerTable(const Table: string): Boolean;
 function SupprimerToutDans(const ChampSupp, Table: string; UseTransaction: TManagedTransaction = nil): Boolean; overload;
 function SupprimerToutDans(const ChampSupp, Table, Reference, Sauf: string; UseTransaction: TManagedTransaction = nil): Boolean; overload;
 function SupprimerToutDans(const ChampSupp, Table, Reference: string; const Valeur: RGUIDEx; UseTransaction: TManagedTransaction = nil): Boolean; overload;
-function SupprimerToutDans(const ChampSupp, Table, Reference: string; const Valeur: RGUIDEx; const Sauf: string; UseTransaction: TManagedTransaction = nil)
-  : Boolean; overload;
 
 function GetCouvertureStream(isParaBD: Boolean; const ID_Couverture: RGUIDEx; Hauteur, Largeur: Integer; AntiAliasing: Boolean; Cadre: Boolean = False;
   Effet3D: Integer = 0): TStream; overload;
@@ -466,37 +464,22 @@ begin
   end;
 end;
 
-function SupprimerToutDans(const ChampSupp, Table: string; UseTransaction: TManagedTransaction = nil): Boolean;
-begin
-  Result := SupprimerToutDans(ChampSupp, Table, '', GUID_NULL, '', UseTransaction);
-end;
-
-function SupprimerToutDans(const ChampSupp, Table, Reference, Sauf: string; UseTransaction: TManagedTransaction = nil): Boolean; overload;
-begin
-  Result := SupprimerToutDans(ChampSupp, Table, Reference, GUID_NULL, Sauf, UseTransaction);
-end;
-
-function SupprimerToutDans(const ChampSupp, Table, Reference: string; const Valeur: RGUIDEx; UseTransaction: TManagedTransaction = nil): Boolean; overload;
-begin
-  Result := SupprimerToutDans(ChampSupp, Table, Reference, Valeur, '', UseTransaction);
-end;
-
 function SupprimerToutDans(const ChampSupp, Table, Reference: string; const Valeur: RGUIDEx; const Sauf: string; UseTransaction: TManagedTransaction = nil)
-  : Boolean;
+  : Boolean; overload;
 begin
   try
     with dmPrinc.DBConnection.GetQuery(UseTransaction) do
       try
         if ChampSupp <> '' then
-          SQL.Add(Format('update %s set %s = True', [Table, ChampSupp]))
+          SQL.Add(Format('update %s set %s = True', [Table, ChampSupp])) // True ????
         else
           SQL.Add(Format('delete from %s', [Table]));
 
         if (Reference <> '') then
-          if IsEqualGUID(Valeur, GUID_NULL) then
-            SQL.Add(Format('where %s not in (%s)', [Reference, Sauf]))
-          else
-            SQL.Add(Format('where %s = ''%s''', [Reference, GUIDToString(Valeur)]));
+          if not IsEqualGUID(Valeur, GUID_NULL) then
+            SQL.Add(Format('where %s = ''%s''', [Reference, GUIDToString(Valeur)]))
+          else if Sauf <> '' then
+            SQL.Add(Format('where %s not in (%s)', [Reference, Sauf]));
 
         Execute;
         Transaction.Commit;
@@ -507,6 +490,25 @@ begin
   except
     Result := False;
   end;
+end;
+
+function SupprimerToutDans(const ChampSupp, Table: string; UseTransaction: TManagedTransaction = nil): Boolean;
+begin
+  Result := SupprimerToutDans(ChampSupp, Table, '', GUID_NULL, '', UseTransaction);
+end;
+
+function SupprimerToutDans(const ChampSupp, Table, Reference, Sauf: string; UseTransaction: TManagedTransaction = nil): Boolean; overload;
+begin
+  // /!\ Valeur = GUID_NULL et Sauf = '' => effacer la table !!!!
+  // dans ce cas, il faut utiliser la méthode spécifique
+  Result := (Sauf = '') or SupprimerToutDans(ChampSupp, Table, Reference, GUID_NULL, Sauf, UseTransaction);
+end;
+
+function SupprimerToutDans(const ChampSupp, Table, Reference: string; const Valeur: RGUIDEx; UseTransaction: TManagedTransaction = nil): Boolean; overload;
+begin
+  // /!\ Valeur = GUID_NULL et Sauf = '' => effacer la table !!!!
+  // dans ce cas, il faut utiliser la méthode spécifique
+  Result := IsEqualGUID(Valeur, GUID_NULL) or SupprimerToutDans(ChampSupp, Table, Reference, Valeur, '', UseTransaction);
 end;
 
 function GetCouvertureStream(isParaBD: Boolean; const ID_Couverture: RGUIDEx; Hauteur, Largeur: Integer; AntiAliasing: Boolean; Cadre: Boolean = False;

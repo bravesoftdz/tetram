@@ -185,6 +185,7 @@ end;
 class procedure TDaoFullEntity<T>.SaveEntity(Entity: TDBEntity; UseTransaction: TManagedTransaction);
 begin
   SaveEntity(T(Entity), UseTransaction);
+  T(Entity).RecInconnu := False;
 end;
 
 class function TDaoFullEntity<T>.getInstance: T;
@@ -205,7 +206,6 @@ end;
 class procedure TDaoFullEntity<T>.SaveEntity(Entity: T; UseTransaction: TManagedTransaction);
 begin
   // Assert(not IsEqualGUID(Entity.ID, GUID_NULL), 'L''ID ne peut être GUID_NULL');
-  Entity.RecInconnu := False;
 end;
 
 { TDaoSerieFull }
