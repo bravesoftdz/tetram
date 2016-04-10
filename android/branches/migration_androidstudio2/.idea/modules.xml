@@ -4,12 +4,6 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/BDTheque/BDTheque.iml" filepath="$PROJECT_DIR$/BDTheque/BDTheque.iml" />
       <module fileurl="file://$PROJECT_DIR$/BDThequeProject.iml" filepath="$PROJECT_DIR$/BDThequeProject.iml" />
-      <module fileurl="file://$PROJECT_DIR$/libraries/android-styled-dialogs/android-styled-dialogs.iml" filepath="$PROJECT_DIR$/libraries/android-styled-dialogs/android-styled-dialogs.iml" />
-      <module fileurl="file://$PROJECT_DIR$/libraries/android-viewpagerindicator/android-viewpagerindicator.iml" filepath="$PROJECT_DIR$/libraries/android-viewpagerindicator/android-viewpagerindicator.iml" />
-      <module fileurl="file://$PROJECT_DIR$/libraries/bdtheque-dependencies/bdtheque-dependencies.iml" filepath="$PROJECT_DIR$/libraries/bdtheque-dependencies/bdtheque-dependencies.iml" />
-      <module fileurl="file://$PROJECT_DIR$/libraries/libraries.iml" filepath="$PROJECT_DIR$/libraries/libraries.iml" />
-      <module fileurl="file://$PROJECT_DIR$/libraries/photoview/photoview.iml" filepath="$PROJECT_DIR$/libraries/photoview/photoview.iml" />
-      <module fileurl="file://$PROJECT_DIR$/libraries/universal-image-loader/universal-image-loader.iml" filepath="$PROJECT_DIR$/libraries/universal-image-loader/universal-image-loader.iml" />
     </modules>
   </component>
 </project>
