@@ -97,49 +97,45 @@ end;
 
 class function TDaoDBEntity.NonNull(Query: TManagedQuery; const Champ: string): TGUID;
 begin
+  Result := GUID_NULL;
+  if Query.Fields.ByNameAsString[Champ].Trim.IsEmpty then
+    Exit;
   try
-    if Query.Fields.ByNameIsNull[Champ] then
-      Result := GUID_NULL
-    else
-      Result := StringToGUID(Query.Fields.ByNameAsString[Champ]);
+    Result := StringToGUID(Query.Fields.ByNameAsString[Champ]);
   except
-    Result := GUID_NULL;
   end;
 end;
 
 class function TDaoDBEntity.NonNull(Query: TManagedQuery; const Champ: string; Default: Integer): Integer;
 begin
+  Result := Default;
+  if Query.Fields.ByNameIsNull[Champ] then
+    Exit;
   try
-    if Query.Fields.ByNameIsNull[Champ] then
-      Result := Default
-    else
-      Result := Query.Fields.ByNameAsInteger[Champ];
+    Result := Query.Fields.ByNameAsInteger[Champ];
   except
-    Result := Default;
   end;
 end;
 
 class function TDaoDBEntity.NonNull(Query: TManagedQuery; Champ: Integer): TGUID;
 begin
+  Result := GUID_NULL;
+  if (Champ = -1) or Query.Fields.IsNull[Champ] then
+    Exit;
   try
-    if (Champ = -1) or Query.Fields.IsNull[Champ] then
-      Result := GUID_NULL
-    else
-      Result := StringToGUID(Query.Fields.AsString[Champ]);
+    Result := StringToGUID(Query.Fields.AsString[Champ]);
   except
-    Result := GUID_NULL;
   end;
 end;
 
 class function TDaoDBEntity.NonNull(Query: TManagedQuery; Champ, Default: Integer): Integer;
 begin
+  Result := Default;
+  if (Champ = -1) or Query.Fields.IsNull[Champ] then
+    Exit;
   try
-    if (Champ = -1) or Query.Fields.IsNull[Champ] then
-      Result := Default
-    else
-      Result := Query.Fields.AsInteger[Champ];
+    Result := Query.Fields.AsInteger[Champ];
   except
-    Result := Default;
   end;
 end;
 
