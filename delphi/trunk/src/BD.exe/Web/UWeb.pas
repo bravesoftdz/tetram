@@ -284,7 +284,7 @@ begin
   FReponse.Size := 0;
   if LoadStreamURL(FURL, FParam, FReponse, False) <> 200 then
     raise Exception.Create
-      ('Impossible d''accéder au site:'#13#10'- vérifiez le paramétrage de l''adresse'#13#10'- Assurez-vous que le modèle est bien chargé sur le site');
+      ('Impossible d''accéder au site:'#13#10'- vérifiez le paramétrage de l''adresse'#13#10'- assurez-vous que le modèle est bien chargé sur le site'#13#10'- vérifiez que votre parefeu ne bloque pas la connexion');
   FReponse.Position := 0;
   FslReponse.LoadFromStream(FReponse);
   // Memo1.Lines.Text := FReponse.DataString;
