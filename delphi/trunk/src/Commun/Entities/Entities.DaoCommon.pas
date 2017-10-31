@@ -82,6 +82,7 @@ begin
   else
     Transaction := DBConnection.GetTransaction;
   try
+    Entity.Clear;
     LoadEntity(Entity, Reference, Transaction);
   finally
     if not Assigned(UseTransaction) then
