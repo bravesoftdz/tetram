@@ -113,7 +113,7 @@ begin
       if CP.Flag['r'] and CP.Flag['rf'] then
       begin
         l.Error('Conflict between parameters on command line:');
-        l.Error(' Flags -r and -rf cannot be used together');
+        l.Error('  Flags -r and -rf cannot be used together');
         l.Error;
         l.Error(CP.PrintSyntax);
         Halt(1);
@@ -122,7 +122,7 @@ begin
     except
       on E: Exception do
       begin
-        l.Error('Error on command line, ' + E.Message);
+        l.Error('Error while parsing command line, ' + E.Message);
         l.Error;
         l.Error(CP.PrintSyntax);
         Halt(1);
