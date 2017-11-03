@@ -1,0 +1,11 @@
+<!--
+  ~ Copyright (c) 2014, tetram.org. All Rights Reserved.
+  ~ annotations.xml
+  ~ Last modified by Tetram, on 2014-09-03T16:22:11CEST
+  -->
+
+<root>
+    <item name='com.sun.javafx.scene.control.skin.BehaviorSkinBase void registerChangeListener(javafx.beans.value.ObservableValue&lt;?&gt;, java.lang.String) 1'>
+        <annotation name='org.jetbrains.annotations.NonNls'/>
+    </item>
+</root>

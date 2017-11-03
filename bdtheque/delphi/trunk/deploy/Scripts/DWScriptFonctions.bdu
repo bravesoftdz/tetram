@@ -1,0 +1,161 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<Script>
+  <Infos>
+    <Auteur>Tetram Corp</Auteur>
+    <Description/>
+    <ScriptVersion>2</ScriptVersion>
+    <BDVersion>2.1.0.17</BDVersion>
+    <LastUpdate>Fri, 6 Dec 2013 09:44:43 +0100</LastUpdate>
+    <Engine>DWScript</Engine>
+  </Infos>
+  <Options/>
+  <Code>unit DWScriptFonctions;
+
+uses BDCommon;
+
+function CleanISBN(const ISBN: string): string;
+begin
+  Result := ISBN;
+  Result := StringReplace(Result, &apos;-&apos;, &apos;&apos;, rfReplaceAll);
+  Result := StringReplace(Result, &apos; &apos;, &apos;&apos;, rfReplaceAll);
+end;
+
+procedure AjoutString1(var Chaine: string; const Ajout, Espace: string; const Avant: string; const Apres: string);
+var
+  s: string;
+begin
+  s := Ajout;
+  if (Ajout &lt;&gt; &apos;&apos;) then
+  begin
+    s := Avant + Ajout + Apres;
+    if (Chaine &lt;&gt; &apos;&apos;) then Chaine := Chaine + Espace;
+  end;
+  Chaine := Chaine + s;
+end;
+
+procedure AjoutString2(var Chaine: string; const Ajout, Espace: string);
+begin
+  AjoutString1(Chaine, Ajout, Espace, &apos;&apos;, &apos;&apos;);
+end;
+
+function AjoutString3(Chaine: string; const Ajout, Espace: string; const Avant: string; const Apres: string): string;
+begin
+  Result := Ajout;
+  AjoutString1(Result, Ajout, Espace, Avant, Apres);
+end;
+
+function AjoutString4(Chaine: string; const Ajout, Espace: string): string;
+begin
+  Result := AjoutString3(Chaine, Ajout, Espace, &apos;&apos;, &apos;&apos;);
+end;
+
+function ChaineIn(const Chaine: string; const Tests: array of string): Boolean;
+var
+  i: Integer;
+begin
+  Result := False;
+  i := 0;
+  while not Result and (i &lt; Length(Tests)) do begin
+    Result := SameText(Chaine, Tests[i]);
+    Inc(i);
+  end;
+end;
+
+function TraduitMois(const Chaine: string): Integer;
+begin
+  Result := StrToIntDef(Chaine, -1);
+  if (Result &gt;= 1) and (Result &lt;= 12) then Exit;
+  
+  if ChaineIn(Chaine, [&apos;janvier&apos;, &apos;january&apos;, &apos;jan&apos;, &apos;jan.&apos;, &apos;janv&apos;, &apos;janv.&apos;]) then begin
+    Result := 1;
+    Exit;
+  end;
+  if ChaineIn(Chaine, [&apos;f&#xE9;vrier&apos;, &apos;fevrier&apos;, &apos;february&apos;, &apos;fev&apos;, &apos;f&#xE9;v&apos;, &apos;fevr&apos;, &apos;f&#xE9;vr&apos;, &apos;feb&apos;, &apos;fev.&apos;, &apos;f&#xE9;v.&apos;, &apos;fevr.&apos;, &apos;f&#xE9;vr.&apos;, &apos;feb.&apos;]) then begin
+    Result := 2;
+    Exit;
+  end;
+  if ChaineIn(Chaine, [&apos;mars&apos;, &apos;march&apos;, &apos;mar&apos;, &apos;mar.&apos;]) then begin
+    Result := 3;
+    Exit;
+  end;
+  if ChaineIn(Chaine, [&apos;avril&apos;, &apos;april&apos;, &apos;avr&apos;, &apos;apr&apos;, &apos;avr.&apos;, &apos;apr.&apos;]) then begin
+    Result := 4;
+    Exit;
+  end;
+  if ChaineIn(Chaine, [&apos;mai&apos;, &apos;may&apos;]) then begin
+    Result := 5;
+    Exit;
+  end;
+  if ChaineIn(Chaine, [&apos;juin&apos;, &apos;june&apos;, &apos;jun&apos;]) then begin
+    Result := 6;
+    Exit;
+  end;
+  if ChaineIn(Chaine, [&apos;juillet&apos;, &apos;july&apos;, &apos;jui&apos;, &apos;jui.&apos;, &apos;juil&apos;, &apos;juil.&apos;, &apos;jul&apos;]) then begin
+    Result := 7;
+    Exit;
+  end;
+  if ChaineIn(Chaine, [&apos;ao&#xFB;t&apos;, &apos;aout&apos;, &apos;august&apos;, &apos;aug&apos;, &apos;aug.&apos;]) then begin
+    Result := 8;
+    Exit;
+  end;
+  if ChaineIn(Chaine, [&apos;septembre&apos;, &apos;september&apos;, &apos;sep&apos;, &apos;sep.&apos;, &apos;sept&apos;, &apos;sept.&apos;]) then begin
+    Result := 9;
+    Exit;
+  end;
+  if ChaineIn(Chaine, [&apos;octobre&apos;, &apos;october&apos;, &apos;oct&apos;, &apos;oct.&apos;]) then begin
+    Result := 10;
+    Exit;
+  end;
+  if ChaineIn(Chaine, [&apos;novembre&apos;, &apos;november&apos;, &apos;nov&apos;, &apos;nov.&apos;]) then begin
+    Result := 11;
+    Exit;
+  end;
+  if ChaineIn(Chaine, [&apos;d&#xE9;cembre&apos;, &apos;decembre&apos;, &apos;december&apos;, &apos;dec&apos;, &apos;d&#xE9;c&apos;, &apos;dec.&apos;, &apos;d&#xE9;c.&apos;]) then begin
+    Result := 12;
+    Exit;
+  end;
+  
+  Result := 0;
+end;
+
+function PrepareTitre(Titre: string): string;
+var
+  pEspace, pApostrophe: Integer;
+  Mot: string;
+begin
+  Titre := Trim(Titre);
+  Result := Titre;
+  if Result = &apos;&apos; then Exit;
+  if Copy(Result, Length(Result), 1) = &apos;]&apos; then Exit;
+  pEspace := Pos(&apos; &apos;, Titre);
+  pApostrophe := Pos(&apos;&apos;&apos;&apos;, Titre);
+  if (pApostrophe &gt; 0) and ((pEspace = 0) or (pApostrophe &lt; pEspace)) then pEspace := pApostrophe + 1; // + 1 pour prendre l&apos;apostrophe dans le mot
+  if pEspace = 0 then Exit;
+  Mot := Copy(Titre, 1, pEspace - 1);
+  if not ChaineIn(LowerCase(Mot), [&apos;l&apos;&apos;&apos;, &apos;un&apos;, &apos;une&apos;, &apos;des&apos;, &apos;le&apos;, &apos;la&apos;, &apos;les&apos;]) then Exit;
+  Result := Trim(Copy(Titre, pEspace, Length(Titre))) + &apos; [&apos; + Mot + &apos;]&apos;;
+end;
+
+function PrepareTitre2(Titre: string): string;
+var
+  p: Integer;
+  Mot: string;
+begin
+  try
+    Titre := Trim(Titre);
+    Result := Titre;
+    if Result = &apos;&apos; then Exit;
+    if Copy(Result, Length(Result), 1) &lt;&gt; &apos;)&apos; then Exit;
+    p := Length(Result) - 1;
+    while (p &gt; 0) and (Result[p] &lt;&gt; &apos;(&apos;) do
+      p := p - 1;
+    if p = 0 then Exit;
+
+    Mot := Copy(Titre, p + 1, Length(Result) - p - 1);
+    if not ChaineIn(LowerCase(Mot), [&apos;l&apos;&apos;&apos;, &apos;un&apos;, &apos;une&apos;, &apos;des&apos;, &apos;le&apos;, &apos;la&apos;, &apos;les&apos;]) then Exit;
+    Result := Trim(Copy(Titre, 1, p - 1)) + &apos; [&apos; + Mot + &apos;]&apos;;
+  finally
+    Result := PrepareTitre(Result);
+  end;
+end;</Code>
+</Script>

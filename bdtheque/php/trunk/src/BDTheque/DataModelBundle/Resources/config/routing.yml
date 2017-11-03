@@ -1,0 +1,39 @@
+BDThequeDataModelBundle_homepage:
+    pattern:  /
+    defaults: { _controller: BDThequeDataModelBundle:Default:index }
+
+BDThequeDataModelBundle_editMode:
+    resource: "@BDThequeDataModelBundle/Resources/config/routing/editMode.yml"
+    prefix:   /edit
+  
+BDThequeDataModelBundle_serie:
+    resource: "@BDThequeDataModelBundle/Resources/config/routing/serie.yml"
+    prefix:   /serie
+        
+BDThequeDataModelBundle_album:
+    resource: "@BDThequeDataModelBundle/Resources/config/routing/album.yml"
+    prefix:   /album
+        
+BDThequeDataModelBundle_edition:
+    resource: "@BDThequeDataModelBundle/Resources/config/routing/edition.yml"
+    prefix:   /edition
+        
+BDThequeDataModelBundle_editeur:
+    resource: "@BDThequeDataModelBundle/Resources/config/routing/editeur.yml"
+    prefix:   /editeur
+       
+BDThequeDataModelBundle_collection:
+    resource: "@BDThequeDataModelBundle/Resources/config/routing/collection.yml"
+    prefix:   /collection
+
+BDThequeDataModelBundle_personne:
+    resource: "@BDThequeDataModelBundle/Resources/config/routing/personne.yml"
+    prefix:   /personne
+        
+BDThequeDataModelBundle_genre:
+    resource: "@BDThequeDataModelBundle/Resources/config/routing/genre.yml"
+    prefix:   /genre
+        
+BDThequeDataModelBundle_initiale:
+    resource: "@BDThequeDataModelBundle/Resources/config/routing/initiale.yml"
+    prefix:  /initiale

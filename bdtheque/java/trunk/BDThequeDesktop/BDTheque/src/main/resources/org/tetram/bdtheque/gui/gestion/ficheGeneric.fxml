@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2014, tetram.org. All Rights Reserved.
+  ~ ficheGeneric.fxml
+  ~ Last modified by Tetram, on 2014-07-29T11:36:11CEST
+  -->
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.*?>
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8"
+            fx:controller="org.tetram.bdtheque.gui.controllers.gestion.FicheEditController">
+    <center>
+        <ScrollPane fx:id="detailPane" hmax="100.0" pannable="true" prefHeight="-1.0" prefWidth="-1.0" vmax="100.0"
+                    BorderPane.alignment="CENTER"/>
+    </center>
+    <top>
+        <VBox BorderPane.alignment="CENTER">
+            <children>
+                <fx:include fx:id="buttons" source="../components/buttonsbar.fxml" AnchorPane.bottomAnchor="0.0"
+                            AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>
+                <Separator prefWidth="200.0"/>
+            </children>
+        </VBox>
+    </top>
+</BorderPane>

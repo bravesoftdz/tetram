@@ -1,0 +1,26 @@
+<!--
+  ~ Copyright (c) 2015, tetram.org. All Rights Reserved.
+  ~ ant.xml
+  ~ Last modified by Thierry, on 2014-12-22T15:36:55CET
+  -->
+
+<!--suppress MybatisMapperXmlInspection, AntResolveInspection -->
+<project name="bdtheque" basedir=".">
+
+
+    <target name="deploy_firebird_artifact">
+
+        <property name="src.dir" value="firebird"/>
+        <property name="dest.dir" value="${artifact.output.path}"/>
+
+        <copy todir="${dest.dir}">
+            <fileset dir="${src.dir}" includes="**"/>
+        </copy>
+
+        <echo message="Suppression de ${dest.dir}\BDTheque.html"/>
+        <delete file="${dest.dir}\BDTheque.html"/>
+
+        <echo message="Suppression de ${dest.dir}\BDTheque.jnlp"/>
+        <delete file="${dest.dir}\BDTheque.jnlp"/>
+    </target>
+</project>

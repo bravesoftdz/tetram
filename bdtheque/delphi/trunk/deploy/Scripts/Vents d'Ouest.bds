@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<Script>
+  <Infos>
+    <Auteur>Tetram Corp</Auteur>
+    <Description/>
+    <ScriptVersion>2</ScriptVersion>
+    <BDVersion>2.1.0.17</BDVersion>
+    <LastUpdate>Thu, 5 Dec 2013 19:41:52 +0100</LastUpdate>
+    <Engine>PascalScript</Engine>
+  </Infos>
+  <Options/>
+  <Code>begin
+  ShowMessage(&apos;Utiliser le script Glenat.&apos;);
+end.</Code>
+</Script>

@@ -1,0 +1,16 @@
+/*
+ * Copyright (c) 2014, tetram.org. All Rights Reserved.
+ * treeview.css
+ * Last modified by Tetram, on 2014-07-29T11:21:45CEST
+ */
+
+.column-header-background {
+    visibility: hidden;
+    display: none;
+    /*noinspection CssInvalidElement*/
+    -fx-padding: -2em;
+}
+
+.node-bold {
+    -fx-font-weight: bold;
+}

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="CustomRatingBar" parent="android:Widget.DeviceDefault.RatingBar.Small">
+        <item name="android:progressDrawable">@drawable/custom_ratingbar</item>
+        <item name="android:indeterminateDrawable">@drawable/custom_ratingbar</item>
+        <item name="android:minHeight">16dip</item>
+        <item name="android:maxHeight">16dip</item>
+    </style>
+
+    <style name="fiche_consultation" parent="android:Theme.Holo.Light">
+        <item name="android:textSize">@dimen/textSizeNormal</item>
+    </style>
+
+    <style name="fiche_label">
+        <item name="android:textColor">#336699</item>
+        <item name="android:layout_marginRight">4dp</item>
+    </style>
+</resources>

@@ -1,0 +1,218 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<Script>
+  <Infos>
+    <Auteur>Tetram Corp</Auteur>
+    <Description/>
+    <ScriptVersion>1.2</ScriptVersion>
+    <BDVersion>2.2.3.29</BDVersion>
+    <LastUpdate>Sun, 18 May 2014 16:10:14 +0200</LastUpdate>
+    <Engine>PascalScript</Engine>
+  </Infos>
+  <Options>
+    <Option Label="Miniatures dans les recherches" Values="Oui|Non" Default="Oui"/>
+  </Options>
+  <Code>program Drugstore;
+
+uses ScriptFonctions, DefaultRegEx;
+
+const
+  urlSite = &apos;http://www.drugstorebd.com&apos;;
+  urlSearch = &apos;http://www.drugstorebd.com/recherche/?q=&apos;;
+  urlBDPlanches = &apos;/flash/livre.php?ean13=&apos;; // + isbn/ean
+
+  regExSearchResultats = &apos;&lt;h2 class=&quot;title&quot;&gt;&lt;img border=&quot;0&quot; alt=&quot;Albums&quot; src=&quot;/css/default/images/title_strAlbumsTitle\.gif&quot; /&gt;&lt;/h2&gt;(?s-:.*?)&lt;ul class=&quot;patchwork clearfix&quot;&gt;((?s-).*?)&lt;/ul&gt;&apos;;
+  regExSearchResultatsLigne = &apos;&lt;li class=&quot;album&quot;&gt;(?s-:.*?)&lt;img(?: src=&quot;(?&lt;couverture&gt;.*?)&quot;|.*?)*/&gt;(?s-:.*?)&lt;h2 class=&quot;title&quot;&gt;&lt;a(?: href=&quot;(?&lt;lien&gt;.*?)&quot;|.*?)*&gt;(?&lt;titre_album&gt;.*?)&lt;/a&gt;&lt;/h2&gt;(?s-:.*?)&lt;span class=&quot;authors&quot;&gt;(?&lt;auteurs&gt;.*?)&lt;/span&gt;(?s-:.*?)&lt;/li&gt;&apos;;
+
+  regExBDCouverture = &apos;&lt;td class=&quot;frame left&quot;&gt;(?s-:.*?)&lt;img(?: src=&quot;(?&lt;couverture&gt;.*?)&quot;|.*?)*/&gt;(?s-:.*?)&lt;/td&gt;&apos;;
+  regExBDInfos = &apos;&lt;td class=&quot;frame main&quot;&gt;((?s-).*?)&lt;/td&gt;&apos;;
+  regExBDSerie = &apos;&lt;h1 class=&quot;title&quot;&gt;(.*?)&lt;/h1&gt;&apos;;
+  regExBDTome = &apos;&lt;h2 class=&quot;tome&quot;&gt;(?:\D*?)(\d*?)&lt;/h2&gt;&apos;;
+  regExBDTitre = &apos;&lt;h3 class=&quot;subtitle&quot;&gt;(.*?)&lt;/h3&gt;&apos;;
+  regExBDCollection = &apos;&lt;li class=&quot;collection&quot;&gt;(?s-:.*?)&lt;a(?:.*?)&gt;(.*?)&lt;/a&gt;&apos;;
+  regExBDPages = &apos;&lt;li class=&quot;pages&quot;&gt;(\d*?)(?:\D*?)&lt;/li&gt;&apos;;
+  regExBDParution = &apos;&lt;li class=&quot;date&quot;&gt;(?:(?:[a-zA-Z]| )*?)([\d|.|,]*?)&lt;/li&gt;&apos;;
+  regExBDISBN = &apos;&lt;li class=&quot;ean&quot;&gt;EAN/ISBN(?:[ |:]*?)([\d|x|X|-]*?)&lt;/li&gt;&apos;;
+  regExBDPrix = &apos;&lt;li class=&quot;price&quot;&gt;Prix(?:[ |:]*?)([\d|\.|,]*?)(?s-:.*?)&lt;/li&gt;&apos;;
+  regExBDGenres = &apos;&lt;li class=&quot;genres&quot;&gt;Genres:(.*?)&lt;/li&gt;&apos;;
+  regExBDTermine = &apos;&lt;span class=&quot;statut&quot;&gt;(.*?)&lt;/span&gt;&apos;;
+  regExBDResume = &apos;&lt;div class=&quot;text&quot;&gt;(.*?)&lt;/div&gt;&apos;;
+  regExBDAuteurs = &apos;&lt;ul class=&quot;authors&quot;&gt;((?s-).*?)&lt;/ul&gt;&apos;;
+  regExBDAuteur = &apos;&lt;span(?:.*?)&gt;(?&lt;metier&gt;.*?)&lt;/span&gt;[\r|\n|\t|\s]*&lt;a(?:.*?)&gt;(?&lt;nom&gt;.*?)&lt;/a&gt;&apos;;
+
+procedure ParseAlbum(const lien: string);
+var
+  page, images, auteur, metier, s, termine: string;
+  imgAdded: Boolean;
+begin
+  lien := CombineURL(urlSite, lien);
+  page := GetPage(lien, True);
+
+  s := ExtractRegEx(page,  regExBDInfos);
+  AlbumToImport.Serie.Titre := PrepareTitre(ExtractRegEx(s,  regExBDSerie));
+  AlbumToImport.Titre := PrepareTitre(ExtractRegEx(s,  regExBDTitre));
+  AlbumToImport.Tome := StrToIntDef(ExtractRegEx(s,  regExBDTome), 0);
+  AlbumToImport.Sujet := HTMLText(ExtractRegEx(s,  regExBDResume));
+
+  AlbumToImport.Edition.NombreDePages := StrToIntDef(ExtractRegEx(s,  regExBDPages), 0);
+  AlbumToImport.Edition.ISBN := ExtractRegEx(s,  regExBDISBN);
+  AlbumToImport.Edition.Prix := StrToFloatDef(ExtractRegEx(s,  regExBDPrix), 0);
+  with TStringList.Create do
+    try
+      Split(ExtractRegEx(s, regExBDParution), &apos;.&apos;);
+      if Count &gt; 0 then
+        AlbumToImport.AnneeParution := StrToIntDef(Strings[Count - 1], 0);
+      if Count &gt; 1 then
+        AlbumToImport.MoisParution := TraduitMois(Strings[Count - 2]);
+    finally
+      Free;
+    end;
+
+  AlbumToImport.Serie.Editeur.NomEditeur := &apos;Drugstore&apos;;
+  AlbumToImport.Serie.Editeur.SiteWeb := &apos;http://www.drugstore.com&apos;;
+  AlbumToImport.Serie.Collection := ExtractRegEx(s,  regExBDCollection);
+  AlbumToImport.Edition.Editeur.NomEditeur := AlbumToImport.Serie.Editeur.NomEditeur;
+  AlbumToImport.Edition.Editeur.SiteWeb := AlbumToImport.Serie.Editeur.SiteWeb;
+  AlbumToImport.Edition.Collection := AlbumToImport.Serie.Collection;
+
+  with TBdtkRegEx.Create do
+    try
+      if BeginSearch(ExtractRegEx(s, regExBDAuteurs), regExBDAuteur) then
+        while Next do begin
+          auteur := GetCaptureByName(&apos;nom&apos;);
+          metier := GetCaptureByName(&apos;metier&apos;);
+          if (metier = &apos;Dessinateur&apos;) or (metier = &apos;Auteur&apos;) then
+          begin
+            AlbumToImport.Dessinateurs.Add(MakeAuteurAlbum(auteur, maDessinateur));
+            AlbumToImport.Serie.Dessinateurs.Add(MakeAuteurSerie(auteur, maDessinateur));
+          end;
+          if (metier = &apos;Sc&#xE9;nariste&apos;) or (metier = &apos;Auteur&apos;) then
+          begin
+            AlbumToImport.Scenaristes.Add(MakeAuteurAlbum(auteur, maScenariste));
+            AlbumToImport.Serie.Scenaristes.Add(MakeAuteurSerie(auteur, maScenariste));
+          end;
+          if (metier = &apos;Coloriste&apos;) or (metier = &apos;Auteur&apos;) then
+          begin
+            AlbumToImport.Coloristes.Add(MakeAuteurAlbum(auteur, maColoriste));
+            AlbumToImport.Serie.Coloristes.Add(MakeAuteurSerie(auteur, maColoriste));
+          end;
+        end;
+
+      if BeginSearch(ExtractRegEx(s, regExBDGenres), &apos;&lt;a(?:.*?)&gt;(?&lt;genre&gt;.*?)&lt;/a&gt;&apos;) then
+        while Next do
+          AlbumToImport.Serie.Genres.Add(GetCaptureByName(&apos;genre&apos;));
+    finally
+      Free;
+    end;
+
+  termine := ExtractRegEx(s, regExBDTermine);
+  if Pos(&apos;en cours&apos;, termine) &gt; 0 then AlbumToImport.Serie.Terminee := 0;
+  if Pos(&apos;termin&#xE9;e&apos;, termine) &gt; 0 then AlbumToImport.Serie.Terminee := 1;
+
+  imgAdded := False;
+  if AlbumToImport.Edition.ISBN &lt;&gt; &apos;&apos; then
+  begin
+    images := GetPage(CombineURL(lien, urlBDPlanches + AlbumToImport.Edition.ISBN), True);
+    if images &lt;&gt; &apos;&apos; then
+    begin
+      with TBdtkRegEx.Create do
+        try
+          if BeginSearch(ExtractRegEx(images, &apos;&lt;pages&gt;((?s-).*?)&lt;/pages&gt;&apos;), &apos;&lt;page&gt;(?&lt;lien&gt;.*?)&lt;/page&gt;&apos;) then
+            while Find(s) do
+              if Pos(&apos;0000000000000-P.jpg&apos;, s) = 0 then
+              begin
+                if imgAdded then
+                  AlbumToImport.Edition.AddImageFromURL(CombineURL(lien, s), ctiPlanche)
+                else
+                  AlbumToImport.Edition.AddImageFromURL(CombineURL(lien, s), ctiCouverture);
+                imgAdded := True;
+              end;
+        finally
+          Free;
+        end;
+    end;
+  end;
+
+  if not imgAdded then begin
+    s := ExtractRegEx(page, regExBDCouverture);
+    if s &lt;&gt; &apos;&apos; then
+      AlbumToImport.Edition.AddImageFromURL(CombineURL(lien, s), ctiCouverture);
+  end;
+
+  AlbumToImport.Import;
+end;
+
+function RechercheParTitre(const Titre: string): string;
+var
+  page: string;
+  re: TBdtkRegEx;
+  c: TScriptChoix;
+  lien, titre_album, commentaire, auteurs, thumb: string;
+  Miniatures: Boolean;
+begin
+  Result := &apos;&apos;;
+  Miniatures := GetOptionValue(&apos;Miniatures dans les recherches&apos;, &apos;Oui&apos;) = &apos;Oui&apos;;
+
+  page := GetPage(urlSearch + Titre, True);
+  writetoconsole(page);
+
+  page := ExtractRegEx(page, regExSearchResultats);
+
+  c := TScriptChoix.Create;
+  re := TBdtkRegEx.Create;
+  try
+    c.Titre := &apos;R&#xE9;sultats de recherche de &quot;&apos; + Titre + &apos;&quot;&apos;;
+    if re.BeginSearch(page, regExSearchResultatsLigne) then
+      while re.Next do begin
+        lien :=  re.GetCaptureByName(&apos;lien&apos;);
+        titre_album := re.GetCaptureByName(&apos;titre_album&apos;);
+        commentaire := &apos;&apos;;
+        with TBdtkRegEx.Create do
+          try
+            Auteurs := &apos;&apos;;
+            if BeginSearch(re.GetCaptureByName(&apos;auteurs&apos;), regExURL) then
+              while Next do
+                AjoutString2(Auteurs, GetCaptureByName(&apos;texte&apos;), &apos;, &apos;);
+            AjoutString1(commentaire, Auteurs, #13#10, &apos;Auteur(s): &apos;, &apos;&apos;);
+          finally
+            Free;
+          end;
+
+        if Miniatures then
+          thumb := re.GetCaptureByName(&apos;couverture&apos;)
+        else
+          thumb := &apos;&apos;;
+        if thumb &lt;&gt; &apos;&apos; then thumb := CombineURL(urlSite, thumb);
+        if thumb &lt;&gt; &apos;&apos; then
+          c.AjoutChoixWithThumb(&apos;&apos;, titre_album, HTMLText(commentaire), lien, thumb)
+        else
+          c.AjoutChoix(&apos;&apos;, titre_album, HTMLText(commentaire), lien);
+      end;
+
+    if c.ChoixCount &gt; 0 then
+      Result := c.Show
+    else
+      ShowMessage(&apos;La recherche n&apos;&apos;a pas retourn&#xE9; de r&#xE9;sultat.&apos;);
+  finally
+    re.Free;
+    c.Free;
+  end;
+end;
+
+var
+  id_album, entry: string;
+  index: integer;
+begin
+  entry := AlbumToImport.DefaultSearch;
+  index := 0;
+  if not AskSearchEntry([&apos;Titre de l&apos;&apos;album ou de la s&#xE9;rie&apos;, &apos;Lien&apos;], entry, index) then Exit;
+
+  id_album := &apos;&apos;;
+  case index of
+    0: id_album := RechercheParTitre(entry);
+    1: id_album := entry
+  end;
+
+  if id_album &lt;&gt; &apos;&apos; then
+    ParseAlbum(id_album);
+end.</Code>
+</Script>

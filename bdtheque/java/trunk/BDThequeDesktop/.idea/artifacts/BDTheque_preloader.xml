@@ -1,0 +1,11 @@
+<component name="ArtifactManager">
+  <artifact type="javafx-preloader" build-on-make="true" name="BDTheque preloader">
+    <output-path>$PROJECT_DIR$/out/artifacts/BDTheque_preloader</output-path>
+    <properties id="javafx-preloader-properties">
+      <options>
+        <option name="preloaderClass" value="org.tetram.bdtheque.Preloader" />
+      </options>
+    </properties>
+    <root id="archive" name="BDThequePreloader.jar" />
+  </artifact>
+</component>

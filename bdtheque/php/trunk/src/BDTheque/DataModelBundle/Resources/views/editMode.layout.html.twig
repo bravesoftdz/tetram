@@ -1,0 +1,46 @@
+{% extends "BDThequeDataModelBundle::main.layout.html.twig" %}
+
+{% block leftPanel %}
+{% endblock %}
+
+{% block contentPanel %}
+<div class=uitabsv id=initiales>
+    <ul>
+        <li><a href={{ path('initiale_list', {'class':'album'}) }} >Albums</a></li>
+        <li><a href={{ path('initiale_list', {'class':'achat'}) }} >Achats</a></li>
+        <li><a href={{ path('initiale_list', {'class':'serie'}) }} >Series</a></li>
+        <li><a href={{ path('initiale_list', {'class':'editeur'}) }} >Editeurs</a></li>
+        <li><a href={{ path('initiale_list', {'class':'collection'}) }} >Collections</a></li>
+        <li><a href={{ path('initiale_list', {'class':'genre'}) }} >Genres</a></li>
+    </ul>
+</div>
+<script lang="text/javascript">
+$(function(){
+    // $('#initiales').tabs("load", 0);
+    $('#initiales')
+        .tabs("option", "active", 0)
+        .on('tabsload', function( event, ui ){
+            $('.uiaccordion').accordion({
+                header: "h3",
+                heightStyle: "content",
+                active: 0,
+                activate: function( event, ui ) { 
+                    var s = ui.newPanel.data('u');
+                    if (s == '#') s = '*';
+                    $('#wait').show();
+                    $.ajax({
+                        type: "POST",
+                        url: s,
+                        cache: false,
+                        success: function(data){
+                            ui.newPanel.html(data);
+                            $('#wait').hide();
+                        }
+                    });    
+                    return false;
+                }
+            });
+    });
+});
+    </script>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends "BDThequeDataModelBundle::main.layout.html.twig" %}
+
+{% block contentPanel %}
+<h1>Serie list</h1>
+
+<table class="records_list">
+    <tbody>
+    {% for entity in entities %}
+            <tr>
+                <td><a href="{{ path('serie_show', { 'id': entity.id }) }}">{{ entity.label }}</a></td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('serie_show', { 'id': entity.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('serie_edit', { 'id': entity.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+    {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('serie_new') }}">
+                Create a new entry
+            </a>
+        </li>
+    </ul>
+{% endblock %}

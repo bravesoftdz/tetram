@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2014, tetram.org. All Rights Reserved.
+  ~ log4j2.xml
+  ~ Last modified by Tetram, on 2014-08-29T10:26:29CEST
+  -->
+<!--
+  apparament, malgré la doc de log4j2, "schema" n'est pas autorisé ici:
+  "ERROR Error validating configuration org.xml.sax.SAXParseException; lineNumber: 8; columnNumber: 70; cvc-complex-type.3.2.2 : L'attribut 'schema' n'est pas autorisé dans l'élément 'Configuration'."
+<Configuration status="warn" strict="true" schema="Log4j-config.xsd">
+-->
+<Configuration status="warn">
+    <Properties>
+        <Property name="logPath">logs</Property>
+        <Property name="logFilename">app.log</Property>
+        <Property name="logRotatePath">${logPath}</Property>
+        <Property name="logRotateFilename">app-%i.log</Property>
+    </Properties>
+    <Appenders>
+        <RollingFile name="file" fileName="${logPath}/${logFilename}"
+                     filePattern="${logRotatePath}/${logRotateFilename}">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} [%t] %-5level %c{1.} - %msg%n"/>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="3 MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="1"/>
+        </RollingFile>
+        <Async name="Async">
+            <AppenderRef ref="file"/>
+        </Async>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+        </Console>
+    </Appenders>
+    <Loggers>
+        <Logger name="org.tetram" level="trace"/>
+        <Logger name="org.tetram.bdtheque.data.dao.mappers" level="debug"/>
+        <Logger name="org.firebirdsql.gds.impl.wire" level="error"/>
+        <Root level="debug">
+            <AppenderRef ref="Async"/>
+            <AppenderRef ref="Console"/>
+        </Root>
+    </Loggers>
+</Configuration>

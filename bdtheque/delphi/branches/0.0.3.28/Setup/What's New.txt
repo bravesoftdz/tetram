@@ -1,0 +1,110 @@
+-=-=-=-=-=-    0.0.3.20 - 05/01/2005   -=-=-=-=-=-
+
+* Nouveautés *
+
+    bdthèque:
+      - Impression de fiche d'album
+      - Impression de fiche de série
+      - Nouveaux icones dans les menus et la barre d'outils
+      - Possibilités de mettre les icones des menus, et les boutons de la barre d'outils en petit
+      - Gestion des tirets dans l'ISBN (uniquement à l'affichage: la saisie se fait toujours sans les tirets)
+      - Possibilité de rentrer l'ISBN en utilisant le code barre de type EAN-ISBN
+      - Gestion de l'ISBN-13 (qui deviendra obligatoire en 2007 mais que vous pouvez déjà rencontrer)
+
+* Bugtrack *
+      - 0000022: [Mode Consultation] Fiche d'Auteur: Liste des albums d'un auteur incorrecte (Tetram)
+      - 0000021: [Mode Gestion] Indice de liste Hors Limite sur la grille des images (Tetram)
+      - 0000017: [Mode Consultation] Bouton Retour dans les stocks (Tetram)
+      - 0000020: [Mode Consultation] Critère de recherche "Prix" (Tetram)
+      - 0000013: [Programme] Mode Gestion (Tetram)
+
+
+-=-=-=-=-=--=-=-=-=-=--=-=-=-=-=--=-=-=-=-=-=-=-=-
+
+L'historique des versions intermédiaires a été perdu.
+
+
+-=-=-=-=-=-    0.0.3.7 - 11/07/2004   -=-=-=-=-=-
+
+* Nouveautés *
+
+    bdthèque:
+      - Fiche d'album: nouveaux champs "Date d'achat", "Offert", "Gratuit",
+         "Nombre de pages", "Format", "Orientation"
+      - Fiche d'auteur: nouveaux champs "Biographie", "Site Web"
+      - Série: possibilité de saisir des scénaristes/dessinateurs/coloristes par
+         défaut
+      - Les images peuvent être extraites de la base en décochant la case de la
+         fiche de saisie d'album
+      - Stock: ajout d'un filtre (depuis plus X jours/semaines/mois/ans ou
+         depuis moins de X jours/semaines/mois/ans)
+      - Prêts: avertir si l'édition d'un album est déjà prêté (en Option:
+         désactivé par défaut)
+      - Gestion des décorations de pages (suppression du fond des listes entre
+         autre)
+
+      - Possibilité de modifier un album depuis la fiche de saisie d'une série
+      - La création de nouveaux items reprend le texte des zone de recherche
+         rapide (Titre d'album, Titre de série, Nom d'auteur, etc)
+
+    WebServer:
+      - le web server est directement intégré dans BDthèque
+
+* Corrections *
+
+    bdthèque:
+      - Nombreuses fautes ou textes érronés
+      - Symbole monétaire correctement pris en compte même s'il est différent de
+         celui de Windows
+      - Les champs de recherche rapide ne tiennent plus compte des accents
+      - Plus de possibilité de changer la date ou le mouvement d'un emprunt sans
+         avoir sélectionner d'album
+      - Plus de possibilité d'enlever la racine de la recherche avancée
+      - Impression recherche simple autre que par auteur: plus de "indice de
+         liste hors-limite (0)"
+
+      - Saisie d'album: le nom des Scénaristes/Dessinateurs/Coloristes est
+         rafraichi si l'un des noms a été corrigé
+
+-=-=-=-=-=-    0.0.2.19 - 09/06/2004   -=-=-=-=-=-
+
+* Corrections *
+
+    bdthèque:
+      - la dernière série crée n'était pas prise en compte dans les prévisions
+         de sorties
+      - gestion des emprunts
+
+-=-=-=-=-=-    0.0.2.5 - 06/03/2004    -=-=-=-=-=-
+
+* Nouveautés *
+
+    bdthèque:
+      - liste des series incomplètes et des prévisions de sorties pour chaque
+         série connue
+
+-=-=-=-=-=-    0.0.2.2 - 02/01/2004    -=-=-=-=-=-
+
+* Nouveautés *
+
+    bdthèque:
+      - gestion des "commentaires" par édition
+
+
+-=-=-=-=-=-    0.0.2.1 - 31/12/2003    -=-=-=-=-=-
+
+* Nouveautés *
+
+    bdthèque:
+      - fonction WebServer
+
+* Corrections *
+
+    bdthèque:
+      - utilisation du paramètre "Site web" des éditeurs dans la fiche de
+         consultation d'album
+
+
+-=-=-=-=-=-    0.0.1.0 - 24/12/2003    -=-=-=-=-=-
+
+Première Béta

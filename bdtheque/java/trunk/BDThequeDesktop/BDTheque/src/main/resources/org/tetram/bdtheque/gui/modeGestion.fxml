@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) 2014, tetram.org. All Rights Reserved.
+  ~ modeGestion.fxml
+  ~ Last modified by Tetram, on 2014-08-27T10:25:31CEST
+  -->
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="573.0" prefWidth="789.0" xmlns="http://javafx.com/javafx/8"
+            fx:controller="org.tetram.bdtheque.gui.controllers.ModeGestionController">
+    <left>
+        <ToolBar fx:id="tbEntities" orientation="VERTICAL" prefHeight="369.0" BorderPane.alignment="CENTER">
+            <ToggleButton fx:id="btAlbums" mnemonicParsing="false" text="%Album/multiple">
+                <padding>
+                    <Insets bottom="4.0" left="10.0" right="10.0" top="4.0"/>
+                </padding>
+                <toggleGroup>
+                    <ToggleGroup fx:id="entitiesType"/>
+                </toggleGroup>
+            </ToggleButton>
+            <ToggleButton fx:id="btAchatsAlbums" mnemonicParsing="false" text="%Achat/multiple" toggleGroup="$entitiesType">
+                <padding>
+                    <Insets bottom="4.0" left="10.0" right="10.0" top="4.0"/>
+                </padding>
+            </ToggleButton>
+            <Separator/>
+            <ToggleButton fx:id="btUnivers" mnemonicParsing="false" text="%Univers/multiple" toggleGroup="$entitiesType">
+                <padding>
+                    <Insets bottom="4.0" left="10.0" right="10.0" top="4.0"/>
+                </padding>
+            </ToggleButton>
+            <ToggleButton fx:id="btSeries" mnemonicParsing="false" text="%Série/multiple" toggleGroup="$entitiesType">
+                <padding>
+                    <Insets bottom="4.0" left="10.0" right="10.0" top="4.0"/>
+                </padding>
+            </ToggleButton>
+            <Separator/>
+            <ToggleButton fx:id="btAuteurs" mnemonicParsing="false" text="%Auteur/multiple" toggleGroup="$entitiesType">
+                <padding>
+                    <Insets bottom="4.0" left="10.0" right="10.0" top="4.0"/>
+                </padding>
+            </ToggleButton>
+            <Separator/>
+            <ToggleButton fx:id="btEditeurs" mnemonicParsing="false" text="%Editeur/multiple" toggleGroup="$entitiesType">
+                <padding>
+                    <Insets bottom="4.0" left="10.0" right="10.0" top="4.0"/>
+                </padding>
+            </ToggleButton>
+            <ToggleButton fx:id="btCollections" mnemonicParsing="false" text="%Collection/multiple"
+                          toggleGroup="$entitiesType">
+                <padding>
+                    <Insets bottom="4.0" left="10.0" right="10.0" top="4.0"/>
+                </padding>
+            </ToggleButton>
+            <Separator/>
+            <ToggleButton fx:id="btGenres" mnemonicParsing="false" text="%Genre/multiple" toggleGroup="$entitiesType">
+                <padding>
+                    <Insets bottom="4.0" left="10.0" right="10.0" top="4.0"/>
+                </padding>
+            </ToggleButton>
+            <Separator/>
+            <ToggleButton fx:id="btParabd" mnemonicParsing="false" text="%ParaBD/multiple" toggleGroup="$entitiesType">
+                <padding>
+                    <Insets bottom="4.0" left="10.0" right="10.0" top="4.0"/>
+                </padding>
+            </ToggleButton>
+            <ToggleButton fx:id="btAchatsParaBD" mnemonicParsing="false" text="%Achat/multiple" toggleGroup="$entitiesType">
+                <padding>
+                    <Insets bottom="4.0" left="10.0" right="10.0" top="4.0"/>
+                </padding>
+            </ToggleButton>
+        </ToolBar>
+    </left>
+    <center>
+        <fx:include fx:id="entities" source="components/treeviewsearch.fxml" AnchorPane.bottomAnchor="0.0"
+                    AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>
+    </center>
+    <top>
+        <ToolBar prefWidth="200.0" BorderPane.alignment="CENTER">
+            <Button fx:id="btRefresh" graphicTextGap="8.0" mnemonicParsing="false" text="%bt/Rafraichir"
+                    onAction="#clickRefresh">
+                <graphic>
+                    <ImageView>
+                        <Image url="@../graphics/png/22x22/reload.png"/>
+                    </ImageView>
+                </graphic>
+            </Button>
+            <Separator orientation="VERTICAL"/>
+            <Button fx:id="btNouveau" graphicTextGap="8.0" mnemonicParsing="false" text="%bt/Nouveau" onAction="#clickNew">
+                <graphic>
+                    <ImageView>
+                        <Image url="@../graphics/png/22x22/editnew.png"/>
+                    </ImageView>
+                </graphic>
+            </Button>
+            <Button fx:id="btModifier" graphicTextGap="8.0" mnemonicParsing="false" text="%bt/Modifier"
+                    onAction="#clickEdit">
+                <graphic>
+                    <ImageView>
+                        <Image url="@../graphics/png/22x22/edit.png"/>
+                    </ImageView>
+                </graphic>
+            </Button>
+            <Button fx:id="btSupprimer" graphicTextGap="8.0" mnemonicParsing="false" text="%bt/Supprimer"
+                    onAction="#clickDel">
+                <graphic>
+                    <ImageView>
+                        <Image url="@../graphics/png/22x22/editdelete.png"/>
+                    </ImageView>
+                </graphic>
+            </Button>
+            <Separator orientation="VERTICAL"/>
+            <Button fx:id="btAcheter" graphicTextGap="8.0" mnemonicParsing="false" text="%bt/Acheter"
+                    onAction="#clickAchat">
+                <graphic>
+                    <ImageView>
+                        <Image url="@../graphics/png/22x22/contents.png"/>
+                    </ImageView>
+                </graphic>
+            </Button>
+        </ToolBar>
+    </top>
+</BorderPane>

@@ -1,0 +1,93 @@
+{% extends "BDThequeDataModelBundle::main.layout.html.twig" %}
+
+{% block contentPanel %}
+<h1>Serie</h1>
+
+<table class="record_properties">
+    <tbody>
+        <tr>
+            <th>Id</th>
+            <td>{{ entity.id }}</td>
+        </tr>
+        <tr>
+            <th>Version</th>
+            <td>{{ entity.version|date('Y-m-d H:i:s') }}</td>
+        </tr>
+        <tr>
+            <th>Created</th>
+            <td>{{ entity.created|date('Y-m-d H:i:s') }}</td>
+        </tr>
+        <tr>
+            <th>Titre</th>
+            <td>{{ entity.titre }}</td>
+        </tr>
+        <tr>
+            <th>Terminee</th>
+            <td>{{ entity.terminee }}</td>
+        </tr>
+        <tr>
+            <th>Sujet</th>
+            <td>{{ entity.sujet }}</td>
+        </tr>
+        <tr>
+            <th>Notes</th>
+            <td>{{ entity.notes }}</td>
+        </tr>
+        <tr>
+            <th>Siteweb</th>
+            <td>{{ entity.siteWeb }}</td>
+        </tr>
+        <tr>
+            <th>Suivremanquants</th>
+            <td>{{ entity.suivreManquants }}</td>
+        </tr>
+        <tr>
+            <th>Complete</th>
+            <td>{{ entity.complete }}</td>
+        </tr>
+        <tr>
+            <th>Suivresorties</th>
+            <td>{{ entity.suivreSorties }}</td>
+        </tr>
+        <tr>
+            <th>Couleur</th>
+            <td>{{ entity.couleur }}</td>
+        </tr>
+        <tr>
+            <th>Nbalbums</th>
+            <td>{{ entity.nbAlbums }}</td>
+        </tr>
+        <tr>
+            <th>Vo</th>
+            <td>{{ entity.vo }}</td>
+        </tr>
+        <tr>
+            <th>Notation</th>
+            <td>{{ entity.notation }}</td>
+        </tr>
+        <tr>
+            <th>Initiale</th>
+            <td>{{ entity.initiale }}</td>
+        </tr>
+    </tbody>
+</table>
+
+<ul class="record_actions">
+    <li>
+        <a href="{{ path('serie') }}">
+            Back to the list
+        </a>
+    </li>
+    <li>
+        <a href="{{ path('serie_edit', { 'id': entity.id }) }}">
+            Edit
+        </a>
+    </li>
+    <li>
+        <form action="{{ path('serie_delete', { 'id': entity.id }) }}" method="post">
+            {{ form_widget(delete_form) }}
+                <button type="submit" class="uibutton">Delete</button>
+            </form>
+        </li>
+    </ul>
+{% endblock %}

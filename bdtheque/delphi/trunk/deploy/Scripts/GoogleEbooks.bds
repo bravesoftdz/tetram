@@ -1,0 +1,209 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<Script>
+  <Infos>
+    <Auteur>Tetram Corp</Auteur>
+    <Description/>
+    <ScriptVersion>1.2</ScriptVersion>
+    <BDVersion>2.2.3.29</BDVersion>
+    <LastUpdate>Sun, 18 May 2014 16:13:37 +0200</LastUpdate>
+    <Engine>PascalScript</Engine>
+  </Infos>
+  <Options>
+    <Option Label="Miniatures dans les recherches" Values="Oui|Non" Default="Oui"/>
+    <Option Label="Date d&apos;&#xE9;dition = Date de parution" Values="Oui|Non" Default="Oui"/>
+  </Options>
+  <Code>program GoogleEbooks;
+
+uses ScriptFonctions;
+
+const
+  urlGoogleEbooks = &apos;https://www.googleapis.com/books/v1/volumes&apos;;
+  GoogleEbooksSearch = &apos;?projection=lite&amp;printType=books&amp;startIndex=%d&amp;maxResults=%d&amp;q=%s&apos;;
+
+procedure ParseAlbum(id_album: string);
+var
+  titre, type_isbn, isbn, c_type_isbn, s: string;
+  page, tmpso: isuperobject;
+  pDate: TDateTime;
+  annee, mois, jour: Word;
+  i: integer;
+begin
+  page := so(GetPage(urlGoogleEbooks+&apos;/&apos;+id_album, True));
+//  writetoconsole(page.asjson(true,true));
+
+  type_isbn := &apos;ISBN_13&apos;;
+  if ISO8601DateToDelphiDateTime(page.GetS(&apos;volumeInfo.publishedDate&apos;), pDate) then
+  begin
+    DecodeDate(pDate, annee, mois, jour);
+    AlbumToImport.Edition.AnneeEdition := annee;
+
+    // on a qu&apos;une date d&apos;&#xE9;dition, pas de parution
+    if GetOptionValue(&apos;Date d&apos;&apos;&#xE9;dition = Date de parution&apos;, &apos;Oui&apos;) = &apos;Oui&apos; then
+    begin
+      AlbumToImport.AnneeParution := annee;
+      AlbumToImport.MoisParution := mois;
+    end;
+
+    if annee &lt; 2007 then type_isbn := &apos;ISBN_10&apos;;
+  end;
+
+  titre := page.GetS(&apos;volumeInfo.subtitle&apos;);
+  if titre &lt;&gt; &apos;&apos; then
+  begin
+    AlbumToImport.Titre := titre;
+    AlbumToImport.Serie.Titre := page.GetS(&apos;volumeInfo.title&apos;);
+  end
+  else
+    AlbumToImport.Titre := page.GetS(&apos;volumeInfo.title&apos;);
+
+//  AlbumToImport.Serie.Titre := &apos;debug&apos;;
+
+  AlbumToImport.Sujet := HTMLText(page.GetS(&apos;volumeInfo.description&apos;));
+  AlbumToImport.Serie.Editeur.NomEditeur := page.GetS(&apos;volumeInfo.publisher&apos;);
+  AlbumToImport.Edition.Editeur.NomEditeur := page.GetS(&apos;volumeInfo.publisher&apos;);
+
+  tmpso := page.GetO(&apos;volumeInfo.authors&apos;);
+  if tmpso &lt;&gt; nil then
+    for i := 0 to tmpso.AsArray.Length - 1 do
+    begin
+      s := tmpso.AsArray[i].AsString;
+      AlbumToImport.Scenaristes.Add(MakeAuteurAlbum(s, maScenariste));
+      AlbumToImport.Dessinateurs.Add(MakeAuteurAlbum(s, maDessinateur));
+      AlbumToImport.Coloristes.Add(MakeAuteurAlbum(s, maColoriste));
+      AlbumToImport.Serie.Scenaristes.Add(MakeAuteurSerie(s, maScenariste));
+      AlbumToImport.Serie.Dessinateurs.Add(MakeAuteurSerie(s, maDessinateur));
+      AlbumToImport.Serie.Coloristes.Add(MakeAuteurSerie(s, maColoriste));
+    end;
+
+  isbn := &apos;&apos;;
+  tmpso := page.GetO(&apos;volumeInfo.industryIdentifiers&apos;);
+  if tmpso &lt;&gt; nil then
+    for i := 0 to tmpso.AsArray.Length - 1 do
+    begin
+      isbn := tmpso.AsArray[i].GetS(&apos;identifier&apos;);
+      c_type_isbn := tmpso.AsArray[i].GetS(&apos;type&apos;);
+
+      if c_type_isbn = type_isbn then break;
+      // dans le cas o&#xF9; on ne trouverait pas d&apos;isbn correspondant au type de l&apos;ann&#xE9;e de parution, on ne garde que l&apos;isbn13
+      if c_type_isbn &lt;&gt; &apos;ISBN_13&apos; then isbn := &apos;&apos;;
+    end;
+  AlbumToImport.Edition.ISBN := isbn;
+  AlbumToImport.Edition.NombreDePages := page.GetI(&apos;volumeInfo.pageCount&apos;);
+
+  tmpso := page.GetO(&apos;volumeInfo.categories&apos;);
+  if tmpso &lt;&gt; nil then
+    for i := 0 to tmpso.AsArray.Length - 1 do
+      AlbumToImport.Serie.Genres.Add(tmpso.AsArray[i].AsString);
+
+  s := page.GetS(&apos;volumeInfo.imageLinks.thumbnail&apos;);
+  if s &lt;&gt; &apos;&apos; then
+    AlbumToImport.Edition.AddImageFromURL(s, ctiCouverture);
+
+  AlbumToImport.Import;
+end;
+
+function Recherche(critere: string): string;
+var
+  _so, tmpSO, soAuth, soItems: isuperobject;
+  id, s, titre, commentaire, thumb: string;
+  i, j: integer;
+  c: TScriptChoix;
+  totalItems, startIndex, maxResults: integer;
+  Miniatures: Boolean;
+begin
+  Miniatures := GetOptionValue(&apos;Miniatures dans les recherches&apos;, &apos;Oui&apos;) = &apos;Oui&apos;;
+  startIndex := 0;
+  maxResults := 10;
+  thumb := &apos;&apos;;
+
+  s := GetPage(Format(urlGoogleEbooks+GoogleEbooksSearch, [startIndex, maxResults, critere]), True);
+// WriteToConsole(s);
+  _so := so(s);
+
+  c := TScriptChoix.Create;
+  try
+    c.Titre := &apos;R&#xE9;sultats de recherche de &quot;&apos; + critere + &apos;&quot;&apos;;
+
+    totalItems := _so.GetI(&apos;totalItems&apos;);
+    if totalItems &gt; 100 then totalItems := 100;
+
+    if totalItems &gt; 0 then
+    begin
+      totalItems := totalItems - maxResults;
+      repeat
+        soItems := _so.GetO(&apos;items&apos;);
+        // WriteToConsole(soItems.AsJson(true,true));
+        if soItems &lt;&gt; nil then
+        begin
+          for i := 0 to (soItems.AsArray.Length - 1) do
+          begin
+            tmpSO := soItems.AsArray.N[i];
+            id := tmpSO.GetS(&apos;id&apos;);
+            titre := tmpSO.GetS(&apos;volumeInfo.title&apos;);
+            AjoutString2(s, tmpSO.GetS(&apos;volumeInfo.subtitle&apos;), &apos;, &apos;);
+            commentaire := &apos;&apos;;
+            soAuth := tmpSO.GetO(&apos;volumeInfo.authors&apos;);
+            s := &apos;&apos;;
+            if soAuth &lt;&gt; nil then
+              for j := 0 to soAuth.AsArray.Length - 1 do
+                AjoutString2(s, soAuth.AsArray[j].AsString, &apos;, &apos;);
+            AjoutString1(commentaire, s, #13#10, &apos;Auteur(s) : &apos;, &apos;&apos;);
+            AjoutString1(commentaire, tmpSO.GetS(&apos;volumeInfo.publisher&apos;), #13#10, &apos;Editeur : &apos;, &apos;&apos;);
+            AjoutString2(commentaire, HTMLText(tmpSO.GetS(&apos;volumeInfo.description&apos;)), #13#10);
+
+            if Miniatures then
+              thumb := tmpSO.GetS(&apos;volumeInfo.imageLinks.smallThumbnail&apos;);
+
+            if thumb &lt;&gt; &apos;&apos; then
+            begin
+  //          WriteToConsole(thumb);
+              try
+                c.AjoutChoixWithThumb(&apos;Album&apos;, HTMLDecode(titre), commentaire, id, thumb);
+              except
+                // certains png ne sont pas reconnu
+              end;
+            end
+            else
+              c.AjoutChoix(&apos;Album&apos;, HTMLDecode(titre), commentaire, id);
+          end;
+        end;
+
+        startIndex := startIndex + maxResults;
+        s := GetPage(Format(urlGoogleEbooks+GoogleEbooksSearch, [startIndex, maxResults, critere]), True);
+        _so := so(s);
+        totalItems := totalItems - maxResults;
+      until totalItems &lt;= 0;
+    end;
+
+    if c.ChoixCount &gt; 0 then
+      Result := c.Show
+    else
+      ShowMessage(&apos;La recherche n&apos;&apos;a pas retourn&#xE9; de r&#xE9;sultat.&apos;);
+  finally
+    c.Free;
+  end;
+end;
+
+var
+  id_album, entry: string;
+  index: integer;
+begin
+  entry := AlbumToImport.Edition.ISBN;
+  index := 0;
+  if (entry = &apos;&apos;) and (AlbumToImport.DefaultSearch &lt;&gt; &apos;&apos;) then
+  begin
+    entry := AlbumToImport.DefaultSearch;
+    index := 1;
+  end;
+  if not AskSearchEntry([&apos;ISBN / EAN&apos;, &apos;Titre de l&apos;&apos;album ou de la s&#xE9;rie&apos;], entry, index) then Exit;
+
+  id_album := &apos;&apos;;
+  case index of
+    0: id_album := Recherche(&apos;isbn:&apos; + entry);
+    1: id_album := Recherche(entry);
+  end;
+
+  if id_album &lt;&gt; &apos;&apos; then
+    ParseAlbum(id_album);
+end.</Code>
+</Script>

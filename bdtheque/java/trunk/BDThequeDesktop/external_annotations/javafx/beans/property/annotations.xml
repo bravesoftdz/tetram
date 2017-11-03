@@ -1,0 +1,35 @@
+<root>
+    <item name='javafx.beans.property.ReadOnlyIntegerWrapper ReadOnlyIntegerWrapper(java.lang.Object, java.lang.String, int) 1'>
+        <annotation name='org.jetbrains.annotations.NonNls'/>
+    </item>
+    <item name='javafx.beans.property.ReadOnlyListWrapper ReadOnlyListWrapper(java.lang.Object, java.lang.String, javafx.collections.ObservableList&lt;E&gt;) 1'>
+        <annotation name='org.jetbrains.annotations.NonNls'/>
+    </item>
+    <item name='javafx.beans.property.ReadOnlyObjectWrapper ReadOnlyObjectWrapper(java.lang.Object, java.lang.String, T) 1'>
+        <annotation name='org.jetbrains.annotations.NonNls'/>
+    </item>
+    <item name='javafx.beans.property.ReadOnlyStringWrapper ReadOnlyStringWrapper(java.lang.Object, java.lang.String, java.lang.String) 1'>
+        <annotation name='org.jetbrains.annotations.NonNls'/>
+    </item>
+    <item name='javafx.beans.property.SimpleBooleanProperty SimpleBooleanProperty(java.lang.Object, java.lang.String, boolean) 1'>
+        <annotation name='org.jetbrains.annotations.NonNls'/>
+    </item>
+    <item name='javafx.beans.property.SimpleDoubleProperty SimpleDoubleProperty(java.lang.Object, java.lang.String, double) 1'>
+        <annotation name='org.jetbrains.annotations.NonNls'/>
+    </item>
+    <item name='javafx.beans.property.SimpleIntegerProperty SimpleIntegerProperty(java.lang.Object, java.lang.String, int) 1'>
+        <annotation name='org.jetbrains.annotations.NonNls'/>
+    </item>
+    <item name='javafx.beans.property.SimpleListProperty SimpleListProperty(java.lang.Object, java.lang.String, javafx.collections.ObservableList&lt;E&gt;) 1'>
+        <annotation name='org.jetbrains.annotations.NonNls'/>
+    </item>
+    <item name='javafx.beans.property.SimpleObjectProperty SimpleObjectProperty(java.lang.Object, java.lang.String, T) 1'>
+        <annotation name='org.jetbrains.annotations.NonNls'/>
+    </item>
+    <item name='javafx.beans.property.SimpleSetProperty SimpleSetProperty(java.lang.Object, java.lang.String, javafx.collections.ObservableSet&lt;E&gt;) 1'>
+        <annotation name='org.jetbrains.annotations.NonNls'/>
+    </item>
+    <item name='javafx.beans.property.SimpleStringProperty SimpleStringProperty(java.lang.Object, java.lang.String, java.lang.String) 1'>
+        <annotation name='org.jetbrains.annotations.NonNls'/>
+    </item>
+</root>

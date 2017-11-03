@@ -1,0 +1,294 @@
+html, body {
+	height: 100%;
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+}
+
+body, div, p, table {
+	font-family: Tahoma;
+	font-size: 12px;
+	color: #000000;
+}
+
+table {
+	border-collapse:collapse;
+	border-spacing: 0;
+}
+
+body { 
+	background-color: white; 
+	background-image: url('graphics/fondbdd.jpg'); 
+}
+
+a, a:active, a:visited {
+	color: #5A7A9A;
+	outline: none;
+}
+
+h1 {
+	font-size: 18px;
+	padding: 0px;
+	margin: 10px;
+}
+
+.treeNode {
+	position: inline;
+	white-space: nowrap;
+}
+.treeChildNode {
+	position: inline;
+	white-space: nowrap;
+	padding-left: 20px;
+}
+
+.tabcontrol
+{
+	white-space: nowrap;
+}
+
+.tabsheet, .tabsheet_selected
+{
+	color: white;
+	float: left;
+	padding-top: 4px;
+	padding-left: 8px;
+	height: 26px; /* 30-4 */
+	width: 80px; /* 88-8 */
+	background-image: url(graphics/tab_unselect.png);
+	background-repeat: no-repeat;
+	cursor: pointer;
+}
+
+.tabsheet_selected
+{
+	background-image: url('graphics/tab_selected.png');
+}
+
+.tabsheet:hover, .tabsheet_selected:hover
+{
+	color: #bcccda;
+}
+
+.toolButton, .toolSeparateur
+{
+	position: inline;
+	float: left;
+	top: 10px;
+	height: 40px;
+	width: 40px;
+	cursor: pointer;
+	
+	border: 1px solid #bcccda;
+}
+
+.toolSeparateur
+{
+	width: 15px;
+	cursor: auto;
+	border: 0px none;
+}
+
+#toolBar
+{
+	position: absolute;
+	top: 4px;
+	left: 5px;
+}
+
+.btnHistorique
+{
+	height: 40px;
+	width: 40px;
+	cursor: pointer;
+	
+	border: 1px solid #bcccda;
+	position: absolute;
+	bottom: 60px;
+}
+
+#historiqueBack
+{
+	left: 270px;
+	background-image: url(graphics/page-back.png);
+}
+#historiqueBack:hover, #historiqueBack.sfhover
+{
+	background-image: url(graphics/page-back-hover.png);
+}
+#historiqueBack.disabled
+{
+	background-image: url(graphics/page-back-disabled.png);
+	display: none;
+}
+
+#historiqueForward
+{
+	right: 10px;
+	background-image: url(graphics/page-forward.png);
+}
+#historiqueForward:hover, #historiqueForward.sfhover
+{
+	background-image: url(graphics/page-forward-hover.png);
+}
+#historiqueForward.disabled
+{
+	background-image: url(graphics/page-forward-disabled.png);
+	display: none;
+}
+
+.listeHistorique
+{
+	position: absolute;
+	bottom: 100px;
+	display: none;
+	background-color: #bcccda;
+	border: 1px solid #5A7A9A;
+	padding: 5px 5px 5px 5px;
+}
+.listeHistorique.show
+{
+	display: inline;
+}
+
+#listeHistoriqueBack
+{
+	left: 270px;
+}
+
+#listeHistoriqueForward
+{
+	right: 10px;
+}
+
+#toolManquants
+{
+	background-image: url(graphics/manquants.png);
+}
+#toolPrevisions
+{
+	background-image: url(graphics/calendrier.png);
+}
+#toolAchats
+{
+	background-image: url(graphics/achats.png);
+}
+
+#wait {
+	position: absolute;
+	bottom: 20px;
+	left: 400px;
+	height: 20px;
+	width: 200px;
+	white-space: nowrap;
+	background-color: #bcccda;
+	border: 1px solid #5A7A9A;
+	vertical-align: middle;
+}
+
+#topbar
+{
+	position: absolute;
+	bottom: 60px;
+	height: 50px;
+	width: 264px;
+	white-space: nowrap;
+	border-top: 1px solid #bcccda;
+}
+
+#bottombar
+{
+	position: absolute;
+	bottom: 0px;
+	height: 60px;
+	width: 100%;
+	white-space: nowrap;
+	border-top: 1px solid #bcccda;
+}
+
+#repertoire_tabs
+{
+	position: absolute;
+	left: 0px;
+	top: 5px;
+	height: 26px;
+}
+
+#repertoire
+{
+	position: absolute;
+	left: 10px;
+	top: 35px;
+	bottom: 110px;
+	width: 254px;
+	overflow: auto;
+	border-right: 1px solid #bcccda;
+}
+
+#repertoire_header
+{
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	width: 100%;
+	padding-top: 10px;
+	height: 40px;
+}
+
+#repertoire_body
+{
+	position: absolute;
+	top: 40px;
+	bottom: 0px;
+	width: 100%;
+	overflow: auto;
+}
+
+#detail {
+	position: absolute;
+	top: 0px;
+	left: 270px;
+	right: 10px;
+	bottom: 60px;
+	overflow: auto;	
+	border-top: 1px solid #bcccda;
+	border-left: 1px solid #bcccda;
+}
+
+#detail div.entete{
+	position: absolute;
+	top: 0px;
+	width: 100%;
+	height: 40px;
+}
+
+#detail div.entete.height60{
+	height: 60px;
+}
+
+#detail div.body{
+	position: absolute;
+	top: 40px;
+	width: 100%;
+	bottom: 0px;
+	overflow: auto;
+}
+
+
+#detail div.body.top60{
+	top: 60px;
+}
+
+#zoom {
+	position: absolute;
+	border: 3px solid #BCCCDA;
+	padding: 4px;
+	left: 230px;
+	top: 30px;
+	z-index: 0;
+	background-color: #ffffff;
+}
+
+#zoomimage {
+	cursor: pointer;
+}

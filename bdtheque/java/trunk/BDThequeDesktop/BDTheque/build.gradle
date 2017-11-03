@@ -1,0 +1,71 @@
+/*
+ * Copyright (c) 2015, tetram.org. All Rights Reserved.
+ * build.gradle
+ * Last modified by Thierry, on 2015-03-26T00:26:13CET
+ */
+
+apply plugin: 'java'
+apply plugin: 'idea'
+
+sourceCompatibility = 1.8
+version = '1.0'
+
+repositories {
+    mavenCentral()
+}
+
+sourceSets {
+    // 22/12/2014: le packager javafx attends toutes les classes et toutes les ressources au même endroit
+    // mais le plugin java les dispatch dans deux répertoires
+    // 22/12/2014 NE PAS FACTORISER EN output.resourcesDir = output.classesDir
+    main {
+        output.classesDir = file("..\\out\\production")
+        output.resourcesDir = file("..\\out\\production")
+    }
+    test {
+        output.classesDir = file("..\\out\\test")
+        output.resourcesDir = file("..\\out\\test")
+    }
+}
+
+dependencies {
+    testCompile 'junit:junit:4+'
+    // 28/05/2014: la version dispo est la version 12 qui ne contient pas l'annotation Contract
+    // compile 'com.intellij:annotations:+'
+    compile files('C:\\Program Files (x86)\\JetBrains\\IntelliJ IDEA 14.1\\lib\\annotations.jar')
+
+    compile 'org.apache.logging.log4j:log4j-core:+'
+    // permet de rediriger, dans la plupart des cas, les appels à Log4j vers Log4j2
+    runtime 'org.apache.logging.log4j:log4j-1.2-api:+'
+
+    compile 'org.apache.commons:commons-io:+'
+    compile 'org.apache.commons:commons-lang3:+'
+    compile 'org.apache.commons:commons-collections4:+'
+    compile 'commons-validator:commons-validator:+'
+
+    compile 'org.firebirdsql.jdbc:jaybird-jdk18:+'
+
+    compile 'org.mybatis:mybatis:+'
+    compile 'org.mybatis:mybatis-spring:+'
+    //compile 'org.mybatis.generator:mybatis-generator-core:+'
+
+    runtime 'cglib:cglib:+'
+
+    compile 'org.springframework:spring-aop:+'
+    compile 'org.springframework:spring-aspects:+'
+    // compile 'org.springframework:spring-agent:+'
+    compile 'org.springframework:spring-context:+'
+    compile 'org.springframework:spring-jdbc:+'
+    testCompile 'org.springframework:spring-test:+'
+
+    // runtime 'org.aspectj:aspectjrt:+'
+    // à priori pas utile puisque déjà en dépendance de spring-aspects
+    // runtime 'org.aspectj:aspectjweaver:+'
+
+    compile 'org.controlsfx:controlsfx:+'
+    compile 'org.jfxtras:jfxtras-common:+'
+    compile 'org.jfxtras:jfxtras-fxml:+'
+    compile 'org.jfxtras:jfxtras-controls:+'
+    compile 'org.jfxtras:jfxtras-labs:+'
+    // runtime files('libraries/ScenicView.jar')
+}

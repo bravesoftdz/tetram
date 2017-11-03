@@ -1,0 +1,26 @@
+{% extends "BDThequeDataModelBundle::editForm.layout.html.twig" %}
+
+{% block contentPanel %}
+<h1>Personne edit</h1>
+
+<form action="{{ path('personne_update', { 'id': entity.id }) }}" method="post" {{ form_enctype(edit_form) }}>
+    {{ form_widget(edit_form) }}
+        <p>
+            <button type="submit" class="uibutton">Edit</button>
+        </p>
+    </form>
+
+    <ul class="record_actions">
+        <li>
+            <a href="{{ path('personne') }}">
+                Back to the list
+            </a>
+        </li>
+        <li>
+            <form action="{{ path('personne_delete', { 'id': entity.id }) }}" method="post">
+            {{ form_widget(delete_form) }}
+                    <button type="submit" class="uibutton">Delete</button>
+                </form>
+            </li>
+        </ul>
+{% endblock %}

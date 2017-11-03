@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.VBox?>
+<VBox xmlns:fx="http://javafx.com/fxml" id="main" fx:id="root" prefHeight="680" prefWidth="280"
+      fx:controller="org.fxsct.FxSceneToolController">
+    <!--
+        <children>
+            <TabPane>
+                <tabs>
+                    <Tab fx:id="nodeToolTab" text="Scene Tools" closable="false" />
+                    <Tab fx:id="styleToolTab" text="Style Tools" />
+                </tabs>
+            </TabPane>
+        </children>
+    -->
+</VBox>
+
+

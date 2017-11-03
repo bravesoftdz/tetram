@@ -1,0 +1,35 @@
+<%
+vAlbums=Modules.Repertoire.Albums
+%>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//FR">
+<HTML>
+	<HEAD>
+		<TITLE><%=Application.Title%></TITLE>
+		<LINK rel="stylesheet" href="/Styles.css" type="text/css">
+	</HEAD>
+	<BODY>
+		<TABLE width=100%>
+				<TR>
+					<TD align=center>
+						<TABLE border=0>
+								<TR>
+									<TH>Album</TH>
+									<TH width=10></TH>
+									<TH>Serie</TH>
+								</TR>
+<%
+var e = new Enumerator(vAlbums.Records);
+s = '';
+for (; !e.atEnd(); e.moveNext()) { %>
+								<TR>
+									<TD class=TitreAlbum><A href="FicheAlbum?RefAlbum=<%=vAlbums.RefAlbum.Value%>"><%=vAlbums.LibelleCourt.DisplayText%><%=""%></A></TD>
+									<TD></TD>
+									<TD class=Serie><A href="FicheSerie?RefSerie=<%=vAlbums.RefSerie.Value%>"><%=vAlbums.TitreSerie.DisplayText%></A></TD>
+								</TR>
+<% } %>
+						</TABLE>
+					</TD>
+				</TR>
+		</TABLE>
+	</BODY>
+</HTML>

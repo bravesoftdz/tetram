@@ -1,0 +1,34 @@
+/*
+ * Copyright (c) 2014, tetram.org. All Rights Reserved.
+ * consultation.css
+ * Last modified by Tetram, on 2014-07-30T13:39:54CEST
+ */
+
+/**
+  source: jfxrt.jar!/com/sun/javafx/scene/control/skin/caspian/caspian.css
+**/
+
+.scene {
+    -fx-background-color: white;
+}
+
+.label-rubrique {
+    /*
+        -fx-text-fill : #152fFF;
+        -fx-text-fill : #2D8E42;
+    */
+    -fx-text-fill: #E05E53;
+}
+
+.scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+
+.scroll-pane {
+    -fx-background-color: transparent;
+}
+
+.flow-border {
+    -fx-background-color: -fx-box-border, -fx-control-inner-background;
+    -fx-background-insets: 0, 1;
+}

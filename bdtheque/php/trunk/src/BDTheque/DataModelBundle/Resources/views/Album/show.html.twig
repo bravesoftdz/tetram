@@ -1,0 +1,93 @@
+{% extends "BDThequeDataModelBundle::main.layout.html.twig" %}
+
+{% block contentPanel %}
+<h1>Album</h1>
+
+<table class="record_properties">
+    <tbody>
+        <tr>
+            <th>Id</th>
+            <td>{{ entity.id }}</td>
+        </tr>
+        <tr>
+            <th>Version</th>
+            <td>{{ entity.version|date('Y-m-d H:i:s') }}</td>
+        </tr>
+        <tr>
+            <th>Created</th>
+            <td>{{ entity.created|date('Y-m-d H:i:s') }}</td>
+        </tr>
+        <tr>
+            <th>Titre</th>
+            <td>{{ entity.titre }}</td>
+        </tr>
+        <tr>
+            <th>Sujet</th>
+            <td>{{ entity.sujet }}</td>
+        </tr>
+        <tr>
+            <th>Horsserie</th>
+            <td>{{ entity.horsSerie }}</td>
+        </tr>
+        <tr>
+            <th>Moisparution</th>
+            <td>{{ entity.moisParution }}</td>
+        </tr>
+        <tr>
+            <th>Tomefin</th>
+            <td>{{ entity.tomeFin }}</td>
+        </tr>
+        <tr>
+            <th>Notes</th>
+            <td>{{ entity.notes }}</td>
+        </tr>
+        <tr>
+            <th>Anneeparution</th>
+            <td>{{ entity.anneeParution }}</td>
+        </tr>
+        <tr>
+            <th>Integrale</th>
+            <td>{{ entity.integrale }}</td>
+        </tr>
+        <tr>
+            <th>Tomedebut</th>
+            <td>{{ entity.tomeDebut }}</td>
+        </tr>
+        <tr>
+            <th>Tome</th>
+            <td>{{ entity.tome }}</td>
+        </tr>
+        <tr>
+            <th>Complet</th>
+            <td>{{ entity.complet }}</td>
+        </tr>
+        <tr>
+            <th>Notation</th>
+            <td>{{ entity.notation }}</td>
+        </tr>
+        <tr>
+            <th>Initiale</th>
+            <td>{{ entity.initiale }}</td>
+        </tr>
+    </tbody>
+</table>
+
+<ul class="record_actions">
+    <li>
+        <a href="{{ path('album') }}">
+            Back to the list
+        </a>
+    </li>
+    <li>
+        <a href="{{ path('album_edit', { 'id': entity.id }) }}">
+            Edit
+        </a>
+    </li>
+    <li>
+        <form action="{{ path('album_delete', { 'id': entity.id }) }}" method="post">
+            {{ form_widget(delete_form) }}
+                <button type="submit" class="uibutton">Delete</button>
+            </form>
+        </li>
+    </ul>
+{% endblock %}

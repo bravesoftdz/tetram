@@ -1,0 +1,69 @@
+{% extends "BDThequeDataModelBundle::main.layout.html.twig" %}
+
+{% block contentPanel %}
+<h1>Album list</h1>
+
+<table class="records_list">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Version</th>
+            <th>Created</th>
+            <th>Titre</th>
+            <th>Sujet</th>
+            <th>Horsserie</th>
+            <th>Moisparution</th>
+            <th>Tomefin</th>
+            <th>Notes</th>
+            <th>Anneeparution</th>
+            <th>Integrale</th>
+            <th>Tomedebut</th>
+            <th>Tome</th>
+            <th>Complet</th>
+            <th>Notation</th>
+            <th>Initiale</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for entity in entities %}
+            <tr>
+                <td><a href="{{ path('album_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+                <td>{% if entity.version %}{{ entity.version|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{% if entity.created %}{{ entity.created|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{{ entity.titre }}</td>
+                <td>{{ entity.sujet }}</td>
+                <td>{{ entity.horsSerie }}</td>
+                <td>{{ entity.moisParution }}</td>
+                <td>{{ entity.tomeFin }}</td>
+                <td>{{ entity.notes }}</td>
+                <td>{{ entity.anneeParution }}</td>
+                <td>{{ entity.integrale }}</td>
+                <td>{{ entity.tomeDebut }}</td>
+                <td>{{ entity.tome }}</td>
+                <td>{{ entity.complet }}</td>
+                <td>{{ entity.notation }}</td>
+                <td>{{ entity.initiale }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('album_show', { 'id': entity.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('album_edit', { 'id': entity.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+    {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('album_new') }}">
+                Create a new entry
+            </a>
+        </li>
+    </ul>
+{% endblock %}

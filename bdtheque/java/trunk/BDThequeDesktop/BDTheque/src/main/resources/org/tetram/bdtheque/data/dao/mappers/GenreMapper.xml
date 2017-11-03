@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  ~ Copyright (c) 2014, tetram.org. All Rights Reserved.
+  ~ GenreMapper.xml
+  ~ Last modified by Tetram, on 2014-08-26T15:56:17CEST
+  -->
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.tetram.bdtheque.data.dao.mappers.GenreMapper">
+    <resultMap id="AbstractGenre" type="org.tetram.bdtheque.data.bean.abstractentities.BaseGenre">
+        <id column="id_genre" property="id"/>
+        <result column="genre" property="nomGenre"/>
+    </resultMap>
+    <resultMap id="GenreLite" extends="AbstractGenre" type="beanGenreLite">
+        <result column="quantite" property="quantite"/>
+    </resultMap>
+    <resultMap id="GenreFull" extends="AbstractGenre" type="beanGenre">
+    </resultMap>
+
+    <resultMap id="GenreLiteInitialeCharacter" type="org.tetram.bdtheque.data.bean.InitialeWithEntity"
+               extends="org.tetram.bdtheque.data.dao.mappers.CommonMapper.InitialeWithEntityCharacter">
+        <association property="entity" resultMap="GenreLite"/>
+    </resultMap>
+
+    <select id="getGenreLiteById" resultMap="GenreLite">
+        select
+            id_genre, genre
+        from
+            genres
+        where
+            id_genre = #{id}
+    </select>
+    <select id="getGenreById" resultMap="GenreFull">
+        select
+            id_genre, genre
+        from
+            genres
+        where
+            id_genre = #{id}
+    </select>
+
+    <select id="getListGenreBySerie" resultMap="GenreLite" resultOrdered="true">
+        select
+            g.id_genre, g.genre
+        from
+            genreSeries s
+            inner join genres g on
+                g.id_genre = s.id_genre
+        where
+            s.id_serie = #{id}
+        order by
+            g.genre
+    </select>
+
+    <select id="getInitiales" resultMap="org.tetram.bdtheque.data.dao.mappers.CommonMapper.InitialeEntityCharacter">
+        select
+            initialeGenre "label", countInitiale "count", initialeGenre "value"
+        from
+            vw_initiales_genres
+    </select>
+    <select id="getListGenreLiteByInitiale" resultMap="GenreLite">
+        select
+            id_genre, genre
+        from
+            genres_by_initiale(#{initiale})
+    </select>
+    <select id="searchListGenreLiteByInitiale" resultMap="GenreLiteInitialeCharacter" resultOrdered="true">
+        <![CDATA[
+        select
+            g.id_genre initiale_key, g.initialeGenre initiale_value,
+            g.id_genre, g.genre
+        from
+            genres g
+        where
+            g.genre like '%' || #{value} || '%'
+        ]]>
+        <if test="filtre != null">
+            and ${filtre}
+        </if>
+        <![CDATA[
+        order by
+            g.initialeGenre, g.genre
+        ]]>
+    </select>
+
+    <select id="checkUniqueGenre" resultType="UUID">
+        <![CDATA[
+        select
+            id_genre
+        from
+            genres
+        where
+            genre = #{nomGenre}
+        ]]>
+        <if test="id != null">
+            <![CDATA[
+            and id_genre <> #{id}
+            ]]>
+        </if>
+    </select>
+
+    <sql id="saveGenreLite">
+        update or insert into genres (id_genre, genre) values (#{id}, #{nomGenre})
+    </sql>
+
+    <insert id="createGenre" parameterType="beanGenre">
+        <selectKey keyProperty="id" order="BEFORE" resultType="UUID">
+            <include refid="org.tetram.bdtheque.data.dao.mappers.CommonMapper.autoIncKey"/>
+        </selectKey>
+        <include refid="saveGenreLite"/>
+    </insert>
+
+    <update id="updateGenre" parameterType="beanGenre">
+        <include refid="saveGenreLite"/>
+    </update>
+
+    <delete id="deleteGenre">
+        delete from genres where id_genre = #{id}
+    </delete>
+
+    <delete id="cleanGenresSerie">
+        delete from genreSeries where id_serie = #{id}
+    </delete>
+    <insert id="addGenreSerie">
+        insert into genreSeries (id_serie, id_genre) values (#{idSerie}, #{idGenre})
+    </insert>
+</mapper>

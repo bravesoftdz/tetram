@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="All but Externals" pattern="!file[BDTheque]:src/ext//*" />
+</component>

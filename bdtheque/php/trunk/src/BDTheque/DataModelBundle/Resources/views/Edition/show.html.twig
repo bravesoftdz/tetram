@@ -1,0 +1,105 @@
+{% extends "BDThequeDataModelBundle::main.layout.html.twig" %}
+
+{% block contentPanel %}
+<h1>Edition</h1>
+
+<table class="record_properties">
+    <tbody>
+        <tr>
+            <th>Id</th>
+            <td>{{ entity.id }}</td>
+        </tr>
+        <tr>
+            <th>Version</th>
+            <td>{{ entity.version|date('Y-m-d H:i:s') }}</td>
+        </tr>
+        <tr>
+            <th>Created</th>
+            <td>{{ entity.created|date('Y-m-d H:i:s') }}</td>
+        </tr>
+        <tr>
+            <th>Stock</th>
+            <td>{{ entity.stock }}</td>
+        </tr>
+        <tr>
+            <th>Prix</th>
+            <td>{{ entity.prix }}</td>
+        </tr>
+        <tr>
+            <th>Anneecote</th>
+            <td>{{ entity.anneeCote }}</td>
+        </tr>
+        <tr>
+            <th>Isbn</th>
+            <td>{{ entity.isbn }}</td>
+        </tr>
+        <tr>
+            <th>Gratuit</th>
+            <td>{{ entity.gratuit }}</td>
+        </tr>
+        <tr>
+            <th>Prete</th>
+            <td>{{ entity.prete }}</td>
+        </tr>
+        <tr>
+            <th>Nombredepages</th>
+            <td>{{ entity.nombreDePages }}</td>
+        </tr>
+        <tr>
+            <th>Numeroperso</th>
+            <td>{{ entity.numeroPerso }}</td>
+        </tr>
+        <tr>
+            <th>Notes</th>
+            <td>{{ entity.notes }}</td>
+        </tr>
+        <tr>
+            <th>Anneeedition</th>
+            <td>{{ entity.anneeEdition }}</td>
+        </tr>
+        <tr>
+            <th>Dedicace</th>
+            <td>{{ entity.dedicace }}</td>
+        </tr>
+        <tr>
+            <th>Couleur</th>
+            <td>{{ entity.couleur }}</td>
+        </tr>
+        <tr>
+            <th>Prixcote</th>
+            <td>{{ entity.prixCote }}</td>
+        </tr>
+        <tr>
+            <th>Dateachat</th>
+            <td>{{ entity.dateAchat|date('Y-m-d H:i:s') }}</td>
+        </tr>
+        <tr>
+            <th>Offert</th>
+            <td>{{ entity.offert }}</td>
+        </tr>
+        <tr>
+            <th>Vo</th>
+            <td>{{ entity.vo }}</td>
+        </tr>
+    </tbody>
+</table>
+
+<ul class="record_actions">
+    <li>
+        <a href="{{ path('edition') }}">
+            Back to the list
+        </a>
+    </li>
+    <li>
+        <a href="{{ path('edition_edit', { 'id': entity.id }) }}">
+            Edit
+        </a>
+    </li>
+    <li>
+        <form action="{{ path('edition_delete', { 'id': entity.id }) }}" method="post">
+            {{ form_widget(delete_form) }}
+                <button type="submit" class="uibutton">Delete</button>
+            </form>
+        </li>
+    </ul>
+{% endblock %}

@@ -1,0 +1,481 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:orientation="vertical">
+
+    <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/album_list_editions"
+            android:spinnerStyle="@android:style/Widget.Spinner.DropDown"
+            />
+
+    <ScrollView
+            android:measureAllChildren="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|right">
+
+        <TableLayout
+                style="@style/fiche_consultation"
+                android:rowOrderPreserved="true"
+                android:columnOrderPreserved="true"
+                android:measureWithLargestChild="false"
+                android:useDefaultMargins="false"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:stretchColumns="1">
+
+            <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                <TextView
+                        style="@style/fiche_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/fiche_edition_isbn"
+                        android:id="@+id/label_edition_isbn"
+                        android:layout_column="0"
+                        android:layout_gravity="center_vertical|right"
+                        android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/edition_isbn"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:layout_gravity="center_vertical"
+                        />
+            </TableRow>
+
+            <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                <TextView
+                        style="@style/fiche_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/fiche_edition_editeur"
+                        android:id="@+id/label_edition_editeur"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:layout_column="0"
+                        android:layout_gravity="center_vertical|right"/>
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/edition_editeur"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:layout_gravity="center_vertical"
+                        android:layout_column="1"
+                        />
+
+            </TableRow>
+
+            <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/fiche_edition_row_collection">
+
+                <TextView
+                        style="@style/fiche_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/fiche_edition_collection"
+                        android:id="@+id/label_edition_collection"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:layout_column="0"
+                        android:layout_gravity="center_vertical|right"/>
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/edition_collection"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:layout_gravity="center_vertical"
+                        android:layout_column="1"
+                        />
+            </TableRow>
+
+            <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                <TextView
+                        style="@style/fiche_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/fiche_edition_annee"
+                        android:id="@+id/label_edition_annee"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:layout_column="0"
+                        android:layout_gravity="center_vertical|right"/>
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/edition_annee"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:layout_gravity="center_vertical"
+                        android:layout_column="1"
+                        android:minWidth="100dp"
+                        android:layout_marginRight="-2dp"
+                        />
+
+            </TableRow>
+
+            <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="-6dp"
+                    android:layout_marginBottom="-6dp">
+
+                <org.tetram.bdtheque.gui.components.ReadOnlyCheckBox
+                        style="@style/fiche_label"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:layout_column="1"
+                        android:text="@string/fiche_edition_stock"
+                        android:id="@+id/edition_stock"
+                        android:checked="false"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+            </TableRow>
+
+            <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="-6dp"
+                    android:layout_marginBottom="-6dp">
+
+                <org.tetram.bdtheque.gui.components.ReadOnlyCheckBox
+                        style="@style/fiche_label"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:layout_column="1"
+                        android:text="@string/fiche_edtion_couleur"
+                        android:id="@+id/edition_couleur"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+            </TableRow>
+
+            <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="-6dp"
+                    android:layout_marginBottom="-6dp">
+
+                <org.tetram.bdtheque.gui.components.ReadOnlyCheckBox
+                        style="@style/fiche_label"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:layout_column="1"
+                        android:text="@string/fiche_edition_dedicace"
+                        android:id="@+id/edition_dedicace"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+            </TableRow>
+
+            <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="-6dp"
+                    android:layout_marginBottom="-6dp">
+
+                <org.tetram.bdtheque.gui.components.ReadOnlyCheckBox
+                        style="@style/fiche_label"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:layout_column="1"
+                        android:text="@string/fiche_edition_offert"
+                        android:id="@+id/edition_offert"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+            </TableRow>
+
+            <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+
+                <TextView
+                        style="@style/fiche_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/fiche_edition_prix"
+                        android:id="@+id/label_edition_prix"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:layout_column="0"
+                        android:layout_gravity="center_vertical|right"/>
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/edition_prix"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:layout_gravity="center_vertical"
+                        android:layout_column="1"
+                        android:minWidth="100dp"
+                        />
+
+            </TableRow>
+
+            <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/fiche_edition_row_aquisition">
+
+                <TextView
+                        style="@style/fiche_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Aquisition"
+                        android:id="@+id/label_edition_aquisition"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:layout_column="0"
+                        android:layout_gravity="center_vertical|right"
+                        tools:ignore="HardcodedText"/>
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/edition_aquisition"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:layout_gravity="center_vertical"
+                        android:layout_column="1"
+                        />
+            </TableRow>
+
+            <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/fiche_edition_row_cote">
+
+
+                <TextView
+                        style="@style/fiche_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/fiche_edition_cote"
+                        android:id="@+id/label_edition_cote"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:layout_column="0"
+                        android:layout_gravity="center_vertical|right"/>
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/edition_cote"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:layout_gravity="center_vertical"
+                        android:layout_column="1"
+                        android:minWidth="100dp"
+                        />
+            </TableRow>
+
+            <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/fiche_edition_row_pages">
+
+                <TextView
+                        style="@style/fiche_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/fiche_edition_pages"
+                        android:id="@+id/label_edition_pages"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:layout_column="0"
+                        android:layout_gravity="right"/>
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/edition_pages"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:layout_column="1"/>
+            </TableRow>
+
+            <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/fiche_edition_row_typeedition">
+
+                <TextView
+                        style="@style/fiche_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/fiche_edition_typeedition"
+                        android:id="@+id/label_edition_typeedition"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:layout_column="0"
+                        android:layout_gravity="right"
+                        />
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/edition_typeedition"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:layout_column="1"/>
+            </TableRow>
+
+            <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/fiche_edition_row_reliure">
+
+                <TextView
+                        style="@style/fiche_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/fiche_edition_reliure"
+                        android:id="@+id/label_edition_reliure"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:layout_column="0"
+                        android:layout_gravity="right"
+                        />
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/edition_reliure"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:layout_column="1"/>
+            </TableRow>
+
+            <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/fiche_edition_row_etatedition">
+
+                <TextView
+                        style="@style/fiche_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/fiche_edition_etatedition"
+                        android:id="@+id/label_edition_etatedition"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:layout_column="0"
+                        android:layout_gravity="right"/>
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/edition_etatedition"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:layout_column="1"/>
+            </TableRow>
+
+            <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/fiche_edition_row_orientation">
+
+                <TextView
+                        style="@style/fiche_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/fiche_edition_orientation"
+                        android:id="@+id/label_edition_orientation"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:layout_column="0"
+                        android:layout_gravity="right"/>
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/edition_orientation"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:layout_column="1"/>
+            </TableRow>
+
+            <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/fiche_edition_row_formatedition">
+
+                <TextView
+                        style="@style/fiche_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/fiche_edition_formatedition"
+                        android:id="@+id/label_edition_formatedition"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:layout_column="0"
+                        android:layout_gravity="right"/>
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/edition_formatedition"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:layout_column="1"/>
+            </TableRow>
+
+            <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/fiche_edition_row_senslecture">
+
+                <TextView
+                        style="@style/fiche_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/fiche_edition_senslecture"
+                        android:id="@+id/label_edition_senslecture"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:layout_column="0"
+                        android:layout_gravity="right"
+                        />
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/edition_senslecture"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:layout_column="1"/>
+            </TableRow>
+
+            <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/fiche_edition_row_numero">
+
+                <TextView
+                        style="@style/fiche_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/fiche_edition_numero"
+                        android:id="@+id/label_edition_numero"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:layout_column="0"
+                        android:layout_gravity="right"/>
+
+                <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/edition_numero"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:layout_column="1"/>
+            </TableRow>
+            <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/fiche_edition_row_notes">
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/edition_notes"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:layout_span="2"/>
+            </TableRow>
+
+        </TableLayout>
+    </ScrollView>
+</LinearLayout>

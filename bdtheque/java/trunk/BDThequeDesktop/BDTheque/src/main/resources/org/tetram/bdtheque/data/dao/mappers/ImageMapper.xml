@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  ~ Copyright (c) 2014, tetram.org. All Rights Reserved.
+  ~ ImageMapper.xml
+  ~ Last modified by Tetram, on 2014-08-01T12:35:12CEST
+  -->
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.tetram.bdtheque.data.dao.mappers.ImageMapper">
+    <resultMap id="AbstractImage" type="org.tetram.bdtheque.data.bean.abstractentities.BaseImage">
+        <result column="CategorieImage" property="categorie"/>
+        <result column="ordre" property="position"/>
+    </resultMap>
+    <resultMap id="PhotoLite" extends="AbstractImage" type="beanPhotoLite">
+        <id column="id_photo" property="id"/>
+        <result column="FichierPhoto" property="newNom"/>
+        <result column="StockagePhoto" property="newStockee"/>
+    </resultMap>
+    <resultMap id="PhotoLiteSelect" type="beanPhotoLite" extends="PhotoLite">
+        <result column="FichierPhoto" property="oldNom"/>
+        <result column="StockagePhoto" property="oldStockee"/>
+    </resultMap>
+    <resultMap id="CouvertureLite" extends="AbstractImage" type="beanCouvertureLite">
+        <id column="id_couverture" property="id"/>
+        <result column="FichierCouverture" property="newNom"/>
+        <result column="StockageCouverture" property="newStockee"/>
+    </resultMap>
+    <resultMap id="CouvertureLiteSelect" type="beanCouvertureLite" extends="CouvertureLite">
+        <result column="FichierCouverture" property="oldNom"/>
+        <result column="StockageCouverture" property="oldStockee"/>
+    </resultMap>
+
+    <select id="getCouvertureLiteById" resultMap="CouvertureLiteSelect">
+        select
+        c.id_couverture, c.fichierCouverture, c.stockageCouverture, c.categorieImage, l.libelle as lb_categorieImage,
+        c.ordre
+        from
+        couvertures c
+        left join listes l on
+        (c.categorieImage = l.ref and l.categorie = 6)
+        where
+        c.id_couverture = #{id}
+    </select>
+    <select id="getListCouvertureLiteByEdition" resultMap="CouvertureLiteSelect" resultOrdered="true">
+        select
+        c.id_couverture, c.fichierCouverture, c.stockageCouverture, c.categorieImage, l.libelle as lb_categorieImage,
+        c.ordre
+        from
+        couvertures c
+        left join listes l on
+        (c.categorieImage = l.ref and l.categorie = 6)
+        where
+        c.id_edition = #{id}
+        order by
+        l.ordre nulls last, c.ordre
+    </select>
+
+    <select id="getPhotoLiteById" resultMap="PhotoLiteSelect">
+        select
+        p.id_photo, p.fichierPhoto, p.stockagePhoto, p.categorieImage, l.libelle as lb_categorieImage, p.ordre
+        from
+        photos p
+        left join listes l on
+        (p.categorieImage = l.ref and l.categorie = 10)
+        where
+        p.id_photo = #{id}
+    </select>
+    <select id="getListPhotoLiteByParaBD" resultMap="PhotoLiteSelect" resultOrdered="true">
+        select
+        p.id_photo, p.fichierPhoto, p.stockagePhoto, p.categorieImage, l.libelle as lb_categorieImage, p.ordre
+        from
+        photos p
+        left join listes l on
+        (p.categorieImage = l.ref and l.categorie = 10)
+        where
+        p.id_parabd = #{id}
+        order by
+        p.ordre
+    </select>
+
+    <delete id="cleanImageLite">
+        delete from ${tableName}
+        <where>
+            ${fieldParentId} = #{parentId}
+        </where>
+        <if test="list != null and !list.isEmpty">
+            ${fieldId} not in
+            <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+    </delete>
+
+    <insert id="addImageLite">
+        <selectKey keyProperty="image.id" order="BEFORE" resultType="UUID">
+            <include refid="org.tetram.bdtheque.data.dao.mappers.CommonMapper.autoIncKey"/>
+        </selectKey>
+        <![CDATA[
+        insert into ${tableName} (
+            ${fieldId}, ${fieldParentId}, ${fieldFile}, ordre, categorieImage, ${fieldModeStockage}, ${fieldBlob}
+        ]]>
+        <foreach collection="secondaryParams.entrySet" index="field" item="value">
+            , ${field}
+        </foreach>
+        <![CDATA[
+        ) values (
+            #{image.id}, #{parentId}, #{fileName}, #{image.position}, #{image.categorieImage}
+        ]]>
+        <choose>
+            <when test="data != null and data.length > 0">, 1, #{data}</when>
+            <otherwise>, 0, null</otherwise>
+        </choose>
+        <foreach collection="secondaryParams.entrySet" index="field" item="value">
+            ,#{value}
+        </foreach>
+        )
+    </insert>
+    <update id="updateMetadataImageLite">
+        <![CDATA[
+        update ${tableName} set
+            ${fieldFile} = #{fileName},
+            ordre = #{image.position},
+            categorieImage = #{image.categorieImage}
+        ]]>
+        <where>
+            ${fieldId} = #{image.id}
+        </where>
+    </update>
+    <update id="changeModeImageLite">
+        update ${tableName} set
+        <choose>
+            <when test="data != null and data.length > 0">
+                ${fieldModeStockage} = 1,
+                ${fieldBlob} = #{data}
+            </when>
+            <otherwise>
+                ${fieldModeStockage} = 0,
+                ${fieldBlob} = null
+            </otherwise>
+        </choose>
+        <where>
+            ${fieldId} = #{image.id}
+        </where>
+    </update>
+    <select id="getImageStream" resultType="org.tetram.bdtheque.data.bean.ImageStream">
+        <![CDATA[
+        select
+            ${fieldBlob} data, ${fieldModeStockage} stockee, ${fieldFile} fileName
+        from
+            ${tableName}
+        ]]>
+        <where>
+            ${fieldId} = #{image.id}
+        </where>
+    </select>
+
+    <delete id="cleanCouverturesAlbum">
+        <![CDATA[
+        delete from couvertures
+        where
+            id_album = #{idAlbum} and id_edition is not null
+        ]]>
+        <if test="editions != null and !editions.isEmpty">
+            and id_edition not in
+            <foreach collection="editions" item="item" index="index" open="(" separator="," close=")">
+                #{item.id}
+            </foreach>
+        </if>
+    </delete>
+</mapper>
