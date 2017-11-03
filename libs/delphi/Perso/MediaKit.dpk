@@ -1,0 +1,76 @@
+package MediaKit;
+
+{$R *.res}
+{$R *.otares}
+{$R 'HARMFADE.dcr'}
+{$R 'Memorytable.dcr'}
+{$R 'PrintObject.dcr'}
+{$R 'VerslabP.dcr'}
+{$R 'kbShellNotify.dcr'}
+{$R 'Browss.dcr'}
+{$R 'HANDLES.dcr'}
+{$R 'ComboCheck.dcr'}
+{$IFDEF IMPLICITBUILDING This IFDEF should not be used by users}
+{$ALIGN 8}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO ON}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION OFF}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$DEFINITIONINFO ON}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES ON}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST ON}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$DEFINE DEBUG}
+{$ENDIF IMPLICITBUILDING}
+{$IMPLICITBUILD ON}
+
+requires
+  vcl,
+  rtl,
+  vclimg,
+  dbrtl,
+  vcldb,
+  VclSmp,
+  PngComponents,
+  Jcl,
+  JvCore;
+
+contains
+  HARMFADE in 'HARMFADE.PAS',
+  MyBarCode in 'MyBarCode.pas',
+  PrintObject in 'PrintObject.pas',
+  ProgressBar in 'ProgressBar.pas',
+  ReadOnlyCheckBox in 'ReadOnlyCheckBox.pas',
+  ScanEdit in 'ScanEdit.pas',
+  RoundButton in 'RoundButton.pas',
+  VDTButton in 'VDTButton.pas',
+  VerslabP in 'VerslabP.pas',
+  DBEditLabeled in 'DBEditLabeled.pas',
+  kbShellNotify in 'kbShellNotify.pas',
+  kbsnPIDL in 'kbsnPIDL.pas',
+  Browss in 'Browss.pas',
+  Divers in 'Divers.pas',
+  HANDLES in 'HANDLES.PAS',
+  ComboCheck in 'ComboCheck.pas',
+  FormPreviewPrintObject in 'FormPreviewPrintObject.pas' {FormPreview},
+  UnrarComp in 'UnrarComp.pas',
+  UnRAR in 'UnRAR.pas',
+  CRFurtif in 'CRFurtif.pas',
+  EditLabeled in 'EditLabeled.pas',
+  LinkControls in 'LinkControls.pas',
+  EditLabeled_register in 'EditLabeled_register.pas',
+  LabeledCheckBox in 'LabeledCheckBox.pas';
+
+end.
