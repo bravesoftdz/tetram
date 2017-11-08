@@ -1,0 +1,4 @@
+[submodule "libs/delphi/virtual-treeview"]
+	path = libs/delphi/virtual-treeview
+	url = https://github.com/Tetram76/vendors.git
+	branch = virtual-treeview
