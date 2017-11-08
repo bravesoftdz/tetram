@@ -14,3 +14,7 @@
 	path = libs/delphi/fastmm
 	url = https://github.com/Tetram76/vendors.git
 	branch = fastmm
+[submodule "libs/delphi/graphics32"]
+	path = libs/delphi/graphics32
+	url = https://github.com/Tetram76/vendors.git
+	branch = graphics32
