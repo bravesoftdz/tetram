@@ -10,3 +10,7 @@
 	path = libs/delphi/dwscript
 	url = https://github.com/Tetram76/vendors.git
 	branch = dwscript
+[submodule "libs/delphi/fastmm"]
+	path = libs/delphi/fastmm
+	url = https://github.com/Tetram76/vendors.git
+	branch = fastmm
