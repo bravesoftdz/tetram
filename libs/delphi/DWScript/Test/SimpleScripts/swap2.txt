@@ -1,6 +1,0 @@
-hello
-world
-world
-hello
-b1a1
-b0a0

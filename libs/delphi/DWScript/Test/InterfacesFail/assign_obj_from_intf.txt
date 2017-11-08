@@ -1,1 +1,0 @@
-Syntax Error: Incompatible types: Cannot assign "IMyInterface" to "TObject" [line: 8, column: 5]

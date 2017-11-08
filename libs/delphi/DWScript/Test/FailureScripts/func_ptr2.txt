@@ -1,1 +1,0 @@
-Syntax Error: Function expected [line: 4, column: 1]

@@ -1,4 +1,0 @@
-String hello
-Integer 123
-String world
-Integer 456

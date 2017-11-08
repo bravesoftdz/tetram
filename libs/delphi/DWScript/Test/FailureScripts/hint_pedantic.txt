@@ -1,2 +1,0 @@
-Hint: "test" does not match case of declaration ("Test") [line: 9, column: 1]
-Syntax Error: Compiler switch "FOOBAR" unknown [line: 11, column: 3]

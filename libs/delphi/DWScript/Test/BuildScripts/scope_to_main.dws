@@ -1,4 +1,0 @@
-uses ScopePrint;
-
-Print('Hello');
-PrintLn('World');

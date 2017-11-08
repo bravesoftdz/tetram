@@ -1,2 +1,0 @@
-var & : Integer := 1;
-

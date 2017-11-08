@@ -1,4 +1,0 @@
-uses subproc;
-
-PrintLn(Hello('DWS'));
-PrintLn(Hello(cWorld));

@@ -1,1 +1,0 @@
-Syntax Error: Missing matching method "B" for interface "IMyInterface" [line: 7, column: 37]

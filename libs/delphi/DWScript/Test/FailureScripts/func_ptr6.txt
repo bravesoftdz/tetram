@@ -1,2 +1,0 @@
-Syntax Error: Class method or constructor expected [line: 1, column: 20]
-Syntax Error: unexpected "@" [line: 2, column: 12]

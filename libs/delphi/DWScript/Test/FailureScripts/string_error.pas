@@ -1,1 +1,0 @@
-const CText = 'foo'''./bar.';

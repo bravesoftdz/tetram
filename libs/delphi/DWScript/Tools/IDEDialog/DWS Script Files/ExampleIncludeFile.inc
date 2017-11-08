@@ -1,2 +1,0 @@
-const
-  ExampleValue = 56;

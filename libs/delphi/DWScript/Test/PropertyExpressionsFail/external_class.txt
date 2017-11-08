@@ -1,2 +1,0 @@
-Syntax Error: Anonymous methods not allowed here [line: 4, column: 32]
-Syntax Error: Anonymous methods not allowed here [line: 4, column: 48]

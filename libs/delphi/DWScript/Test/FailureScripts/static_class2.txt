@@ -1,1 +1,0 @@
-Syntax Error: Class "TDummy" is not static, cannot inherit as static [line: 6, column: 39]

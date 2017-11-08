@@ -1,2 +1,0 @@
-type TMyClass = System.Dummy;
-   

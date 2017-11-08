@@ -1,3 +1,0 @@
-nil default
-TObject
-set nil

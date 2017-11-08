@@ -1,2 +1,0 @@
-Errors >>>>
-Syntax Error: Name expected [line: 1, column: 10]

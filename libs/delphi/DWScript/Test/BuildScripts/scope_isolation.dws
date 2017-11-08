@@ -1,4 +1,0 @@
-uses scope_isolation_direct;
-
-//ShouldWork;
-ShouldFail;

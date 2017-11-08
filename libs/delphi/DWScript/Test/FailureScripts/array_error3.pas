@@ -1,1 +1,0 @@
-var a : array [1..2] integer;

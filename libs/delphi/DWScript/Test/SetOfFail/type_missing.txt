@@ -1,2 +1,0 @@
-Syntax Error: Type expected [line: 2, column: 22]
-Syntax Error: Enumeration expected [line: 2, column: 19]

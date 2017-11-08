@@ -1,2 +1,0 @@
-JSON Array required for Add method
-JSON Array Add() unsupported type

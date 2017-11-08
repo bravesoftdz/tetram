@@ -1,3 +1,0 @@
-uses HelperUser;
-
-PrintLn(TMyUser.Hello);

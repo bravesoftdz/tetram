@@ -1,3 +1,0 @@
-Base world!
-Hello World?
-Bye WORLD.

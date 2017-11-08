@@ -1,1 +1,0 @@
-Syntax Error: Record type "TRec" is not fully defined [line: 3, column: 19]

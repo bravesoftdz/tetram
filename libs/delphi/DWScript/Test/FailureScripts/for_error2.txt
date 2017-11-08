@@ -1,2 +1,0 @@
-Syntax Error: TO or DOWNTO expected [line: 3, column: 10]
-Syntax Error: DO expected [line: 3, column: 19]

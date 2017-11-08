@@ -1,1 +1,0 @@
-Syntax Error: Boolean or integer operand expected [line: 5, column: 10]

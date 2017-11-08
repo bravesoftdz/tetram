@@ -1,2 +1,0 @@
-Syntax Error: Type expected [line: 1, column: 14]
-Syntax Error: Unknown name "bar" [line: 3, column: 1]

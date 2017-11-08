@@ -1,3 +1,0 @@
-Local: 123
-Integer: 456
-String: abc

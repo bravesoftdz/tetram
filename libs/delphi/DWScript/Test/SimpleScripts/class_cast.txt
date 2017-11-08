@@ -1,8 +1,0 @@
-TObject
-TChild
-TObject
-TChild
-TChild
-Cannot cast instance of type "TObject" to class "TChild"
-TChild
-Cannot cast instance of type "TObject" to class "TChild"

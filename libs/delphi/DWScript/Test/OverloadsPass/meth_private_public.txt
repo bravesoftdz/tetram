@@ -1,4 +1,0 @@
-String Foo
-Integer Foo
-Integer Bar
-String Bar

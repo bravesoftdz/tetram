@@ -1,4 +1,0 @@
-hello
-TObject
-TObject!
-TMyClass!

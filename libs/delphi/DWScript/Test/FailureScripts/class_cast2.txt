@@ -1,1 +1,0 @@
-Syntax Error: Incompatible types: "void" and "TObject" [line: 1, column: 18]

@@ -1,2 +1,0 @@
-Syntax Error: Include item "DUMMY" unknown [line: 2, column: 13]
-Syntax Error: "}" expected [line: 3, column: 18]

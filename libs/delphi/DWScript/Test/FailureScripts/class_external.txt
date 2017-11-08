@@ -1,3 +1,0 @@
-Syntax Error: "TInternal.Bug1" is not external [line: 3, column: 23]
-Hint: "forward" is meaningless for external functions [line: 6, column: 34]
-Syntax Error: String expected [line: 12, column: 32]

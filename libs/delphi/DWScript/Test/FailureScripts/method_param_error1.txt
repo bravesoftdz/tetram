@@ -1,1 +1,0 @@
-Syntax Error: Unknown name "bug" [line: 8, column: 20]

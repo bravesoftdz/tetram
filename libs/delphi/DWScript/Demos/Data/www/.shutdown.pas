@@ -1,1 +1,0 @@
-// this script will be executed when the server shutdowns

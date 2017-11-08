@@ -1,4 +1,0 @@
-procedure TObject. ;
-begin
-   
-end;

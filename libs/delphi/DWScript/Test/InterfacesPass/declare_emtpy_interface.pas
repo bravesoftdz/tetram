@@ -1,3 +1,0 @@
-type
-  IMyInterface = interface 
-  end;

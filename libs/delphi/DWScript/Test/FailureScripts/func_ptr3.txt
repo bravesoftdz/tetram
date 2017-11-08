@@ -1,1 +1,0 @@
-Syntax Error: Incompatible types: "class function ClassName: String" and "class function ClassType: TClass" [line: 3, column: 6]

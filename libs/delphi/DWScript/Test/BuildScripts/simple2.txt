@@ -1,5 +1,0 @@
-Errors >>>>
-Hint: "forward" is implicit here [line: 14, column: 30, file: HelloWorld2]
-Result >>>>
-Hello World2a!
-Hello World2b!

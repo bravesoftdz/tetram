@@ -1,3 +1,0 @@
-Errors >>>>
-Runtime Error: Division by zero [line: 3, column: 8]
-Result >>>>

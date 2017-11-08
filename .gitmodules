@@ -6,3 +6,7 @@
 	path = libs/delphi/uib
 	url = https://github.com/Tetram76/vendors.git
 	branch = uib
+[submodule "libs/delphi/dwscript"]
+	path = libs/delphi/dwscript
+	url = https://github.com/Tetram76/vendors.git
+	branch = dwscript

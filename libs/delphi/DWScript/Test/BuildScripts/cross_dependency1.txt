@@ -1,5 +1,0 @@
-First
-TClass1 Stuff1
-TClass2 Stuff2
-Second
-TClass2 Stuff2

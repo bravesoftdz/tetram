@@ -1,1 +1,0 @@
-type TTest = class(TObject, IInterface, IInterface)

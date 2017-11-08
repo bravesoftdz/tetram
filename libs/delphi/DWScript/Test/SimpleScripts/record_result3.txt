@@ -1,9 +1,0 @@
-Errors >>>>
-Hint: "X" does not match case of declaration ("x") [line: 14, column: 6]
-Result >>>>
-1,0
-4,6
-4,6
-3,2
-3,2
-4,2

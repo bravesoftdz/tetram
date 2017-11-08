@@ -1,3 +1,0 @@
-TMyClass hello
-TMyClass world
-TMyClass !

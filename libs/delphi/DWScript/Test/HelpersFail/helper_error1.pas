@@ -1,2 +1,0 @@
-type
-   TDummy = helper end;

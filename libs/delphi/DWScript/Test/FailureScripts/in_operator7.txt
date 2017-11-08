@@ -1,2 +1,0 @@
-Syntax Error: Expression expected [line: 1, column: 9]
-Syntax Error: THEN expected [line: 1, column: 9]

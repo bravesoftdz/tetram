@@ -1,1 +1,0 @@
-type IIntf = Interface;

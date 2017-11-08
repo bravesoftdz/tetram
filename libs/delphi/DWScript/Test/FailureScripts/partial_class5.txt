@@ -1,2 +1,0 @@
-Syntax Error: Name "TTest" already exists [line: 3, column: 22]
-Syntax Error: Class "" isn't defined completely [line: 3, column: 27]

@@ -1,3 +1,0 @@
-ClassType is nil [line: 8, column: 8]
-TObject
-TMyClass

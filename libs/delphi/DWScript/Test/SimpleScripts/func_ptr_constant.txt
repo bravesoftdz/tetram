@@ -1,4 +1,0 @@
-Errors >>>>
-Hint: "assigned" does not match case of declaration ("Assigned") [line: 3, column: 4]
-Result >>>>
-5
