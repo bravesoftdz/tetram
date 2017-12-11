@@ -22,3 +22,7 @@
 	path = libs/delphi/alcinoe
 	url = https://github.com/Tetram76/vendors.git
 	branch = alcinoe
+[submodule "libs/delphi/delphionrails"]
+	path = libs/delphi/delphionrails
+	url = https://github.com/Tetram76/vendors.git
+	branch = delphionrails
