@@ -36,6 +36,10 @@
 	url = https://github.com/Tetram76/vendors.git
 	branch = jvcl
 	fetchRecurseSubmodules = true
+[submodule "libs/delphi/pascalscript"]
+	path = libs/delphi/pascalscript
+	url = https://github.com/Tetram76/vendors.git
+	branch = pascalscript
 [submodule "libs/delphi/uib"]
 	path = libs/delphi/uib
 	url = https://github.com/Tetram76/vendors.git
