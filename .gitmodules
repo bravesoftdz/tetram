@@ -64,3 +64,7 @@
 	path = libs/delphi/virtual-treeview
 	url = https://github.com/Tetram76/vendors.git
 	branch = virtual-treeview
+[submodule "libs/delphi/zipmaster"]
+	path = libs/delphi/zipmaster
+	url = https://github.com/Tetram76/vendors.git
+	branch = zipmaster
