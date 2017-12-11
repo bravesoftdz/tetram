@@ -1,1 +1,0 @@
-@del /f /s *.dcu *.~* *.local *.identcache *.bpl

@@ -18,3 +18,7 @@
 	path = libs/delphi/graphics32
 	url = https://github.com/Tetram76/vendors.git
 	branch = graphics32
+[submodule "libs/delphi/alcinoe"]
+	path = libs/delphi/alcinoe
+	url = https://github.com/Tetram76/vendors.git
+	branch = alcinoe
