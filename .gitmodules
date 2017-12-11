@@ -1,11 +1,11 @@
-[submodule "libs/delphi/virtual-treeview"]
-	path = libs/delphi/virtual-treeview
+[submodule "libs/delphi/alcinoe"]
+	path = libs/delphi/alcinoe
 	url = https://github.com/Tetram76/vendors.git
-	branch = virtual-treeview
-[submodule "libs/delphi/uib"]
-	path = libs/delphi/uib
+	branch = alcinoe
+[submodule "libs/delphi/delphionrails"]
+	path = libs/delphi/delphionrails
 	url = https://github.com/Tetram76/vendors.git
-	branch = uib
+	branch = delphionrails
 [submodule "libs/delphi/dwscript"]
 	path = libs/delphi/dwscript
 	url = https://github.com/Tetram76/vendors.git
@@ -18,11 +18,15 @@
 	path = libs/delphi/graphics32
 	url = https://github.com/Tetram76/vendors.git
 	branch = graphics32
-[submodule "libs/delphi/alcinoe"]
-	path = libs/delphi/alcinoe
+[submodule "libs/delphi/uib"]
+	path = libs/delphi/uib
 	url = https://github.com/Tetram76/vendors.git
-	branch = alcinoe
-[submodule "libs/delphi/delphionrails"]
-	path = libs/delphi/delphionrails
+	branch = uib
+[submodule "libs/delphi/virtual-treeview"]
+	path = libs/delphi/virtual-treeview
 	url = https://github.com/Tetram76/vendors.git
-	branch = delphionrails
+	branch = virtual-treeview
+[submodule "libs/delphi/grizzlypack"]
+	path = libs/delphi/grizzlypack
+	url = https://github.com/Tetram76/vendors.git
+	branch = grizzlypack
