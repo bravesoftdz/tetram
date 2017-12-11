@@ -26,6 +26,11 @@
 	path = libs/delphi/ics
 	url = https://github.com/Tetram76/vendors.git
 	branch = ics
+[submodule "libs/delphi/jvcl/jcl"]
+	path = libs/delphi/jvcl/jcl
+	url = https://github.com/Tetram76/vendors.git
+	branch = jcl
+	fetchRecurseSubmodules = true
 [submodule "libs/delphi/uib"]
 	path = libs/delphi/uib
 	url = https://github.com/Tetram76/vendors.git
