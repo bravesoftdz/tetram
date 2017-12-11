@@ -14,6 +14,10 @@
 	path = libs/delphi/fastmm
 	url = https://github.com/Tetram76/vendors.git
 	branch = fastmm
+[submodule "libs/delphi/gpprofile"]
+	path = libs/delphi/gpprofile
+	url = https://github.com/Tetram76/vendors.git
+	branch = gpprofile
 [submodule "libs/delphi/graphicex"]
 	path = libs/delphi/graphicex
 	url = https://github.com/Tetram76/vendors.git
