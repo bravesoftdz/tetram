@@ -56,6 +56,10 @@
 	path = libs/delphi/synedit
 	url = https://github.com/Tetram76/vendors.git
 	branch = synedit
+[submodule "libs/delphi/tregexpr"]
+	path = libs/delphi/tregexpr
+	url = https://github.com/Tetram76/vendors.git
+	branch = tregexpr
 [submodule "libs/delphi/uib"]
 	path = libs/delphi/uib
 	url = https://github.com/Tetram76/vendors.git
