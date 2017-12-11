@@ -1,4 +1,0 @@
-- Compiler le paquet PackagesXE5\PngComponents.dpk
-- Compiler puis Installer le paquet PackagesXE5\PngComponentsDesign.dpk
-- Ajouter le chemin de bibliothèque 
-    * $(Compos)\PngComponents\Source

@@ -40,6 +40,10 @@
 	path = libs/delphi/pascalscript
 	url = https://github.com/Tetram76/vendors.git
 	branch = pascalscript
+[submodule "libs/delphi/pngcomponents"]
+	path = libs/delphi/pngcomponents
+	url = https://github.com/Tetram76/vendors.git
+	branch = pngcomponents
 [submodule "libs/delphi/uib"]
 	path = libs/delphi/uib
 	url = https://github.com/Tetram76/vendors.git
