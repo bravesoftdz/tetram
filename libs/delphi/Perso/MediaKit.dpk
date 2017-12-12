@@ -1,20 +1,11 @@
 package MediaKit;
 
 {$R *.res}
-{$R *.otares}
-{$R 'HARMFADE.dcr'}
-{$R 'Memorytable.dcr'}
-{$R 'PrintObject.dcr'}
-{$R 'VerslabP.dcr'}
-{$R 'kbShellNotify.dcr'}
-{$R 'Browss.dcr'}
-{$R 'HANDLES.dcr'}
-{$R 'ComboCheck.dcr'}
 {$IFDEF IMPLICITBUILDING This IFDEF should not be used by users}
 {$ALIGN 8}
 {$ASSERTIONS ON}
 {$BOOLEVAL OFF}
-{$DEBUGINFO ON}
+{$DEBUGINFO OFF}
 {$EXTENDEDSYNTAX ON}
 {$IMPORTEDDATA ON}
 {$IOCHECKS ON}
@@ -43,7 +34,7 @@ requires
   dbrtl,
   vcldb,
   VclSmp,
-  PngComponents,
+  PngComponentsD,
   Jcl,
   JvCore;
 
