@@ -10,8 +10,8 @@ uses
   Math,
   AnsiStrings,
   StrUtils,
-  ICUNumberFormatter in 'D:\Composants\Perso\icu\ICUNumberFormatter.pas',
-  _unum in 'D:\Composants\Perso\icu\lib\_unum.pas';
+  ICUNumberFormatter in '..\..\..\..\..\libs\delphi\Perso\icu\ICUNumberFormatter.pas',
+  _unum in '..\..\..\..\..\libs\delphi\Perso\icu\lib\_unum.pas';
 
 {$R *.res}
 

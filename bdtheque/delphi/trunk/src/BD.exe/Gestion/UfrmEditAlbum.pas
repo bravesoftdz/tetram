@@ -7,7 +7,7 @@ uses
   VDTButton, ExtDlgs, Mask, ComCtrls, Buttons, VirtualTrees, VirtualTreeBdtk, Menus, Entities.Lite, ActnList, Entities.Full, ComboCheck,
   UframRechercheRapide, UframBoutons, UBdtForms, Generics.Collections, StrUtils,
   JvExMask, JvToolEdit, UVirtualTreeEdit, UfrmFond, PngSpeedButton,
-  UframVTEdit, LoadCompletImport;
+  UframVTEdit, LoadCompletImport, System.ImageList;
 
 type
   TfrmEditAlbum = class(TbdtForm)
@@ -232,7 +232,6 @@ begin
   vstImages.LinkControls.Add(VDTButton4);
   vstImages.LinkControls.Add(VDTButton5);
   vstImages.Mode := vmNone;
-  vstImages.CheckImageKind := ckXP;
   vstImages.TreeOptions.StringOptions := [];
   vstImages.TreeOptions.MiscOptions := vstImages.TreeOptions.MiscOptions + [toCheckSupport];
   vstImages.TreeOptions.PaintOptions := vstImages.TreeOptions.PaintOptions - [toShowButtons, toShowRoot, toShowTreeLines];

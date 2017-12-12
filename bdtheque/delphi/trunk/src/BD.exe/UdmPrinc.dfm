@@ -24,7 +24,6 @@ object dmPrinc: TdmPrinc
     Top = 184
   end
   object ShareImageList: TPngImageList
-    ColorDepth = cd32Bit
     PngImages = <
       item
         Background = clWindow

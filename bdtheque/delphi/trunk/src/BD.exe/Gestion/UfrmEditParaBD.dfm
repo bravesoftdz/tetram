@@ -776,7 +776,6 @@ object frmEditParaBD: TfrmEditParaBD
       BevelKind = bkTile
       BorderStyle = bsNone
       ButtonFillMode = fmShaded
-      CheckImageKind = ckDarkCheck
       Header.AutoSizeIndex = 0
       Header.DefaultHeight = 17
       Header.Font.Charset = DEFAULT_CHARSET

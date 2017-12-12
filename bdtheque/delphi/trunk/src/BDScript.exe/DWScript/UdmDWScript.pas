@@ -6,7 +6,7 @@ uses
   System.SysUtils, Winapi.Windows, Forms, System.Classes, UScriptList, Variants,
   UScriptUtils, Entities.Full, dwsComp, dwsDebugger, dwsCompiler, dwsExprs, dwsFunctions,
   UMasterEngine, UScriptEngineIntf, UScriptEditor, SynHighlighterDWS, UDW_BdtkRegEx, UDW_BdtkObjects, dwsClassesLibModule, UDW_CommonFunctions,
-  dwsErrors, UDWUnit, Vcl.Graphics, dwsJSONConnector;
+  dwsErrors, UDWUnit, Vcl.Graphics, dwsJSONConnector, dwsUnitSymbols;
 
 type
   TDWScriptEngineFactory = class(TEngineFactory)
@@ -106,7 +106,8 @@ type
 implementation
 
 uses
-  UDWScriptEditor, Procedures, dwsSymbols, dwsSuggestions, dwsUtils, dwsXPlatform;
+  UDWScriptEditor, Procedures, dwsSymbols, dwsSuggestions, dwsUtils, dwsXPlatform, dwsCompilerContext, dwsScriptSource, dwsSymbolDictionary,
+  dwsXXHash;
 
 { TDWScriptEngineFactory }
 
@@ -497,6 +498,7 @@ function TdmDWScript.GetParametersProposal(Proposal, Code: TStrings; CurrentEdit
     FuncSymbol: TFuncSymbol;
 
     SymbolDictionary: TdwsSymbolDictionary;
+    SymbolPos: TSymbolPositionList;
     Symbol, TestSymbol: TSymbol;
   begin
     SymbolDictionary := AProgram.SymbolDictionary;
@@ -522,9 +524,9 @@ function TdmDWScript.GetParametersProposal(Proposal, Code: TStrings; CurrentEdit
 
       if TFuncSymbol(Symbol).IsOverloaded then
       begin
-        for ItemIndex := 0 to SymbolDictionary.Count - 1 do
+        for SymbolPos in SymbolDictionary do
         begin
-          TestSymbol := SymbolDictionary.Items[ItemIndex].Symbol;
+          TestSymbol := SymbolPos.Symbol;
 
           if (TestSymbol.ClassType = Symbol.ClassType) and SameText(TFuncSymbol(TestSymbol).Name, TFuncSymbol(Symbol).Name) and (TestSymbol <> Symbol) then
             ParamsToInfo(TFuncSymbol(TestSymbol).Params);

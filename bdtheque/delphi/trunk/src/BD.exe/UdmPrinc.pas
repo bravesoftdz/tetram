@@ -4,7 +4,8 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, System.UITypes, SyncObjs, jpeg, Menus, uib,
-  Vcl.AppEvnts, Vcl.ImgList, PngImageList, Entities.DBConnection;
+  Vcl.AppEvnts, Vcl.ImgList, PngImageList, Entities.DBConnection,
+  System.ImageList;
 
 const
   AntiAliasing = True;

@@ -127,7 +127,6 @@ begin
   PrepareLV(Self);
   FrameRechercheRapideGenre.VirtualTreeView := vtGenres;
   vtGenres.Mode := vmGenres;
-  vtGenres.CheckImageKind := ckXP;
   vtGenres.TreeOptions.MiscOptions := vtGenres.TreeOptions.MiscOptions + [toCheckSupport];
   vtEditPersonnes.Mode := vmPersonnes;
   vtEditPersonnes.VTEdit.LinkControls.Add(Label19);

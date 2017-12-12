@@ -8,7 +8,7 @@ interface
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, ImgList, Menus, ComCtrls, ExtCtrls, Buttons, ActnList,
   Printers, iniFiles, jpeg, Generics.Collections, ToolWin, UBdtForms, PngImageList, pngImage, PngFunctions, UHistorique,
-  System.Actions;
+  System.Actions, System.ImageList;
 
 const
   MSG_COMMANDELINE = WM_USER + 1;
