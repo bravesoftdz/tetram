@@ -65,7 +65,7 @@ implementation
 
 {$R *.DFM}
 
-uses Commun, Entities.Lite, Impression, DateUtils, UHistorique, Proc_Gestions, UfrmFond,
+uses Commun, Entities.Lite, Impression, DateUtils, UHistorique, Proc_Gestions, BDTK.Main.Form,
   Entities.DaoFull, Entities.Common, Entities.FactoriesFull;
 
 type

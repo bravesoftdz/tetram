@@ -43,7 +43,7 @@ uses
   UfrmProgression in '..\Commun\UfrmProgression.pas' {frmProgression},
   UframBoutons in '..\Commun\UframBoutons.pas' {framBoutons: TFrame},
   IDHashMap in 'IDHashMap.pas',
-  UdmPrinc in 'UdmPrinc.pas' {dmPrinc: TDataModule},
+  BDS.Main.DataModule in 'BDS.Main.DataModule.pas' {dmPrinc: TDataModule},
   UframBreakpoints in 'UframBreakpoints.pas' {framBreakpoints: TFrame},
   UframMessages in 'UframMessages.pas' {framMessages: TFrame},
   UframScriptInfos in 'UframScriptInfos.pas' {framScriptInfos: TFrame},
@@ -52,7 +52,7 @@ uses
   UfrmScriptEditOption in 'UfrmScriptEditOption.pas' {frmScriptEditOption},
   UfrmScriptGotoLine in 'UfrmScriptGotoLine.pas' {frmScriptGotoLine},
   UfrmScriptOption in '..\Commun\Scripts\UfrmScriptOption.pas' {frmScriptOption},
-  UfrmScripts in 'UfrmScripts.pas' {frmScripts},
+  BDS.Main.Form in 'BDS.Main.Form.pas' {frmScripts},
   UfrmScriptSearch in 'UfrmScriptSearch.pas' {frmScriptSearch},
   UfrmScriptsUpdate in 'UfrmScriptsUpdate.pas' {frmScriptsUpdate},
   UMasterEngine in 'UMasterEngine.pas',
@@ -70,7 +70,8 @@ uses
   Entities.DaoLambdaJSON in 'Entities.DaoLambdaJSON.pas',
   Entities.DaoLambda in '..\Commun\Entities\Entities.DaoLambda.pas',
   UNetICSCompress in '..\Commun\UNetICSCompress.pas',
-  Entities.Types in '..\Commun\Entities\Entities.Types.pas';
+  Entities.Types in '..\Commun\Entities\Entities.Types.pas',
+  BD.Common.DataModule in '..\Commun\BD.Common.DataModule.pas' {dmCommon: TDataModule};
 
 {$R *.res}
 

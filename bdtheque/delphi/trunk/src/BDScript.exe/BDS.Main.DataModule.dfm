@@ -3,7 +3,6 @@ object dmPrinc: TdmPrinc
   Height = 150
   Width = 215
   object ShareImageList: TPngImageList
-    ColorDepth = cd32Bit
     PngImages = <
       item
         Background = clWindow

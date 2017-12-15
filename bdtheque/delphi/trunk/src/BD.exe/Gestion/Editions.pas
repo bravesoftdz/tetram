@@ -103,8 +103,8 @@ function DelAchatParaBD(const ID: TGUID): Boolean;
 implementation
 
 uses
-  UIB, Commun, UfrmEditAlbum, UfrmEditSerie, Textes, UfrmEditEditeur, UdmPrinc,
-  Math, UfrmFond, Procedures, ProceduresBDtk, UfrmEditCollection, UfrmEditAuteur, UfrmEditParaBD,
+  UIB, Commun, UfrmEditAlbum, UfrmEditSerie, Textes, UfrmEditEditeur, BDTK.Main.DataModule,
+  Math, BDTK.Main.Form, Procedures, ProceduresBDtk, UfrmEditCollection, UfrmEditAuteur, UfrmEditParaBD,
   UfrmEditAchatAlbum, UfrmEditUnivers, Entities.DaoLite, Entities.DaoFull,
   Entities.Common;
 

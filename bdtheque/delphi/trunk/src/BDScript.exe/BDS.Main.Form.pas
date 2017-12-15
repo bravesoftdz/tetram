@@ -1,4 +1,4 @@
-unit UfrmScripts;
+unit BDS.Main.Form;
 
 interface
 
@@ -227,7 +227,7 @@ implementation
 
 uses
   UfrmScriptSearch, UScriptsFonctions, CommonConst, UIB, Procedures, BdtkRegEx, Commun, Divers,
-  UScriptsHTMLFunctions, JclSimpleXML, UdmPrinc, UfrmScriptOption, UfrmScriptEditOption, UfrmScriptsUpdate,
+  UScriptsHTMLFunctions, JclSimpleXML, BDS.Main.DataModule, UfrmScriptOption, UfrmScriptEditOption, UfrmScriptsUpdate,
   UdmPascalScript, SynHighlighterDWS, UMasterEngine, PngFunctions,
   UfrmAboutBox, System.IOUtils;
 

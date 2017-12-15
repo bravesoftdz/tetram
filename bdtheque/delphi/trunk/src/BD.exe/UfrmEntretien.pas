@@ -52,7 +52,7 @@ type
 implementation
 
 uses
-  IOUtils, UfrmFond, CommonConst, UdmPrinc, UIB, Commun, Procedures, Textes,
+  IOUtils, BDTK.Main.Form, CommonConst, BDTK.Main.DataModule, UIB, Commun, Procedures, Textes,
   UfrmVerbose, UHistorique, UfrmGestion, IniFiles, Math, uiblib;
 
 {$R *.dfm}

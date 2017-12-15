@@ -10,7 +10,7 @@ procedure Import(Self: TAlbumFull);
 implementation
 
 uses
-  uib, Entities.Lite, UfrmValidationImport, VirtualTreeBdtk, UfrmControlImport, Commun, Entities.DaoLite, UdmPrinc, Entities.DaoFull, Entities.FactoriesLite,
+  uib, Entities.Lite, UfrmValidationImport, VirtualTreeBdtk, UfrmControlImport, Commun, Entities.DaoLite, BDTK.Main.DataModule, Entities.DaoFull, Entities.FactoriesLite,
   UMetadata, System.UITypes, Divers, Entities.Common, Entities.Types;
 
 procedure Import(Self: TAlbumFull);

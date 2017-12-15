@@ -71,8 +71,8 @@ procedure LoadCombo(Combo: TLightComboCheck; List: TStrings; DefaultValue: ROpti
 
 implementation
 
-uses UfrmChoixDetail, UfrmChoix, UfrmConvertisseur, UfrmFond, Divers, Procedures, Math, Textes, ActnList, UfrmChoixDetailSerie,
-  UdmPrinc, System.IniFiles, Vcl.Imaging.jpeg, System.IOUtils;
+uses UfrmChoixDetail, UfrmChoix, UfrmConvertisseur, BDTK.Main.Form, Divers, Procedures, Math, Textes, ActnList, UfrmChoixDetailSerie,
+  BDTK.Main.DataModule, System.IniFiles, Vcl.Imaging.jpeg, System.IOUtils;
 
 function Choisir(const Texte1, Texte2: string; Bouton: Integer): TModalResult;
 begin

@@ -63,7 +63,7 @@ type
 implementation
 
 uses
-  uib, UdmPrinc, Commun;
+  uib, Commun;
 
 { TDaoListe }
 

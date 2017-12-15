@@ -135,7 +135,7 @@ type
 implementation
 
 uses
-  Commun, uib, UdmPrinc, System.DateUtils, Divers, Entities.DaoLite,
+  Commun, uib, BDTK.Main.DataModule, System.DateUtils, Divers, Entities.DaoLite,
   Entities.FactoriesLite, Entities.DBConnection;
 
 { TStats }

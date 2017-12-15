@@ -15,8 +15,8 @@ uses
   SyncObjs,
   Divers,
   DateUtils,
-  UfrmFond in 'UfrmFond.pas' {frmFond},
-  UdmPrinc in 'UdmPrinc.pas' {dmPrinc: TDataModule},
+  BDTK.Main.Form in 'BDTK.Main.Form.pas' {frmFond},
+  BDTK.Main.DataModule in 'BDTK.Main.DataModule.pas' {dmPrinc: TDataModule},
   UfrmRepertoire in 'Consultation\UfrmRepertoire.pas' {frmRepertoire},
   UfrmConsultationAuteur in 'Consultation\UfrmConsultationAuteur.pas' {frmConsultationAuteur},
   UfrmConsultationSerie in 'Consultation\UfrmConsultationSerie.pas' {frmConsultationSerie},
@@ -179,7 +179,8 @@ uses
   Entities.FactoriesFull in '..\Commun\Entities\Entities.FactoriesFull.pas',
   Entities.FactoriesLite in '..\Commun\Entities\Entities.FactoriesLite.pas',
   Entities.DBConnection in '..\Commun\Entities\Entities.DBConnection.pas',
-  Entities.DaoCommon in '..\Commun\Entities\Entities.DaoCommon.pas';
+  Entities.DaoCommon in '..\Commun\Entities\Entities.DaoCommon.pas',
+  BD.Common.DataModule in '..\Commun\BD.Common.DataModule.pas' {dmCommon: TDataModule};
 
 begin
   Application.Title := 'BDthèque';

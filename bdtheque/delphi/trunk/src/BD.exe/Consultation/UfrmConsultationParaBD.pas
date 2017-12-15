@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, System.UITypes, StrUtils,
-  Dialogs, Entities.Full, StdCtrls, VirtualTrees, ExtCtrls, UfrmFond, Procedures,
+  Dialogs, Entities.Full, StdCtrls, VirtualTrees, ExtCtrls, BDTK.Main.Form, Procedures,
   ComCtrls, VDTButton, Buttons, ActnList, Menus, ProceduresBDtk, UBdtForms,
   LabeledCheckBox, System.Actions, PngSpeedButton;
 

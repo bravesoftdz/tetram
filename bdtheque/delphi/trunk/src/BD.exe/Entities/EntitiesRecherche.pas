@@ -107,7 +107,7 @@ type
 implementation
 
 uses
-  Commun, UdmPrinc, Divers, uiblib, CommonConst, UMetadata, Textes,
+  Commun, BDTK.Main.DataModule, Divers, uiblib, CommonConst, UMetadata, Textes,
   Entities.DaoLite, Entities.DBConnection;
 
 { TRecherche }

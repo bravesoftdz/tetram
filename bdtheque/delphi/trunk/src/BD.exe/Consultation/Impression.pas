@@ -4,7 +4,7 @@ interface
 
 uses
   Dialogs, Controls, Forms, Classes, SysUtils, Windows, ExtCtrls, Graphics, System.UITypes, Printers, Commun, PrintObject, Textes, CommonConst,
-  Divers, Entities.Lite, UfrmFond, UdmPrinc, UfrmRecherche, UIB, jpeg, Generics.Collections, Entities.Full,
+  Divers, Entities.Lite, BDTK.Main.Form, BDTK.Main.DataModule, UfrmRecherche, UIB, jpeg, Generics.Collections, Entities.Full,
   EntitiesRecherche, EntitiesStats;
 
 procedure ImpressionListeCompleteAlbums(Previsualisation: Boolean);

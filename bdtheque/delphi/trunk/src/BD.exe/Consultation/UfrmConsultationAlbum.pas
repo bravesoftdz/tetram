@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, System.UITypes, Db, ExtCtrls, DBCtrls, StdCtrls, Menus, ComCtrls,
-  UfrmFond, VDTButton, ActnList, Buttons, ToolWin, VirtualTrees, VirtualTreeBdtk, ProceduresBDtk, UbdtForms, StrUtils,
+  BDTK.Main.Form, VDTButton, ActnList, Buttons, ToolWin, VirtualTrees, VirtualTreeBdtk, ProceduresBDtk, UbdtForms, StrUtils,
   jpeg, ShellAPI, Entities.Full, Generics.Defaults, PngSpeedButton, pngimage,
   LabeledCheckBox, System.Actions;
 
@@ -165,7 +165,7 @@ implementation
 uses
   Commun, Entities.Lite, CommonConst, MAJ, Impression, DateUtils, UHistorique, Procedures,
   Divers, Textes, Proc_Gestions, UfrmConsole, Entities.DaoFull,
-  Entities.Common, Entities.FactoriesFull, UdmPrinc;
+  Entities.Common, Entities.FactoriesFull, BDTK.Main.DataModule;
 
 var
   FSortColumn: Integer;

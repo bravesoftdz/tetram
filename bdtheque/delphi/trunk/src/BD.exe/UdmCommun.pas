@@ -8,19 +8,18 @@ uses
 
 type
   TdmCommun = class(TDataModule)
-    TblGenres: TUIBQuery;
-    TGenre: TUIBQuery;
-    TCritereReliure: TUIBQuery;
-    TCritereString: TUIBQuery;
-    TCritereBoolean: TUIBQuery;
-    TCritereNumeral: TUIBQuery;
-    TCritereTitre: TUIBQuery;
-    TCritereAffiche: TUIBQuery;
-    TCritereListe: TUIBQuery;
-    TCritereEtat: TUIBQuery;
-    TCritereLangueTitre: TUIBQuery;
-    TCritereSensLecture: TUIBQuery;
-    TCritereNotation: TUIBQuery;
+    tblGenre: TUIBQuery;
+    tblCritereReliure: TUIBQuery;
+    tblCritereString: TUIBQuery;
+    tblCritereBoolean: TUIBQuery;
+    tblCritereNumeral: TUIBQuery;
+    tblCritereTitre: TUIBQuery;
+    tblCritereAffiche: TUIBQuery;
+    tblCritereListe: TUIBQuery;
+    tblCritereEtat: TUIBQuery;
+    tblCritereLangueTitre: TUIBQuery;
+    tblCritereSensLecture: TUIBQuery;
+    tblCritereNotation: TUIBQuery;
     procedure DataModuleDestroy(Sender: TObject);
   private
     { Déclarations privées }
@@ -33,7 +32,7 @@ var
 implementation
 
 uses
-  UdmPrinc, Commun, Divers;
+  BDTK.Main.DataModule, Commun, Divers;
 
 {$R *.DFM}
 

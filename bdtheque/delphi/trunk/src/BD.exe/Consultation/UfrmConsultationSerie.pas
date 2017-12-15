@@ -93,7 +93,7 @@ type
 implementation
 
 uses Commun, Divers, Entities.Lite, ShellAPI, UHistorique, Impression, Proc_Gestions,
-  UfrmFond, Entities.DaoFull, Entities.Common, Entities.FactoriesFull;
+  BDTK.Main.Form, Entities.DaoFull, Entities.Common, Entities.FactoriesFull;
 
 {$R *.dfm}
 { TFrmConsultationSerie }

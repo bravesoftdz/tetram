@@ -170,7 +170,7 @@ $(PostBuildEvent)]]></PostBuildEvent>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
         <DCCReference Include="IDHashMap.pas"/>
-        <DCCReference Include="UdmPrinc.pas">
+        <DCCReference Include="BDS.Main.DataModule.pas">
             <Form>dmPrinc</Form>
             <FormType>dfm</FormType>
             <DesignClass>TDataModule</DesignClass>
@@ -211,7 +211,7 @@ $(PostBuildEvent)]]></PostBuildEvent>
             <Form>frmScriptOption</Form>
             <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="UfrmScripts.pas">
+        <DCCReference Include="BDS.Main.Form.pas">
             <Form>frmScripts</Form>
             <FormType>dfm</FormType>
         </DCCReference>
@@ -242,6 +242,11 @@ $(PostBuildEvent)]]></PostBuildEvent>
         <DCCReference Include="..\Commun\Entities\Entities.DaoLambda.pas"/>
         <DCCReference Include="..\Commun\UNetICSCompress.pas"/>
         <DCCReference Include="..\Commun\Entities\Entities.Types.pas"/>
+        <DCCReference Include="..\Commun\BD.Common.DataModule.pas">
+            <Form>dmCommon</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TDataModule</DesignClass>
+        </DCCReference>
         <RcItem Include="..\Commun\images\imgAbout.bmp">
             <ResourceType>BITMAP</ResourceType>
             <ResourceId>ABOUT</ResourceId>
@@ -321,8 +326,26 @@ $(PostBuildEvent)]]></PostBuildEvent>
                 </Excluded_Packages>
             </Delphi.Personality>
             <Deployment Version="3">
-                <DeployFile LocalName="..\..\bin\Win32\BDScript.exe" Configuration="Debug" Class="ProjectOutput"/>
+                <DeployFile LocalName="..\..\deploy\Win32\BDScript.exe" Configuration="Debug" Class="ProjectOutput">
+                    <Platform Name="Win32">
+                        <RemoteName>BDScript.exe</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployFile LocalName="..\Commun\images\handpoint.cur" Configuration="Debug" Class="ProjectFile"/>
+                <DeployFile LocalName="..\Commun\images\imgAbout.bmp" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="..\..\bin\Win32\BDScript.exe" Configuration="Debug" Class="ProjectOutput"/>
+                <DeployFile LocalName="..\Commun\images\handpoint.cur" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployClass Name="AdditionalDebugSymbols">
                     <Platform Name="iOSSimulator">
                         <Operation>1</Operation>

@@ -102,7 +102,7 @@ type
 
 implementation
 
-uses CommonConst, UdmPrinc, Entities.Lite, UIB, Commun, Procedures, Updates, IOUtils,
+uses CommonConst, BDTK.Main.DataModule, Entities.Lite, UIB, Commun, Procedures, Updates, IOUtils,
   Entities.DaoLite, ProceduresBDtk, Entities.Common, Entities.FactoriesLite, ICUNumberFormatter, _uloc,
   Entities.DBConnection;
 

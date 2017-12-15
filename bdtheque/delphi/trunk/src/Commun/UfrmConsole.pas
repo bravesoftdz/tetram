@@ -50,7 +50,7 @@ type
 implementation
 
 uses
-  UdmPrinc, DateUtils;
+  BDTK.Main.DataModule, DateUtils;
 
 {$R *.dfm}
 { TTraceEvent }

@@ -13,7 +13,7 @@ procedure MAJ_ODS(FullRebuild: Boolean);
 implementation
 
 uses
-  IOUtils, CommonConst, UfrmVerbose, UdmPrinc, Divers, UIB, UIBLib, UIBMetadata, UIBConst;
+  IOUtils, CommonConst, UfrmVerbose, BDTK.Main.DataModule, Divers, UIB, UIBLib, UIBMetadata, UIBConst;
 
 procedure MAJ_ODS_BackupRestore;
 var

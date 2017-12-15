@@ -1,10 +1,10 @@
-unit UdmPrinc;
+unit BDS.Main.DataModule;
 
 interface
 
 uses
   System.SysUtils, System.Classes, Winapi.Windows, Vcl.Dialogs, Winapi.Messages,
-  Vcl.ImgList, Vcl.Controls, PngImageList;
+  Vcl.ImgList, Vcl.Controls, PngImageList, System.ImageList;
 
 const
   MSG_COMMANDELINE = WM_USER + 1;
@@ -31,7 +31,7 @@ function dmPrinc: TdmPrinc;
 implementation
 
 uses
-  System.SyncObjs, Vcl.Forms, System.StrUtils, UfrmSplash, CommonConst, Textes, System.DateUtils, System.UITypes, Divers, UfrmScripts, System.IOUtils,
+  System.SyncObjs, Vcl.Forms, System.StrUtils, UfrmSplash, CommonConst, Textes, System.DateUtils, System.UITypes, Divers, BDS.Main.Form, System.IOUtils,
   UScriptEngineIntf, UMasterEngine, UScriptList, dwsJSON, Entities.Full, JclCompression, Entities.Deserializer, Entities.FactoriesFull, Entities.DaoLambdaJSON,
   Entities.Serializer, JsonSerializer, Entities.Lite, Commun,
   System.Generics.Collections;

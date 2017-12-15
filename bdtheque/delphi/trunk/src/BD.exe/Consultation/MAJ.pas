@@ -21,7 +21,7 @@ function ZoomCouverture(isParaBD: Boolean; const ID_Item, ID_Couverture: TGUID):
 implementation
 
 uses
-  CommonConst, UfrmFond, DB, StdCtrls, UfrmSeriesIncompletes, UfrmPrevisionsSorties, Graphics, UfrmConsultationAlbum, UfrmRecherche, UfrmZoomCouverture,
+  CommonConst, BDTK.Main.Form, DB, StdCtrls, UfrmSeriesIncompletes, UfrmPrevisionsSorties, Graphics, UfrmConsultationAlbum, UfrmRecherche, UfrmZoomCouverture,
   UfrmConsultationAuteur, UfrmPrevisionAchats, UHistorique, UfrmConsultationParaBD, UfrmConsultationSerie, UfrmGallerie, UfrmConsultationUnivers,
   JclCompression, System.IOUtils, Entities.Serializer, ProceduresBDtk, JsonSerializer, dwsJSON, Entities.DaoLambda, UfrmChoixScript, JclSysUtils,
   Entities.Deserializer, LoadCompletImport, Divers;

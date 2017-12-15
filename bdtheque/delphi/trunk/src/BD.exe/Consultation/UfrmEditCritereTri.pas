@@ -38,7 +38,7 @@ type
 
 implementation
 
-uses UdmCommun, Commun, UdmPrinc, Divers,
+uses UdmCommun, Commun, BDTK.Main.DataModule, Divers,
   UChampsRecherche;
 
 {$R *.DFM}

@@ -95,7 +95,7 @@ procedure RefreshCallBack(Data: TObject);
 
 implementation
 
-uses MAJ, UfrmFond, Forms, Proc_Gestions, UfrmConsole, TypInfo, UdmPrinc,
+uses MAJ, BDTK.Main.Form, Forms, Proc_Gestions, UfrmConsole, TypInfo, BDTK.Main.DataModule,
   Entities.Full;
 
 const

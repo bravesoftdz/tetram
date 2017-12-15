@@ -42,7 +42,7 @@ type
 
 implementation
 
-uses UfrmFond, CommonConst, Procedures, Textes;
+uses BDTK.Main.Form, CommonConst, Procedures, Textes;
 
 {$R *.DFM}
 

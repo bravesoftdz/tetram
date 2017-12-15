@@ -243,7 +243,7 @@ const
 implementation
 
 uses
-  UIB, UdmPrinc, Commun, Types, UIBLib, Divers, Entities.Common,
+  UIB, BDTK.Main.DataModule, Commun, Types, UIBLib, Divers, Entities.Common,
   Entities.DBConnection;
 
 { TVirtualStringTree }

@@ -32,7 +32,7 @@ implementation
 
 {$R *.dfm}
 
-uses Math, UNet, Divers, Updates, UIB, UIBLib, UdmPrinc, Commun, DateUtils, Procedures, CommonConst, VarUtils, StrUtils,
+uses Math, UNet, Divers, Updates, UIB, UIBLib, BDTK.Main.DataModule, Commun, DateUtils, Procedures, CommonConst, VarUtils, StrUtils,
   Generics.Collections, JclMime, ProceduresBDtk, UWeb;
 
 type

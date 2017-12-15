@@ -6,7 +6,7 @@ uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, System.UITypes, ExtCtrls, DBCtrls, StdCtrls, ImgList, EditLabeled,
   VDTButton, ExtDlgs, Mask, ComCtrls, Buttons, VirtualTrees, VirtualTreeBdtk, Menus, Entities.Lite, ActnList, Entities.Full, ComboCheck,
   UframRechercheRapide, UframBoutons, UBdtForms, Generics.Collections, StrUtils,
-  JvExMask, JvToolEdit, UVirtualTreeEdit, UfrmFond, PngSpeedButton,
+  JvExMask, JvToolEdit, UVirtualTreeEdit, BDTK.Main.Form, PngSpeedButton,
   UframVTEdit, LoadCompletImport, System.ImageList;
 
 type

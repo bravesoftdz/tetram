@@ -83,8 +83,8 @@ type
 implementation
 
 uses
-  Textes, UdmPrinc, Entities.Lite, Impression, Math, UfrmEditCritere, UHistorique, Procedures, StrUtils,
-  UfrmFond, UfrmEditCritereTri, Divers, Entities.Common;
+  Textes, BDTK.Main.DataModule, Entities.Lite, Impression, Math, UfrmEditCritere, UHistorique, Procedures, StrUtils,
+  BDTK.Main.Form, UfrmEditCritereTri, Divers, Entities.Common;
 
 {$R *.DFM}
 

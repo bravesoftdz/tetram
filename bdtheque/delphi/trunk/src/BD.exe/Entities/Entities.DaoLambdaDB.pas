@@ -18,7 +18,7 @@ type
 implementation
 
 uses
-  uib, Entities.Full, UdmPrinc, Entities.Types;
+  uib, Entities.Full, BDTK.Main.DataModule, Entities.Types;
 
 class procedure TDaoListeDB.DoEnsureDefaultValues;
 var

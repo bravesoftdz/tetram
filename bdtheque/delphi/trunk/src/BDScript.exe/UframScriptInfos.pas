@@ -54,7 +54,7 @@ implementation
 {$R *.dfm}
 
 uses
-  UIB, UfrmScriptOption, UdmPrinc, Commun, UfrmScriptEditOption, StrUtils;
+  UIB, UfrmScriptOption, BDS.Main.DataModule, Commun, UfrmScriptEditOption, StrUtils;
 
 procedure TframScriptInfos.actCreerOptionExecute(Sender: TObject);
 var

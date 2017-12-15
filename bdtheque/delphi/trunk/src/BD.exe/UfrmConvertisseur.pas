@@ -28,7 +28,7 @@ var
 
 implementation
 
-uses CommonConst, Entities.Lite, UdmPrinc, UIB, Commun, Entities.DaoLite,
+uses CommonConst, Entities.Lite, BDTK.Main.DataModule, UIB, Commun, Entities.DaoLite,
   Entities.FactoriesLite, Entities.DBConnection;
 
 {$R *.DFM}

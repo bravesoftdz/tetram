@@ -158,7 +158,7 @@ function HashString(const s: TbtString): Cardinal;
 implementation
 
 uses
-  IOUtils, AnsiStrings, Procedures, UfrmScripts, Divers, UScriptsFonctions, UScriptsHTMLFunctions, Dialogs, StrUtils, uPSDisassembly,
+  IOUtils, AnsiStrings, Procedures, BDS.Main.Form, Divers, UScriptsFonctions, UScriptsHTMLFunctions, Dialogs, StrUtils, uPSDisassembly,
   UPascalScriptEditor, UNet, Entities.Lite, Entities.DaoLambda;
 
 procedure AddToTStrings(const Strings: TStringArray; List: TStrings);

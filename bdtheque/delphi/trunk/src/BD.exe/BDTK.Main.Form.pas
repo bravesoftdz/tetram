@@ -1,4 +1,4 @@
-unit UfrmFond;
+unit BDTK.Main.Form;
 
 interface
 
@@ -211,7 +211,7 @@ implementation
 
 uses
   IOUtils, ProceduresBDtk, UfrmRepertoire, CommonConst, UfrmOptions, UfrmStatsGeneral, UfrmStatsAlbums, Entities.Full, Impression,
-  UfrmGestion, UfrmCustomize, UfrmAboutBox, UdmPrinc, Types, Procedures, UfrmEntretien, ShellAPI, Math, UfrmPublier, JumpList, ShlObj,
+  UfrmGestion, UfrmCustomize, UfrmAboutBox, BDTK.Main.DataModule, Types, Procedures, UfrmEntretien, ShellAPI, Math, UfrmPublier, JumpList, ShlObj,
   EntitiesStats, UfrmSynchroniser;
 
 procedure TfrmFond.WMSyscommand(var msg: TWmSysCommand);

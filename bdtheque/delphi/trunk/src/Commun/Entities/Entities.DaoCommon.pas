@@ -48,7 +48,7 @@ type
 implementation
 
 uses
-  uib, UdmPrinc, Commun;
+  uib, BDTK.Main.DataModule, Commun;
 
 { TDaoEntity }
 

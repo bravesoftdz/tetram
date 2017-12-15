@@ -3,20 +3,14 @@ object dmCommun: TdmCommun
   OnDestroy = DataModuleDestroy
   Height = 351
   Width = 589
-  object TblGenres: TUIBQuery
-    SQL.Strings = (
-      'SELECT ID_GENRE, GENRE FROM GENRES ORDER BY UPPERGENRE')
-    Left = 16
-    Top = 8
-  end
-  object TGenre: TUIBQuery
+  object tblGenre: TUIBQuery
     SQL.Strings = (
       'SELECT ID_GENRE, GENRE FROM GENRES'
       'ORDER BY GENRE')
     Left = 96
     Top = 8
   end
-  object TCritereReliure: TUIBQuery
+  object tblCritereReliure: TUIBQuery
     SQL.Strings = (
       'SELECT REF, LIBELLE FROM LISTES'
       'WHERE CATEGORIE = 2'
@@ -25,7 +19,7 @@ object dmCommun: TdmCommun
     Left = 96
     Top = 56
   end
-  object TCritereString: TUIBQuery
+  object tblCritereString: TUIBQuery
     SQL.Strings = (
       
         'SELECT REFCRITERE, CRITERE FROM CRITERES WHERE TYPE_CRITERE = '#39'S' +
@@ -33,7 +27,7 @@ object dmCommun: TdmCommun
     Left = 192
     Top = 8
   end
-  object TCritereBoolean: TUIBQuery
+  object tblCritereBoolean: TUIBQuery
     SQL.Strings = (
       
         'SELECT REFCRITERE, CRITERE FROM CRITERES WHERE TYPE_CRITERE = '#39'B' +
@@ -41,7 +35,7 @@ object dmCommun: TdmCommun
     Left = 192
     Top = 56
   end
-  object TCritereNumeral: TUIBQuery
+  object tblCritereNumeral: TUIBQuery
     SQL.Strings = (
       
         'SELECT REFCRITERE, CRITERE FROM CRITERES WHERE TYPE_CRITERE = '#39'N' +
@@ -49,7 +43,7 @@ object dmCommun: TdmCommun
     Left = 192
     Top = 104
   end
-  object TCritereTitre: TUIBQuery
+  object tblCritereTitre: TUIBQuery
     SQL.Strings = (
       
         'SELECT REFCRITERE, CRITERE FROM CRITERES WHERE TYPE_CRITERE = '#39'T' +
@@ -57,7 +51,7 @@ object dmCommun: TdmCommun
     Left = 192
     Top = 152
   end
-  object TCritereAffiche: TUIBQuery
+  object tblCritereAffiche: TUIBQuery
     SQL.Strings = (
       
         'SELECT REFCRITERE, CRITERE FROM CRITERES WHERE TYPE_CRITERE = '#39'I' +
@@ -65,7 +59,7 @@ object dmCommun: TdmCommun
     Left = 192
     Top = 200
   end
-  object TCritereListe: TUIBQuery
+  object tblCritereListe: TUIBQuery
     SQL.Strings = (
       
         'SELECT REFCRITERE, CRITERE FROM CRITERES WHERE TYPE_CRITERE = '#39'L' +
@@ -73,7 +67,7 @@ object dmCommun: TdmCommun
     Left = 192
     Top = 248
   end
-  object TCritereEtat: TUIBQuery
+  object tblCritereEtat: TUIBQuery
     SQL.Strings = (
       'SELECT REF, LIBELLE FROM LISTES'
       'WHERE CATEGORIE = 1'
@@ -81,7 +75,7 @@ object dmCommun: TdmCommun
     Left = 96
     Top = 104
   end
-  object TCritereLangueTitre: TUIBQuery
+  object tblCritereLangueTitre: TUIBQuery
     SQL.Strings = (
       
         'SELECT REFCRITERE, CRITERE FROM CRITERES WHERE TYPE_CRITERE = '#39'L' +
@@ -89,7 +83,7 @@ object dmCommun: TdmCommun
     Left = 280
     Top = 152
   end
-  object TCritereSensLecture: TUIBQuery
+  object tblCritereSensLecture: TUIBQuery
     SQL.Strings = (
       'SELECT REF, LIBELLE FROM LISTES'
       'WHERE CATEGORIE = 8'
@@ -98,7 +92,7 @@ object dmCommun: TdmCommun
     Left = 96
     Top = 152
   end
-  object TCritereNotation: TUIBQuery
+  object tblCritereNotation: TUIBQuery
     SQL.Strings = (
       'SELECT REF, LIBELLE FROM LISTES'
       'WHERE CATEGORIE = 9'
