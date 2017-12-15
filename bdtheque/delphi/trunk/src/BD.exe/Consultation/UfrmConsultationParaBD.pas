@@ -4,8 +4,8 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, System.UITypes, StrUtils,
-  Dialogs, Entities.Full, StdCtrls, VirtualTrees, ExtCtrls, BDTK.Main.Form, Procedures,
-  ComCtrls, VDTButton, Buttons, ActnList, Menus, ProceduresBDtk, UBdtForms,
+  Dialogs, BD.Entities.Full, StdCtrls, VirtualTrees, ExtCtrls, BDTK.GUI.Forms.Main, BD.Utils.GUIUtils,
+  ComCtrls, VDTButton, Buttons, ActnList, Menus, BDTK.GUI.Utils, BD.GUI.Forms,
   LabeledCheckBox, System.Actions, PngSpeedButton;
 
 type
@@ -95,9 +95,9 @@ type
 
 implementation
 
-uses Commun, Entities.Lite, UHistorique, Divers, ShellAPI, Textes, CommonConst, jpeg, Impression,
-  Proc_Gestions, Entities.DaoFull, Entities.Common, Entities.FactoriesFull,
-  UfrmConsole;
+uses BD.Utils.StrUtils, BD.Entities.Lite, UHistorique, Divers, ShellAPI, BD.Strings, BD.Common, jpeg, Impression,
+  Proc_Gestions, BDTK.Entities.Dao.Full, BD.Entities.Common, BD.Entities.Factory.Full,
+  BD.GUI.Forms.Console;
 
 {$R *.dfm}
 { TFrmConsultationParaBD }

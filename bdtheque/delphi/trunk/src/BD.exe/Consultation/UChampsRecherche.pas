@@ -35,7 +35,7 @@ const
 implementation
 
 uses
-  Textes, Commun, UIB, BDTK.Main.DataModule, Entities.DBConnection;
+  BD.Strings, BD.Utils.StrUtils, BD.Utils.GUIUtils, UIB, BDTK.GUI.DataModules.Main, BD.DB.Connection;
 
 const
   GP_UNIVERS = 1;

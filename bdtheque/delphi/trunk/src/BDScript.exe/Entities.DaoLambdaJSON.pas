@@ -3,7 +3,7 @@ unit Entities.DaoLambdaJSON;
 interface
 
 uses
-  System.SysUtils, System.Classes, Entities.DaoLambda;
+  System.SysUtils, System.Classes, BD.Entities.Dao.Lambda;
 
 type
   // surcharge de TDaoListe pour pouvoir accéder aux elements protected
@@ -23,7 +23,7 @@ type
 implementation
 
 uses
-  dwsJSON, JsonDeserializer, System.TypInfo, Entities.Full;
+  dwsJSON, BD.Utils.Deserializer.JSON, System.TypInfo, BD.Entities.Full;
 
 { TDaoListeJSON }
 

@@ -5,7 +5,7 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes,
   Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, EditLabeled,
-  Vcl.ComCtrls, UScriptList, Vcl.Menus, System.Actions, Vcl.ActnList, UScriptEngineIntf;
+  Vcl.ComCtrls, BD.Scripts, Vcl.Menus, System.Actions, Vcl.ActnList, UScriptEngineIntf;
 
 type
   TframScriptInfos = class(TFrame)
@@ -54,7 +54,7 @@ implementation
 {$R *.dfm}
 
 uses
-  UIB, UfrmScriptOption, BDS.Main.DataModule, Commun, UfrmScriptEditOption, StrUtils;
+  UIB, BD.Scripts.Forms.UserSetting, BDS.DataModules.Main, BD.Utils.StrUtils, UfrmScriptEditOption, StrUtils;
 
 procedure TframScriptInfos.actCreerOptionExecute(Sender: TObject);
 var

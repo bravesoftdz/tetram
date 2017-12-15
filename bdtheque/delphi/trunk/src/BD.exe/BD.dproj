@@ -85,16 +85,19 @@ $(PreBuildEvent)]]></PreBuildEvent>
         <DCC_N>false</DCC_N>
         <DCC_E>false</DCC_E>
         <DCC_DcuOutput>.\dcu\$(Platform)\$(Config)</DCC_DcuOutput>
+        <DCC_Inlining>off</DCC_Inlining>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win32)'!=''">
         <DCC_Namespace>Winapi;System.Win;Data.Win;Datasnap.Win;Web.Win;Soap.Win;Xml.Win;Bde;$(DCC_Namespace)</DCC_Namespace>
         <UWP_DelphiLogo44>$(BDS)\bin\Artwork\Windows\UWP\delphi_UwpDefault_44.png</UWP_DelphiLogo44>
         <UWP_DelphiLogo150>$(BDS)\bin\Artwork\Windows\UWP\delphi_UwpDefault_150.png</UWP_DelphiLogo150>
+        <Icon_MainIcon>..\Commun\Resources\BD_Icon.ico</Icon_MainIcon>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win64)'!=''">
         <DCC_Namespace>Winapi;System.Win;Data.Win;Datasnap.Win;Web.Win;Soap.Win;Xml.Win;$(DCC_Namespace)</DCC_Namespace>
         <UWP_DelphiLogo44>$(BDS)\bin\Artwork\Windows\UWP\delphi_UwpDefault_44.png</UWP_DelphiLogo44>
         <UWP_DelphiLogo150>$(BDS)\bin\Artwork\Windows\UWP\delphi_UwpDefault_150.png</UWP_DelphiLogo150>
+        <Icon_MainIcon>..\Commun\Resources\BD_Icon.ico</Icon_MainIcon>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1)'!=''">
         <VerInfo_Debug>true</VerInfo_Debug>
@@ -131,10 +134,10 @@ $(PreBuildEvent)]]></PreBuildEvent>
         <DelphiCompile Include="$(MainSource)">
             <MainSource>MainSource</MainSource>
         </DelphiCompile>
-        <DCCReference Include="BDTK.Main.Form.pas">
+        <DCCReference Include="GUI\Forms\BDTK.GUI.Forms.Main.pas">
             <Form>frmFond</Form>
         </DCCReference>
-        <DCCReference Include="BDTK.Main.DataModule.pas">
+        <DCCReference Include="GUI\DataModules\BDTK.GUI.DataModules.Main.pas">
             <Form>dmPrinc</Form>
             <DesignClass>TDataModule</DesignClass>
         </DCCReference>
@@ -165,8 +168,8 @@ $(PreBuildEvent)]]></PreBuildEvent>
         <DCCReference Include="Consultation\UfrmStatsAlbums.pas">
             <Form>frmStatsAlbums</Form>
         </DCCReference>
-        <DCCReference Include="UdmCommun.pas">
-            <Form>dmCommun</Form>
+        <DCCReference Include="GUI\DataModules\BDTK.GUI.DataModules.Search.pas">
+            <Form>dmSearch</Form>
             <DesignClass>TDataModule</DesignClass>
         </DCCReference>
         <DCCReference Include="Gestion\Editions.pas"/>
@@ -196,10 +199,10 @@ $(PreBuildEvent)]]></PreBuildEvent>
             <Form>frmEditParaBD</Form>
         </DCCReference>
         <DCCReference Include="Consultation\Impression.pas"/>
-        <DCCReference Include="UfrmOptions.pas">
+        <DCCReference Include="GUI\Forms\BDTK.GUI.Forms.UserSettings.pas">
             <Form>frmOptions</Form>
         </DCCReference>
-        <DCCReference Include="UfrmCustomize.pas">
+        <DCCReference Include="GUI\Forms\BDTK.GUI.Forms.Customize.pas">
             <Form>frmCustomize</Form>
         </DCCReference>
         <DCCReference Include="UfrmChoix.pas">
@@ -208,14 +211,14 @@ $(PreBuildEvent)]]></PreBuildEvent>
         <DCCReference Include="UfrmChoixDetail.pas">
             <Form>frmChoixDetail</Form>
         </DCCReference>
-        <DCCReference Include="UfrmConvertisseur.pas">
+        <DCCReference Include="GUI\Forms\BDTK.GUI.Forms.Converter.pas">
             <Form>FrmConvers</Form>
         </DCCReference>
-        <DCCReference Include="UframConvertisseur.pas">
+        <DCCReference Include="GUI\Frames\BDTK.GUI.Frames.Converter.pas">
             <Form>framConvertisseur</Form>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
-        <DCCReference Include="UframRechercheRapide.pas">
+        <DCCReference Include="GUI\Frames\BDTK.GUI.Frames.QuickSearch.pas">
             <Form>framRechercheRapide</Form>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
@@ -239,264 +242,254 @@ $(PreBuildEvent)]]></PreBuildEvent>
         <DCCReference Include="Consultation\UfrmPrevisionAchats.pas">
             <Form>frmPrevisionsAchats</Form>
         </DCCReference>
-        <DCCReference Include="mises_a_jour\Updates.pas"/>
+        <DCCReference Include="Updates\BDTK.Updates.pas"/>
         <DCCReference Include="Gestion\UfrmWizardImport.pas">
             <Form>frmWizardImport</Form>
         </DCCReference>
         <DCCReference Include="Gestion\UImportXML.pas"/>
-        <DCCReference Include="ProceduresBDtk.pas"/>
+        <DCCReference Include="GUI\BDTK.GUI.Utils.pas"/>
         <DCCReference Include="UfrmChoixDetailSerie.pas">
             <Form>frmChoixDetailSerie</Form>
         </DCCReference>
-        <DCCReference Include="mises_a_jour\UMAJODS.pas"/>
+        <DCCReference Include="Updates\BDTK.Updates.ODS.pas"/>
         <DCCReference Include="Consultation\UfrmEditCritere.pas">
             <Form>frmEditCritere</Form>
         </DCCReference>
         <DCCReference Include="Consultation\UChampsRecherche.pas"/>
-        <DCCReference Include="Web\UfrmPublier.pas">
+        <DCCReference Include="Web\BDTK.Web.Forms.Publish.pas">
             <Form>frmPublier</Form>
         </DCCReference>
-        <DCCReference Include="Web\mises_a_jour\UMySQLMAJ1_0_0_1.pas"/>
-        <DCCReference Include="Web\mises_a_jour\UMySQLMAJ1_0_0_0.pas"/>
-        <DCCReference Include="Web\mises_a_jour\UMySQLMAJ1_0_0_2.pas"/>
+        <DCCReference Include="Web\Updates\BDTK.Web.Updates.v1_0_0_1.pas"/>
+        <DCCReference Include="Web\Updates\BDTK.Web.Updates.v1_0_0_0.pas"/>
+        <DCCReference Include="Web\Updates\BDTK.Web.Updates.v1_0_0_2.pas"/>
         <DCCReference Include="Gestion\UfrmControlImport.pas">
             <Form>frmControlImport</Form>
         </DCCReference>
-        <DCCReference Include="UVirtualTreeEdit.pas"/>
+        <DCCReference Include="GUI\Controls\BDTK.GUI.Controls.VirtualTreeEdit.pas"/>
         <DCCReference Include="UframVTEdit.pas">
             <Form>framVTEdit</Form>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
-        <DCCReference Include="mises_a_jour\UMAJ2_1_1_7.pas"/>
-        <DCCReference Include="mises_a_jour\UMAJ0_0_0_6.pas"/>
-        <DCCReference Include="mises_a_jour\UMAJ0_0_0_8.pas"/>
-        <DCCReference Include="mises_a_jour\UMAJ0_0_0_9.pas"/>
-        <DCCReference Include="mises_a_jour\UMAJ0_0_1_2.pas"/>
-        <DCCReference Include="mises_a_jour\UMAJ0_0_1_7.pas"/>
-        <DCCReference Include="mises_a_jour\UMAJ0_0_2_2.pas"/>
-        <DCCReference Include="mises_a_jour\UMAJ0_0_2_3.pas"/>
-        <DCCReference Include="mises_a_jour\UMAJ0_0_2_5.pas"/>
-        <DCCReference Include="mises_a_jour\UMAJ0_0_2_7.pas"/>
-        <DCCReference Include="mises_a_jour\UMAJ0_0_2_19.pas"/>
-        <DCCReference Include="mises_a_jour\UMAJ0_0_2_23.pas"/>
-        <DCCReference Include="mises_a_jour\UMAJ0_0_3_01.pas"/>
-        <DCCReference Include="mises_a_jour\UMAJ0_0_3_02.pas"/>
-        <DCCReference Include="mises_a_jour\UMAJ0_0_3_07.pas"/>
-        <DCCReference Include="mises_a_jour\UMAJ0_0_3_14.pas"/>
-        <DCCReference Include="mises_a_jour\UMAJ0_0_3_16.pas"/>
-        <DCCReference Include="mises_a_jour\UMAJ0_0_3_19.pas"/>
-        <DCCReference Include="mises_a_jour\UMAJ0_0_3_21.pas"/>
-        <DCCReference Include="mises_a_jour\UMAJ0_0_3_22.pas"/>
-        <DCCReference Include="mises_a_jour\UMAJ0_0_3_23.pas"/>
-        <DCCReference Include="mises_a_jour\UMAJ0_0_3_24.pas"/>
-        <DCCReference Include="mises_a_jour\UMAJ0_0_3_25.pas"/>
-        <DCCReference Include="mises_a_jour\UMAJ0_0_3_27.pas"/>
-        <DCCReference Include="mises_a_jour\UMAJ1_0_0_0.pas"/>
-        <DCCReference Include="mises_a_jour\UMAJ1_0_0_2.pas"/>
-        <DCCReference Include="mises_a_jour\UMAJ1_0_0_3.pas"/>
-        <DCCReference Include="mises_a_jour\UMAJ1_1_0_0.pas"/>
-        <DCCReference Include="mises_a_jour\UMAJ1_2_0_0.pas"/>
-        <DCCReference Include="mises_a_jour\UMAJ1_2_0_8.pas"/>
-        <DCCReference Include="mises_a_jour\UMAJ1_2_1_0.pas"/>
-        <DCCReference Include="mises_a_jour\UMAJ1_2_2_0.pas"/>
-        <DCCReference Include="mises_a_jour\UMAJ1_2_3_3.pas"/>
-        <DCCReference Include="mises_a_jour\UMAJ1_2_3_14.pas"/>
-        <DCCReference Include="mises_a_jour\UMAJ1_2_3_20.pas"/>
-        <DCCReference Include="mises_a_jour\UMAJ1_2_3_22.pas"/>
-        <DCCReference Include="mises_a_jour\UMAJ1_2_3_25.pas"/>
-        <DCCReference Include="mises_a_jour\UMAJ1_2_3_26.pas"/>
-        <DCCReference Include="mises_a_jour\UMAJ2_0_0_5.pas"/>
-        <DCCReference Include="mises_a_jour\UMAJ2_0_1_0.pas"/>
-        <DCCReference Include="mises_a_jour\UMAJ2_1_0_0.pas"/>
-        <DCCReference Include="mises_a_jour\UMAJ2_1_0_16.pas"/>
-        <DCCReference Include="mises_a_jour\UMAJ2_1_0_22.pas"/>
-        <DCCReference Include="mises_a_jour\UMAJ2_1_0_72.pas"/>
-        <DCCReference Include="mises_a_jour\UMAJ2_1_1_2.pas"/>
+        <DCCReference Include="Updates\BDTK.Updates.v2_1_1_7.pas"/>
+        <DCCReference Include="Updates\BDTK.Updates.v0_0_0_6.pas"/>
+        <DCCReference Include="Updates\BDTK.Updates.v0_0_0_8.pas"/>
+        <DCCReference Include="Updates\BDTK.Updates.v0_0_0_9.pas"/>
+        <DCCReference Include="Updates\BDTK.Updates.v0_0_1_2.pas"/>
+        <DCCReference Include="Updates\BDTK.Updates.v0_0_1_7.pas"/>
+        <DCCReference Include="Updates\BDTK.Updates.v0_0_2_2.pas"/>
+        <DCCReference Include="Updates\BDTK.Updates.v0_0_2_3.pas"/>
+        <DCCReference Include="Updates\BDTK.Updates.v0_0_2_5.pas"/>
+        <DCCReference Include="Updates\BDTK.Updates.v0_0_2_7.pas"/>
+        <DCCReference Include="Updates\BDTK.Updates.v0_0_2_19.pas"/>
+        <DCCReference Include="Updates\BDTK.Updates.v0_0_2_23.pas"/>
+        <DCCReference Include="Updates\BDTK.Updates.v0_0_3_01.pas"/>
+        <DCCReference Include="Updates\BDTK.Updates.v0_0_3_02.pas"/>
+        <DCCReference Include="Updates\BDTK.Updates.v0_0_3_07.pas"/>
+        <DCCReference Include="Updates\BDTK.Updates.v0_0_3_14.pas"/>
+        <DCCReference Include="Updates\BDTK.Updates.v0_0_3_16.pas"/>
+        <DCCReference Include="Updates\BDTK.Updates.v0_0_3_19.pas"/>
+        <DCCReference Include="Updates\BDTK.Updates.v0_0_3_21.pas"/>
+        <DCCReference Include="Updates\BDTK.Updates.v0_0_3_22.pas"/>
+        <DCCReference Include="Updates\BDTK.Updates.v0_0_3_23.pas"/>
+        <DCCReference Include="Updates\BDTK.Updates.v0_0_3_24.pas"/>
+        <DCCReference Include="Updates\BDTK.Updates.v0_0_3_25.pas"/>
+        <DCCReference Include="Updates\BDTK.Updates.v0_0_3_27.pas"/>
+        <DCCReference Include="Updates\BDTK.Updates.v1_0_0_0.pas"/>
+        <DCCReference Include="Updates\BDTK.Updates.v1_0_0_2.pas"/>
+        <DCCReference Include="Updates\BDTK.Updates.v1_0_0_3.pas"/>
+        <DCCReference Include="Updates\BDTK.Updates.v1_1_0_0.pas"/>
+        <DCCReference Include="Updates\BDTK.Updates.v1_2_0_0.pas"/>
+        <DCCReference Include="Updates\BDTK.Updates.v1_2_0_8.pas"/>
+        <DCCReference Include="Updates\BDTK.Updates.v1_2_1_0.pas"/>
+        <DCCReference Include="Updates\BDTK.Updates.v1_2_2_0.pas"/>
+        <DCCReference Include="Updates\BDTK.Updates.v1_2_3_3.pas"/>
+        <DCCReference Include="Updates\BDTK.Updates.v1_2_3_14.pas"/>
+        <DCCReference Include="Updates\BDTK.Updates.v1_2_3_20.pas"/>
+        <DCCReference Include="Updates\BDTK.Updates.v1_2_3_22.pas"/>
+        <DCCReference Include="Updates\BDTK.Updates.v1_2_3_25.pas"/>
+        <DCCReference Include="Updates\BDTK.Updates.v1_2_3_26.pas"/>
+        <DCCReference Include="Updates\BDTK.Updates.v2_0_0_5.pas"/>
+        <DCCReference Include="Updates\BDTK.Updates.v2_0_1_0.pas"/>
+        <DCCReference Include="Updates\BDTK.Updates.v2_1_0_0.pas"/>
+        <DCCReference Include="Updates\BDTK.Updates.v2_1_0_16.pas"/>
+        <DCCReference Include="Updates\BDTK.Updates.v2_1_0_22.pas"/>
+        <DCCReference Include="Updates\BDTK.Updates.v2_1_0_72.pas"/>
+        <DCCReference Include="Updates\BDTK.Updates.v2_1_1_2.pas"/>
         <DCCReference Include="Gestion\UfrmFusionEditions.pas">
             <Form>frmFusionEditions</Form>
         </DCCReference>
-        <DCCReference Include="mises_a_jour\UMAJ2_1_1_4.pas"/>
-        <DCCReference Include="mises_a_jour\UMAJ2_1_1_8.pas"/>
+        <DCCReference Include="Updates\BDTK.Updates.v2_1_1_4.pas"/>
+        <DCCReference Include="Updates\BDTK.Updates.v2_1_1_8.pas"/>
         <DCCReference Include="Consultation\UfrmGallerie.pas">
             <Form>frmGallerie</Form>
         </DCCReference>
-        <DCCReference Include="VirtualTreeBdtk.pas"/>
-        <DCCReference Include="mises_a_jour\UMAJ2_1_1_10.pas"/>
-        <DCCReference Include="mises_a_jour\UMAJ2_1_1_17.pas"/>
-        <DCCReference Include="mises_a_jour\UMAJ2_1_1_155.pas"/>
+        <DCCReference Include="GUI\Controls\BDTK.GUI.Controls.VirtualTree.pas"/>
+        <DCCReference Include="Updates\BDTK.Updates.v2_1_1_10.pas"/>
+        <DCCReference Include="Updates\BDTK.Updates.v2_1_1_17.pas"/>
+        <DCCReference Include="Updates\BDTK.Updates.v2_1_1_155.pas"/>
         <DCCReference Include="Consultation\UfrmConsultationAlbum.pas">
             <Form>frmConsultationAlbum</Form>
         </DCCReference>
-        <DCCReference Include="mises_a_jour\UMAJ2_2_2_233.pas"/>
-        <DCCReference Include="mises_a_jour\UMAJ2_2_3_13.pas"/>
+        <DCCReference Include="Updates\BDTK.Updates.v2_2_2_233.pas"/>
+        <DCCReference Include="Updates\BDTK.Updates.v2_2_3_13.pas"/>
         <DCCReference Include="Consultation\UfrmConsultationUnivers.pas">
             <Form>frmConsultationUnivers</Form>
         </DCCReference>
         <DCCReference Include="Gestion\UfrmEditUnivers.pas">
             <Form>frmEditUnivers</Form>
         </DCCReference>
-        <DCCReference Include="mises_a_jour\UMAJ2_2_3_16.pas"/>
-        <DCCReference Include="mises_a_jour\UMAJ2_2_3_17.pas"/>
-        <DCCReference Include="mises_a_jour\UMAJ2_2_3_19.pas"/>
-        <DCCReference Include="mises_a_jour\UMAJ2_2_3_21.pas"/>
-        <DCCReference Include="Web\mises_a_jour\UMySQLMAJ1_0_0_3.pas"/>
-        <DCCReference Include="mises_a_jour\UMAJ2_2_3_22.pas"/>
-        <DCCReference Include="mises_a_jour\UMAJ2_2_3_23.pas"/>
-        <DCCReference Include="..\Commun\CommonConst.pas"/>
-        <DCCReference Include="..\Commun\Commun.pas"/>
-        <DCCReference Include="..\Commun\Textes.pas"/>
-        <DCCReference Include="..\Commun\UBdtForms.pas">
+        <DCCReference Include="Updates\BDTK.Updates.v2_2_3_16.pas"/>
+        <DCCReference Include="Updates\BDTK.Updates.v2_2_3_17.pas"/>
+        <DCCReference Include="Updates\BDTK.Updates.v2_2_3_19.pas"/>
+        <DCCReference Include="Updates\BDTK.Updates.v2_2_3_21.pas"/>
+        <DCCReference Include="Web\Updates\BDTK.Web.Updates.v1_0_0_3.pas"/>
+        <DCCReference Include="Updates\BDTK.Updates.v2_2_3_22.pas"/>
+        <DCCReference Include="Updates\BDTK.Updates.v2_2_3_23.pas"/>
+        <DCCReference Include="..\Commun\BD.Common.pas"/>
+        <DCCReference Include="..\Commun\Utils\BD.Utils.StrUtils.pas"/>
+        <DCCReference Include="..\Commun\BD.Strings.pas"/>
+        <DCCReference Include="..\Commun\GUI\Forms\BD.GUI.Forms.pas">
             <Form>bdtForm</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="..\Commun\UframBoutons.pas">
+        <DCCReference Include="..\Commun\GUI\Frames\BD.GUI.Frames.Buttons.pas">
             <Form>framBoutons</Form>
-            <FormType>dfm</FormType>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
-        <DCCReference Include="..\Commun\UfrmAboutBox.pas">
+        <DCCReference Include="..\Commun\GUI\Forms\BD.GUI.Forms.About.pas">
             <Form>frmAboutBox</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="..\Commun\UfrmConsole.pas">
+        <DCCReference Include="..\Commun\GUI\Forms\BD.GUI.Forms.Console.pas">
             <Form>frmConsole</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="..\Commun\UfrmProgression.pas">
+        <DCCReference Include="..\Commun\GUI\Forms\BD.GUI.Forms.Progress.pas">
             <Form>frmProgression</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="..\Commun\UfrmSplash.pas">
+        <DCCReference Include="..\Commun\GUI\Forms\BD.GUI.Forms.Splash.pas">
             <Form>frmSplash</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="..\Commun\UfrmVerbose.pas">
+        <DCCReference Include="..\Commun\GUI\Forms\BD.GUI.Forms.Verbose.pas">
             <Form>frmVerbose</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="..\Commun\UMetadata.pas"/>
-        <DCCReference Include="..\Commun\Procedures.pas"/>
-        <DCCReference Include="..\Commun\UNet.pas"/>
-        <DCCReference Include="..\Commun\VirtualTree.pas"/>
-        <DCCReference Include="Entities\Entities.DaoFull.pas"/>
-        <DCCReference Include="Entities\Entities.DaoLite.pas"/>
-        <DCCReference Include="Entities\DaoRecherche.pas"/>
-        <DCCReference Include="Entities\DaoStats.pas"/>
-        <DCCReference Include="Entities\EntitiesRecherche.pas"/>
-        <DCCReference Include="Entities\EntitiesStats.pas"/>
+        <DCCReference Include="..\Commun\Entities\BD.Entities.Metadata.pas"/>
+        <DCCReference Include="..\Commun\Utils\BD.Utils.GUIUtils.pas"/>
+        <DCCReference Include="..\Commun\Utils\BD.Utils.Net.pas"/>
+        <DCCReference Include="..\Commun\GUI\Controls\BD.GUI.Controls.VirtualTree.pas"/>
+        <DCCReference Include="Entities\BDTK.Entities.Dao.Full.pas"/>
+        <DCCReference Include="Entities\BDTK.Entities.Dao.Lite.pas"/>
+        <DCCReference Include="Entities\BDTK.Entities.Dao.Search.pas"/>
+        <DCCReference Include="Entities\BDTK.Entities.Dao.Stats.pas"/>
+        <DCCReference Include="Entities\BDTK.Entities.Search.pas"/>
+        <DCCReference Include="Entities\BDTK.Entities.Stats.pas"/>
         <DCCReference Include="Entities\LoadCompletImport.pas"/>
-        <DCCReference Include="..\Commun\Entities\Entities.Deserializer.pas"/>
-        <DCCReference Include="..\Commun\Entities\Entities.Full.pas"/>
-        <DCCReference Include="..\Commun\Entities\Entities.Lite.pas"/>
-        <DCCReference Include="..\Commun\Entities\Entities.Serializer.pas"/>
-        <DCCReference Include="..\Commun\Entities\JsonDeserializer.pas"/>
-        <DCCReference Include="..\Commun\Entities\JsonSerializer.pas"/>
-        <DCCReference Include="..\Commun\BdtkRegEx.pas"/>
-        <DCCReference Include="..\Commun\Scripts\UScriptList.pas"/>
+        <DCCReference Include="..\Commun\Entities\BD.Entities.Utils.Deserializer.pas"/>
+        <DCCReference Include="..\Commun\Entities\BD.Entities.Full.pas"/>
+        <DCCReference Include="..\Commun\Entities\BD.Entities.Lite.pas"/>
+        <DCCReference Include="..\Commun\Entities\BD.Entities.Utils.Serializer.pas"/>
+        <DCCReference Include="..\Commun\Utils\BD.Utils.Deserializer.JSON.pas"/>
+        <DCCReference Include="..\Commun\Utils\BD.Utils.Serializer.JSON.pas"/>
+        <DCCReference Include="..\Commun\Utils\BD.Utils.RegEx.pas"/>
+        <DCCReference Include="..\Commun\Scripts\BD.Scripts.pas"/>
         <DCCReference Include="Scripts\UfrmValidationImport.pas">
             <Form>frmValidationImport</Form>
         </DCCReference>
-        <DCCReference Include="..\Commun\Entities\Entities.Common.pas"/>
-        <DCCReference Include="..\Commun\Entities\Entities.FactoriesCommon.pas"/>
-        <DCCReference Include="..\Commun\Entities\Entities.DaoLambda.pas"/>
-        <DCCReference Include="Entities\Entities.DaoLambdaDB.pas"/>
+        <DCCReference Include="..\Commun\Entities\BD.Entities.Common.pas"/>
+        <DCCReference Include="..\Commun\Entities\BD.Entities.Factory.Common.pas"/>
+        <DCCReference Include="..\Commun\Entities\BD.Entities.Dao.Lambda.pas"/>
+        <DCCReference Include="Entities\BDTK.Entities.Dao.Lambda.pas"/>
         <DCCReference Include="Scripts\UfrmChoixScript.pas">
             <Form>frmChoixScript</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="..\Commun\Scripts\UfrmScriptOption.pas">
+        <DCCReference Include="..\Commun\Scripts\BD.Scripts.Forms.UserSetting.pas">
             <Form>frmScriptOption</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="..\Commun\UNetICSCompress.pas"/>
-        <DCCReference Include="Web\UfrmSynchroniser.pas">
+        <DCCReference Include="..\Commun\Utils\BD.Utils.Net.ICS.pas"/>
+        <DCCReference Include="Web\BDTK.Web.Forms.Synchronize.pas">
             <Form>frmSynchroniser</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="Web\UWeb.pas"/>
-        <DCCReference Include="mises_a_jour\UMAJ2_2_3_24.pas"/>
-        <DCCReference Include="mises_a_jour\UMAJ2_2_3_25.pas"/>
-        <DCCReference Include="mises_a_jour\UMAJ2_2_3_29.pas"/>
-        <DCCReference Include="..\Commun\Entities\Entities.Types.pas"/>
-        <DCCReference Include="..\Commun\Entities\Entities.FactoriesFull.pas"/>
-        <DCCReference Include="..\Commun\Entities\Entities.FactoriesLite.pas"/>
-        <DCCReference Include="..\Commun\Entities\Entities.DBConnection.pas"/>
-        <DCCReference Include="..\Commun\Entities\Entities.DaoCommon.pas"/>
-        <DCCReference Include="..\Commun\BD.Common.DataModule.pas">
+        <DCCReference Include="Web\BDTK.Web.pas"/>
+        <DCCReference Include="Updates\BDTK.Updates.v2_2_3_24.pas"/>
+        <DCCReference Include="Updates\BDTK.Updates.v2_2_3_25.pas"/>
+        <DCCReference Include="Updates\BDTK.Updates.v2_2_3_29.pas"/>
+        <DCCReference Include="..\Commun\Entities\BD.Entities.Types.pas"/>
+        <DCCReference Include="..\Commun\Entities\BD.Entities.Factory.Full.pas"/>
+        <DCCReference Include="..\Commun\Entities\BD.Entities.Factory.Lite.pas"/>
+        <DCCReference Include="..\Commun\Entities\BD.DB.Connection.pas"/>
+        <DCCReference Include="..\Commun\Entities\BD.Entities.Dao.Common.pas"/>
+        <DCCReference Include="..\Commun\GUI\DataModules\BD.GUI.DataModules.Common.pas">
             <Form>dmCommon</Form>
-            <FormType>dfm</FormType>
             <DesignClass>TDataModule</DesignClass>
         </DCCReference>
-        <RcItem Include="..\Commun\images\network.png">
+        <DCCReference Include="GUI\Controls\BDTK.GUI.Controls.Spin.pas"/>
+        <RcItem Include="..\Commun\Resources\network.png">
             <ResourceType>RCDATA</ResourceType>
             <ResourceId>BT_LINK</ResourceId>
         </RcItem>
-        <RcItem Include="..\Commun\images\brokenimage.jpg">
+        <RcItem Include="..\Commun\Resources\brokenimage.jpg">
             <ResourceType>RCDATA</ResourceType>
             <ResourceId>IMAGENONVALIDE</ResourceId>
         </RcItem>
-        <RcItem Include="..\Commun\images\imgAbout.bmp">
+        <RcItem Include="..\Commun\Resources\imgAbout.bmp">
             <ResourceType>BITMAP</ResourceType>
             <ResourceId>ABOUT</ResourceId>
         </RcItem>
-        <RcItem Include="..\Commun\images\my-documents.ico">
+        <RcItem Include="..\Commun\Resources\my-documents.ico">
             <ResourceType>ICON</ResourceType>
             <ResourceId>MAINICON_1</ResourceId>
         </RcItem>
-        <RcItem Include="..\Commun\images\unknown.ico">
+        <RcItem Include="..\Commun\Resources\unknown.ico">
             <ResourceType>ICON</ResourceType>
             <ResourceId>MAINICON_2</ResourceId>
         </RcItem>
-        <RcItem Include="ISBNRanges.xml">
+        <RcItem Include="..\Commun\Resources\ISBNRanges.xml">
             <ContainerId>ResourceItem</ContainerId>
             <ResourceType>RCDATA</ResourceType>
             <ResourceId>ISBN_RANGES</ResourceId>
         </RcItem>
-        <RcItem Include="..\Commun\images\handpoint.cur">
+        <RcItem Include="..\Commun\Resources\handpoint.cur">
             <ResourceType>RCDATA</ResourceType>
             <ResourceId>CUR_HANDPOINT</ResourceId>
         </RcItem>
-        <RcItem Include="mises_a_jour\MAJ1_2_0_0-1.sql">
+        <RcItem Include="Updates\BDTK.Updates.v1_2_0_0-1.sql">
             <ContainerId>ResourceItem</ContainerId>
             <ResourceType>ScriptsUpdate</ResourceType>
             <ResourceId>MAJ1_2_0_0part1</ResourceId>
         </RcItem>
-        <RcItem Include="mises_a_jour\MAJ1_2_0_0-2.sql">
+        <RcItem Include="Updates\BDTK.Updates.v1_2_0_0-2.sql">
             <ContainerId>ResourceItem</ContainerId>
             <ResourceType>ScriptsUpdate</ResourceType>
             <ResourceId>MAJ1_2_0_0part2</ResourceId>
         </RcItem>
-        <RcItem Include="mises_a_jour\MAJ2_1_0_72-1.sql">
+        <RcItem Include="Updates\BDTK.Updates.v2_1_0_72-1.sql">
             <ContainerId>ResourceItem</ContainerId>
             <ResourceType>ScriptsUpdate</ResourceType>
             <ResourceId>MAJ2_1_0_72part1</ResourceId>
         </RcItem>
-        <RcItem Include="mises_a_jour\MAJ2_1_0_72-2.sql">
+        <RcItem Include="Updates\BDTK.Updates.v2_1_0_72-2.sql">
             <ContainerId>ResourceItem</ContainerId>
             <ResourceType>ScriptsUpdate</ResourceType>
             <ResourceId>MAJ2_1_0_72part2</ResourceId>
         </RcItem>
-        <RcItem Include="mises_a_jour\MAJ2_1_0_72-3.sql">
+        <RcItem Include="Updates\BDTK.Updates.v2_1_0_72-3.sql">
             <ContainerId>ResourceItem</ContainerId>
             <ResourceType>ScriptsUpdate</ResourceType>
             <ResourceId>MAJ2_1_0_72part3</ResourceId>
         </RcItem>
-        <RcItem Include="mises_a_jour\MAJ2_1_1_17.sql">
+        <RcItem Include="Updates\BDTK.Updates.v2_1_1_17.sql">
             <ContainerId>ResourceItem</ContainerId>
             <ResourceType>ScriptsUpdate</ResourceType>
             <ResourceId>MAJ2_1_1_17</ResourceId>
         </RcItem>
-        <RcItem Include="mises_a_jour\MAJ2_1_1_8-1.sql">
+        <RcItem Include="Updates\BDTK.Updates.v2_1_1_8-1.sql">
             <ContainerId>ResourceItem</ContainerId>
             <ResourceType>ScriptsUpdate</ResourceType>
             <ResourceId>MAJ2_1_1_8part1</ResourceId>
         </RcItem>
-        <RcItem Include="mises_a_jour\MAJ2_1_1_8-2.sql">
+        <RcItem Include="Updates\BDTK.Updates.v2_1_1_8-2.sql">
             <ContainerId>ResourceItem</ContainerId>
             <ResourceType>ScriptsUpdate</ResourceType>
             <ResourceId>MAJ2_1_1_8part2</ResourceId>
         </RcItem>
-        <RcItem Include="mises_a_jour\MAJ2_1_1_8-3.sql">
+        <RcItem Include="Updates\BDTK.Updates.v2_1_1_8-3.sql">
             <ContainerId>ResourceItem</ContainerId>
             <ResourceType>ScriptsUpdate</ResourceType>
             <ResourceId>MAJ2_1_1_8part3</ResourceId>
@@ -578,13 +571,49 @@ $(PreBuildEvent)]]></PreBuildEvent>
                 </Excluded_Packages>
             </Delphi.Personality>
             <Deployment Version="3">
-                <DeployFile LocalName="mises_a_jour\MAJ2_1_1_8-3.sql" Configuration="Debug" Class="ProjectFile">
+                <DeployFile LocalName="..\Commun\Resources\brokenimage.jpg" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Win64">
                         <RemoteDir>.\</RemoteDir>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName="..\Commun\images\brokenimage.jpg" Configuration="Debug" Class="ProjectFile">
+                <DeployFile LocalName="Updates\BDTK.Updates.v2_1_1_17.sql" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win64">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="..\Commun\Resources\imgAbout.bmp" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win64">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Updates\BDTK.Updates.v2_1_0_72-2.sql" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win64">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Updates\BDTK.Updates.v1_2_0_0-1.sql" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win64">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="..\Commun\Resources\network.png" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win64">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="..\Commun\Resources\handpoint.cur" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win64">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Updates\BDTK.Updates.v2_1_0_72-1.sql" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Win64">
                         <RemoteDir>.\</RemoteDir>
                         <Overwrite>true</Overwrite>
@@ -596,49 +625,19 @@ $(PreBuildEvent)]]></PreBuildEvent>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName="..\Commun\images\imgAbout.bmp" Configuration="Debug" Class="ProjectFile">
+                <DeployFile LocalName="Updates\BDTK.Updates.v2_1_0_72-3.sql" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Win64">
                         <RemoteDir>.\</RemoteDir>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName="mises_a_jour\MAJ1_2_0_0-2.sql" Configuration="Debug" Class="ProjectFile">
+                <DeployFile LocalName="Updates\BDTK.Updates.v2_1_1_8-1.sql" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Win64">
                         <RemoteDir>.\</RemoteDir>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName="..\Commun\images\network.png" Configuration="Debug" Class="ProjectFile">
-                    <Platform Name="Win64">
-                        <RemoteDir>.\</RemoteDir>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
-                <DeployFile LocalName="mises_a_jour\MAJ1_2_0_0-1.sql" Configuration="Debug" Class="ProjectFile">
-                    <Platform Name="Win64">
-                        <RemoteDir>.\</RemoteDir>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
-                <DeployFile LocalName="mises_a_jour\MAJ2_1_1_8-2.sql" Configuration="Debug" Class="ProjectFile">
-                    <Platform Name="Win64">
-                        <RemoteDir>.\</RemoteDir>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
-                <DeployFile LocalName="..\Commun\images\handpoint.cur" Configuration="Debug" Class="ProjectFile">
-                    <Platform Name="Win64">
-                        <RemoteDir>.\</RemoteDir>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
-                <DeployFile LocalName="..\Commun\images\unknown.ico" Configuration="Debug" Class="ProjectFile">
-                    <Platform Name="Win64">
-                        <RemoteDir>.\</RemoteDir>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
-                <DeployFile LocalName="mises_a_jour\MAJ2_1_0_72-2.sql" Configuration="Debug" Class="ProjectFile">
+                <DeployFile LocalName="..\Commun\Resources\unknown.ico" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Win64">
                         <RemoteDir>.\</RemoteDir>
                         <Overwrite>true</Overwrite>
@@ -650,37 +649,31 @@ $(PreBuildEvent)]]></PreBuildEvent>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
+                <DeployFile LocalName="Updates\BDTK.Updates.v2_1_1_8-2.sql" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win64">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Updates\BDTK.Updates.v2_1_1_8-3.sql" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win64">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployFile LocalName="..\..\deploy\Win64\BD.rsm" Configuration="Debug" Class="DebugSymbols">
                     <Platform Name="Win64">
                         <RemoteName>BD.rsm</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName="..\Commun\images\my-documents.ico" Configuration="Debug" Class="ProjectFile">
+                <DeployFile LocalName="Updates\BDTK.Updates.v1_2_0_0-2.sql" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Win64">
                         <RemoteDir>.\</RemoteDir>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName="mises_a_jour\MAJ2_1_0_72-3.sql" Configuration="Debug" Class="ProjectFile">
-                    <Platform Name="Win64">
-                        <RemoteDir>.\</RemoteDir>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
-                <DeployFile LocalName="mises_a_jour\MAJ2_1_0_72-1.sql" Configuration="Debug" Class="ProjectFile">
-                    <Platform Name="Win64">
-                        <RemoteDir>.\</RemoteDir>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
-                <DeployFile LocalName="mises_a_jour\MAJ2_1_1_17.sql" Configuration="Debug" Class="ProjectFile">
-                    <Platform Name="Win64">
-                        <RemoteDir>.\</RemoteDir>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
-                <DeployFile LocalName="mises_a_jour\MAJ2_1_1_8-1.sql" Configuration="Debug" Class="ProjectFile">
+                <DeployFile LocalName="..\Commun\Resources\my-documents.ico" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Win64">
                         <RemoteDir>.\</RemoteDir>
                         <Overwrite>true</Overwrite>

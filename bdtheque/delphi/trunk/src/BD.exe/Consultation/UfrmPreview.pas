@@ -5,7 +5,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, Generics.Collections, System.Types,
-  StdCtrls, ExtCtrls, ToolWin, Menus, Printers, PrintObject, ImgList, UBdtForms, ComCtrls;
+  StdCtrls, ExtCtrls, ToolWin, Menus, Printers, PrintObject, ImgList, BD.GUI.Forms, ComCtrls;
 
 type
   TfrmPreview = class(TBdtForm, IPrintObjectPreview)

@@ -1027,6 +1027,9 @@ object frmEditAlbum: TfrmEditAlbum
         ExplicitLeft = 60
         ExplicitTop = 27
         ExplicitWidth = 316
+        DesignSize = (
+          316
+          21)
         inherited btReset: TVDTButton
           Left = 253
           ExplicitLeft = 226
@@ -1053,6 +1056,9 @@ object frmEditAlbum: TfrmEditAlbum
         TabOrder = 0
         ExplicitLeft = 60
         ExplicitWidth = 316
+        DesignSize = (
+          316
+          21)
         inherited btReset: TVDTButton
           Left = 253
           ExplicitLeft = 226
@@ -1393,6 +1399,9 @@ object frmEditAlbum: TfrmEditAlbum
       ExplicitLeft = 56
       ExplicitTop = 30
       ExplicitWidth = 675
+      DesignSize = (
+        675
+        21)
       inherited btReset: TVDTButton
         Left = 612
         ExplicitLeft = 619
@@ -1420,6 +1429,9 @@ object frmEditAlbum: TfrmEditAlbum
       ExplicitLeft = 56
       ExplicitTop = 227
       ExplicitWidth = 281
+      DesignSize = (
+        281
+        21)
       inherited btReset: TVDTButton
         Left = 218
         ExplicitLeft = 218
@@ -1447,6 +1459,9 @@ object frmEditAlbum: TfrmEditAlbum
       ExplicitLeft = 56
       ExplicitTop = 84
       ExplicitWidth = 281
+      DesignSize = (
+        281
+        21)
       inherited btReset: TVDTButton
         Left = 218
         ExplicitLeft = 284
@@ -1540,7 +1555,7 @@ object frmEditAlbum: TfrmEditAlbum
   object ImageList1: TImageList
     Left = 344
     Bitmap = {
-      494C010101000500080010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010101000500040010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000001000000001002000000000000010
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000

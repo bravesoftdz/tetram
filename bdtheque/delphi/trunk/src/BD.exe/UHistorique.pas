@@ -2,7 +2,7 @@ unit UHistorique;
 
 interface
 
-uses SysUtils, Windows, Classes, Generics.Collections, Commun;
+uses SysUtils, Windows, Classes, Generics.Collections, BD.Utils.StrUtils;
 
 type
   TActionConsultation = (fcActionBack, fcActionRefresh, fcAlbum, fcAuteur, fcCouverture, fcRecherche, fcPreview, fcSeriesIncompletes,
@@ -95,8 +95,8 @@ procedure RefreshCallBack(Data: TObject);
 
 implementation
 
-uses MAJ, BDTK.Main.Form, Forms, Proc_Gestions, UfrmConsole, TypInfo, BDTK.Main.DataModule,
-  Entities.Full;
+uses MAJ, BDTK.GUI.Forms.Main, Forms, Proc_Gestions, BD.GUI.Forms.Console, TypInfo, BDTK.GUI.DataModules.Main,
+  BD.Entities.Full;
 
 const
   UsedInGestion = [fcGestionAjout, fcGestionModif, fcGestionSupp, fcGestionAchat, fcConflitImport];

@@ -4,8 +4,8 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, Mask, DBCtrls, ExtCtrls, ComCtrls, VDTButton,
-  Buttons, EditLabeled, VirtualTrees, VirtualTreeBdtk, UframRechercheRapide, Entities.Full,
-  UBdtForms, UframVTEdit, UframBoutons;
+  Buttons, EditLabeled, VirtualTrees, BDTK.GUI.Controls.VirtualTree, BDTK.GUI.Frames.QuickSearch, BD.Entities.Full,
+  BD.GUI.Forms, UframVTEdit, BD.GUI.Frames.Buttons;
 
 type
   TfrmEditCollection = class(TbdtForm)
@@ -36,8 +36,8 @@ type
 implementation
 
 uses
-  Commun, Procedures, Proc_Gestions, Textes, UHistorique, Entities.Lite,
-  Entities.DaoFull, Entities.DaoLite, Entities.Common;
+  BD.Utils.StrUtils, BD.Utils.GUIUtils, Proc_Gestions, BD.Strings, UHistorique, BD.Entities.Lite,
+  BDTK.Entities.Dao.Full, BDTK.Entities.Dao.Lite, BD.Entities.Common;
 
 {$R *.DFM}
 

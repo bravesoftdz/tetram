@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, System.UITypes,
-  Dialogs, VirtualTrees, UframBoutons, UScriptsFonctions, Generics.Collections, UbdtForms, BDS.Main.DataModule;
+  Dialogs, VirtualTrees, BD.GUI.Frames.Buttons, BD.Scripts.Functions, Generics.Collections, BD.GUI.Forms, BDS.DataModules.Main;
 
 type
   TVirtualStringTree = class(VirtualTrees.TVirtualStringTree)

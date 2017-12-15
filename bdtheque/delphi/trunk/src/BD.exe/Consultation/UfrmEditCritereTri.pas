@@ -3,8 +3,8 @@ unit UfrmEditCritereTri;
 interface
 
 uses
-  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, System.Types, UframBoutons, StdCtrls, DBCtrls, UfrmRecherche,
-  ActnList, EditLabeled, ComboCheck, ComCtrls, EntitiesRecherche, UBdtForms,
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, System.Types, BD.GUI.Frames.Buttons, StdCtrls, DBCtrls, UfrmRecherche,
+  ActnList, EditLabeled, ComboCheck, ComCtrls, BDTK.Entities.Search, BD.GUI.Forms,
   System.Actions;
 
 type
@@ -38,7 +38,7 @@ type
 
 implementation
 
-uses UdmCommun, Commun, BDTK.Main.DataModule, Divers,
+uses BDTK.GUI.DataModules.Search, BD.Utils.StrUtils, BD.Utils.GUIUtils, BDTK.GUI.DataModules.Main, Divers,
   UChampsRecherche;
 
 {$R *.DFM}

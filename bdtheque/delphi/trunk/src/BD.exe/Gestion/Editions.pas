@@ -3,7 +3,7 @@ unit Editions;
 interface
 
 uses
-  SysUtils, Windows, Dialogs, DB, DBCtrls, Forms, Controls, ComCtrls, Classes, Entities.Full;
+  SysUtils, Windows, Dialogs, DB, DBCtrls, Forms, Controls, ComCtrls, Classes, BD.Entities.Full;
 
 {
   Principes de base:
@@ -103,10 +103,10 @@ function DelAchatParaBD(const ID: TGUID): Boolean;
 implementation
 
 uses
-  UIB, Commun, UfrmEditAlbum, UfrmEditSerie, Textes, UfrmEditEditeur, BDTK.Main.DataModule,
-  Math, BDTK.Main.Form, Procedures, ProceduresBDtk, UfrmEditCollection, UfrmEditAuteur, UfrmEditParaBD,
-  UfrmEditAchatAlbum, UfrmEditUnivers, Entities.DaoLite, Entities.DaoFull,
-  Entities.Common;
+  UIB, BD.Utils.StrUtils, UfrmEditAlbum, UfrmEditSerie, BD.Strings, UfrmEditEditeur, BDTK.GUI.DataModules.Main,
+  Math, BDTK.GUI.Forms.Main, BD.Utils.GUIUtils, BDTK.GUI.Utils, UfrmEditCollection, UfrmEditAuteur, UfrmEditParaBD,
+  UfrmEditAchatAlbum, UfrmEditUnivers, BDTK.Entities.Dao.Lite, BDTK.Entities.Dao.Full,
+  BD.Entities.Common;
 
 function FindRec(const Table, Champ: string; const Reference: TGUID; WithMessage: Boolean): Boolean;
 begin
@@ -614,12 +614,12 @@ end;
 
 function CreationGenre(const Genre: string; Source: TObjetFull = nil): TGUID;
 begin
-  Result := CreationLambdaChampSimple(Textes.rsGenre, 'GENRES', 'Genre', 'ID_Genre', Genre);
+  Result := CreationLambdaChampSimple(BD.Strings.rsGenre, 'GENRES', 'Genre', 'ID_Genre', Genre);
 end;
 
 function EditionGenre(var ID: TGUID): Boolean;
 begin
-  Result := EditionLambdaChampSimple(Textes.rsGenre, 'GENRES', 'Genre', 'ID_Genre', ID);
+  Result := EditionLambdaChampSimple(BD.Strings.rsGenre, 'GENRES', 'Genre', 'ID_Genre', ID);
 end;
 
 function DelGenre(const ID: TGUID): Boolean;
@@ -630,7 +630,7 @@ end;
 
 function CreationAuteur(const Auteur: string): TGUID;
 begin
-  Result := CreationLambdaChampSimple(Textes.rsAuteur, 'PERSONNES', 'NomPersonne', 'ID_Personne', Auteur);
+  Result := CreationLambdaChampSimple(BD.Strings.rsAuteur, 'PERSONNES', 'NomPersonne', 'ID_Personne', Auteur);
 end;
 
 function CreationAuteur2(const Auteur: string): TGUID;

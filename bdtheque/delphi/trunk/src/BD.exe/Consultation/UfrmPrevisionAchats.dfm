@@ -40,8 +40,6 @@ object frmPrevisionsAchats: TfrmPrevisionsAchats
     ParentFont = False
     TabOrder = 0
     OnPaintText = vstPrevisionsAchatsPaintText
-    ExplicitTop = 56
-    ExplicitHeight = 538
     Columns = <>
   end
   object Panel1: TPanel

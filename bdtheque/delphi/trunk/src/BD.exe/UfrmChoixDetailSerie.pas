@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, UframBoutons, StdCtrls, ComboCheck, ProceduresBDtk, UBdtForms;
+  Dialogs, BD.GUI.Frames.Buttons, StdCtrls, ComboCheck, BDTK.GUI.Utils, BD.GUI.Forms;
 
 type
   TfrmChoixDetailSerie = class(TbdtForm)

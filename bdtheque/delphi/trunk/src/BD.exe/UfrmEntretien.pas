@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, Buttons,
-  VirtualTrees, VDTButton, ExtCtrls, VCL.ActnList, Browss, StdActns, ProceduresBDtk, UBdtForms,
+  VirtualTrees, VDTButton, ExtCtrls, VCL.ActnList, Browss, StdActns, BDTK.GUI.Utils, BD.GUI.Forms,
   PngSpeedButton, System.Actions;
 
 type
@@ -52,8 +52,8 @@ type
 implementation
 
 uses
-  IOUtils, BDTK.Main.Form, CommonConst, BDTK.Main.DataModule, UIB, Commun, Procedures, Textes,
-  UfrmVerbose, UHistorique, UfrmGestion, IniFiles, Math, uiblib;
+  IOUtils, BDTK.GUI.Forms.Main, BD.Common, BDTK.GUI.DataModules.Main, UIB, BD.Utils.StrUtils, BD.Utils.GUIUtils, BD.Strings,
+  BD.GUI.Forms.Verbose, UHistorique, UfrmGestion, IniFiles, Math, uiblib;
 
 {$R *.dfm}
 

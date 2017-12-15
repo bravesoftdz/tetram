@@ -4,8 +4,8 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, Db, StdCtrls, DBCtrls, Menus, Buttons, ComCtrls, ExtCtrls,
-  ScanEdit, VDTButton, VirtualTrees, ActnList, VirtualTreeBdtk, jpeg, EditLabeled, ComboCheck, ProceduresBDtk,
-  UframRechercheRapide, UBdtForms;
+  ScanEdit, VDTButton, VirtualTrees, ActnList, BDTK.GUI.Controls.VirtualTree, jpeg, EditLabeled, ComboCheck, BDTK.GUI.Utils,
+  BDTK.GUI.Frames.QuickSearch, BD.GUI.Forms;
 
 type
   TfrmRepertoire = class(TbdtForm)
@@ -45,7 +45,7 @@ var
 implementation
 
 uses
-  CommonConst, IniFiles, Procedures, UHistorique, BDTK.Main.Form, Entities.Lite;
+  BD.Common, IniFiles, BD.Utils.GUIUtils, UHistorique, BDTK.GUI.Forms.Main, BD.Entities.Lite;
 
 {$R *.DFM}
 

@@ -72,15 +72,16 @@ $(PostBuildEvent)]]></PostBuildEvent>
         <DCC_S>false</DCC_S>
         <DCC_F>false</DCC_F>
         <DCC_K>false</DCC_K>
+        <DCC_Inlining>off</DCC_Inlining>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win32)'!=''">
         <DCC_Namespace>Winapi;System.Win;Data.Win;Datasnap.Win;Web.Win;Soap.Win;Xml.Win;Bde;$(DCC_Namespace)</DCC_Namespace>
-        <Manifest_File>$(BDS)\bin\default_app.manifest</Manifest_File>
         <VerInfo_Locale>1033</VerInfo_Locale>
         <DCC_UsePackage>IndyIPClient;JvGlobus;JvMM;JvManagedThreads;DBXSqliteDriver;frxDB18;fmx;JvDlgs;IndySystem;JvCrypt;TeeDB;frx18;inetdbbde;vclib;DBXInterBaseDriver;DataSnapClient;DataSnapCommon;DataSnapServer;JvNet;DataSnapProviderClient;JvDotNetCtrls;DBXSybaseASEDriver;DbxCommonDriver;vclimg;dbxcds;DatasnapConnectorsFreePascal;MetropolisUILiveTile;JvXPCtrls;vcldb;vcldsnap;DBXDb2Driver;DBXOracleDriver;CustomIPTransport;JvCore;dsnap;IndyIPServer;fmxase;vcl;IndyCore;IndyIPCommon;CloudService;DBXMSSQLDriver;FmxTeeUI;JvAppFrm;JvDB;JvRuntimeDesign;inetdbxpress;webdsnap;JclDeveloperTools;JvDocking;adortl;JvWizards;JvHMI;bindcompfmx;MediaKit;JvBands;vcldbx;rtl;dbrtl;DbxClientDriver;bindcomp;inetdb;JvPluginSystem;Tee;JclContainers;DBXOdbcDriver;JvCmp;JvSystem;xmlrtl;svnui;ibxpress;JvTimeFramework;JvControls;IndyProtocols;DBXMySQLDriver;frxe18;vclactnband;bindengine;soaprtl;bindcompdbx;FMXTee;TeeUI;bindcompvcl;UIBD17Win32R;JvStdCtrls;Jcl;vclie;JvCustom;JvJans;JvPageComps;JvPrintPreview;vcltouch;ZipmasterD12;PngComponents;OverbyteIcsDXe4Run;VclSmp;DBXInformixDriver;Intraweb;DataSnapConnectors;dsnapcon;DBXFirebirdDriver;inet;SynEdit_RXE4;fmxobj;JclVcl;JvPascalInterpreter;vclx;svn;DBXSybaseASADriver;fmxdae;bdertl;VirtualTreesR;dbexpress;DataSnapIndy10ServerTransport;JvBDE;$(DCC_UsePackage)</DCC_UsePackage>
         <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
         <UWP_DelphiLogo44>$(BDS)\bin\Artwork\Windows\UWP\delphi_UwpDefault_44.png</UWP_DelphiLogo44>
         <UWP_DelphiLogo150>$(BDS)\bin\Artwork\Windows\UWP\delphi_UwpDefault_150.png</UWP_DelphiLogo150>
+        <Icon_MainIcon>..\Commun\Resources\BD_Icon.ico</Icon_MainIcon>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win64)'!=''">
         <DCC_UsePackage>IndyIPClient;DBXSqliteDriver;fmx;IndySystem;TeeDB;vclib;DBXInterBaseDriver;DataSnapClient;DataSnapCommon;DataSnapServer;DataSnapProviderClient;DBXSybaseASEDriver;DbxCommonDriver;vclimg;dbxcds;DatasnapConnectorsFreePascal;MetropolisUILiveTile;vcldb;vcldsnap;DBXDb2Driver;DBXOracleDriver;CustomIPTransport;dsnap;IndyIPServer;fmxase;vcl;IndyCore;IndyIPCommon;CloudService;DBXMSSQLDriver;FmxTeeUI;inetdbxpress;webdsnap;adortl;bindcompfmx;rtl;dbrtl;DbxClientDriver;bindcomp;inetdb;Tee;DBXOdbcDriver;xmlrtl;ibxpress;IndyProtocols;DBXMySQLDriver;vclactnband;bindengine;soaprtl;bindcompdbx;FMXTee;TeeUI;bindcompvcl;vclie;vcltouch;PngComponents;OverbyteIcsDXe4Run;VclSmp;DBXInformixDriver;Intraweb;DataSnapConnectors;dsnapcon;DBXFirebirdDriver;inet;SynEdit_RXE4;fmxobj;vclx;DBXSybaseASADriver;fmxdae;VirtualTreesR;dbexpress;DataSnapIndy10ServerTransport;$(DCC_UsePackage)</DCC_UsePackage>
@@ -120,138 +121,120 @@ $(PostBuildEvent)]]></PostBuildEvent>
         <DelphiCompile Include="$(MainSource)">
             <MainSource>MainSource</MainSource>
         </DelphiCompile>
-        <DCCReference Include="..\Commun\UMetadata.pas"/>
-        <DCCReference Include="..\Commun\Commun.pas"/>
-        <DCCReference Include="..\Commun\CommonConst.pas"/>
-        <DCCReference Include="..\Commun\Textes.pas"/>
-        <DCCReference Include="..\Commun\UfrmSplash.pas">
+        <DCCReference Include="..\Commun\Entities\BD.Entities.Metadata.pas"/>
+        <DCCReference Include="..\Commun\Utils\BD.Utils.StrUtils.pas"/>
+        <DCCReference Include="..\Commun\BD.Common.pas"/>
+        <DCCReference Include="..\Commun\BD.Strings.pas"/>
+        <DCCReference Include="..\Commun\GUI\Forms\BD.GUI.Forms.Splash.pas">
             <Form>frmSplash</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="..\Commun\UBdtForms.pas">
+        <DCCReference Include="..\Commun\GUI\Forms\BD.GUI.Forms.pas">
             <Form>bdtForm</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="..\Commun\Entities\Entities.Deserializer.pas"/>
-        <DCCReference Include="..\Commun\Entities\Entities.Full.pas"/>
-        <DCCReference Include="..\Commun\Entities\Entities.Lite.pas"/>
-        <DCCReference Include="..\Commun\Entities\Entities.Serializer.pas"/>
-        <DCCReference Include="..\Commun\Entities\JsonDeserializer.pas"/>
-        <DCCReference Include="..\Commun\Entities\JsonSerializer.pas"/>
-        <DCCReference Include="PascalScript\UdmPascalScript.pas"/>
-        <DCCReference Include="PascalScript\UPascalScriptEditor.pas"/>
-        <DCCReference Include="PascalScript\uPSC_BdtkObjects.pas"/>
-        <DCCReference Include="PascalScript\uPSC_BdtkRegEx.pas"/>
-        <DCCReference Include="PascalScript\uPSC_superobject.pas"/>
-        <DCCReference Include="PascalScript\uPSI_BdtkObjects.pas"/>
-        <DCCReference Include="PascalScript\uPSI_BdtkRegEx.pas"/>
-        <DCCReference Include="PascalScript\uPSI_superobject.pas"/>
-        <DCCReference Include="PascalScript\uPSR_BdtkObjects.pas"/>
-        <DCCReference Include="PascalScript\uPSR_BdtkRegEx.pas"/>
-        <DCCReference Include="PascalScript\uPSR_superobject.pas"/>
-        <DCCReference Include="DWScript\UdmDWScript.pas"/>
-        <DCCReference Include="DWScript\UDW_BdtkObjects.pas"/>
-        <DCCReference Include="DWScript\UDW_BdtkRegEx.pas"/>
-        <DCCReference Include="DWScript\UDW_CommonFunctions.pas"/>
-        <DCCReference Include="DWScript\UDWScriptEditor.pas"/>
-        <DCCReference Include="DWScript\UDWUnit.pas"/>
-        <DCCReference Include="..\Commun\Scripts\UScriptList.pas"/>
-        <DCCReference Include="..\Commun\Scripts\UScriptsFonctions.pas"/>
-        <DCCReference Include="..\Commun\Scripts\UScriptUtils.pas"/>
-        <DCCReference Include="..\Commun\UNet.pas"/>
-        <DCCReference Include="..\Commun\Procedures.pas"/>
-        <DCCReference Include="..\Commun\UfrmProgression.pas">
+        <DCCReference Include="..\Commun\Entities\BD.Entities.Utils.Deserializer.pas"/>
+        <DCCReference Include="..\Commun\Entities\BD.Entities.Full.pas"/>
+        <DCCReference Include="..\Commun\Entities\BD.Entities.Lite.pas"/>
+        <DCCReference Include="..\Commun\Entities\BD.Entities.Utils.Serializer.pas"/>
+        <DCCReference Include="..\Commun\Utils\BD.Utils.Deserializer.JSON.pas"/>
+        <DCCReference Include="..\Commun\Utils\BD.Utils.Serializer.JSON.pas"/>
+        <DCCReference Include="PascalScript\BDS.Scripts.PascalScript.pas"/>
+        <DCCReference Include="PascalScript\BDS.Scripts.PascalScript.Editor.pas"/>
+        <DCCReference Include="PascalScript\BDS.Scripts.PascalScript.Compilation.BdtkObjects.pas"/>
+        <DCCReference Include="PascalScript\BDS.Scripts.PascalScript.Compilation.BdtkRegEx.pas"/>
+        <DCCReference Include="PascalScript\BDS.Scripts.PascalScript.Compilation.superobject.pas"/>
+        <DCCReference Include="PascalScript\BDS.Scripts.PascalScript.Import.BdtkObjects.pas"/>
+        <DCCReference Include="PascalScript\BDS.Scripts.PascalScript.Import.BdtkRegEx.pas"/>
+        <DCCReference Include="PascalScript\BDS.Scripts.PascalScript.Import.superobject.pas"/>
+        <DCCReference Include="PascalScript\BDS.Scripts.PascalScript.Run.BdtkObjects.pas"/>
+        <DCCReference Include="PascalScript\BDS.Scripts.PascalScript.Run.BdtkRegEx.pas"/>
+        <DCCReference Include="PascalScript\BDS.Scripts.PascalScript.Run.superobject.pas"/>
+        <DCCReference Include="DWScript\BDS.Scripts.DWScript.pas"/>
+        <DCCReference Include="DWScript\BDS.Scripts.DWScript.DWUnit.BdtkObjects.pas"/>
+        <DCCReference Include="DWScript\BDS.Scripts.DWScript.DWUnit.BdtkRegEx.pas"/>
+        <DCCReference Include="DWScript\BDS.Scripts.DWScript.DWUnit.Functions.pas"/>
+        <DCCReference Include="DWScript\BDS.Scripts.DWScript.Editor.pas"/>
+        <DCCReference Include="DWScript\BDS.Scripts.DWScript.DWUnit.pas"/>
+        <DCCReference Include="..\Commun\Scripts\BD.Scripts.pas"/>
+        <DCCReference Include="..\Commun\Scripts\BD.Scripts.Functions.pas"/>
+        <DCCReference Include="..\Commun\Scripts\BD.Scripts.Utils.pas"/>
+        <DCCReference Include="..\Commun\Utils\BD.Utils.Net.pas"/>
+        <DCCReference Include="..\Commun\Utils\BD.Utils.GUIUtils.pas"/>
+        <DCCReference Include="..\Commun\GUI\Forms\BD.GUI.Forms.Progress.pas">
             <Form>frmProgression</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="..\Commun\UframBoutons.pas">
+        <DCCReference Include="..\Commun\GUI\Frames\BD.GUI.Frames.Buttons.pas">
             <Form>framBoutons</Form>
-            <FormType>dfm</FormType>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
         <DCCReference Include="IDHashMap.pas"/>
-        <DCCReference Include="BDS.Main.DataModule.pas">
+        <DCCReference Include="GUI\DataModules\BDS.DataModules.Main.pas">
             <Form>dmPrinc</Form>
-            <FormType>dfm</FormType>
             <DesignClass>TDataModule</DesignClass>
         </DCCReference>
         <DCCReference Include="UframBreakpoints.pas">
             <Form>framBreakpoints</Form>
-            <FormType>dfm</FormType>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
         <DCCReference Include="UframMessages.pas">
             <Form>framMessages</Form>
-            <FormType>dfm</FormType>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
         <DCCReference Include="UframScriptInfos.pas">
             <Form>framScriptInfos</Form>
-            <FormType>dfm</FormType>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
         <DCCReference Include="UframWatches.pas">
             <Form>framWatches</Form>
-            <FormType>dfm</FormType>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
         <DCCReference Include="UfrmScriptChoix.pas">
             <Form>frmScriptChoix</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="UfrmScriptEditOption.pas">
             <Form>frmScriptEditOption</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="UfrmScriptGotoLine.pas">
             <Form>frmScriptGotoLine</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="..\Commun\Scripts\UfrmScriptOption.pas">
+        <DCCReference Include="..\Commun\Scripts\BD.Scripts.Forms.UserSetting.pas">
             <Form>frmScriptOption</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="BDS.Main.Form.pas">
+        <DCCReference Include="GUI\Forms\BDS.Forms.Main.pas">
             <Form>frmScripts</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="UfrmScriptSearch.pas">
             <Form>frmScriptSearch</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="UfrmScriptsUpdate.pas">
             <Form>frmScriptsUpdate</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="UMasterEngine.pas"/>
         <DCCReference Include="UScriptEditor.pas"/>
         <DCCReference Include="UScriptEditorPage.pas"/>
         <DCCReference Include="UScriptEngineIntf.pas"/>
         <DCCReference Include="UScriptsHTMLFunctions.pas"/>
-        <DCCReference Include="..\Commun\BdtkRegEx.pas"/>
-        <DCCReference Include="..\Commun\VirtualTree.pas"/>
-        <DCCReference Include="..\Commun\UfrmAboutBox.pas">
+        <DCCReference Include="..\Commun\Utils\BD.Utils.RegEx.pas"/>
+        <DCCReference Include="..\Commun\GUI\Controls\BD.GUI.Controls.VirtualTree.pas"/>
+        <DCCReference Include="..\Commun\GUI\Forms\BD.GUI.Forms.About.pas">
             <Form>frmAboutBox</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="..\Commun\Entities\Entities.Common.pas"/>
-        <DCCReference Include="..\Commun\Entities\Entities.FactoriesLite.pas"/>
-        <DCCReference Include="..\Commun\Entities\Entities.FactoriesCommon.pas"/>
-        <DCCReference Include="..\Commun\Entities\Entities.FactoriesFull.pas"/>
+        <DCCReference Include="..\Commun\Entities\BD.Entities.Common.pas"/>
+        <DCCReference Include="..\Commun\Entities\BD.Entities.Factory.Lite.pas"/>
+        <DCCReference Include="..\Commun\Entities\BD.Entities.Factory.Common.pas"/>
+        <DCCReference Include="..\Commun\Entities\BD.Entities.Factory.Full.pas"/>
         <DCCReference Include="Entities.DaoLambdaJSON.pas"/>
-        <DCCReference Include="..\Commun\Entities\Entities.DaoLambda.pas"/>
-        <DCCReference Include="..\Commun\UNetICSCompress.pas"/>
-        <DCCReference Include="..\Commun\Entities\Entities.Types.pas"/>
-        <DCCReference Include="..\Commun\BD.Common.DataModule.pas">
+        <DCCReference Include="..\Commun\Entities\BD.Entities.Dao.Lambda.pas"/>
+        <DCCReference Include="..\Commun\Utils\BD.Utils.Net.ICS.pas"/>
+        <DCCReference Include="..\Commun\Entities\BD.Entities.Types.pas"/>
+        <DCCReference Include="..\Commun\GUI\DataModules\BD.GUI.DataModules.Common.pas">
             <Form>dmCommon</Form>
-            <FormType>dfm</FormType>
             <DesignClass>TDataModule</DesignClass>
         </DCCReference>
-        <RcItem Include="..\Commun\images\imgAbout.bmp">
+        <RcItem Include="..\Commun\Resources\imgAbout.bmp">
             <ResourceType>BITMAP</ResourceType>
             <ResourceId>ABOUT</ResourceId>
         </RcItem>
-        <RcItem Include="..\Commun\images\handpoint.cur">
+        <RcItem Include="..\Commun\Resources\handpoint.cur">
             <ResourceType>RCDATA</ResourceType>
             <ResourceId>CUR_HANDPOINT</ResourceId>
         </RcItem>
@@ -332,20 +315,20 @@ $(PostBuildEvent)]]></PostBuildEvent>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName="..\Commun\images\handpoint.cur" Configuration="Debug" Class="ProjectFile"/>
-                <DeployFile LocalName="..\Commun\images\imgAbout.bmp" Configuration="Debug" Class="ProjectFile">
+                <DeployFile LocalName="..\Commun\Resources\handpoint.cur" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="..\Commun\Resources\handpoint.cur" Configuration="Debug" Class="ProjectFile"/>
+                <DeployFile LocalName="..\Commun\Resources\imgAbout.bmp" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Win32">
                         <RemoteDir>.\</RemoteDir>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="..\..\bin\Win32\BDScript.exe" Configuration="Debug" Class="ProjectOutput"/>
-                <DeployFile LocalName="..\Commun\images\handpoint.cur" Configuration="Debug" Class="ProjectFile">
-                    <Platform Name="Win32">
-                        <RemoteDir>.\</RemoteDir>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
                 <DeployClass Name="AdditionalDebugSymbols">
                     <Platform Name="iOSSimulator">
                         <Operation>1</Operation>

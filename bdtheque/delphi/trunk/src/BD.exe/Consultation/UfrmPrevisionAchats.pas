@@ -4,8 +4,8 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, Menus, ActnList, VirtualTrees, VirtualTreeBdtk, Buttons, VDTButton, ProceduresBDtk,
-  ExtCtrls, Procedures, ComboCheck, StdCtrls, UBdtForms, PngSpeedButton,
+  Dialogs, Menus, ActnList, VirtualTrees, BDTK.GUI.Controls.VirtualTree, Buttons, VDTButton, BDTK.GUI.Utils,
+  ExtCtrls, BD.Utils.GUIUtils, ComboCheck, StdCtrls, BD.GUI.Forms, PngSpeedButton,
   System.Actions;
 
 type
@@ -52,8 +52,8 @@ type
 
 implementation
 
-uses Impression, IniFiles, CommonConst, Entities.Lite, DateUtils, UHistorique,
-  Proc_Gestions, Commun;
+uses Impression, IniFiles, BD.Common, BD.Entities.Lite, DateUtils, UHistorique,
+  Proc_Gestions, BD.Utils.StrUtils;
 
 {$R *.dfm}
 

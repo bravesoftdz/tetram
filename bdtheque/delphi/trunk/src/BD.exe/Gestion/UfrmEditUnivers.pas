@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, Db, StdCtrls, ExtCtrls, DBCtrls, Mask, Buttons, VDTButton, ComCtrls,
-  EditLabeled, VirtualTrees, VirtualTreeBdtk, Entities.Full, Menus, ExtDlgs, UframRechercheRapide, UframBoutons, UBdtForms,
+  EditLabeled, VirtualTrees, BDTK.GUI.Controls.VirtualTree, BD.Entities.Full, Menus, ExtDlgs, BDTK.GUI.Frames.QuickSearch, BD.GUI.Frames.Buttons, BD.GUI.Forms,
   ComboCheck, StrUtils, PngSpeedButton, UframVTEdit;
 
 type
@@ -52,8 +52,8 @@ type
 implementation
 
 uses
-  Commun, Proc_Gestions, Entities.Lite, Procedures, Divers, Textes, StdConvs, ShellAPI, CommonConst, JPEG,
-  UHistorique, UMetadata, Entities.DaoFull, Entities.DaoLite, Entities.Common;
+  BD.Utils.StrUtils, Proc_Gestions, BD.Entities.Lite, BD.Utils.GUIUtils, Divers, BD.Strings, StdConvs, ShellAPI, BD.Common, JPEG,
+  UHistorique, BD.Entities.Metadata, BDTK.Entities.Dao.Full, BDTK.Entities.Dao.Lite, BD.Entities.Common;
 
 {$R *.DFM}
 

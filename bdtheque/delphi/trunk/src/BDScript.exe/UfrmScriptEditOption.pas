@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, UframBoutons, StdCtrls, ExtCtrls, UbdtForms, EditLabeled;
+  Dialogs, BD.GUI.Frames.Buttons, StdCtrls, ExtCtrls, BD.GUI.Forms, EditLabeled;
 
 type
   TfrmScriptEditOption = class(TBdtForm)

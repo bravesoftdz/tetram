@@ -4,8 +4,8 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, Mask, DBCtrls, ExtCtrls, ComCtrls, VDTButton,
-  Buttons, EditLabeled, ShellAPI, Entities.Full, UBdtForms,
-  PngSpeedButton, UframBoutons;
+  Buttons, EditLabeled, ShellAPI, BD.Entities.Full, BD.GUI.Forms,
+  PngSpeedButton, BD.GUI.Frames.Buttons;
 
 type
   TfrmEditEditeur = class(TbdtForm)
@@ -40,8 +40,8 @@ type
 implementation
 
 uses
-  Commun, Procedures, Textes, VirtualTreeBdtk, Entities.DaoFull,
-  Entities.Common;
+  BD.Utils.StrUtils, BD.Utils.GUIUtils, BD.Strings, BDTK.GUI.Controls.VirtualTree, BDTK.Entities.Dao.Full,
+  BD.Entities.Common;
 
 {$R *.DFM}
 

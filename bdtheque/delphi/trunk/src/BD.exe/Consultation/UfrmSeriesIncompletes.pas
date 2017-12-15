@@ -3,8 +3,8 @@ unit UfrmSeriesIncompletes;
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, Dialogs, EntitiesStats, VirtualTrees, VirtualTree, ToolWin,
-  ProceduresBDtk, StdCtrls, ExtCtrls, Menus, ActnList, UBdtForms, System.Actions;
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, Dialogs, BDTK.Entities.Stats, VirtualTrees, BD.GUI.Controls.VirtualTree, ToolWin,
+  BDTK.GUI.Utils, StdCtrls, ExtCtrls, Menus, ActnList, BD.GUI.Forms, System.Actions;
 
 type
   TfrmSeriesIncompletes = class(TBdtForm, IImpressionApercu)
@@ -38,8 +38,8 @@ type
 
 implementation
 
-uses Entities.Lite, Commun, Impression, IniFiles, CommonConst, Procedures,
-  Entities.DaoFull;
+uses BD.Entities.Lite, BD.Common, Impression, IniFiles, BD.Utils.StrUtils, BD.Utils.GUIUtils,
+  BDTK.Entities.Dao.Full;
 
 {$R *.dfm}
 

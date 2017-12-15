@@ -4,8 +4,8 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, IOUtils, System.UITypes,
-  Vcl.Dialogs, ActnList, StdActns, VirtualTrees, StdCtrls, Buttons, ProceduresBDtk,
-  VDTButton, ExtCtrls, VirtualTreeBdtk, Procedures, UBdtForms, PngSpeedButton;
+  Vcl.Dialogs, ActnList, StdActns, VirtualTrees, StdCtrls, Buttons, BDTK.GUI.Utils,
+  VDTButton, ExtCtrls, BDTK.GUI.Controls.VirtualTree, BD.Utils.GUIUtils, BD.GUI.Forms, PngSpeedButton;
 
 type
   TFileStream = class(Classes.TFileStream)
@@ -44,8 +44,8 @@ type
 
 implementation
 
-uses CommonConst, Entities.Lite, Commun, Entities.Full, Entities.DaoLite, Entities.DaoFull,
-  Entities.Serializer, JsonSerializer, Entities.Common, Entities.FactoriesLite;
+uses BD.Common, BD.Entities.Lite, BD.Utils.StrUtils, BD.Entities.Full, BDTK.Entities.Dao.Lite, BDTK.Entities.Dao.Full,
+  BD.Entities.Utils.Serializer, BD.Utils.Serializer.JSON, BD.Entities.Common, BD.Entities.Factory.Lite;
 
 {$R *.dfm}
 { TFileStream }

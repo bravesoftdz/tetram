@@ -4,8 +4,8 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, UBdtForms, UScriptList, Vcl.StdCtrls,
-  Vcl.ComCtrls, Vcl.ExtCtrls, UframBoutons;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, BD.GUI.Forms, BD.Scripts, Vcl.StdCtrls,
+  Vcl.ComCtrls, Vcl.ExtCtrls, BD.GUI.Frames.Buttons;
 
 type
   TfrmChoixScript = class(TbdtForm)
@@ -44,7 +44,7 @@ type
 implementation
 
 uses
-  UfrmScriptOption, CommonConst;
+  BD.Scripts.Forms.UserSetting, BD.Common;
 
 {$R *.dfm}
 

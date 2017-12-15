@@ -3,9 +3,9 @@ unit UfrmRecherche;
 interface
 
 uses
-  SysUtils, Windows, Messages, Classes, Forms, Graphics, Controls, Menus, StdCtrls, System.UITypes, System.Types, Buttons, ComCtrls, ExtCtrls, ToolWin, Commun,
-  VirtualTrees, VirtualTreeBdtk, ActnList, VDTButton, ComboCheck, ProceduresBDtk,
-  UframRechercheRapide, Entities.Full, EntitiesRecherche, UBdtForms, Generics.Defaults,
+  SysUtils, Windows, Messages, Classes, Forms, Graphics, Controls, Menus, StdCtrls, System.UITypes, System.Types, Buttons, ComCtrls, ExtCtrls, ToolWin, BD.Utils.StrUtils,
+  VirtualTrees, BDTK.GUI.Controls.VirtualTree, ActnList, VDTButton, ComboCheck, BDTK.GUI.Utils,
+  BDTK.GUI.Frames.QuickSearch, BD.Entities.Full, BDTK.Entities.Search, BD.GUI.Forms, Generics.Defaults,
   System.Actions;
 
 type
@@ -83,8 +83,8 @@ type
 implementation
 
 uses
-  Textes, BDTK.Main.DataModule, Entities.Lite, Impression, Math, UfrmEditCritere, UHistorique, Procedures, StrUtils,
-  BDTK.Main.Form, UfrmEditCritereTri, Divers, Entities.Common;
+  BD.Strings, BDTK.GUI.DataModules.Main, BD.Entities.Lite, Impression, Math, UfrmEditCritere, UHistorique, BD.Utils.GUIUtils, StrUtils,
+  BDTK.GUI.Forms.Main, UfrmEditCritereTri, Divers, BD.Entities.Common;
 
 {$R *.DFM}
 

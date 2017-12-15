@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
-  StdCtrls, ExtCtrls, EntitiesStats, UBdtForms;
+  StdCtrls, ExtCtrls, BDTK.Entities.Stats, BD.GUI.Forms;
 
 type
   TfrmStatsAlbums = class(TbdtForm)
@@ -45,7 +45,7 @@ function TStatsAlbumsCreate(AOwner: TComponent; Info: TStats): TfrmStatsAlbums;
 
 implementation
 
-uses CommonConst, Entities.Lite, Divers;
+uses BD.Common, BD.Entities.Lite, Divers;
 
 {$R *.DFM}
 

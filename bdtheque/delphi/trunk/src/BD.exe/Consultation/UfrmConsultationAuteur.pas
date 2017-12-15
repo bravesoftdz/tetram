@@ -2,8 +2,8 @@ unit UfrmConsultationAuteur;
 
 interface
 
-uses Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, System.UITypes, Db, ExtCtrls, DBCtrls, StdCtrls, Menus, ComCtrls, ProceduresBDtk,
-  VDTButton, ActnList, Buttons, ToolWin, VirtualTrees, jpeg, Procedures, ShellAPI, VirtualTree, Entities.Full, UBdtForms, StrUtils,
+uses Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, System.UITypes, Db, ExtCtrls, DBCtrls, StdCtrls, Menus, ComCtrls, BDTK.GUI.Utils,
+  VDTButton, ActnList, Buttons, ToolWin, VirtualTrees, jpeg, BD.Utils.GUIUtils, ShellAPI, BD.GUI.Controls.VirtualTree, BD.Entities.Full, BD.GUI.Forms, StrUtils,
   System.Actions;
 
 type
@@ -65,8 +65,8 @@ implementation
 
 {$R *.DFM}
 
-uses Commun, Entities.Lite, Impression, DateUtils, UHistorique, Proc_Gestions, BDTK.Main.Form,
-  Entities.DaoFull, Entities.Common, Entities.FactoriesFull;
+uses BD.Utils.StrUtils, BD.Entities.Lite, Impression, DateUtils, UHistorique, Proc_Gestions, BDTK.GUI.Forms.Main,
+  BDTK.Entities.Dao.Full, BD.Entities.Common, BD.Entities.Factory.Full;
 
 type
   PNodeInfo = ^RNodeInfo;

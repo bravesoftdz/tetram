@@ -4,8 +4,8 @@ interface
 
 uses
   Windows, Messages, SysUtils, System.Types, Variants, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, EditLabeled, VirtualTrees, ComCtrls, VDTButton,
-  VirtualTreeBdtk, ComboCheck, ExtCtrls, Buttons, UframRechercheRapide, Vcl.ExtDlgs, Entities.Full,
-  UframBoutons, UBdtForms, PngSpeedButton, UframVTEdit, Vcl.Menus;
+  BDTK.GUI.Controls.VirtualTree, ComboCheck, ExtCtrls, Buttons, BDTK.GUI.Frames.QuickSearch, Vcl.ExtDlgs, BD.Entities.Full,
+  BD.GUI.Frames.Buttons, BD.GUI.Forms, PngSpeedButton, UframVTEdit, Vcl.Menus;
 
 type
   TfrmEditParaBD = class(TbdtForm)
@@ -121,9 +121,9 @@ type
 implementation
 
 uses
-  Commun, CommonConst, Textes, Procedures, ProceduresBDtk, jpeg, Proc_Gestions, Entities.Lite, Divers, UHistorique,
-  UMetadata, Entities.DaoLite, Entities.DaoFull, Entities.Common,
-  Entities.FactoriesLite, Entities.DaoLambda, Entities.Types;
+  BD.Utils.StrUtils, BD.Common, BD.Strings, BD.Utils.GUIUtils, BDTK.GUI.Utils, jpeg, Proc_Gestions, BD.Entities.Lite, Divers, UHistorique,
+  BD.Entities.Metadata, BDTK.Entities.Dao.Lite, BDTK.Entities.Dao.Full, BD.Entities.Common,
+  BD.Entities.Factory.Lite, BD.Entities.Dao.Lambda, BD.Entities.Types;
 
 {$R *.dfm}
 { TFrmEditAchatParaBD }

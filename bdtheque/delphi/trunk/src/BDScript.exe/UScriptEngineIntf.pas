@@ -3,7 +3,7 @@ unit UScriptEngineIntf;
 interface
 
 uses
-  System.Classes, UScriptList, UScriptEditor, Entities.Full, VirtualTrees, System.Generics.Collections;
+  System.Classes, BD.Scripts, UScriptEditor, BD.Entities.Full, VirtualTrees, System.Generics.Collections;
 
 type
   TDebugMode = (dmRun, dmStepOver, dmStepInto, dmPaused);

@@ -4,8 +4,8 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, StrUtils, System.UITypes,
-  Dialogs, Entities.Full, StdCtrls, VirtualTrees, ExtCtrls, BDTK.Main.Form, Procedures,
-  ComCtrls, VDTButton, Buttons, ActnList, Menus, ProceduresBDtk, UBdtForms, VirtualTreeBdtk,
+  Dialogs, BD.Entities.Full, StdCtrls, VirtualTrees, ExtCtrls, BDTK.GUI.Forms.Main, BD.Utils.GUIUtils,
+  ComCtrls, VDTButton, Buttons, ActnList, Menus, BDTK.GUI.Utils, BD.GUI.Forms, BDTK.GUI.Controls.VirtualTree,
   LabeledCheckBox, System.Actions;
 
 type
@@ -64,8 +64,8 @@ type
 
 implementation
 
-uses Commun, Entities.Lite, UHistorique, Divers, ShellAPI, Textes, CommonConst, jpeg, Impression,
-  Proc_Gestions, Entities.DaoFull, Entities.Common, Entities.FactoriesFull;
+uses BD.Utils.StrUtils, BD.Entities.Lite, UHistorique, Divers, ShellAPI, BD.Strings, BD.Common, jpeg, Impression,
+  Proc_Gestions, BDTK.Entities.Dao.Full, BD.Entities.Common, BD.Entities.Factory.Full;
 
 {$R *.dfm}
 { TfrmConsultationUnivers }

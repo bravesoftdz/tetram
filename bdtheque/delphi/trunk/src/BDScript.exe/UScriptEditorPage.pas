@@ -9,7 +9,7 @@ uses
   SynEdit, SynEditKeyCmds, SynEditSearch, SynMacroRecorder,
   PngImageList,
   UScriptEngineIntf,
-  UScriptList, UScriptEditor;
+  BD.Scripts, UScriptEditor;
 
 const
   ecOpenFileUnderCursor = ecUserFirst;

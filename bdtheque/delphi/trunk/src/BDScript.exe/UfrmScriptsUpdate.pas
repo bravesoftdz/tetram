@@ -4,8 +4,8 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, Menus,
-  Dialogs, UScriptEngineIntf, Generics.Collections, UScriptList, VirtualTrees, VirtualTree,
-  StdCtrls, UframBoutons, ActnList, ComCtrls, ComboCheck, System.Actions;
+  Dialogs, UScriptEngineIntf, Generics.Collections, BD.Scripts, VirtualTrees, BD.GUI.Controls.VirtualTree,
+  StdCtrls, BD.GUI.Frames.Buttons, ActnList, ComCtrls, ComboCheck, System.Actions;
 
 type
   TOnlineScript = class
@@ -55,7 +55,7 @@ type
 implementation
 
 uses
-  IOUtils, JclSimpleXML, UScriptsFonctions, CommonConst, UNet, Divers,
+  IOUtils, JclSimpleXML, BD.Scripts.Functions, BD.Common, BD.Utils.Net, Divers,
   UMasterEngine;
 
 {$R *.dfm}

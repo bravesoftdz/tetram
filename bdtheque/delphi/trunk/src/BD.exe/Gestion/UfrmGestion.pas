@@ -4,8 +4,8 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, DBCtrls, ComCtrls, Db, Menus,
-  ExtCtrls, Buttons, Proc_Gestions, VDTButton, VirtualTrees, VirtualTreeBdtk,
-  UframRechercheRapide, UBdtForms, PngSpeedButton;
+  ExtCtrls, Buttons, Proc_Gestions, VDTButton, VirtualTrees, BDTK.GUI.Controls.VirtualTree,
+  BDTK.GUI.Frames.QuickSearch, BD.GUI.Forms, PngSpeedButton;
 
 type
   PInfo_Gestion = ^RInfo_Gestion;
@@ -79,7 +79,7 @@ var
 implementation
 
 uses
-  Commun, CommonConst, Procedures, UfrmWizardImport, UHistorique;
+  BD.Utils.StrUtils, BD.Common, BD.Utils.GUIUtils, UfrmWizardImport, UHistorique;
 
 const
   HintListeAlbums = 'Liste des albums';

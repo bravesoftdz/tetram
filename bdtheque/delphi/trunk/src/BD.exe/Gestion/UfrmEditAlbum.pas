@@ -4,9 +4,9 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, System.UITypes, ExtCtrls, DBCtrls, StdCtrls, ImgList, EditLabeled,
-  VDTButton, ExtDlgs, Mask, ComCtrls, Buttons, VirtualTrees, VirtualTreeBdtk, Menus, Entities.Lite, ActnList, Entities.Full, ComboCheck,
-  UframRechercheRapide, UframBoutons, UBdtForms, Generics.Collections, StrUtils,
-  JvExMask, JvToolEdit, UVirtualTreeEdit, BDTK.Main.Form, PngSpeedButton,
+  VDTButton, ExtDlgs, Mask, ComCtrls, Buttons, VirtualTrees, BDTK.GUI.Controls.VirtualTree, Menus, BD.Entities.Lite, ActnList, BD.Entities.Full, ComboCheck,
+  BDTK.GUI.Frames.QuickSearch, BD.GUI.Frames.Buttons, BD.GUI.Forms, Generics.Collections, StrUtils,
+  JvExMask, JvToolEdit, BDTK.GUI.Controls.VirtualTreeEdit, BDTK.GUI.Forms.Main, PngSpeedButton,
   UframVTEdit, LoadCompletImport, System.ImageList;
 
 type
@@ -193,9 +193,9 @@ type
 implementation
 
 uses
-  Commun, CommonConst, Textes, Divers, Proc_Gestions, Procedures, ProceduresBDtk, Types, jpeg, DateUtils,
-  UHistorique, UMetadata, Entities.DaoLite, Entities.DaoFull, Entities.Common, Entities.Types,
-  Entities.FactoriesLite, Entities.FactoriesFull, Entities.DaoLambda;
+  BD.Utils.StrUtils, BD.Common, BD.Strings, Divers, Proc_Gestions, BD.Utils.GUIUtils, BDTK.GUI.Utils, Types, jpeg, DateUtils,
+  UHistorique, BD.Entities.Metadata, BDTK.Entities.Dao.Lite, BDTK.Entities.Dao.Full, BD.Entities.Common, BD.Entities.Types,
+  BD.Entities.Factory.Lite, BD.Entities.Factory.Full, BD.Entities.Dao.Lambda;
 
 {$R *.DFM}
 

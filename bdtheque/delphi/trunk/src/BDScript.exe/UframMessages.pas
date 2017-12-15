@@ -23,7 +23,7 @@ type
 implementation
 
 uses
-  UScriptUtils;
+  BD.Scripts.Utils;
 
 {$R *.dfm}
 

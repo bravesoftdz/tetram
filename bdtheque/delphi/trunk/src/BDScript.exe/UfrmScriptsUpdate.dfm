@@ -103,7 +103,6 @@ object frmScriptsUpdate: TfrmScriptsUpdate
     Width = 814
     Height = 401
     Anchors = [akLeft, akTop, akRight, akBottom]
-    CheckImageKind = ckLightTick
     Header.AutoSizeIndex = 0
     Header.Font.Charset = DEFAULT_CHARSET
     Header.Font.Color = clWindowText

@@ -55,7 +55,7 @@ object frmPrevisionsSorties: TfrmPrevisionsSorties
       item
         MinWidth = 50
         Position = 1
-        Width = 564
+        Width = 560
         WideText = 'Pr'#233'visions'
       end>
   end

@@ -3,15 +3,15 @@ unit LoadCompletImport;
 interface
 
 uses
-  Winapi.Windows, SysUtils, Classes, Forms, Entities.Full, Generics.Collections, Graphics;
+  Winapi.Windows, SysUtils, Classes, Forms, BD.Entities.Full, Generics.Collections, Graphics;
 
 procedure Import(Self: TAlbumFull);
 
 implementation
 
 uses
-  uib, Entities.Lite, UfrmValidationImport, VirtualTreeBdtk, UfrmControlImport, Commun, Entities.DaoLite, BDTK.Main.DataModule, Entities.DaoFull, Entities.FactoriesLite,
-  UMetadata, System.UITypes, Divers, Entities.Common, Entities.Types;
+  uib, BD.Entities.Lite, UfrmValidationImport, BDTK.GUI.Controls.VirtualTree, UfrmControlImport, BD.Utils.StrUtils, BDTK.Entities.Dao.Lite, BDTK.GUI.DataModules.Main, BDTK.Entities.Dao.Full, BD.Entities.Factory.Lite,
+  BD.Entities.Metadata, System.UITypes, Divers, BD.Entities.Common, BD.Entities.Types;
 
 procedure Import(Self: TAlbumFull);
 var

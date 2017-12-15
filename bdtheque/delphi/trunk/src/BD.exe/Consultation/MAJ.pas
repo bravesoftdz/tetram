@@ -3,7 +3,7 @@ unit MAJ;
 interface
 
 uses
-  Windows, SysUtils, Forms, Controls, ComCtrls, Entities.Lite, Entities.Full, Classes, Commun;
+  Windows, SysUtils, Forms, Controls, ComCtrls, BD.Entities.Lite, BD.Entities.Full, Classes, BD.Utils.StrUtils;
 
 function MAJConsultationAlbum(const Reference: TGUID): Boolean;
 function MAJConsultationAuteur(const Reference: TGUID): Boolean;
@@ -21,10 +21,10 @@ function ZoomCouverture(isParaBD: Boolean; const ID_Item, ID_Couverture: TGUID):
 implementation
 
 uses
-  CommonConst, BDTK.Main.Form, DB, StdCtrls, UfrmSeriesIncompletes, UfrmPrevisionsSorties, Graphics, UfrmConsultationAlbum, UfrmRecherche, UfrmZoomCouverture,
+  BD.Common, BD.Utils.GUIUtils, BDTK.GUI.Forms.Main, DB, StdCtrls, UfrmSeriesIncompletes, UfrmPrevisionsSorties, Graphics, UfrmConsultationAlbum, UfrmRecherche, UfrmZoomCouverture,
   UfrmConsultationAuteur, UfrmPrevisionAchats, UHistorique, UfrmConsultationParaBD, UfrmConsultationSerie, UfrmGallerie, UfrmConsultationUnivers,
-  JclCompression, System.IOUtils, Entities.Serializer, ProceduresBDtk, JsonSerializer, dwsJSON, Entities.DaoLambda, UfrmChoixScript, JclSysUtils,
-  Entities.Deserializer, LoadCompletImport, Divers;
+  JclCompression, System.IOUtils, BD.Entities.Utils.Serializer, BDTK.GUI.Utils, BD.Utils.Serializer.JSON, dwsJSON, BD.Entities.Dao.Lambda, UfrmChoixScript, JclSysUtils,
+  BD.Entities.Utils.Deserializer, LoadCompletImport, Divers;
 
 function MAJConsultationAuteur(const Reference: TGUID): Boolean;
 var

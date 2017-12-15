@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, System.Types, ExtCtrls, ActnList, ToolWin, StdCtrls,
-  Procedures, Menus, ProceduresBDtk, UBdtForms, System.Actions;
+  BD.Utils.GUIUtils, Menus, BDTK.GUI.Utils, BD.GUI.Forms, System.Actions;
 
 type
   TfrmZoomCouverture = class(TBdtForm, IImpressionApercu)

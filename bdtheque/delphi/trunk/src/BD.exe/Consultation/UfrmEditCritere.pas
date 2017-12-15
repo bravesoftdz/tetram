@@ -3,8 +3,8 @@ unit UfrmEditCritere;
 interface
 
 uses
-  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, System.Types, UframBoutons, StdCtrls, DBCtrls, UfrmRecherche,
-  ActnList, EditLabeled, ComboCheck, ComCtrls, EntitiesRecherche, UBdtForms,
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, System.Types, BD.GUI.Frames.Buttons, StdCtrls, DBCtrls, UfrmRecherche,
+  ActnList, EditLabeled, ComboCheck, ComCtrls, BDTK.Entities.Search, BD.GUI.Forms,
   System.Actions;
 
 type
@@ -36,7 +36,7 @@ type
 
 implementation
 
-uses UIB, UdmCommun, Commun, BDTK.Main.DataModule, UIBLib, Divers,
+uses UIB, BDTK.GUI.DataModules.Search, BD.Utils.StrUtils, BD.Utils.GUIUtils, BDTK.GUI.DataModules.Main, UIBLib, Divers,
   UChampsRecherche;
 
 {$R *.DFM}
@@ -246,48 +246,48 @@ begin
   case PChamp(champs.LastItemData).Special of
     csTitre:
       begin
-        AssignItems(signes.Items, dmCommun.tblCritereTitre);
-        AssignItems(Critere2.Items, dmCommun.tblCritereLangueTitre);
+        AssignItems(signes.Items, dmSearch.tblCritereTitre);
+        AssignItems(Critere2.Items, dmSearch.tblCritereLangueTitre);
         signes.Tag := 1;
         valeur.Visible := True;
       end;
     csGenre:
       begin
-        AssignItems(signes.Items, dmCommun.tblCritereListe);
-        AssignItems(Critere2.Items, dmCommun.tblGenre, FChampValeurs);
+        AssignItems(signes.Items, dmSearch.tblCritereListe);
+        AssignItems(Critere2.Items, dmSearch.tblGenre, FChampValeurs);
         signes.Tag := 2;
         valeur.Visible := False;
       end;
     csAffiche:
       begin
-        AssignItems(signes.Items, dmCommun.tblCritereAffiche);
+        AssignItems(signes.Items, dmSearch.tblCritereAffiche);
         valeur.Visible := False;
       end;
     csEtat:
       begin
-        AssignItems(signes.Items, dmCommun.tblCritereListe);
-        AssignItems(Critere2.Items, dmCommun.tblCritereEtat);
+        AssignItems(signes.Items, dmSearch.tblCritereListe);
+        AssignItems(Critere2.Items, dmSearch.tblCritereEtat);
         signes.Tag := 2;
         valeur.Visible := False;
       end;
     csReliure:
       begin
-        AssignItems(signes.Items, dmCommun.tblCritereListe);
-        AssignItems(Critere2.Items, dmCommun.tblCritereReliure);
+        AssignItems(signes.Items, dmSearch.tblCritereListe);
+        AssignItems(Critere2.Items, dmSearch.tblCritereReliure);
         signes.Tag := 2;
         valeur.Visible := False;
       end;
     csSensLecture:
       begin
-        AssignItems(signes.Items, dmCommun.tblCritereListe);
-        AssignItems(Critere2.Items, dmCommun.tblCritereSensLecture);
+        AssignItems(signes.Items, dmSearch.tblCritereListe);
+        AssignItems(Critere2.Items, dmSearch.tblCritereSensLecture);
         signes.Tag := 2;
         valeur.Visible := False;
       end;
     csNotation:
       begin
-        AssignItems(signes.Items, dmCommun.tblCritereListe);
-        AssignItems(Critere2.Items, dmCommun.tblCritereNotation);
+        AssignItems(signes.Items, dmSearch.tblCritereListe);
+        AssignItems(Critere2.Items, dmSearch.tblCritereNotation);
         signes.Tag := 2;
         valeur.Visible := False;
       end;
@@ -295,23 +295,23 @@ begin
       case PChamp(champs.LastItemData).TypeData of
         uftChar, uftVarchar, uftBlob:
           begin
-            AssignItems(signes.Items, dmCommun.tblCritereString);
+            AssignItems(signes.Items, dmSearch.tblCritereString);
             valeur.Visible := True;
           end;
         uftSmallInt, uftInteger, uftFloat, uftNumeric:
           if PChamp(champs.LastItemData).Booleen then
           begin
-            AssignItems(signes.Items, dmCommun.tblCritereBoolean);
+            AssignItems(signes.Items, dmSearch.tblCritereBoolean);
             valeur.Visible := False;
           end
           else
           begin
-            AssignItems(signes.Items, dmCommun.tblCritereNumeral);
+            AssignItems(signes.Items, dmSearch.tblCritereNumeral);
             valeur.Visible := True;
           end;
         uftDate, uftTime, uftTimestamp:
           begin
-            AssignItems(signes.Items, dmCommun.tblCritereNumeral);
+            AssignItems(signes.Items, dmSearch.tblCritereNumeral);
             valeur.Visible := True;
           end;
       end;

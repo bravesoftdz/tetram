@@ -4,8 +4,8 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, System.UITypes,
-  Dialogs, ExtCtrls, StdCtrls, Entities.Full, Generics.Collections, Entities.Lite,
-  UBdtForms;
+  Dialogs, ExtCtrls, StdCtrls, BD.Entities.Full, Generics.Collections, BD.Entities.Lite,
+  BD.GUI.Forms;
 
 type
   TfrmGallerie = class(TBdtForm)
@@ -75,8 +75,8 @@ implementation
 {$R *.dfm}
 
 uses
-  Procedures, CommonConst, jpeg, UHistorique, Commun, Entities.DaoLite, Entities.DaoFull,
-  ProceduresBDtk, Entities.Common, Entities.FactoriesLite;
+  BD.Utils.GUIUtils, BD.Common, jpeg, UHistorique, BD.Utils.StrUtils, BDTK.Entities.Dao.Lite, BDTK.Entities.Dao.Full,
+  BDTK.GUI.Utils, BD.Entities.Common, BD.Entities.Factory.Lite;
 
 { TThumbList.TThumb }
 

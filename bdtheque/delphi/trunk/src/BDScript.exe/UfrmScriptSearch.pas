@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, ExtCtrls, ComCtrls, SynEditTypes, UBdtForms;
+  Dialogs, StdCtrls, ExtCtrls, ComCtrls, SynEditTypes, BD.GUI.Forms;
 
 type
   TfrmScriptSearch = class(TbdtForm)

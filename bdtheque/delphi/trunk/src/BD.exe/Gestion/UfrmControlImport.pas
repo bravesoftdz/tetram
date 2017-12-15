@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, UframBoutons, UbdtForms, StdCtrls, UframVTEdit, VirtualTreeBdtk, Entities.Full;
+  Dialogs, BD.GUI.Frames.Buttons, BD.GUI.Forms, StdCtrls, UframVTEdit, BDTK.GUI.Controls.VirtualTree, BD.Entities.Full;
 
 type
   TfrmControlImport = class(TbdtForm)
@@ -36,7 +36,7 @@ type
 implementation
 
 uses
-  Commun, Proc_Gestions;
+  BD.Utils.StrUtils, Proc_Gestions;
 
 {$R *.dfm}
 

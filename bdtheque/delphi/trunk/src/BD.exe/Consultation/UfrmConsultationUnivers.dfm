@@ -223,7 +223,6 @@ object frmConsultationUnivers: TfrmConsultationUnivers
       BevelKind = bkFlat
       BorderStyle = bsNone
       ButtonFillMode = fmShaded
-      CheckImageKind = ckDarkCheck
       Header.AutoSizeIndex = -1
       Header.DefaultHeight = 17
       Header.Font.Charset = DEFAULT_CHARSET

@@ -3,8 +3,8 @@ unit UMasterEngine;
 interface
 
 uses
-  System.SysUtils, System.Classes, UScriptList, System.Generics.Collections, Dialogs,
-  UScriptUtils, Entities.Full, UScriptEditor, UScriptEngineIntf;
+  System.SysUtils, System.Classes, BD.Scripts, System.Generics.Collections, Dialogs,
+  BD.Scripts.Utils, BD.Entities.Full, UScriptEditor, UScriptEngineIntf;
 
 type
   TEngineFactory = class
@@ -69,7 +69,7 @@ implementation
 
 { %CLASSGROUP 'System.Classes.TPersistent' }
 
-uses CommonConst, Entities.FactoriesFull, dwsJSON;
+uses BD.Common, BD.Entities.Factory.Full, dwsJSON;
 
 var
   Engines: TDictionary<TScriptEngine, TEngineFactoryClass> = nil;

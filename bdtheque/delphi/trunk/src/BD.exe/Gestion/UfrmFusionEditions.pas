@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, UbdtForms, StdCtrls, ExtCtrls, UframBoutons, Entities.Full,
+  Dialogs, BD.GUI.Forms, StdCtrls, ExtCtrls, BD.GUI.Frames.Buttons, BD.Entities.Full,
   Generics.Collections, LabeledCheckBox;
 
 type
@@ -103,7 +103,7 @@ type
 implementation
 
 uses
-  Textes, Commun, CommonConst, StrUtils, Entities.Common;
+  BD.Strings, BD.Utils.StrUtils, BD.Common, StrUtils, BD.Entities.Common;
 
 {$R *.dfm}
 

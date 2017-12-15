@@ -4,8 +4,8 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, System.UITypes, Db, ExtCtrls, DBCtrls, StdCtrls, Menus, ComCtrls,
-  BDTK.Main.Form, VDTButton, ActnList, Buttons, ToolWin, VirtualTrees, VirtualTreeBdtk, ProceduresBDtk, UbdtForms, StrUtils,
-  jpeg, ShellAPI, Entities.Full, Generics.Defaults, PngSpeedButton, pngimage,
+  BDTK.GUI.Forms.Main, VDTButton, ActnList, Buttons, ToolWin, VirtualTrees, BDTK.GUI.Controls.VirtualTree, BDTK.GUI.Utils, BD.GUI.Forms, StrUtils,
+  jpeg, ShellAPI, BD.Entities.Full, Generics.Defaults, PngSpeedButton, pngimage,
   LabeledCheckBox, System.Actions;
 
 type
@@ -131,8 +131,7 @@ type
     procedure FicheModifierExecute(Sender: TObject);
     procedure VDTButton1Click(Sender: TObject);
     procedure VDTButton2Click(Sender: TObject);
-    procedure vstSerieGetImageIndex(Sender: TBaseVirtualTree; Node: PVirtualNode; Kind: TVTImageKind; Column: TColumnIndex; var Ghosted: Boolean;
-      var ImageIndex: Integer);
+    procedure vstSerieGetImageIndex(Sender: TBaseVirtualTree; Node: PVirtualNode; Kind: TVTImageKind; Column: TColumnIndex; var Ghosted: Boolean; var ImageIndex: TImageIndex);
     procedure vstSerieDblClick(Sender: TObject);
     procedure N7Click(Sender: TObject);
     procedure vstSerieAfterItemPaint(Sender: TBaseVirtualTree; TargetCanvas: TCanvas; Node: PVirtualNode; ItemRect: TRect);
@@ -163,9 +162,9 @@ implementation
 {$R *.DFM}
 
 uses
-  Commun, Entities.Lite, CommonConst, MAJ, Impression, DateUtils, UHistorique, Procedures,
-  Divers, Textes, Proc_Gestions, UfrmConsole, Entities.DaoFull,
-  Entities.Common, Entities.FactoriesFull, BDTK.Main.DataModule;
+  BD.Utils.StrUtils, BD.Entities.Lite, BD.Common, MAJ, Impression, DateUtils, UHistorique, BD.Utils.GUIUtils,
+  Divers, BD.Strings, Proc_Gestions, BD.GUI.Forms.Console, BDTK.Entities.Dao.Full,
+  BD.Entities.Common, BD.Entities.Factory.Full, BDTK.GUI.DataModules.Main;
 
 var
   FSortColumn: Integer;
@@ -264,8 +263,7 @@ begin
     Historique.AddWaiting(fcAlbum, val);
 end;
 
-procedure TfrmConsultationAlbum.vstSerieGetImageIndex(Sender: TBaseVirtualTree; Node: PVirtualNode; Kind: TVTImageKind; Column: TColumnIndex;
-  var Ghosted: Boolean; var ImageIndex: Integer);
+procedure TfrmConsultationAlbum.vstSerieGetImageIndex(Sender: TBaseVirtualTree; Node: PVirtualNode; Kind: TVTImageKind; Column: TColumnIndex; var Ghosted: Boolean; var ImageIndex: TImageIndex);
 var
   Album: TBaseLite;
 begin

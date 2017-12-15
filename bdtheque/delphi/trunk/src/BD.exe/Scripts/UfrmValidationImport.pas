@@ -3,9 +3,9 @@ unit UfrmValidationImport;
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, Generics.Collections, Entities.Lite, Dialogs, StdCtrls, Entities.Full,
-  ExtCtrls, CheckLst, Menus, jpeg, UframBoutons, ComboCheck, EditLabeled, ComCtrls,
-  UBdtForms, Entities.Types;
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, Generics.Collections, BD.Entities.Lite, Dialogs, StdCtrls, BD.Entities.Full,
+  ExtCtrls, CheckLst, Menus, jpeg, BD.GUI.Frames.Buttons, ComboCheck, EditLabeled, ComCtrls,
+  BD.GUI.Forms, BD.Entities.Types;
 
 type
   TfrmValidationImport = class(TbdtForm)
@@ -139,8 +139,8 @@ type
 implementation
 
 uses
-  IOUtils, Commun, Procedures, CommonConst, Entities.DaoFull, ProceduresBDtk,
-  Entities.Common, Entities.DaoLambda;
+  IOUtils, BD.Utils.StrUtils, BD.Utils.GUIUtils, BD.Common, BDTK.Entities.Dao.Full, BDTK.GUI.Utils,
+  BD.Entities.Common, BD.Entities.Dao.Lambda;
 
 {$R *.dfm}
 

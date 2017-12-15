@@ -4,8 +4,8 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, EditLabeled, VirtualTrees, ComCtrls, VDTButton,
-  ExtCtrls, Buttons, UframBoutons, VirtualTreeBdtk, Entities.Lite, UframRechercheRapide, Entities.Full,
-  UBdtForms, Generics.Collections, PngSpeedButton, UframVTEdit;
+  ExtCtrls, Buttons, BD.GUI.Frames.Buttons, BDTK.GUI.Controls.VirtualTree, BD.Entities.Lite, BDTK.GUI.Frames.QuickSearch, BD.Entities.Full,
+  BD.GUI.Forms, Generics.Collections, PngSpeedButton, UframVTEdit;
 
 type
   TfrmEditAchatAlbum = class(TbdtForm)
@@ -78,9 +78,9 @@ type
 implementation
 
 uses
-  Math, CommonConst, Proc_Gestions, Commun, Procedures, Textes, Divers, StrUtils,
-  UHistorique, UMetadata, Entities.DaoLite, Entities.DaoFull, Entities.Common,
-  Entities.FactoriesLite;
+  Math, BD.Common, Proc_Gestions, BD.Utils.StrUtils, BD.Utils.GUIUtils, BD.Strings, Divers, StrUtils,
+  UHistorique, BD.Entities.Metadata, BDTK.Entities.Dao.Lite, BDTK.Entities.Dao.Full, BD.Entities.Common,
+  BD.Entities.Factory.Lite;
 
 {$R *.dfm}
 

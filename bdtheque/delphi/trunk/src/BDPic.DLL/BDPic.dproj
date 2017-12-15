@@ -104,15 +104,15 @@ $(PostBuildEvent)]]></PostBuildEvent>
         <DelphiCompile Include="$(MainSource)">
             <MainSource>MainSource</MainSource>
         </DelphiCompile>
-        <RcItem Include="Images\About.bmp">
+        <RcItem Include="..\Commun\Resources\About.bmp">
             <ResourceType>BITMAP</ResourceType>
             <ResourceId>ABOUT</ResourceId>
         </RcItem>
-        <RcItem Include="Images\fondbdd.bmp">
+        <RcItem Include="..\Commun\Resources\fondbdd.bmp">
             <ResourceType>BITMAP</ResourceType>
             <ResourceId>FONDVT</ResourceId>
         </RcItem>
-        <RcItem Include="Images\livres.bmp">
+        <RcItem Include="..\Commun\Resources\livres.bmp">
             <ResourceType>BITMAP</ResourceType>
             <ResourceId>STOCK</ResourceId>
         </RcItem>

@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, Buttons, ExtCtrls, ComCtrls, ActnList, UBdtForms,
+  Dialogs, StdCtrls, Buttons, ExtCtrls, ComCtrls, ActnList, BD.GUI.Forms,
   pngimage, System.Actions, PngSpeedButton, VDTButton;
 
 type

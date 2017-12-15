@@ -3,9 +3,9 @@ unit Impression;
 interface
 
 uses
-  Dialogs, Controls, Forms, Classes, SysUtils, Windows, ExtCtrls, Graphics, System.UITypes, Printers, Commun, PrintObject, Textes, CommonConst,
-  Divers, Entities.Lite, BDTK.Main.Form, BDTK.Main.DataModule, UfrmRecherche, UIB, jpeg, Generics.Collections, Entities.Full,
-  EntitiesRecherche, EntitiesStats;
+  Dialogs, Controls, Forms, Classes, SysUtils, Windows, ExtCtrls, Graphics, System.UITypes, Printers, BD.Utils.StrUtils, PrintObject, BD.Strings, BD.Common,
+  Divers, BD.Entities.Lite, BDTK.GUI.Forms.Main, BDTK.GUI.DataModules.Main, UfrmRecherche, UIB, jpeg, Generics.Collections, BD.Entities.Full,
+  BDTK.Entities.Search, BDTK.Entities.Stats;
 
 procedure ImpressionListeCompleteAlbums(Previsualisation: Boolean);
 
@@ -28,9 +28,9 @@ procedure ImpressionListePrevisionsAchats(Previsualisation: Boolean);
 implementation
 
 uses
-  UfrmPreview, Math, Procedures, ProceduresBDtk, DateUtils, UIBlib, StrUtils, UMetadata,
-  Entities.DaoLite, Entities.DaoFull, Entities.Common, Entities.FactoriesLite,
-  Entities.DBConnection;
+  UfrmPreview, Math, BD.Utils.GUIUtils, BDTK.GUI.Utils, DateUtils, UIBlib, StrUtils, BD.Entities.Metadata,
+  BDTK.Entities.Dao.Lite, BDTK.Entities.Dao.Full, BD.Entities.Common, BD.Entities.Factory.Lite,
+  BD.DB.Connection;
 
 procedure PreparePrintObject(Prn: TPrintObject; Previsualisation: Boolean; const Titre: string);
 begin

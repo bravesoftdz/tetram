@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, Buttons, VDTButton, StdCtrls, Mask, JvExMask,
-  JvToolEdit, UVirtualTreeEdit, VirtualTreeBdtk, UHistorique, PngSpeedButton, BDTK.Main.Form,
+  JvToolEdit, BDTK.GUI.Controls.VirtualTreeEdit, BDTK.GUI.Controls.VirtualTree, UHistorique, PngSpeedButton, BDTK.GUI.Forms.Main,
   Vcl.ExtCtrls;
 
 type
@@ -51,7 +51,7 @@ implementation
 {$R *.dfm}
 
 uses
-  Commun, Proc_Gestions;
+  BD.Utils.StrUtils, Proc_Gestions;
 
 constructor TframVTEdit.Create(AOwner: TComponent);
 begin
