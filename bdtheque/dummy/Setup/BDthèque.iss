@@ -7,7 +7,7 @@
 Name: fr; MessagesFile: compiler:Languages\French.isl
 
 [Setup]
-AppVersion={#GetFileVersion("..\..\bin\Win64\BD.exe")}
+AppVersion={#GetFileVersion("..\..\delphi\trunk\deploy\Win64\BD.exe")}
 AppName=BDTheque
 AppVerName=BDTheque {#SetupSetting("AppVersion")}
 AppMutex=TetramCorpBDMutex
@@ -21,11 +21,9 @@ DefaultGroupName=Teträm Corp\BDTheque
 PrivilegesRequired=poweruser
 AppCopyright=Teträm Corp © 1997-2008
 AppID={{A86E29B5-D1EE-431F-A5BF-E4A10D36CBDC}
-LicenseFile=D:\MEDIA.KIT\LicenceFreeWare.rtf
+LicenseFile=..\..\..\documentation\LicenceFreeWare.rtf
 WindowVisible=false
 BackColor=$008080FF
-BackColor2=clPurple
-BackColorDirection=toptobottom
 WizardImageBackColor=clBlack
 OutputBaseFilename=BDTheque-setup-{#SetupSetting("AppVersion")}{#outputSuffix}
 MinVersion=0,5.0.2195
@@ -55,42 +53,42 @@ Name: interneticon; Description: Créer un raccourci vers le site de Teträm Corp;
 [Files]
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
-Source: ..\..\bin\{#SrcBin}\BD.exe; DestDir: {app}; Flags: ignoreversion
-Source: ..\..\bin\{#SrcBin}\BDScript.exe; DestDir: {app}; Flags: ignoreversion
-Source: ..\..\bin\{#SrcBin}\BDPic.dll; DestDir: {app}; Flags: ignoreversion
-Source: ..\..\bin\{#SrcBin}\fbembed.dll; DestDir: {app}; Flags: ignoreversion
-Source: ..\..\bin\{#SrcBin}\firebird.msg; DestDir: {app}; Flags: ignoreversion
-Source: ..\..\bin\{#SrcBin}\ib_util.dll; DestDir: {app}; Flags: ignoreversion
-Source: ..\..\bin\{#SrcBin}\UDF\BDT_UDF.dll; DestDir: {app}\UDF; Flags: ignoreversion
-Source: ..\..\bin\{#SrcBin}\icuuc30.dll; DestDir: {app}; Flags: ignoreversion
-Source: ..\..\bin\{#SrcBin}\icuin30.dll; DestDir: {app}; Flags: ignoreversion
-Source: ..\..\bin\{#SrcBin}\icudt30.dll; DestDir: {app}; Flags: ignoreversion
-Source: ..\..\bin\{#SrcBin}\icuuc52.dll; DestDir: {app}; Flags: ignoreversion
-Source: ..\..\bin\{#SrcBin}\icuin52.dll; DestDir: {app}; Flags: ignoreversion
-Source: ..\..\bin\{#SrcBin}\icudt52.dll; DestDir: {app}; Flags: ignoreversion
-Source: ..\..\bin\{#SrcBin}\ssleay32.dll; DestDir: {app}; Flags: ignoreversion
-Source: ..\..\bin\{#SrcBin}\libeay32.dll; DestDir: {app}; Flags: ignoreversion
-Source: ..\..\bin\{#SrcBin}\intl\fbintl.dll; DestDir: {app}\Intl; Flags: ignoreversion
-Source: ..\..\bin\{#SrcBin}\intl\fbintl.conf; DestDir: {app}\Intl; Flags: ignoreversion
-Source: ..\..\bin\{#SrcBin}\msvcp80.dll; DestDir: {app}; Flags: ignoreversion
-Source: ..\..\bin\{#SrcBin}\msvcr80.dll; DestDir: {app}; Flags: ignoreversion
-Source: ..\..\bin\{#SrcBin}\Microsoft.VC80.CRT.manifest; DestDir: {app}; Flags: ignoreversion
-Source: ..\..\bin\{#SrcBin}\msvcp90.dll; DestDir: {app}; Flags: ignoreversion
-Source: ..\..\bin\{#SrcBin}\msvcr90.dll; DestDir: {app}; Flags: ignoreversion
-Source: ..\..\bin\{#SrcBin}\Microsoft.VC90.CRT.manifest; DestDir: {app}; Flags: ignoreversion
-Source: ..\..\bin\{#SrcBin}\msvcp100.dll; DestDir: {app}; Flags: ignoreversion
-Source: ..\..\bin\{#SrcBin}\msvcr100.dll; DestDir: {app}; Flags: ignoreversion
-Source: ..\..\bin\{#SrcBin}\Microsoft.VC100.CRT.manifest; DestDir: {app}; Flags: ignoreversion
-Source: ..\..\bin\{#SrcBin}\7z_x86.dll; DestDir: {app}; Flags: ignoreversion
-Source: ..\..\bin\{#SrcBin}\7z_x64.dll; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\delphi\trunk\deploy\{#SrcBin}\BD.exe; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\delphi\trunk\deploy\{#SrcBin}\BDScript.exe; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\delphi\trunk\deploy\{#SrcBin}\BDPic.dll; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\delphi\trunk\deploy\{#SrcBin}\fbembed.dll; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\delphi\trunk\deploy\{#SrcBin}\firebird.msg; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\delphi\trunk\deploy\{#SrcBin}\ib_util.dll; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\delphi\trunk\deploy\{#SrcBin}\UDF\BDT_UDF.dll; DestDir: {app}\UDF; Flags: ignoreversion
+Source: ..\..\delphi\trunk\deploy\{#SrcBin}\icuuc30.dll; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\delphi\trunk\deploy\{#SrcBin}\icuin30.dll; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\delphi\trunk\deploy\{#SrcBin}\icudt30.dll; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\delphi\trunk\deploy\{#SrcBin}\icuuc52.dll; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\delphi\trunk\deploy\{#SrcBin}\icuin52.dll; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\delphi\trunk\deploy\{#SrcBin}\icudt52.dll; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\delphi\trunk\deploy\{#SrcBin}\ssleay32.dll; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\delphi\trunk\deploy\{#SrcBin}\libeay32.dll; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\delphi\trunk\deploy\{#SrcBin}\intl\fbintl.dll; DestDir: {app}\Intl; Flags: ignoreversion
+Source: ..\..\delphi\trunk\deploy\{#SrcBin}\intl\fbintl.conf; DestDir: {app}\Intl; Flags: ignoreversion
+Source: ..\..\delphi\trunk\deploy\{#SrcBin}\msvcp80.dll; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\delphi\trunk\deploy\{#SrcBin}\msvcr80.dll; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\delphi\trunk\deploy\{#SrcBin}\Microsoft.VC80.CRT.manifest; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\delphi\trunk\deploy\{#SrcBin}\msvcp90.dll; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\delphi\trunk\deploy\{#SrcBin}\msvcr90.dll; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\delphi\trunk\deploy\{#SrcBin}\Microsoft.VC90.CRT.manifest; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\delphi\trunk\deploy\{#SrcBin}\msvcp100.dll; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\delphi\trunk\deploy\{#SrcBin}\msvcr100.dll; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\delphi\trunk\deploy\{#SrcBin}\Microsoft.VC100.CRT.manifest; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\delphi\trunk\deploy\{#SrcBin}\7z_x86.dll; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\delphi\trunk\deploy\{#SrcBin}\7z_x64.dll; DestDir: {app}; Flags: ignoreversion
 
 Source: What's New.txt; DestDir: {app}; Flags: ignoreversion
 Source: Base vide\BD.GDB; DestDir: {userappdata}\TetramCorp\BDTheque; Flags: onlyifdoesntexist ignoreversion; Check: FirstInstall
-Source: ..\..\bin\scripts\*.bds; DestDir: {commonappdata}\TetramCorp\BDTheque\Scripts; Flags: ignoreversion promptifolder; 
-Source: ..\..\bin\scripts\*.bdu; DestDir: {commonappdata}\TetramCorp\BDTheque\Scripts; Flags: ignoreversion promptifolder
-Source: ..\..\bin\WebServer\interface.zip; DestDir: {commonappdata}\TetramCorp\BDTheque\WebServer; Flags: ignoreversion
-Source: ..\..\bin\WebServer\Site par défaut.zip; DestDir: {commonappdata}\TetramCorp\BDTheque\WebServer; Flags: ignoreversion
-Source: ..\..\bin\WebServer\BDthequeWeb.zip; DestDir: {commonappdata}\TetramCorp\BDTheque\WebServer; Flags: ignoreversion
+Source: ..\..\delphi\trunk\deploy\scripts\*.bds; DestDir: {commonappdata}\TetramCorp\BDTheque\Scripts; Flags: ignoreversion promptifolder; 
+Source: ..\..\delphi\trunk\deploy\scripts\*.bdu; DestDir: {commonappdata}\TetramCorp\BDTheque\Scripts; Flags: ignoreversion promptifolder
+Source: ..\..\delphi\trunk\deploy\WebServer\interface.zip; DestDir: {commonappdata}\TetramCorp\BDTheque\WebServer; Flags: ignoreversion
+Source: ..\..\delphi\trunk\deploy\WebServer\Site par défaut.zip; DestDir: {commonappdata}\TetramCorp\BDTheque\WebServer; Flags: ignoreversion
+Source: ..\..\delphi\trunk\deploy\WebServer\BDthequeWeb.zip; DestDir: {commonappdata}\TetramCorp\BDTheque\WebServer; Flags: ignoreversion
 
 [Dirs]
 Name: {commonappdata}\TetramCorp
@@ -134,6 +132,9 @@ Name: {app}\BDws.dll; Type: files
 CustomFormCaption=BDTheque est déjà installé
 CustomFormDescription=Le programme d'installation a détecté que BDTheque est déjà installé sur cet ordinateur.
 UninstallRegKey=SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{A86E29B5-D1EE-431F-A5BF-E4A10D36CBDC}_is1
+
+[ThirdParty]
+CompileLogMethod=append
 
 [Code]
   var
