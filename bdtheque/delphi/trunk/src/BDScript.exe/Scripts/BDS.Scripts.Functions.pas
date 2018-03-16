@@ -1,4 +1,4 @@
-unit BD.Scripts.Functions;
+unit BDS.Scripts.Functions;
 
 interface
 
@@ -68,7 +68,7 @@ function AddImageFromURL(Edition: TEditionFull; const URL: string; TypeImage: In
 implementation
 
 uses
-  IOUtils, BD.GUI.Forms, EditLabeled, StdCtrls, Controls, Forms, BD.GUI.Frames.Buttons, UfrmScriptChoix, OverbyteIcsHttpProt, BD.Common, BD.Utils.GUIUtils,
+  IOUtils, BD.GUI.Forms, EditLabeled, StdCtrls, Controls, Forms, BD.GUI.Frames.Buttons, BDS.Forms.Scripts.Choix, OverbyteIcsHttpProt, BD.Common, BD.Utils.GUIUtils,
   SysConst, Graphics, System.UITypes, BD.Entities.Factory.Lite,
   BD.Entities.Dao.Lambda, Divers;
 

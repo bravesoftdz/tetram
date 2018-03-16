@@ -1,4 +1,4 @@
-unit UfrmScriptEditOption;
+unit BDS.Forms.Scripts.EditOption;
 
 interface
 

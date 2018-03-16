@@ -1,4 +1,4 @@
-unit UScriptsHTMLfunctions;
+unit BDS.Scripts.HTMLFunctions;
 
 interface
 

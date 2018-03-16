@@ -1,4 +1,4 @@
-unit UfrmScriptGotoLine;
+unit BDS.Forms.Scripts.GotoLine;
 
 interface
 

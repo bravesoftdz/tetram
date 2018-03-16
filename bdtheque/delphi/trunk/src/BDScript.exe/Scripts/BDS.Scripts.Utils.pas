@@ -1,10 +1,10 @@
-unit BD.Scripts.Utils;
+unit BDS.Scripts.Utils;
 
 interface
 
 uses
   SysUtils, Classes, Graphics, Types, StdCtrls, SynEdit, Controls, VirtualTrees, uPSCompiler, uPSUtils,
-  Generics.Collections, Generics.Defaults, UScriptEditor, UScriptEngineIntf, BD.Scripts;
+  Generics.Collections, Generics.Defaults, BDS.GUI.Controls.ScriptEditor, BDS.Scripts.Engine.Intf, BD.Scripts;
 
 type
   TDebugList<I: IDebugItem> = class(TList<I>, IDebugList<I>)

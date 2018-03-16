@@ -4,8 +4,8 @@ interface
 
 uses
   System.SysUtils, Winapi.Windows, Forms, System.Classes, BD.Scripts, Variants,
-  BD.Scripts.Utils, BD.Entities.Full, dwsComp, dwsDebugger, dwsCompiler, dwsExprs, dwsFunctions,
-  UMasterEngine, UScriptEngineIntf, UScriptEditor, SynHighlighterDWS, BDS.Scripts.DWScript.DWUnit.BdtkRegEx, BDS.Scripts.DWScript.DWUnit.BdtkObjects, dwsClassesLibModule, BDS.Scripts.DWScript.DWUnit.Functions,
+  BDS.Scripts.Utils, BD.Entities.Full, dwsComp, dwsDebugger, dwsCompiler, dwsExprs, dwsFunctions,
+  BDS.Scripts.MasterEngine, BDS.Scripts.Engine.Intf, BDS.GUI.Controls.ScriptEditor, SynHighlighterDWS, BDS.Scripts.DWScript.DWUnit.BdtkRegEx, BDS.Scripts.DWScript.DWUnit.BdtkObjects, dwsClassesLibModule, BDS.Scripts.DWScript.DWUnit.Functions,
   dwsErrors, BDS.Scripts.DWScript.DWUnit, Vcl.Graphics, dwsJSONConnector, dwsUnitSymbols;
 
 type

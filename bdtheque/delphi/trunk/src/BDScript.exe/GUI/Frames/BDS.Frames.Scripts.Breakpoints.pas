@@ -1,10 +1,10 @@
-unit UframBreakpoints;
+unit BDS.Frames.Scripts.Breakpoints;
 
 interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes,
-  Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, VirtualTrees, UScriptEngineIntf;
+  Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, VirtualTrees, BDS.Scripts.Engine.Intf;
 
 type
   TframBreakpoints = class(TFrame)

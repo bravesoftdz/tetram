@@ -3,7 +3,7 @@ unit BDS.Scripts.PascalScript.Import.BdtkObjects;
 interface
 
 uses
-  SysUtils, Classes, uPSComponent, uPSCompiler, uPSRuntime, UScriptEngineIntf;
+  SysUtils, Classes, uPSComponent, uPSCompiler, uPSRuntime, BDS.Scripts.Engine.Intf;
 
 type
   TPSImport_BdtkObjects = class(TPSPlugin)

@@ -3,7 +3,7 @@ unit BDS.Scripts.DWScript.DWUnit.Functions;
 interface
 
 uses
-  System.Classes, System.SysUtils, BDS.Scripts.DWScript.DWUnit, Variants, StrUtils, dwsSymbols, dwsMagicExprs, dwsExprs, dwsFunctions, dwsExprList, UScriptEngineIntf;
+  System.Classes, System.SysUtils, BDS.Scripts.DWScript.DWUnit, Variants, StrUtils, dwsSymbols, dwsMagicExprs, dwsExprs, dwsFunctions, dwsExprList, BDS.Scripts.Engine.Intf;
 
 type
   TDW_CommonFunctionsUnit = class(TDW_Unit)
@@ -48,7 +48,7 @@ type
 implementation
 
 uses
-  IOUtils, dwsUnitSymbols, Dialogs, BD.Scripts.Functions, BD.Scripts.Utils, BD.Utils.Net, UScriptsHTMLFunctions, dwsUtils, dwsComp;
+  IOUtils, dwsUnitSymbols, Dialogs, BDS.Scripts.Functions, BDS.Scripts.Utils, BD.Utils.Net, BDS.Scripts.HTMLFunctions, dwsUtils, dwsComp;
 
 const // type constants
   cFloat = 'Float';

@@ -1,11 +1,11 @@
-unit UframScriptInfos;
+unit BDS.Frames.Scripts.Infos;
 
 interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes,
   Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, EditLabeled,
-  Vcl.ComCtrls, BD.Scripts, Vcl.Menus, System.Actions, Vcl.ActnList, UScriptEngineIntf;
+  Vcl.ComCtrls, BD.Scripts, Vcl.Menus, System.Actions, Vcl.ActnList, BDS.Scripts.Engine.Intf;
 
 type
   TframScriptInfos = class(TFrame)
@@ -54,7 +54,7 @@ implementation
 {$R *.dfm}
 
 uses
-  UIB, BD.Scripts.Forms.UserSetting, BDS.DataModules.Main, BD.Utils.StrUtils, UfrmScriptEditOption, StrUtils;
+  UIB, BD.Scripts.Forms.UserSetting, BDS.DataModules.Main, BD.Utils.StrUtils, BDS.Forms.Scripts.EditOption, StrUtils;
 
 procedure TframScriptInfos.actCreerOptionExecute(Sender: TObject);
 var

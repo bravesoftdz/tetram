@@ -1,10 +1,10 @@
-object framMessages: TframMessages
+object framBreakpoints: TframBreakpoints
   Left = 0
   Top = 0
   Width = 320
   Height = 240
   TabOrder = 0
-  object vstMessages: TVirtualStringTree
+  object vstBreakpoints: TVirtualStringTree
     Left = 0
     Top = 0
     Width = 320
@@ -12,7 +12,7 @@ object framMessages: TframMessages
     Align = alClient
     BevelKind = bkTile
     BorderStyle = bsNone
-    Header.AutoSizeIndex = 3
+    Header.AutoSizeIndex = 1
     Header.Font.Charset = DEFAULT_CHARSET
     Header.Font.Color = clWindowText
     Header.Font.Height = -11
@@ -21,32 +21,23 @@ object framMessages: TframMessages
     Header.Options = [hoAutoResize, hoColumnResize, hoDrag, hoVisible]
     Header.Style = hsPlates
     TabOrder = 0
+    TreeOptions.MiscOptions = [toAcceptOLEDrop, toCheckSupport, toFullRepaintOnResize, toInitOnSave, toToggleOnDblClick, toWheelPanning]
     TreeOptions.PaintOptions = [toShowDropmark, toShowTreeLines, toThemeAware, toUseBlendedImages]
     TreeOptions.SelectionOptions = [toFullRowSelect]
-    OnGetText = vstMessagesGetText
-    ExplicitLeft = -276
-    ExplicitWidth = 596
-    ExplicitHeight = 158
+    OnChecked = vstBreakpointsChecked
+    OnGetText = vstBreakpointsGetText
+    OnPaintText = vstBreakpointsPaintText
+    OnInitNode = vstBreakpointsInitNode
     Columns = <
       item
         Position = 0
         Width = 100
-        WideText = 'Contexte'
+        WideText = 'Position'
       end
       item
         Position = 1
-        Width = 120
-        WideText = 'Type'
-      end
-      item
-        Position = 2
-        Width = 150
+        Width = 216
         WideText = 'Fichier'
-      end
-      item
-        Position = 3
-        Width = 10
-        WideText = 'Message'
       end>
   end
 end

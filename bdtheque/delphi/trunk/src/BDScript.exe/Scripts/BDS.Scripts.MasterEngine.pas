@@ -1,10 +1,10 @@
-unit UMasterEngine;
+unit BDS.Scripts.MasterEngine;
 
 interface
 
 uses
   System.SysUtils, System.Classes, BD.Scripts, System.Generics.Collections, Dialogs,
-  BD.Scripts.Utils, BD.Entities.Full, UScriptEditor, UScriptEngineIntf;
+  BDS.Scripts.Utils, BD.Entities.Full, BDS.GUI.Controls.ScriptEditor, BDS.Scripts.Engine.Intf;
 
 type
   TEngineFactory = class
@@ -81,7 +81,7 @@ begin
   Engines.AddOrSetValue(Engine, EngineFactoryClass);
 end;
 
-{ TdmScripts }
+{ TMasterEngine }
 
 function TMasterEngine.GetAlbumToUpdate: Boolean;
 begin

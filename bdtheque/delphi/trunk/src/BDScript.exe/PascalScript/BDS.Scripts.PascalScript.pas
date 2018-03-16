@@ -4,9 +4,9 @@ interface
 
 uses
   System.SysUtils, Winapi.Windows, Vcl.Forms, System.Classes, Vcl.Graphics,
-  uPSComponent, uPSComponent_COM, uPSComponent_Default, BD.Scripts, BD.Scripts.Utils, BD.Entities.Full,
-  IDHashMap, uPSUtils,
-  uPSRuntime, uPSCompiler, uPSDebugger, BDS.Scripts.PascalScript.Import.BdtkRegEx, BDS.Scripts.PascalScript.Import.BdtkObjects, BDS.Scripts.PascalScript.Import.superobject, UMasterEngine, UScriptEngineIntf, UScriptEditor,
+  uPSComponent, uPSComponent_COM, uPSComponent_Default, BD.Scripts, BDS.Scripts.Utils, BD.Entities.Full,
+  BDS.Common.IDHashMap, uPSUtils,
+  uPSRuntime, uPSCompiler, uPSDebugger, BDS.Scripts.PascalScript.Import.BdtkRegEx, BDS.Scripts.PascalScript.Import.BdtkObjects, BDS.Scripts.PascalScript.Import.superobject, BDS.Scripts.MasterEngine, BDS.Scripts.Engine.Intf, BDS.GUI.Controls.ScriptEditor,
   SynCompletionProposal,
   SynEditHighlighter, SynHighlighterPas;
 
@@ -158,7 +158,7 @@ function HashString(const s: TbtString): Cardinal;
 implementation
 
 uses
-  IOUtils, AnsiStrings, BD.Utils.GUIUtils, BDS.Forms.Main, Divers, BD.Scripts.Functions, UScriptsHTMLFunctions, Dialogs, StrUtils, uPSDisassembly,
+  IOUtils, AnsiStrings, BD.Utils.GUIUtils, BDS.Forms.Main, Divers, BDS.Scripts.Functions, BDS.Scripts.HTMLFunctions, Dialogs, StrUtils, uPSDisassembly,
   BDS.Scripts.PascalScript.Editor, BD.Utils.Net, BD.Entities.Lite, BD.Entities.Dao.Lambda;
 
 procedure AddToTStrings(const Strings: TStringArray; List: TStrings);
@@ -572,7 +572,7 @@ end;
 
 function TdmPascalScript.GetDebugMode: TDebugMode;
 begin
-  Result := UScriptEngineIntf.TDebugMode(PSScriptDebugger1.Exec.DebugMode);
+  Result := BDS.Scripts.Engine.Intf.TDebugMode(PSScriptDebugger1.Exec.DebugMode);
 end;
 
 function TdmPascalScript.GetNewEditor(AOwner: TComponent): TScriptEditor;

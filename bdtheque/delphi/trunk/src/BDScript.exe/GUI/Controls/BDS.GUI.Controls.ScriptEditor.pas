@@ -1,4 +1,4 @@
-unit UScriptEditor;
+unit BDS.GUI.Controls.ScriptEditor;
 
 interface
 

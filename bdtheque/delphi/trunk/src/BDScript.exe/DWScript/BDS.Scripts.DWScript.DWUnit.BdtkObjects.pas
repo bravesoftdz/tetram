@@ -3,7 +3,7 @@ unit BDS.Scripts.DWScript.DWUnit.BdtkObjects;
 interface
 
 uses
-  System.SysUtils, System.Classes, BDS.Scripts.DWScript.DWUnit, dwsComp, dwsExprs, dialogs, UScriptEngineIntf;
+  System.SysUtils, System.Classes, BDS.Scripts.DWScript.DWUnit, dwsComp, dwsExprs, dialogs, BDS.Scripts.Engine.Intf;
 
 type
   TDW_BdtkObjectsUnit = class(TDW_Unit)
@@ -75,7 +75,7 @@ implementation
 
 uses
   dwsSymbols, BD.Entities.Full, BD.Entities.Metadata, BD.Utils.GUIUtils, AnsiStrings, Divers, Generics.Collections,
-  BD.Scripts.Functions, BD.Entities.Lite, BD.Utils.StrUtils, BD.Entities.Factory.Lite,
+  BDS.Scripts.Functions, BD.Entities.Lite, BD.Utils.StrUtils, BD.Entities.Factory.Lite,
   BD.Entities.Factory.Full, BD.Entities.Dao.Lambda;
 
 { TDW_BdtkObjects }

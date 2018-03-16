@@ -1,4 +1,4 @@
-unit UScriptEditorPage;
+unit BDS.GUI.Controls.EditorPage;
 
 interface
 
@@ -8,8 +8,8 @@ uses
   Generics.Collections,
   SynEdit, SynEditKeyCmds, SynEditSearch, SynMacroRecorder,
   PngImageList,
-  UScriptEngineIntf,
-  BD.Scripts, UScriptEditor;
+  BDS.Scripts.Engine.Intf,
+  BD.Scripts, BDS.GUI.Controls.ScriptEditor;
 
 const
   ecOpenFileUnderCursor = ecUserFirst;
@@ -108,7 +108,7 @@ type
 implementation
 
 uses
-  UfrmScriptGotoLine;
+  BDS.Forms.Scripts.GotoLine;
 
 const
   imgGutterBREAK = 0;
@@ -468,7 +468,7 @@ begin
   end
   else
   begin
-    if (MasterEngine.Engine.DebugMode = UScriptEngineIntf.dmPaused) and (Cardinal(aLine) = MasterEngine.Engine.ActiveLine) and
+    if (MasterEngine.Engine.DebugMode = BDS.Scripts.Engine.Intf.dmPaused) and (Cardinal(aLine) = MasterEngine.Engine.ActiveLine) and
       SameText(MasterEngine.GetScriptUnitName(MasterEngine.Engine.ActiveUnitName), FScript.ScriptUnitName) then
       IconIndex := imgGutterEXECLINE;
   end;

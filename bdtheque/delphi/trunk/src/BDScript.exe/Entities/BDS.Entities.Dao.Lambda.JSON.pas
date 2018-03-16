@@ -1,4 +1,4 @@
-unit Entities.DaoLambdaJSON;
+unit BDS.Entities.Dao.Lambda.JSON;
 
 interface
 

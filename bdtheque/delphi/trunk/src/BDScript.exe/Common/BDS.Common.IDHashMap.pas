@@ -1,4 +1,4 @@
-unit IDHashMap;
+unit BDS.Common.IDHashMap;
 
 interface
 

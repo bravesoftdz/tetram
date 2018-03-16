@@ -32,7 +32,7 @@ implementation
 
 uses
   System.SyncObjs, Vcl.Forms, System.StrUtils, BD.GUI.Forms.Splash, BD.Common, BD.Strings, System.DateUtils, System.UITypes, Divers, BDS.Forms.Main, System.IOUtils,
-  UScriptEngineIntf, UMasterEngine, BD.Scripts, dwsJSON, BD.Entities.Full, JclCompression, BD.Entities.Utils.Deserializer, BD.Entities.Factory.Full, Entities.DaoLambdaJSON,
+  BDS.Scripts.Engine.Intf, BDS.Scripts.MasterEngine, BD.Scripts, dwsJSON, BD.Entities.Full, JclCompression, BD.Entities.Utils.Deserializer, BD.Entities.Factory.Full, BDS.Entities.Dao.Lambda.JSON,
   BD.Entities.Utils.Serializer, BD.Utils.Serializer.JSON, BD.Entities.Lite, BD.Utils.StrUtils,
   System.Generics.Collections;
 

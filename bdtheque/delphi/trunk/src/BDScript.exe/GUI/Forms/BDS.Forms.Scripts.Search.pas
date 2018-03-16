@@ -1,4 +1,4 @@
-unit UfrmScriptSearch;
+unit BDS.Forms.Scripts.Search;
 
 interface
 

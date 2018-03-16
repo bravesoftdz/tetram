@@ -4,11 +4,11 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, Dialogs, System.UITypes, SynEditHighlighter, SynEdit, ImgList,
-  StrUtils, SynEditMiscClasses, SynEditSearch, StdActns, ActnList, Menus, SynEditTypes, ComCtrls, BD.Scripts.Utils, VirtualTrees, StdCtrls,
-  ExtCtrls, BD.Entities.Full, SynEditKeyCmds, BD.GUI.Forms, Generics.Collections, ToolWin, UScriptEditor,
-  PngImageList, UScriptEngineIntf, BD.Scripts, BD.GUI.Frames.Buttons, EditLabeled,
+  StrUtils, SynEditMiscClasses, SynEditSearch, StdActns, ActnList, Menus, SynEditTypes, ComCtrls, BDS.Scripts.Utils, VirtualTrees, StdCtrls,
+  ExtCtrls, BD.Entities.Full, SynEditKeyCmds, BD.GUI.Forms, Generics.Collections, ToolWin, BDS.GUI.Controls.ScriptEditor,
+  PngImageList, BDS.Scripts.Engine.Intf, BD.Scripts, BD.GUI.Frames.Buttons, EditLabeled,
   System.Actions, SynCompletionProposal, SynEditPlugins, SynMacroRecorder,
-  dwsDebugger, UframWatches, UframBreakpoints, UframMessages, UframScriptInfos, UScriptEditorPage,
+  dwsDebugger, BDS.Frames.Scripts.Watches, BDS.Frames.Scripts.Breakpoints, BDS.Frames.Scripts.Messages, BDS.Frames.Scripts.Infos, BDS.GUI.Controls.EditorPage,
   System.ImageList;
 
 type
@@ -227,9 +227,9 @@ implementation
 {$R *.dfm}
 
 uses
-  UfrmScriptSearch, BD.Scripts.Functions, BD.Common, UIB, BD.Utils.GUIUtils, BD.Utils.RegEx, BD.Utils.StrUtils, Divers,
-  UScriptsHTMLFunctions, JclSimpleXML, BDS.DataModules.Main, BD.Scripts.Forms.UserSetting, UfrmScriptEditOption, UfrmScriptsUpdate,
-  BDS.Scripts.PascalScript, SynHighlighterDWS, UMasterEngine, PngFunctions,
+  BDS.Forms.Scripts.Search, BDS.Scripts.Functions, BD.Common, UIB, BD.Utils.GUIUtils, BD.Utils.RegEx, BD.Utils.StrUtils, Divers,
+  BDS.Scripts.HTMLFunctions, JclSimpleXML, BDS.DataModules.Main, BD.Scripts.Forms.UserSetting, BDS.Forms.Scripts.EditOption, BDS.Forms.Scripts.Update,
+  BDS.Scripts.PascalScript, SynHighlighterDWS, BDS.Scripts.MasterEngine, PngFunctions,
   BD.GUI.Forms.About, System.IOUtils;
 
 procedure TfrmScripts.Button1Click(Sender: TObject);
@@ -509,13 +509,13 @@ begin
   EditUndo1.Enabled := Assigned(Editor) and Editor.Focused and Editor.CanUndo;
   EditRedo1.Enabled := Assigned(Editor) and Editor.Focused and Editor.CanRedo;
   actRun.Enabled := (FProjetOuvert or actEdit.Enabled) and ((MasterEngine.Engine = nil) or not MasterEngine.Engine.Running or
-    (MasterEngine.Engine.DebugMode = UScriptEngineIntf.dmPaused));
+    (MasterEngine.Engine.DebugMode = BDS.Scripts.Engine.Intf.dmPaused));
   actRunWithoutDebug.Visible := MasterEngine.AlbumToUpdate;
   actRunWithoutDebug.Enabled := actRunWithoutDebug.Visible and actRun.Enabled and not MasterEngine.Engine.Running;
-  actPause.Enabled := (MasterEngine.Engine <> nil) and MasterEngine.Engine.Running and (MasterEngine.Engine.DebugMode = UScriptEngineIntf.dmRun);
+  actPause.Enabled := (MasterEngine.Engine <> nil) and MasterEngine.Engine.Running and (MasterEngine.Engine.DebugMode = BDS.Scripts.Engine.Intf.dmRun);
   actFermer.Enabled := Assigned(Editor) and (FForceClose or (FCurrentPage.Script <> MasterEngine.ProjectScript));
   actEnregistrer.Enabled := Assigned(Editor);
-  actReset.Enabled := (MasterEngine.Engine <> nil) and MasterEngine.Engine.Running and (MasterEngine.Engine.DebugMode in [UScriptEngineIntf.dmPaused]);
+  actReset.Enabled := (MasterEngine.Engine <> nil) and MasterEngine.Engine.Running and (MasterEngine.Engine.DebugMode in [BDS.Scripts.Engine.Intf.dmPaused]);
   actCompile.Enabled := (MasterEngine.Engine <> nil) and not MasterEngine.Engine.Running;
 
   // sinon les actions court-circuitent les raccouris sur les autres composants

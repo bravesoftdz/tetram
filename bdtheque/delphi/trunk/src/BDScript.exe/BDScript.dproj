@@ -155,8 +155,8 @@ $(PostBuildEvent)]]></PostBuildEvent>
         <DCCReference Include="DWScript\BDS.Scripts.DWScript.Editor.pas"/>
         <DCCReference Include="DWScript\BDS.Scripts.DWScript.DWUnit.pas"/>
         <DCCReference Include="..\Commun\Scripts\BD.Scripts.pas"/>
-        <DCCReference Include="..\Commun\Scripts\BD.Scripts.Functions.pas"/>
-        <DCCReference Include="..\Commun\Scripts\BD.Scripts.Utils.pas"/>
+        <DCCReference Include="Scripts\BDS.Scripts.Functions.pas"/>
+        <DCCReference Include="Scripts\BDS.Scripts.Utils.pas"/>
         <DCCReference Include="..\Commun\Utils\BD.Utils.Net.pas"/>
         <DCCReference Include="..\Commun\Utils\BD.Utils.GUIUtils.pas"/>
         <DCCReference Include="..\Commun\GUI\Forms\BD.GUI.Forms.Progress.pas">
@@ -166,34 +166,34 @@ $(PostBuildEvent)]]></PostBuildEvent>
             <Form>framBoutons</Form>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
-        <DCCReference Include="IDHashMap.pas"/>
+        <DCCReference Include="Common\BDS.Common.IDHashMap.pas"/>
         <DCCReference Include="GUI\DataModules\BDS.DataModules.Main.pas">
             <Form>dmPrinc</Form>
             <DesignClass>TDataModule</DesignClass>
         </DCCReference>
-        <DCCReference Include="UframBreakpoints.pas">
+        <DCCReference Include="GUI\Frames\BDS.Frames.Scripts.Breakpoints.pas">
             <Form>framBreakpoints</Form>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
-        <DCCReference Include="UframMessages.pas">
+        <DCCReference Include="GUI\Frames\BDS.Frames.Scripts.Messages.pas">
             <Form>framMessages</Form>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
-        <DCCReference Include="UframScriptInfos.pas">
+        <DCCReference Include="GUI\Frames\BDS.Frames.Scripts.Infos.pas">
             <Form>framScriptInfos</Form>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
-        <DCCReference Include="UframWatches.pas">
+        <DCCReference Include="GUI\Frames\BDS.Frames.Scripts.Watches.pas">
             <Form>framWatches</Form>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
-        <DCCReference Include="UfrmScriptChoix.pas">
+        <DCCReference Include="GUI\Forms\BDS.Forms.Scripts.Choix.pas">
             <Form>frmScriptChoix</Form>
         </DCCReference>
-        <DCCReference Include="UfrmScriptEditOption.pas">
+        <DCCReference Include="GUI\Forms\BDS.Forms.Scripts.EditOption.pas">
             <Form>frmScriptEditOption</Form>
         </DCCReference>
-        <DCCReference Include="UfrmScriptGotoLine.pas">
+        <DCCReference Include="GUI\Forms\BDS.Forms.Scripts.GotoLine.pas">
             <Form>frmScriptGotoLine</Form>
         </DCCReference>
         <DCCReference Include="..\Commun\Scripts\BD.Scripts.Forms.UserSetting.pas">
@@ -202,17 +202,17 @@ $(PostBuildEvent)]]></PostBuildEvent>
         <DCCReference Include="GUI\Forms\BDS.Forms.Main.pas">
             <Form>frmScripts</Form>
         </DCCReference>
-        <DCCReference Include="UfrmScriptSearch.pas">
+        <DCCReference Include="GUI\Forms\BDS.Forms.Scripts.Search.pas">
             <Form>frmScriptSearch</Form>
         </DCCReference>
-        <DCCReference Include="UfrmScriptsUpdate.pas">
+        <DCCReference Include="GUI\Forms\BDS.Forms.Scripts.Update.pas">
             <Form>frmScriptsUpdate</Form>
         </DCCReference>
-        <DCCReference Include="UMasterEngine.pas"/>
-        <DCCReference Include="UScriptEditor.pas"/>
-        <DCCReference Include="UScriptEditorPage.pas"/>
-        <DCCReference Include="UScriptEngineIntf.pas"/>
-        <DCCReference Include="UScriptsHTMLFunctions.pas"/>
+        <DCCReference Include="Scripts\BDS.Scripts.MasterEngine.pas"/>
+        <DCCReference Include="GUI\Controls\BDS.GUI.Controls.ScriptEditor.pas"/>
+        <DCCReference Include="GUI\Controls\BDS.GUI.Controls.EditorPage.pas"/>
+        <DCCReference Include="Scripts\BDS.Scripts.Engine.Intf.pas"/>
+        <DCCReference Include="Scripts\BDS.Scripts.HTMLFunctions.pas"/>
         <DCCReference Include="..\Commun\Utils\BD.Utils.RegEx.pas"/>
         <DCCReference Include="..\Commun\GUI\Controls\BD.GUI.Controls.VirtualTree.pas"/>
         <DCCReference Include="..\Commun\GUI\Forms\BD.GUI.Forms.About.pas">
@@ -222,7 +222,7 @@ $(PostBuildEvent)]]></PostBuildEvent>
         <DCCReference Include="..\Commun\Entities\BD.Entities.Factory.Lite.pas"/>
         <DCCReference Include="..\Commun\Entities\BD.Entities.Factory.Common.pas"/>
         <DCCReference Include="..\Commun\Entities\BD.Entities.Factory.Full.pas"/>
-        <DCCReference Include="Entities.DaoLambdaJSON.pas"/>
+        <DCCReference Include="Entities\BDS.Entities.Dao.Lambda.JSON.pas"/>
         <DCCReference Include="..\Commun\Entities\BD.Entities.Dao.Lambda.pas"/>
         <DCCReference Include="..\Commun\Utils\BD.Utils.Net.ICS.pas"/>
         <DCCReference Include="..\Commun\Entities\BD.Entities.Types.pas"/>

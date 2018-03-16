@@ -3,7 +3,7 @@ unit BDS.Scripts.DWScript.Editor;
 interface
 
 uses
-  System.SysUtils, Winapi.Windows, System.Classes, UScriptEditor, BD.Scripts.Utils;
+  System.SysUtils, Winapi.Windows, System.Classes, BDS.GUI.Controls.ScriptEditor, BDS.Scripts.Utils;
 
 type
   TDWScriptEditor = class(TScriptEditor)

@@ -3,7 +3,7 @@ unit BDS.Scripts.DWScript.DWUnit;
 interface
 
 uses
-  System.SysUtils, System.Classes, dwsComp, dwsExprs, dwsSymbols, Generics.Collections, Variants, dwsUnitSymbols, dwsOperators, dwsUtils, UScriptEngineIntf;
+  System.SysUtils, System.Classes, dwsComp, dwsExprs, dwsSymbols, Generics.Collections, Variants, dwsUnitSymbols, dwsOperators, dwsUtils, BDS.Scripts.Engine.Intf;
 
 type
 {$M+}

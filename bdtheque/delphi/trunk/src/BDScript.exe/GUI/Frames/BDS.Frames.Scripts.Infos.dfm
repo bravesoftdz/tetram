@@ -14,10 +14,6 @@ object framScriptInfos: TframScriptInfos
     TabOrder = 0
     object TabSheet4: TTabSheet
       Caption = 'Options'
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object ListBox1: TListBox
         Left = 0
         Top = 0

@@ -1,10 +1,10 @@
-unit UfrmScriptsUpdate;
+unit BDS.Forms.Scripts.Update;
 
 interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, Menus,
-  Dialogs, UScriptEngineIntf, Generics.Collections, BD.Scripts, VirtualTrees, BD.GUI.Controls.VirtualTree,
+  Dialogs, BDS.Scripts.Engine.Intf, Generics.Collections, BD.Scripts, VirtualTrees, BD.GUI.Controls.VirtualTree,
   StdCtrls, BD.GUI.Frames.Buttons, ActnList, ComCtrls, ComboCheck, System.Actions;
 
 type
@@ -55,8 +55,8 @@ type
 implementation
 
 uses
-  IOUtils, JclSimpleXML, BD.Scripts.Functions, BD.Common, BD.Utils.Net, Divers,
-  UMasterEngine;
+  IOUtils, JclSimpleXML, BDS.Scripts.Functions, BD.Common, BD.Utils.Net, Divers,
+  BDS.Scripts.MasterEngine;
 
 {$R *.dfm}
 

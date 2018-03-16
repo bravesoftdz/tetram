@@ -1,9 +1,9 @@
-unit UScriptEngineIntf;
+unit BDS.Scripts.Engine.Intf;
 
 interface
 
 uses
-  System.Classes, BD.Scripts, UScriptEditor, BD.Entities.Full, VirtualTrees, System.Generics.Collections;
+  System.Classes, BD.Scripts, BDS.GUI.Controls.ScriptEditor, BD.Entities.Full, VirtualTrees, System.Generics.Collections;
 
 type
   TDebugMode = (dmRun, dmStepOver, dmStepInto, dmPaused);

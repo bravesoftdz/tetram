@@ -396,6 +396,7 @@ object frmScripts: TfrmScripts
                 OnDblClick = vstMessagesDblClick
                 OnGetText = framMessages1vstMessagesGetText
                 ExplicitWidth = 595
+                ExplicitHeight = 158
                 Columns = <
                   item
                     Position = 0
@@ -476,6 +477,7 @@ object frmScripts: TfrmScripts
                 Height = 158
                 OnDblClick = vstBreakpointsDblClick
                 ExplicitWidth = 595
+                ExplicitHeight = 158
                 Columns = <
                   item
                     Position = 0
