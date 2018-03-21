@@ -1,3 +1,0 @@
-editMode:
-    pattern:  /
-    defaults: { _controller: BDThequeDataModelBundle:EditMode:index }
