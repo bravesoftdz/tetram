@@ -33,13 +33,7 @@ return [
 
     'connections' => [
 
-        'sqlite' => [
-            'driver' => 'sqlite',
-            'database' => env('DB_DATABASE', database_path('database.sqlite')),
-            'prefix' => env('DB_PREFIX', ''),
-        ],
-
-        'mysql' => [
+       'mysql' => [
             'driver' => 'mysql',
             'host' => env('DB_HOST', '127.0.0.1'),
             'port' => env('DB_PORT', '3306'),
@@ -51,7 +45,7 @@ return [
             'collation' => 'utf8_unicode_ci',
             'prefix' => env('DB_PREFIX', ''),
             'strict' => true,
-            'engine' => null,
+            'engine' => 'InnoDB',
         ],
 
         'pgsql' => [
