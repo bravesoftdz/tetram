@@ -154,11 +154,11 @@ return [
         /*
          * Application Service Providers...
          */
-        App\Providers\AppServiceProvider::class,
-        App\Providers\AuthServiceProvider::class,
-        // App\Providers\BroadcastServiceProvider::class,
-        App\Providers\EventServiceProvider::class,
-        App\Providers\RouteServiceProvider::class,
+        BDTheque\Providers\AppServiceProvider::class,
+        BDTheque\Providers\AuthServiceProvider::class,
+        // BDTheque\Providers\BroadcastServiceProvider::class,
+        BDTheque\Providers\EventServiceProvider::class,
+        BDTheque\Providers\RouteServiceProvider::class,
 
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class, // Laravel IDE helper
     ],

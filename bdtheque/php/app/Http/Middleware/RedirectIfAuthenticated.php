@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Middleware;
+namespace BDTheque\Http\Middleware;
 
 use Closure;
 use Illuminate\Support\Facades\Auth;
