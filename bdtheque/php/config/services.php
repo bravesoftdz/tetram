@@ -30,7 +30,7 @@ return [
     ],
 
     'stripe' => [
-        'model' => App\Models\User::class,
+        'model' => BDTheque\Models\User::class,
         'key' => env('STRIPE_KEY'),
         'secret' => env('STRIPE_SECRET'),
     ],
