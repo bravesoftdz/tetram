@@ -2,6 +2,7 @@
 
 namespace BDTheque\Http;
 
+use Illuminate\Auth\Middleware\Authenticate;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -37,10 +38,21 @@ class Kernel extends HttpKernel
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
 
+        'web_admin' => [
+            'web',
+            'auth',
+        ],
+
         'api' => [
             'throttle:60,1',
             'bindings',
         ],
+
+        'api_admin' => [
+            'api',
+            'auth:api',
+        ],
+
     ];
 
     /**
