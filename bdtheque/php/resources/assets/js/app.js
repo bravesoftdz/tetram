@@ -15,7 +15,14 @@ window.Vue = require('vue');
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-Vue.component('example-component', require('./components/ExampleComponent.vue'));
+import decamelize from 'decamelize';
+
+const requireComponent = require.context('./components', true, /\.(vue|js)$/);
+requireComponent.keys().forEach(fileName => {
+    const componentConfig = requireComponent(fileName);
+    const componentName = decamelize(componentConfig.default['name'], '-');
+    Vue.component(componentName, componentConfig.default || componentConfig);
+});
 
 const app = new Vue({
     el: '#app'
