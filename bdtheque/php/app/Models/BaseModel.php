@@ -48,15 +48,15 @@ abstract class BaseModel extends Model
                 $model->$keyName = $original_id;
 
             if ($model->buildInitialeFrom) {
-                $model->buildInitialeFrom = trim($model->buildInitialeFrom);
+                $initiale_from_var = trim($model->buildInitialeFrom);
+                $initiale_var = 'initiale_' . $initiale_from_var;
 
-                $initiale_var = 'initiale_' . $model->buildInitialeFrom;
-                if (!$model->buildInitialeFrom)
+                if (!$model->$initiale_from_var)
                     $model->$initiale_var = null;
-                elseif (empty($model->buildInitialeFrom))
+                elseif (empty($model->$initiale_from_var))
                     $model->$initiale_var = '#';
                 else {
-                    $model->$initiale_var = ucfirst($model->buildInitialeFrom)[0];
+                    $model->$initiale_var = ucfirst($model->$initiale_from_var)[0];
                     if (!(ctype_alpha($model->$initiale_var)))
                         $model->$initiale_var = '#';
                 }
