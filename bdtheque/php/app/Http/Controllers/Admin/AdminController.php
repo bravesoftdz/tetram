@@ -29,7 +29,7 @@ abstract class AdminController extends Controller
      * @param Uuid $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Uuid $id)
+    public function edit(string $id)
     {
         return view(self::getModelView('edit'))->with(self::getModelViewTag(), self::getModel($id));
     }
@@ -55,7 +55,8 @@ abstract class AdminController extends Controller
     public function store(Request $request)
     {
         /** @var BaseModel $model */
-        $model = new (self::getModelClass())($request);
+        $modelClass = self::getModelClass();
+        $model = new $modelClass($request);
         $this->authorize('store', $model);
 
         $model->save();

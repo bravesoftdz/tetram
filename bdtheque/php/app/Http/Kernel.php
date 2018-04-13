@@ -40,7 +40,7 @@ class Kernel extends HttpKernel
 
         'web_admin' => [
             'web',
-            'auth',
+//            'auth',
         ],
 
         'api' => [

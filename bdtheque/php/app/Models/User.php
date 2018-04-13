@@ -5,6 +5,15 @@ namespace BDTheque\Models;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
+/***
+ * Class User
+ * @package BDTheque\Models
+ *
+ * @property string $name
+ * @property string $email
+ * @property string $password
+ * @property string $remember_token
+ */
 class User extends Authenticatable
 {
     use Notifiable;
