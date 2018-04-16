@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="dataSourceStorageLocal">
+    <data-source name="MySQL - bdtheque@localhost" uuid="cc9ab806-6ce4-4246-89a5-e3c77ee0c425">
+      <database-info product="MySQL" version="5.5.5-10.2.8-MariaDB" jdbc-version="4.0" driver-name="MySQL Connector Java" driver-version="mysql-connector-java-5.1.45 ( Revision: 9131eefa398531c7dc98776e8a3fe839e544c5b2 )">
+        <extra-name-characters>#@</extra-name-characters>
+        <identifier-quote-string>`</identifier-quote-string>
+      </database-info>
+      <case-sensitivity plain-identifiers="lower" quoted-identifiers="lower" />
+      <secret-storage>master_key</secret-storage>
+      <user-name>bdtheque</user-name>
+      <introspection-schemas>*:bdtheque</introspection-schemas>
+    </data-source>
+    <data-source name="Firebird - Embedded - BD.GDB" uuid="d0f7b06b-5a83-4a28-b3a8-691c137f0afc">
+      <database-info product="Firebird 2.5" version="WI-V2.5.2.26540" jdbc-version="4.2" driver-name="Jaybird JCA/JDBC driver" driver-version="3.0">
+        <extra-name-characters>$</extra-name-characters>
+        <identifier-quote-string>&quot;</identifier-quote-string>
+      </database-info>
+      <case-sensitivity plain-identifiers="upper" quoted-identifiers="exact" />
+      <secret-storage>master_key</secret-storage>
+      <user-name>sysdba</user-name>
+      <introspection-schemas>:</introspection-schemas>
+      <table-pattern>table:-(MON|RDB)\$.*</table-pattern>
+    </data-source>
+  </component>
+</project>

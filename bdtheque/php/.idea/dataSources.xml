@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
+    <data-source source="LOCAL" name="MySQL - bdtheque@localhost" uuid="cc9ab806-6ce4-4246-89a5-e3c77ee0c425">
+      <driver-ref>mysql</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>com.mysql.jdbc.Driver</jdbc-driver>
+      <jdbc-url>jdbc:mysql://localhost:3307/bdtheque</jdbc-url>
+      <driver-properties>
+        <property name="autoReconnect" value="true" />
+        <property name="zeroDateTimeBehavior" value="convertToNull" />
+        <property name="tinyInt1isBit" value="false" />
+        <property name="characterEncoding" value="utf8" />
+        <property name="characterSetResults" value="utf8" />
+        <property name="yearIsDateType" value="false" />
+      </driver-properties>
+    </data-source>
+    <data-source source="LOCAL" name="Firebird - Embedded - BD.GDB" uuid="d0f7b06b-5a83-4a28-b3a8-691c137f0afc">
+      <synchronize>true</synchronize>
+      <configured-by-url>true</configured-by-url>
+      <jdbc-driver>org.firebirdsql.jdbc.FBDriver</jdbc-driver>
+      <jdbc-url>jdbc:firebirdsql:embedded:$PROJECT_DIR$/../delphi/trunk/deploy/BD.GDB</jdbc-url>
+      <vm-env>
+        <property name="PATH" value="%PATH%;D:\GIT\tetram\bdtheque\delphi\trunk\deploy\Win64" />
+      </vm-env>
+    </data-source>
+  </component>
+</project>
