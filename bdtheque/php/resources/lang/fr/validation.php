@@ -37,7 +37,7 @@ return [
     'digits_between' => 'Le champ :attribute doit contenir entre :min et :max chiffres.',
     'dimensions' => "La taille de l'image :attribute n'est pas conforme.",
     'distinct' => 'Le champ :attribute a une valeur en double.',
-    'email' => 'Le champ :attribute doit être une adresse courriel valide.',
+    'email' => 'Le champ :attribute doit être une adresse électronique valide.',
     'exists' => 'Le champ :attribute sélectionné est invalide.',
     'file' => 'Le champ :attribute doit être un fichier.',
     'filled' => 'Le champ :attribute doit avoir une valeur.',
@@ -85,7 +85,7 @@ return [
     'string' => 'Le champ :attribute doit être une chaîne de caractères.',
     'timezone' => 'Le champ :attribute doit être un fuseau horaire valide.',
     'unique' => 'La valeur du champ :attribute est déjà utilisée.',
-    'uploaded' => "Le fichier du champ :attribute n'a pu être téléversé.",
+    'uploaded' => "Le fichier du champ :attribute n'a pu être envoyé.",
     'url' => "Le format de l'URL de :attribute n'est pas valide.",
 
     /*
@@ -119,7 +119,7 @@ return [
     'attributes' => [
         'name' => 'nom',
         'username' => "nom d'utilisateur",
-        'email' => 'adresse courriel',
+        'email' => 'adresse électronique',
         'first_name' => 'prénom',
         'last_name' => 'nom',
         'password' => 'mot de passe',
