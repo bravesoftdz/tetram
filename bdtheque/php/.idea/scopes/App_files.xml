@@ -1,3 +1,3 @@
 <component name="DependencyValidationManager">
-  <scope name="App files" pattern="file[BDTheque]:*.php/&amp;&amp;!file:_ide_helper.php||file[BDTheque]:*.js/&amp;&amp;!file:public/js/app.js||file[BDTheque]:*.vue/" />
+  <scope name="App files" pattern="(file[BDTheque]:*.php/&amp;&amp;!file:_ide_helper.php||file[BDTheque]:*.js||file[BDTheque]:*.vue/)&amp;&amp;!file[BDTheque]:public//*" />
 </component>

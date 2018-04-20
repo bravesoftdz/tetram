@@ -1,6 +1,5 @@
 /node_modules
-/public/hot
-/public/storage
+/public
 /storage/*.key
 /vendor
 /.idea
@@ -12,9 +11,4 @@ npm-debug.log
 yarn-error.log
 .env
 /_ide_helper.php
-/public/mix-manifest.json
 /resources/assets/js/vue-i18n-locales.generated.js
-/public/js/app.js
-/public/js/vendor.js
-/public/js/manifest.js
-/public/css/app.css
