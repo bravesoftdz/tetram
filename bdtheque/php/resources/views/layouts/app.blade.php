@@ -6,7 +6,6 @@
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,600" rel="stylesheet" type="text/css">
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
@@ -25,53 +24,79 @@
 
 @section('body')
     <div id="app">
-    <nav class="navbar navbar-expand-md navbar-light navbar-laravel">
-        <div class="container">
-            <a class="navbar-brand" href="{{ url('/') }}">
-                {{ config('app.name', 'Laravel') }}
-            </a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+        <v-app dark>
+            <v-navigation-drawer
+                    app
+                    fixed
+                    clipped
+                    v-model="drawer"
+            >
+                @yield('drawer')
+            </v-navigation-drawer>
+            <v-toolbar
+                    app
+                    dense
+                    clipped-left
+                    clipped-right
+            >
+                <v-toolbar-side-icon @click.native="drawer = !drawer"></v-toolbar-side-icon>
+                <v-toolbar-title>{{ config('app.name') }}</v-toolbar-title>
+                <v-spacer></v-spacer>
+                @yield('toolbar')
+                <v-btn icon>
+                    <v-menu transition="slide-y-transition" bottom left offset-y>
+                        <v-icon slot="activator" large color="primary">account_circle</v-icon>
+                        <v-list>
+                            @guest
+                                <v-list-tile>
+                                    <v-btn align-left small flat block href="{{ route('login') }}">{{ __('Login') }}</v-btn>
+                                </v-list-tile>
+                                <v-list-tile>
+                                    <v-btn align-left small flat block href="{{ route('register') }}">{{ __('Register') }}</v-btn>
+                                </v-list-tile>
+                            @else
+                                <li class="nav-item dropdown">
+                                    <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
+                                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                        {{ Auth::user()->name }} <span class="caret"></span>
+                                    </a>
 
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <!-- Left Side Of Navbar -->
-                <ul class="navbar-nav mr-auto">
-
-                </ul>
-
-                <!-- Right Side Of Navbar -->
-                <ul class="navbar-nav ml-auto">
-                    <!-- Authentication Links -->
-                    @guest
-                        <li><a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a></li>
-                        <li><a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a></li>
-                    @else
-                        <li class="nav-item dropdown">
-                            <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                {{ Auth::user()->name }} <span class="caret"></span>
-                            </a>
-
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="{{ route('logout') }}"
-                                   onclick="event.preventDefault();
+                                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                        <a class="dropdown-item" href="{{ route('logout') }}"
+                                           onclick="event.preventDefault();
                                                  document.getElementById('logout-form').submit();">
-                                    {{ __('Logout') }}
-                                </a>
+                                            {{ __('Logout') }}
+                                        </a>
 
-                                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                    @csrf
-                                </form>
-                            </div>
-                        </li>
-                    @endguest
-                </ul>
-            </div>
-        </div>
-    </nav>
+                                        <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                                              style="display: none;">
+                                            @csrf
+                                        </form>
+                                    </div>
+                                </li>
+                            @endguest
+                        </v-list>
+                    </v-menu>
+                </v-btn>
+            </v-toolbar>
 
-    <main class="py-4">
-        @yield('content')
-    </main>
+
+            <v-content>
+                @yield('content')
+            </v-content>
+            <v-footer
+                    app
+            >
+                &copy; {{ date("Y") }}
+            </v-footer>
+        </v-app>
     </div>
 @endsection
+
+<script type="application/javascript" defer>
+    export default {
+        data: () => ({
+            drawer: null
+        })
+    }
+</script>

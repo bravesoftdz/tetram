@@ -9,6 +9,14 @@ require('./bootstrap');
 
 window.Vue = require('vue');
 
+// vuetify
+import 'vuetify/dist/vuetify.css';
+Vue.use(require('vuetify'));
+
+// materialdesignicons (more icons for vuetify)
+import 'mdi/css/materialdesignicons.css';
+
+// i18n
 import VueI18n from "vue-i18n";
 Vue.use(VueI18n);
 const i18n = new VueI18n({
