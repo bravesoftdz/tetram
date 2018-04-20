@@ -20,5 +20,6 @@ for (package in package_file.dependencies) {
 }
 
 mix.js('resources/assets/js/app.js', 'public/js')
-   .sass('resources/assets/sass/app.scss', 'public/css')
-   .extract(package_cfg);
+    .sass('resources/assets/sass/app.scss', 'public/css')
+    .extract(package_cfg)
+;
