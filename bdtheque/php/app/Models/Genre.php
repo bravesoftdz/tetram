@@ -9,4 +9,8 @@ namespace BDTheque\Models;
 class Genre extends BaseModel
 {
     protected $buildInitialeFrom = 'genre';
+
+    protected static $rules = [
+      'genre' => 'required|max=30'
+    ];
 }

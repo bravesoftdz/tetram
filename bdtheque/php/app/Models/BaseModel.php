@@ -20,6 +20,8 @@ abstract class BaseModel extends Model
     protected $keyType = 'string';
     protected $dates = [Model::CREATED_AT, Model::UPDATED_AT, 'deleted_at'];
 
+    protected static $rules = [];
+
     /**
      * Field name from which make an "initiale_$buildInitiale" field
      * @var string
@@ -64,6 +66,36 @@ abstract class BaseModel extends Model
 
             return true;
         });
+    }
+
+    /**
+     * Returns model's global validation rules
+     *
+     * @return array
+     */
+    protected static function getRules(): array
+    {
+        return self::$rules;
+    }
+
+    /**
+     * Returns model's creation validation rules
+     *
+     * @return array
+     */
+    public static function getCreateRules(): array
+    {
+        return self::getRules();
+    }
+
+    /**
+     * Returns model's update validation rules
+     *
+     * @return array
+     */
+    public static function getUpdateRules(): array
+    {
+        return self::getRules();
     }
 
 }

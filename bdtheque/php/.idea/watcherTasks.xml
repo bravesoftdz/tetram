@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ProjectTasksOptions">
-    <TaskOptions isEnabled="true">
+    <TaskOptions isEnabled="false">
       <option name="arguments" value="artisan ide-helper:generate" />
       <option name="checkSyntaxErrors" value="true" />
       <option name="description" />
@@ -36,7 +36,7 @@
       <option name="outputFromStdout" value="false" />
       <option name="program" value="$PhpExecutable$" />
       <option name="runOnExternalChanges" value="true" />
-      <option name="scopeName" value="App files" />
+      <option name="scopeName" value="App Lang files" />
       <option name="trackOnlyRoot" value="false" />
       <option name="workingDir" value="$ProjectFileDir$" />
       <envs />

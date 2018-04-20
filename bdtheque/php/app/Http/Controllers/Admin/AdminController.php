@@ -3,22 +3,25 @@
 namespace BDTheque\Http\Controllers\Admin;
 
 
+use BDTheque\Http\Controllers\BaseModelControllerTrait;
 use BDTheque\Http\Controllers\Controller;
-use BDTheque\Http\Controllers\TraitModelController;
+use BDTheque\Http\Requests\BaseModelRequest;
 use BDTheque\Models\BaseModel;
-use Illuminate\Http\Request;
-use Ramsey\Uuid\Uuid;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Response;
 
 abstract class AdminController extends Controller
 {
-    use TraitModelController;
+    use BaseModelControllerTrait;
 
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
-    public function create()
+    public function _create()
     {
         return view()->first([self::getModelView('create'), self::getModelView('edit')])->with(self::getModelViewTag(), null);
     }
@@ -26,78 +29,73 @@ abstract class AdminController extends Controller
     /**
      * Edit the specified resource.
      *
-     * @param Uuid $id
-     * @return \Illuminate\Http\Response
+     * @param Model $model
+     * @return Response
      */
-    public function edit(string $id)
+    public function _edit(Model $model)
     {
-        return view(self::getModelView('edit'))->with(self::getModelViewTag(), self::getModel($id));
+        return view(self::getModelView('edit'))->with(self::getModelViewTag(), $model);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param Uuid $id
-     * @return \Illuminate\Http\Response
+     * @param Model $model
+     * @return Response
      */
-    public function delete(Uuid $id)
+    public function _delete(Model $model)
     {
-        return view(self::getModelView('delete'))->with(self::getModelViewTag(), self::getModel($id));
+        return view(self::getModelView('delete'))->with(self::getModelViewTag(), self::getModel($model));
     }
 
     /**
      * Create a new resource in storage
      *
-     * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse
-     * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @param BaseModelRequest $request
+     * @return RedirectResponse
+     * @throws AuthorizationException
      */
-    public function store(Request $request)
+    public function _store(BaseModelRequest $request)
     {
-        /** @var BaseModel $model */
         $modelClass = self::getModelClass();
-        $model = new $modelClass($request);
-        $this->authorize('store', $model);
-
+        /** @var BaseModel $model */
+        $model = new $modelClass($request->all());
+        $this->authorize('create', $model);
         $model->save();
 
-        return redirect()->route(self::getModelView('index'))->with('success', "The brand <strong>{self::modelClassName()}</strong> has successfully been created.");
+        return back()->with('success', "The brand <strong>{self::modelClassName()}</strong> has successfully been created.");
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param Uuid $id
-     * @return \Illuminate\Http\Response
-     * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @param BaseModelRequest $request
+     * @param Model $model
+     * @return Response
+     * @throws AuthorizationException
      */
-    public function update(Request $request, Uuid $id)
+    public function _update(BaseModelRequest $request, Model $model)
     {
-        $model = self::getModel($id);
         $this->authorize('update', $model);
+        $model->update($request->all());
 
-        $model->save();
-
-        return redirect()->route(self::getModelView('index'))->with('success', "The brand <strong>{self::modelClassName()}</strong> has successfully been updated.");
+        return back()->with('success', "The brand <strong>{self::modelClassName()}</strong> has successfully been updated.");
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param Uuid $id
-     * @return \Illuminate\Http\Response
-     * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @param Model $model
+     * @return Response
+     * @throws AuthorizationException
      * @throws \Exception
      */
-    public function destroy(Uuid $id)
+    public function _destroy(Model $model)
     {
-        $model = self::getModel($id);
         $this->authorize('delete', $model);
-
         $model->delete();
 
-        return redirect()->route(self::getModelView('index'))->with('success', "The brand <strong>{self::modelClassName()}</strong> has successfully been archived.");
+        return back()->with('success', "The brand <strong>{self::modelClassName()}</strong> has successfully been archived.");
     }
 
 }

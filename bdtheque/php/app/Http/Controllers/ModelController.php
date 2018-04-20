@@ -5,7 +5,7 @@ namespace BDTheque\Http\Controllers;
 
 abstract class ModelController extends Controller
 {
-    use TraitModelController;
+    use BaseModelControllerTrait;
 
     /**
      * Display a listing of the resource.
