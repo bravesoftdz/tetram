@@ -2,13 +2,7 @@
 
 namespace BDTheque\Models;
 
-/**
- * Class ImageParaBd
- * @package BDTheque\Models
- *
- * @property ParaBd $para_bd
- */
-class ImageParaBd extends BaseImage
+class ImageParaBd extends BaseImage implements Metadata\ImageParaBd
 {
     protected $table = 'images_para_bds';
 

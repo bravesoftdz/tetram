@@ -2,11 +2,13 @@
 // Fonts
 @import url("https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons");
 
-// @import '~vuetify/dist/vuetify.css';
-
 // Variables
 // @import "variables";
+
+// Vuetify
+@import '~vuetify/dist/vuetify.css';
 
 // Bootstrap
 // @import '~bootstrap/scss/bootstrap';
 
+@import './../css/app.css';

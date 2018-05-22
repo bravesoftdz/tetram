@@ -28,13 +28,14 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $middlewareGroups = [
+        // web is used only for user password reset... no need for all the middlewares
         'web' => [
-            \BDTheque\Http\Middleware\EncryptCookies::class,
-            \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
-            \Illuminate\Session\Middleware\StartSession::class,
+            // \BDTheque\Http\Middleware\EncryptCookies::class,
+            // \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
+            // \Illuminate\Session\Middleware\StartSession::class,
             // \Illuminate\Session\Middleware\AuthenticateSession::class,
-            \Illuminate\View\Middleware\ShareErrorsFromSession::class,
-            \BDTheque\Http\Middleware\VerifyCsrfToken::class,
+            // \Illuminate\View\Middleware\ShareErrorsFromSession::class,
+            // \BDTheque\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
 
@@ -46,10 +47,12 @@ class Kernel extends HttpKernel
         'api' => [
             'throttle:60,1',
             'bindings',
+            'guest:api'
         ],
 
         'api_admin' => [
-            'api',
+            'throttle:60,1',
+            'bindings',
             'auth:api',
         ],
 

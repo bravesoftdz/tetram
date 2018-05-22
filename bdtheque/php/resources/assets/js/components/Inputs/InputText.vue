@@ -23,7 +23,7 @@
             },
         },
         methods: {
-            updateInput(event){
+            updateInput(event) {
                 this.$emit('change', this.value);
             }
         }

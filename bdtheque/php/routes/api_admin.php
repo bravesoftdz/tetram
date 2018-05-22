@@ -13,6 +13,11 @@ use Illuminate\Http\Request;
 |
 */
 
+Route::post('logout', '\BDTheque\Http\Controllers\Auth\LoginController@logout');
+
 Route::get('/user', function (Request $request) {
     return $request->user();
-})->name('user');
+});
+
+Route::patch('settings/profile', 'SettingsController@updateProfile');
+Route::patch('settings/password', 'SettingsController@updatePassword');

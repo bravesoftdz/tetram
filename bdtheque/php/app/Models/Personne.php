@@ -2,21 +2,20 @@
 
 namespace BDTheque\Models;
 
-/**
- * @property string $nom_personne
- * @property-read string $initiale_nom_personne
- * @property string $biographie
- * @property string $site_web
- */
-class Personne extends BaseModel
+class Personne extends BaseModel implements Metadata\Personne
 {
     protected $buildInitialeFrom = 'nom_personne';
+    protected static $defaultOrderBy = [
+        'nom_personne'
+    ];
 
-    public function albums() {
+    public function albums()
+    {
         $this->belongsToMany(Album::class, 'auteurs_albums');
     }
 
-    public function series() {
+    public function series()
+    {
         $this->belongsToMany(Serie::class, 'series_albums');
     }
 }

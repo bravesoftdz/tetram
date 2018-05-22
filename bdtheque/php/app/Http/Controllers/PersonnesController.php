@@ -2,7 +2,7 @@
 
 namespace BDTheque\Http\Controllers;
 
-class PersonnesController extends Controller
+class PersonnesController extends ModelController
 {
 
 }

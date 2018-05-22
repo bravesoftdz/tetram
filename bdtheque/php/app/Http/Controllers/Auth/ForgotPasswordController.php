@@ -4,6 +4,7 @@ namespace BDTheque\Http\Controllers\Auth;
 
 use BDTheque\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
+use Illuminate\Http\Request;
 
 class ForgotPasswordController extends Controller
 {
@@ -29,4 +30,28 @@ class ForgotPasswordController extends Controller
     {
         $this->middleware('guest');
     }
+
+    /**
+     * Get the response for a successful password reset link.
+     *
+     * @param  string $response
+     * @return array
+     */
+    protected function sendResetLinkResponse($response)
+    {
+        return ['status' => trans($response)];
+    }
+
+    /**
+     * Get the response for a failed password reset link.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @param  string $response
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    protected function sendResetLinkFailedResponse(Request $request, $response)
+    {
+        return response()->json(['email' => trans($response)], 400);
+    }
+
 }

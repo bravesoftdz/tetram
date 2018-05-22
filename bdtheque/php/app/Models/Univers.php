@@ -2,19 +2,12 @@
 
 namespace BDTheque\Models;
 
-/**
- * @property string $nom_univers
- * @property-read string $initiale_nom_univers
- * @property string $description
- * @property string $site_web
- * @property Univers $univers_parent
- * @property Univers $univers_racine
- * @property string $univers_branches
- */
-class Univers extends BaseModel
+class Univers extends BaseModel implements Metadata\Univers
 {
-    protected $table = 'univers';
     protected $buildInitialeFrom = 'nom_univers';
+    protected static $defaultOrderBy = [
+        'nom_univers'
+    ];
 
     public static function boot()
     {

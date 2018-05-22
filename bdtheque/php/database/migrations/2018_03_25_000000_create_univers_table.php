@@ -23,7 +23,7 @@ class CreateUniversTable extends Migration
 
             $table->uuid('parent_univers_id')->charset('ascii')->nullable(true);
             $table->uuid('racine_univers_id')->charset('ascii')->nullable(true);
-            $table->string('univers_branches', 2000)->charset('ascii')->nullable(true);
+            $table->string('univers_branches', 720)->charset('ascii')->nullable(true);
 
             $table->timestamps();
             $table->softDeletes();

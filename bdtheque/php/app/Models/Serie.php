@@ -2,48 +2,9 @@
 
 namespace BDTheque\Models;
 
-/**
- * @property string $titre_serie
- * @property-read string $initiale_titre_serie
- * @property Editeur $editeur
- * @property Collection $collection
- *
- * @property boolean $terminee
- * @property boolean $complete
- * @property boolean $suivre_manquants
- * @property boolean $suivre_sorties
- * @property integer $nb_albums
- *
- * @property string $sujet
- * @property string $notes
- * @property string $site_web
- *
- * @property boolean $vo
- * @property boolean $couleur
- * @property integer $etat
- * @property integer $reliure
- * @property integer $type_edition
- * @property integer $orientation
- * @property integer $format_edition
- * @property integer $sens_lecture
- * @property integer $notation
- *
- * @property Album[] $albums
- * @property Personne[] $scenaristes
- * @property Personne[] $dessinateurs
- * @property Personne[] $coloristes
- * @property Univers[] $univers
- * @property Genre[] $genres
- */
-class Serie extends BaseModel
+class Serie extends BaseModel implements Metadata\Serie
 {
     protected $buildInitialeFrom = 'titre_serie';
-
-    /**
-     * The attributes that should be casted to native types.
-     *
-     * @var array
-     */
     protected $casts = [
         'terminee' => 'boolean',
         'complete' => 'boolean',
@@ -51,6 +12,15 @@ class Serie extends BaseModel
         'suivre_sorties' => 'boolean',
         'vo' => 'boolean',
         'couleur' => 'boolean',
+    ];
+
+    protected static $defaultOrderBy = [
+        'titre_serie',
+        'editeur.nom_editeur',
+        'collection.nom_collection'
+    ];
+    protected static $autoLoadRelations = [
+        'editeur', 'collection'
     ];
 
     /**

@@ -16,16 +16,16 @@ class CreateAlbumsTable extends Migration
         Schema::create('albums', function (Blueprint $table) {
             $table->uuid('id')->charset('ascii')->nullable(false)->primary();
 
-            $table->string('titre_album', 150)->nullable(false);
+            $table->string('titre_album', 150)->nullable(true);
             $table->string('initiale_titre_album', 1)->charset('ascii')->nullable(false);
-            $table->unsignedSmallInteger('mois_parution')->nullable(true);
-            $table->unsignedTinyInteger('annee_parution')->nullable(true);
+            $table->unsignedTinyInteger('mois_parution')->nullable(true);
+            $table->unsignedSmallInteger('annee_parution')->nullable(true);
             $table->unsignedTinyInteger('tome')->nullable(true);
             $table->unsignedTinyInteger('tome_debut')->nullable(true);
             $table->unsignedTinyInteger('tome_fin')->nullable(true);
             $table->boolean('hors_serie')->nullable(false)->default(false);
             $table->boolean('integrale')->nullable(false)->default(false);
-            $table->unsignedSmallInteger('notation')->nullable(true);
+            $table->unsignedTinyInteger('notation')->nullable(true);
             $table->longText('sujet')->nullable(true);
             $table->longText('notes')->nullable(true);
 

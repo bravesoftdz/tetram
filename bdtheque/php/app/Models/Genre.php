@@ -2,15 +2,14 @@
 
 namespace BDTheque\Models;
 
-/**
- * @property string $genre
- * @property-read string $initiale_genre
- */
-class Genre extends BaseModel
+class Genre extends BaseModel implements Metadata\Genre
 {
     protected $buildInitialeFrom = 'genre';
+    protected static $defaultOrderBy = [
+        'genre'
+    ];
 
     protected static $rules = [
-      'genre' => 'required|max=30'
+        'genre' => 'required|max=30'
     ];
 }

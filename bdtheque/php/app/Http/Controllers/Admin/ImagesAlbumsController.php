@@ -7,8 +7,6 @@ use BDTheque\Models\ImageAlbum;
 
 class ImagesAlbumsController extends AdminController
 {
-    protected static $modelClass = ImageAlbum::class;
-
     /**
      * @return \Illuminate\Http\Response
      */

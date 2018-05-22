@@ -10,6 +10,7 @@ trait BaseModelControllerTrait
 {
     use BaseModelHandlerTrait;
     static $baseModelHandlerSuffix = 'Controller';
+    static $DEFAULT_ROWS_PER_PAGE = 15;
 
     /**
      * Returns the tag used in view files to identify the related model class name

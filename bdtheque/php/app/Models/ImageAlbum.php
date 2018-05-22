@@ -2,16 +2,9 @@
 
 namespace BDTheque\Models;
 
-/**
- * Class ImageAlbum
- * @package BDTheque\Models
- *
- * @property Album $album
- * @property Edition $edition
- */
-class ImageAlbum extends BaseImage
+class ImageAlbum extends BaseImage implements Metadata\ImageAlbum
 {
-    protected $table = 'albums_albums';
+    protected $table = 'images_albums';
 
     /**
      * @return Album|\Illuminate\Database\Eloquent\Relations\BelongsTo

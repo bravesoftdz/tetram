@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Laravel'),
+    'name' => 'BDThèque',
 
     /*
     |--------------------------------------------------------------------------
@@ -152,6 +152,7 @@ return [
          */
         Laravel\Tinker\TinkerServiceProvider::class,
         MartinLindhe\VueInternationalizationGenerator\GeneratorProvider::class,
+        Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class, // Laravel IDE helper
 
         /*
          * Application Service Providers...
@@ -161,8 +162,7 @@ return [
         // BDTheque\Providers\BroadcastServiceProvider::class,
         BDTheque\Providers\EventServiceProvider::class,
         BDTheque\Providers\RouteServiceProvider::class,
-
-        Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class, // Laravel IDE helper
+        BDTheque\Providers\PluralizationServiceProvider::class,
     ],
 
     /*
@@ -211,7 +211,8 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
-
+        'JWTAuth' => Tymon\JWTAuth\Facades\JWTAuth::class,
+        'JWTFactory' => Tymon\JWTAuth\Facades\JWTFactory::class,
     ],
 
 ];

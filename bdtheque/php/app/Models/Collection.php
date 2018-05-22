@@ -2,14 +2,12 @@
 
 namespace BDTheque\Models;
 
-/**
- * @property string $nom_collection
- * @property-read string $initiale_nom_collection
- * @property Editeur $editeur
- */
-class Collection extends BaseModel
+class Collection extends BaseModel implements Metadata\Collection
 {
     protected $buildInitialeFrom = 'nom_collection';
+    protected static $defaultOrderBy = [
+        'nom_collection'
+    ];
 
     /**
      * @return Editeur|\Illuminate\Database\Eloquent\Relations\BelongsTo

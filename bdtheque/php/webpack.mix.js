@@ -1,4 +1,4 @@
-let mix = require('laravel-mix');
+let mix = require('laravel-mix')
 
 /*
  |--------------------------------------------------------------------------
@@ -11,15 +11,15 @@ let mix = require('laravel-mix');
  |
  */
 
-// package_cfg = ["axios","bootstrap","decamelize","jquery","lodash","path-parse","popper.js","vue","vue-i18n"];
-package_cfg = [];
+// packagesList = ["axios","bootstrap","decamelize","jquery","lodash","path-parse","popper.js","vue","vue-i18n"];
+let packagesList = []
 
-let package_file = require('./package.json');
-for (package in package_file.dependencies) {
-    package_cfg.push(package);
+let packageFiles = require('./package.json')
+for (let packageFile in packageFiles.dependencies) {
+  packagesList.push(packageFile)
 }
 
 mix.js('resources/assets/js/app.js', 'public/js')
-    .sass('resources/assets/sass/app.scss', 'public/css')
-    .extract(package_cfg)
-;
+  .sass('resources/assets/sass/app.scss', 'public/css')
+  .extract(packagesList)
+  .sourceMaps()

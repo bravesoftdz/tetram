@@ -2,23 +2,26 @@
 
 namespace BDTheque\Models;
 
-
 trait BaseModelHandlerTrait
 {
     protected static $modelClass;
-//    protected static $baseModelHandlerSuffix = '';
+    protected static $modelResourceClass;
+    protected static $modelResourceCollectionClass;
+    // it's not allowed for a trait to override another trait field
+    //    protected static $baseModelHandlerSuffix = '';
 
     /**
      * Returns the Model class name handled by the class using this trait
      *
+     * @param string|null $class
      * @return string
      */
-    protected static function getModelClassName(): string
+    protected static function getModelClassName(string $class = null): string
     {
-        $classPath = explode('\\', (self::$modelClass ? self::$modelClass : get_called_class()));
+        $classPath = explode('\\', $class ?: static::$modelClass ?: get_called_class());
         $className = end($classPath);
-        if (!self::$modelClass) {
-            $className = substr($className, 0, strlen($className) - strlen(self::getBaseModelHandlerSuffix()));
+        if (!$class && !static::$modelClass) {
+            $className = substr($className, 0, strlen($className) - strlen(static::getBaseModelHandlerSuffix()));
             $className = str_singular($className);
         }
         return $className;
@@ -27,13 +30,39 @@ trait BaseModelHandlerTrait
     /**
      * Returns the Model class handled by the class using this trait
      *
-     * @return string
+     * @return string|BaseModel
      */
     protected static function getModelClass(): string
     {
-        if (self::$modelClass) return self::$modelClass;
+        if (static::$modelClass) return static::$modelClass;
 
-        return $className = '\\BDTheque\\Models\\' . self::getModelClassName();
+        return $className = '\\BDTheque\\Models\\' . static::getModelClassName();
+    }
+
+    /**
+     * Returns the ModelResource class handled by the class using this trait
+     *
+     * @param string|null $class
+     * @return string
+     */
+    protected static function getModelResourceClass(string $class = null): string
+    {
+        if (!$class && static::$modelResourceClass) return static::$modelResourceClass;
+
+        return $className = '\\BDTheque\\Http\\Resources\\' . static::getModelClassName($class) . 'Resource';
+    }
+
+    /**
+     * Returns the ModelResourceCollection class handled by the class using this trait
+     *
+     * @param string|null $class
+     * @return string
+     */
+    protected static function getModelResourceCollectionClass(string $class = null): string
+    {
+        if (!$class && static::$modelResourceCollectionClass) return static::$modelResourceCollectionClass;
+
+        return $className = static::getModelResourceClass($class) . 'Collection';
     }
 
     /**
@@ -41,7 +70,7 @@ trait BaseModelHandlerTrait
      */
     protected static function getBaseModelHandlerSuffix()
     {
-        if (self::$baseModelHandlerSuffix) return self::$baseModelHandlerSuffix;
+        if (static::$baseModelHandlerSuffix) return static::$baseModelHandlerSuffix;
 
         return '';
     }
