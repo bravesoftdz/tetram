@@ -18,7 +18,7 @@ class Album extends BaseModel implements Metadata\Album
         'tome', 'tome_debut', 'tome_fin',
         'annee_parution', 'mois_parution'
     ];
-    protected static $autoLoadRelations = [
+    protected $with = [
         'serie'
     ];
 

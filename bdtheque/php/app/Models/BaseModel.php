@@ -3,6 +3,7 @@
 namespace BDTheque\Models;
 
 use BDTheque\Support\ExtendedEloquentBuilder;
+use BDTheque\Support\ExtendedQueryBuilder;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -19,7 +20,6 @@ abstract class BaseModel extends Model implements Metadata\Base
     protected $dates = [Model::CREATED_AT, Model::UPDATED_AT, BaseModel::DELETED_AT];
 
     protected static $rules = [];
-    protected static $autoLoadRelations = [];
     protected static $defaultOrderBy = [];
     protected static $orderBy = [];
 
@@ -70,9 +70,9 @@ abstract class BaseModel extends Model implements Metadata\Base
     /**
      * @return array
      */
-    public static function getAutoLoadRelations()
+    public function getWith()
     {
-        return static::$autoLoadRelations;
+        return $this->with;
     }
 
     /**
@@ -94,6 +94,15 @@ abstract class BaseModel extends Model implements Metadata\Base
     public function newEloquentBuilder($query)
     {
         return new ExtendedEloquentBuilder($query);
+    }
+
+    protected function newBaseQueryBuilder()
+    {
+        $connection = $this->getConnection();
+
+        return new ExtendedQueryBuilder(
+            $connection, $connection->getQueryGrammar(), $connection->getPostProcessor()
+        );
     }
 
     /**
@@ -183,7 +192,6 @@ abstract class BaseModel extends Model implements Metadata\Base
         $query = static::query();
         assert($query instanceof ExtendedEloquentBuilder);
         $query->select($query->getModel()->qualifyColumn('*'));
-        $query->with(static::getAutoLoadRelations());
 
         if ($filters) {
             if (is_object($filters) || (is_array($filters) && key_exists('column', $filters)))

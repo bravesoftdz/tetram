@@ -29,12 +29,38 @@
 				hide-actions
 				hide-headers
 		>
-			<template slot="items" slot-scope="{ item }">
-				<td>
-					<slot name="display-item" v-bind:item="item">
-						{{ item }}
-					</slot>
-				</td>
+			<template slot="items" slot-scope="args">
+				<tr v-if="isGroupedBy" @click="args.expanded = !args.expanded">
+					<td>
+						<slot name="display-group" v-bind:group="args.item">
+							{{ args.item }}
+						</slot>
+					</td>
+				</tr>
+				<tr v-else>
+					<td>
+						<slot name="display-item" v-bind:item="args.item">
+							{{ args.item }}
+						</slot>
+					</td>
+				</tr>
+			</template>
+			<template slot="expand" slot-scope="{ item }">
+				<v-card flat>
+					<v-data-table
+							:items="item.items"
+							hide-actions
+							hide-headers
+					>
+						<tr slot="items" slot-scope="{ item }">
+							<td>
+								<slot name="display-item" v-bind:item="item">
+									{{ item }}
+								</slot>
+							</td>
+						</tr>
+					</v-data-table>
+				</v-card>
 			</template>
 			<v-alert slot="no-results" :value="true" color="error" icon="warning">
 				Your search for "{{ quickSearchFilter }}" found no results.
@@ -73,7 +99,7 @@
         type: Function | Object,
         required: false
       },
-      groupBy: {type: String, required: false},
+      groupBy: {type: Function | String, required: false, default: ''},
       groupBySort: {
         type: Function | Object,
         required: false
@@ -89,7 +115,6 @@
       items: [],
       loading: false,
       pagination: {pages: 0, page: 1, rowsPerPage: 10, totalItems: 0},
-      firstLoad: true,
       quickSearchFilter: ''
     }),
     mounted () {
@@ -175,7 +200,7 @@
           `/api/${this.model}/index` + (params.length ? '?' + params.join('&') : ''), {
             filters: filters,
             sortBy: this.sortObjectFromParam(this.sortBy),
-            groupBy: this.groupBy,
+            groupBy: this.groupedBy,
             groupBySort: this.sortObjectFromParam(this.groupBySort),
           })
           .then(response => {
@@ -195,9 +220,9 @@
       }
     },
     computed: {
-      paginationVisiblePages () {
-        return this.pages > 10 ? 7 : null
-      }
+      paginationVisiblePages () { return (this.pagination && this.pagination.pages > 10) ? 7 : null},
+      groupedBy () { return (typeof this.groupBy) === 'function' ? this.groupBy() : this.groupBy },
+      isGroupedBy () { return this.groupedBy !== '' }
     }
   }
 </script>

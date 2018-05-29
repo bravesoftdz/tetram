@@ -7,6 +7,9 @@
 			group-by="serie"
 			group-by-sort="index"
 	>
+		<template slot="display-group" slot-scope="{ group }">
+			{{ displayGroup(group) }}
+		</template>
 		<template slot="display-item" slot-scope="{ item }">
 			{{ displayItem(item) }}
 		</template>
@@ -15,12 +18,13 @@
 
 <script>
   import ModelIndex from '../../../components/ModelIndex'
-  import { displayAlbum } from '../../../bdtheque/DisplayItem'
+  import { displayAlbum, displaySerie } from '../../../bdtheque/DisplayItem'
 
   export default {
     name: 'AlbumsIndex',
     components: {ModelIndex},
     methods: {
+      displayGroup: (item) => displaySerie(item),
       displayItem: (item) => displayAlbum(item)
     }
   }

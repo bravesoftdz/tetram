@@ -19,7 +19,7 @@ class Serie extends BaseModel implements Metadata\Serie
         'editeur.nom_editeur',
         'collection.nom_collection'
     ];
-    protected static $autoLoadRelations = [
+    protected $with = [
         'editeur', 'collection'
     ];
 

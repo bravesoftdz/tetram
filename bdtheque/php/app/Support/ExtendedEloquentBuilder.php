@@ -2,8 +2,10 @@
 
 namespace BDTheque\Support;
 
+use BDTheque\Models\BaseModel;
 use Closure;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
@@ -14,6 +16,26 @@ use Illuminate\Support\Facades\DB;
 
 class ExtendedEloquentBuilder extends EloquentBuilder
 {
+    /**
+     * @return ExtendedQueryBuilder|\Illuminate\Database\Query\Builder
+     */
+    public function toBase()
+    {
+        return parent::toBase();
+    }
+
+    /**
+     * change model reference without changing from query
+     *
+     * @param Model $model
+     * @return $this
+     */
+    public function changeModel(Model $model)
+    {
+        $this->model = $model;
+        return $this;
+    }
+
     /**
      * @param Relation $relation
      * @return bool
@@ -51,7 +73,7 @@ class ExtendedEloquentBuilder extends EloquentBuilder
     {
         $relations = explode('.', $relations);
 
-        $closure = function ($q) use (&$closure, &$relations, $operator, $count, $callback) {
+        $closure = function () use (&$closure, &$relations, $operator, $count, $callback) {
             // In order to nest "has", we need to add count relation constraints on the
             // callback Closure. We'll do this by simply passing the Closure its own
             // reference to itself so it calls itself recursively on each segment.
@@ -61,6 +83,27 @@ class ExtendedEloquentBuilder extends EloquentBuilder
         };
 
         return $this->hasRelation(array_shift($relations), '>=', 1, $boolean, $closure);
+    }
+
+    /**
+     * @param  string $relations
+     * @param  \Closure|null $callback
+     * @return \Illuminate\Database\Eloquent\Builder|static
+     */
+    protected function joinNestedRelation($relations, $callback = null)
+    {
+        $relations = explode('.', $relations);
+
+        $closure = function () use (&$closure, &$relations, $callback) {
+            // In order to nest "join", we need to add count relation constraints on the
+            // callback Closure. We'll do this by simply passing the Closure its own
+            // reference to itself so it calls itself recursively on each segment.
+            count($relations) > 1
+                ? $this->whereHasRelation(array_shift($relations), $closure)
+                : $this->hasRelation(array_shift($relations), $callback);
+        };
+
+        return $this->joinRelation(array_shift($relations), $closure);
     }
 
     /**
@@ -83,6 +126,32 @@ class ExtendedEloquentBuilder extends EloquentBuilder
 
         if (!self::isRelationJoinable($relation))
             return $this->has($relation, $operator, $count, $boolean, $callback);
+
+        // it looks like the relation can be joined
+        $this->addJoinRelation($relation->getRelationExistenceQuery($relation->getRelated()->newQuery(), $this)->applyScopes());
+        if ($callback)
+            $this->callScope($callback, [$relation->getModel()]);
+
+        return $this;
+    }
+
+    /**
+     * same as "has" method but will use join when $relation is "joinable"
+     *
+     * @param string $relation
+     * @param Closure|null $callback
+     * @return $this
+     */
+    public function joinRelation($relation, $callback = null)
+    {
+        if (strpos($relation, '.') !== false) {
+            return $this->joinNestedRelation($relation, $callback);
+        }
+
+        $relation = $this->getRelationWithoutConstraints($relation);
+
+        if (!self::isRelationJoinable($relation))
+            return $this;
 
         // it looks like the relation can be joined
         $this->addJoinRelation($relation->getRelationExistenceQuery($relation->getRelated()->newQuery(), $this)->applyScopes());
@@ -163,6 +232,25 @@ class ExtendedEloquentBuilder extends EloquentBuilder
                 $q->mergeWheres($wheres, $bindings);
             });
         });
+    }
+
+    /**
+     * @param string|null $sortBy
+     * @param string $sortDirection
+     * @return ExtendedEloquentBuilder
+     */
+    public function orderByRef($sortBy = null, $sortDirection = 'asc')
+    {
+        /** @var BaseModel $modelClass */
+        $modelClass = get_class($this->getModel());
+        if ($sortBy && array_key_exists($sortBy, $modelClass::getOrderBy()))
+            $sortBy = $modelClass::getOrderBy()[$sortBy];
+        else
+            $sortBy = $modelClass::getDefaultOrderBy();
+        foreach ($sortBy as $column) {
+            $this->orderByRelation($column, $sortDirection);
+        }
+        return $this;
     }
 
 }
