@@ -152,7 +152,6 @@ return [
          */
         Laravel\Tinker\TinkerServiceProvider::class,
         MartinLindhe\VueInternationalizationGenerator\GeneratorProvider::class,
-        Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class, // Laravel IDE helper
 
         /*
          * Application Service Providers...

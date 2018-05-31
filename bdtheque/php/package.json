@@ -9,13 +9,14 @@
     "prod": "npm run production --report",
     "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
     "install-dependencies": "npm install",
+    "update-dependencies": "npm update --save-dev",
     "test-js": "standard"
   },
   "devDependencies": {
     "cross-env": "^5.1",
-    "eslint": "^3.19.0",
-    "eslint-plugin-html": "^3.2.2",
-    "eslint-plugin-vue-libs": "^1.2.1",
+    "eslint": "^4.19.1",
+    "eslint-plugin-html": "^4.0.3",
+    "eslint-plugin-vue-libs": "^3.0.0",
     "laravel-mix": "^2.0",
     "mdi": "^2.2.43",
     "standard": "^11.0.1"
@@ -24,7 +25,7 @@
     "axios": "^0.18",
     "babel-polyfill": "^6.26.0",
     "bootstrap": "^4.0.0",
-    "gsap": "^1.20.4",
+    "gsap": "^2.0.1",
     "jquery": "^3.2",
     "js-cookie": "^2.2.0",
     "lodash.debounce": "^4.0.8",
