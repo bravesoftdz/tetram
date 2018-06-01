@@ -18,6 +18,15 @@ class Album extends BaseModel implements Metadata\Album
         'tome', 'tome_debut', 'tome_fin',
         'annee_parution', 'mois_parution'
     ];
+
+    protected static $orderBy = [
+        'subindex' => [
+            'hors_serie', 'integrale',
+            'tome', 'tome_debut', 'tome_fin',
+            'annee_parution', 'mois_parution'
+        ]
+    ];
+
     protected $with = [
         'serie'
     ];

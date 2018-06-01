@@ -2,12 +2,13 @@ import { ajoutString, formatISBN, formatTitre, formatTitreAlbum, nonZero } from 
 
 /**
  * @param {Album} album
+ * @param {Boolean} withSerie
  * @returns {string}
  */
-export function displayAlbum (album) {
+export function displayAlbum (album, withSerie = true) {
   return formatTitreAlbum(
     false,
-    true,
+    withSerie,
     album.titre_album,
     album.serie ? album.serie.titre_serie : null,
     album.tome,

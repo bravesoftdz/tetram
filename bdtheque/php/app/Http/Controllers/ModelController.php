@@ -70,7 +70,10 @@ abstract class ModelController extends Controller
         }
 
         $modelResourceCollectionClass = static::getModelResourceCollectionClass(get_class($results->getModel()));
-        return new $modelResourceCollectionClass($results->paginate($this->getRowPerPage()));
+        if ($this->getRowPerPage() === -1)
+            return new $modelResourceCollectionClass($results->get());
+        else
+            return new $modelResourceCollectionClass($results->paginate($this->getRowPerPage()));
     }
 
     /**

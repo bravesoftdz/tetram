@@ -138,18 +138,22 @@ abstract class BaseModel extends Model implements Metadata\Base
     /**
      * @param ExtendedEloquentBuilder $query
      * @param array|object $filter
+     * @param ExtendedEloquentBuilder|null $rootQuery
      */
-    private static function addFilter($query, $filter)
+    private static function addFilter($query, $filter, $rootQuery = null)
     {
+        if (!$rootQuery)
+            $rootQuery = $query;
+
         if (is_object($filter)) $filter = get_object_vars($filter);
         array_change_key_case($filter, CASE_LOWER);
         $operator = array_key_exists('operator', $filter) ? $filter['operator'] : 'and';
 
         if (array_key_exists('c', $filter) && is_array($filter['c'])) {
             $subFilters = $filter['c'];
-            $query->where(function ($q) use ($subFilters) {
+            $query->where(function ($q) use ($subFilters, $rootQuery) {
                 foreach ($subFilters as $key => $filter)
-                    static::addFilter($q, $filter);
+                    static::addFilter($q, $filter, $rootQuery);
             }, null, null, $operator);
         } else {
             $column = $filter['column'];
@@ -169,10 +173,11 @@ abstract class BaseModel extends Model implements Metadata\Base
             } else {
                 $column = substr($column, strlen($relation) + 1);
                 // odd composition but needed to Builder lacks'n bug
-                $query->hasRelation(
+                $rootQuery->hasRelation(
                 // $query->has(
                     $relation, '>', 0, $operator,
                     function (Builder $q, Model $model) use ($query, $appendFilter, $filter, $column, $operator) {
+                        // $q == $rootQuery
                         $q->where(function () use ($query, $appendFilter, $filter, $column, $operator, $model) {
                             $appendFilter($query, $filter, $column, $operator, $model);
                         });
@@ -199,6 +204,9 @@ abstract class BaseModel extends Model implements Metadata\Base
             foreach ($filters as $key => $filter)
                 static::addFilter($query, $filter);
         }
+
+        if (is_string($sortBy))
+            $sortBy = ['sortBy' => $sortBy];
 
         if ($sortBy) {
             $sortDirection = array_key_exists('sortDirection', $sortBy) ? $sortBy['sortDirection'] : 'asc';

@@ -1,3 +1,5 @@
+export const NULL_ID = '<null>'
+
 /**
  * @param {string} s
  * @returns {string}
