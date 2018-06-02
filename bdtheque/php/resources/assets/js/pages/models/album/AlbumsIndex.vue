@@ -1,6 +1,6 @@
 <template>
 	<model-index
-			title="Books"
+			title="Albums"
 			model="albums"
 			:quick-search-fields="['titre_album', 'serie.titre_serie']"
 			:sort-by="sortIndex"
@@ -9,22 +9,25 @@
 			:group-key="groupKey"
 	>
 		<template slot="sub-header">
-			<v-layout row wrap>
-				<v-flex xs6>
-					<v-subheader>{{ $t('Group by') }}</v-subheader>
-				</v-flex>
-				<v-flex xs6>
-					<v-select
-							dense
-							v-model="groupBy"
-							:items="groups"
-							item-value="key"
-							item-text="name"
-							single-line
-					>
-					</v-select>
-				</v-flex>
-			</v-layout>
+			<v-flex>
+				<v-layout row align-baseline>
+					<v-flex>
+						Grouper par
+					</v-flex>
+					<v-flex>
+						<v-select
+								dense
+								v-model="groupBy"
+								:items="groups"
+								item-value="key"
+								item-text="name"
+								single-line
+								hide-details
+						>
+						</v-select>
+					</v-flex>
+				</v-layout>
+			</v-flex>
 		</template>
 		<template slot="display-group" slot-scope="{ group }">
 			{{ displayGroup(group) }}
@@ -47,9 +50,10 @@
       return {
         groupBy: 'serie',
         groups: [
-          {key: null, name: this.$t('None')},
-          {key: 'serie', name: this.$t('Serial')},
-          {key: 'annee_parution', name: this.$t('Publishing year')}
+          {key: null, name: 'Pas de groupe'},
+          {key: 'initiale_titre_album', name: 'Initiale du titre'},
+          {key: 'serie', name: 'Série'},
+          {key: 'annee_parution', name: 'Année de parution'}
         ]
       }
     },
@@ -64,11 +68,11 @@
       displayGroup (item) {
         switch (this.groupBy) {
           case 'serie':
-            return item.id === NULL_ID ? `< ${this.$t('One-off')} >` : displaySerie(item)
+            return item.id === NULL_ID ? `< Hors-série >` : displaySerie(item)
           case 'annee_parution':
-            return item[this.groupKey()] === NULL_ID ? `< ${this.$t('Unknown')} >` : item[this.groupKey()]
+            return item[this.groupKey()] === NULL_ID ? `< Inconnue >` : item[this.groupKey()]
           default:
-            return item
+            return item[this.groupKey()] === NULL_ID ? `< Inconnu >` : item[this.groupKey()]
         }
       },
       displayItem (item) {
@@ -76,11 +80,10 @@
       },
       groupKey () {
         switch (this.groupBy) {
-          case 'annee_parution':
-            return this.groupBy
           case 'serie':
-          default:
             return 'id'
+          default:
+            return this.groupBy
         }
       }
     }

@@ -30,6 +30,14 @@ abstract class BaseModel extends Model implements Metadata\Base
     protected $buildInitialeFrom = null;
 
     /**
+     * @return string
+     */
+    public function getInitialeFieldName()
+    {
+        return $this->buildInitialeFrom ? 'initiale_' . trim($this->buildInitialeFrom) : '';
+    }
+
+    /**
      * The booting method of the model.
      *
      * @return void

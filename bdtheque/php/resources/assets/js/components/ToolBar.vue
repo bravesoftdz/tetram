@@ -21,7 +21,7 @@
 			<!--<v-btn flat :to="{ name: 'settings.profile' }">{{ user.name }}</v-btn>-->
 
 			<v-menu transition="slide-y-transition" bottom left offset-y lazy>
-				<v-btn flat slot="activator">{{ $t('Manage') }}</v-btn>
+				<v-btn flat slot="activator">Gestion</v-btn>
 				<v-list dense>
 					<tree-popup-menu v-for="(item, index) in items.manage" :item="item"
 									 :key="index"></tree-popup-menu>
@@ -45,8 +45,8 @@
 
 		<!-- Guest -->
 		<template v-else>
-			<v-btn flat :to="{ name: 'login' }">{{ $t('Login') }}</v-btn>
-			<!--<v-btn flat :to="{ name: 'register' }">{{ $t('Register') }}</v-btn>-->
+			<v-btn flat :to="{ name: 'login' }">Connexion</v-btn>
+			<!--<v-btn flat :to="{ name: 'register' }">S'enregistrer</v-btn>-->
 		</template>
 	</v-toolbar>
 </template>
@@ -71,16 +71,16 @@
       busy: false,
       items: {
         account: [
-          {title: 'Account', icon: ICONS.ACCOUNT, route: {name: 'settings.profile'}},
+          {title: 'Compte', icon: ICONS.COMPTE, route: {name: 'settings.profile'}},
         ],
         manage: [
-          {title: 'Books', icon: ICONS.BOOKS, route: {name: 'books.list'}},
-          {title: 'Serials', icon: ICONS.SERIALS, route: {name: 'serials.list'}},
-          {title: 'Authors', icon: ICONS.AUTHORS, route: {name: 'authors.list'}},
-          {title: 'Editors', icon: ICONS.EDITORS, route: {name: 'editors.list'}},
+          {title: 'Albums', icon: ICONS.ALBUMS, route: {name: 'albums.list'}},
+          {title: 'Séries', icon: ICONS.SERIES, route: {name: 'series.list'}},
+          {title: 'Auteurs', icon: ICONS.AUTEURS, route: {name: 'auteurs.list'}},
+          {title: 'Editeurs', icon: ICONS.EDITEURS, route: {name: 'editeurs.list'}},
           {title: 'Univers', icon: ICONS.UNIVERS, route: {name: 'univers.list'}},
-          {title: 'Genders', icon: ICONS.GENDERS, route: {name: 'genders.list'}},
-          {title: 'ParaBd', icon: ICONS.PARABDS, route: {name: 'parabds.list'}},
+          {title: 'Genres', icon: ICONS.GENRES, route: {name: 'genres.list'}},
+          {title: 'ParaBds', icon: ICONS.PARABDS, route: {name: 'parabds.list'}},
         ]
       }
     }),

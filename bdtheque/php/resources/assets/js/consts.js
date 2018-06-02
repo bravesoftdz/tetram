@@ -1,11 +1,11 @@
 export const ICONS = {
-  DASHBOARD: 'mdi-wall',
-  ACCOUNT: 'mdi-account-settings',
-  BOOKS: 'mdi-book-open-page-variant',
-  SERIALS: 'mdi-stack-overflow',
-  AUTHORS: 'mdi-account-multiple',
-  EDITORS: 'mdi-bank',
+  TABLEAUDEBORD: 'mdi-wall',
+  COMPTE: 'mdi-account-settings',
+  ALBUMS: 'mdi-book-open-page-variant',
+  SERIES: 'mdi-stack-overflow',
+  AUTEURS: 'mdi-account-multiple',
+  EDITEURS: 'mdi-bank',
   UNIVERS: 'mdi-castle',
-  GENDERS: 'mdi-tag-text-outline',
+  GENRES: 'mdi-tag-text-outline',
   PARABDS: 'mdi-cube-outline'
 }

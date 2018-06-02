@@ -1,7 +1,7 @@
 <template>
 	<v-menu v-if="item.items" offset-x open-on-hover>
 		<v-list-tile slot="activator" @click="">
-			<menu-item :title="$t(item.title)" :icon="item.icon">
+			<menu-item :title="item.title" :icon="item.icon">
 				<v-list-tile-action class="justify-end">
 					<v-icon>play_arrow</v-icon>
 				</v-list-tile-action>
@@ -20,14 +20,14 @@
 	</v-menu>
 	<menu-item
 			v-else-if="item.route || item.click"
-			:title="$t(item.title)" :icon="item.icon"
+			:title="item.title" :icon="item.icon"
 			:to="item.route" :click="item.click"
 			:use_action="use_action">
 	</menu-item>
 	<v-divider v-else-if="!item.title"></v-divider>
 	<v-subheader v-else>
 		<v-icon v-if="item.icon" class="mr-3">{{ item.icon }}</v-icon>
-		{{ $t(item.title )}}
+		{{ item.title }}
 	</v-subheader>
 </template>
 

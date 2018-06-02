@@ -1,6 +1,6 @@
 <template>
 	<model-index
-			title="Serials"
+			title="Séries"
 			model="series"
 			quick-search-fields="titre_serie"
 			sort-by="index"

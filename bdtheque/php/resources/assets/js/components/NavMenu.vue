@@ -15,14 +15,14 @@
     data () {
       return {
         items: [
-          {title: 'Dashboard', icon: ICONS.DASHBOARD, route: {name: 'welcome'}},
+          {title: 'Tableau de bord', icon: ICONS.TABLEAUDEBORD, route: {name: 'welcome'}},
           {},
-          {title: 'Consult'},
-          {title: 'Books', icon: ICONS.BOOKS, route: {name: 'books.index'}},
-          {title: 'Serials', icon: ICONS.SERIALS, route: {name: 'serials.index'}},
+          {title: 'Consultation'},
+          {title: 'Albums', icon: ICONS.ALBUMS, route: {name: 'albums.index'}},
+          {title: 'Séries', icon: ICONS.SERIES, route: {name: 'series.index'}},
           {title: 'Univers', icon: ICONS.UNIVERS, route: {name: 'univers.index'}},
-          {title: 'Authors', icon: ICONS.AUTHORS, route: {name: 'authors.index'}},
-          {title: 'Goodies', icon: ICONS.PARABDS, route: {name: 'parabds.index'}},
+          {title: 'Auteurs', icon: ICONS.AUTEURS, route: {name: 'auteurs.index'}},
+          {title: 'ParaBds', icon: ICONS.PARABDS, route: {name: 'parabds.index'}},
         ]
       }
     }

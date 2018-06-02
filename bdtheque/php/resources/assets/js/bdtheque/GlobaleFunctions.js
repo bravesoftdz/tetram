@@ -2,10 +2,10 @@ export const NULL_ID = '<null>'
 
 /**
  * @param {string} s
- * @returns {string}
+ * @returns {Vue}
  */
-export function trans (s) {
-  return window.VueInstance.$t(s)
+export function getVueInstance (s) {
+  return window.VueInstance
 }
 
 /**
@@ -52,13 +52,13 @@ export function formatTitreAlbum (simple, avecSerie, titre, serie, tome, tomeDeb
   let num = ''
   if (integrale) {
     let dummy = nonZero(tomeDebut)
-    dummy = ajoutString(dummy, nonZero(tomeFin), trans(' to '))
-    num = ajoutString(num, trans(titreAlbum ? 'Full' : 'F.'), ' - ', '', rtrim(' ' + nonZero(tome)))
+    dummy = ajoutString(dummy, nonZero(tomeFin), ' à ')
+    num = ajoutString(num, titreAlbum ? 'Intégrale' : 'Int.', ' - ', '', rtrim(' ' + nonZero(tome)))
     num = ajoutString(num, dummy, ' ', '[', ']')
   } else if (horsSerie) {
-    num = ajoutString(num, trans(titreAlbum ? 'One-off' : 'OO'), ' - ', '', rtrim(' ' + nonZero(tome)))
+    num = ajoutString(num, titreAlbum ? 'Hors-série' : 'HS', ' - ', '', rtrim(' ' + nonZero(tome)))
   } else {
-    num = ajoutString(num, nonZero(tome), ' - ', titreAlbum ? trans('Volume') + ' ' : trans('Vol.'))
+    num = ajoutString(num, nonZero(tome), ' - ', titreAlbum ? 'Tome' + ' ' : 'T.')
   }
 
   let result
@@ -77,7 +77,7 @@ export function formatTitreAlbum (simple, avecSerie, titre, serie, tome, tomeDeb
   //   }
   // }
 
-  if (result === '') result = trans('<No title>')
+  if (result === '') result = '< Sans titre >'
   return result
 }
 

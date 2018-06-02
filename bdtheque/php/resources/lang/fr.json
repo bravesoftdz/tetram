@@ -1,4 +1,5 @@
 {
+  "Ok": "Ok",
   "Home": "Accueil",
   "Login": "Connexion",
   "Logout": "Déconnexion",
@@ -13,30 +14,6 @@
   "Send password reset link": "Envoyer le lien de ré-initialisation de mot de passe",
   "Documentation": "Documentation",
   "News": "Actualité",
-  "Close": "Fermer",
-  "Dashboard": "Tableau de bord",
-  "Manage": "Gestion",
-  "Consult": "Consultation",
-  "Book": "Album",
-  "Books": "Albums",
-  "Serial": "Série",
-  "Serials": "Séries",
-  "Authors": "Auteurs",
-  "Author": "Auteur",
-  "Editors": "Editeurs",
-  "Editor": "Editeur",
-  "Gender": "Genres",
-  "Genders": "Genres",
-  "Univers": "Univers",
-  "Goodies": "ParaBds",
-  "Goody": "ParaBd",
-  "Publishing year": "Année de parution",
-  "<No title>": "<Sans titre>",
-  "Volume": "Tome",
-  "Vol.": "T.",
-  "One-off": "Hors-série",
-  "OO": "HS",
-  "Full": "Intégrale",
-  "F.": "Int.",
-  " to ": " à "
+  "Close": "Fermer"
+
 }

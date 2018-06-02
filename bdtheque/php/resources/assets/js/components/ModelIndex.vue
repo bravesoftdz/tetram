@@ -1,19 +1,25 @@
 <template>
 	<v-card>
 		<v-card-title>
-			<div class="headline">{{ $t(this.title)}}</div>
-			<slot name="sub-header"/>
-			<v-spacer></v-spacer>
-			<v-text-field
-					v-model="quickSearchFilter"
-					append-icon="search"
-					label="Search"
-					single-line
-					clearable
-					:disabled="loading"
-					hide-details
-					ref="quickSearchInput"
-			></v-text-field>
+			<v-layout row>
+				<div class="headline">{{ this.title }}</div>
+				<v-spacer></v-spacer>
+				<v-layout column>
+					<v-flex>
+						<v-text-field
+								v-model="quickSearchFilter"
+								append-icon="search"
+								label="Search"
+								single-line
+								clearable
+								:disabled="loading"
+								hide-details
+								ref="quickSearchInput"
+						></v-text-field>
+					</v-flex>
+					<slot name="sub-header"/>
+				</v-layout>
+			</v-layout>
 		</v-card-title>
 		<v-divider></v-divider>
 		<v-progress-linear
@@ -29,7 +35,7 @@
 				:total-items="pagination.totalItems"
 				hide-actions
 				hide-headers
-				:no-data-text="loading ? $t('Loading...') : $t('Nothing to display')"
+				:no-data-text="loading ? 'Chargement...' : 'Pas de données à afficher'"
 				:item-key="itemKey"
 		>
 			<template slot="items" slot-scope="args">
@@ -69,7 +75,7 @@
 				</v-card>
 			</template>
 			<v-alert slot="no-results" :value="true" color="error" icon="warning">
-				Your search for "{{ quickSearchFilter }}" found no results.
+				Pas de résultat correspondant à la recherche "{{ quickSearchFilter }}".
 			</v-alert>
 		</v-data-table>
 		<v-divider v-if="pagination.totalItems > 0"></v-divider>
@@ -216,19 +222,25 @@
        * @param item
        */
       refreshSubItems (item) {
-        if (item.items && (item.items.length > 0))
-          return item.items
-
-        if (!this.loading) {
+        if (!item.items) {
           item.items = []
+          item.itemsLoaded = false
+        }
+
+        if (!item.itemsLoaded && !this.loading) {
           this.getItems({
-            groupByColumn: this.itemKey === 'id' ? `${this.groupedBy}.id` : this.groupedBy,
-            groupById: item[this.itemKey]
-          }).then(data => {
+              groupByColumn: this.itemKey === 'id' ? `${this.groupedBy}.id` : this.groupedBy,
+              groupById: item[this.itemKey]
+            }
+          ).then(data => {
               item.items = data.items
+            }
+          ).finally(() => {
+              item.itemsLoaded = true
             }
           )
         }
+        return item.items
       },
       /**
        * @param {Number|integer} page
@@ -246,8 +258,7 @@
         return new Promise((resolve, reject) => {
           let filters = []
           if (groupById) {
-            filters.push(
-              {
+            filters.push({
                 column: groupByColumn,
                 value: groupById !== NULL_ID ? groupById : null
               }
@@ -257,13 +268,14 @@
             let fields = this.arrayFromParam(this.quickSearchFields)
 
             let newFilters = Array.from(fields, (field) => {
-              return {
-                operator: 'or',
-                column: field,
-                comparison: 'like',
-                value: `%${this.quickSearchFilter}%`
+                return {
+                  operator: 'or',
+                  column: field,
+                  comparison: 'like',
+                  value: `%${this.quickSearchFilter}%`
+                }
               }
-            })
+            )
 
             if (filters.length === 0)
               filters.push(...newFilters)
@@ -281,33 +293,35 @@
               sortBy: this.sortObjectFromParam(this.sortBy, groupById),
               groupBy: groupById ? null : this.groupedBy,
               groupBySort: this.sortObjectFromParam(this.groupBySort),
-            })
-            .then(response => {
-              this.loading = false
-
+            }
+          ).then(response => {
               if (!groupById) {
                 response.data.data = Array.from(response.data.data, (item) => {
-                  if (!item[this.itemKey])
-                    item[this.itemKey] = NULL_ID
-                  return item
-                })
+                    if (!item[this.itemKey])
+                      item[this.itemKey] = NULL_ID
+                    return item
+                  }
+                )
               }
 
               resolve({
-                items: response.data.data,
-                pagination: !response.data.pagination ? undefined : {
-                  rowsPerPage: response.data.pagination.per_page,
-                  page: response.data.pagination.current_page,
-                  totalItems: response.data.pagination.total,
-                  pages: response.data.pagination.total_pages,
+                  items: response.data.data,
+                  pagination: !response.data.pagination ? undefined : {
+                    rowsPerPage: response.data.pagination.per_page,
+                    page: response.data.pagination.current_page,
+                    totalItems: response.data.pagination.total,
+                    pages: response.data.pagination.total_pages,
+                  }
                 }
-              })
-            })
-            .catch(e => {
-                this.loading = false
-                this.errors.push(e)
-              }
-            )
+              )
+            }
+          ).catch(e => {
+              this.errors.push(e)
+            }
+          ).finally(() => {
+              this.loading = false
+            }
+          )
         })
       }
     },

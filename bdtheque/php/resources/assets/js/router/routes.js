@@ -23,21 +23,21 @@ export default ({authGuard, guestGuard}) => [
     // {path: '/register', name: 'register', component: require('../pages/auth/register.vue')},
     {path: '/password/reset', name: 'password.request', component: require('../pages/auth/password/email.vue')},
     {path: '/password/reset/:token', name: 'password.reset', component: require('../pages/auth/password/reset.vue')},
-    {path: '/books', name: 'books.index', component: require('../pages/models/album/AlbumsIndex.vue')},
-    {path: '/serials', name: 'serials.index', component: require('../pages/models/serie/SeriesIndex.vue')},
-    {path: '/authors', name: 'authors.index', component: require('../pages/models/personne/PersonnesIndex')},
+    {path: '/albums', name: 'albums.index', component: require('../pages/models/album/AlbumsIndex.vue')},
+    {path: '/series', name: 'series.index', component: require('../pages/models/serie/SeriesIndex.vue')},
+    {path: '/auteurs', name: 'auteurs.index', component: require('../pages/models/personne/PersonnesIndex')},
     {path: '/univers', name: 'univers.index', component: require('../pages/models/univers/UniversIndex')},
     {path: '/parabds', name: 'parabds.index', component: require('../pages/models/parabd/ParabdsIndex')},
     {
       path: '/admin',
       children:
         [
-          {path: 'books', name: 'books.list'},
-          {path: 'serials', name: 'serials.list'},
-          {path: 'authors', name: 'authors.list'},
-          {path: 'editors', name: 'editors.list'},
+          {path: 'albums', name: 'albums.list'},
+          {path: 'series', name: 'series.list'},
+          {path: 'auteurs', name: 'auteurs.list'},
+          {path: 'editeurs', name: 'editeurs.list'},
           {path: 'univers', name: 'univers.list'},
-          {path: 'genders', name: 'genders.list'},
+          {path: 'genres', name: 'genres.list'},
           {path: 'parabds', name: 'parabds.list'}]
     }
   ]),

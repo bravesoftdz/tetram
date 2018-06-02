@@ -7,21 +7,21 @@
                 <v-divider></v-divider>
                 <v-card-text>{{ responseMessage.text }}</v-card-text>
                 <v-layout row justify-center>
-                    <v-btn :color="responseMessage.type" flat="flat" @click.native="close">{{ $t('Ok') }}</v-btn>
+                    <v-btn :color="responseMessage.type" flat="flat" @click.native="close">Ok</v-btn>
                 </v-layout>
             </v-card>
         </v-dialog>
         <v-snackbar v-else top v-model="responseMessage.show" :color="responseMessage.type">
             {{ responseMessage.text }}
-            <v-btn dark flat @click.native="close">{{ $t('Close') }}</v-btn>
+            <v-btn dark flat @click.native="close">Fermer</v-btn>
         </v-snackbar>
     </v-layout>
 </template>
 
 <script>
-    import {mapGetters} from 'vuex'
+  import { mapGetters } from 'vuex'
 
-    export default {
+  export default {
         name: 'feedback-message',
         computed: mapGetters([
             'responseMessage'

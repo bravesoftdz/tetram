@@ -30,8 +30,11 @@ abstract class BaseModelResource extends JsonResource implements Base
 
     public function toArray($request)
     {
+        $initiale = $this->getInitialeFieldName() !== '' ? $this->{$this->getInitialeFieldName()} : null;
+
         return [
-            'id' => $this->id ?: '<null>'
+            'id' => $this->when($this->id, $this->id),
+            $this->getInitialeFieldName() => $this->when($initiale, $initiale)
         ];
     }
 }
