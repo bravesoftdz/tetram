@@ -163,34 +163,29 @@
       arrayFromParam (p) {
         let a = []
         switch (typeof p) {
-          case 'string': {
+          case 'string':
             a.push(p)
             break
-          }
-          case 'function': {
+          case 'function':
             a.push(p())
             break
-          }
           case 'object':
-          case 'array': {
+          case 'array':
             a.push(...p)
             break
-          }
         }
         return a
       },
       sortObjectFromParam (p, groupId = null) {
         let r = {}
         switch (typeof p) {
-          case 'string': {
+          case 'string':
             r.sortBy = p
             r.sortDirection = 'asc'
             break
-          }
-          case 'function': {
+          case 'function':
             r = p(groupId)
             break
-          }
           case 'object':
             r = p
             break
@@ -199,10 +194,9 @@
       },
       updateItemKey () {
         switch (typeof this.groupKey) {
-          case 'function': {
+          case 'function':
             this.itemKey = this.groupKey()
             break
-          }
           default:
             this.itemKey = this.groupKey
         }

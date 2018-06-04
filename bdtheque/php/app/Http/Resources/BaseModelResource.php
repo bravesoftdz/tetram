@@ -34,7 +34,8 @@ abstract class BaseModelResource extends JsonResource implements Base
 
         return [
             'id' => $this->when($this->id, $this->id),
-            $this->getInitialeFieldName() => $this->when($initiale, $initiale)
+            $this->getInitialeFieldName() => $this->when($initiale, $initiale),
+            'notation' => $this->when($this->notation, $this->notation)
         ];
     }
 }

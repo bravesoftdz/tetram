@@ -29,6 +29,7 @@ $factory->define(Album::class, function (Faker $faker) {
         'mois_parution' => $anneeParution ? $faker->optional()->numberBetween(1, 12) : null,
         'serie_id' => $serie ? $serie->id : null,
         'hors_serie' => $serie ? $faker->boolean(10) : false,
-        'integrale' => $tomeDebut ? true : false
+        'integrale' => $tomeDebut ? true : false,
+        'notation' => $faker->optional(0.1)->numberBetween(0, 10)
     ];
 });

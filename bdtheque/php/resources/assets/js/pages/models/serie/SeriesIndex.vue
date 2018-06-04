@@ -6,7 +6,11 @@
 			sort-by="index"
 	>
 		<template slot="display-item" slot-scope="{ item }">
-			{{ displayItem(item) }}
+			<v-layout row>
+				{{ displayItem(item) }}
+				<v-spacer/>
+				<model-notation align-right :value="item.notation" class="shrink"></model-notation>
+			</v-layout>
 		</template>
 	</model-index>
 </template>

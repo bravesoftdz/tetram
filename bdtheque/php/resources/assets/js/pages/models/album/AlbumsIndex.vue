@@ -30,10 +30,20 @@
 			</v-flex>
 		</template>
 		<template slot="display-group" slot-scope="{ group }">
-			{{ displayGroup(group) }}
+			<v-layout row>
+				{{ displayGroup(group) }}
+				<template v-if="group.notation">
+					<v-spacer/>
+					<model-notation align-right :value="group.notation" class="shrink"></model-notation>
+				</template>
+			</v-layout>
 		</template>
 		<template slot="display-item" slot-scope="{ item }">
-			{{ displayItem(item) }}
+			<v-layout row>
+				{{ displayItem(item) }}
+				<v-spacer/>
+				<model-notation align-right :value="item.notation" class="shrink"></model-notation>
+			</v-layout>
 		</template>
 	</model-index>
 </template>
@@ -42,10 +52,11 @@
   import ModelIndex from '../../../components/ModelIndex'
   import { displayAlbum, displaySerie } from '../../../bdtheque/DisplayItem'
   import { NULL_ID } from '../../../bdtheque/GlobaleFunctions'
+  import ModelNotation from '../../../components/ModelNotation'
 
   export default {
     name: 'AlbumsIndex',
-    components: {ModelIndex},
+    components: {ModelNotation, ModelIndex},
     data () {
       return {
         groupBy: 'serie',
