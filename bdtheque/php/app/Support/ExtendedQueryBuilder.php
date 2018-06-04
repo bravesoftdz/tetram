@@ -25,4 +25,22 @@ class ExtendedQueryBuilder extends QueryBuilder
 //            ->get()->all();
     }
 
+    /**
+     * @param string $table
+     * @return string
+     */
+    public function getRawTable($table)
+    {
+        return str_contains($table, ' as ') ? explode(' as ', $table)[0] : $table;
+    }
+
+    /**
+     * @param string $table
+     * @return string
+     */
+    public function getAliasTable($table)
+    {
+        return str_contains($table, ' as ') ? explode(' as ', $table)[1] : $table;
+    }
+
 }

@@ -12,6 +12,6 @@ $factory->define(Personne::class, function (Faker $faker) {
 
     return [
         'nom_personne' => $faker->unique()->authorName(),
-        'biographie' => $faker->optional(0.1)->text(500)
+        'biographie' => $faker->optional(10)->text(500)
     ];
 });

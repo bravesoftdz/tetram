@@ -4,6 +4,7 @@ use BDTheque\Faker\Provider\BookProvider;
 use BDTheque\Faker\Provider\ModelProvider;
 use BDTheque\Models\Album;
 use BDTheque\Models\Serie;
+use BDTheque\Models\Univers;
 use Faker\Generator as Faker;
 
 /**
@@ -30,6 +31,13 @@ $factory->define(Album::class, function (Faker $faker) {
         'serie_id' => $serie ? $serie->id : null,
         'hors_serie' => $serie ? $faker->boolean(10) : false,
         'integrale' => $tomeDebut ? true : false,
-        'notation' => $faker->optional(0.1)->numberBetween(0, 10)
+        'notation' => $faker->optional(10)->numberBetween(0, 10)
     ];
+})->afterCreating(Album::class, function (Album $album, Faker $faker) {
+    $u = $faker->boolean($album->serie_id ? 0 : 50) ? $faker->numberBetween(1, 3) : 0;
+
+    $univers = [];
+    while ($u-- > 0) $univers += [$faker->randomModel(Univers::class)->id];
+    $album->univers()->sync($univers);
 });
+

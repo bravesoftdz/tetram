@@ -178,14 +178,15 @@ class ExtendedEloquentBuilder extends EloquentBuilder
     /**
      * @param string $column
      * @param string $direction
+     * @param null|string $table
      * @return $this
      */
-    public function orderByRelation(string $column, string $direction = 'asc')
+    public function orderByRelation(string $column, string $direction = 'asc', ?string $table = null)
     {
         if ($this->isRawColumn($column))
             return $this->orderBy(DB::raw($column), $direction);
 
-        $model = $this->getModel();
+        $modelTable = $table ?: $this->getModel()->getTable();
 
         if (strpos($column, '.') !== false) {
             $query = $this;
@@ -197,14 +198,14 @@ class ExtendedEloquentBuilder extends EloquentBuilder
                 if (self::isRelationJoinable($relation)) {
                     // it looks like the relation can be joined
                     $query = $relation->getRelationExistenceQuery($relation->getRelated()->newQuery(), $this)->applyScopes();
-                    $model = $query->getModel();
+                    $modelTable = $query->toBase()->getAliasTable($query->toBase()->from);
                     $this->addJoinRelation($query);
                 }
             }
         }
 
-        if ($model)
-            $column = $model->qualifyColumn($column);
+        if ($modelTable)
+            $column = "$modelTable.$column";
         return $this->orderBy($column, $direction);
     }
 
@@ -237,9 +238,10 @@ class ExtendedEloquentBuilder extends EloquentBuilder
     /**
      * @param string|null $sortBy
      * @param string $sortDirection
+     * @param string|null $table
      * @return ExtendedEloquentBuilder
      */
-    public function orderByRef($sortBy = null, $sortDirection = 'asc')
+    public function orderByRef(?string $sortBy = null, string $sortDirection = 'asc', ?string $table = null)
     {
         /** @var BaseModel $modelClass */
         $modelClass = get_class($this->getModel());
@@ -248,7 +250,7 @@ class ExtendedEloquentBuilder extends EloquentBuilder
         else
             $sortBy = $modelClass::getDefaultOrderBy();
         foreach ($sortBy as $column) {
-            $this->orderByRelation($column, $sortDirection);
+            $this->orderByRelation($column, $sortDirection, $table);
         }
         return $this;
     }

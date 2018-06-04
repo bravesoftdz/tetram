@@ -13,19 +13,45 @@ class Univers extends BaseModel implements Metadata\Univers
     {
         parent::boot();
 
-        static::saving(function (Univers $univers): bool {
-            if ($univers->univers_parent && $univers->univers_racine !== $univers->univers_parent->univers_racine)
-                $univers->univers_racine = $univers->univers_parent->univers_racine;
-            if (!$univers->univers_parent && $univers->univers_racine)
-                $univers->univers_parent = $univers->univers_racine;
+        static::saving(function (Univers $univers): ?bool {
+            $univers->checkId();
 
-            $univers->univers_branches = null;
-            if ($univers->univers_parent && $univers->univers_racine)
-                $univers->univers_branches = $univers->univers_parent->univers_branches . "|" . $univers->univers_parent->id;
+            $univers_parent = $univers->univers_parent;
 
-            return true;
+            $univers_racine = $univers_parent ? ($univers_parent->univers_racine ?: $univers_parent) : null;
+
+            $univers->univers_racine()->associate($univers_racine);
+
+            $univers->updateBranche();
+
+            // return null to allow other events to be fired
+            return null;
         });
 
+        static::saved(function (Univers $univers): ?bool {
+            if ($univers->univers_branches === $univers->getOriginal('univers_branches'))
+                return null;
+
+            Univers::query()
+                ->where('univers_branches', '=', $univers->id)
+                ->each(function (Univers $univers): bool {
+                    $univers->updateBranche()->save();
+                    return true;
+                });
+
+            // return null to allow other events to be fired
+            return null;
+        });
+
+    }
+
+    /**
+     * @return $this
+     */
+    protected function updateBranche()
+    {
+        $this->univers_branches = ($this->univers_parent ? $this->univers_parent->univers_branches : '|') . $this->id . '|';
+        return $this;
     }
 
     /**

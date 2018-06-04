@@ -16,7 +16,9 @@ class UniversResource extends BaseModelResource implements Univers
     {
         return
             parent::toArray($request) + [
-                'nom_univers' => $this->when(isset($this->nom_univers), $this->nom_univers)
+                'nom_univers' => $this->when(isset($this->nom_univers), $this->nom_univers),
+                'univers_parent' => $this->when(isset($this->univers_parent), $this->univers_parent),
+                'univers_racine' => $this->when(isset($this->univers_racine), $this->univers_racine)
             ];
     }
 }

@@ -6,12 +6,13 @@ use BDTheque\Models\Editeur;
 use BDTheque\Models\Genre;
 use BDTheque\Models\Personne;
 use BDTheque\Models\Serie;
+use BDTheque\Models\Univers;
 use BDTheque\Models\User;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
-    const FACTOR = 20;
+    const FACTOR = 1; // 20
     const GENRE_COUNT = 10;
 
     /**
@@ -27,6 +28,7 @@ class DatabaseSeeder extends Seeder
         factory(Editeur::class, 2.5 * self::FACTOR)->create();
         factory(Collection::class, 2 * 2.5 * self::FACTOR)->create();
         factory(Personne::class, 50 * self::FACTOR)->create();
+        factory(Univers::class, 10 * self::FACTOR)->create();
         factory(Serie::class, 15 * self::FACTOR)->create();
         factory(Album::class, 100 * self::FACTOR)->create();
     }

@@ -4,6 +4,7 @@ namespace BDTheque\Http\Controllers;
 
 
 use BDTheque\Http\Resources\BaseModelResourceCollection;
+use BDTheque\Models\BaseModel;
 use BDTheque\Support\ExtendedEloquentBuilder;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Database\Eloquent\RelationNotFoundException;
@@ -53,14 +54,23 @@ abstract class ModelController extends Controller
 
             try {
                 $relation = $results->getRelation($groupBy);
+                /** @var BaseModel $model */
                 $model = $relation->getModel();
 
                 $results->joinRelation($groupBy);
                 $results->changeModel($model);
                 $results->with($model->getWith());
                 $results->setQuery($results->getQuery()->cloneWithout(['orders']));
-                $results->orderByRef($sortBy, $sortDirection);
-                $results->select($model->qualifyColumn('*'));
+
+                $relationAlias = null;
+                foreach ($results->getQuery()->joins as $join) {
+                    $table = $results->toBase()->getRawTable($join->table);
+                    if ($table === $relation->getQuery()->toBase()->from)
+                        $relationAlias = $results->toBase()->getAliasTable($join->table);
+                }
+                $results->select("$relationAlias.*");
+                $results->orderByRef($sortBy, $sortDirection, $relationAlias);
+
             } catch (RelationNotFoundException $e) {
                 // groupBy is not relation: assumes it's a current model field
                 $results->select($results->getModel()->qualifyColumn($groupBy));

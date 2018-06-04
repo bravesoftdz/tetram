@@ -37,6 +37,17 @@ abstract class BaseModel extends Model implements Metadata\Base
         return $this->buildInitialeFrom ? 'initiale_' . trim($this->buildInitialeFrom) : '';
     }
 
+
+    protected function checkId()
+    {
+        $keyName = $this->getKeyName();
+        $original_id = $this->getOriginal($keyName);
+        if ($original_id)
+            $this->$keyName = $original_id;
+        else if (!$this->$keyName)
+            $this->$keyName = Str::uuid()->toString();
+    }
+
     /**
      * The booting method of the model.
      *
@@ -46,17 +57,15 @@ abstract class BaseModel extends Model implements Metadata\Base
     {
         parent::boot();
 
-        static::creating(function (BaseModel $model): bool {
-            $model->{$model->getKeyName()} = Str::uuid()->toString();
+        static::creating(function (BaseModel $model): ?bool {
+            $model->checkId();
 
-            return true;
+            // return null to allow other events to be fired
+            return null;
         });
 
-        static::saving(function (BaseModel $model): bool {
-            $keyName = $model->getKeyName();
-            $original_id = $model->getOriginal($keyName);
-            if ($original_id !== $model->$keyName)
-                $model->$keyName = $original_id;
+        static::saving(function (BaseModel $model): ?bool {
+            $model->checkId();
 
             if ($model->buildInitialeFrom) {
                 $initiale_from_var = trim($model->buildInitialeFrom);
@@ -71,7 +80,8 @@ abstract class BaseModel extends Model implements Metadata\Base
                 }
             }
 
-            return true;
+            // return null to allow other events to be fired
+            return null;
         });
     }
 
