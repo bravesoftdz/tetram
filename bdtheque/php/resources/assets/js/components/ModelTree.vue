@@ -99,7 +99,7 @@
   import { NULL_ID } from '../bdtheque/GlobaleFunctions'
 
   export default {
-    name: 'ModelIndex',
+    name: 'ModelTree',
     props: {
       title: {type: String, required: false},
       model: {type: String, required: true},

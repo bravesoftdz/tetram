@@ -1,5 +1,5 @@
 <template>
-	<model-index
+	<model-tree
 			title="Albums"
 			model="albums"
 			:quick-search-fields="['titre_album', 'serie.titre_serie']"
@@ -40,23 +40,28 @@
 		</template>
 		<template slot="display-item" slot-scope="{ item }">
 			<v-layout row>
-				{{ displayItem(item) }}
+				<router-link :to="ItemRoute(routeName, item)">{{ displayItem(item) }}</router-link>
 				<v-spacer/>
 				<model-notation align-right :value="item.notation" class="shrink"></model-notation>
 			</v-layout>
 		</template>
-	</model-index>
+	</model-tree>
 </template>
 
 <script>
-  import ModelIndex from '../../../components/ModelIndex'
+  import ModelIndex from '../ModelIndex'
+  import ModelTree from '../../../components/ModelTree'
   import { displayAlbum, displaySerie } from '../../../bdtheque/DisplayItem'
   import { NULL_ID } from '../../../bdtheque/GlobaleFunctions'
   import ModelNotation from '../../../components/ModelNotation'
 
   export default {
     name: 'AlbumsIndex',
-    components: {ModelNotation, ModelIndex},
+    extends: ModelIndex,
+    components: {ModelNotation, ModelTree},
+    props: {
+      routeName: {default: 'album.card'}
+    },
     data () {
       return {
         groupBy: 'serie',

@@ -1,5 +1,5 @@
 <template>
-	<model-index
+	<model-tree
 			title="Séries"
 			model="series"
 			quick-search-fields="titre_serie"
@@ -12,19 +12,24 @@
 				<model-notation align-right :value="item.notation" class="shrink"></model-notation>
 			</v-layout>
 		</template>
-	</model-index>
+	</model-tree>
 </template>
 
 <script>
-  import ModelIndex from '../../../components/ModelIndex'
+  import ModelIndex from '../ModelIndex'
+  import ModelTree from '../../../components/ModelTree'
   import { displaySerie } from '../../../bdtheque/DisplayItem'
 
   export default {
     name: 'SeriesIndex',
-    components: {ModelIndex},
+    extends: ModelIndex,
+    components: {ModelTree},
+    props: {
+      routeName: {default: 'serie.card'}
+    },
     methods: {
       displayItem: (item) => displaySerie(item)
-	}
+    }
   }
 </script>
 

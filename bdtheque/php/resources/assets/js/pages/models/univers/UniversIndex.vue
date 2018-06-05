@@ -1,5 +1,5 @@
 <template>
-	<model-index
+	<model-tree
 			title="Univers"
 			model="univers"
 			quick-search-fields="nom_univers"
@@ -34,17 +34,22 @@
 		<template slot="display-item" slot-scope="{ item }">
 			{{ displayItem(item) }}
 		</template>
-	</model-index>
+	</model-tree>
 </template>
 
 <script>
-  import ModelIndex from '../../../components/ModelIndex'
+  import ModelIndex from '../ModelIndex'
+  import ModelTree from '../../../components/ModelTree'
   import { displayUnivers } from '../../../bdtheque/DisplayItem'
   import { NULL_ID } from '../../../bdtheque/GlobaleFunctions'
 
   export default {
     name: 'UniversIndex',
-    components: {ModelIndex},
+    extends: ModelIndex,
+    props: {
+      routeName: {default: 'univers.card'}
+    },
+    components: {ModelTree},
     data () {
       return {
         groupBy: null,
