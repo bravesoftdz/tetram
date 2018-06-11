@@ -17,15 +17,14 @@
     "eslint": "^4.19.1",
     "eslint-plugin-html": "^4.0.3",
     "eslint-plugin-vue-libs": "^3.0.0",
-    "laravel-mix": "^2.0",
-    "mdi": "^2.2.43",
+    "laravel-mix": "^2.1",
+    "@mdi/font": "^2.2.43",
     "standard": "^11.0.1"
   },
   "dependencies": {
     "axios": "^0.18",
     "babel-polyfill": "^6.26.0",
-    "bootstrap": "^4.0.0",
-    "gsap": "^2.0.1",
+    "bootstrap": "^4.1",
     "jquery": "^3.2",
     "js-cookie": "^2.2.0",
     "lodash.debounce": "^4.0.8",

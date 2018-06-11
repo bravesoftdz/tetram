@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="Langues" pattern="file[BDTheque]:resources/lang//*" />
+</component>
