@@ -1,7 +1,8 @@
 import './axios'
-import './validation'
-import './materialdesignicons'
 import './babel-polyfill'
+import './materialdesignicons'
+import './moment'
+import './validation'
 import i18n from './vue-i18n'
 import theme from './theme'
 

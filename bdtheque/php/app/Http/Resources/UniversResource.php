@@ -6,19 +6,16 @@ use BDTheque\Models\Metadata\Univers;
 
 class UniversResource extends BaseModelResource implements Univers
 {
-    /**
-     * Transform the resource into an array.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @return array
-     */
-    public function toArray($request)
-    {
-        return
-            parent::toArray($request) + [
-                'nom_univers' => $this->when(isset($this->nom_univers), $this->nom_univers),
-                'univers_parent' => $this->when(isset($this->univers_parent), $this->univers_parent),
-                'univers_racine' => $this->when(isset($this->univers_racine), $this->univers_racine)
-            ];
-    }
+    public $common_properties = [
+        'nom_univers'
+    ];
+
+    public $full_properties = [
+        'univers_parent' => [UniversResource::class, false, 'parent_univers_id'],
+        'univers_racine' => [UniversResource::class, false, 'racine_univers_id'],
+        'univers_branches',
+        'description',
+        'site_web',
+        'albums' => [BaseModelResourceCollection::class, false]
+    ];
 }

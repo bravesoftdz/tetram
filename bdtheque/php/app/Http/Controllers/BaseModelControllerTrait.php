@@ -3,6 +3,7 @@
 namespace BDTheque\Http\Controllers;
 
 use BDTheque\Models\BaseModelHandlerTrait;
+use BDTheque\Support\ExtendedEloquentBuilder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
@@ -35,12 +36,18 @@ trait BaseModelControllerTrait
 
     /**
      * @param string $id
+     * @param array|null $scopes
      * @return Model
      */
-    protected static function getModel(string $id): Model
+    protected static function getModel(string $id, ?array $scopes = null): Model
     {
         $modelClass = self::getModelClass();
-        return $modelClass::findOrFail($id);
+        /** @var ExtendedEloquentBuilder $query */
+        $query = (new $modelClass)->newQuery();
+        if ($scopes)
+            foreach($scopes as $_ => $scope)
+                $query->$scope();
+        return $query->findOrFail($id);
     }
 
 }

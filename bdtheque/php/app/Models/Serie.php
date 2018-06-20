@@ -23,6 +23,13 @@ class Serie extends BaseModel implements Metadata\Serie
         'editeur', 'collection'
     ];
 
+    protected $withFull = [
+        'editeur', 'collection',
+        'genres',
+        'univers',
+        'scenaristes', 'dessinateurs', 'coloristes'
+    ];
+
     /**
      * @return Genre[]|\Illuminate\Database\Eloquent\Relations\BelongsToMany
      */

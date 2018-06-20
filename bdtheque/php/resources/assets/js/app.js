@@ -3,9 +3,9 @@ import Vuetify from 'vuetify'
 import store from './store'
 import router from './router'
 import { i18n, theme } from './plugins'
+import './mixins'
 import App from './components/App'
 import './components'
-import './mixins'
 
 Vue.use(Vuetify, {theme})
 

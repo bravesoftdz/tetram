@@ -4,9 +4,10 @@ namespace BDTheque\Models;
 
 use BDTheque\Support\ExtendedEloquentBuilder;
 use BDTheque\Support\ExtendedQueryBuilder;
-use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Str;
 
 abstract class BaseModel extends Model implements Metadata\Base
@@ -22,6 +23,7 @@ abstract class BaseModel extends Model implements Metadata\Base
     protected static $rules = [];
     protected static $defaultOrderBy = [];
     protected static $orderBy = [];
+    protected $withFull = [];
 
     /**
      * Field name from which make an "initiale_$buildInitiale" field
@@ -86,11 +88,39 @@ abstract class BaseModel extends Model implements Metadata\Base
     }
 
     /**
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeFull($query)
+    {
+//        $constraint = function ($relation) {
+//            $relation->full();
+//        };
+//
+//        foreach($this->getWith() as $id => $relation)
+//            $query->with([$relation => $constraint]);
+//        foreach($this->getWithFull() as $id => $relation)
+//            $query->with([$relation => $constraint]);
+//        return $query;
+
+        // $this->getWith should already be prepared for eager load
+        return $query->with($this->getWith())->with($this->getWithFull());
+    }
+
+    /**
      * @return array
      */
     public function getWith()
     {
         return $this->with;
+    }
+
+    /**
+     * @return array
+     */
+    public function getWithFull()
+    {
+        return $this->withFull;
     }
 
     /**
@@ -177,13 +207,29 @@ abstract class BaseModel extends Model implements Metadata\Base
             $column = $filter['column'];
             $relation = join('.', explode('.', $column, -1));
 
-            $appendFilter = function (Builder $query, array $filter, string $column, string $operator, Model $model = null) {
+            /**
+             * @param QueryBuilder | EloquentBuilder $query
+             * @param array $filter
+             * @param string $column
+             * @param string $operator
+             * @param Model|null $model
+             */
+            $appendFilter = function ($query, array $filter, string $column, string $operator, Model $model = null) {
                 if ($model)
                     $column = $model->qualifyColumn($column);
-                if (array_key_exists('value1', $filter) && array_key_exists('value2', $filter))
-                    $query->whereBetween($column, [$filter['value1'], $filter['value2']], $operator);
-                else
-                    $query->where($column, array_key_exists('comparison', $filter) ? $filter['comparison'] : '=', $filter['value'], $operator);
+                $comparison = array_key_exists('comparison', $filter) ? strtolower($filter['comparison']) : '=';
+                switch ($comparison) {
+                    case 'between':
+                    case 'not between':
+                        $query->whereBetween($column, [$filter['value1'], $filter['value2']], $operator, $comparison === 'not between');
+                        break;
+                    case 'not in':
+                    case 'in':
+                        $query->whereIn($column, $filter['value'], $operator, $comparison === 'not in');
+                        break;
+                    default:
+                        $query->where($column, $comparison, $filter['value'], $operator);
+                }
             };
 
             if ($relation === '') {
@@ -192,10 +238,15 @@ abstract class BaseModel extends Model implements Metadata\Base
                 $column = substr($column, strlen($relation) + 1);
                 // odd composition but needed to Builder lacks'n bug
                 $rootQuery->hasRelation(
-                // $query->has(
                     $relation, '>', 0, $operator,
-                    function (Builder $q, Model $model) use ($query, $appendFilter, $filter, $column, $operator) {
-                        // $q == $rootQuery
+                    /**
+                     * @param QueryBuilder | EloquentBuilder $q
+                     * @param bool $joinUsed
+                     * @param Model $model
+                     */
+                    function ($q, bool $joinUsed, Model $model) use ($query, $appendFilter, $filter, $column, $operator) {
+                        $query = $joinUsed ? $query : $q;
+                        $operator = $joinUsed ? $operator : 'and';
                         $q->where(function () use ($query, $appendFilter, $filter, $column, $operator, $model) {
                             $appendFilter($query, $filter, $column, $operator, $model);
                         });
@@ -208,7 +259,7 @@ abstract class BaseModel extends Model implements Metadata\Base
     /**
      * @param array|object|null $filters
      * @param array|null $sortBy
-     * @return Builder
+     * @return EloquentBuilder
      */
     public static function search($filters = null, $sortBy = null)
     {

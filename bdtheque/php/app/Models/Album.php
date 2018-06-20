@@ -31,6 +31,14 @@ class Album extends BaseModel implements Metadata\Album
         'serie'
     ];
 
+    protected $withFull = [
+        'serie.genres',
+        'serie.univers',
+        'univers',
+        'scenaristes', 'dessinateurs', 'coloristes',
+        'editions'
+    ];
+
     /**
      * @return Serie|\Illuminate\Database\Eloquent\Relations\BelongsTo
      */

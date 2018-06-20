@@ -1,10 +1,12 @@
 <template>
 	<v-card>
-		<v-card-title>{{ this.title }}</v-card-title>
+		<v-card-title class="headline">
+			{{ this.title }}
+		</v-card-title>
 		<v-card-media>
-			<slot name="media"></slot>
+			<slot name="media"/>
 		</v-card-media>
-		<slot name="details"></slot>
+		<slot/>
 	</v-card>
 </template>
 

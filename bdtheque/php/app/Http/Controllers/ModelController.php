@@ -81,9 +81,20 @@ abstract class ModelController extends Controller
 
         $modelResourceCollectionClass = static::getModelResourceCollectionClass(get_class($results->getModel()));
         if ($this->getRowPerPage() === -1)
-            return new $modelResourceCollectionClass($results->get());
+            return new $modelResourceCollectionClass($results->get(), false);
         else
-            return new $modelResourceCollectionClass($results->paginate($this->getRowPerPage()));
+            return new $modelResourceCollectionClass($results->paginate($this->getRowPerPage()), false);
+    }
+
+    /**
+     * @param string $itemId
+     * @return \Illuminate\Database\Eloquent\Model
+     */
+    public function get(Request $request, string $itemId){
+        $fullItem = $request->has('full');
+        $model = static::getModel($itemId, $fullItem ? ['full'] : []);
+        $modelResourceClass = static::getModelResourceClass();
+        return new $modelResourceClass($model, $fullItem);
     }
 
     /**

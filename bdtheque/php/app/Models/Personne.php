@@ -9,13 +9,17 @@ class Personne extends BaseModel implements Metadata\Personne
         'nom_personne'
     ];
 
+    protected $withFull = [
+        'albums'
+    ];
+
     public function albums()
     {
-        $this->belongsToMany(Album::class, 'auteurs_albums');
+        return $this->belongsToMany(Album::class, 'auteurs_albums')->distinct();
     }
 
     public function series()
     {
-        $this->belongsToMany(Serie::class, 'series_albums');
+        return $this->belongsToMany(Serie::class, 'auteurs_albums')->distinct();
     }
 }

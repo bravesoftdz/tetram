@@ -4,7 +4,7 @@
 
 <script>
   export default {
-    name: 'ModelForm'
+    name: 'ModelForm',
   }
 </script>
 

@@ -6,11 +6,8 @@
 			sort-by="index"
 	>
 		<template slot="display-item" slot-scope="{ item }">
-			<v-layout row>
-				{{ displayItem(item) }}
-				<v-spacer/>
-				<model-notation align-right :value="item.notation" class="shrink"></model-notation>
-			</v-layout>
+			<router-link :to="$itemRoute(routeName, item)">{{ $displaySerie(item) }}</router-link>
+			<model-notation :value="item.notation"/>
 		</template>
 	</model-tree>
 </template>
@@ -18,18 +15,16 @@
 <script>
   import ModelIndex from '../ModelIndex'
   import ModelTree from '../../../components/ModelTree'
-  import { displaySerie } from '../../../bdtheque/DisplayItem'
+  import ModelNotation from '../../../components/ModelNotation'
 
   export default {
     name: 'SeriesIndex',
     extends: ModelIndex,
-    components: {ModelTree},
+    components: {ModelNotation, ModelTree},
     props: {
       routeName: {default: 'serie.card'}
     },
-    methods: {
-      displayItem: (item) => displaySerie(item)
-    }
+    methods: {}
   }
 </script>
 

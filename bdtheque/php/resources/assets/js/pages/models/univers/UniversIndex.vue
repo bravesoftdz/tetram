@@ -32,7 +32,7 @@
 			{{ displayItem(group) }}
 		</template>
 		<template slot="display-item" slot-scope="{ item }">
-			{{ displayItem(item) }}
+			<router-link :to="$itemRoute(routeName, item)">{{ displayItem(item) }}</router-link>
 		</template>
 	</model-tree>
 </template>
@@ -40,8 +40,7 @@
 <script>
   import ModelIndex from '../ModelIndex'
   import ModelTree from '../../../components/ModelTree'
-  import { displayUnivers } from '../../../bdtheque/DisplayItem'
-  import { NULL_ID } from '../../../bdtheque/GlobaleFunctions'
+  import { NULL_ID } from '../../../mixins/global/API'
 
   export default {
     name: 'UniversIndex',
@@ -68,11 +67,11 @@
       displayItem (item) {
         switch (this.groupBy) {
           case 'univers_parent':
-            return item.id === NULL_ID ? `< Pas de parent >` : displayUnivers(item)
+            return item.id === NULL_ID ? `< Pas de parent >` : this.$displayUnivers(item)
           case 'univers_racine':
-            return item.id === NULL_ID ? `< Pas de racine >` : displayUnivers(item)
+            return item.id === NULL_ID ? `< Pas de racine >` : this.$displayUnivers(item)
           default:
-            return displayUnivers(item)
+            return this.$displayUnivers(item)
         }
       },
     }

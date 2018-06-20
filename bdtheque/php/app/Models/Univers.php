@@ -9,6 +9,12 @@ class Univers extends BaseModel implements Metadata\Univers
         'nom_univers'
     ];
 
+    protected $withFull = [
+        'albums',
+        'univers_racine',
+        'univers_parent'
+    ];
+
     public static function boot()
     {
         parent::boot();
@@ -68,6 +74,11 @@ class Univers extends BaseModel implements Metadata\Univers
     public function univers_racine()
     {
         return $this->belongsTo(Univers::class, 'racine_univers_id');
+    }
+
+    public function albums()
+    {
+        return $this->belongsToMany(Album::class, 'univers_albums');
     }
 
 }

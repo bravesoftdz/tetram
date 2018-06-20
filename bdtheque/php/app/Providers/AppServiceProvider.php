@@ -4,7 +4,6 @@ namespace BDTheque\Providers;
 
 use Illuminate\Database\Events\QueryExecuted;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -18,7 +17,7 @@ class AppServiceProvider extends ServiceProvider
     {
         DB::listen(function (QueryExecuted $query) {
             if ($query->sql) {
-                Log::debug("\n" .
+                logger("\n" .
                     $query->sql .
                     ($query->bindings ? "\nParams: " . var_export($query->bindings, true) : '') .
                     "\nRuntime: $query->time"

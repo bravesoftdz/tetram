@@ -2,6 +2,7 @@
 
 namespace BDTheque\Faker\Provider;
 
+use BDTheque\Support\ISBN;
 use Faker\Provider\Base;
 
 class BookProvider extends Base
@@ -21,7 +22,7 @@ class BookProvider extends Base
 
     public function ISBN()
     {
-        return $this->generator->ean13();
+        return ISBN::build();
     }
 
 }

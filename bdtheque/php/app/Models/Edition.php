@@ -2,13 +2,10 @@
 
 namespace BDTheque\Models;
 
+use BDTheque\Support\ISBN;
+
 class Edition extends BaseModel implements Metadata\Edition
 {
-    /**
-     * The attributes that should be casted to native types.
-     *
-     * @var array
-     */
     protected $casts = [
         'vo' => 'boolean',
         'couleur' => 'boolean',
@@ -16,6 +13,11 @@ class Edition extends BaseModel implements Metadata\Edition
         'gratuit' => 'boolean',
         'offert' => 'boolean',
         'date_achat' => 'datetime'
+    ];
+
+    protected $with = [
+        'editeur',
+        'collection'
     ];
 
     /**
@@ -48,5 +50,10 @@ class Edition extends BaseModel implements Metadata\Edition
     public function images()
     {
         return $this->hasMany(ImageAlbum::class);
+    }
+
+    public function getFormattedIsbnAttribute()
+    {
+        return ISBN::format($this->isbn);
     }
 }

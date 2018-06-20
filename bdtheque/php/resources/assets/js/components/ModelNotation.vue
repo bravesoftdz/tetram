@@ -1,10 +1,10 @@
 <template>
-	<v-layout row>
-		<img :src="getSrc(0)" style="height: 16px">
-		<img :src="getSrc(1)" style="height: 16px">
-		<img :src="getSrc(2)" style="height: 16px">
-		<img :src="getSrc(3)" style="height: 16px">
-		<img :src="getSrc(4)" style="height: 16px">
+	<v-layout v-if="value" row class="shrink notation">
+		<img :src="getSrc(0)" >
+		<img :src="getSrc(1)">
+		<img :src="getSrc(2)">
+		<img :src="getSrc(3)">
+		<img :src="getSrc(4)">
 	</v-layout>
 </template>
 
@@ -18,17 +18,17 @@
         validator: (value) => !value || [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].includes(value)
       },
       fullStarImg: {
-        Type: String | Function,
+        type: String | Function,
         required: false,
         default: require('./../../images/full16.png')
       },
       halfStarImg: {
-        Type: String | Function,
+        type: String | Function,
         required: false,
         default: require('./../../images/half_l16.png')
       },
       emptyStarImg: {
-        Type: String | Function,
+        type: String | Function,
         required: false,
         default: require('./../../images/empty16.png')
       }
@@ -66,5 +66,10 @@
 </script>
 
 <style scoped>
-
+	.notation {
+		height: 16px;
+		display: inline-flex;
+		padding-left: 0.5em;
+		vertical-align: sub;
+	}
 </style>

@@ -6,7 +6,7 @@
 			sort-by="index"
 	>
 		<template slot="display-item" slot-scope="{ item }">
-			{{ displayItem(item) }}
+			{{ $displayParaBd(item) }}
 		</template>
 	</model-tree>
 </template>
@@ -14,7 +14,6 @@
 <script>
   import ModelIndex from '../ModelIndex'
   import ModelTree from '../../../components/ModelTree'
-  import { displayParaBd } from '../../../bdtheque/DisplayItem'
 
   export default {
     name: 'ParabdsIndex',
@@ -24,7 +23,6 @@
       routeName: {default: 'parabd.card'}
     },
     methods: {
-      displayItem: (item) => displayParaBd(item)
     }
   }
 </script>

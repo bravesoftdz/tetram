@@ -3,6 +3,7 @@
 use BDTheque\Faker\Provider\BookProvider;
 use BDTheque\Faker\Provider\ModelProvider;
 use BDTheque\Models\Editeur;
+use BDTheque\Models\Genre;
 use BDTheque\Models\Personne;
 use BDTheque\Models\Serie;
 use BDTheque\Models\Univers;
@@ -26,24 +27,16 @@ $factory->define(Serie::class, function (Faker $faker) {
         'notation' => $faker->optional(10)->numberBetween(0, 10)
     ];
 })->afterCreating(Serie::class, function (Serie $serie, Faker $faker) {
-    $s = $faker->boolean(75) ? $faker->numberBetween(1, 3) : 0;
-    $d = $faker->boolean(75) ? $faker->numberBetween(1, 3) : 0;
-    $c = $faker->boolean(75) ? $faker->numberBetween(1, 3) : 0;
-    $u = $faker->boolean(75) ? $faker->numberBetween(1, 3) : 0;
+    $faker->randomModels($serie->univers(), Univers::class);
+    $faker->randomModels($serie->genres(), Genre::class);
 
-    $auteurs = [];
-    while ($s-- > 0) $auteurs += [$faker->randomModel(Personne::class)->id => ['metier' => \BDTheque\Models\Metadata\Personne::SCENARISTE]];
-    $serie->scenaristes()->sync($auteurs);
-
-    $auteurs = [];
-    while ($d-- > 0) $auteurs += [$faker->randomModel(Personne::class)->id => ['metier' => \BDTheque\Models\Metadata\Personne::DESSINATEUR]];
-    $serie->dessinateurs()->sync($auteurs);
-
-    $auteurs = [];
-    while ($c-- > 0) $auteurs += [$faker->randomModel(Personne::class)->id => ['metier' => \BDTheque\Models\Metadata\Personne::COLORISTE]];
-    $serie->coloristes()->sync($auteurs);
-
-    $univers = [];
-    while ($u-- > 0) $univers += [$faker->randomModel(Univers::class)->id];
-    $serie->univers()->sync($univers);
+    $faker->randomModels($serie->scenaristes(), Personne::class, 75, 1, 3, null, function () {
+        return ['metier' => \BDTheque\Models\Metadata\Personne::SCENARISTE];
+    });
+    $faker->randomModels($serie->dessinateurs(), Personne::class, 75, 1, 3, null, function () {
+        return ['metier' => \BDTheque\Models\Metadata\Personne::DESSINATEUR];
+    });
+    $faker->randomModels($serie->coloristes(), Personne::class, 75, 1, 3, null, function () {
+        return ['metier' => \BDTheque\Models\Metadata\Personne::COLORISTE];
+    });
 });

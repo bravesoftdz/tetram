@@ -1,16 +1,9 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Thierry
- * Date: 26/03/2018
- * Time: 14:17
- */
 
 namespace Tests\BDTheque\Support;
 
 use BDTheque\Support\CategorieImageAlbum;
 use BDTheque\Support\CategorieImageParaBd;
-use BDTheque\Support\Enum;
 use BDTheque\Support\Etat;
 use BDTheque\Support\FormatEdition;
 use BDTheque\Support\Notation;

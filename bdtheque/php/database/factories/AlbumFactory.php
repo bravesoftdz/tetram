@@ -3,6 +3,8 @@
 use BDTheque\Faker\Provider\BookProvider;
 use BDTheque\Faker\Provider\ModelProvider;
 use BDTheque\Models\Album;
+use BDTheque\Models\Edition;
+use BDTheque\Models\Personne;
 use BDTheque\Models\Serie;
 use BDTheque\Models\Univers;
 use Faker\Generator as Faker;
@@ -34,10 +36,19 @@ $factory->define(Album::class, function (Faker $faker) {
         'notation' => $faker->optional(10)->numberBetween(0, 10)
     ];
 })->afterCreating(Album::class, function (Album $album, Faker $faker) {
-    $u = $faker->boolean($album->serie_id ? 0 : 50) ? $faker->numberBetween(1, 3) : 0;
+    $faker->randomModels($album->univers(), Univers::class);
 
-    $univers = [];
-    while ($u-- > 0) $univers += [$faker->randomModel(Univers::class)->id];
-    $album->univers()->sync($univers);
+    $faker->randomModels($album->scenaristes(), Personne::class, 75, 1, 3, null, function () {
+        return ['metier' => \BDTheque\Models\Metadata\Personne::SCENARISTE];
+    });
+    $faker->randomModels($album->dessinateurs(), Personne::class, 75, 1, 3, null, function () {
+        return ['metier' => \BDTheque\Models\Metadata\Personne::DESSINATEUR];
+    });
+    $faker->randomModels($album->coloristes(), Personne::class, 75, 1, 3, null, function () {
+        return ['metier' => \BDTheque\Models\Metadata\Personne::COLORISTE];
+    });
+
+    $e = $faker->boolean(95) ? 1 : $faker->numberBetween(0, 3);
+    $album->editions()->saveMany(factory(Edition::class, $e)->make());
 });
 

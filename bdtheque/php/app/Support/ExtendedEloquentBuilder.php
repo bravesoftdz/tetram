@@ -109,7 +109,7 @@ class ExtendedEloquentBuilder extends EloquentBuilder
     /**
      * same as "has" method but will use join when $relation is "joinable"
      *
-     * @param string $relation
+     * @param string $relation_inst
      * @param string $operator
      * @param int $count
      * @param string $boolean
@@ -122,15 +122,18 @@ class ExtendedEloquentBuilder extends EloquentBuilder
             return $this->hasNestedRelation($relation, $operator, $count, $boolean, $callback);
         }
 
-        $relation = $this->getRelationWithoutConstraints($relation);
+        $relation_inst = $this->getRelationWithoutConstraints($relation);
 
-        if (!self::isRelationJoinable($relation))
-            return $this->has($relation, $operator, $count, $boolean, $callback);
+        if (!self::isRelationJoinable($relation_inst))
+            return $this->has($relation, $operator, $count, $boolean, function (EloquentBuilder $q) use ($relation_inst, $callback){
+                if ($callback)
+                    $callback($q->getQuery(), false, $relation_inst->getModel());
+            });
 
         // it looks like the relation can be joined
-        $this->addJoinRelation($relation->getRelationExistenceQuery($relation->getRelated()->newQuery(), $this)->applyScopes());
+        $this->addJoinRelation($relation_inst->getRelationExistenceQuery($relation_inst->getRelated()->newQuery(), $this)->applyScopes());
         if ($callback)
-            $this->callScope($callback, [$relation->getModel()]);
+            $this->callScope($callback, [true, $relation_inst->getModel()]);
 
         return $this;
     }

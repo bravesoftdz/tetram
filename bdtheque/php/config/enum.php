@@ -6,7 +6,7 @@ return [
         'default' => 110
     ],
     'reliure' => [
-        'values' => [200, 201, 301, 302, 303],
+        'values' => [200, 201],
         'default' => 200
     ],
     'type_edition' => [

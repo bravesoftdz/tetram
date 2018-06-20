@@ -8,42 +8,34 @@
 			group-by-sort="index"
 			:group-key="groupKey"
 	>
-		<template slot="sub-header">
-			<v-flex>
-				<v-layout row align-baseline>
-					<v-flex>
-						Grouper par
-					</v-flex>
-					<v-flex>
-						<v-select
-								dense
-								v-model="groupBy"
-								:items="groups"
-								item-value="key"
-								item-text="name"
-								single-line
-								hide-details
-						>
-						</v-select>
-					</v-flex>
-				</v-layout>
-			</v-flex>
-		</template>
-		<template slot="display-group" slot-scope="{ group }">
-			<v-layout row>
-				{{ displayGroup(group) }}
-				<template v-if="group.notation">
-					<v-spacer/>
-					<model-notation align-right :value="group.notation" class="shrink"></model-notation>
-				</template>
+		<v-flex slot="sub-header">
+			<v-layout row align-baseline>
+				<v-flex>
+					Grouper par
+				</v-flex>
+				<v-flex>
+					<v-select
+							dense
+							v-model="groupBy"
+							:items="groups"
+							item-value="key"
+							item-text="name"
+							single-line
+							hide-details
+					>
+					</v-select>
+				</v-flex>
 			</v-layout>
+		</v-flex>
+		<template slot="display-group" slot-scope="{ group }">
+			{{ displayGroup(group) }}
+			<model-notation :value="group.notation"/>
 		</template>
 		<template slot="display-item" slot-scope="{ item }">
-			<v-layout row>
-				<router-link :to="ItemRoute(routeName, item)">{{ displayItem(item) }}</router-link>
-				<v-spacer/>
-				<model-notation align-right :value="item.notation" class="shrink"></model-notation>
-			</v-layout>
+			<router-link :to="$itemRoute(routeName, item)">
+				{{ $displayAlbum(item, this.groupBy !== 'serie') }}
+			</router-link>
+			<model-notation :value="item.notation"/>
 		</template>
 	</model-tree>
 </template>
@@ -51,9 +43,8 @@
 <script>
   import ModelIndex from '../ModelIndex'
   import ModelTree from '../../../components/ModelTree'
-  import { displayAlbum, displaySerie } from '../../../bdtheque/DisplayItem'
-  import { NULL_ID } from '../../../bdtheque/GlobaleFunctions'
   import ModelNotation from '../../../components/ModelNotation'
+  import { NULL_ID } from '../../../mixins/global/API'
 
   export default {
     name: 'AlbumsIndex',
@@ -84,7 +75,7 @@
       displayGroup (item) {
         switch (this.groupBy) {
           case 'serie':
-            return item.id === NULL_ID ? `< Hors-série >` : displaySerie(item)
+            return item.id === NULL_ID ? `< Hors-série >` : this.$displaySerie(item)
           case 'annee_parution':
             return item[this.groupKey()] === NULL_ID ? `< Inconnue >` : item[this.groupKey()]
           default:
@@ -92,7 +83,7 @@
         }
       },
       displayItem (item) {
-        return displayAlbum(item, this.groupBy !== 'serie')
+        return this.$displayAlbum(item, this.groupBy !== 'serie')
       },
       groupKey () {
         switch (this.groupBy) {

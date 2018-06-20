@@ -1,85 +1,72 @@
 <template>
 	<v-card>
-		<v-card-title>
-			<v-layout row>
-				<div class="headline">{{ this.title }}</div>
-				<v-spacer></v-spacer>
-				<v-layout column>
-					<v-flex>
-						<v-text-field
-								v-model="quickSearchFilter"
-								append-icon="search"
-								label="Search"
-								single-line
-								clearable
-								:disabled="loading"
-								hide-details
-								ref="quickSearchInput"
-						></v-text-field>
-					</v-flex>
-					<slot name="sub-header"/>
+		<template v-if="!compact && !noHeader">
+			<v-card-title>
+				<v-layout row>
+					<div class="headline">{{ this.title }}</div>
+					<v-spacer></v-spacer>
+					<v-layout column>
+						<v-flex>
+							<v-text-field
+									v-model="quickSearchFilter"
+									append-icon="search"
+									label="Search"
+									single-line
+									clearable
+									:disabled="api_loading"
+									hide-details
+									ref="quickSearchInput"
+							></v-text-field>
+						</v-flex>
+						<slot name="sub-header"/>
+					</v-layout>
 				</v-layout>
-			</v-layout>
-		</v-card-title>
-		<v-divider></v-divider>
+			</v-card-title>
+			<v-divider></v-divider>
+		</template>
 		<v-progress-linear
 				height="3"
 				color="secondary"
 				indeterminate
-				:active="loading"
+				v-if="api_loading && !$itemsLoaded"
 				class="progress"
-		></v-progress-linear>
-		<v-data-table
-				:items="items"
-				:pagination="pagination"
-				:total-items="pagination.totalItems"
-				hide-actions
-				hide-headers
-				:no-data-text="loading ? 'Chargement...' : 'Pas de données à afficher'"
-				:item-key="itemKey"
+		/>
+		<div
+				v-for="item in items" :key="item.id"
+				@click="item.$expanded = !item.$expanded"
 		>
-			<template slot="items" slot-scope="args">
-				<tr v-if="isGroupedBy" @click="args.expanded = !args.expanded" style="cursor: pointer">
-					<td :style="itemStyle" style="font-weight: bold">
-						<slot name="display-group" v-bind:group="args.item">
-							{{ args.item }}
-						</slot>
-					</td>
-				</tr>
-				<tr v-else>
-					<td :style="itemStyle">
-						<slot name="display-item" v-bind:item="args.item">
-							{{ args.item }}
-						</slot>
-					</td>
-				</tr>
+			<template v-if="isGroupedBy">
+				<div class="item parentItem">
+					<slot name="display-group" v-bind:group="item">
+						{{ item }}
+					</slot>
+				</div>
+				<template v-if="item.$expanded">
+					<v-progress-linear
+							v-if="api_loading && !item.$itemsLoaded"
+							indeterminate
+							color="secondary"
+							class="mx-auto progress"
+							height="3"
+					/>
+					<template v-else>
+						<div v-for="subitem in refreshSubItems(item)" :key="subitem.id" class="item subItem">
+							<slot name="display-item" v-bind:item="subitem">
+								{{ subitem }}
+							</slot>
+						</div>
+					</template>
+				</template>
 			</template>
-			<template slot="expand" slot-scope="{ item }">
-				<v-card flat>
-					<v-data-table
-							:items="refreshSubItems(item)"
-							hide-actions
-							hide-headers
-					>
-						<tr slot="items" slot-scope="{ item }">
-							<td :style="subItemStyle">
-								<slot name="display-item" v-bind:item="item">
-									{{ item }}
-								</slot>
-							</td>
-						</tr>
-						<template slot="no-data">
-							<v-progress-circular indeterminate color="secondary" class="mx-auto"></v-progress-circular>
-						</template>
-					</v-data-table>
-				</v-card>
-			</template>
-			<v-alert slot="no-results" :value="true" color="error" icon="warning">
-				Pas de résultat correspondant à la recherche "{{ quickSearchFilter }}".
-			</v-alert>
-		</v-data-table>
-		<v-divider v-if="pagination.totalItems > 0"></v-divider>
-		<v-card-actions v-if="pagination.totalItems > 0">
+			<div v-else class="item">
+				<slot name="display-item" v-bind:item="item">
+					{{ item }}
+				</slot>
+			</div>
+		</div>
+
+		<v-divider v-if="pagination.pages > 1"/>
+		<v-card-actions v-if="pagination.pages > 1">
 			<v-pagination
 					v-model="pagination.page"
 					:length="pagination.pages"
@@ -88,25 +75,26 @@
 					circle
 					:total-visible="paginationVisiblePages"
 					class="mx-auto"
-			></v-pagination>
+			/>
 		</v-card-actions>
 	</v-card>
 </template>
 
 <script>
-  import axios from 'axios'
   import debounce from 'lodash.debounce'
-  import { NULL_ID } from '../bdtheque/GlobaleFunctions'
+  import { NULL_ID } from '../mixins/global/API'
 
   export default {
     name: 'ModelTree',
+    components: {},
     props: {
+      noHeader: {type: Boolean, required: false, default: false},
       title: {type: String, required: false},
       model: {type: String, required: true},
       quickSearchFields: {
         type: Function | String | [String],
         required: false,
-        default: []
+        default: () => []
       },
       sortBy: {
         type: Function | Object,
@@ -126,16 +114,16 @@
         type: Function | String,
         required: false,
         default: 'id'
-      }
+      },
+      defaultFilter: {type: Function | Array, required: false, default: () => []},
+      compact: {type: Boolean, required: false, default: false}
     },
     data: () => ({
       items: [],
-      loading: false,
       pagination: {pages: 0, page: 1, rowsPerPage: this.perPage, totalItems: 0},
       quickSearchFilter: '',
-      itemStyle: 'height: 3em !important; padding: 0 2em !important;',
-      subItemStyle: 'height: 3em !important; padding: 0 4em !important;',
-      itemKey: 'id'
+      itemKey: 'id',
+      $itemsLoaded: false
     }),
     mounted () {
       this.updateItemKey()
@@ -153,7 +141,7 @@
       groupBy () {
         this.updateItemKey()
         this.refreshItems({resetItems: true})
-      }
+      },
     },
     methods: {
       /**
@@ -205,36 +193,42 @@
        * @param {Number|integer} page
        * @param {Boolean} resetItems
        */
-      refreshItems ({page = null, resetItems = false} = {}) {
-        this.getItems({page: page, resetItems}).then(data => {
-            this.items = data.items
-            this.pagination = {...this.pagination, ...data.pagination}
-          }
-        )
+      refreshItems ({page = undefined, resetItems = false} = {}) {
+        if (resetItems) {
+          this.items = []
+          this.pagination = {...this.pagination, ...{pages: 0, page: 1, totalItems: 0}}
+        }
+
+        this.$itemsLoaded = false
+        this.getItems({
+          page: page
+        }).then(data => {
+          this.items = data.items
+          this.pagination = {...this.pagination, ...data.pagination}
+        }).finally(() => {
+          this.$itemsLoaded = true
+        })
       },
       /**
        * @param item
        */
       refreshSubItems (item) {
-        if (!item.items) {
-          item.items = []
-          item.itemsLoaded = false
+        if (!item.$items) {
+          item.$items = []
+          item.$itemsLoaded = false
         }
 
-        if (!item.itemsLoaded && !this.loading) {
+        if (!item.$itemsLoaded && !this.api_loading) {
           this.getItems({
-              groupByColumn: this.itemKey === 'id' ? `${this.groupedBy}.id` : this.groupedBy,
-              groupById: item[this.itemKey]
-            }
-          ).then(data => {
-              item.items = data.items
-            }
-          ).finally(() => {
-              item.itemsLoaded = true
-            }
-          )
+            groupByColumn: this.itemKey === 'id' ? `${this.groupedBy}.id` : this.groupedBy,
+            groupById: item[this.itemKey]
+          }).then(data => {
+            item.$items = data.items
+          }).finally(() => {
+            item.$itemsLoaded = true
+          })
         }
-        return item.items
+        return item.$items
       },
       /**
        * @param {Number|integer} page
@@ -243,79 +237,61 @@
        * @param {Boolean} resetItems
        * @returns {Promise<any>}
        */
-      getItems ({page = undefined, groupByColumn = undefined, groupById = undefined, resetItems = false} = {}) {
-        this.loading = true
-        if (resetItems) {
-          this.items = []
-          this.pagination = {...this.pagination, ...{pages: 0, page: 1, totalItems: 0}}
+      getItems ({page = undefined, groupByColumn = undefined, groupById = undefined}) {
+        let filters = []
+        if (groupById) {
+          filters.push({
+            column: groupByColumn,
+            value: groupById !== NULL_ID ? groupById : null
+          })
         }
-        return new Promise((resolve, reject) => {
-          let filters = []
-          if (groupById) {
-            filters.push({
-                column: groupByColumn,
-                value: groupById !== NULL_ID ? groupById : null
-              }
-            )
-          }
-          if (this.quickSearchFilter && this.quickSearchFilter !== '') {
-            let fields = this.arrayFromParam(this.quickSearchFields)
+        if (this.quickSearchFilter && this.quickSearchFilter !== '') {
+          let fields = this.arrayFromParam(this.quickSearchFields)
 
-            let newFilters = Array.from(fields, (field) => {
-                return {
-                  operator: 'or',
-                  column: field,
-                  comparison: 'like',
-                  value: `%${this.quickSearchFilter}%`
-                }
-              }
-            )
-
-            if (filters.length === 0)
-              filters.push(...newFilters)
-            else
-              filters.push({c: newFilters})
-          }
-
-          let params = []
-          if (page) params.push(`page=${page}`)
-          if (this.perPage || groupById) params.push(`perPage=${groupById ? -1 : this.perPage}`)
-
-          axios.post(
-            `/api/${this.model}/index` + (params.length ? '?' + params.join('&') : ''), {
-              filters: filters,
-              sortBy: this.sortObjectFromParam(this.sortBy, groupById),
-              groupBy: groupById ? null : this.groupedBy,
-              groupBySort: this.sortObjectFromParam(this.groupBySort),
+          let newFilters = Array.from(fields, (field) => {
+            return {
+              operator: 'or',
+              column: field,
+              comparison: 'like',
+              value: `%${this.quickSearchFilter}%`
             }
-          ).then(response => {
+          })
+
+          if (filters.length === 0) {
+            filters.push(...newFilters)
+          } else {
+            filters.push({c: newFilters})
+          }
+        }
+        let defaultFilters = this.arrayFromParam(this.defaultFilter)
+        switch (defaultFilters.length) {
+          case 0:
+            break
+          case 1:
+            filters.push(...defaultFilters)
+            break
+          default:
+            filters.push({c: defaultFilters})
+        }
+
+        return new Promise(resolve => {
+          this.$getItems({
+            model: this.model,
+            page: page,
+            perPage: (this.compact || this.perPage || groupById) ? (this.compact || groupById ? -1 : this.perPage) : undefined,
+            filters: filters,
+            sortBy: this.sortObjectFromParam(this.sortBy, groupById),
+            groupBy: groupById ? null : this.groupedBy,
+            groupBySort: this.sortObjectFromParam(this.groupBySort)
+          }).then(data => {
+            data.items.forEach(item => {
+              item.$expanded = false
               if (!groupById) {
-                response.data.data = Array.from(response.data.data, (item) => {
-                    if (!item[this.itemKey])
-                      item[this.itemKey] = NULL_ID
-                    return item
-                  }
-                )
+                if (!item[this.itemKey]) item[this.itemKey] = NULL_ID
               }
-
-              resolve({
-                  items: response.data.data,
-                  pagination: !response.data.pagination ? undefined : {
-                    rowsPerPage: response.data.pagination.per_page,
-                    page: response.data.pagination.current_page,
-                    totalItems: response.data.pagination.total,
-                    pages: response.data.pagination.total_pages,
-                  }
-                }
-              )
-            }
-          ).catch(e => {
-              this.errors.push(e)
-            }
-          ).finally(() => {
-              this.loading = false
-            }
-          )
+            })
+            resolve(data)
+          })
         })
       }
     },
@@ -331,6 +307,20 @@
 </script>
 
 <style scoped>
+	.item {
+		min-height: 2em !important;
+		padding: 0 1em !important;
+	}
+
+	.item.subItem {
+		padding: 0 1em 0 3em !important;
+	}
+
+	.item.parentItem {
+		font-weight: bold;
+		cursor: pointer;
+	}
+
 	.progress {
 		margin: 0;
 	}
