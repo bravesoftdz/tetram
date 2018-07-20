@@ -22,8 +22,7 @@
 								item-text="name"
 								single-line
 								hide-details
-						>
-						</v-select>
+						/>
 					</v-flex>
 				</v-layout>
 			</v-flex>

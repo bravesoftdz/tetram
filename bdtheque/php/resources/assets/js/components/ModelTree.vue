@@ -4,7 +4,7 @@
 			<v-card-title>
 				<v-layout row>
 					<div class="headline">{{ this.title }}</div>
-					<v-spacer></v-spacer>
+					<v-spacer/>
 					<v-layout column>
 						<v-flex>
 							<v-text-field
@@ -16,13 +16,13 @@
 									:disabled="api_loading"
 									hide-details
 									ref="quickSearchInput"
-							></v-text-field>
+							/>
 						</v-flex>
 						<slot name="sub-header"/>
 					</v-layout>
 				</v-layout>
 			</v-card-title>
-			<v-divider></v-divider>
+			<v-divider/>
 		</template>
 		<v-progress-linear
 				height="3"

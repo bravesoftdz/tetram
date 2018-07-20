@@ -11,15 +11,9 @@ let mix = require('laravel-mix')
  |
  */
 
-// packagesList = ["axios","bootstrap","decamelize","jquery","lodash","path-parse","popper.js","vue","vue-i18n"];
-let packagesList = []
-
-let packageFiles = require('./package.json')
-for (let packageFile in packageFiles.dependencies) {
-  packagesList.push(packageFile)
-}
+let packageConf = require('./package.json')
 
 mix.js('resources/assets/js/app.js', 'public/js')
   .sass('resources/assets/sass/app.scss', 'public/css')
-  .extract(packagesList)
+  .extract(Object.keys(packageConf.dependencies))
   .sourceMaps()
