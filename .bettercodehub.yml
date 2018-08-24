@@ -1,0 +1,16 @@
+exclude:
+- /documentation/.*
+- /libs/.*
+- /text2table/.*
+- /wallpepper/.*
+- /bdtheque/android/.*
+- /bdtheque/delphi/.*
+- /bdtheque/bdppc/.*
+- /bdtheque/drafts/.*
+- /bdtheque/dummy/.*
+- /bdtheque/java/.*
+
+languages:
+- php
+- javascript
+- typescript
