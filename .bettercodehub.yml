@@ -1,3 +1,5 @@
+component_depth: 6
+
 exclude:
 - /documentation/.*
 - /libs/.*
