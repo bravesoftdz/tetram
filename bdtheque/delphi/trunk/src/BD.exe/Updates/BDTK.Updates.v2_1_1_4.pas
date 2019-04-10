@@ -12,7 +12,7 @@ begin
 
   Query.Script.Add('create table options_scripts (');
   Query.Script.Add('    id_option   t_guid_notnull,');
-  Query.Script.Add('    Query.Script      varchar(50) character set iso8859_1 not null collate fr_fr_ci_ai,');
+  Query.Script.Add('    script      varchar(50) character set iso8859_1 not null collate fr_fr_ci_ai,');
   Query.Script.Add('    nom_option  varchar(50) character set iso8859_1 not null collate fr_fr_ci_ai,');
   Query.Script.Add('    valeur      varchar(255),');
   Query.Script.Add('    dc_options  t_timestamp_notnull,');

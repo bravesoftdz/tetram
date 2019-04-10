@@ -219,10 +219,10 @@ begin
   Query.Script.Add('  add valeur varchar(255),');
   Query.Script.Add('  alter nom_option to old_nom_option,');
   Query.Script.Add('  add nom_option varchar (50) not null,');
-  Query.Script.Add('  alter Query.Script to old_script,');
-  Query.Script.Add('  add Query.Script varchar (50) not null;');
+  Query.Script.Add('  alter script to old_script,');
+  Query.Script.Add('  add script varchar (50) not null;');
   Query.Script.Add('update options_scripts set');
-  Query.Script.Add('  Query.Script = old_script,');
+  Query.Script.Add('  script = old_script,');
   Query.Script.Add('  nom_option = old_nom_option;');
   Query.Script.Add('alter table options_scripts drop old_nom_option, drop old_script;');
   Query.Script.Add('alter table options_scripts add constraint options_scripts_pk primary key(script, nom_option) using index options_scripts_pk;');
