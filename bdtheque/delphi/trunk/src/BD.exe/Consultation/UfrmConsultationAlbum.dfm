@@ -1173,6 +1173,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
       Header.Height = 17
       Header.MainColumn = -1
       Header.Options = [hoColumnResize, hoDrag]
+      StateImages = dmPrinc.ShareImageList
       TabOrder = 8
       OnAfterItemPaint = vstSerieAfterItemPaint
       OnDblClick = vstSerieDblClick

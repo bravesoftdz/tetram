@@ -164,7 +164,8 @@ implementation
 uses
   BD.Utils.StrUtils, BD.Entities.Lite, BD.Common, MAJ, Impression, DateUtils, UHistorique, BD.Utils.GUIUtils,
   Divers, BD.Strings, Proc_Gestions, BD.GUI.Forms.Console, BDTK.Entities.Dao.Full,
-  BD.Entities.Common, BD.Entities.Factory.Full, BDTK.GUI.DataModules.Main;
+  BD.Entities.Common, BD.Entities.Factory.Full, BDTK.GUI.DataModules.Main,
+  BD.GUI.DataModules.Common;
 
 var
   FSortColumn: Integer;
@@ -267,11 +268,14 @@ procedure TfrmConsultationAlbum.vstSerieGetImageIndex(Sender: TBaseVirtualTree; 
 var
   Album: TBaseLite;
 begin
-  Album := vstSerie.GetNodeBasePointer(Node);
-  if Assigned(Album) and IsEqualGUID(Album.ID, ID_Album) then
-    ImageIndex := 13
-  else
-    ImageIndex := -1;
+  if Kind = ikState then
+  begin
+    Album := vstSerie.GetNodeBasePointer(Node);
+    if Assigned(Album) and IsEqualGUID(Album.ID, ID_Album) then
+      ImageIndex := 13
+    else
+      ImageIndex := -1;
+  end;
 end;
 
 procedure TfrmConsultationAlbum.VDTButton1Click(Sender: TObject);
