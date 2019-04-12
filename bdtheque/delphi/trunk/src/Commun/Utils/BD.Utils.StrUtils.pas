@@ -54,6 +54,8 @@ uses
 function StringToGUIDDef(const GUID: string; const Default: TGUID): TGUID;
 begin
   try
+    if GUID.Trim.IsEmpty then
+      Exit(Default);
     Result := StringToGUID(GUID);
   except
     Result := Default;
