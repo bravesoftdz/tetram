@@ -1,0 +1,18 @@
+component_depth: 6
+
+exclude:
+- /documentation/.*
+- /libs/.*
+- /text2table/.*
+- /wallpepper/.*
+- /bdtheque/android/.*
+- /bdtheque/delphi/.*
+- /bdtheque/bdppc/.*
+- /bdtheque/drafts/.*
+- /bdtheque/dummy/.*
+- /bdtheque/java/.*
+
+languages:
+- php
+- javascript
+- typescript
