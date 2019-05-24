@@ -170,7 +170,7 @@ begin
       Archive.Items[0].OwnsStream := False;
       Archive.ExtractSelected;
       bckStream.Seek(0, soFromEnd);
-      Data.Seek(Length(TFichierLog.Instance.Encoding.GetPreamble), soFromBeginning);
+      Data.Position := Length(TFichierLog.Instance.Encoding.GetPreamble);
     end
     else
       Archive.AddFile(TPath.GetFileName(NomFichierBackup), bckStream);
