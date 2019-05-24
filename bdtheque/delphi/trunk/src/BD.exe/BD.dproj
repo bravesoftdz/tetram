@@ -81,8 +81,8 @@ $(PreBuildEvent)]]></PreBuildEvent>
         <DCC_UNIT_PLATFORM>false</DCC_UNIT_PLATFORM>
         <DCC_WriteableConstants>true</DCC_WriteableConstants>
         <Manifest_File>$(BDS)\bin\default_app.manifest</Manifest_File>
-        <VerInfo_Build>29</VerInfo_Build>
-        <VerInfo_Keys>CompanyName=Teträm Corp;FileDescription=;FileVersion=2.2.3.29;InternalName=BDT;LegalCopyright=Teträm Corp 1997-2014;LegalTrademarks=;OriginalFilename=;ProductName=BDtheque;ProductVersion=2.2;Comments=</VerInfo_Keys>
+        <VerInfo_Build>32</VerInfo_Build>
+        <VerInfo_Keys>CompanyName=Teträm Corp;FileDescription=;FileVersion=2.2.3.32;InternalName=BDT;LegalCopyright=Teträm Corp 1997-2014;LegalTrademarks=;OriginalFilename=;ProductName=BDtheque;ProductVersion=2.2;Comments=</VerInfo_Keys>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <DCC_Namespace>System;Xml;Data;Datasnap;Web;Soap;Vcl;Vcl.Imaging;Vcl.Touch;Vcl.Samples;Vcl.Shell;$(DCC_Namespace)</DCC_Namespace>
         <VerInfo_MajorVer>2</VerInfo_MajorVer>
@@ -125,6 +125,8 @@ $(PreBuildEvent)]]></PreBuildEvent>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_Win64)'!=''">
         <BT_BuildType>Debug</BT_BuildType>
+        <VerInfo_Build>32</VerInfo_Build>
+        <VerInfo_Keys>CompanyName=Teträm Corp;FileDescription=;FileVersion=2.2.3.32;InternalName=BDT;LegalCopyright=Teträm Corp 1997-2014;LegalTrademarks=;OriginalFilename=;ProductName=BDtheque;ProductVersion=2.2;Comments=</VerInfo_Keys>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_3)'!=''">
         <DCC_DebugDCUs>true</DCC_DebugDCUs>
@@ -440,6 +442,7 @@ $(PreBuildEvent)]]></PreBuildEvent>
             <DesignClass>TDataModule</DesignClass>
         </DCCReference>
         <DCCReference Include="GUI\Controls\BDTK.GUI.Controls.Spin.pas"/>
+        <DCCReference Include="Updates\BDTK.Updates.v2_2_3_33.pas"/>
         <RcItem Include="..\Commun\Resources\network.png">
             <ResourceType>RCDATA</ResourceType>
             <ResourceId>BT_LINK</ResourceId>

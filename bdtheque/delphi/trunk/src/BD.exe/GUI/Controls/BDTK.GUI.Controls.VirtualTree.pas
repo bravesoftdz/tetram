@@ -412,6 +412,7 @@ begin
     InfoNode := GetNodeData(Node);
     if not Assigned(InfoNode.List) then
       InfoNode.List := TObjectList<TBaseLite>.Create(True);
+    InfoNode.List.Clear;
     q := dmPrinc.DBConnection.GetQuery;
     try
       q.SQL.Text := 'select ' + vmModeInfos[FMode].FIELDS + ' from ' + vmModeInfos[FMode].Filtre;
@@ -423,6 +424,8 @@ begin
         q.Params.AsString[1] := Copy(vmModeInfos[FMode].DEFAULTFILTRE, 1, q.Params.MaxStrLen[1]);
       q.Open;
       vmModeInfos[FMode].ClassDao.FillList(InfoNode.List, q);
+
+      Assert(InfoNode.List.Count = ChildCount);
     finally
       q.Free;
     end;
@@ -646,6 +649,7 @@ end;
 
 function TVirtualStringTree.GetNodeByValue(const Value: TGUID): PVirtualNode;
 var
+  DefaultValue: string;
   Node: PVirtualNode;
   init: Cardinal;
   cs: string;
@@ -653,10 +657,20 @@ begin
   Result := nil;
   if IsEqualGUID(Value, GUID_NULL) then
     Exit;
+
+  case FMode of
+    vmAlbumsCollection, vmAlbumsEditeur, vmAlbumsGenre, vmAlbumsSerie, vmParaBDSerie, vmAchatsAlbumsEditeur, vmAlbumsSerieUnivers, vmParaBDSerieUnivers:
+      DefaultValue := '';
+    else
+      DefaultValue := '-1';
+  end;
+
   with dmPrinc.DBConnection.GetQuery do
     try
-      SQL.Text := 'SELECT coalesce(' + vmModeInfos[FMode].INITIALEVALUE + ', ''-1'') FROM ' + vmModeInfos[FMode].TABLESEARCH + ' WHERE ' +
-        vmModeInfos[FMode].REFFIELDS + ' = ?';
+      SQL.Text :=
+        'SELECT coalesce(' + vmModeInfos[FMode].INITIALEVALUE + ', ''' + DefaultValue + ''')' +
+        ' FROM ' + vmModeInfos[FMode].TABLESEARCH +
+        ' WHERE ' + vmModeInfos[FMode].REFFIELDS + ' = ?';
       Params.AsString[0] := GUIDToString(Value);
       Open;
       if Eof then
