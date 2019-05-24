@@ -86,14 +86,15 @@ begin
   PageRep.ActivePageIndex := 0;
 
   vstAlbums.Mode := vmNone;
-  with TIniFile.Create(FichierIni) do try
-    LightComboCheck1.OnChange := nil;
-    LightComboCheck1.Value := -1;
-    LightComboCheck1.OnChange := LightComboCheck1Change;
-    LightComboCheck1.Value := ReadInteger('Options', 'GroupBy', 1);
-  finally
-    Free;
-  end;
+  with TIniFile.Create(FichierIni) do
+    try
+      LightComboCheck1.OnChange := nil;
+      LightComboCheck1.Value := -1;
+      LightComboCheck1.OnChange := LightComboCheck1Change;
+      LightComboCheck1.Value := ReadInteger('Options', 'GroupBy', 1);
+    finally
+      Free;
+    end;
   vstAuteurs.Mode := vmPersonnes;
   vstSeries.Mode := vmSeries;
   vstUnivers.Mode := vmUnivers;
@@ -109,15 +110,20 @@ end;
 procedure TfrmRepertoire.vstAlbumsDblClick(Sender: TObject);
 begin
   case PageRep.ActivePageIndex of
-    PosAlbums: with vstAlbums do
+    PosAlbums:
+      with vstAlbums do
         if GetNodeLevel(FocusedNode) > 0 then Historique.AddWaiting(fcAlbum, CurrentValue);
-    PosAuteurs: with vstAuteurs do
+    PosAuteurs:
+      with vstAuteurs do
         if GetNodeLevel(FocusedNode) > 0 then Historique.AddWaiting(fcAuteur, CurrentValue);
-    PosSeries: with vstSeries do
+    PosSeries:
+      with vstSeries do
         if GetNodeLevel(FocusedNode) > 0 then Historique.AddWaiting(fcSerie, CurrentValue);
-    PosUnivers: with vstUnivers do
+    PosUnivers:
+      with vstUnivers do
         if GetNodeLevel(FocusedNode) > 0 then Historique.AddWaiting(fcUnivers, CurrentValue);
-    PosParaBD: with vstParaBD do
+    PosParaBD:
+      with vstParaBD do
         if GetNodeLevel(FocusedNode) > 0 then Historique.AddWaiting(fcParaBD, CurrentValue);
   end;
 end;
@@ -128,7 +134,8 @@ var
 const
   FirstTime: Boolean = True;
 begin
-  if (vstAlbums.Mode <> Mode) or FirstTime then begin
+  if (vstAlbums.Mode <> Mode) or FirstTime then
+  begin
     i := vstAlbums.CurrentValue;
     vstAlbums.Mode := Mode;
     vstAlbums.CurrentValue := i;
@@ -141,16 +148,18 @@ const
   NewMode: array[0..5] of TVirtualMode = (vmAlbums, vmAlbumsSerie, vmAlbumsEditeur, vmAlbumsGenre, vmAlbumsAnnee, vmAlbumsCollection);
 begin
   ChangeAlbumMode(NewMode[LightComboCheck1.Value]);
-  with TIniFile.Create(FichierIni) do try
-    WriteInteger('Options', 'GroupBy', LightComboCheck1.Value);
-  finally
-    Free;
-  end;
+  with TIniFile.Create(FichierIni) do
+    try
+      WriteInteger('Options', 'GroupBy', LightComboCheck1.Value);
+    finally
+      Free;
+    end;
 end;
 
 procedure TfrmRepertoire.FrameRechercheRapideedSearchKeyPress(Sender: TObject; var Key: Char);
 begin
-  if Key = #13 then begin
+  if Key = #13 then
+  begin
     Key := #0;
     TFramRechercheRapide(TWinControl(Sender).Parent).VirtualTreeView.OnDblClick(nil);
   end;

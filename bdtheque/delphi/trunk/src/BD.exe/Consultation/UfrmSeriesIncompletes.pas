@@ -61,12 +61,13 @@ begin
 
   CheckBox1.OnClick := nil;
   CheckBox2.OnClick := nil;
-  with TIniFile.Create(FichierIni) do try
-    CheckBox1.Checked := ReadBool('Options', 'ManquantsIntegrales', True);
-    CheckBox2.Checked := ReadBool('Options', 'ManquantsAchats', True);
-  finally
-    Free;
-  end;
+  with TIniFile.Create(FichierIni) do
+    try
+      CheckBox1.Checked := ReadBool('Options', 'ManquantsIntegrales', True);
+      CheckBox2.Checked := ReadBool('Options', 'ManquantsAchats', True);
+    finally
+      Free;
+    end;
   CheckBox1.OnClick := CheckBox1Click;
   CheckBox2.OnClick := CheckBox1Click;
 
@@ -79,9 +80,11 @@ var
   NodeInfo: ^RNodeInfo;
 begin
   NodeInfo := Sender.GetNodeData(Node);
-  if Assigned(NodeInfo) then begin
+  if Assigned(NodeInfo) then
+  begin
     Initialize(NodeInfo^);
-    with TSerieIncomplete(Liste.Series[Node.Index]) do begin
+    with TSerieIncomplete(Liste.Series[Node.Index]) do
+    begin
       NodeInfo.Serie := Serie.ChaineAffichage(False);
       NodeInfo.AlbumsManquants := ChaineAffichage;
     end;
@@ -139,12 +142,13 @@ end;
 
 procedure TfrmSeriesIncompletes.CheckBox1Click(Sender: TObject);
 begin
-  with TIniFile.Create(FichierIni) do try
-    WriteBool('Options', 'ManquantsIntegrales', CheckBox1.Checked);
-    WriteBool('Options', 'ManquantsAchats', CheckBox2.Checked);
-  finally
-    Free;
-  end;
+  with TIniFile.Create(FichierIni) do
+    try
+      WriteBool('Options', 'ManquantsIntegrales', CheckBox1.Checked);
+      WriteBool('Options', 'ManquantsAchats', CheckBox2.Checked);
+    finally
+      Free;
+    end;
   LoadListe;
 end;
 

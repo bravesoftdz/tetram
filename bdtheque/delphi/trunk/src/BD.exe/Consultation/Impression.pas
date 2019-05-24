@@ -11,15 +11,15 @@ procedure ImpressionListeCompleteAlbums(Previsualisation: Boolean);
 
 procedure ImpressionInfosBDtheque(Previsualisation: Boolean);
 
-procedure ImpressionFicheAlbum(const Reference, ID_Edition: TGUID; Previsualisation: Boolean);
-procedure ImpressionFicheAuteur(const Reference: TGUID; Previsualisation: Boolean);
-procedure ImpressionFicheSerie(const Reference: TGUID; Previsualisation: Boolean);
-procedure ImpressionFicheUnivers(const Reference: TGUID; Previsualisation: Boolean);
-procedure ImpressionFicheParaBD(const Reference: TGUID; Previsualisation: Boolean);
+procedure ImpressionFicheAlbum(const reference, ID_Edition: TGUID; Previsualisation: Boolean);
+procedure ImpressionFicheAuteur(const reference: TGUID; Previsualisation: Boolean);
+procedure ImpressionFicheSerie(const reference: TGUID; Previsualisation: Boolean);
+procedure ImpressionFicheUnivers(const reference: TGUID; Previsualisation: Boolean);
+procedure ImpressionFicheParaBD(const reference: TGUID; Previsualisation: Boolean);
 
 procedure ImpressionRecherche(Recherche: TRecherche; Previsualisation: Boolean);
-procedure ImpressionCouvertureAlbum(const Reference, ID_Couverture: TGUID; Previsualisation: Boolean);
-procedure ImpressionImageParaBD(const Reference, ID_Photo: TGUID; Previsualisation: Boolean);
+procedure ImpressionCouvertureAlbum(const reference, ID_Couverture: TGUID; Previsualisation: Boolean);
+procedure ImpressionImageParaBD(const reference, ID_Photo: TGUID; Previsualisation: Boolean);
 
 procedure ImpressionListeManquants(R: TSeriesIncompletes; Previsualisation: Boolean);
 procedure ImpressionListePrevisions(R: TPrevisionsSorties; Previsualisation: Boolean);
@@ -48,8 +48,7 @@ begin
   Prn.Footers.Clear;
   Prn.SetFooterInformation1(0, 0, CopyrightTetramCorp, taRightJustify, Prn.Font.name, 9, []);
   Prn.SetPageNumberInformation1(Prn.FooterCoordinates.Top + 5, rsTransPage + ' ', '', taCenter, Prn.Font.name, 10, [fsUnderline]);
-  Prn.SetDateTimeInformation1(Prn.HeaderCoordinates.Top, dfShortDateFormat, True, dtStart, tfShortTimeFormat, True, DateFirst, ' - ', taRightJustify,
-    Prn.Font.name, 9, []);
+  Prn.SetDateTimeInformation1(Prn.HeaderCoordinates.Top, dfShortDateFormat, True, dtStart, tfShortTimeFormat, True, DateFirst, ' - ', taRightJustify, Prn.Font.name, 9, []);
   Prn.Headers.Clear;
 end;
 
@@ -427,7 +426,7 @@ begin
   end;
 end;
 
-procedure ImpressionFicheSerie(const Reference: TGUID; Previsualisation: Boolean);
+procedure ImpressionFicheSerie(const reference: TGUID; Previsualisation: Boolean);
 var
   fWaiting: IWaiting;
   Serie: TSerieFull;
@@ -444,13 +443,13 @@ var
   DetailsOptions: TDetailSerieOption;
   PrevisionsManquants: Boolean;
 begin
-  if IsEqualGUID(Reference, GUID_NULL) then
+  if IsEqualGUID(reference, GUID_NULL) then
     Exit;
   if ChoisirDetailSerie(dsoSerieSeule, DetailsOptions, PrevisionsManquants) = mrCancel then
     Exit;
   fWaiting := TWaiting.Create;
   fWaiting.ShowProgression(rsTransConfig, 0, 9);
-  Serie := TDaoSerieFull.getInstance(Reference);
+  Serie := TDaoSerieFull.getInstance(reference);
   try
     Prn := TPrintObject.Create(frmFond);
     try
@@ -665,11 +664,11 @@ begin
   end;
 end;
 
-procedure ImpressionFicheUnivers(const Reference: TGUID; Previsualisation: Boolean);
+procedure ImpressionFicheUnivers(const reference: TGUID; Previsualisation: Boolean);
 begin
 end;
 
-procedure ImpressionFicheAlbum(const Reference, ID_Edition: TGUID; Previsualisation: Boolean);
+procedure ImpressionFicheAlbum(const reference, ID_Edition: TGUID; Previsualisation: Boolean);
 var
   i: Integer;
   op: Integer;
@@ -679,14 +678,14 @@ var
   Prn: TPrintObject;
   DetailsOptions: TDetailSerieOption;
 begin
-  if IsEqualGUID(Reference, GUID_NULL) then
+  if IsEqualGUID(reference, GUID_NULL) then
     Exit;
   if ChoisirDetailSerie(dsoAlbumsDetails, DetailsOptions) = mrCancel then
     Exit;
   fWaiting := TWaiting.Create;
   fWaiting.ShowProgression(rsTransConfig, 0, 9);
   // MinTop := -1;
-  Album := TDaoAlbumFull.getInstance(Reference);
+  Album := TDaoAlbumFull.getInstance(reference);
   Edition := nil;
   if not IsEqualGUID(ID_Edition, GUID_NULL) then
     Edition := TDaoEditionFull.getInstance(ID_Edition);
@@ -732,17 +731,17 @@ begin
   end;
 end;
 
-procedure ImpressionFicheParaBD(const Reference: TGUID; Previsualisation: Boolean);
+procedure ImpressionFicheParaBD(const reference: TGUID; Previsualisation: Boolean);
 var
   ParaBD: TParaBDFull;
   fWaiting: IWaiting;
   Prn: TPrintObject;
 begin
-  if IsEqualGUID(Reference, GUID_NULL) then
+  if IsEqualGUID(reference, GUID_NULL) then
     Exit;
   fWaiting := TWaiting.Create;
   fWaiting.ShowProgression(rsTransConfig, 0, 9);
-  ParaBD := TDaoParaBDFull.getInstance(Reference);
+  ParaBD := TDaoParaBDFull.getInstance(reference);
   try
     Prn := TPrintObject.Create(frmFond);
     try
@@ -760,7 +759,7 @@ begin
   end;
 end;
 
-procedure ImpressionFicheAuteur(const Reference: TGUID; Previsualisation: Boolean);
+procedure ImpressionFicheAuteur(const reference: TGUID; Previsualisation: Boolean);
 var
   Auteur: TAuteurFull;
   fWaiting: IWaiting;
@@ -769,11 +768,11 @@ var
   fl: Integer;
   Album: TAlbumLite;
 begin
-  if IsEqualGUID(Reference, GUID_NULL) then
+  if IsEqualGUID(reference, GUID_NULL) then
     Exit;
   fWaiting := TWaiting.Create;
   fWaiting.ShowProgression(rsTransConfig, 0, 3);
-  Auteur := TDaoAuteurFull.getInstance(Reference);
+  Auteur := TDaoAuteurFull.getInstance(reference);
   try
     Prn := TPrintObject.Create(frmFond);
     try
@@ -1026,7 +1025,7 @@ var
   var
     i, ColonneGenre, NbLignes: Integer;
     YPos, YPosMax: Single;
-    Position: array [1 .. 10] of Single;
+    Position: array[1..10] of Single;
   begin
     Prn.SetTopOfPage;
     Prn.SetFontInformation1(Prn.Font.name, 5, []);
@@ -1483,7 +1482,7 @@ begin
   end;
 end;
 
-procedure ImpressionCouvertureAlbum(const Reference, ID_Couverture: TGUID; Previsualisation: Boolean);
+procedure ImpressionCouvertureAlbum(const reference, ID_Couverture: TGUID; Previsualisation: Boolean);
 var
   Album: TAlbumFull;
   ms: TStream;
@@ -1492,11 +1491,11 @@ var
   fWaiting: IWaiting;
   Prn: TPrintObject;
 begin
-  if IsEqualGUID(Reference, GUID_NULL) then
+  if IsEqualGUID(reference, GUID_NULL) then
     Exit;
   fWaiting := TWaiting.Create;
   fWaiting.ShowProgression(rsTransConfig, 0, 2);
-  Album := TDaoAlbumFull.getInstance(Reference);
+  Album := TDaoAlbumFull.getInstance(reference);
   try
     Prn := TPrintObject.Create(frmFond);
     try
@@ -1545,7 +1544,7 @@ begin
   end;
 end;
 
-procedure ImpressionImageParaBD(const Reference, ID_Photo: TGUID; Previsualisation: Boolean);
+procedure ImpressionImageParaBD(const reference, ID_Photo: TGUID; Previsualisation: Boolean);
 var
   ParaBD: TParaBDFull;
   ms: TStream;
@@ -1554,11 +1553,11 @@ var
   fWaiting: IWaiting;
   Prn: TPrintObject;
 begin
-  if IsEqualGUID(Reference, GUID_NULL) then
+  if IsEqualGUID(reference, GUID_NULL) then
     Exit;
   fWaiting := TWaiting.Create;
   fWaiting.ShowProgression(rsTransConfig, 0, 2);
-  ParaBD := TDaoParaBDFull.getInstance(Reference);
+  ParaBD := TDaoParaBDFull.getInstance(reference);
   try
     Prn := TPrintObject.Create(frmFond);
     try
@@ -1802,7 +1801,7 @@ begin
       Prn.SetHeaderDimensions1(-1, -1, -1, 30, False, 0, clWhite);
       Prn.SetHeaderInformation1(0, 5, rsListeAchats, taCenter, Prn.Font.name, 24, [fsBold]);
       Prn.SetHeaderInformation1(1, -1, Format('%d %s - %s', [NbAlbums div 2
-        { NbAlbums contient le double du nb d'albums } , rsTransAlbums, BDCurrencyToStr(PrixTotal)]), taCenter, Prn.Font.name, 12, []);
+        { NbAlbums contient le double du nb d'albums }, rsTransAlbums, BDCurrencyToStr(PrixTotal)]), taCenter, Prn.Font.name, 12, []);
       Prn.SetHeaderInformation1(2, -1, 'Prix moyen estimé d''un album: ' + BDCurrencyToStr(PrixMoyen), taCenter, Prn.Font.name, 12, []);
 
       Prn.CreateColumn1(0, 15, 15, taLeftJustify, Prn.Font.name, 12, []); // numéro
@@ -1880,3 +1879,4 @@ begin
 end;
 
 end.
+
