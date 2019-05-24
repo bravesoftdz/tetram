@@ -8,7 +8,7 @@ type
   TActionConsultation = (fcActionBack, fcActionRefresh, fcAlbum, fcAuteur, fcCouverture, fcRecherche, fcPreview, fcSeriesIncompletes,
     fcPrevisionsSorties, fcRecreateToolBar, fcPrevisionsAchats, fcRefreshRepertoire, fcRefreshRepertoireData, fcParaBD, fcImageParaBD, fcSerie, fcGestionAjout,
     fcGestionModif, fcGestionSupp, fcGestionAchat, fcConflitImport, fcGallerie, fcModeConsultation, fcModeGestion, fcUnivers,
-    fcConsole, fcScripts);
+    fcConsole);
 
 type
   TConsultCallback = procedure(Data: TObject);
@@ -101,7 +101,7 @@ uses MAJ, BDTK.GUI.Forms.Main, Forms, Proc_Gestions, BD.GUI.Forms.Console, TypIn
 const
   UsedInGestion = [fcGestionAjout, fcGestionModif, fcGestionSupp, fcGestionAchat, fcConflitImport];
   Modes = [fcModeConsultation, fcModeGestion];
-  Specials = [fcActionBack, fcActionRefresh, fcPreview, fcRecreateToolBar, fcRefreshRepertoire, fcRefreshRepertoireData, fcConsole, fcScripts];
+  Specials = [fcActionBack, fcActionRefresh, fcPreview, fcRecreateToolBar, fcRefreshRepertoire, fcRefreshRepertoireData, fcConsole];
   NoSaveHistorique = Specials
   // à cause des callback, les appels de gestion ne peuvent pas être sauvés dans l'historique
   // et puis je vois pas bien à quoi ça pourrait servir
@@ -420,8 +420,6 @@ begin
         frmFond.actActualiseRepertoire.Execute;
       fcRefreshRepertoireData:
         frmFond.actActualiseRepertoireData;
-      fcScripts:
-        doCallback := MAJRunScript(TAlbumFull(Consult.GestionVTV));
       fcConflitImport:
         frmFond.SetModalChildForm(TForm(Consult.Reference));
 

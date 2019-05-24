@@ -12,9 +12,6 @@
         <Projects Include="BD.exe\BD.dproj">
             <Dependencies>BDPic.DLL\BDPic.dproj;BDT_UDF.DLL\BDT_UDF.dproj</Dependencies>
         </Projects>
-        <Projects Include="BDScript.exe\BDScript.dproj">
-            <Dependencies>BD.exe\BD.dproj;BDPic.DLL\BDPic.dproj</Dependencies>
-        </Projects>
     </ItemGroup>
     <ProjectExtensions>
         <Borland.Personality>Default.Personality.12</Borland.Personality>
@@ -50,32 +47,17 @@
     <Target Name="BD:Make" DependsOnTargets="BDPic:Make;BDT_UDF:Make">
         <MSBuild Projects="BD.exe\BD.dproj" Targets="Make"/>
     </Target>
-    <Target Name="BDScript" DependsOnTargets="BD;BDPic">
-        <MSBuild Projects="BDScript.exe\BDScript.dproj"/>
-    </Target>
-    <Target Name="BDScript:Clean" DependsOnTargets="BD:Clean;BDPic:Clean">
-        <MSBuild Projects="BDScript.exe\BDScript.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="BDScript:Make" DependsOnTargets="BD:Make;BDPic:Make">
-        <MSBuild Projects="BDScript.exe\BDScript.dproj" Targets="Make"/>
-    </Target>
     <Target Name="Build">
-        <CallTarget Targets="BDPic;BDT_UDF;BD;BDScript"/>
+        <CallTarget Targets="BDPic;BDT_UDF;BD"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="BDPic:Clean;BDT_UDF:Clean;BD:Clean;BDScript:Clean"/>
+        <CallTarget Targets="BDPic:Clean;BDT_UDF:Clean;BD:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="BDPic:Make;BDT_UDF:Make;BD:Make;BDScript:Make"/>
+        <CallTarget Targets="BDPic:Make;BDT_UDF:Make;BD:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
     <ItemGroup Condition="'$(BuildGroup)'=='Release'">
-        <BuildGroupProject Include="BDScript.exe\BDScript.dproj">
-            <ProjectGuid>{5E022C95-04FD-4378-B040-C7F9ECAB1946}</ProjectGuid>
-            <Configurations>Release</Configurations>
-            <Platforms>Win32</Platforms>
-            <Enabled>True</Enabled>
-        </BuildGroupProject>
         <BuildGroupProject Include="BDPic.DLL\BDPic.dproj">
             <ProjectGuid>{A4E4DFAF-E8D4-4A12-B2FC-43EB2128EAE3}</ProjectGuid>
             <Configurations>Release</Configurations>

@@ -54,7 +54,6 @@ Name: interneticon; Description: Créer un raccourci vers le site de Teträm Corp;
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 Source: ..\..\delphi\trunk\deploy\{#SrcBin}\BD.exe; DestDir: {app}; Flags: ignoreversion
-Source: ..\..\delphi\trunk\deploy\{#SrcBin}\BDScript.exe; DestDir: {app}; Flags: ignoreversion
 Source: ..\..\delphi\trunk\deploy\{#SrcBin}\BDPic.dll; DestDir: {app}; Flags: ignoreversion
 Source: ..\..\delphi\trunk\deploy\{#SrcBin}\fbembed.dll; DestDir: {app}; Flags: ignoreversion
 Source: ..\..\delphi\trunk\deploy\{#SrcBin}\firebird.msg; DestDir: {app}; Flags: ignoreversion
@@ -84,8 +83,6 @@ Source: ..\..\delphi\trunk\deploy\{#SrcBin}\7z_x64.dll; DestDir: {app}; Flags: i
 
 Source: What's New.txt; DestDir: {app}; Flags: ignoreversion
 Source: Base vide\BD.GDB; DestDir: {userappdata}\TetramCorp\BDTheque; Flags: onlyifdoesntexist ignoreversion; Check: FirstInstall
-Source: ..\..\delphi\trunk\deploy\scripts\*.bds; DestDir: {commonappdata}\TetramCorp\BDTheque\Scripts; Flags: ignoreversion promptifolder; 
-Source: ..\..\delphi\trunk\deploy\scripts\*.bdu; DestDir: {commonappdata}\TetramCorp\BDTheque\Scripts; Flags: ignoreversion promptifolder
 Source: ..\..\delphi\trunk\deploy\WebServer\interface.zip; DestDir: {commonappdata}\TetramCorp\BDTheque\WebServer; Flags: ignoreversion
 Source: ..\..\delphi\trunk\deploy\WebServer\Site par défaut.zip; DestDir: {commonappdata}\TetramCorp\BDTheque\WebServer; Flags: ignoreversion
 Source: ..\..\delphi\trunk\deploy\WebServer\BDthequeWeb.zip; DestDir: {commonappdata}\TetramCorp\BDTheque\WebServer; Flags: ignoreversion

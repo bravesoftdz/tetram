@@ -7,7 +7,7 @@ uses
   VDTButton, ExtDlgs, Mask, ComCtrls, Buttons, VirtualTrees, BDTK.GUI.Controls.VirtualTree, Menus, BD.Entities.Lite, ActnList, BD.Entities.Full, ComboCheck,
   BDTK.GUI.Frames.QuickSearch, BD.GUI.Frames.Buttons, BD.GUI.Forms, Generics.Collections, StrUtils,
   JvExMask, JvToolEdit, BDTK.GUI.Controls.VirtualTreeEdit, BDTK.GUI.Forms.Main, PngSpeedButton,
-  UframVTEdit, LoadCompletImport, System.ImageList;
+  UframVTEdit, System.ImageList;
 
 type
   TfrmEditAlbum = class(TbdtForm)
@@ -102,7 +102,6 @@ type
     edNotes: TMemoLabeled;
     Bevel6: TBevel;
     vtEditPersonnes: TframVTEdit;
-    btnScript: TButton;
     Label28: TLabel;
     vtEditUnivers: TframVTEdit;
     Label29: TLabel;
@@ -159,7 +158,6 @@ type
     procedure OnEditAuteurs(Sender: TObject);
     procedure vtEditEditeursVTEditChange(Sender: TObject);
     procedure vtEditCollectionsVTEditChange(Sender: TObject);
-    procedure btnScriptClick(Sender: TObject);
     procedure vtEditUniversVTEditChange(Sender: TObject);
     procedure lvUniversData(Sender: TObject; Item: TListItem);
     procedure lvUniversKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
@@ -368,17 +366,6 @@ begin
   finally
     FreeAndNil(frm.FAlbumImport);
   end;
-end;
-
-procedure TfrmEditAlbum.btnScriptClick(Sender: TObject);
-begin
-  FreeAndNil(FAlbumImport); // si on a annulé la précédente maj par script, l'objet n'avait pas été détruit
-  FAlbumImport := TDaoAlbumFull.getInstance;
-  if FAlbum.TitreAlbum <> '' then
-    FAlbumImport.DefaultSearch := FormatTitre(FAlbum.TitreAlbum)
-  else
-    FAlbumImport.DefaultSearch := FormatTitre(FAlbum.Serie.TitreSerie);
-  Historique.AddWaiting(fcScripts, @ImportScript, Self, nil, FAlbumImport);
 end;
 
 procedure TfrmEditAlbum.btUniversClick(Sender: TObject);

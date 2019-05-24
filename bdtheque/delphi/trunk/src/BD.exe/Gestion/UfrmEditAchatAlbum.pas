@@ -45,7 +45,6 @@ type
     Label16: TLabel;
     Label28: TLabel;
     Bevel2: TBevel;
-    btnScript: TButton;
     procedure FormCreate(Sender: TObject);
     procedure cbIntegraleClick(Sender: TObject);
     procedure Frame11btnOKClick(Sender: TObject);
@@ -59,7 +58,6 @@ type
     procedure vtEditSeriesVTEditChange(Sender: TObject);
     procedure vtEditPersonnesVTEditChange(Sender: TObject);
     procedure OnEditAuteurs(Sender: TObject);
-    procedure btnScriptClick(Sender: TObject);
   private
     { Déclarations privées }
     FAlbum, FAlbumImport: TAlbumFull;
@@ -399,18 +397,6 @@ begin
   end;
 end;
 
-procedure TfrmEditAchatAlbum.btnScriptClick(Sender: TObject);
-begin
-  FreeAndNil(FAlbumImport); // si on a annulé la précédente maj par script, l'objet n'avait pas été détruit
-  FAlbumImport := TDaoAlbumFull.getInstance;
-  if FAlbum.TitreAlbum <> '' then
-    FAlbumImport.DefaultSearch := FormatTitre(FAlbum.TitreAlbum)
-  else
-    FAlbumImport.DefaultSearch := FormatTitre(FAlbum.Serie.TitreSerie);
-  FAlbumImport.FusionneEditions := False;
-  Historique.AddWaiting(fcScripts, @ImportScript, Self, nil, FAlbumImport);
-end;
-
 procedure TfrmEditAchatAlbum.btScenaristeClick(Sender: TObject);
 begin
   if IsEqualGUID(vtEditPersonnes.CurrentValue, GUID_NULL) then
@@ -461,7 +447,6 @@ begin
   pnAlbumExistant.Visible := rbAlbumExistant.Checked;
 
   pnNouvelAlbum.Visible := rbNouvelAlbum.Checked;
-  btnScript.Visible := rbNouvelAlbum.Checked;
 end;
 
 procedure TfrmEditAchatAlbum.lvDessinateursData(Sender: TObject; Item: TListItem);

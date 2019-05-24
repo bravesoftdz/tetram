@@ -153,9 +153,6 @@ type
     property SensLecture: ROption read FSensLecture write FSensLecture;
     property Notation: Integer read FNotation write FNotation;
     property Univers: TObjectList<TUniversLite> read FUnivers;
-
-    // pour rétrocompatibilité pour les scripts
-    property Titre: RAutoTrimString read FTitreSerie write SetTitreSerie;
   end;
 
   TAuteurFull = class(TObjetFull)
@@ -317,9 +314,6 @@ type
     property Notation: Integer read FNotation write FNotation;
     property Univers: TObjectList<TUniversLite> read FUnivers;
     property UniversFull: TList<TUniversLite> read FUniversFull;
-
-    // pour rétrocompatibilité pour les scripts
-    property Titre: string read GetTitreAlbum write SetTitreAlbum;
   end;
 
   TParaBDFull = class(TObjetFull)

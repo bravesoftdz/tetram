@@ -252,9 +252,6 @@ $(PreBuildEvent)]]></PreBuildEvent>
         <DCCReference Include="UfrmEntretien.pas">
             <Form>frmEntretien</Form>
         </DCCReference>
-        <DCCReference Include="Gestion\UfrmExportation.pas">
-            <Form>frmExportation</Form>
-        </DCCReference>
         <DCCReference Include="Consultation\UfrmPrevisionsSorties.pas">
             <Form>frmPrevisionsSorties</Form>
         </DCCReference>
@@ -402,28 +399,13 @@ $(PreBuildEvent)]]></PreBuildEvent>
         <DCCReference Include="Entities\BDTK.Entities.Dao.Stats.pas"/>
         <DCCReference Include="Entities\BDTK.Entities.Search.pas"/>
         <DCCReference Include="Entities\BDTK.Entities.Stats.pas"/>
-        <DCCReference Include="Entities\LoadCompletImport.pas"/>
-        <DCCReference Include="..\Commun\Entities\BD.Entities.Utils.Deserializer.pas"/>
         <DCCReference Include="..\Commun\Entities\BD.Entities.Full.pas"/>
         <DCCReference Include="..\Commun\Entities\BD.Entities.Lite.pas"/>
-        <DCCReference Include="..\Commun\Entities\BD.Entities.Utils.Serializer.pas"/>
-        <DCCReference Include="..\Commun\Utils\BD.Utils.Deserializer.JSON.pas"/>
-        <DCCReference Include="..\Commun\Utils\BD.Utils.Serializer.JSON.pas"/>
         <DCCReference Include="..\Commun\Utils\BD.Utils.RegEx.pas"/>
-        <DCCReference Include="..\Commun\Scripts\BD.Scripts.pas"/>
-        <DCCReference Include="Scripts\UfrmValidationImport.pas">
-            <Form>frmValidationImport</Form>
-        </DCCReference>
         <DCCReference Include="..\Commun\Entities\BD.Entities.Common.pas"/>
         <DCCReference Include="..\Commun\Entities\BD.Entities.Factory.Common.pas"/>
         <DCCReference Include="..\Commun\Entities\BD.Entities.Dao.Lambda.pas"/>
         <DCCReference Include="Entities\BDTK.Entities.Dao.Lambda.pas"/>
-        <DCCReference Include="Scripts\UfrmChoixScript.pas">
-            <Form>frmChoixScript</Form>
-        </DCCReference>
-        <DCCReference Include="..\Commun\Scripts\BD.Scripts.Forms.UserSetting.pas">
-            <Form>frmScriptOption</Form>
-        </DCCReference>
         <DCCReference Include="..\Commun\Utils\BD.Utils.Net.ICS.pas"/>
         <DCCReference Include="Web\BDTK.Web.Forms.Synchronize.pas">
             <Form>frmSynchroniser</Form>
@@ -654,6 +636,12 @@ $(PreBuildEvent)]]></PreBuildEvent>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
+                <DeployFile LocalName="..\Commun\Resources\ISBNRanges.xml" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win64">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployFile LocalName="Updates\BDTK.Updates.v2_1_1_8-1.sql" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Win64">
                         <RemoteDir>.\</RemoteDir>
@@ -661,12 +649,6 @@ $(PreBuildEvent)]]></PreBuildEvent>
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="..\Commun\Resources\unknown.ico" Configuration="Debug" Class="ProjectFile">
-                    <Platform Name="Win64">
-                        <RemoteDir>.\</RemoteDir>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
-                <DeployFile LocalName="ISBNRanges.xml" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Win64">
                         <RemoteDir>.\</RemoteDir>
                         <Overwrite>true</Overwrite>

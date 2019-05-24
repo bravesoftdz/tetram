@@ -56,8 +56,8 @@ implementation
 uses
   IOUtils, BD.Common, BD.Utils.StrUtils, BD.Strings, BDTK.GUI.DataModules.Search, UIBLib, Divers, IniFiles, BD.Utils.GUIUtils, UHistorique, Math, UIBase, BDTK.Updates, BDTK.GUI.Forms.Main, CheckVersionNet,
   DateUtils, BDTK.Updates.ODS, JumpList, BD.GUI.Forms.Splash, Proc_Gestions, Generics.Collections,
-  BD.GUI.Forms.Verbose, BD.GUI.Forms.Console, BDTK.GUI.Utils, JclCompression, dwsJSON,
-  BD.Utils.Serializer.JSON, BD.Entities.Dao.Lambda, System.TypInfo, BD.Entities.Full,
+  BD.GUI.Forms.Verbose, BD.GUI.Forms.Console, BDTK.GUI.Utils, JclCompression,
+  BD.Entities.Dao.Lambda, System.TypInfo, BD.Entities.Full,
   BD.Entities.Dao.Common;
 
 const
@@ -128,36 +128,6 @@ type
       qry.Transaction.Commit;
     finally
       qry.Free;
-    end;
-  end;
-
-  procedure BuildExternalData;
-  var
-    Archive: TJcl7zCompressArchive;
-    o: TdwsJSONObject;
-    c: TDaoListe.CategorieIndex;
-    s: string;
-  begin
-    o := TdwsJSONObject.Create;
-    try
-      for c := Succ(TDaoListe.CategorieIndex.piNOTUSED) to High(TDaoListe.CategorieIndex) do
-      begin
-        s := GetEnumName(TypeInfo(TDaoListe.CategorieIndex), Integer(c)).Substring(2);
-        TJsonSerializer.WriteValueToJSON('default' + s, TDaoListe.DefaultValues[c], o, []);
-        TJsonSerializer.WriteValueToJSON('list' + s, TDaoListe.Lists[c], o, [], True);
-      end;
-
-      if TFile.Exists(FileScriptsMetadata) then
-        TFile.Delete(FileScriptsMetadata);
-      Archive := TJcl7zCompressArchive.Create(FileScriptsMetadata);
-      try
-        Archive.AddFile('data.json', TStringStream.Create({$IFNDEF DEBUG}o.ToString{$ELSE}o.ToBeautifiedString{$ENDIF}), True);
-        Archive.Compress;
-      finally
-        Archive.Free;
-      end;
-    finally
-      o.Free;
     end;
   end;
 
@@ -250,7 +220,6 @@ begin
   end;
 
   CheckIndex;
-  BuildExternalData;
 
   if (ListFBUpdates.Last.Version > CurrentVersion) and not Force then
     ShowMessage('Mise à jour terminée.');

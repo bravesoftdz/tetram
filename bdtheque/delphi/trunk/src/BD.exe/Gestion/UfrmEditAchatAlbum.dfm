@@ -627,20 +627,4 @@ object frmEditAchatAlbum: TfrmEditAchatAlbum
       end
     end
   end
-  object btnScript: TButton
-    Left = 33
-    Top = 122
-    Width = 69
-    Height = 21
-    Cursor = crHandPoint
-    Hint = 'Valider les modifcations'
-    Caption = 'Script'
-    Default = True
-    DoubleBuffered = True
-    ImageIndex = 12
-    Images = dmPrinc.ShareImageList
-    ParentDoubleBuffered = False
-    TabOrder = 2
-    OnClick = btnScriptClick
-  end
 end

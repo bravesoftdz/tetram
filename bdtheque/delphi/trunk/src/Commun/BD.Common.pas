@@ -19,9 +19,6 @@ var
   TempPath: string = 'TC_BDTK';
   RepImages: string = 'Images\';
   RepWebServer: string = 'WebServer\';
-  RepScripts: string = 'Scripts\';
-  FileScriptsOptions: string = 'Scripts.opt';
-  FileScriptsMetadata: string = '';
   RessourcePic: string = 'BDPic.dll';
   HandleDLLPic: Integer = 0;
   FichierIni: string = 'Bd.ini';
@@ -130,7 +127,6 @@ begin
     FichierIni := TPath.Combine(parentPath, FichierIni);
     DatabasePath := TPath.Combine(parentPath, DatabasePath);
     RepImages := TPath.Combine(parentPath, RepImages);
-    RepScripts := TPath.Combine(parentPath, RepScripts);
     RepWebServer := TPath.Combine(parentPath, RepWebServer);
   end
   else
@@ -138,7 +134,6 @@ begin
     FichierIni := TPath.Combine(AppData, FichierIni);
     DatabasePath := TPath.Combine(AppData, DatabasePath);
     RepImages := TPath.Combine(AppData, RepImages);
-    RepScripts := TPath.Combine(CommonAppData, RepScripts);
     RepWebServer := TPath.Combine(CommonAppData, RepWebServer);
   end;
 end;
@@ -155,11 +150,7 @@ begin
     DatabaseRole := ini.ReadString('Database', 'Role', DatabaseRole);
     DatabaseLibraryName := ini.ReadString('Database', 'LibraryName', DatabaseLibraryName);
     RepImages := IncludeTrailingPathDelimiter(ini.ReadString('DIVERS', 'RepImages', RepImages));
-    RepScripts := IncludeTrailingPathDelimiter(ini.ReadString('DIVERS', 'Scripts', RepScripts));
     RepWebServer := IncludeTrailingPathDelimiter(ini.ReadString('DIVERS', 'WebServer', RepWebServer));
-
-    FileScriptsOptions := TPath.Combine(TPath.GetDirectoryName(DatabasePath), 'Scripts.opt');
-    FileScriptsMetadata := TPath.ChangeExtension(DatabasePath, '.mtd');
 
     TGlobalVar.Utilisateur.Options.VerifMAJDelai := ini.ReadInteger('Divers', 'VerifMAJDelai', 4);
     TGlobalVar.Utilisateur.Options.LastVerifMAJ := ini.ReadInteger('Divers', 'LastVerifMAJ', 0);
