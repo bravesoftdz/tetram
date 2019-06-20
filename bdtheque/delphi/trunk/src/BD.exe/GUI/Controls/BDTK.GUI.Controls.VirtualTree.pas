@@ -68,10 +68,6 @@ type
     procedure SetShowAchat(const Value: Boolean);
     procedure SetShowDateParutionAlbum(const Value: Boolean);
     function GetNodeByValue(const Value: TGUID): PVirtualNode;
-  public
-    constructor Create(AOwner: TComponent); override;
-    destructor Destroy; override;
-    procedure DoGetText(var pEventArgs: TVSTGetCellTextEventArgs); override;
   protected
     procedure DoFreeNode(Node: PVirtualNode); override;
     function DoInitChildren(Node: PVirtualNode; var ChildCount: Cardinal): Boolean; override;
@@ -81,6 +77,20 @@ type
     procedure DoAfterPaint(Canvas: TCanvas); override;
     procedure DoCollapsed(Node: PVirtualNode); override;
     function DoCompareNodeString(Node: PVirtualNode; const Text: string): Boolean; virtual;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+
+    procedure DoGetText(var pEventArgs: TVSTGetCellTextEventArgs); override;
+    function GetNodeBasePointer(Node: PVirtualNode): TBaseLite;
+    function GetFocusedNodeData: TBaseLite;
+    procedure InitializeRep(KeepValue: Boolean = True);
+    procedure ReinitNodes(NodeLevel: Integer = -1);
+    procedure Find(const Text: string; GetNext: Boolean = False);
+    procedure MemorizeIndexNode;
+    procedure FindIndexNode;
+    procedure ClearIndexNode;
+    procedure MakeVisibleValue(const Value: TGUID);
   published
     property Mode: TVirtualMode read FMode write SetMode;
     property CurrentValue: TGUID read GetCurrentValue write SetCurrentValue;
@@ -92,15 +102,6 @@ type
     property ShowAchat: Boolean read FShowAchat write SetShowAchat default True;
     property ShowDateParutionAlbum: Boolean read FShowDateParutionAlbum write SetShowDateParutionAlbum default False;
     property OnCompareNodeString: TOnCompareNodeString read FOnCompareNodeString write FOnCompareNodeString;
-    function GetNodeBasePointer(Node: PVirtualNode): TBaseLite;
-    function GetFocusedNodeData: TBaseLite;
-    procedure InitializeRep(KeepValue: Boolean = True);
-    procedure ReinitNodes(NodeLevel: Integer = -1);
-    procedure Find(const Text: string; GetNext: Boolean = False);
-    procedure MemorizeIndexNode;
-    procedure FindIndexNode;
-    procedure ClearIndexNode;
-    procedure MakeVisibleValue(const Value: TGUID);
   end;
 
 type
@@ -275,11 +276,6 @@ end;
 
 { TVirtualStringTree }
 
-procedure TVirtualStringTree.ClearIndexNode;
-begin
-  FMemorizedIndexNode := False;
-end;
-
 constructor TVirtualStringTree.Create(AOwner: TComponent);
 begin
   inherited;
@@ -291,6 +287,16 @@ begin
   FUseDefaultFiltre := True;
   SetLength(FFindArray, 0);
   FLastFindText := '';
+end;
+
+destructor TVirtualStringTree.Destroy;
+begin
+  inherited;
+end;
+
+procedure TVirtualStringTree.ClearIndexNode;
+begin
+  FMemorizedIndexNode := False;
 end;
 
 procedure TVirtualStringTree.DoAfterPaint(Canvas: TCanvas);
@@ -887,11 +893,6 @@ procedure TVirtualStringTree.SetUseFiltre(const Value: Boolean);
 begin
   FUseFiltre := Value;
   InitializeRep(True);
-end;
-
-destructor TVirtualStringTree.Destroy;
-begin
-  inherited;
 end;
 
 function TVirtualStringTree.DoCompareNodeString(Node: PVirtualNode; const Text: string): Boolean;
