@@ -282,7 +282,7 @@ begin
   if Sender.GetNodeLevel(Node) > 0 then
   begin
     Node.CheckType := ctCheckBox;
-    if Assigned(FSerie) and (FSerie.Genres.IndexOfName(GUIDToString(TGenreLite(RNodeInfo(vtGenres.GetNodeData(Node)^).Detail).ID)) <> -1) then
+    if Assigned(FSerie) and (FSerie.Genres.IndexOfName(GUIDToString(vtGenres.GetNodeBasePointer(Node).ID)) <> -1) then
       Node.CheckState := csCheckedNormal
     else
       Node.CheckState := csUncheckedNormal;
@@ -294,12 +294,10 @@ var
   s: string;
   i: Integer;
   PG: TGenreLite;
-  NodeInfo: PNodeInfo;
 begin
-  NodeInfo := vtGenres.GetNodeData(Node);
-  if Assigned(NodeInfo) and Assigned(NodeInfo.Detail) then
+  PG := TGenreLite(vtGenres.GetNodeBasePointer(Node));
+  if Assigned(PG) then
   begin
-    PG := NodeInfo.Detail as TGenreLite;
     i := FSerie.Genres.IndexOfName(GUIDToString(PG.ID));
     if i = -1 then
       FSerie.Genres.Values[GUIDToString(PG.ID)] := PG.Genre

@@ -19,12 +19,18 @@ type
     sValue: string;
   end;
 
-  PNodeInfo = ^RNodeInfo;
+  TNodeData = class
+  private
+    FList: TList<TBaseLite>;
+    FInitialeInfo: PInitialeInfo;
+    FDetail: TBaseLite;
+  public
+    constructor Create;
+    destructor Destroy; override;
 
-  RNodeInfo = record
-    List: TList<TBaseLite>;
-    InitialeInfo: PInitialeInfo;
-    Detail: TBaseLite;
+    property List: TList<TBaseLite> read FList;
+    property InitialeInfo: PInitialeInfo read FInitialeInfo write FInitialeInfo;
+    property Detail: TBaseLite read FDetail write FDetail;
   end;
 
   // !!! Les valeurs ne doivent pas être changées
@@ -254,6 +260,19 @@ uses
   UIB, BDTK.GUI.DataModules.Main, BD.Utils.StrUtils, Types, UIBLib, Divers, BD.Entities.Common,
   BD.DB.Connection;
 
+{ TNodeData }
+
+constructor TNodeData.Create;
+begin
+  FList := TObjectList<TBaseLite>.Create(True);
+end;
+
+destructor TNodeData.Destroy;
+begin
+  FList.Free;
+  inherited;
+end;
+
 { TVirtualStringTree }
 
 procedure TVirtualStringTree.ClearIndexNode;
@@ -265,7 +284,6 @@ constructor TVirtualStringTree.Create(AOwner: TComponent);
 begin
   inherited;
   TreeOptions.StringOptions := TreeOptions.StringOptions + [toShowStaticText];
-  NodeDataSize := SizeOf(RNodeInfo);
   Indent := 8;
   FShowAchat := True;
   FShowDateParutionAlbum := False;
@@ -306,16 +324,8 @@ begin
 end;
 
 procedure TVirtualStringTree.DoFreeNode(Node: PVirtualNode);
-var
-  NodeInfo: ^RNodeInfo;
 begin
-  if FMode <> vmNone then
-    if (GetNodeLevel(Node) = 0) then
-    begin
-      NodeInfo := GetNodeData(Node);
-      NodeInfo.List.Free;
-      // Finalize(NodeInfo^);
-    end;
+  GetNodeData<TNodeData>(Node).Free;
   inherited;
 end;
 
@@ -330,7 +340,7 @@ begin
       case FMode of
         vmAlbums, vmAlbumsAnnee, vmAlbumsCollection, vmAlbumsEditeur, vmAlbumsGenre, vmAlbumsSerie, vmAchatsAlbumsEditeur, vmAlbumsSerieUnivers:
           begin
-            PA := RNodeInfo(GetNodeData(pEventArgs.Node)^).Detail as TAlbumLite;
+            PA := GetNodeData<TNodeData>(pEventArgs.Node).Detail as TAlbumLite;
             case Header.Columns.Count of
               2:
                 case pEventArgs.Column of
@@ -366,19 +376,19 @@ begin
           end;
         vmPersonnes, vmGenres, vmEditeurs, vmUnivers:
           begin
-            pEventArgs.CellText := RNodeInfo(GetNodeData(pEventArgs.Node)^).Detail.ChaineAffichage(True);
+            pEventArgs.CellText := GetNodeData<TNodeData>(pEventArgs.Node).Detail.ChaineAffichage(True);
           end;
         vmCollections:
           begin
-            pEventArgs.CellText := RNodeInfo(GetNodeData(pEventArgs.Node)^).Detail.ChaineAffichage(FUseFiltre and (Pos('id_editeur', LowerCase(FFiltre)) > 0));
+            pEventArgs.CellText := GetNodeData<TNodeData>(pEventArgs.Node).Detail.ChaineAffichage(FUseFiltre and (Pos('id_editeur', LowerCase(FFiltre)) > 0));
           end;
         vmSeries:
           begin
-            pEventArgs.CellText := RNodeInfo(GetNodeData(pEventArgs.Node)^).Detail.ChaineAffichage(False);
+            pEventArgs.CellText := GetNodeData<TNodeData>(pEventArgs.Node).Detail.ChaineAffichage(False);
           end;
         vmParaBDSerie, vmParaBDSerieUnivers:
           begin
-            pEventArgs.CellText := RNodeInfo(GetNodeData(pEventArgs.Node)^).Detail.ChaineAffichage(False);
+            pEventArgs.CellText := GetNodeData<TNodeData>(pEventArgs.Node).Detail.ChaineAffichage(False);
           end;
       end;
     end
@@ -403,16 +413,14 @@ end;
 
 function TVirtualStringTree.DoInitChildren(Node: PVirtualNode; var ChildCount: Cardinal): Boolean;
 var
-  InfoNode: ^RNodeInfo;
+  List: TList<TBaseLite>;
   q: TManagedQuery;
 begin
   if (FMode <> vmNone) and (GetNodeLevel(Node) = 0) then
   begin
     ChildCount := FCountPointers[Node.Index].Count;
-    InfoNode := GetNodeData(Node);
-    if not Assigned(InfoNode.List) then
-      InfoNode.List := TObjectList<TBaseLite>.Create(True);
-    InfoNode.List.Clear;
+    List := GetNodeData<TNodeData>(Node).List;
+    List.Clear;
     q := dmPrinc.DBConnection.GetQuery;
     try
       q.SQL.Text := 'select ' + vmModeInfos[FMode].FIELDS + ' from ' + vmModeInfos[FMode].Filtre;
@@ -423,9 +431,9 @@ begin
       else if FUseDefaultFiltre and (vmModeInfos[FMode].DEFAULTFILTRE <> '') then
         q.Params.AsString[1] := Copy(vmModeInfos[FMode].DEFAULTFILTRE, 1, q.Params.MaxStrLen[1]);
       q.Open;
-      vmModeInfos[FMode].ClassDao.FillList(InfoNode.List, q);
+      vmModeInfos[FMode].ClassDao.FillList(List, q);
 
-      Assert(InfoNode.List.Count = ChildCount);
+      Assert(Cardinal(List.Count) = ChildCount);
     finally
       q.Free;
     end;
@@ -437,20 +445,25 @@ end;
 
 procedure TVirtualStringTree.DoInitNode(Parent, Node: PVirtualNode; var InitStates: TVirtualNodeInitStates);
 var
-  NodeInfo: ^RNodeInfo;
+  NodeData: TNodeData;
 begin
-  NodeInfo := GetNodeData(Node);
+  NodeData := GetNodeData<TNodeData>(Node);
+  if not Assigned(NodeData) then
+  begin
+    NodeData := TNodeData.Create;
+    SetNodeData<TNodeData>(Node, NodeData);
+  end;
+
   if FMode <> vmNone then
     if GetNodeLevel(Node) > 0 then
     begin
-      NodeInfo.Detail := RNodeInfo(GetNodeData(Parent)^).List[Node.Index];
+      NodeData.Detail := GetNodeData<TNodeData>(Parent).List[Node.Index];
       InitStates := InitStates - [ivsHasChildren];
     end
     else
     begin
-      FreeAndNil(NodeInfo.List);
-      NodeInfo.InitialeInfo := @FCountPointers[Node.Index];
-      if LongBool(FCountPointers[Node.Index].Count) then
+      NodeData.InitialeInfo := @FCountPointers[Node.Index];
+      if FCountPointers[Node.Index].Count > 0 then
         InitStates := InitStates + [ivsHasChildren]
       else
         InitStates := InitStates + [ivsDisabled];
@@ -460,9 +473,9 @@ end;
 
 procedure TVirtualStringTree.DoPaintText(Node: PVirtualNode; const Canvas: TCanvas; Column: TColumnIndex; TextType: TVSTTextType);
 var
-  InfoNode: ^RNodeInfo;
+  InfoData: TNodeData;
 begin
-  InfoNode := GetNodeData(Node);
+  InfoData := GetNodeData<TNodeData>(Node);
   if (FMode <> vmNone) and (TextType = ttNormal) then
     if (GetNodeLevel(Node) = 0) then
     begin
@@ -472,10 +485,10 @@ begin
     else
       case FMode of
         vmAlbums, vmAlbumsAnnee, vmAlbumsCollection, vmAlbumsEditeur, vmAlbumsGenre, vmAlbumsSerie, vmAchatsAlbumsEditeur, vmAlbumsSerieUnivers:
-          if FShowAchat and TAlbumLite(InfoNode.Detail).Achat then
+          if FShowAchat and TAlbumLite(InfoData.Detail).Achat then
             Canvas.Font.Style := Canvas.Font.Style + [fsItalic];
         vmParaBDSerie, vmParaBDSerieUnivers:
-          if FShowAchat and TParaBDLite(InfoNode.Detail).Achat then
+          if FShowAchat and TParaBDLite(InfoData.Detail).Achat then
             Canvas.Font.Style := Canvas.Font.Style + [fsItalic];
       end;
   inherited;
@@ -608,7 +621,7 @@ begin
   begin
     Node := GetFirstSelected;
     if GetNodeLevel(Node) > 0 then
-      Result := RNodeInfo(GetNodeData(Node)^).Detail.ID;
+      Result := GetNodeData<TNodeData>(Node).Detail.ID;
   end;
 end;
 
@@ -644,7 +657,7 @@ function TVirtualStringTree.GetNodeBasePointer(Node: PVirtualNode): TBaseLite;
 begin
   Result := nil;
   if GetNodeLevel(Node) > 0 then
-    Result := RNodeInfo(GetNodeData(Node)^).Detail;
+    Result := GetNodeData<TNodeData>(Node).Detail;
 end;
 
 function TVirtualStringTree.GetNodeByValue(const Value: TGUID): PVirtualNode;
@@ -690,7 +703,7 @@ begin
         InitNode(Node);
         InitChildren(Node);
         Result := Node.FirstChild;
-        while Assigned(Result) and InitNode(Result) and (not IsEqualGUID(RNodeInfo(GetNodeData(Result)^).Detail.ID, Value)) do
+        while Assigned(Result) and InitNode(Result) and (not IsEqualGUID(GetNodeData<TNodeData>(Result).Detail.ID, Value)) do
           Result := Result.NextSibling;
       end;
     finally
