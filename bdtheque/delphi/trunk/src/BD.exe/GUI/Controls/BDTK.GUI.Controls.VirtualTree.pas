@@ -339,6 +339,7 @@ procedure TVirtualStringTree.DoGetText(var pEventArgs: TVSTGetCellTextEventArgs)
 var
   PA: TAlbumLite;
 begin
+  inherited;
   pEventArgs.CellText := '';
   if FMode <> vmNone then
     if GetNodeLevel(pEventArgs.Node) > 0 then
@@ -414,7 +415,6 @@ begin
         AjoutString(pEventArgs.StaticText, NonZero(IntToStr(FCountPointers[pEventArgs.Node.Index].Count)), ' ', '(', ')');
       end;
     end;
-  inherited;
 end;
 
 function TVirtualStringTree.DoInitChildren(Node: PVirtualNode; var ChildCount: Cardinal): Boolean;
