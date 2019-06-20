@@ -306,7 +306,7 @@ end;
 
 procedure TVirtualStringTree.DoFreeNode(Node: PVirtualNode);
 begin
-  if FMode = vmNone then
+  if FMode <> vmNone then
     GetNodeData<TNodeData>(Node).Free;
   inherited;
 end;
