@@ -5,7 +5,8 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, Dialogs, BDTK.Entities.Stats, VirtualTrees, BDTK.GUI.Controls.VirtualTree, ToolWin,
   BDTK.GUI.Utils, StdCtrls, ExtCtrls, Menus, ActnList, Buttons, VDTButton, BD.GUI.Forms, StrUtils,
-  EditLabeled, PngSpeedButton, System.Actions;
+  EditLabeled, PngSpeedButton, System.Actions, Proc_Gestions,
+  BD.Entities.Full;
 
 type
   TfrmPrevisionsSorties = class(TBdtForm, IImpressionApercu)
@@ -21,6 +22,14 @@ type
     Imprimer1: TMenuItem;
     edSearch: TEditLabeled;
     btNext: TVDTButton;
+    PopupMenu1: TPopupMenu;
+    SeriePlusSuivie: TAction;
+    SerieTerminee: TAction;
+    EditSerie: TAction;
+    Neplussurveillerlessorties1: TMenuItem;
+    Srietermine1: TMenuItem;
+    N1: TMenuItem;
+    Modifier1: TMenuItem;
     procedure vstPrevisionsSortiesGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: string);
     procedure FormDestroy(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -33,6 +42,11 @@ type
     procedure edSearchChange(Sender: TObject);
     procedure edSearchKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure vstPrevisionsSortiesDblClick(Sender: TObject);
+    procedure vstPrevisionsSortiesGetPopupMenu(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; const P: TPoint; var AskParent: Boolean; var PopupMenu: TPopupMenu);
+    procedure SeriePlusSuivieExecute(Sender: TObject);
+    procedure SerieTermineeExecute(Sender: TObject);
+    procedure EditSerieExecute(Sender: TObject);
+    procedure vstPrevisionsSortiesPaintText(Sender: TBaseVirtualTree; const TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType);
   private
     procedure ImpressionExecute(Sender: TObject);
     procedure ApercuExecute(Sender: TObject);
@@ -40,6 +54,7 @@ type
     function ApercuUpdate: Boolean;
     procedure LoadListe;
     procedure OnCompareNodeString(Sender: TBaseVirtualTree; Node: PVirtualNode; const Text: string; var Concorde: Boolean);
+    procedure EditCurrentSeries(ACallback: TProc<TSerieFull>);
   public
     Liste: TPrevisionsSorties;
   end;
@@ -47,7 +62,8 @@ type
 implementation
 
 uses Impression, DateUtils, IniFiles, BD.Common, Divers, BD.Entities.Lite, BD.Utils.StrUtils,
-  UHistorique, BD.Utils.GUIUtils, BD.Entities.Common;
+  UHistorique, BD.Utils.GUIUtils, BD.Entities.Common, BDTK.Entities.Dao.Full,
+  BD.Entities.Types;
 
 {$R *.dfm}
 
@@ -109,6 +125,23 @@ begin
       end;
     end;
   end;
+end;
+
+procedure TfrmPrevisionsSorties.vstPrevisionsSortiesPaintText(Sender: TBaseVirtualTree; const TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType);
+var
+  NodeInfo: ^RNodeInfo;
+begin
+  inherited;
+  NodeInfo := Sender.GetNodeData(Node);
+  if Assigned(NodeInfo) and NodeInfo^.PSerie.Terminee.AsBoolean[False] then
+    TargetCanvas.Font.Style := TargetCanvas.Font.Style + [fsStrikeOut];
+end;
+
+procedure TfrmPrevisionsSorties.vstPrevisionsSortiesGetPopupMenu(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; const P: TPoint; var AskParent: Boolean; var PopupMenu: TPopupMenu);
+begin
+  inherited;
+  if vstPrevisionsSorties.GetFirstSelected <> nil then
+    PopupMenu := PopupMenu1;
 end;
 
 procedure TfrmPrevisionsSorties.vstPrevisionsSortiesGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: string);
@@ -238,6 +271,15 @@ begin
   LoadListe;
 end;
 
+procedure TfrmPrevisionsSorties.EditSerieExecute(Sender: TObject);
+var
+  NodeInfo: ^RNodeInfo;
+begin
+  NodeInfo := vstPrevisionsSorties.GetNodeData(vstPrevisionsSorties.FocusedNode);
+  if ModifierSeries2(NodeInfo^.PSerie.ID) then
+    LoadListe;
+end;
+
 procedure TfrmPrevisionsSorties.vstPrevisionsSortiesFreeNode(Sender: TBaseVirtualTree; Node: PVirtualNode);
 var
   NodeInfo: ^RNodeInfo;
@@ -263,6 +305,44 @@ begin
   NodeInfo := Sender.GetNodeData(Node);
   if Assigned(NodeInfo) and Assigned(NodeInfo.PSerie) then
     Concorde := Pos(Text, UpperCase(SansAccents(FormatTitre(NodeInfo.PSerie.TitreSerie)))) > 0;
+end;
+
+procedure TfrmPrevisionsSorties.EditCurrentSeries(ACallback: TProc<TSerieFull>);
+var
+  NodeInfo: ^RNodeInfo;
+  Serie: TSerieFull;
+  Node: PVirtualNode;
+begin
+  for Node in vstPrevisionsSorties.SelectedNodes do
+  begin
+    NodeInfo := vstPrevisionsSorties.GetNodeData(Node);
+    Serie := TDaoSerieFull.getInstance(NodeInfo.PSerie.ID);
+    try
+      ACallback(Serie);
+      TDaoSerieFull.SaveToDatabase(Serie);
+    finally
+      Serie.Free;
+    end;
+  end;
+  LoadListe;
+end;
+
+procedure TfrmPrevisionsSorties.SeriePlusSuivieExecute(Sender: TObject);
+begin
+  EditCurrentSeries(
+    procedure(ASerie: TSerieFull)
+    begin
+      ASerie.SuivreSorties := False;
+    end);
+end;
+
+procedure TfrmPrevisionsSorties.SerieTermineeExecute(Sender: TObject);
+begin
+  EditCurrentSeries(
+    procedure(ASerie: TSerieFull)
+    begin
+      ASerie.Terminee := True;
+    end);
 end;
 
 procedure TfrmPrevisionsSorties.vstPrevisionsSortiesDblClick(Sender: TObject);

@@ -40,10 +40,13 @@ object frmPrevisionsSorties: TfrmPrevisionsSorties
     HotCursor = crHandPoint
     Images = frmFond.ImageList1
     TabOrder = 0
+    TreeOptions.SelectionOptions = [toFullRowSelect, toMultiSelect, toRightClickSelect]
     OnAfterItemPaint = vstPrevisionsSortiesAfterItemPaint
     OnDblClick = vstPrevisionsSortiesDblClick
     OnFreeNode = vstPrevisionsSortiesFreeNode
     OnGetText = vstPrevisionsSortiesGetText
+    OnPaintText = vstPrevisionsSortiesPaintText
+    OnGetPopupMenu = vstPrevisionsSortiesGetPopupMenu
     OnInitNode = vstPrevisionsSortiesInitNode
     OnResize = vstPrevisionsSortiesResize
     Columns = <
@@ -74,6 +77,7 @@ object frmPrevisionsSorties: TfrmPrevisionsSorties
       Width = 20
       Height = 20
       Caption = '...'
+      Flat = False
       OnClick = edSearchChange
     end
     object CheckBox1: TCheckBox
@@ -116,6 +120,21 @@ object frmPrevisionsSorties: TfrmPrevisionsSorties
       ImageIndex = 3
       OnExecute = ListeApercuExecute
     end
+    object SeriePlusSuivie: TAction
+      Category = 'PopupMenu'
+      Caption = 'Ne plus surveiller les sorties'
+      OnExecute = SeriePlusSuivieExecute
+    end
+    object SerieTerminee: TAction
+      Category = 'PopupMenu'
+      Caption = 'S'#233'rie termin'#233'e'
+      OnExecute = SerieTermineeExecute
+    end
+    object EditSerie: TAction
+      Category = 'PopupMenu'
+      Caption = 'Modifier...'
+      OnExecute = EditSerieExecute
+    end
   end
   object MainMenu1: TMainMenu
     Left = 152
@@ -128,6 +147,22 @@ object frmPrevisionsSorties: TfrmPrevisionsSorties
       object Imprimer1: TMenuItem
         Action = ListeImprime
       end
+    end
+  end
+  object PopupMenu1: TPopupMenu
+    Left = 304
+    Top = 80
+    object Neplussurveillerlessorties1: TMenuItem
+      Action = SeriePlusSuivie
+    end
+    object Srietermine1: TMenuItem
+      Action = SerieTerminee
+    end
+    object N1: TMenuItem
+      Caption = '-'
+    end
+    object Modifier1: TMenuItem
+      Action = EditSerie
     end
   end
 end

@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, SysUtils, DB, Classes, ComCtrls, StdCtrls, BD.Utils.StrUtils, BD.Entities.Metadata, SyncObjs, Generics.Collections,
-  BD.Entities.Common;
+  BD.Entities.Common, BD.Entities.Types;
 
 type
   TBaseLiteClass = class of TBaseLite;
@@ -154,6 +154,7 @@ type
     TitreSerie: string { [150] };
     Editeur: TEditeurLite;
     Collection: TCollectionLite;
+    Terminee: RTriStateValue;
 
     procedure Assign(Source: TPersistent); override;
 

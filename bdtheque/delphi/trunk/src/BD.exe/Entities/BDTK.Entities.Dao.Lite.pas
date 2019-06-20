@@ -213,7 +213,7 @@ implementation
 
 uses
   BD.Utils.StrUtils, uiblib, BD.Entities.Factory.Lite, BDTK.GUI.Utils,
-  BD.Common, BD.Utils.GUIUtils;
+  BD.Common, BD.Utils.GUIUtils, BD.Entities.Types;
 
 { TDaoLite<T> }
 
@@ -979,6 +979,11 @@ begin
     TDaoCollectionLite.Fill(Entity.Collection, Query);
   except
     Entity.Collection.Clear;
+  end;
+  try
+    Entity.Terminee := RTriStateValue.FromInteger(Query.Fields.ByNameAsInteger['terminee']);
+  except
+    Entity.Terminee := RTriStateValue.Default;
   end;
 end;
 
