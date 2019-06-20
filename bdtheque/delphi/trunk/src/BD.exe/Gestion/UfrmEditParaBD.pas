@@ -388,7 +388,7 @@ begin
     if MatchesMasks(Filename, GraphicMasks) then
     begin
       PP := TFactoryPhotoLite.getInstance;
-      FParaBD.Photos.Add(PP);
+      FParaBD.Photos.Insert(AAtPosition, PP);
       PP.ID := GUID_NULL;
       PP.OldNom := Filename;
       PP.NewNom := PP.OldNom;
