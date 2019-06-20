@@ -791,6 +791,8 @@ object frmEditParaBD: TfrmEditParaBD
       OnChange = vstImagesChange
       OnChecked = vstImagesChecked
       OnDblClick = vstImagesDblClick
+      OnDragOver = vstImagesDragOver
+      OnDragDrop = vstImagesDragDrop
       OnEditing = vstImagesEditing
       OnGetText = vstImagesGetText
       OnPaintText = vstImagesPaintText
@@ -802,7 +804,7 @@ object frmEditParaBD: TfrmEditParaBD
       Columns = <
         item
           Position = 1
-          Width = 433
+          Width = 429
         end
         item
           Position = 0

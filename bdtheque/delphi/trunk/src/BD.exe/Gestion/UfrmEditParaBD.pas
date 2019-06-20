@@ -5,7 +5,8 @@ interface
 uses
   Windows, Messages, SysUtils, System.Types, Variants, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, EditLabeled, VirtualTrees, ComCtrls, VDTButton,
   BDTK.GUI.Controls.VirtualTree, ComboCheck, ExtCtrls, Buttons, BDTK.GUI.Frames.QuickSearch, Vcl.ExtDlgs, BD.Entities.Full,
-  BD.GUI.Frames.Buttons, BD.GUI.Forms, PngSpeedButton, UframVTEdit, Vcl.Menus;
+  BD.GUI.Frames.Buttons, BD.GUI.Forms, PngSpeedButton, UframVTEdit, Vcl.Menus,
+  BD.Utils.IOUtils, ActiveX;
 
 type
   TfrmEditParaBD = class(TbdtForm)
@@ -96,6 +97,8 @@ type
     procedure pmChoixCategoriePopup(Sender: TObject);
     procedure miChangeCategorieImageClick(Sender: TObject);
     procedure imgVisuClick(Sender: TObject);
+    procedure vstImagesDragOver(Sender: TBaseVirtualTree; Source: TObject; Shift: TShiftState; State: TDragState; Pt: TPoint; Mode: TDropMode; var Effect: Integer; var Accept: Boolean);
+    procedure vstImagesDragDrop(Sender: TBaseVirtualTree; Source: TObject; DataObject: IDataObject; Formats: TFormatArray; Shift: TShiftState; Pt: TPoint; var Effect: Integer; Mode: TDropMode);
   private
     FCreation: Boolean;
     FisAchat: Boolean;
@@ -104,6 +107,7 @@ type
     procedure SetParaBD(const Value: TParaBDFull);
     function GetID_ParaBD: TGUID;
     procedure VisuClose(Sender: TObject);
+    procedure AddImageFiles(AImageList: TStrings; AAtPosition: Integer = -1);
     { Déclarations privées }
   public
     { Déclarations publiques }
@@ -121,7 +125,7 @@ type
 implementation
 
 uses
-  BD.Utils.StrUtils, BD.Common, BD.Strings, BD.Utils.GUIUtils, BDTK.GUI.Utils, jpeg, Proc_Gestions, BD.Entities.Lite, Divers, UHistorique,
+  Math, BD.Utils.StrUtils, BD.Common, BD.Strings, BD.Utils.GUIUtils, BDTK.GUI.Utils, jpeg, Proc_Gestions, BD.Entities.Lite, Divers, UHistorique,
   BD.Entities.Metadata, BDTK.Entities.Dao.Lite, BDTK.Entities.Dao.Full, BD.Entities.Common,
   BD.Entities.Factory.Lite, BD.Entities.Dao.Lambda, BD.Entities.Types;
 
@@ -367,35 +371,42 @@ begin
   vtEditUniversVTEditChange(vtEditUnivers.VTEdit);
 end;
 
-procedure TfrmEditParaBD.ChoixImageClick(Sender: TObject);
+procedure TfrmEditParaBD.AddImageFiles(AImageList: TStrings; AAtPosition: Integer);
 var
-  i: Integer;
+  GraphicMasks: TArray<string>;
+  Filename: string;
   PP: TPhotoLite;
 begin
-  with ChoixImageDialog do
-  begin
-    Options := Options + [ofAllowMultiSelect];
-    Filter := GraphicFilter(TGraphic);
-    InitialDir := RepImages;
-    FileName := '';
-    if Execute then
+  GraphicMasks := SplitMasks(GraphicFilter(TGraphic));
+
+  if not InRange(AAtPosition, 0, Pred(FParaBD.Photos.Count)) then
+    AAtPosition := FParaBD.Photos.Count;
+
+  vstImages.BeginUpdate;
+  try
+    for Filename in AImageList do
+    if MatchesMasks(Filename, GraphicMasks) then
     begin
-      vstImages.BeginUpdate;
-      try
-        for i := 0 to Files.Count - 1 do
-        begin
-          PP := TFactoryPhotoLite.getInstance;
-          FParaBD.Photos.Add(PP);
-          PP.ID := GUID_NULL;
-          PP.OldNom := Files[i];
-          PP.NewNom := PP.OldNom;
-        end;
-      finally
-        vstImages.RootNodeCount := FParaBD.Photos.Count;
-        vstImages.EndUpdate;
-      end;
+      PP := TFactoryPhotoLite.getInstance;
+      FParaBD.Photos.Add(PP);
+      PP.ID := GUID_NULL;
+      PP.OldNom := Filename;
+      PP.NewNom := PP.OldNom;
     end;
+  finally
+    vstImages.RootNodeCount := FParaBD.Photos.Count;
+    vstImages.EndUpdate;
   end;
+end;
+
+procedure TfrmEditParaBD.ChoixImageClick(Sender: TObject);
+begin
+  ChoixImageDialog.Options := ChoixImageDialog.Options + [ofAllowMultiSelect];
+  ChoixImageDialog.Filter := GraphicFilter(TGraphic);
+  ChoixImageDialog.InitialDir := RepImages;
+  ChoixImageDialog.FileName := '';
+  if ChoixImageDialog.Execute then
+    AddImageFiles(ChoixImageDialog.Files);
 end;
 
 procedure TfrmEditParaBD.vstImagesChange(Sender: TBaseVirtualTree; Node: PVirtualNode);
@@ -456,6 +467,42 @@ begin
         vstImages.InvalidateNode(vstImages.FocusedNode);
       end;
     end;
+end;
+
+procedure TfrmEditParaBD.vstImagesDragDrop(Sender: TBaseVirtualTree; Source: TObject; DataObject: IDataObject; Formats: TFormatArray; Shift: TShiftState; Pt: TPoint; var Effect: Integer; Mode: TDropMode);
+var
+  Fmt: Word;
+  FilesList: TStringList;
+  Position: Integer;
+begin
+  inherited;
+  case Mode of
+    dmOnNode, dmBelow:
+      Position := vstImages.DropTargetNode.Index + 1;
+    dmAbove:
+      Position := vstImages.DropTargetNode.Index;
+    else
+      Position := -1;
+  end;
+
+  for Fmt in Formats do
+    if Fmt = CF_HDROP then
+    begin
+      FilesList := TStringList.Create;
+      try
+        GetFileListFromExplorerDropObj(DataObject, FilesList);
+        AddImageFiles(FilesList, Position);
+      finally
+        FilesList.Free;
+      end;
+      Exit;
+    end;
+end;
+
+procedure TfrmEditParaBD.vstImagesDragOver(Sender: TBaseVirtualTree; Source: TObject; Shift: TShiftState; State: TDragState; Pt: TPoint; Mode: TDropMode; var Effect: Integer; var Accept: Boolean);
+begin
+  inherited;
+  Accept := Source = nil; // means from external source ??
 end;
 
 procedure TfrmEditParaBD.vstImagesEditing(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; var Allowed: Boolean);

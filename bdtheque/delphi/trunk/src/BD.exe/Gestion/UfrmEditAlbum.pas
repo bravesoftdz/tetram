@@ -7,7 +7,7 @@ uses
   VDTButton, ExtDlgs, Mask, ComCtrls, Buttons, VirtualTrees, BDTK.GUI.Controls.VirtualTree, Menus, BD.Entities.Lite, ActnList, BD.Entities.Full, ComboCheck,
   BDTK.GUI.Frames.QuickSearch, BD.GUI.Frames.Buttons, BD.GUI.Forms, Generics.Collections, StrUtils,
   JvExMask, JvToolEdit, BDTK.GUI.Controls.VirtualTreeEdit, BDTK.GUI.Forms.Main, PngSpeedButton,
-  UframVTEdit, System.ImageList;
+  UframVTEdit, System.ImageList, WinAPI.ActiveX, BD.Utils.IOUtils;
 
 type
   TfrmEditAlbum = class(TbdtForm)
@@ -163,6 +163,8 @@ type
     procedure lvUniversKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure btUniversClick(Sender: TObject);
     procedure edISBNPaste(Sender: TObject; var Handled: Boolean);
+    procedure vstImagesDragDrop(Sender: TBaseVirtualTree; Source: TObject; DataObject: IDataObject; Formats: TFormatArray; Shift: TShiftState; Pt: TPoint; var Effect: Integer; Mode: TDropMode);
+    procedure vstImagesDragOver(Sender: TBaseVirtualTree; Source: TObject; Shift: TShiftState; State: TDragState; Pt: TPoint; Mode: TDropMode; var Effect: Integer; var Accept: Boolean);
   strict private
     FAlbum: TAlbumFull;
     FCurrentEditionComplete: TEditionFull;
@@ -181,6 +183,7 @@ type
   private
     FAlbumImport: TAlbumFull;
     procedure SaveToObject;
+    procedure AddImageFiles(AImageList: TStrings; AAtPosition: Integer = -1);
   public
     { Déclarations publiques }
     property isCreation: Boolean read GetCreation;
@@ -192,7 +195,7 @@ type
 implementation
 
 uses
-  BD.Utils.StrUtils, BD.Common, BD.Strings, Divers, Proc_Gestions, BD.Utils.GUIUtils, BDTK.GUI.Utils, Types, jpeg, DateUtils,
+  Math, BD.Utils.StrUtils, BD.Common, BD.Strings, Divers, Proc_Gestions, BD.Utils.GUIUtils, BDTK.GUI.Utils, Types, jpeg, DateUtils,
   UHistorique, BD.Entities.Metadata, BDTK.Entities.Dao.Lite, BDTK.Entities.Dao.Full, BD.Entities.Common, BD.Entities.Types,
   BD.Entities.Factory.Lite, BD.Entities.Factory.Full, BD.Entities.Dao.Lambda, Clipbrd;
 
@@ -255,6 +258,8 @@ begin
     mi.OnClick := miChangeCategorieImageClick;
     pmChoixCategorie.Items.Add(mi);
   end;
+
+//  DragAcceptFiles(vstImages.Handle, True);
 end;
 
 procedure TfrmEditAlbum.SetAlbum(Value: TAlbumFull);
@@ -583,40 +588,48 @@ begin
   Caption := 'Saisie d''album - ' + FormatTitre(edTitre.Text);
 end;
 
-procedure TfrmEditAlbum.ChoixImageClick(Sender: TObject);
+procedure TfrmEditAlbum.AddImageFiles(AImageList: TStrings; AAtPosition: Integer);
 var
-  i: Integer;
+  GraphicMasks: TArray<string>;
+  Filename: string;
   PC: TCouvertureLite;
 begin
-  with ChoixImageDialog do
-  begin
-    Options := Options + [ofAllowMultiSelect];
-    Filter := GraphicFilter(TGraphic);
-    InitialDir := RepImages;
-    FileName := '';
-    if Execute then
+  GraphicMasks := SplitMasks(GraphicFilter(TGraphic));
+
+  if not InRange(AAtPosition, 0, Pred(FCurrentEditionComplete.Couvertures.Count)) then
+    AAtPosition := FCurrentEditionComplete.Couvertures.Count;
+
+  vstImages.BeginUpdate;
+  try
+    for Filename in AImageList do
+    if MatchesMasks(Filename, GraphicMasks) then
     begin
-      vstImages.BeginUpdate;
-      try
-        for i := 0 to Files.Count - 1 do
-        begin
-          PC := TFactoryCouvertureLite.getInstance;
-          FCurrentEditionComplete.Couvertures.Add(PC);
-          PC.ID := GUID_NULL;
-          PC.OldNom := Files[i];
-          PC.NewNom := PC.OldNom;
-          if FCurrentEditionComplete.Couvertures.Count = 1 then
-            PC.Categorie := 600
-          else
-            PC.Categorie := 601;
-          PC.sCategorie := TDaoListe.ListTypesCouverture.Values[IntToStr(PC.Categorie)];
-        end;
-      finally
-        vstImages.RootNodeCount := FCurrentEditionComplete.Couvertures.Count;
-        vstImages.EndUpdate;
-      end;
+      PC := TFactoryCouvertureLite.getInstance;
+      FCurrentEditionComplete.Couvertures.Insert(AAtPosition, PC);
+      Inc(AAtPosition);
+      PC.ID := GUID_NULL;
+      PC.OldNom := Filename;
+      PC.NewNom := PC.OldNom;
+      if FCurrentEditionComplete.Couvertures.Count = 1 then
+        PC.Categorie := 600
+      else
+        PC.Categorie := 601;
+      PC.sCategorie := TDaoListe.ListTypesCouverture.Values[IntToStr(PC.Categorie)];
     end;
+  finally
+    vstImages.RootNodeCount := FCurrentEditionComplete.Couvertures.Count;
+    vstImages.EndUpdate;
   end;
+end;
+
+procedure TfrmEditAlbum.ChoixImageClick(Sender: TObject);
+begin
+  ChoixImageDialog.Options := ChoixImageDialog.Options + [ofAllowMultiSelect];
+  ChoixImageDialog.Filter := GraphicFilter(TGraphic);
+  ChoixImageDialog.InitialDir := RepImages;
+  ChoixImageDialog.FileName := '';
+  if ChoixImageDialog.Execute then
+    AddImageFiles(ChoixImageDialog.Files);
 end;
 
 procedure TfrmEditAlbum.vstImagesChange(Sender: TBaseVirtualTree; Node: PVirtualNode);
@@ -738,8 +751,7 @@ begin
   end;
 end;
 
-procedure TfrmEditAlbum.vstImagesPaintText(Sender: TBaseVirtualTree; const TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex;
-  TextType: TVSTTextType);
+procedure TfrmEditAlbum.vstImagesPaintText(Sender: TBaseVirtualTree; const TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType);
 var
   PC: TCouvertureLite;
 begin
@@ -1221,6 +1233,42 @@ begin
         vstImages.InvalidateNode(vstImages.FocusedNode);
       end;
     end;
+end;
+
+procedure TfrmEditAlbum.vstImagesDragDrop(Sender: TBaseVirtualTree; Source: TObject; DataObject: IDataObject; Formats: TFormatArray; Shift: TShiftState; Pt: TPoint; var Effect: Integer; Mode: TDropMode);
+var
+  Fmt: Word;
+  FilesList: TStringList;
+  Position: Integer;
+begin
+  inherited;
+  case Mode of
+    dmOnNode, dmBelow:
+      Position := vstImages.DropTargetNode.Index + 1;
+    dmAbove:
+      Position := vstImages.DropTargetNode.Index;
+    else
+      Position := -1;
+  end;
+
+  for Fmt in Formats do
+    if Fmt = CF_HDROP then
+    begin
+      FilesList := TStringList.Create;
+      try
+        GetFileListFromExplorerDropObj(DataObject, FilesList);
+        AddImageFiles(FilesList, Position);
+      finally
+        FilesList.Free;
+      end;
+      Exit;
+    end;
+end;
+
+procedure TfrmEditAlbum.vstImagesDragOver(Sender: TBaseVirtualTree; Source: TObject; Shift: TShiftState; State: TDragState; Pt: TPoint; Mode: TDropMode; var Effect: Integer; var Accept: Boolean);
+begin
+  inherited;
+  Accept := Source = nil; // means from external source ??
 end;
 
 procedure TfrmEditAlbum.cbOffertClick(Sender: TObject);

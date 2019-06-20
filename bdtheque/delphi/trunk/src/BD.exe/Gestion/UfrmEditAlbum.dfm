@@ -1221,6 +1221,8 @@ object frmEditAlbum: TfrmEditAlbum
       OnChange = vstImagesChange
       OnChecked = vstImagesChecked
       OnDblClick = vstImagesDblClick
+      OnDragOver = vstImagesDragOver
+      OnDragDrop = vstImagesDragDrop
       OnEditing = vstImagesEditing
       OnGetText = vstImagesGetText
       OnPaintText = vstImagesPaintText
@@ -1232,7 +1234,7 @@ object frmEditAlbum: TfrmEditAlbum
       Columns = <
         item
           Position = 1
-          Width = 437
+          Width = 433
         end
         item
           Position = 0

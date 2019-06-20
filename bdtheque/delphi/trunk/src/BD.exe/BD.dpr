@@ -172,7 +172,8 @@ uses
   BD.Entities.Dao.Common in '..\Commun\Entities\BD.Entities.Dao.Common.pas',
   BD.GUI.DataModules.Common in '..\Commun\GUI\DataModules\BD.GUI.DataModules.Common.pas' {dmCommon: TDataModule},
   BDTK.GUI.Controls.Spin in 'GUI\Controls\BDTK.GUI.Controls.Spin.pas',
-  BDTK.Updates.v2_2_3_33 in 'Updates\BDTK.Updates.v2_2_3_33.pas';
+  BDTK.Updates.v2_2_3_33 in 'Updates\BDTK.Updates.v2_2_3_33.pas',
+  BD.Utils.IOUtils in '..\Commun\Utils\BD.Utils.IOUtils.pas';
 
 begin
   Application.Title := 'BDthèque';
