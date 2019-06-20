@@ -474,6 +474,7 @@ var
   iCurrent, iFind: TGUID;
   nCurrent, nFind: PVirtualNode;
   i: Integer;
+  Query: TManagedQuery;
 begin
   GetNext := GetNext and SameText(Text, FLastFindText);
   FLastFindText := Text;
@@ -526,45 +527,47 @@ begin
       CurrentValue := iFind;
     end
     else
-      with dmPrinc.DBConnection.GetQuery do
-        try
-          SQL.Text := 'SELECT ' + vmModeInfos[FMode].REFFIELDS + ' FROM ' + vmModeInfos[FMode].TABLESEARCH + ' WHERE ' + vmModeInfos[FMode].FIELDSEARCH +
-            ' LIKE ''%'' || ? || ''%''';
-          if FUseFiltre then
-            SQL.Add('AND ' + FFiltre)
-          else if FUseDefaultFiltre and (vmModeInfos[FMode].DEFAULTFILTRE <> '') then
-            SQL.Add('AND ' + vmModeInfos[FMode].DEFAULTFILTRE);
-          SQL.Add('ORDER BY ' + vmModeInfos[FMode].INITIALEFIELDS + ',');
-          if vmModeInfos[FMode].SEARCHORDER <> '' then
-            SQL.Add(vmModeInfos[FMode].SEARCHORDER + ',');
-          SQL.Add(vmModeInfos[FMode].FIELDSEARCH);
-          Prepare(True);
-          Params.AsString[0] := Copy(UpperCase(SansAccents(Text)), 1, Params.MaxStrLen[0] - 2);
+    begin
+      Query := dmPrinc.DBConnection.GetQuery;
+      try
+        Query.SQL.Text := 'SELECT ' + vmModeInfos[FMode].REFFIELDS + ' FROM ' + vmModeInfos[FMode].TABLESEARCH + ' WHERE ' + vmModeInfos[FMode].FIELDSEARCH +
+          ' LIKE ''%'' || ? || ''%''';
+        if FUseFiltre then
+          Query.SQL.Add('AND ' + FFiltre)
+        else if FUseDefaultFiltre and (vmModeInfos[FMode].DEFAULTFILTRE <> '') then
+          Query.SQL.Add('AND ' + vmModeInfos[FMode].DEFAULTFILTRE);
+        Query.SQL.Add('ORDER BY ' + vmModeInfos[FMode].INITIALEFIELDS + ',');
+        if vmModeInfos[FMode].SEARCHORDER <> '' then
+          Query.SQL.Add(vmModeInfos[FMode].SEARCHORDER + ',');
+        Query.SQL.Add(vmModeInfos[FMode].FIELDSEARCH);
+        Query.Prepare(True);
+        Query.Params.AsString[0] := Copy(UpperCase(SansAccents(Text)), 1, Query.Params.MaxStrLen[0] - 2);
 
-          Open;
-          SetLength(FFindArray, 0);
-          i := 0;
-          while not Eof do
-          begin
-            Inc(i);
-            // pour gagner en rapidité, on alloue par espace de 250 positions
-            if i > Length(FFindArray) then
-              SetLength(FFindArray, i + 250);
-            FFindArray[i - 1] := StringToGUID(FIELDS.AsString[0]);
-            Next;
-          end;
-          // on retire ce qui est alloué en trop
-          SetLength(FFindArray, i + 1);
-          // recopie du permier à la fin pour pouvoir boucler la recherche
-          FFindArray[i] := FFindArray[0];
-
-          if Length(FFindArray) = 0 then
-            CurrentValue := GUID_NULL
-          else
-            CurrentValue := FFindArray[0];
-        finally
-          Free;
+        Query.Open;
+        SetLength(FFindArray, 0);
+        i := 0;
+        while not Query.Eof do
+        begin
+          Inc(i);
+          // pour gagner en rapidité, on alloue par espace de 250 positions
+          if i > Length(FFindArray) then
+            SetLength(FFindArray, i + 250);
+          FFindArray[i - 1] := StringToGUID(Query.Fields.AsString[0]);
+          Query.Next;
         end;
+        // on retire ce qui est alloué en trop
+        SetLength(FFindArray, i + 1);
+        // recopie du permier à la fin pour pouvoir boucler la recherche
+        FFindArray[i] := FFindArray[0];
+
+        if Length(FFindArray) = 0 then
+          CurrentValue := GUID_NULL
+        else
+          CurrentValue := FFindArray[0];
+      finally
+        Query.Free;
+      end;
+    end;
   end;
 end;
 
@@ -641,6 +644,7 @@ var
   Node: PVirtualNode;
   init: Cardinal;
   cs: string;
+  Query: TManagedQuery;
 begin
   Result := nil;
   if IsEqualGUID(Value, GUID_NULL) then
@@ -653,37 +657,38 @@ begin
       DefaultValue := '-1';
   end;
 
-  with dmPrinc.DBConnection.GetQuery do
-    try
-      SQL.Text :=
-        'SELECT coalesce(' + vmModeInfos[FMode].INITIALEVALUE + ', ''' + DefaultValue + ''')' +
-        ' FROM ' + vmModeInfos[FMode].TABLESEARCH +
-        ' WHERE ' + vmModeInfos[FMode].REFFIELDS + ' = ?';
-      Params.AsString[0] := GUIDToString(Value);
-      Open;
-      if Eof then
-        Exit;
-      init := 0;
+  Query := dmPrinc.DBConnection.GetQuery;
+  try
+    Query.SQL.Text :=
+      'SELECT coalesce(' + vmModeInfos[FMode].INITIALEVALUE + ', ''' + DefaultValue + ''')' +
+      ' FROM ' + vmModeInfos[FMode].TABLESEARCH +
+      ' WHERE ' + vmModeInfos[FMode].REFFIELDS + ' = ?';
+    Query.Params.AsString[0] := GUIDToString(Value);
+    Query.Open;
+    if Query.Eof then
+      Exit;
 
-      cs := Trim(FIELDS.AsString[0]);
-      while (Integer(init) < Length(FCountPointers)) and (FCountPointers[init].sValue <> cs) do
-        Inc(init);
+    cs := Trim(Query.Fields.AsString[0]);
+  finally
+    Query.Free;
+  end;
 
-      Node := GetFirst;
-      while Assigned(Node) and (Node.Index <> init) do
-        Node := Node.NextSibling;
-      Result := nil;
-      if Assigned(Node) then
-      begin
-        InitNode(Node);
-        InitChildren(Node);
-        Result := Node.FirstChild;
-        while Assigned(Result) and InitNode(Result) and (not IsEqualGUID(GetNodeBasePointer(Result).ID, Value)) do
-          Result := Result.NextSibling;
-      end;
-    finally
-      Free;
-    end;
+  init := 0;
+  while (Integer(init) < Length(FCountPointers)) and (FCountPointers[init].sValue <> cs) do
+    Inc(init);
+
+  Node := GetFirst;
+  while Assigned(Node) and (Node.Index <> init) do
+    Node := Node.NextSibling;
+  Result := nil;
+  if Assigned(Node) then
+  begin
+    InitNode(Node);
+    InitChildren(Node);
+    Result := Node.FirstChild;
+    while Assigned(Result) and InitNode(Result) and (not IsEqualGUID(GetNodeBasePointer(Result).ID, Value)) do
+      Result := Result.NextSibling;
+  end;
 end;
 
 function TVirtualStringTree.GetFocusedNodeData: TBaseLite;
@@ -699,48 +704,49 @@ procedure TVirtualStringTree.InitializeRep(KeepValue: Boolean = True);
 var
   i: Integer;
   iCurrent: TGUID;
+  Query: TManagedQuery;
 begin
   iCurrent := CurrentValue;
   Clear;
   if FMode <> vmNone then
-    with dmPrinc.DBConnection.GetQuery do
-    begin
-      BeginUpdate;
-      try
-        SQL.Text := 'SELECT * FROM ' + vmModeInfos[FMode].FILTRECOUNT;
-        Prepare(True);
-        if FUseFiltre then
-          Params.AsString[0] := Copy(FFiltre, 1, Params.MaxStrLen[0])
-        else if FUseDefaultFiltre and (vmModeInfos[FMode].DEFAULTFILTRE <> '') then
-          Params.AsString[0] := Copy(vmModeInfos[FMode].DEFAULTFILTRE, 1, Params.MaxStrLen[0]);
-        Open;
+  begin
+    Query := dmPrinc.DBConnection.GetQuery;
+    BeginUpdate;
+    try
+      Query.SQL.Text := 'SELECT * FROM ' + vmModeInfos[FMode].FILTRECOUNT;
+      Query.Prepare(True);
+      if FUseFiltre then
+        Query.Params.AsString[0] := Copy(FFiltre, 1, Query.Params.MaxStrLen[0])
+      else if FUseDefaultFiltre and (vmModeInfos[FMode].DEFAULTFILTRE <> '') then
+        Query.Params.AsString[0] := Copy(vmModeInfos[FMode].DEFAULTFILTRE, 1, Query.Params.MaxStrLen[0]);
+      Query.Open;
 
-        SetLength(FCountPointers, 0);
-        i := 0;
-        while not Eof do
-        begin
-          // on alloue par plage de 250 pour eviter de le faire trop souvent
-          if Length(FCountPointers) <= i then
-            SetLength(FCountPointers, Length(FCountPointers) + 250);
-          FCountPointers[i].Count := FIELDS.AsInteger[1];
-          FCountPointers[i].Initiale := FIELDS.AsString[0];
-          if FMode in [vmAlbumsSerie, vmAlbumsEditeur, vmAlbumsCollection, vmAchatsAlbumsEditeur, vmAlbumsSerieUnivers, vmParaBDSerie, vmParaBDSerieUnivers] then
-            FCountPointers[i].Initiale := FormatTitre(FCountPointers[i].Initiale);
-          if FMode = vmAlbumsCollection then
-            AjoutString(FCountPointers[i].Initiale, FormatTitre(FIELDS.AsString[3]), ' ', '(', ')');
-          FCountPointers[i].sValue := FIELDS.ByNameAsString[vmModeInfos[FMode].INITIALEVALUE];
-          Next;
-          Inc(i);
-        end;
-        // on retire ce qui a été alloué en trop
-        SetLength(FCountPointers, i);
-
-        RootNodeCount := Length(FCountPointers);
-      finally
-        Free;
-        EndUpdate;
+      SetLength(FCountPointers, 0);
+      i := 0;
+      while not Query.Eof do
+      begin
+        // on alloue par plage de 250 pour eviter de le faire trop souvent
+        if Length(FCountPointers) <= i then
+          SetLength(FCountPointers, Length(FCountPointers) + 250);
+        FCountPointers[i].Count := Query.Fields.AsInteger[1];
+        FCountPointers[i].Initiale := Query.Fields.AsString[0];
+        if FMode in [vmAlbumsSerie, vmAlbumsEditeur, vmAlbumsCollection, vmAchatsAlbumsEditeur, vmAlbumsSerieUnivers, vmParaBDSerie, vmParaBDSerieUnivers] then
+          FCountPointers[i].Initiale := FormatTitre(FCountPointers[i].Initiale);
+        if FMode = vmAlbumsCollection then
+          AjoutString(FCountPointers[i].Initiale, FormatTitre(Query.Fields.AsString[3]), ' ', '(', ')');
+        FCountPointers[i].sValue := Query.Fields.ByNameAsString[vmModeInfos[FMode].INITIALEVALUE];
+        Query.Next;
+        Inc(i);
       end;
+      // on retire ce qui a été alloué en trop
+      SetLength(FCountPointers, i);
+
+      RootNodeCount := Length(FCountPointers);
+    finally
+      Query.Free;
+      EndUpdate;
     end;
+  end;
   if KeepValue then
     CurrentValue := iCurrent;
   SetLength(FFindArray, 0);
