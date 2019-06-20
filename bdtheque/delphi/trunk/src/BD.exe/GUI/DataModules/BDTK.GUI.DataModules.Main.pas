@@ -24,10 +24,6 @@ type
     procedure DataModuleCreate(Sender: TObject);
     procedure DataModuleDestroy(Sender: TObject);
   strict private
-    class var _instance: TdmPrinc;
-  private
-    class function getInstance: TdmPrinc;
-  strict private
     FUILock: TCriticalSection;
     FDBConnection: IDBConnection;
     procedure MakeJumpList;
@@ -47,7 +43,8 @@ type
 procedure BdtkInitProc;
 procedure AnalyseLigneCommande(cmdLine: string);
 
-function dmPrinc: TdmPrinc;
+var
+  dmPrinc: TdmPrinc;
 
 implementation
 
@@ -58,16 +55,11 @@ uses
   DateUtils, BDTK.Updates.ODS, JumpList, BD.GUI.Forms.Splash, Proc_Gestions, Generics.Collections,
   BD.GUI.Forms.Verbose, BD.GUI.Forms.Console, BDTK.GUI.Utils, JclCompression,
   BD.Entities.Dao.Lambda, System.TypInfo, BD.Entities.Full,
-  BD.Entities.Dao.Common;
+  BD.Entities.Dao.Common, BD.GUI.DataModules.Common;
 
 const
   FinBackup = 'gbak:closing file, committing, and finishing.';
   FinRestore = 'gbak:    committing metadata';
-
-function dmPrinc: TdmPrinc;
-begin
-  Result := TdmPrinc.getInstance;
-end;
 
 function TdmPrinc.CheckDBVersion(Affiche_act: TAffiche_act; Force: Boolean): Boolean;
 var
@@ -321,24 +313,6 @@ begin
   end;
 end;
 
-class function TdmPrinc.getInstance: TdmPrinc;
-var
-  cs: TCriticalSection;
-begin
-  if not Assigned(_instance) then
-  begin
-    cs := TCriticalSection.Create;
-    cs.Enter;
-    try
-      Application.CreateForm(TdmPrinc, _instance);
-    finally
-      cs.Leave;
-      cs.Free;
-    end;
-  end;
-  Result := _instance;
-end;
-
 procedure TdmPrinc.MakeJumpList;
 var
   jl: TJumpList;
@@ -536,6 +510,9 @@ begin
   end;
 
   // if not CheckCriticalFiles then Halt;
+
+  Application.CreateForm(TdmCommon, dmCommon);
+  Application.CreateForm(TdmPrinc, dmPrinc);
 
   frmSplash := TfrmSplash.Create(nil);
   try
