@@ -162,6 +162,7 @@ type
     procedure lvUniversData(Sender: TObject; Item: TListItem);
     procedure lvUniversKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure btUniversClick(Sender: TObject);
+    procedure edISBNPaste(Sender: TObject; var Handled: Boolean);
   strict private
     FAlbum: TAlbumFull;
     FCurrentEditionComplete: TEditionFull;
@@ -193,7 +194,7 @@ implementation
 uses
   BD.Utils.StrUtils, BD.Common, BD.Strings, Divers, Proc_Gestions, BD.Utils.GUIUtils, BDTK.GUI.Utils, Types, jpeg, DateUtils,
   UHistorique, BD.Entities.Metadata, BDTK.Entities.Dao.Lite, BDTK.Entities.Dao.Full, BD.Entities.Common, BD.Entities.Types,
-  BD.Entities.Factory.Lite, BD.Entities.Factory.Full, BD.Entities.Dao.Lambda;
+  BD.Entities.Factory.Lite, BD.Entities.Factory.Full, BD.Entities.Dao.Lambda, Clipbrd;
 
 {$R *.DFM}
 
@@ -846,6 +847,16 @@ end;
 procedure TfrmEditAlbum.edISBNExit(Sender: TObject);
 begin
   edISBN.Text := Trim(edISBN.Text);
+end;
+
+procedure TfrmEditAlbum.edISBNPaste(Sender: TObject; var Handled: Boolean);
+begin
+  inherited;
+  if Clipboard.HasFormat(CF_TEXT) then
+  begin
+    edISBN.SelText := ClearISBN(Clipboard.AsText).Trim;
+    Handled := True;
+  end;
 end;
 
 procedure TfrmEditAlbum.edISBNChange(Sender: TObject);

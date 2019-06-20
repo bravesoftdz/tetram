@@ -6,18 +6,21 @@ interface
 
 uses
   Windows, SysUtils, Classes, Graphics, Controls, ScanEdit, StdCtrls, Mask, Spin, ComCtrls, ExtCtrls,
-  VDTButton, CheckLst, LinkControls;
+  VDTButton, CheckLst, LinkControls, Winapi.Messages;
 
-  type
+type
   TTypeDonnee = (tdChaine, tdNumeric, tdEntier, tdNumericSigne, tdEntierSigne, tdDate, tdHeure, tdDateHeure, tdNomFichier, tdISBN, tdCurrency);
+  TOnPasteEvent = procedure(Sender: TObject; var Handled: Boolean) of object;
 
   TEditLabeled = class(TEdit)
   private
     FTypeDonnee: TTypeDonnee;
     FCurrencyChar: Char;
     FLinkControls: TControlList;
+    FOnPaste: TOnPasteEvent;
     procedure ValidChar(var Key: Char; PressValid: Boolean = False);
     procedure SetLinkControls(const Value: TControlList);
+    procedure WMPASTE(var Message: TWMPaste); message WM_PASTE;
     type TCrackWinControl = class(TWinControl);
   protected
     { Déclarations protégées }
@@ -32,6 +35,8 @@ uses
     property LinkControls: TControlList read FLinkControls write SetLinkControls;
     property TypeDonnee: TTypeDonnee read FTypeDonnee write FTypeDonnee default tdChaine;
     property CurrencyChar: Char read FCurrencyChar write FCurrencyChar;
+
+    property OnPaste: TOnPasteEvent read FOnPaste write FOnPaste;
   end;
 
   TRadioGroupLabeled = class(TRadioGroup)
@@ -351,6 +356,16 @@ begin
           Key := #0;
     end;
   inherited;
+end;
+
+procedure TEditLabeled.WMPASTE(var Message: TWMPaste);
+var
+  Handled: Boolean;
+begin
+  Handled := False;
+  if Assigned(FOnPaste) then
+    FOnPaste(Self, Handled);
+  Message.Result := Ord(Handled);
 end;
 
 procedure TEditLabeled.KeyPress(var Key: Char);

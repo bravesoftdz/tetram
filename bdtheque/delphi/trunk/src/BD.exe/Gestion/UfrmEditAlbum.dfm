@@ -839,6 +839,7 @@ object frmEditAlbum: TfrmEditAlbum
           end>
         TypeDonnee = tdISBN
         CurrencyChar = #0
+        OnPaste = edISBNPaste
       end
       object cbVO: TCheckBoxLabeled
         Left = 510
