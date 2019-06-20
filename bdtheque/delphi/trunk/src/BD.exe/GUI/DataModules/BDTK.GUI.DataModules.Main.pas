@@ -247,6 +247,7 @@ end;
 procedure TdmPrinc.DataModuleDestroy(Sender: TObject);
 begin
   DBConnection.GetDatabase.Connected := False;
+  Sleep(500); // let the connection being fully closed
   TDaoDBEntity.DBConnection := nil;
   FDBConnection := nil;
   FUILock.Free;
