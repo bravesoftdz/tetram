@@ -1,13 +1,13 @@
 ﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup>
-        <ProjectGuid>{022E3FB6-83D5-4439-8F05-C27BDD308694}</ProjectGuid>
-        <MainSource>BD.dpr</MainSource>
-        <Config Condition="'$(Config)'==''">Debug</Config>
-        <ProjectVersion>18.2</ProjectVersion>
         <Base>True</Base>
         <AppType>Application</AppType>
+        <Config Condition="'$(Config)'==''">Debug</Config>
         <FrameworkType>VCL</FrameworkType>
+        <MainSource>BD.dpr</MainSource>
         <Platform Condition="'$(Platform)'==''">Win64</Platform>
+        <ProjectGuid>{022E3FB6-83D5-4439-8F05-C27BDD308694}</ProjectGuid>
+        <ProjectVersion>18.2</ProjectVersion>
         <TargetedPlatforms>3</TargetedPlatforms>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Config)'=='Base' or '$(Base)'!=''">
@@ -46,37 +46,9 @@
         <Cfg_1>true</Cfg_1>
         <Base>true</Base>
     </PropertyGroup>
-    <PropertyGroup Condition="('$(Platform)'=='Win32' and '$(Cfg_3)'=='true') or '$(Cfg_3_Win32)'!=''">
-        <Cfg_3_Win32>true</Cfg_3_Win32>
-        <CfgParent>Cfg_3</CfgParent>
-        <Cfg_3>true</Cfg_3>
-        <Cfg_1>true</Cfg_1>
-        <Base>true</Base>
-    </PropertyGroup>
-    <PropertyGroup Condition="('$(Platform)'=='Win64' and '$(Cfg_3)'=='true') or '$(Cfg_3_Win64)'!=''">
-        <Cfg_3_Win64>true</Cfg_3_Win64>
-        <CfgParent>Cfg_3</CfgParent>
-        <Cfg_3>true</Cfg_3>
-        <Cfg_1>true</Cfg_1>
-        <Base>true</Base>
-    </PropertyGroup>
     <PropertyGroup Condition="'$(Config)'=='FullDebug' or '$(Cfg_4)'!=''">
         <Cfg_4>true</Cfg_4>
         <CfgParent>Cfg_1</CfgParent>
-        <Cfg_1>true</Cfg_1>
-        <Base>true</Base>
-    </PropertyGroup>
-    <PropertyGroup Condition="('$(Platform)'=='Win32' and '$(Cfg_4)'=='true') or '$(Cfg_4_Win32)'!=''">
-        <Cfg_4_Win32>true</Cfg_4_Win32>
-        <CfgParent>Cfg_4</CfgParent>
-        <Cfg_4>true</Cfg_4>
-        <Cfg_1>true</Cfg_1>
-        <Base>true</Base>
-    </PropertyGroup>
-    <PropertyGroup Condition="('$(Platform)'=='Win64' and '$(Cfg_4)'=='true') or '$(Cfg_4_Win64)'!=''">
-        <Cfg_4_Win64>true</Cfg_4_Win64>
-        <CfgParent>Cfg_4</CfgParent>
-        <Cfg_4>true</Cfg_4>
         <Cfg_1>true</Cfg_1>
         <Base>true</Base>
     </PropertyGroup>
@@ -85,123 +57,81 @@
         <CfgParent>Base</CfgParent>
         <Base>true</Base>
     </PropertyGroup>
-    <PropertyGroup Condition="('$(Platform)'=='Win32' and '$(Cfg_2)'=='true') or '$(Cfg_2_Win32)'!=''">
-        <Cfg_2_Win32>true</Cfg_2_Win32>
-        <CfgParent>Cfg_2</CfgParent>
-        <Cfg_2>true</Cfg_2>
-        <Base>true</Base>
-    </PropertyGroup>
-    <PropertyGroup Condition="('$(Platform)'=='Win64' and '$(Cfg_2)'=='true') or '$(Cfg_2_Win64)'!=''">
-        <Cfg_2_Win64>true</Cfg_2_Win64>
-        <CfgParent>Cfg_2</CfgParent>
-        <Cfg_2>true</Cfg_2>
-        <Base>true</Base>
+    <PropertyGroup Condition="'$(Base_Android)'!=''">
+        <EnabledSysJars>android-support-v4.dex.jar;cloud-messaging.dex.jar;fmx.dex.jar;google-analytics-v2.dex.jar;google-play-billing.dex.jar;google-play-licensing.dex.jar;google-play-services.dex.jar</EnabledSysJars>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base)'!=''">
-        <PostBuildEvent><![CDATA[$(PROJECTDIR)\post_build.bat $(PROJECTPATH) $(OUTPUTPATH) $(Platform)
-$(PostBuildEvent)]]></PostBuildEvent>
-        <PreBuildEvent><![CDATA[$(PROJECTDIR)\pre_build.bat $(PROJECTPATH) $(OUTPUTPATH) $(Platform)
-$(PreBuildEvent)]]></PreBuildEvent>
-        <DCC_DUPLICATE_CTOR_DTOR>false</DCC_DUPLICATE_CTOR_DTOR>
         <SanitizedProjectName>BD</SanitizedProjectName>
-        <DCC_UnitSearchPath>..\..\..\..\..\libs\delphi\fastmm;..\..\..\..\..\libs\delphi\Perso;..\..\..\..\..\libs\delphi\Perso\icu;..\..\..\..\..\libs\delphi\Perso\icu\lib;..\..\..\..\..\libs\delphi\pngcomponents\source;..\..\..\..\..\libs\delphi\uib\source;..\..\..\..\..\libs\delphi\virtual-treeview\source;..\..\..\..\..\libs\delphi\graphics32\source;..\..\..\..\..\libs\delphi\dwscript\source;..\..\..\..\..\libs\delphi\ics\source;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
-        <DCC_SYMBOL_PLATFORM>false</DCC_SYMBOL_PLATFORM>
-        <DCC_UNIT_PLATFORM>false</DCC_UNIT_PLATFORM>
-        <DCC_WriteableConstants>true</DCC_WriteableConstants>
-        <Manifest_File>$(BDS)\bin\default_app.manifest</Manifest_File>
-        <VerInfo_Keys>CompanyName=Teträm Corp;FileDescription=;FileVersion=2.2.4.0;InternalName=BDT;LegalCopyright=Teträm Corp 1997-2014;LegalTrademarks=;OriginalFilename=;ProductName=BDtheque;ProductVersion=2.2;Comments=</VerInfo_Keys>
-        <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
-        <DCC_Namespace>System;Xml;Data;Datasnap;Web;Soap;Vcl;Vcl.Imaging;Vcl.Touch;Vcl.Samples;Vcl.Shell;$(DCC_Namespace)</DCC_Namespace>
-        <VerInfo_MajorVer>2</VerInfo_MajorVer>
-        <VerInfo_MinorVer>2</VerInfo_MinorVer>
-        <VerInfo_Locale>1036</VerInfo_Locale>
-        <VerInfo_Release>4</VerInfo_Release>
+        <DCC_DUPLICATE_CTOR_DTOR>false</DCC_DUPLICATE_CTOR_DTOR>
+        <DCC_DcuOutput>.\dcu\$(Platform)\$(Config)</DCC_DcuOutput>
         <DCC_Define>FB25;UIBLANG_FR;FBEMBED;GIFGraphic;UseLZW;PortableNetworkGraphic;PS_USESSUPPORT;PCRE_STATICLINK;7ZIP_LINKONREQUEST;NO_ADVANCED_HTTP_CLIENT_FEATURES;UseContentCoding;USE_SSL;NO_OSSL_VERSION_CHECK;$(DCC_Define)</DCC_Define>
         <DCC_ExeOutput>..\..\deploy\$(platform)</DCC_ExeOutput>
-        <DCC_K>false</DCC_K>
-        <DCC_F>false</DCC_F>
-        <DCC_S>false</DCC_S>
-        <DCC_N>false</DCC_N>
-        <DCC_E>false</DCC_E>
-        <DCC_DcuOutput>.\dcu\$(Platform)\$(Config)</DCC_DcuOutput>
         <DCC_Inlining>off</DCC_Inlining>
+        <DCC_Namespace>System;Xml;Data;Datasnap;Web;Soap;Vcl;Vcl.Imaging;Vcl.Touch;Vcl.Samples;Vcl.Shell;$(DCC_Namespace)</DCC_Namespace>
+        <DCC_SYMBOL_PLATFORM>false</DCC_SYMBOL_PLATFORM>
+        <DCC_UNIT_PLATFORM>false</DCC_UNIT_PLATFORM>
+        <DCC_UnitSearchPath>..\..\..\..\..\libs\delphi\fastmm;..\..\..\..\..\libs\delphi\Perso;..\..\..\..\..\libs\delphi\Perso\icu;..\..\..\..\..\libs\delphi\Perso\icu\lib;..\..\..\..\..\libs\delphi\pngcomponents\source;..\..\..\..\..\libs\delphi\uib\source;..\..\..\..\..\libs\delphi\virtual-treeview\source;..\..\..\..\..\libs\delphi\graphics32\source;..\..\..\..\..\libs\delphi\dwscript\source;..\..\..\..\..\libs\delphi\ics\source;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
+        <DCC_WriteableConstants>true</DCC_WriteableConstants>
+        <Manifest_File>$(BDS)\bin\default_app.manifest</Manifest_File>
+        <PostBuildEvent>
+            <![CDATA[$(PROJECTDIR)\post_build.bat $(PROJECTPATH) $(OUTPUTPATH) $(Platform)
+$(PostBuildEvent)]]>
+        </PostBuildEvent>
+        <PreBuildEvent>
+            <![CDATA[$(PROJECTDIR)\pre_build.bat $(PROJECTPATH) $(OUTPUTPATH) $(Platform)
+$(PreBuildEvent)]]>
+        </PreBuildEvent>
+        <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
+        <VerInfo_Keys>CompanyName=Teträm Corp;FileDescription=;FileVersion=2.2.4.0;InternalName=BDT;LegalCopyright=Teträm Corp 1997-2014;LegalTrademarks=;OriginalFilename=;ProductName=BDtheque;ProductVersion=2.2;Comments=</VerInfo_Keys>
+        <VerInfo_Locale>1036</VerInfo_Locale>
+        <VerInfo_MajorVer>2</VerInfo_MajorVer>
+        <VerInfo_MinorVer>2</VerInfo_MinorVer>
+        <VerInfo_Release>4</VerInfo_Release>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win32)'!=''">
-        <DCC_Namespace>Winapi;System.Win;Data.Win;Datasnap.Win;Web.Win;Soap.Win;Xml.Win;Bde;$(DCC_Namespace)</DCC_Namespace>
-        <UWP_DelphiLogo44>$(BDS)\bin\Artwork\Windows\UWP\delphi_UwpDefault_44.png</UWP_DelphiLogo44>
-        <UWP_DelphiLogo150>$(BDS)\bin\Artwork\Windows\UWP\delphi_UwpDefault_150.png</UWP_DelphiLogo150>
-        <Icon_MainIcon>..\Commun\Resources\BD_Icon.ico</Icon_MainIcon>
-        <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
         <AppEnableHighDPI>true</AppEnableHighDPI>
+        <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
+        <DCC_Namespace>Winapi;System.Win;Data.Win;Datasnap.Win;Web.Win;Soap.Win;Xml.Win;Bde;$(DCC_Namespace)</DCC_Namespace>
+        <Icon_MainIcon>..\Commun\Resources\BD_Icon.ico</Icon_MainIcon>
+        <UWP_DelphiLogo150>$(BDS)\bin\Artwork\Windows\UWP\delphi_UwpDefault_150.png</UWP_DelphiLogo150>
+        <UWP_DelphiLogo44>$(BDS)\bin\Artwork\Windows\UWP\delphi_UwpDefault_44.png</UWP_DelphiLogo44>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win64)'!=''">
-        <DCC_Namespace>Winapi;System.Win;Data.Win;Datasnap.Win;Web.Win;Soap.Win;Xml.Win;$(DCC_Namespace)</DCC_Namespace>
-        <UWP_DelphiLogo44>$(BDS)\bin\Artwork\Windows\UWP\delphi_UwpDefault_44.png</UWP_DelphiLogo44>
-        <UWP_DelphiLogo150>$(BDS)\bin\Artwork\Windows\UWP\delphi_UwpDefault_150.png</UWP_DelphiLogo150>
-        <Icon_MainIcon>..\Commun\Resources\BD_Icon.ico</Icon_MainIcon>
-        <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
         <AppEnableHighDPI>true</AppEnableHighDPI>
+        <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
+        <DCC_Namespace>Winapi;System.Win;Data.Win;Datasnap.Win;Web.Win;Soap.Win;Xml.Win;$(DCC_Namespace)</DCC_Namespace>
+        <Icon_MainIcon>..\Commun\Resources\BD_Icon.ico</Icon_MainIcon>
+        <UWP_DelphiLogo150>$(BDS)\bin\Artwork\Windows\UWP\delphi_UwpDefault_150.png</UWP_DelphiLogo150>
+        <UWP_DelphiLogo44>$(BDS)\bin\Artwork\Windows\UWP\delphi_UwpDefault_44.png</UWP_DelphiLogo44>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1)'!=''">
-        <VerInfo_Debug>true</VerInfo_Debug>
-        <DCC_Define>DEBUG;$(DCC_Define)</DCC_Define>
-        <DCC_Optimize>false</DCC_Optimize>
-        <DCC_GenerateStackFrames>true</DCC_GenerateStackFrames>
         <DCC_DebugInfoInExe>true</DCC_DebugInfoInExe>
+        <DCC_Define>DEBUG;$(DCC_Define)</DCC_Define>
+        <DCC_GenerateStackFrames>true</DCC_GenerateStackFrames>
+        <DCC_Optimize>false</DCC_Optimize>
         <DCC_RemoteDebug>true</DCC_RemoteDebug>
+        <VerInfo_Debug>true</VerInfo_Debug>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_Win32)'!=''">
-        <DCC_RemoteDebug>false</DCC_RemoteDebug>
         <BT_BuildType>Debug</BT_BuildType>
-        <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
-        <AppEnableHighDPI>true</AppEnableHighDPI>
+        <DCC_RemoteDebug>false</DCC_RemoteDebug>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_Win64)'!=''">
         <BT_BuildType>Debug</BT_BuildType>
-        <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
-        <AppEnableHighDPI>true</AppEnableHighDPI>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_3)'!=''">
         <DCC_DebugDCUs>true</DCC_DebugDCUs>
     </PropertyGroup>
-    <PropertyGroup Condition="'$(Cfg_3_Win32)'!=''">
-        <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
-        <AppEnableHighDPI>true</AppEnableHighDPI>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(Cfg_3_Win64)'!=''">
-        <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
-        <AppEnableHighDPI>true</AppEnableHighDPI>
-    </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_4)'!=''">
         <DCC_Define>FullDebugMode;ClearLogFileOnStartup;LoadDebugDLLDynamically;$(DCC_Define)</DCC_Define>
     </PropertyGroup>
-    <PropertyGroup Condition="'$(Cfg_4_Win32)'!=''">
-        <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
-        <AppEnableHighDPI>true</AppEnableHighDPI>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(Cfg_4_Win64)'!=''">
-        <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
-        <AppEnableHighDPI>true</AppEnableHighDPI>
-    </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2)'!=''">
+        <DCC_DebugInformation>0</DCC_DebugInformation>
+        <DCC_Define>RELEASE;$(DCC_Define)</DCC_Define>
+        <DCC_LocalDebugSymbols>false</DCC_LocalDebugSymbols>
+        <DCC_SymbolReferenceInfo>0</DCC_SymbolReferenceInfo>
         <Manifest_File>$(BDS)\bin\default_app.manifest</Manifest_File>
         <VerInfo_AutoIncVersion>true</VerInfo_AutoIncVersion>
-        <DCC_LocalDebugSymbols>false</DCC_LocalDebugSymbols>
-        <DCC_Define>RELEASE;$(DCC_Define)</DCC_Define>
-        <DCC_SymbolReferenceInfo>0</DCC_SymbolReferenceInfo>
-        <DCC_DebugInformation>0</DCC_DebugInformation>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(Cfg_2_Win32)'!=''">
-        <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
-        <AppEnableHighDPI>true</AppEnableHighDPI>
-        <VerInfo_Build>1</VerInfo_Build>
-        <VerInfo_Keys>CompanyName=Teträm Corp;FileDescription=;FileVersion=2.2.4.1;InternalName=BDT;LegalCopyright=Teträm Corp 1997-2014;LegalTrademarks=;OriginalFilename=;ProductName=BDtheque;ProductVersion=2.2;Comments=</VerInfo_Keys>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(Cfg_2_Win64)'!=''">
-        <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
-        <AppEnableHighDPI>true</AppEnableHighDPI>
-        <VerInfo_Build>1</VerInfo_Build>
-        <VerInfo_Keys>CompanyName=Teträm Corp;FileDescription=;FileVersion=2.2.4.1;InternalName=BDT;LegalCopyright=Teträm Corp 1997-2014;LegalTrademarks=;OriginalFilename=;ProductName=BDtheque;ProductVersion=2.2;Comments=</VerInfo_Keys>
     </PropertyGroup>
     <ItemGroup>
         <DelphiCompile Include="$(MainSource)">
@@ -209,135 +139,173 @@ $(PreBuildEvent)]]></PreBuildEvent>
         </DelphiCompile>
         <DCCReference Include="GUI\Forms\BDTK.GUI.Forms.Main.pas">
             <Form>frmFond</Form>
+            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="GUI\DataModules\BDTK.GUI.DataModules.Main.pas">
             <Form>dmPrinc</Form>
+            <FormType>dfm</FormType>
             <DesignClass>TDataModule</DesignClass>
         </DCCReference>
         <DCCReference Include="Consultation\UfrmRepertoire.pas">
             <Form>frmRepertoire</Form>
+            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="Consultation\UfrmConsultationAuteur.pas">
             <Form>frmConsultationAuteur</Form>
+            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="Consultation\UfrmConsultationSerie.pas">
             <Form>frmConsultationSerie</Form>
+            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="Consultation\UfrmConsultationParaBD.pas">
             <Form>frmConsultationParaBD</Form>
+            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="Consultation\UfrmZoomCouverture.pas">
             <Form>frmZoomCouverture</Form>
+            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="Consultation\UfrmRecherche.pas">
             <Form>frmRecherche</Form>
+            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="Consultation\UfrmEditCritereTri.pas">
             <Form>frmEditCritereTri</Form>
+            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="Consultation\UfrmStatsGeneral.pas">
             <Form>frmStatsGenerales</Form>
+            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="Consultation\UfrmStatsAlbums.pas">
             <Form>frmStatsAlbums</Form>
+            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="GUI\DataModules\BDTK.GUI.DataModules.Search.pas">
             <Form>dmSearch</Form>
+            <FormType>dfm</FormType>
             <DesignClass>TDataModule</DesignClass>
         </DCCReference>
         <DCCReference Include="Gestion\Editions.pas"/>
         <DCCReference Include="Gestion\Proc_Gestions.pas"/>
         <DCCReference Include="Gestion\UfrmGestion.pas">
             <Form>frmGestions</Form>
+            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="Gestion\UfrmEditAlbum.pas">
             <Form>frmEditAlbum</Form>
+            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="Gestion\UfrmEditAchatAlbum.pas">
             <Form>frmEditAchatAlbum</Form>
+            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="Gestion\UfrmEditEditeur.pas">
             <Form>frmEditEditeur</Form>
+            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="Gestion\UfrmEditSerie.pas">
             <Form>frmEditSerie</Form>
+            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="Gestion\UfrmEditCollection.pas">
             <Form>frmEditCollection</Form>
+            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="Gestion\UfrmEditAuteur.pas">
             <Form>frmEditAuteur</Form>
+            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="Gestion\UfrmEditParaBD.pas">
             <Form>frmEditParaBD</Form>
+            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="Consultation\Impression.pas"/>
         <DCCReference Include="GUI\Forms\BDTK.GUI.Forms.UserSettings.pas">
             <Form>frmOptions</Form>
+            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="GUI\Forms\BDTK.GUI.Forms.Customize.pas">
             <Form>frmCustomize</Form>
+            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="UfrmChoix.pas">
             <Form>frmChoix</Form>
+            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="UfrmChoixDetail.pas">
             <Form>frmChoixDetail</Form>
+            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="GUI\Forms\BDTK.GUI.Forms.Converter.pas">
             <Form>FrmConvers</Form>
+            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="GUI\Frames\BDTK.GUI.Frames.Converter.pas">
             <Form>framConvertisseur</Form>
+            <FormType>dfm</FormType>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
         <DCCReference Include="GUI\Frames\BDTK.GUI.Frames.QuickSearch.pas">
             <Form>framRechercheRapide</Form>
+            <FormType>dfm</FormType>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
         <DCCReference Include="Consultation\MAJ.pas"/>
         <DCCReference Include="Consultation\UfrmPreview.pas">
             <Form>frmPreview</Form>
+            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="UHistorique.pas"/>
         <DCCReference Include="UfrmEntretien.pas">
             <Form>frmEntretien</Form>
+            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="Consultation\UfrmPrevisionsSorties.pas">
             <Form>frmPrevisionsSorties</Form>
+            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="Consultation\UfrmSeriesIncompletes.pas">
             <Form>frmSeriesIncompletes</Form>
+            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="Consultation\UfrmPrevisionAchats.pas">
             <Form>frmPrevisionsAchats</Form>
+            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="Updates\BDTK.Updates.pas"/>
         <DCCReference Include="Gestion\UfrmWizardImport.pas">
             <Form>frmWizardImport</Form>
+            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="Gestion\UImportXML.pas"/>
         <DCCReference Include="GUI\BDTK.GUI.Utils.pas"/>
         <DCCReference Include="UfrmChoixDetailSerie.pas">
             <Form>frmChoixDetailSerie</Form>
+            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="Updates\BDTK.Updates.ODS.pas"/>
         <DCCReference Include="Consultation\UfrmEditCritere.pas">
             <Form>frmEditCritere</Form>
+            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="Consultation\UChampsRecherche.pas"/>
         <DCCReference Include="Web\BDTK.Web.Forms.Publish.pas">
             <Form>frmPublier</Form>
+            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="Web\Updates\BDTK.Web.Updates.v1_0_0_1.pas"/>
         <DCCReference Include="Web\Updates\BDTK.Web.Updates.v1_0_0_0.pas"/>
         <DCCReference Include="Web\Updates\BDTK.Web.Updates.v1_0_0_2.pas"/>
         <DCCReference Include="Gestion\UfrmControlImport.pas">
             <Form>frmControlImport</Form>
+            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="GUI\Controls\BDTK.GUI.Controls.VirtualTreeEdit.pas"/>
         <DCCReference Include="UframVTEdit.pas">
             <Form>framVTEdit</Form>
+            <FormType>dfm</FormType>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
         <DCCReference Include="Updates\BDTK.Updates.v2_1_1_7.pas"/>
@@ -387,11 +355,13 @@ $(PreBuildEvent)]]></PreBuildEvent>
         <DCCReference Include="Updates\BDTK.Updates.v2_1_1_2.pas"/>
         <DCCReference Include="Gestion\UfrmFusionEditions.pas">
             <Form>frmFusionEditions</Form>
+            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="Updates\BDTK.Updates.v2_1_1_4.pas"/>
         <DCCReference Include="Updates\BDTK.Updates.v2_1_1_8.pas"/>
         <DCCReference Include="Consultation\UfrmGallerie.pas">
             <Form>frmGallerie</Form>
+            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="GUI\Controls\BDTK.GUI.Controls.VirtualTree.pas"/>
         <DCCReference Include="Updates\BDTK.Updates.v2_1_1_10.pas"/>
@@ -399,14 +369,17 @@ $(PreBuildEvent)]]></PreBuildEvent>
         <DCCReference Include="Updates\BDTK.Updates.v2_1_1_155.pas"/>
         <DCCReference Include="Consultation\UfrmConsultationAlbum.pas">
             <Form>frmConsultationAlbum</Form>
+            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="Updates\BDTK.Updates.v2_2_2_233.pas"/>
         <DCCReference Include="Updates\BDTK.Updates.v2_2_3_13.pas"/>
         <DCCReference Include="Consultation\UfrmConsultationUnivers.pas">
             <Form>frmConsultationUnivers</Form>
+            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="Gestion\UfrmEditUnivers.pas">
             <Form>frmEditUnivers</Form>
+            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="Updates\BDTK.Updates.v2_2_3_16.pas"/>
         <DCCReference Include="Updates\BDTK.Updates.v2_2_3_17.pas"/>
@@ -420,25 +393,32 @@ $(PreBuildEvent)]]></PreBuildEvent>
         <DCCReference Include="..\Commun\BD.Strings.pas"/>
         <DCCReference Include="..\Commun\GUI\Forms\BD.GUI.Forms.pas">
             <Form>bdtForm</Form>
+            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="..\Commun\GUI\Frames\BD.GUI.Frames.Buttons.pas">
             <Form>framBoutons</Form>
+            <FormType>dfm</FormType>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
         <DCCReference Include="..\Commun\GUI\Forms\BD.GUI.Forms.About.pas">
             <Form>frmAboutBox</Form>
+            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="..\Commun\GUI\Forms\BD.GUI.Forms.Console.pas">
             <Form>frmConsole</Form>
+            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="..\Commun\GUI\Forms\BD.GUI.Forms.Progress.pas">
             <Form>frmProgression</Form>
+            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="..\Commun\GUI\Forms\BD.GUI.Forms.Splash.pas">
             <Form>frmSplash</Form>
+            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="..\Commun\GUI\Forms\BD.GUI.Forms.Verbose.pas">
             <Form>frmVerbose</Form>
+            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="..\Commun\Entities\BD.Entities.Metadata.pas"/>
         <DCCReference Include="..\Commun\Utils\BD.Utils.GUIUtils.pas"/>
@@ -460,6 +440,7 @@ $(PreBuildEvent)]]></PreBuildEvent>
         <DCCReference Include="..\Commun\Utils\BD.Utils.Net.ICS.pas"/>
         <DCCReference Include="Web\BDTK.Web.Forms.Synchronize.pas">
             <Form>frmSynchroniser</Form>
+            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="Web\BDTK.Web.pas"/>
         <DCCReference Include="Updates\BDTK.Updates.v2_2_3_24.pas"/>
@@ -472,6 +453,7 @@ $(PreBuildEvent)]]></PreBuildEvent>
         <DCCReference Include="..\Commun\Entities\BD.Entities.Dao.Common.pas"/>
         <DCCReference Include="..\Commun\GUI\DataModules\BD.GUI.DataModules.Common.pas">
             <Form>dmCommon</Form>
+            <FormType>dfm</FormType>
             <DesignClass>TDataModule</DesignClass>
         </DCCReference>
         <DCCReference Include="GUI\Controls\BDTK.GUI.Controls.Spin.pas"/>
@@ -554,9 +536,9 @@ $(PreBuildEvent)]]></PreBuildEvent>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
-        <BuildConfiguration Include="FullDebug">
-            <Key>Cfg_4</Key>
-            <CfgParent>Cfg_1</CfgParent>
+        <BuildConfiguration Include="Debug">
+            <Key>Cfg_1</Key>
+            <CfgParent>Base</CfgParent>
         </BuildConfiguration>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
@@ -566,9 +548,9 @@ $(PreBuildEvent)]]></PreBuildEvent>
             <Key>Cfg_3</Key>
             <CfgParent>Cfg_1</CfgParent>
         </BuildConfiguration>
-        <BuildConfiguration Include="Debug">
-            <Key>Cfg_1</Key>
-            <CfgParent>Base</CfgParent>
+        <BuildConfiguration Include="FullDebug">
+            <Key>Cfg_4</Key>
+            <CfgParent>Cfg_1</CfgParent>
         </BuildConfiguration>
     </ItemGroup>
     <Import Condition="Exists('$(BDS)\Bin\CodeGear.Delphi.Targets')" Project="$(BDS)\Bin\CodeGear.Delphi.Targets"/>
@@ -581,6 +563,7 @@ $(PreBuildEvent)]]></PreBuildEvent>
                 <Source>
                     <Source Name="MainSource">BD.dpr</Source>
                 </Source>
+                <Excluded_Packages/>
                 <VersionInfo>
                     <VersionInfo Name="IncludeVerInfo">True</VersionInfo>
                     <VersionInfo Name="AutoIncBuild">True</VersionInfo>
@@ -622,43 +605,27 @@ $(PreBuildEvent)]]></PreBuildEvent>
                     <VersionInfoKeys Name="CFBundleInfoDictionaryVersion"/>
                     <VersionInfoKeys Name="CFBundleDevelopmentRegion"/>
                 </VersionInfoKeys>
-                <Excluded_Packages>
-                    <Excluded_Packages Name="$(BDSBIN)\dcloffice2k250.bpl">Composants Microsoft Office 2000 Sample Automation Server Wrapper</Excluded_Packages>
-                    <Excluded_Packages Name="$(BDSBIN)\dclofficexp250.bpl">Composants Microsoft Office XP Sample Automation Server Wrapper</Excluded_Packages>
-                </Excluded_Packages>
             </Delphi.Personality>
             <Deployment Version="3">
+                <DeployFile LocalName="..\..\deploy\Win64\BD.exe" Configuration="Debug" Class="ProjectOutput">
+                    <Platform Name="Win64">
+                        <RemoteName>BD.exe</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="..\..\deploy\Win64\BD.rsm" Configuration="Debug" Class="DebugSymbols">
+                    <Platform Name="Win64">
+                        <RemoteName>BD.rsm</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="..\Commun\Resources\ISBNRanges.xml" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win64">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployFile LocalName="..\Commun\Resources\brokenimage.jpg" Configuration="Debug" Class="ProjectFile">
-                    <Platform Name="Win64">
-                        <RemoteDir>.\</RemoteDir>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
-                <DeployFile LocalName="Updates\BDTK.Updates.v2_1_1_17.sql" Configuration="Debug" Class="ProjectFile">
-                    <Platform Name="Win64">
-                        <RemoteDir>.\</RemoteDir>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
-                <DeployFile LocalName="..\Commun\Resources\imgAbout.bmp" Configuration="Debug" Class="ProjectFile">
-                    <Platform Name="Win64">
-                        <RemoteDir>.\</RemoteDir>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
-                <DeployFile LocalName="Updates\BDTK.Updates.v2_1_0_72-2.sql" Configuration="Debug" Class="ProjectFile">
-                    <Platform Name="Win64">
-                        <RemoteDir>.\</RemoteDir>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
-                <DeployFile LocalName="Updates\BDTK.Updates.v1_2_0_0-1.sql" Configuration="Debug" Class="ProjectFile">
-                    <Platform Name="Win64">
-                        <RemoteDir>.\</RemoteDir>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
-                <DeployFile LocalName="..\Commun\Resources\network.png" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Win64">
                         <RemoteDir>.\</RemoteDir>
                         <Overwrite>true</Overwrite>
@@ -670,15 +637,51 @@ $(PreBuildEvent)]]></PreBuildEvent>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
+                <DeployFile LocalName="..\Commun\Resources\imgAbout.bmp" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win64">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="..\Commun\Resources\my-documents.ico" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win64">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="..\Commun\Resources\network.png" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win64">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="..\Commun\Resources\unknown.ico" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win64">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Updates\BDTK.Updates.v1_2_0_0-1.sql" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win64">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Updates\BDTK.Updates.v1_2_0_0-2.sql" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win64">
+                        <RemoteDir>.\</RemoteDir>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployFile LocalName="Updates\BDTK.Updates.v2_1_0_72-1.sql" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Win64">
                         <RemoteDir>.\</RemoteDir>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName="..\..\deploy\Win64\BD.exe" Configuration="Debug" Class="ProjectOutput">
+                <DeployFile LocalName="Updates\BDTK.Updates.v2_1_0_72-2.sql" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Win64">
-                        <RemoteName>BD.exe</RemoteName>
+                        <RemoteDir>.\</RemoteDir>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
@@ -688,19 +691,13 @@ $(PreBuildEvent)]]></PreBuildEvent>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName="..\Commun\Resources\ISBNRanges.xml" Configuration="Debug" Class="ProjectFile">
+                <DeployFile LocalName="Updates\BDTK.Updates.v2_1_1_17.sql" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Win64">
                         <RemoteDir>.\</RemoteDir>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
                 <DeployFile LocalName="Updates\BDTK.Updates.v2_1_1_8-1.sql" Configuration="Debug" Class="ProjectFile">
-                    <Platform Name="Win64">
-                        <RemoteDir>.\</RemoteDir>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
-                <DeployFile LocalName="..\Commun\Resources\unknown.ico" Configuration="Debug" Class="ProjectFile">
                     <Platform Name="Win64">
                         <RemoteDir>.\</RemoteDir>
                         <Overwrite>true</Overwrite>
@@ -718,399 +715,40 @@ $(PreBuildEvent)]]></PreBuildEvent>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName="..\..\deploy\Win64\BD.rsm" Configuration="Debug" Class="DebugSymbols">
-                    <Platform Name="Win64">
-                        <RemoteName>BD.rsm</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
-                <DeployFile LocalName="Updates\BDTK.Updates.v1_2_0_0-2.sql" Configuration="Debug" Class="ProjectFile">
-                    <Platform Name="Win64">
-                        <RemoteDir>.\</RemoteDir>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
-                <DeployFile LocalName="..\Commun\Resources\my-documents.ico" Configuration="Debug" Class="ProjectFile">
-                    <Platform Name="Win64">
-                        <RemoteDir>.\</RemoteDir>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
                 <DeployClass Name="AdditionalDebugSymbols">
-                    <Platform Name="iOSSimulator">
-                        <Operation>1</Operation>
-                    </Platform>
-                    <Platform Name="OSX32">
-                        <RemoteDir>Contents\MacOS</RemoteDir>
-                        <Operation>1</Operation>
-                    </Platform>
                     <Platform Name="Win32">
                         <RemoteDir>Contents\MacOS</RemoteDir>
                         <Operation>0</Operation>
                     </Platform>
                 </DeployClass>
-                <DeployClass Name="AndroidClassesDexFile">
-                    <Platform Name="Android">
-                        <RemoteDir>classes</RemoteDir>
-                        <Operation>1</Operation>
-                    </Platform>
-                </DeployClass>
-                <DeployClass Name="AndroidGDBServer">
-                    <Platform Name="Android">
-                        <RemoteDir>library\lib\armeabi-v7a</RemoteDir>
-                        <Operation>1</Operation>
-                    </Platform>
-                </DeployClass>
-                <DeployClass Name="AndroidLibnativeArmeabiFile">
-                    <Platform Name="Android">
-                        <RemoteDir>library\lib\armeabi</RemoteDir>
-                        <Operation>1</Operation>
-                    </Platform>
-                </DeployClass>
-                <DeployClass Name="AndroidLibnativeMipsFile">
-                    <Platform Name="Android">
-                        <RemoteDir>library\lib\mips</RemoteDir>
-                        <Operation>1</Operation>
-                    </Platform>
-                </DeployClass>
-                <DeployClass Name="AndroidServiceOutput">
-                    <Platform Name="Android">
-                        <RemoteDir>library\lib\armeabi-v7a</RemoteDir>
-                        <Operation>1</Operation>
-                    </Platform>
-                </DeployClass>
-                <DeployClass Name="AndroidSplashImageDef">
-                    <Platform Name="Android">
-                        <RemoteDir>res\drawable</RemoteDir>
-                        <Operation>1</Operation>
-                    </Platform>
-                </DeployClass>
-                <DeployClass Name="AndroidSplashStyles">
-                    <Platform Name="Android">
-                        <RemoteDir>res\values</RemoteDir>
-                        <Operation>1</Operation>
-                    </Platform>
-                </DeployClass>
-                <DeployClass Name="Android_DefaultAppIcon">
-                    <Platform Name="Android">
-                        <RemoteDir>res\drawable</RemoteDir>
-                        <Operation>1</Operation>
-                    </Platform>
-                </DeployClass>
-                <DeployClass Name="Android_LauncherIcon144">
-                    <Platform Name="Android">
-                        <RemoteDir>res\drawable-xxhdpi</RemoteDir>
-                        <Operation>1</Operation>
-                    </Platform>
-                </DeployClass>
-                <DeployClass Name="Android_LauncherIcon36">
-                    <Platform Name="Android">
-                        <RemoteDir>res\drawable-ldpi</RemoteDir>
-                        <Operation>1</Operation>
-                    </Platform>
-                </DeployClass>
-                <DeployClass Name="Android_LauncherIcon48">
-                    <Platform Name="Android">
-                        <RemoteDir>res\drawable-mdpi</RemoteDir>
-                        <Operation>1</Operation>
-                    </Platform>
-                </DeployClass>
-                <DeployClass Name="Android_LauncherIcon72">
-                    <Platform Name="Android">
-                        <RemoteDir>res\drawable-hdpi</RemoteDir>
-                        <Operation>1</Operation>
-                    </Platform>
-                </DeployClass>
-                <DeployClass Name="Android_LauncherIcon96">
-                    <Platform Name="Android">
-                        <RemoteDir>res\drawable-xhdpi</RemoteDir>
-                        <Operation>1</Operation>
-                    </Platform>
-                </DeployClass>
-                <DeployClass Name="Android_SplashImage426">
-                    <Platform Name="Android">
-                        <RemoteDir>res\drawable-small</RemoteDir>
-                        <Operation>1</Operation>
-                    </Platform>
-                </DeployClass>
-                <DeployClass Name="Android_SplashImage470">
-                    <Platform Name="Android">
-                        <RemoteDir>res\drawable-normal</RemoteDir>
-                        <Operation>1</Operation>
-                    </Platform>
-                </DeployClass>
-                <DeployClass Name="Android_SplashImage640">
-                    <Platform Name="Android">
-                        <RemoteDir>res\drawable-large</RemoteDir>
-                        <Operation>1</Operation>
-                    </Platform>
-                </DeployClass>
-                <DeployClass Name="Android_SplashImage960">
-                    <Platform Name="Android">
-                        <RemoteDir>res\drawable-xlarge</RemoteDir>
-                        <Operation>1</Operation>
-                    </Platform>
-                </DeployClass>
                 <DeployClass Name="DebugSymbols">
-                    <Platform Name="iOSSimulator">
-                        <Operation>1</Operation>
-                    </Platform>
-                    <Platform Name="OSX32">
-                        <RemoteDir>Contents\MacOS</RemoteDir>
-                        <Operation>1</Operation>
-                    </Platform>
                     <Platform Name="Win32">
                         <Operation>0</Operation>
                     </Platform>
                 </DeployClass>
                 <DeployClass Name="DependencyFramework">
-                    <Platform Name="OSX32">
-                        <RemoteDir>Contents\MacOS</RemoteDir>
-                        <Operation>1</Operation>
-                        <Extensions>.framework</Extensions>
-                    </Platform>
                     <Platform Name="Win32">
                         <Operation>0</Operation>
                     </Platform>
                 </DeployClass>
                 <DeployClass Name="DependencyModule">
-                    <Platform Name="iOSDevice32">
-                        <Operation>1</Operation>
-                        <Extensions>.dylib</Extensions>
-                    </Platform>
-                    <Platform Name="iOSDevice64">
-                        <Operation>1</Operation>
-                        <Extensions>.dylib</Extensions>
-                    </Platform>
-                    <Platform Name="iOSSimulator">
-                        <Operation>1</Operation>
-                        <Extensions>.dylib</Extensions>
-                    </Platform>
-                    <Platform Name="OSX32">
-                        <RemoteDir>Contents\MacOS</RemoteDir>
-                        <Operation>1</Operation>
-                        <Extensions>.dylib</Extensions>
-                    </Platform>
                     <Platform Name="Win32">
                         <Operation>0</Operation>
                         <Extensions>.dll;.bpl</Extensions>
                     </Platform>
                 </DeployClass>
                 <DeployClass Required="true" Name="DependencyPackage">
-                    <Platform Name="iOSDevice32">
-                        <Operation>1</Operation>
-                        <Extensions>.dylib</Extensions>
-                    </Platform>
-                    <Platform Name="iOSDevice64">
-                        <Operation>1</Operation>
-                        <Extensions>.dylib</Extensions>
-                    </Platform>
-                    <Platform Name="iOSSimulator">
-                        <Operation>1</Operation>
-                        <Extensions>.dylib</Extensions>
-                    </Platform>
-                    <Platform Name="OSX32">
-                        <RemoteDir>Contents\MacOS</RemoteDir>
-                        <Operation>1</Operation>
-                        <Extensions>.dylib</Extensions>
-                    </Platform>
                     <Platform Name="Win32">
                         <Operation>0</Operation>
                         <Extensions>.bpl</Extensions>
                     </Platform>
                 </DeployClass>
                 <DeployClass Name="File">
-                    <Platform Name="Android">
-                        <Operation>0</Operation>
-                    </Platform>
-                    <Platform Name="iOSDevice32">
-                        <Operation>0</Operation>
-                    </Platform>
-                    <Platform Name="iOSDevice64">
-                        <Operation>0</Operation>
-                    </Platform>
-                    <Platform Name="iOSSimulator">
-                        <Operation>0</Operation>
-                    </Platform>
-                    <Platform Name="OSX32">
-                        <RemoteDir>Contents\Resources\StartUp\</RemoteDir>
-                        <Operation>0</Operation>
-                    </Platform>
                     <Platform Name="Win32">
                         <Operation>0</Operation>
                     </Platform>
                 </DeployClass>
-                <DeployClass Name="iPad_Launch1024">
-                    <Platform Name="iOSDevice32">
-                        <Operation>1</Operation>
-                    </Platform>
-                    <Platform Name="iOSDevice64">
-                        <Operation>1</Operation>
-                    </Platform>
-                    <Platform Name="iOSSimulator">
-                        <Operation>1</Operation>
-                    </Platform>
-                </DeployClass>
-                <DeployClass Name="iPad_Launch1536">
-                    <Platform Name="iOSDevice32">
-                        <Operation>1</Operation>
-                    </Platform>
-                    <Platform Name="iOSDevice64">
-                        <Operation>1</Operation>
-                    </Platform>
-                    <Platform Name="iOSSimulator">
-                        <Operation>1</Operation>
-                    </Platform>
-                </DeployClass>
-                <DeployClass Name="iPad_Launch2048">
-                    <Platform Name="iOSDevice32">
-                        <Operation>1</Operation>
-                    </Platform>
-                    <Platform Name="iOSDevice64">
-                        <Operation>1</Operation>
-                    </Platform>
-                    <Platform Name="iOSSimulator">
-                        <Operation>1</Operation>
-                    </Platform>
-                </DeployClass>
-                <DeployClass Name="iPad_Launch768">
-                    <Platform Name="iOSDevice32">
-                        <Operation>1</Operation>
-                    </Platform>
-                    <Platform Name="iOSDevice64">
-                        <Operation>1</Operation>
-                    </Platform>
-                    <Platform Name="iOSSimulator">
-                        <Operation>1</Operation>
-                    </Platform>
-                </DeployClass>
-                <DeployClass Name="iPhone_Launch320">
-                    <Platform Name="iOSDevice32">
-                        <Operation>1</Operation>
-                    </Platform>
-                    <Platform Name="iOSDevice64">
-                        <Operation>1</Operation>
-                    </Platform>
-                    <Platform Name="iOSSimulator">
-                        <Operation>1</Operation>
-                    </Platform>
-                </DeployClass>
-                <DeployClass Name="iPhone_Launch640">
-                    <Platform Name="iOSDevice32">
-                        <Operation>1</Operation>
-                    </Platform>
-                    <Platform Name="iOSDevice64">
-                        <Operation>1</Operation>
-                    </Platform>
-                    <Platform Name="iOSSimulator">
-                        <Operation>1</Operation>
-                    </Platform>
-                </DeployClass>
-                <DeployClass Name="iPhone_Launch640x1136">
-                    <Platform Name="iOSDevice32">
-                        <Operation>1</Operation>
-                    </Platform>
-                    <Platform Name="iOSDevice64">
-                        <Operation>1</Operation>
-                    </Platform>
-                    <Platform Name="iOSSimulator">
-                        <Operation>1</Operation>
-                    </Platform>
-                </DeployClass>
-                <DeployClass Name="ProjectAndroidManifest">
-                    <Platform Name="Android">
-                        <Operation>1</Operation>
-                    </Platform>
-                </DeployClass>
-                <DeployClass Name="ProjectiOSDeviceDebug">
-                    <Platform Name="iOSDevice32">
-                        <RemoteDir>..\$(PROJECTNAME).app.dSYM\Contents\Resources\DWARF</RemoteDir>
-                        <Operation>1</Operation>
-                    </Platform>
-                    <Platform Name="iOSDevice64">
-                        <RemoteDir>..\$(PROJECTNAME).app.dSYM\Contents\Resources\DWARF</RemoteDir>
-                        <Operation>1</Operation>
-                    </Platform>
-                </DeployClass>
-                <DeployClass Name="ProjectiOSDeviceResourceRules">
-                    <Platform Name="iOSDevice32">
-                        <Operation>1</Operation>
-                    </Platform>
-                    <Platform Name="iOSDevice64">
-                        <Operation>1</Operation>
-                    </Platform>
-                </DeployClass>
-                <DeployClass Name="ProjectiOSEntitlements">
-                    <Platform Name="iOSDevice32">
-                        <RemoteDir>..\</RemoteDir>
-                        <Operation>1</Operation>
-                    </Platform>
-                    <Platform Name="iOSDevice64">
-                        <RemoteDir>..\</RemoteDir>
-                        <Operation>1</Operation>
-                    </Platform>
-                </DeployClass>
-                <DeployClass Name="ProjectiOSInfoPList">
-                    <Platform Name="iOSDevice32">
-                        <Operation>1</Operation>
-                    </Platform>
-                    <Platform Name="iOSDevice64">
-                        <Operation>1</Operation>
-                    </Platform>
-                    <Platform Name="iOSSimulator">
-                        <Operation>1</Operation>
-                    </Platform>
-                </DeployClass>
-                <DeployClass Name="ProjectiOSResource">
-                    <Platform Name="iOSDevice32">
-                        <Operation>1</Operation>
-                    </Platform>
-                    <Platform Name="iOSDevice64">
-                        <Operation>1</Operation>
-                    </Platform>
-                    <Platform Name="iOSSimulator">
-                        <Operation>1</Operation>
-                    </Platform>
-                </DeployClass>
-                <DeployClass Name="ProjectOSXEntitlements">
-                    <Platform Name="OSX32">
-                        <RemoteDir>..\</RemoteDir>
-                        <Operation>1</Operation>
-                    </Platform>
-                </DeployClass>
-                <DeployClass Name="ProjectOSXInfoPList">
-                    <Platform Name="OSX32">
-                        <RemoteDir>Contents</RemoteDir>
-                        <Operation>1</Operation>
-                    </Platform>
-                </DeployClass>
-                <DeployClass Name="ProjectOSXResource">
-                    <Platform Name="OSX32">
-                        <RemoteDir>Contents\Resources</RemoteDir>
-                        <Operation>1</Operation>
-                    </Platform>
-                </DeployClass>
                 <DeployClass Required="true" Name="ProjectOutput">
-                    <Platform Name="Android">
-                        <RemoteDir>library\lib\armeabi-v7a</RemoteDir>
-                        <Operation>1</Operation>
-                    </Platform>
-                    <Platform Name="iOSDevice32">
-                        <Operation>1</Operation>
-                    </Platform>
-                    <Platform Name="iOSDevice64">
-                        <Operation>1</Operation>
-                    </Platform>
-                    <Platform Name="iOSSimulator">
-                        <Operation>1</Operation>
-                    </Platform>
-                    <Platform Name="Linux64">
-                        <Operation>1</Operation>
-                    </Platform>
-                    <Platform Name="OSX32">
-                        <RemoteDir>Contents\MacOS</RemoteDir>
-                        <Operation>1</Operation>
-                    </Platform>
                     <Platform Name="Win32">
                         <Operation>0</Operation>
                     </Platform>
@@ -1143,16 +781,12 @@ $(PreBuildEvent)]]></PreBuildEvent>
                         <Operation>1</Operation>
                     </Platform>
                 </DeployClass>
-                <ProjectRoot Platform="iOSDevice64" Name="$(PROJECTNAME).app"/>
-                <ProjectRoot Platform="Win64" Name="$(PROJECTNAME)"/>
-                <ProjectRoot Platform="iOSDevice32" Name="$(PROJECTNAME).app"/>
-                <ProjectRoot Platform="Linux64" Name="$(PROJECTNAME)"/>
                 <ProjectRoot Platform="Win32" Name="$(PROJECTNAME)"/>
-                <ProjectRoot Platform="OSX32" Name="$(PROJECTNAME).app"/>
-                <ProjectRoot Platform="Android" Name="$(PROJECTNAME)"/>
-                <ProjectRoot Platform="iOSSimulator" Name="$(PROJECTNAME).app"/>
+                <ProjectRoot Platform="Win64" Name="$(PROJECTNAME)"/>
             </Deployment>
             <Platforms>
+                <Platform value="Android">False</Platform>
+                <Platform value="Linux64">False</Platform>
                 <Platform value="Win32">True</Platform>
                 <Platform value="Win64">True</Platform>
             </Platforms>
