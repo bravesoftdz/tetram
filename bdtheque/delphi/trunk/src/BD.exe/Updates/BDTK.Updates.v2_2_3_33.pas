@@ -232,7 +232,7 @@ begin
   Query.Script.Add('');
   Query.Script.Add('    suspend;');
   Query.Script.Add('  end');
-  Query.Script.Add('end');
+  Query.Script.Add('end;');
 
   Query.ExecuteScript;
 end;
