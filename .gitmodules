@@ -2,6 +2,10 @@
 	path = libs/delphi/dwscript
 	url = https://github.com/Tetram76/vendors.git
 	branch = dwscript
+[submodule "libs/delphi/fastmm"]
+	path = libs/delphi/fastmm
+	url = https://github.com/Tetram76/vendors.git
+	branch = fastmm
 [submodule "libs/delphi/gpprofile"]
 	path = libs/delphi/gpprofile
 	url = https://github.com/Tetram76/vendors.git
@@ -52,15 +56,11 @@
 	path = libs/delphi/uib
 	url = https://github.com/Tetram76/vendors.git
 	branch = uib
-[submodule "libs/delphi/zipmaster"]
-	path = libs/delphi/zipmaster
-	url = https://github.com/Tetram76/vendors.git
-	branch = zipmaster
-[submodule "fastmm"]
-	path = libs/delphi/fastmm
-	url = https://github.com/Tetram76/vendors.git
-	branch = fastmm
 [submodule "libs/delphi/virtual-treeview"]
 	path = libs/delphi/virtual-treeview
 	url = https://github.com/Tetram76/vendors.git
 	branch = virtual-treeview
+[submodule "libs/delphi/zipmaster"]
+	path = libs/delphi/zipmaster
+	url = https://github.com/Tetram76/vendors.git
+	branch = zipmaster
