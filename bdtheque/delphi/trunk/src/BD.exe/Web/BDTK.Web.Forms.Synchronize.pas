@@ -26,7 +26,7 @@ type
 implementation
 
 uses
-  BD.Common, System.IOUtils, BD.Utils.Net, JclMime, BDTK.Web, dwsJSON;
+  BD.Common, System.IOUtils, BD.Utils.Net, JclMime, BDTK.Web, System.JSON;
 
 {$R *.dfm}
 
@@ -122,13 +122,13 @@ end;
 
 procedure TSynchroWeb.SendOption(const cle, Valeur: string);
 var
-  obj: TdwsJSONObject;
+  obj: TJSONObject;
 begin
-  obj := TdwsJSONObject.Create;
+  obj := TJSONObject.Create;
   try
-    obj.AddValue('cle', cle);
-    obj.AddValue('valeur', Valeur);
-    SendData(ActionSendOption, obj.ToString);
+    obj.AddPair('cle', cle);
+    obj.AddPair('valeur', Valeur);
+    SendData(ActionSendOption, obj.ToJSON);
   finally
     obj.Free;
   end;
