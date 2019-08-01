@@ -88,9 +88,9 @@ type
     constructor Create(CustomComboCheck: TCustomComboCheck; AOwner: TSubItem); reintroduce;
     procedure Assign(Source: TPersistent); override;
     function Add: TSubItem; overload;
-    function Add(Chaine: String): TSubItem; overload;
-    procedure Insert(Index: Integer; Chaine: String);
-    function IndexOf(Chaine: String): Integer;
+    function Add(const AChaine: string): TSubItem; overload;
+    procedure Insert(Index: Integer; const Chaine: string);
+    function IndexOf(const Chaine: string): Integer;
     property Items[Index: Integer]: TSubItem read GetItem write SetItem; default;
   end;
 
@@ -104,9 +104,9 @@ type
   public
     procedure Assign(Source: TPersistent); override;
     function Add: TSubItem; overload;
-    function Add(Chaine: String): TSubItem; overload;
-    procedure Insert(Index: Integer; Chaine: String);
-    function IndexOf(Chaine: String): Integer;
+    function Add(const Chaine: string): TSubItem; overload;
+    procedure Insert(Index: Integer; const Chaine: string);
+    function IndexOf(const Chaine: string): Integer;
     property Items[Index: Integer]: TSubItem read GetItem write SetItem; default;
   end;
 
@@ -353,7 +353,7 @@ begin
   Result := TSubItem(inherited Add);
 end;
 
-function TItems.Add(Chaine: String): TSubItem;
+function TItems.Add(const Chaine: string): TSubItem;
 var
   i: Integer;
 begin
@@ -368,7 +368,7 @@ begin
   end;
 end;
 
-function TItems.IndexOf(Chaine: String): Integer;
+function TItems.IndexOf(const Chaine: string): Integer;
 
   function Process(Item: TSubItem): Integer;
   var
@@ -400,7 +400,7 @@ begin
   end;
 end;
 
-procedure TItems.Insert(Index: Integer; Chaine: String);
+procedure TItems.Insert(Index: Integer; const Chaine: string);
 begin
   if (Index < 0) or (Index > Count) then
     Exit;
@@ -495,22 +495,22 @@ begin
   Result := TSubItem(inherited Add);
 end;
 
-function TSubItems.Add(Chaine: String): TSubItem;
+function TSubItems.Add(const AChaine: string): TSubItem;
 var
   i: Integer;
 begin
   Result := Add;
-  i := Pos('=', Chaine);
+  i := Pos('=', AChaine);
   if i = 0 then
-    Result.Caption := Chaine
+    Result.Caption := AChaine
   else
   begin
-    Result.Caption := Copy(Chaine, 1, i - 1);
-    Result.Valeur := StrToInt(Copy(Chaine, i + 1, Length(Chaine)));
+    Result.Caption := Copy(AChaine, 1, i - 1);
+    Result.Valeur := StrToInt(Copy(AChaine, i + 1, Length(AChaine)));
   end;
 end;
 
-function TSubItems.IndexOf(Chaine: String): Integer;
+function TSubItems.IndexOf(const Chaine: string): Integer;
 
   function Process(Item: TSubItem): Integer;
   var
@@ -542,7 +542,7 @@ begin
   end;
 end;
 
-procedure TSubItems.Insert(Index: Integer; Chaine: String);
+procedure TSubItems.Insert(Index: Integer; const Chaine: string);
 begin
   if (Index < 0) or (Index > Count) then
     Exit;
