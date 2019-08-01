@@ -50,7 +50,6 @@ begin
     Header.Options := Header.Options + [hoAutoResize];
   end;
   HintMode := hmTooltip;
-  HintAnimation := hatNone;
   HotCursor := crHandPoint;
   Color := clWhite;
   //  if clBtnFace = clWhite then
