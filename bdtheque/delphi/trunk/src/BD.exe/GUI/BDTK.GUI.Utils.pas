@@ -75,210 +75,229 @@ uses UfrmChoixDetail, UfrmChoix, BDTK.GUI.Forms.Converter, BDTK.GUI.Forms.Main, 
   BDTK.GUI.DataModules.Main, System.IniFiles, Vcl.Imaging.jpeg, System.IOUtils;
 
 function Choisir(const Texte1, Texte2: string; Bouton: Integer): TModalResult;
+var
+  frm: TfrmChoix;
+  dlg: TTaskDialog;
+  btn: TTaskDialogBaseButtonItem;
 begin
   Result := mrCancel;
   if not Bouton in [0 .. 2] then
     Exit;
   if CanUseTaskDialog then
-    with TTaskDialog.Create(nil) do
-      try
-        with Buttons.Add do
-        begin
-          Caption := Texte1;
-          default := Bouton = 1;
-          ModalResult := mrYes;
-        end;
+  begin
+    dlg := TTaskDialog.Create(nil);
+    try
+      btn := dlg.Buttons.Add;
+      btn.Caption := Texte1;
+      btn.Default := Bouton = 1;
+      btn.ModalResult := mrYes;
 
-        with Buttons.Add do
-        begin
-          Caption := Texte2;
-          default := Bouton = 2;
-          ModalResult := mrNo;
-        end;
-        Flags := [tfAllowDialogCancellation, tfUseCommandLinks];
-        CommonButtons := [tcbCancel];
-        if Execute then
-          Result := ModalResult;
-      finally
-        Free;
-      end
+      btn := dlg.Buttons.Add;
+      btn.Caption := Texte2;
+      btn.Default := Bouton = 2;
+      btn.ModalResult := mrNo;
+
+      dlg.Flags := [tfAllowDialogCancellation, tfUseCommandLinks];
+      dlg.CommonButtons := [tcbCancel];
+      if dlg.Execute then
+        Result := dlg.ModalResult;
+    finally
+      dlg.Free;
+    end;
+  end
   else
-    with TFrmChoix.Create(Application) do
-      try
-        BtnChoix1.Caption := Texte1;
-        BtnChoix2.Caption := Texte2;
-        case Bouton of
-          0:
-            framBoutons1.btnAnnuler.default := True;
-          1:
-            BtnChoix1.default := True;
-          2:
-            BtnChoix2.default := True;
-        end;
-        Result := ShowModal;
-      finally
-        Free;
+  begin
+    frm := TFrmChoix.Create(Application);
+    try
+      frm.BtnChoix1.Caption := Texte1;
+      frm.BtnChoix2.Caption := Texte2;
+      case Bouton of
+        0:
+          frm.framBoutons1.btnAnnuler.Default := True;
+        1:
+          frm.BtnChoix1.Default := True;
+        2:
+          frm.BtnChoix2.Default := True;
       end;
+      Result := frm.ShowModal;
+    finally
+      frm.Free;
+    end;
+  end;
 end;
 
 function ChoisirDetailAlbum(Bouton: Integer; out DetailsOptions: TDetailAlbumOptions): TModalResult;
+var
+  frm: TfrmChoixDetail;
 begin
   if not Bouton in [0 .. 2] then
-  begin
-    Result := 0;
-    Exit;
-  end;
-  with TFrmChoixDetail.Create(Application) do
-    try
-      BtnChoix1.Caption := rsTransListeSimple;
-      BtnChoix2.Caption := rsTransListeDetail;
-      case Bouton of
-        0:
-          framBoutons1.btnAnnuler.default := True;
-        1:
-          BtnChoix1.default := True;
-        2:
-          BtnChoix2.default := True;
-      end;
-      Result := ShowModal;
-      if Result = mrNo then
-      begin
-        if cbScenario.Checked then
-          Include(DetailsOptions, daoScenario);
-        if cbDessins.Checked then
-          Include(DetailsOptions, daoDessins);
-        if cbCouleurs.Checked then
-          Include(DetailsOptions, daoCouleurs);
-        if cbHistoire.Checked then
-          Include(DetailsOptions, daoHistoire);
-        if cbNotes.Checked then
-          Include(DetailsOptions, daoNotes);
-      end;
-    finally
-      Free;
+    Exit(0);
+
+  frm := TFrmChoixDetail.Create(Application);
+  try
+    frm.BtnChoix1.Caption := rsTransListeSimple;
+    frm.BtnChoix2.Caption := rsTransListeDetail;
+    case Bouton of
+      0:
+        frm.framBoutons1.btnAnnuler.default := True;
+      1:
+        frm.BtnChoix1.default := True;
+      2:
+        frm.BtnChoix2.default := True;
     end;
+    Result := frm.ShowModal;
+    if Result = mrNo then
+    begin
+      if frm.cbScenario.Checked then
+        Include(DetailsOptions, daoScenario);
+      if frm.cbDessins.Checked then
+        Include(DetailsOptions, daoDessins);
+      if frm.cbCouleurs.Checked then
+        Include(DetailsOptions, daoCouleurs);
+      if frm.cbHistoire.Checked then
+        Include(DetailsOptions, daoHistoire);
+      if frm.cbNotes.Checked then
+        Include(DetailsOptions, daoNotes);
+    end;
+  finally
+    frm.Free;
+  end;
 end;
 
 function ChoisirDetailSerie(NiveauDetailMax: TDetailSerieOption; out DetailSerieOption: TDetailSerieOption): TModalResult;
 var
   i: TDetailSerieOption;
+  frm: TfrmChoixDetailSerie;
+  dlg: TTaskDialog;
+  btn: TTaskDialogBaseButtonItem;
 begin
   Result := mrCancel;
   if CanUseTaskDialog then
-    with TTaskDialog.Create(nil) do
-      try
-        for i := NiveauDetailMax to high(TDetailSerieOption) do
-          with Buttons.Add do
-          begin
-            Caption := LibelleDetailSerieOption[NiveauDetailMax][i];
-            default := i = NiveauDetailMax;
-            ModalResult := 110 + Integer(i);
-          end;
-
-        Flags := [tfAllowDialogCancellation, tfUseCommandLinks];
-        CommonButtons := [tcbCancel];
-
-        if Execute and (ModalResult <> mrCancel) then
+  begin
+    dlg := TTaskDialog.Create(nil);
+    try
+      for i := NiveauDetailMax to high(TDetailSerieOption) do
+      begin
+        btn := dlg.Buttons.Add;
         begin
-          Result := mrOk;
-          DetailSerieOption := TDetailSerieOption(ModalResult - 110);
+          btn.Caption := LibelleDetailSerieOption[NiveauDetailMax][i];
+          btn.Default := i = NiveauDetailMax;
+          btn.ModalResult := 110 + Integer(i);
         end;
-      finally
-        Free;
-      end
-  else
-    with TFrmChoixDetailSerie.Create(Application) do
-      try
-        // cacher la checkbox avant d'assigner MaxNiveauDetail
-        CheckBox1.Visible := False;
-        MaxNiveauDetail := NiveauDetailMax;
-        if ShowModal <> mrCancel then
-        begin
-          Result := mrOk;
-          DetailSerieOption := TDetailSerieOption(ModalResult - 110);
-        end;
-      finally
-        Free;
       end;
+
+      dlg.Flags := [tfAllowDialogCancellation, tfUseCommandLinks];
+      dlg.CommonButtons := [tcbCancel];
+
+      if dlg.Execute and (dlg.ModalResult <> mrCancel) then
+      begin
+        Result := mrOk;
+        DetailSerieOption := TDetailSerieOption(dlg.ModalResult - 110);
+      end;
+    finally
+      dlg.Free;
+    end;
+  end
+  else
+  begin
+    frm := TFrmChoixDetailSerie.Create(Application);
+    try
+      // cacher la checkbox avant d'assigner MaxNiveauDetail
+      frm.CheckBox1.Visible := False;
+      frm.MaxNiveauDetail := NiveauDetailMax;
+      if frm.ShowModal <> mrCancel then
+      begin
+        Result := mrOk;
+        DetailSerieOption := TDetailSerieOption(frm.ModalResult - 110);
+      end;
+    finally
+      frm.Free;
+    end;
+  end;
 end;
 
 function ChoisirDetailSerie(NiveauDetailMax: TDetailSerieOption; out DetailSerieOption: TDetailSerieOption; out PrevisionsManquants: Boolean): TModalResult;
 var
   i: TDetailSerieOption;
+  frm: TfrmChoixDetailSerie;
+  dlg: TTaskDialog;
+  btn: TTaskDialogBaseButtonItem;
 begin
   Result := mrCancel;
   if CanUseTaskDialog then
-    with TTaskDialog.Create(nil) do
-      try
-        for i := NiveauDetailMax to high(TDetailSerieOption) do
-          with Buttons.Add do
-          begin
-            Caption := LibelleDetailSerieOption[NiveauDetailMax][i];
-            default := i = NiveauDetailMax;
-            ModalResult := 110 + Integer(i);
-          end;
-
-        with RadioButtons.Add do
-        begin
-          Caption := 'Inclure Prévisions de sorties/Manquants';
-          default := True;
-          ModalResult := 105;
-        end;
-        with RadioButtons.Add do
-        begin
-          Caption := 'Exclure Prévisions de sorties/Manquants';
-          default := False;
-          ModalResult := 106;
-        end;
-
-        Flags := [tfAllowDialogCancellation, tfUseCommandLinks];
-        CommonButtons := [tcbCancel];
-
-        if Execute and (ModalResult <> mrCancel) then
-        begin
-          Result := mrOk;
-          DetailSerieOption := TDetailSerieOption(ModalResult - 110);
-          PrevisionsManquants := Assigned(RadioButton) and (RadioButton.ModalResult = 105);
-        end;
-      finally
-        Free;
-      end
-  else
-    with TFrmChoixDetailSerie.Create(Application) do
-      try
-        MaxNiveauDetail := NiveauDetailMax;
-        if ShowModal <> mrCancel then
-        begin
-          Result := mrOk;
-          DetailSerieOption := TDetailSerieOption(ModalResult - 110);
-          PrevisionsManquants := CheckBox1.Checked;
-        end;
-      finally
-        Free;
+  begin
+    dlg := TTaskDialog.Create(nil);
+    try
+      for i := NiveauDetailMax to high(TDetailSerieOption) do
+      begin
+        btn := dlg.Buttons.Add;
+        btn.Caption := LibelleDetailSerieOption[NiveauDetailMax][i];
+        btn.Default := i = NiveauDetailMax;
+        btn.ModalResult := 110 + Integer(i);
       end;
+
+      btn := dlg.RadioButtons.Add;
+      btn.Caption := 'Inclure Prévisions de sorties/Manquants';
+      btn.Default := True;
+      btn.ModalResult := 105;
+
+      btn := dlg.RadioButtons.Add;
+      btn.Caption := 'Exclure Prévisions de sorties/Manquants';
+      btn.Default := False;
+      btn.ModalResult := 106;
+
+      dlg.Flags := [tfAllowDialogCancellation, tfUseCommandLinks];
+      dlg.CommonButtons := [tcbCancel];
+
+      if dlg.Execute and (dlg.ModalResult <> mrCancel) then
+      begin
+        Result := mrOk;
+        DetailSerieOption := TDetailSerieOption(dlg.ModalResult - 110);
+        PrevisionsManquants := Assigned(dlg.RadioButton) and (dlg.RadioButton.ModalResult = 105);
+      end;
+    finally
+      dlg.Free;
+    end;
+  end
+  else
+  begin
+    frm := TFrmChoixDetailSerie.Create(Application);
+    try
+      frm.MaxNiveauDetail := NiveauDetailMax;
+      if frm.ShowModal <> mrCancel then
+      begin
+        Result := mrOk;
+        DetailSerieOption := TDetailSerieOption(frm.ModalResult - 110);
+        PrevisionsManquants := frm.CheckBox1.Checked;
+      end;
+    finally
+      frm.Free;
+    end;
+  end;
 end;
 
 function Convertisseur(Caller: TControl; var Value: Currency): Boolean;
 var
   p: TPoint;
+  frm: TFrmConvers;
 begin
-  with TFrmConvers.Create(nil) do
-    try
-      Valeur := Value;
-      p := Caller.ClientOrigin;
-      Inc(p.y, Caller.Height);
-      Left := p.x;
-      Top := p.y;
-      if Left + Width > Screen.WorkAreaRect.Right then
-        Left := Max(0, Screen.WorkAreaRect.Right - Width);
-      if Top + Height > Screen.WorkAreaRect.Bottom then
-        Top := Max(0, Screen.WorkAreaRect.Bottom - Height);
-      Result := ShowModal = mrOk;
-      if Result then
-        Value := Valeur;
-    finally
-      Free;
-    end;
+  frm := TFrmConvers.Create(nil);
+  try
+    frm.Valeur := Value;
+    p := Caller.ClientOrigin;
+    Inc(p.y, Caller.Height);
+    frm.Left := p.x;
+    frm.Top := p.y;
+    if frm.Left + frm.Width > Screen.WorkAreaRect.Right then
+      frm.Left := Max(0, Screen.WorkAreaRect.Right - frm.Width);
+    if frm.Top + frm.Height > Screen.WorkAreaRect.Bottom then
+      frm.Top := Max(0, Screen.WorkAreaRect.Bottom - frm.Height);
+    Result := frm.ShowModal = mrOk;
+    if Result then
+      Value := frm.Valeur;
+  finally
+    frm.Free;
+  end;
 end;
 
 { TModeEditing }
@@ -309,184 +328,178 @@ procedure LitOptions;
 
   function LitStr(Table: TManagedQuery; const Champ, Defaut: string): string;
   begin
-    with Table do
-    begin
-      Params.AsString[0] := Copy(Champ, 1, Params.MaxStrLen[0]);
-      Open;
-      if not Eof then
-        Result := Fields.AsUnicodeString[0]
-      else
-        Result := Defaut;
-    end;
+    Table.Params.AsString[0] := Copy(Champ, 1, Table.Params.MaxStrLen[0]);
+    Table.Open;
+    if not Table.Eof then
+      Result := Table.Fields.AsUnicodeString[0]
+    else
+      Result := Defaut;
   end;
 
 var
   op: TManagedQuery;
   hg: IHourGlass;
+  ini: TIniFile;
 begin
   hg := THourGlass.Create;
   op := dmPrinc.DBConnection.GetQuery;
-  with op do
-    try
-      SQL.Text := 'select first 1 valeur from options where nom_option = ? order by dm_options desc';
-      Prepare(True);
-      TGlobalVar.Utilisateur.Options.SymboleMonnetaire := LitStr(op, 'SymboleM', FormatSettings.CurrencyString);
-      RepImages := LitStr(op, 'RepImages', RepImages);
-    finally
-      Free;
-    end;
-  with TIniFile.Create(FichierIni) do
-    try
-      TGlobalVar.Utilisateur.Options.ModeDemarrage := ReadBool('DIVERS', 'ModeDemarrage', True);
-      TGlobalVar.Utilisateur.Options.FicheAlbumWithCouverture := ReadBool('DIVERS', 'FicheWithCouverture', True);
-      TGlobalVar.Utilisateur.Options.FicheParaBDWithImage := ReadBool('DIVERS', 'ParaBDWithImage', True);
-      TGlobalVar.Utilisateur.Options.Images := ReadBool('DIVERS', 'Images', True);
-      TGlobalVar.Utilisateur.Options.AntiAliasing := ReadBool('DIVERS', 'AntiAliasing', True);
-      TGlobalVar.Utilisateur.Options.ImagesStockees := ReadBool('ModeEdition', 'ImagesStockees', False);
-      TGlobalVar.Utilisateur.Options.FormatTitreAlbum := ReadInteger('DIVERS', 'FormatTitreAlbum', 0);
-      TGlobalVar.Utilisateur.Options.AvertirPret := ReadBool('DIVERS', 'AvertirPret', False);
-      TGlobalVar.Utilisateur.Options.GrandesIconesMenus := ReadBool('DIVERS', 'GrandesIconesMenus', True);
-      TGlobalVar.Utilisateur.Options.GrandesIconesBarre := ReadBool('DIVERS', 'GrandesIconesBarre', True);
-      TGlobalVar.Utilisateur.Options.VerifMAJDelai := ReadInteger('Divers', 'VerifMAJDelai', 4);
-      TGlobalVar.Utilisateur.Options.SerieObligatoireAlbums := ReadBool('DIVERS', 'SerieObligatoireAlbums', False);
-      TGlobalVar.Utilisateur.Options.SerieObligatoireParaBD := ReadBool('DIVERS', 'SerieObligatoireParaBD', False);
-      TGlobalVar.Utilisateur.Options.AfficheNoteListes := ReadBool('DIVERS', 'AfficheNoteListes', True);
+  try
+    op.SQL.Text := 'select first 1 valeur from options where nom_option = ? order by dm_options desc';
+    op.Prepare(True);
+    TGlobalVar.Utilisateur.Options.SymboleMonnetaire := LitStr(op, 'SymboleM', FormatSettings.CurrencyString);
+    RepImages := LitStr(op, 'RepImages', RepImages);
+  finally
+    op.Free;
+  end;
+  ini := TIniFile.Create(FichierIni);
+  try
+    TGlobalVar.Utilisateur.Options.ModeDemarrage := ini.ReadBool('DIVERS', 'ModeDemarrage', True);
+    TGlobalVar.Utilisateur.Options.FicheAlbumWithCouverture := ini.ReadBool('DIVERS', 'FicheWithCouverture', True);
+    TGlobalVar.Utilisateur.Options.FicheParaBDWithImage := ini.ReadBool('DIVERS', 'ParaBDWithImage', True);
+    TGlobalVar.Utilisateur.Options.Images := ini.ReadBool('DIVERS', 'Images', True);
+    TGlobalVar.Utilisateur.Options.AntiAliasing := ini.ReadBool('DIVERS', 'AntiAliasing', True);
+    TGlobalVar.Utilisateur.Options.ImagesStockees := ini.ReadBool('ModeEdition', 'ImagesStockees', False);
+    TGlobalVar.Utilisateur.Options.FormatTitreAlbum := ini.ReadInteger('DIVERS', 'FormatTitreAlbum', 0);
+    TGlobalVar.Utilisateur.Options.AvertirPret := ini.ReadBool('DIVERS', 'AvertirPret', False);
+    TGlobalVar.Utilisateur.Options.GrandesIconesMenus := ini.ReadBool('DIVERS', 'GrandesIconesMenus', True);
+    TGlobalVar.Utilisateur.Options.GrandesIconesBarre := ini.ReadBool('DIVERS', 'GrandesIconesBarre', True);
+    TGlobalVar.Utilisateur.Options.VerifMAJDelai := ini.ReadInteger('Divers', 'VerifMAJDelai', 4);
+    TGlobalVar.Utilisateur.Options.SerieObligatoireAlbums := ini.ReadBool('DIVERS', 'SerieObligatoireAlbums', False);
+    TGlobalVar.Utilisateur.Options.SerieObligatoireParaBD := ini.ReadBool('DIVERS', 'SerieObligatoireParaBD', False);
+    TGlobalVar.Utilisateur.Options.AfficheNoteListes := ini.ReadBool('DIVERS', 'AfficheNoteListes', True);
 
-      TGlobalVar.Utilisateur.Options.SiteWeb.Adresse := ReadString('WWW', 'Adresse', '');
-      TGlobalVar.Utilisateur.Options.SiteWeb.Cle := ReadString('WWW', 'AuthKey', '');
-      TGlobalVar.Utilisateur.Options.SiteWeb.Modele := ReadString('WWW', 'Modele', 'Site par défaut');
-      TGlobalVar.Utilisateur.Options.SiteWeb.MySQLServeur := ReadString('WWW', 'MySQLServeur', 'localhost');
-      TGlobalVar.Utilisateur.Options.SiteWeb.MySQLLogin := ReadString('WWW', 'MySQLLogin', '');
-      TGlobalVar.Utilisateur.Options.SiteWeb.MySQLPassword := ReadString('WWW', 'MySQLPassword', '');
-      TGlobalVar.Utilisateur.Options.SiteWeb.MySQLBDD := ReadString('WWW', 'MySQLBDD', TGlobalVar.Utilisateur.Options.SiteWeb.MySQLLogin);
-      TGlobalVar.Utilisateur.Options.SiteWeb.MySQLPrefix := ReadString('WWW', 'MySQLPrefix', 'bdt');
-      TGlobalVar.Utilisateur.Options.SiteWeb.BddVersion := ReadString('WWW', 'BddVersion', '');
-      TGlobalVar.Utilisateur.Options.SiteWeb.Paquets := ReadInteger('WWW', 'Paquets', 4096);
+    TGlobalVar.Utilisateur.Options.SiteWeb.Adresse := ini.ReadString('WWW', 'Adresse', '');
+    TGlobalVar.Utilisateur.Options.SiteWeb.Cle := ini.ReadString('WWW', 'AuthKey', '');
+    TGlobalVar.Utilisateur.Options.SiteWeb.Modele := ini.ReadString('WWW', 'Modele', 'Site par défaut');
+    TGlobalVar.Utilisateur.Options.SiteWeb.MySQLServeur := ini.ReadString('WWW', 'MySQLServeur', 'localhost');
+    TGlobalVar.Utilisateur.Options.SiteWeb.MySQLLogin := ini.ReadString('WWW', 'MySQLLogin', '');
+    TGlobalVar.Utilisateur.Options.SiteWeb.MySQLPassword := ini.ReadString('WWW', 'MySQLPassword', '');
+    TGlobalVar.Utilisateur.Options.SiteWeb.MySQLBDD := ini.ReadString('WWW', 'MySQLBDD', TGlobalVar.Utilisateur.Options.SiteWeb.MySQLLogin);
+    TGlobalVar.Utilisateur.Options.SiteWeb.MySQLPrefix := ini.ReadString('WWW', 'MySQLPrefix', 'bdt');
+    TGlobalVar.Utilisateur.Options.SiteWeb.BddVersion := ini.ReadString('WWW', 'BddVersion', '');
+    TGlobalVar.Utilisateur.Options.SiteWeb.Paquets := ini.ReadInteger('WWW', 'Paquets', 4096);
 
-      {$IFDEF DEBUG}
-      TGlobalVar.Utilisateur.Options.ServerSynchro := TGlobalVar.Utilisateur.Options.SiteWeb;
-      {$ENDIF}
-    finally
-      Free;
-    end;
+    {$IFDEF DEBUG}
+    TGlobalVar.Utilisateur.Options.ServerSynchro := TGlobalVar.Utilisateur.Options.SiteWeb;
+    {$ENDIF}
+  finally
+    ini.Free;
+  end;
 end;
 
 procedure EcritOptions;
 
   procedure Sauve(Table: TManagedQuery; const Champ: string; Valeur: Currency); overload;
   begin
-    with Table do
-    begin
-      SQL.Text := 'update or insert into options (nom_option, valeur) values (:nom_option, :valeur) matching (nom_option)';
-      Prepare(True);
-      Params.AsString[1] := Copy(Champ, 1, Params.MaxStrLen[0]);
-      Params.AsCurrency[1] := Valeur;
-      Execute;
-    end;
+    Table.SQL.Text := 'update or insert into options (nom_option, valeur) values (:nom_option, :valeur) matching (nom_option)';
+    Table.Prepare(True);
+    Table.Params.AsString[1] := Copy(Champ, 1, Table.Params.MaxStrLen[0]);
+    Table.Params.AsCurrency[1] := Valeur;
+    Table.Execute;
   end;
 
   procedure Sauve(Table: TManagedQuery; const Champ, Valeur: string); overload;
   begin
-    with Table do
-    begin
-      SQL.Text := 'update or insert into options (nom_option, valeur) values (:nom_option, :valeur) matching (nom_option)';
-      Prepare(True);
-      Params.AsString[0] := Copy(Champ, 1, Params.MaxStrLen[0]);
-      Params.AsString[1] := Copy(Valeur, 1, Params.MaxStrLen[1]);
-      Execute;
-    end;
+    Table.SQL.Text := 'update or insert into options (nom_option, valeur) values (:nom_option, :valeur) matching (nom_option)';
+    Table.Prepare(True);
+    Table.Params.AsString[0] := Copy(Champ, 1, Table.Params.MaxStrLen[0]);
+    Table.Params.AsString[1] := Copy(Valeur, 1, Table.Params.MaxStrLen[1]);
+    Table.Execute;
   end;
 
 var
   op: TManagedQuery;
   hg: IHourGlass;
+  ini: TIniFile;
 begin
   hg := THourGlass.Create;
   op := dmPrinc.DBConnection.GetQuery;
-  with op do
-    try
-      Sauve(op, 'SymboleM', TGlobalVar.Utilisateur.Options.SymboleMonnetaire);
-      Sauve(op, 'RepImages', RepImages);
-      Transaction.Commit;
-    finally
-      Free;
-    end;
-  with TIniFile.Create(FichierIni), TGlobalVar.Utilisateur.Options do
-    try
-      WriteBool('DIVERS', 'ModeDemarrage', ModeDemarrage);
-      WriteBool('DIVERS', 'Images', Images);
-      WriteBool('DIVERS', 'FicheWithCouverture', FicheAlbumWithCouverture);
-      WriteBool('DIVERS', 'ParaBDWithImage', FicheParaBDWithImage);
-      WriteBool('DIVERS', 'AntiAliasing', AntiAliasing);
-      WriteBool('DIVERS', 'AvertirPret', AvertirPret);
-      WriteBool('DIVERS', 'GrandesIconesMenus', GrandesIconesMenus);
-      WriteBool('DIVERS', 'GrandesIconesBarre', GrandesIconesBarre);
-      WriteBool('ModeEdition', 'ImagesStockees', ImagesStockees);
-      WriteInteger('DIVERS', 'FormatTitreAlbum', FormatTitreAlbum);
-      WriteInteger('Divers', 'VerifMAJDelai', VerifMAJDelai);
-      WriteBool('DIVERS', 'SerieObligatoireAlbums', SerieObligatoireAlbums);
-      WriteBool('DIVERS', 'SerieObligatoireParaBD', SerieObligatoireParaBD);
-      WriteBool('DIVERS', 'AfficheNoteListes', AfficheNoteListes);
+  try
+    Sauve(op, 'SymboleM', TGlobalVar.Utilisateur.Options.SymboleMonnetaire);
+    Sauve(op, 'RepImages', RepImages);
+    op.Transaction.Commit;
+  finally
+    op.Free;
+  end;
+  ini := TIniFile.Create(FichierIni);
+  try
+    ini.WriteBool('DIVERS', 'ModeDemarrage', TGlobalVar.Utilisateur.Options.ModeDemarrage);
+    ini.WriteBool('DIVERS', 'Images', TGlobalVar.Utilisateur.Options.Images);
+    ini.WriteBool('DIVERS', 'FicheWithCouverture', TGlobalVar.Utilisateur.Options.FicheAlbumWithCouverture);
+    ini.WriteBool('DIVERS', 'ParaBDWithImage', TGlobalVar.Utilisateur.Options.FicheParaBDWithImage);
+    ini.WriteBool('DIVERS', 'AntiAliasing', TGlobalVar.Utilisateur.Options.AntiAliasing);
+    ini.WriteBool('DIVERS', 'AvertirPret', TGlobalVar.Utilisateur.Options.AvertirPret);
+    ini.WriteBool('DIVERS', 'GrandesIconesMenus', TGlobalVar.Utilisateur.Options.GrandesIconesMenus);
+    ini.WriteBool('DIVERS', 'GrandesIconesBarre', TGlobalVar.Utilisateur.Options.GrandesIconesBarre);
+    ini.WriteBool('ModeEdition', 'ImagesStockees', TGlobalVar.Utilisateur.Options.ImagesStockees);
+    ini.WriteInteger('DIVERS', 'FormatTitreAlbum', TGlobalVar.Utilisateur.Options.FormatTitreAlbum);
+    ini.WriteInteger('Divers', 'VerifMAJDelai', TGlobalVar.Utilisateur.Options.VerifMAJDelai);
+    ini.WriteBool('DIVERS', 'SerieObligatoireAlbums', TGlobalVar.Utilisateur.Options.SerieObligatoireAlbums);
+    ini.WriteBool('DIVERS', 'SerieObligatoireParaBD', TGlobalVar.Utilisateur.Options.SerieObligatoireParaBD);
+    ini.WriteBool('DIVERS', 'AfficheNoteListes', TGlobalVar.Utilisateur.Options.AfficheNoteListes);
 
-      WriteString('DIVERS', 'RepImages', ''); // efface la ligne
+    ini.WriteString('DIVERS', 'RepImages', ''); // efface la ligne
 
-      WriteString('WWW', 'Adresse', SiteWeb.Adresse);
-      WriteString('WWW', 'AuthKey', SiteWeb.Cle);
-      WriteString('WWW', 'Modele', SiteWeb.Modele);
-      WriteString('WWW', 'MySQLServeur', SiteWeb.MySQLServeur);
-      WriteString('WWW', 'MySQLLogin', SiteWeb.MySQLLogin);
-      WriteString('WWW', 'MySQLPassword', SiteWeb.MySQLPassword);
-      WriteString('WWW', 'MySQLBDD', SiteWeb.MySQLBDD);
-      WriteString('WWW', 'MySQLPrefix', SiteWeb.MySQLPrefix);
-      WriteString('WWW', 'BddVersion', SiteWeb.BddVersion);
-      WriteInteger('WWW', 'Paquets', SiteWeb.Paquets);
-    finally
-      Free;
-    end;
+    ini.WriteString('WWW', 'Adresse', TGlobalVar.Utilisateur.Options.SiteWeb.Adresse);
+    ini.WriteString('WWW', 'AuthKey', TGlobalVar.Utilisateur.Options.SiteWeb.Cle);
+    ini.WriteString('WWW', 'Modele', TGlobalVar.Utilisateur.Options.SiteWeb.Modele);
+    ini.WriteString('WWW', 'MySQLServeur', TGlobalVar.Utilisateur.Options.SiteWeb.MySQLServeur);
+    ini.WriteString('WWW', 'MySQLLogin', TGlobalVar.Utilisateur.Options.SiteWeb.MySQLLogin);
+    ini.WriteString('WWW', 'MySQLPassword', TGlobalVar.Utilisateur.Options.SiteWeb.MySQLPassword);
+    ini.WriteString('WWW', 'MySQLBDD', TGlobalVar.Utilisateur.Options.SiteWeb.MySQLBDD);
+    ini.WriteString('WWW', 'MySQLPrefix', TGlobalVar.Utilisateur.Options.SiteWeb.MySQLPrefix);
+    ini.WriteString('WWW', 'BddVersion', TGlobalVar.Utilisateur.Options.SiteWeb.BddVersion);
+    ini.WriteInteger('WWW', 'Paquets', TGlobalVar.Utilisateur.Options.SiteWeb.Paquets);
+  finally
+    ini.Free;
+  end;
 end;
 
 function SupprimerTable(const Table: string): Boolean;
+var
+  qry: TManagedQuery;
 begin
   try
-    with dmPrinc.DBConnection.GetQuery do
-      try
-        Transaction.Database.Connected := False; // fonctionne mais pas correct du tout!
-        Transaction.Database.Connected := True;
-        SQL.Text := 'drop table ' + Table;
-        Execute;
-        Transaction.Commit;
-        Result := True;
-      finally
-        Free;
-      end;
+    qry := dmPrinc.DBConnection.GetQuery;
+    try
+      qry.Transaction.Database.Connected := False; // fonctionne mais pas correct du tout!
+      qry.Transaction.Database.Connected := True;
+      qry.SQL.Text := 'drop table ' + Table;
+      qry.Execute;
+      qry.Transaction.Commit;
+      Result := True;
+    finally
+      qry.Free;
+    end;
   except
     Result := False;
   end;
 end;
 
-function SupprimerToutDans(const ChampSupp, Table, Reference: string; const Valeur: RGUIDEx; const Sauf: string; UseTransaction: TManagedTransaction = nil)
-  : Boolean; overload;
+function SupprimerToutDans(const ChampSupp, Table, Reference: string; const Valeur: RGUIDEx; const Sauf: string; UseTransaction: TManagedTransaction = nil): Boolean; overload;
+var
+  qry: TManagedQuery;
 begin
   try
-    with dmPrinc.DBConnection.GetQuery(UseTransaction) do
-      try
-        if ChampSupp <> '' then
-          SQL.Add(Format('update %s set %s = True', [Table, ChampSupp])) // True ????
-        else
-          SQL.Add(Format('delete from %s', [Table]));
+    qry := dmPrinc.DBConnection.GetQuery(UseTransaction);
+    try
+      if ChampSupp <> '' then
+        qry.SQL.Add(Format('update %s set %s = True', [Table, ChampSupp])) // True ????
+      else
+        qry.SQL.Add(Format('delete from %s', [Table]));
 
-        if (Reference <> '') then
-          if not IsEqualGUID(Valeur, GUID_NULL) then
-            SQL.Add(Format('where %s = ''%s''', [Reference, GUIDToString(Valeur)]))
-          else if Sauf <> '' then
-            SQL.Add(Format('where %s not in (%s)', [Reference, Sauf]));
+      if (Reference <> '') then
+        if not IsEqualGUID(Valeur, GUID_NULL) then
+          qry.SQL.Add(Format('where %s = ''%s''', [Reference, GUIDToString(Valeur)]))
+        else if Sauf <> '' then
+          qry.SQL.Add(Format('where %s not in (%s)', [Reference, Sauf]));
 
-        Execute;
-        Transaction.Commit;
-        Result := True;
-      finally
-        Free;
-      end;
+      qry.Execute;
+      qry.Transaction.Commit;
+      Result := True;
+    finally
+      qry.Free;
+    end;
   except
     Result := False;
   end;
@@ -530,69 +543,72 @@ var
   ms: TMemoryStream;
   img: TJPEGImage;
   Fichier, Chemin: string;
+  qry: TManagedQuery;
 begin
-  with dmPrinc.DBConnection.GetQuery do
-    try
-      if isParaBD then
-        SQL.Text := 'select imagephoto, stockagephoto, fichierphoto from photos where id_photo = ?'
-      else
-        SQL.Text := 'select imagecouverture, stockagecouverture, fichiercouverture from couvertures where id_couverture = ?';
-      Params.AsString[0] := GUIDToString(ID_Couverture);
-      FetchBlobs := True;
-      Open;
-      if Eof or (Fields.IsNull[0] and Fields.IsNull[2]) then
-        Picture.Assign(nil)
-      else
+  qry := dmPrinc.DBConnection.GetQuery;
+  try
+    if isParaBD then
+      qry.SQL.Text := 'select imagephoto, stockagephoto, fichierphoto from photos where id_photo = ?'
+    else
+      qry.SQL.Text := 'select imagecouverture, stockagecouverture, fichiercouverture from couvertures where id_couverture = ?';
+    qry.Params.AsString[0] := GUIDToString(ID_Couverture);
+    qry.FetchBlobs := True;
+    qry.Open;
+    if qry.Eof or (qry.Fields.IsNull[0] and qry.Fields.IsNull[2]) then
+      Picture.Assign(nil)
+    else
+    begin
+      if not qry.Fields.AsBoolean[1] then
       begin
-        if not Fields.AsBoolean[1] then
+        Fichier := TPath.GetFileName(qry.Fields.AsString[2]);
+        Chemin := TPath.GetDirectoryName(qry.Fields.AsString[2]);
+        if Chemin = '' then
+          Chemin := RepImages;
+        qry.SQL.Text := 'select blobcontent from loadblobfromfile(:chemin, :fichier);';
+        qry.Prepare(True);
+        qry.Params.AsString[0] := Copy(Chemin, 1, qry.Params.MaxStrLen[0]);
+        qry.Params.AsString[1] := Copy(Fichier, 1, qry.Params.MaxStrLen[1]);
+        qry.Open;
+        if qry.Eof then
         begin
-          Fichier := TPath.GetFileName(Fields.AsString[2]);
-          Chemin := TPath.GetDirectoryName(Fields.AsString[2]);
-          if Chemin = '' then
-            Chemin := RepImages;
-          SQL.Text := 'select blobcontent from loadblobfromfile(:chemin, :fichier);';
-          Prepare(True);
-          Params.AsString[0] := Copy(Chemin, 1, Params.MaxStrLen[0]);
-          Params.AsString[1] := Copy(Fichier, 1, Params.MaxStrLen[1]);
-          Open;
-          if Eof then
-          begin
-            Picture.Assign(nil);
-            Exit;
-          end;
-        end;
-
-        ms := TMemoryStream.Create;
-        img := TJPEGImage.Create;
-        try
-          ReadBlob(0, ms);
-          ms.Position := 0;
-          img.LoadFromStream(ms);
-          Picture.Assign(img);
-        finally
-          ms.Free;
-          img.Free;
+          Picture.Assign(nil);
+          Exit;
         end;
       end;
-    finally
-      Free;
+
+      ms := TMemoryStream.Create;
+      img := TJPEGImage.Create;
+      try
+        qry.ReadBlob(0, ms);
+        ms.Position := 0;
+        img.LoadFromStream(ms);
+        Picture.Assign(img);
+      finally
+        ms.Free;
+        img.Free;
+      end;
     end;
+  finally
+    qry.Free;
+  end;
 end;
 
 function SearchNewFileName(const Chemin, Fichier: string; Reserve: Boolean = True): string;
+var
+  qry: TManagedQuery;
 begin
-  with dmPrinc.DBConnection.GetQuery do
-    try
-      SQL.Text := 'select * from searchfilename(:chemin, :fichier, :reserve)';
-      Prepare(True);
-      Params.AsString[0] := Copy(IncludeTrailingPathDelimiter(Chemin), 1, Params.MaxStrLen[0]);
-      Params.AsString[1] := Copy(Fichier, 1, Params.MaxStrLen[1]);
-      Params.AsBoolean[2] := Reserve;
-      Open;
-      Result := TPath.GetFileName(Fields.AsString[0]);
-    finally
-      Free;
-    end;
+  qry := dmPrinc.DBConnection.GetQuery;
+  try
+    qry.SQL.Text := 'select * from searchfilename(:chemin, :fichier, :reserve)';
+    qry.Prepare(True);
+    qry.Params.AsString[0] := Copy(IncludeTrailingPathDelimiter(Chemin), 1, qry.Params.MaxStrLen[0]);
+    qry.Params.AsString[1] := Copy(Fichier, 1, qry.Params.MaxStrLen[1]);
+    qry.Params.AsBoolean[2] := Reserve;
+    qry.Open;
+    Result := TPath.GetFileName(qry.Fields.AsString[0]);
+  finally
+    qry.Free;
+  end;
 end;
 
 procedure LoadCombo(Combo: TLightComboCheck; List: TStrings; DefaultValue: ROption);

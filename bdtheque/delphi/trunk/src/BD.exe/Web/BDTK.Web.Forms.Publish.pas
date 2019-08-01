@@ -369,106 +369,104 @@ begin
   try
     enteteXML := '<table>' + LowerCase(InfoTable.TableName) + '</table>';
     AjoutString(enteteXML, LowerCase(InfoTable.ID), '', '<primarykey>', '</primarykey>');
-    with Query do
+
+    for i := 0 to Pred(Query.Fields.FieldCount) do
     begin
-      for i := 0 to Pred(Fields.FieldCount) do
-      begin
-        champ := LowerCase(Fields.AliasName[i]);
+      champ := LowerCase(Query.Fields.AliasName[i]);
 
-        // champ à passer ?
-        s := '@' + InfoTable.SkipFields + '@';
-        l := Pos('@' + champ + '=', s);
-        if l > 0 then
-        begin
-          l := l + Length(champ) + 2;
-          if DBVersion >= Copy(s, l, PosEx('@', s, l) - l) then
-            listFields.Add(i);
-          Continue; // ce n'est pas grave si on ne fait pas le test du champ à upper: si on l'a passé c'est qu'il ne l'est pas
-        end;
-        if Pos('@' + champ + '@', s) = 0 then
+      // champ à passer ?
+      s := '@' + InfoTable.SkipFields + '@';
+      l := Pos('@' + champ + '=', s);
+      if l > 0 then
+      begin
+        l := l + Length(champ) + 2;
+        if DBVersion >= Copy(s, l, PosEx('@', s, l) - l) then
           listFields.Add(i);
-
-        s := '@' + InfoTable.UpperFields + '@';
-        l := Pos('@' + champ + '=', s);
-        if l > 0 then
-        begin
-          l := l + Length(champ) + 2;
-          if DBVersion >= Copy(s, l, PosEx('@', s, l) - l) then
-            listUpperFields.Add(i);
-          Continue;
-        end;
-        if Pos('@' + champ + '@', s) > 0 then
-          listUpperFields.Add(i);
+        Continue; // ce n'est pas grave si on ne fait pas le test du champ à upper: si on l'a passé c'est qu'il ne l'est pas
       end;
-      bodyXML := '';
-      while not Eof do
+      if Pos('@' + champ + '@', s) = 0 then
+        listFields.Add(i);
+
+      s := '@' + InfoTable.UpperFields + '@';
+      l := Pos('@' + champ + '=', s);
+      if l > 0 then
       begin
-        recordXML := '';
-        for l := 0 to Pred(listFields.Count) do
-        begin
-          i := listFields[l];
-          champ := LowerCase(Fields.AliasName[i]);
-          if Fields.IsNull[i] then
-            contenuChamp := ''
-          else
-          begin
-            case Fields.FieldType[i] of
-              uftDate:
-                contenuChamp := DateToStr(Fields.AsDate[i], TGlobalVar.SQLSettings);
-              uftTimestamp:
-                contenuChamp := DateToStr(Fields.AsDateTime[i], TGlobalVar.SQLSettings) + ' ' + TimeToStr(Fields.AsDateTime[i], TGlobalVar.SQLSettings);
-              // uftBlob:
-              // begin
-              // ms := TMemoryStream.Create;
-              // ss := TStringStream.Create('');
-              // try
-              // Fields.ReadBlob(i, ms);
-              // ms.Position := 0;
-              // MimeEncodeStream(ms, ss);
-              // champ := ss.DataString;
-              // finally
-              // ms.Free;
-              // ss.Free;
-              // end;
-              // end;
-              uftNumeric:
-                contenuChamp := StringReplace(Fields.AsString[i], FormatSettings.DecimalSeparator, '.', []);
-            else
-              contenuChamp := Trim(Fields.AsString[i]);
-            end;
-            // if Fields.FieldType[i] <> uftBlob then
-
-          end;
-
-          if contenuChamp = '' then
-          begin
-            AjoutString(recordXML, Format('<%s null="T" />', [champ]), '');
-            if listUpperFields.IndexOf(i) <> -1 then
-              AjoutString(recordXML, Format('<%s null="T" />', ['upper' + champ]), '');
-          end
-          else
-          begin
-            AjoutString(recordXML, CleanHTTP(contenuChamp), '', Format('<%s%s>', [champ, IIf(Fields.FieldType[i] = uftBlob,
-              { ' type="B"' } '', '')]), Format('</%s>', [champ]));
-            if listUpperFields.IndexOf(i) <> -1 then
-              AjoutString(recordXML, CleanHTTP(UpperCase(SansAccents(contenuChamp))), '',
-                Format('<%s%s>', ['upper' + champ, IIf(Fields.FieldType[i] = uftBlob, { ' type="B"' } '', '')]), Format('</%s>', ['upper' + champ]));
-          end;
-        end;
-        AjoutString(bodyXML, recordXML, '', '<record' + IIf(isDelete, ' action="D"', '') + '>', '</record>');
-        if Length(bodyXML) > Site.Paquets then
-        begin
-          SendXML(Format('<data>%s<records>%s</records></data>', [enteteXML, bodyXML]));
-          bodyXML := '';
-        end;
-
-        Next;
-        if Assigned(RefreshProgressBars) then
-          RefreshProgressBars(FStartTime, FStartTimeTable);
+        l := l + Length(champ) + 2;
+        if DBVersion >= Copy(s, l, PosEx('@', s, l) - l) then
+          listUpperFields.Add(i);
+        Continue;
       end;
-      if Length(bodyXML) > 0 then
-        SendXML(Format('<data>%s<records>%s</records></data>', [enteteXML, bodyXML]));
+      if Pos('@' + champ + '@', s) > 0 then
+        listUpperFields.Add(i);
     end;
+    bodyXML := '';
+    while not Query.Eof do
+    begin
+      recordXML := '';
+      for l := 0 to Pred(listFields.Count) do
+      begin
+        i := listFields[l];
+        champ := LowerCase(Query.Fields.AliasName[i]);
+        if Query.Fields.IsNull[i] then
+          contenuChamp := ''
+        else
+        begin
+          case Query.Fields.FieldType[i] of
+            uftDate:
+              contenuChamp := DateToStr(Query.Fields.AsDate[i], TGlobalVar.SQLSettings);
+            uftTimestamp:
+              contenuChamp := DateToStr(Query.Fields.AsDateTime[i], TGlobalVar.SQLSettings) + ' ' + TimeToStr(Query.Fields.AsDateTime[i], TGlobalVar.SQLSettings);
+            // uftBlob:
+            // begin
+            // ms := TMemoryStream.Create;
+            // ss := TStringStream.Create('');
+            // try
+            // Fields.ReadBlob(i, ms);
+            // ms.Position := 0;
+            // MimeEncodeStream(ms, ss);
+            // champ := ss.DataString;
+            // finally
+            // ms.Free;
+            // ss.Free;
+            // end;
+            // end;
+            uftNumeric:
+              contenuChamp := StringReplace(Query.Fields.AsString[i], FormatSettings.DecimalSeparator, '.', []);
+          else
+            contenuChamp := Trim(Query.Fields.AsString[i]);
+          end;
+          // if Fields.FieldType[i] <> uftBlob then
+
+        end;
+
+        if contenuChamp = '' then
+        begin
+          AjoutString(recordXML, Format('<%s null="T" />', [champ]), '');
+          if listUpperFields.IndexOf(i) <> -1 then
+            AjoutString(recordXML, Format('<%s null="T" />', ['upper' + champ]), '');
+        end
+        else
+        begin
+          AjoutString(recordXML, CleanHTTP(contenuChamp), '', Format('<%s%s>', [champ, IIf(Query.Fields.FieldType[i] = uftBlob,
+            { ' type="B"' } '', '')]), Format('</%s>', [champ]));
+          if listUpperFields.IndexOf(i) <> -1 then
+            AjoutString(recordXML, CleanHTTP(UpperCase(SansAccents(contenuChamp))), '',
+              Format('<%s%s>', ['upper' + champ, IIf(Query.Fields.FieldType[i] = uftBlob, { ' type="B"' } '', '')]), Format('</%s>', ['upper' + champ]));
+        end;
+      end;
+      AjoutString(bodyXML, recordXML, '', '<record' + IIf(isDelete, ' action="D"', '') + '>', '</record>');
+      if Length(bodyXML) > Site.Paquets then
+      begin
+        SendXML(Format('<data>%s<records>%s</records></data>', [enteteXML, bodyXML]));
+        bodyXML := '';
+      end;
+
+      Query.Next;
+      if Assigned(RefreshProgressBars) then
+        RefreshProgressBars(FStartTime, FStartTimeTable);
+    end;
+    if Length(bodyXML) > 0 then
+      SendXML(Format('<data>%s<records>%s</records></data>', [enteteXML, bodyXML]));
   finally
     listFields.Free;
     listUpperFields.Free;

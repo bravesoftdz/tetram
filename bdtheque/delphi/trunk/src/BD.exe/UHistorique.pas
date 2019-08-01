@@ -131,20 +131,19 @@ procedure THistory.AddConsultation(Consult: TConsult);
   end;
 
 begin
-  if not LongBool(FLockCount) then
+  if LongBool(FLockCount) then
+    Exit;
+
+  if (FCurrentConsultation > -1) and (Consult.Action = CurrentConsult.Action) then
   begin
-    if (FCurrentConsultation > -1) and (Consult.Action = CurrentConsult.Action) then
-      with CurrentConsult do
-      begin
-        if Consult.Action in MustRefresh then
-          Modifie
-        else if not(Consult.Action in CanRefresh) or (Reference <> Consult.Reference) or (not IsEqualGUID(ReferenceGUID, Consult.ReferenceGUID)) or
-          (Reference2 <> Consult.Reference2) or (not IsEqualGUID(ReferenceGUID2, Consult.ReferenceGUID2)) then
-          Ajoute;
-      end
-    else
+    if Consult.Action in MustRefresh then
+      Modifie
+    else if not(Consult.Action in CanRefresh) or (CurrentConsult.Reference <> Consult.Reference) or (not IsEqualGUID(CurrentConsult.ReferenceGUID, Consult.ReferenceGUID)) or
+      (CurrentConsult.Reference2 <> Consult.Reference2) or (not IsEqualGUID(CurrentConsult.ReferenceGUID2, Consult.ReferenceGUID2)) then
       Ajoute;
-  end;
+  end
+  else
+    Ajoute;
 end;
 
 procedure THistory.AddConsultation(Consultation: TActionConsultation);
@@ -167,42 +166,45 @@ begin
 end;
 
 procedure THistory.AddWaiting(Consultation: TActionConsultation; const Ref, Ref2: RGUIDEx);
+var
+  act: TConsult;
 begin
-  FListWaiting.Add(TConsult.Create);
-  with FListWaiting.Last do
-  begin
-    Action := Consultation;
-    Reference := -1;
-    ReferenceGUID := Ref;
-    Reference2 := -1;
-    ReferenceGUID2 := Ref2;
-  end;
+  act := TConsult.Create;
+  act.Action := Consultation;
+  act.Reference := -1;
+  act.ReferenceGUID := Ref;
+  act.Reference2 := -1;
+  act.ReferenceGUID2 := Ref2;
+
+  FListWaiting.Add(act);
 end;
 
 procedure THistory.AddWaiting(Consultation: TActionConsultation; Ref, Ref2: Integer);
+var
+  act: TConsult;
 begin
-  FListWaiting.Add(TConsult.Create);
-  with TConsult(FListWaiting.Last) do
-  begin
-    Action := Consultation;
-    Reference := Ref;
-    ReferenceGUID := GUID_NULL;
-    Reference2 := Ref2;
-    ReferenceGUID2 := GUID_NULL;
-  end;
+  act := TConsult.Create;
+  act.Action := Consultation;
+  act.Reference := Ref;
+  act.ReferenceGUID := GUID_NULL;
+  act.Reference2 := Ref2;
+  act.ReferenceGUID2 := GUID_NULL;
+
+  FListWaiting.Add(act);
 end;
 
 procedure THistory.AddWaiting(Consultation: TActionConsultation; const Ref: RGUIDEx; Ref2: Integer);
+var
+  act: TConsult;
 begin
-  FListWaiting.Add(TConsult.Create);
-  with TConsult(FListWaiting.Last) do
-  begin
-    Action := Consultation;
-    Reference := -1;
-    ReferenceGUID := Ref;
-    Reference2 := Ref2;
-    ReferenceGUID2 := GUID_NULL;
-  end;
+  act := TConsult.Create;
+  act.Action := Consultation;
+  act.Reference := -1;
+  act.ReferenceGUID := Ref;
+  act.Reference2 := Ref2;
+  act.ReferenceGUID2 := GUID_NULL;
+
+  FListWaiting.Add(act);
 end;
 
 procedure THistory.AddWaiting(Consultation: TActionConsultation; Callback: TConsultCallback; CallbackData: TObject; Proc, VTV: Pointer; const Valeur: string);
@@ -210,23 +212,20 @@ begin
   AddWaiting(Consultation, Callback, CallbackData, Proc, VTV, GUID_NULL, Valeur);
 end;
 
-procedure THistory.AddWaiting(Consultation: TActionConsultation; Callback: TConsultCallback; CallbackData: TObject; Proc, VTV: Pointer; const Ref: RGUIDEx;
-  const Valeur: string);
+procedure THistory.AddWaiting(Consultation: TActionConsultation; Callback: TConsultCallback; CallbackData: TObject; Proc, VTV: Pointer; const Ref: RGUIDEx; const Valeur: string);
+var
+  act: TConsult;
 begin
-  FListWaiting.Add(TConsult.Create);
-  with TConsult(FListWaiting.Last) do
-  begin
-    Action := Consultation;
+  act := TConsult.Create;
+  act.Action := Consultation;
+  act.ReferenceGUID := Ref;
+  act.GestionCallback := Callback;
+  act.GestionCallbackData := CallbackData;
+  act.GestionProc := Proc;
+  act.GestionVTV := VTV;
+  act.GestionValeur := Valeur;
 
-    ReferenceGUID := Ref;
-
-    GestionCallback := Callback;
-    GestionCallbackData := CallbackData;
-
-    GestionProc := Proc;
-    GestionVTV := VTV;
-    GestionValeur := Valeur;
-  end;
+  FListWaiting.Add(act);
 end;
 
 procedure THistory.Back;
@@ -267,8 +266,8 @@ end;
 
 destructor THistory.Destroy;
 begin
-  FreeAndNil(FListConsultation);
-  FreeAndNil(FListWaiting);
+  FListConsultation.Free;
+  FListWaiting.Free;
   inherited;
 end;
 

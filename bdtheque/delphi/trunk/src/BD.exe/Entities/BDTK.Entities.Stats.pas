@@ -177,147 +177,155 @@ begin
   hg := THourGlass.Create;
   Stats.FEditeur := Editeur;
   q := dmPrinc.DBConnection.GetQuery;
-  with q do
-    try
-      SQL.Add('select count(a.id_album) from albums a inner join editions e on a.id_album = e.id_album');
-      if not IsEqualGUID(ID_Editeur, GUID_NULL) then
-        SQL.Add('and e.id_editeur = ' + QuotedStr(GUIDToString(ID_Editeur)))
-      else
-        SQL.Add('');
-      SQL.Add('');
-      Open;
-      Stats.FNbAlbums := Fields.AsInteger[0];
-      Close;
-      SQL[2] := 'where e.couleur = 0';
-      Open;
-      Stats.FNbAlbumsNB := Fields.AsInteger[0];
-      Close;
-      SQL[2] := 'where e.vo = 1';
-      Open;
-      Stats.FNbAlbumsVO := Fields.AsInteger[0];
-      Close;
-      SQL[2] := 'where e.stock = 1';
-      Open;
-      Stats.FNbAlbumsStock := Fields.AsInteger[0];
-      Close;
-      SQL[2] := 'where e.dedicace = 1';
-      Open;
-      Stats.FNbAlbumsDedicace := Fields.AsInteger[0];
-      Close;
-      SQL[2] := 'where e.offert = 1';
-      Open;
-      Stats.FNbAlbumsOffert := Fields.AsInteger[0];
-      Close;
-      SQL[2] := 'where e.gratuit = 1';
-      Open;
-      Stats.FNbAlbumsGratuit := Fields.AsInteger[0];
-      Close;
-      SQL[2] := 'where a.integrale = 1';
-      Open;
-      Stats.FNbAlbumsIntegrale := Fields.AsInteger[0];
-      Close;
-      SQL[2] := 'where a.horsserie = 1';
-      Open;
-      Stats.FNbAlbumsHorsSerie := Fields.AsInteger[0];
-      Close;
+  try
+    q.SQL.Add('select count(a.id_album) from albums a inner join editions e on a.id_album = e.id_album');
+    if not IsEqualGUID(ID_Editeur, GUID_NULL) then
+      q.SQL.Add('and e.id_editeur = ' + QuotedStr(GUIDToString(ID_Editeur)))
+    else
+      q.SQL.Add('');
+    q.SQL.Add('');
+    q.Open;
+    Stats.FNbAlbums := q.Fields.AsInteger[0];
+    q.Close;
 
-      SQL.Clear;
-      SQL.Add('select count(distinct a.id_serie) from albums a');
-      if not IsEqualGUID(ID_Editeur, GUID_NULL) then
-        SQL.Add('inner join editions e on e.id_album = a.id_album and e.id_editeur=' + QuotedStr(GUIDToString(ID_Editeur)))
-      else
-        SQL.Add('');
-      Open;
-      Stats.FNbSeries := Fields.AsInteger[0];
-      Close;
-      SQL.Add('left join series s on a.id_serie = s.id_serie');
-      SQL.Add('');
-      SQL[3] := 'where s.terminee = 1';
-      Open;
-      Stats.FNbSeriesTerminee := Fields.AsInteger[0];
-      Close;
+    q.SQL[2] := 'where e.couleur = 0';
+    q.Open;
+    Stats.FNbAlbumsNB := q.Fields.AsInteger[0];
+    q.Close;
 
-      SQL.Text := 'select min(a.anneeparution) as minannee, max(a.anneeparution) as maxannee from albums a';
-      if not IsEqualGUID(ID_Editeur, GUID_NULL) then
-        SQL.Add('inner join editions e on e.id_album = a.id_album and e.id_editeur=' + QuotedStr(GUIDToString(ID_Editeur)));
-      Open;
-      Stats.FMinAnnee := 0;
-      Stats.FMaxAnnee := 0;
-      if not Eof then
-      begin
-        Stats.FMinAnnee := Fields.ByNameAsInteger['minannee'];
-        Stats.FMaxAnnee := Fields.ByNameAsInteger['maxannee'];
-      end;
+    q.SQL[2] := 'where e.vo = 1';
+    q.Open;
+    Stats.FNbAlbumsVO := q.Fields.AsInteger[0];
+    q.Close;
 
-      Close;
-      SQL.Clear;
-      SQL.Add('select');
-      SQL.Add('  count(g.id_genre) as quantitegenre, g.id_genre, g.genre');
-      SQL.Add('from');
-      SQL.Add('  genreseries gs');
-      SQL.Add('  inner join genres g on');
-      SQL.Add('    gs.id_genre = g.id_genre');
-      if not IsEqualGUID(ID_Editeur, GUID_NULL) then
-      begin
-        SQL.Add('  inner join albums a on');
-        SQL.Add('    a.id_serie = gs.id_serie');
-        SQL.Add('  inner join editions e on');
-        SQL.Add('    e.id_album = a.id_album');
-        SQL.Add('    and e.id_editeur=' + QuotedStr(GUIDToString(ID_Editeur)));
-      end;
-      SQL.Add('group by');
-      SQL.Add('  g.genre, g.id_genre');
-      SQL.Add('order by');
-      SQL.Add('  1 desc');
-      Open;
-      TDaoGenreLite.FillList(Stats.ListGenre, q);
+    q.SQL[2] := 'where e.stock = 1';
+    q.Open;
+    Stats.FNbAlbumsStock := q.Fields.AsInteger[0];
+    q.Close;
 
-      Close;
-      SQL.Clear;
-      SQL.Add('select');
-      SQL.Add('  sum(prix) as sumprix, count(prix) as countprix, min(prix) as minprix, max(prix) as maxprix');
-      SQL.Add('from');
-      SQL.Add('  editions');
-      if not IsEqualGUID(ID_Editeur, GUID_NULL) then
-        SQL.Add('where id_editeur = ' + QuotedStr(GUIDToString(ID_Editeur)));
-      Open;
-      Stats.FValeurConnue := Fields.ByNameAsCurrency['sumprix'];
-      Stats.FPrixAlbumMoyen := 0;
-      Stats.FPrixAlbumMinimun := 0;
-      Stats.FPrixAlbumMaximun := 0;
-      if not Eof and Fields.ByNameAsBoolean['countprix'] then
-      begin
-        Stats.FPrixAlbumMoyen := Fields.ByNameAsCurrency['sumprix'] / Fields.ByNameAsInteger['countprix'];
-        Stats.FPrixAlbumMinimun := Fields.ByNameAsCurrency['minprix'];
-        Stats.FPrixAlbumMaximun := Fields.ByNameAsCurrency['maxprix'];
-      end;
+    q.SQL[2] := 'where e.dedicace = 1';
+    q.Open;
+    Stats.FNbAlbumsDedicace := q.Fields.AsInteger[0];
+    q.Close;
 
-      Close;
-      SQL.Clear;
-      SQL.Add('select');
-      SQL.Add('  count(id_edition) as countref');
-      SQL.Add('from');
-      SQL.Add('  editions');
-      SQL.Add('where');
-      SQL.Add('  prix is null');
-      if not IsEqualGUID(ID_Editeur, GUID_NULL) then
-        SQL.Add('  and id_editeur = ' + QuotedStr(GUIDToString(ID_Editeur)));
-      Open;
-      Stats.FNbAlbumsSansPrix := 0;
-      if not Eof then
-        Stats.FNbAlbumsSansPrix := Fields.ByNameAsInteger['countref'] - Stats.NbAlbumsGratuit;
-      Stats.FValeurEstimee := Stats.ValeurConnue + Stats.NbAlbumsSansPrix * Stats.PrixAlbumMoyen;
-    finally
-      Free;
+    q.SQL[2] := 'where e.offert = 1';
+    q.Open;
+    Stats.FNbAlbumsOffert := q.Fields.AsInteger[0];
+    q.Close;
+
+    q.SQL[2] := 'where e.gratuit = 1';
+    q.Open;
+    Stats.FNbAlbumsGratuit := q.Fields.AsInteger[0];
+    q.Close;
+
+    q.SQL[2] := 'where a.integrale = 1';
+    q.Open;
+    Stats.FNbAlbumsIntegrale := q.Fields.AsInteger[0];
+    q.Close;
+
+    q.SQL[2] := 'where a.horsserie = 1';
+    q.Open;
+    Stats.FNbAlbumsHorsSerie := q.Fields.AsInteger[0];
+    q.Close;
+
+    q.SQL.Clear;
+    q.SQL.Add('select count(distinct a.id_serie) from albums a');
+    if not IsEqualGUID(ID_Editeur, GUID_NULL) then
+      q.SQL.Add('inner join editions e on e.id_album = a.id_album and e.id_editeur=' + QuotedStr(GUIDToString(ID_Editeur)))
+    else
+      q.SQL.Add('');
+    q.Open;
+    Stats.FNbSeries := q.Fields.AsInteger[0];
+    q.Close;
+
+    q.SQL.Add('left join series s on a.id_serie = s.id_serie');
+    q.SQL.Add('');
+    q.SQL[3] := 'where s.terminee = 1';
+    q.Open;
+    Stats.FNbSeriesTerminee := q.Fields.AsInteger[0];
+    q.Close;
+
+    q.SQL.Text := 'select min(a.anneeparution) as minannee, max(a.anneeparution) as maxannee from albums a';
+    if not IsEqualGUID(ID_Editeur, GUID_NULL) then
+      q.SQL.Add('inner join editions e on e.id_album = a.id_album and e.id_editeur=' + QuotedStr(GUIDToString(ID_Editeur)));
+    q.Open;
+    Stats.FMinAnnee := 0;
+    Stats.FMaxAnnee := 0;
+    if not q.Eof then
+    begin
+      Stats.FMinAnnee := q.Fields.ByNameAsInteger['minannee'];
+      Stats.FMaxAnnee := q.Fields.ByNameAsInteger['maxannee'];
     end;
+
+    q.Close;
+    q.SQL.Clear;
+    q.SQL.Add('select');
+    q.SQL.Add('  count(g.id_genre) as quantitegenre, g.id_genre, g.genre');
+    q.SQL.Add('from');
+    q.SQL.Add('  genreseries gs');
+    q.SQL.Add('  inner join genres g on');
+    q.SQL.Add('    gs.id_genre = g.id_genre');
+    if not IsEqualGUID(ID_Editeur, GUID_NULL) then
+    begin
+      q.SQL.Add('  inner join albums a on');
+      q.SQL.Add('    a.id_serie = gs.id_serie');
+      q.SQL.Add('  inner join editions e on');
+      q.SQL.Add('    e.id_album = a.id_album');
+      q.SQL.Add('    and e.id_editeur=' + QuotedStr(GUIDToString(ID_Editeur)));
+    end;
+    q.SQL.Add('group by');
+    q.SQL.Add('  g.genre, g.id_genre');
+    q.SQL.Add('order by');
+    q.SQL.Add('  1 desc');
+    q.Open;
+    TDaoGenreLite.FillList(Stats.ListGenre, q);
+
+    q.Close;
+    q.SQL.Clear;
+    q.SQL.Add('select');
+    q.SQL.Add('  sum(prix) as sumprix, count(prix) as countprix, min(prix) as minprix, max(prix) as maxprix');
+    q.SQL.Add('from');
+    q.SQL.Add('  editions');
+    if not IsEqualGUID(ID_Editeur, GUID_NULL) then
+      q.SQL.Add('where id_editeur = ' + QuotedStr(GUIDToString(ID_Editeur)));
+    q.Open;
+    Stats.FValeurConnue := q.Fields.ByNameAsCurrency['sumprix'];
+    Stats.FPrixAlbumMoyen := 0;
+    Stats.FPrixAlbumMinimun := 0;
+    Stats.FPrixAlbumMaximun := 0;
+    if not q.Eof and q.Fields.ByNameAsBoolean['countprix'] then
+    begin
+      Stats.FPrixAlbumMoyen := q.Fields.ByNameAsCurrency['sumprix'] / q.Fields.ByNameAsInteger['countprix'];
+      Stats.FPrixAlbumMinimun := q.Fields.ByNameAsCurrency['minprix'];
+      Stats.FPrixAlbumMaximun := q.Fields.ByNameAsCurrency['maxprix'];
+    end;
+
+    q.Close;
+    q.SQL.Clear;
+    q.SQL.Add('select');
+    q.SQL.Add('  count(id_edition) as countref');
+    q.SQL.Add('from');
+    q.SQL.Add('  editions');
+    q.SQL.Add('where');
+    q.SQL.Add('  prix is null');
+    if not IsEqualGUID(ID_Editeur, GUID_NULL) then
+      q.SQL.Add('  and id_editeur = ' + QuotedStr(GUIDToString(ID_Editeur)));
+    q.Open;
+    Stats.FNbAlbumsSansPrix := 0;
+    if not q.Eof then
+      Stats.FNbAlbumsSansPrix := q.Fields.ByNameAsInteger['countref'] - Stats.NbAlbumsGratuit;
+    Stats.FValeurEstimee := Stats.ValeurConnue + Stats.NbAlbumsSansPrix * Stats.PrixAlbumMoyen;
+  finally
+    q.Free;
+  end;
 end;
 
 destructor TStats.Destroy;
 begin
-  FreeAndNil(FListAlbumsMax);
-  FreeAndNil(FListAlbumsMin);
-  FreeAndNil(FListGenre);
-  FreeAndNil(FListEditeurs);
+  FListAlbumsMax.Free;
+  FListAlbumsMin.Free;
+  FListGenre.Free;
+  FListEditeurs.Free;
   inherited;
 end;
 
@@ -333,29 +341,26 @@ begin
   if Complete then
   begin
     q := dmPrinc.DBConnection.GetQuery;
-    with q do
-      try
-        Close;
-        SQL.Clear;
-        SQL.Add('select distinct');
-        SQL.Add('  ed.id_editeur, e.nomediteur');
-        SQL.Add('from');
-        SQL.Add('  editions ed');
-        SQL.Add('  inner join editeurs e on');
-        SQL.Add('    ed.id_editeur = e.id_editeur');
-        SQL.Add('order by');
-        SQL.Add('  e.nomediteur');
-        Open;
-        while not Eof do
-        begin
-          PS := TStats.Create;
-          ListEditeurs.Add(PS);
-          CreateStats(PS, StringToGUID(Fields.AsString[0]), Trim(Fields.AsString[1]));
-          Next;
-        end;
-      finally
-        Free;
+    try
+      q.SQL.Add('select distinct');
+      q.SQL.Add('  ed.id_editeur, e.nomediteur');
+      q.SQL.Add('from');
+      q.SQL.Add('  editions ed');
+      q.SQL.Add('  inner join editeurs e on');
+      q.SQL.Add('    ed.id_editeur = e.id_editeur');
+      q.SQL.Add('order by');
+      q.SQL.Add('  e.nomediteur');
+      q.Open;
+      while not q.Eof do
+      begin
+        PS := TStats.Create;
+        ListEditeurs.Add(PS);
+        CreateStats(PS, StringToGUID(q.Fields.AsString[0]), Trim(q.Fields.AsString[1]));
+        q.Next;
       end;
+    finally
+      q.Free;
+    end;
   end;
 end;
 
@@ -396,13 +401,14 @@ var
   procedure UpdateSerie;
   var
     i: Integer;
+    NumerosManquants: TStringList;
   begin
-    with Self.Series[Pred(Self.Series.Count)] do
-      if CurrentTome > FirstTome + 1 then
-        NumerosManquants.Add(Format('%d<>%d', [FirstTome, CurrentTome]))
-      else
-        for i := FirstTome to CurrentTome do
-          NumerosManquants.Add(IntToStr(i));
+    NumerosManquants := Self.Series.Last.NumerosManquants;
+    if CurrentTome > FirstTome + 1 then
+      NumerosManquants.Add(Format('%d<>%d', [FirstTome, CurrentTome]))
+    else
+      for i := FirstTome to CurrentTome do
+        NumerosManquants.Add(IntToStr(i));
   end;
 
 var
@@ -410,48 +416,47 @@ var
 begin
   Clear;
   q := dmPrinc.DBConnection.GetQuery;
-  with q do
-    try
-      SQL.Text := 'select * from albums_manquants(:withintegrales, :withachats, :id_serie) order by titreserie, tome';
-      Params.AsBoolean[0] := AvecIntegrales;
-      Params.AsBoolean[1] := AvecAchats;
-      if not IsEqualGUID(ID_Serie, GUID_NULL) then
-        Params.AsString[2] := GUIDToString(ID_Serie);
-      Open;
-      CurrentSerie := GUID_NULL;
-      FirstTome := -1;
-      CurrentTome := -1;
-      while not Eof do
+  try
+    q.SQL.Text := 'select * from albums_manquants(:withintegrales, :withachats, :id_serie) order by titreserie, tome';
+    q.Params.AsBoolean[0] := AvecIntegrales;
+    q.Params.AsBoolean[1] := AvecAchats;
+    if not IsEqualGUID(ID_Serie, GUID_NULL) then
+      q.Params.AsString[2] := GUIDToString(ID_Serie);
+    q.Open;
+    CurrentSerie := GUID_NULL;
+    FirstTome := -1;
+    CurrentTome := -1;
+    while not q.Eof do
+    begin
+      dummy := StringToGUID(q.Fields.ByNameAsString['id_serie']);
+      if not IsEqualGUID(dummy, CurrentSerie) then
       begin
-        dummy := StringToGUID(Fields.ByNameAsString['id_serie']);
-        if not IsEqualGUID(dummy, CurrentSerie) then
+        if not IsEqualGUID(CurrentSerie, GUID_NULL) then
+          UpdateSerie;
+        Incomplete := TSerieIncomplete.Create;
+        Self.Series.Add(Incomplete);
+        TDaoSerieLite.Fill(Incomplete.Serie, q);
+        CurrentSerie := dummy;
+        FirstTome := q.Fields.ByNameAsInteger['tome'];
+        CurrentTome := FirstTome;
+      end
+      else
+      begin
+        iDummy := q.Fields.ByNameAsInteger['tome'];
+        if iDummy <> CurrentTome + 1 then
         begin
-          if not IsEqualGUID(CurrentSerie, GUID_NULL) then
-            UpdateSerie;
-          Incomplete := TSerieIncomplete.Create;
-          Self.Series.Add(Incomplete);
-          TDaoSerieLite.Fill(Incomplete.Serie, q);
-          CurrentSerie := dummy;
-          FirstTome := Fields.ByNameAsInteger['tome'];
-          CurrentTome := FirstTome;
-        end
-        else
-        begin
-          iDummy := Fields.ByNameAsInteger['tome'];
-          if iDummy <> CurrentTome + 1 then
-          begin
-            UpdateSerie;
-            FirstTome := iDummy;
-          end;
-          CurrentTome := iDummy;
+          UpdateSerie;
+          FirstTome := iDummy;
         end;
-        Next;
+        CurrentTome := iDummy;
       end;
-      if not IsEqualGUID(CurrentSerie, GUID_NULL) then
-        UpdateSerie;
-    finally
-      Free;
+      q.Next;
     end;
+    if not IsEqualGUID(CurrentSerie, GUID_NULL) then
+      UpdateSerie;
+  finally
+    q.Free;
+  end;
 end;
 
 procedure TSeriesIncompletes.Fill(const Reference: TGUID);
@@ -504,45 +509,43 @@ begin
   Clear;
   CurrentAnnee := YearOf(Now);
   q := dmPrinc.DBConnection.GetQuery;
-  with q do
-    try
-      SQL.Clear;
-      SQL.Add('select');
-      SQL.Add('  *');
-      SQL.Add('from');
-      SQL.Add('  previsions_sorties(:withachats, :id_serie)');
-      SQL.Add('order by');
-      SQL.Add('  anneeparution,');
-      SQL.Add('  case');
-      SQL.Add('    when moisparution between 1 and 4 then 1');
-      SQL.Add('    when moisparution between 5 and 8 then 2');
-      SQL.Add('    when moisparution between 9 and 12 then 3');
-      SQL.Add('    else 0');
-      SQL.Add('  end,');
-      SQL.Add('  titreserie');
-      Params.AsBoolean[0] := AvecAchats;
-      if not IsEqualGUID(ID_Serie, GUID_NULL) then
-        Params.AsString[1] := GUIDToString(ID_Serie);
-      Open;
-      while not Eof do
-      begin
-        Annee := Fields.ByNameAsInteger['anneeparution'];
-        Prevision := TPrevisionSortie.Create;
-        TDaoSerieLite.Fill(Prevision.Serie, q);
-        Prevision.Tome := Fields.ByNameAsInteger['tome'];
-        Prevision.Annee := Annee;
-        Prevision.Mois := Fields.ByNameAsInteger['moisparution'];
-        if Annee < CurrentAnnee then
-          Self.AnneesPassees.Add(Prevision)
-        else if Annee > CurrentAnnee then
-          Self.AnneesProchaines.Add(Prevision)
-        else
-          Self.AnneeEnCours.Add(Prevision);
-        Next;
-      end;
-    finally
-      Free;
+  try
+    q.SQL.Add('select');
+    q.SQL.Add('  *');
+    q.SQL.Add('from');
+    q.SQL.Add('  previsions_sorties(:withachats, :id_serie)');
+    q.SQL.Add('order by');
+    q.SQL.Add('  anneeparution,');
+    q.SQL.Add('  case');
+    q.SQL.Add('    when moisparution between 1 and 4 then 1');
+    q.SQL.Add('    when moisparution between 5 and 8 then 2');
+    q.SQL.Add('    when moisparution between 9 and 12 then 3');
+    q.SQL.Add('    else 0');
+    q.SQL.Add('  end,');
+    q.SQL.Add('  titreserie');
+    q.Params.AsBoolean[0] := AvecAchats;
+    if not IsEqualGUID(ID_Serie, GUID_NULL) then
+      q.Params.AsString[1] := GUIDToString(ID_Serie);
+    q.Open;
+    while not q.Eof do
+    begin
+      Annee := q.Fields.ByNameAsInteger['anneeparution'];
+      Prevision := TPrevisionSortie.Create;
+      TDaoSerieLite.Fill(Prevision.Serie, q);
+      Prevision.Tome := q.Fields.ByNameAsInteger['tome'];
+      Prevision.Annee := Annee;
+      Prevision.Mois := q.Fields.ByNameAsInteger['moisparution'];
+      if Annee < CurrentAnnee then
+        Self.AnneesPassees.Add(Prevision)
+      else if Annee > CurrentAnnee then
+        Self.AnneesProchaines.Add(Prevision)
+      else
+        Self.AnneeEnCours.Add(Prevision);
+      q.Next;
     end;
+  finally
+    q.Free;
+  end;
 end;
 
 procedure TPrevisionsSorties.Fill(const Reference: TGUID);

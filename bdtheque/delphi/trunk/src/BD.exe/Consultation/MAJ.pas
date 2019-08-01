@@ -157,35 +157,33 @@ begin
   if not(TGlobalVar.Mode_en_cours in [mdEdit, mdConsult]) then
     Exit;
   FDest := TFrmRecherche.Create(frmFond);
-  with FDest do
+
+  // le TTreeView est une merde! si on fait la création de noeud avec Data
+  // avant l'assignation du Handle, les Data risquent de partir dans la nature
+
+  // TreeView1.HandleNeeded n'est d'aucune utilité!!!!
+
+  // du coup, obligation de faire le SetChildForm AVANT de recréer les critères de recherche
+
+  // conclusion:
+  // virer le TTreeView!!!!!!!
+
+  // 16/05/2009: Etait vrai avec D7, semble plus le cas avec D2009: on verra à le changer pour homogénéiser
+  frmFond.SetChildForm(FDest);
+
+  if Assigned(Stream) and (Stream.Size > 0) then
   begin
-    // le TTreeView est une merde! si on fait la création de noeud avec Data
-    // avant l'assignation du Handle, les Data risquent de partir dans la nature
-
-    // TreeView1.HandleNeeded n'est d'aucune utilité!!!!
-
-    // du coup, obligation de faire le SetChildForm AVANT de recréer les critères de recherche
-
-    // conclusion:
-    // virer le TTreeView!!!!!!!
-
-    // 16/05/2009: Etait vrai avec D7, semble plus le cas avec D2009: on verra à le changer pour homogénéiser
-
-    frmFond.SetChildForm(FDest);
-
-    if Assigned(Stream) and (Stream.Size > 0) then
-    begin
-      LoadRechFromStream(Stream);
-      btnRecherche.Click;
-    end
-    else if LightComboCheck1.ValidValue(TypeSimple) then
-    begin
-      PageControl1.ActivePageIndex := 0;
-      LightComboCheck1.Value := TypeSimple;
-      VTPersonnes.CurrentValue := Reference;
-      SpeedButton1Click(nil);
-    end;
+    FDest.LoadRechFromStream(Stream);
+    FDest.btnRecherche.Click;
+  end
+  else if FDest.LightComboCheck1.ValidValue(TypeSimple) then
+  begin
+    FDest.PageControl1.ActivePageIndex := 0;
+    FDest.LightComboCheck1.Value := TypeSimple;
+    FDest.VTPersonnes.CurrentValue := Reference;
+    FDest.SpeedButton1Click(nil);
   end;
+
   if Historique.CurrentConsultation = 0 then
     Historique.SetDescription('Accueil')
   else
@@ -200,13 +198,12 @@ begin
   if not Result then
     Exit;
   FDest := TFrmZoomCouverture.Create(frmFond);
-  with FDest do
-    try
-      Result := LoadCouverture(isParaBD, ID_Item, ID_Couverture);
-      Historique.SetDescription(FDest.Caption);
-    finally
-      frmFond.SetChildForm(FDest);
-    end;
+  try
+    Result := FDest.LoadCouverture(isParaBD, ID_Item, ID_Couverture);
+    Historique.SetDescription(FDest.Caption);
+  finally
+    frmFond.SetChildForm(FDest);
+  end;
 end;
 
 function MAJGallerie(TypeGallerie: Integer; const Reference: TGUID): Boolean;

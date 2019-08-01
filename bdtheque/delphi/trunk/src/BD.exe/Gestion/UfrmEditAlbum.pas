@@ -801,17 +801,14 @@ begin
   EditionComplete.ID_Album := ID_Album;
   EditionComplete.Stock := True;
   EditionComplete.Dedicace := False;
-  with FAlbum.Serie do
-  begin
-    EditionComplete.Couleur := IIf(RecInconnu or Couleur.Undefined, True, Couleur.AsBoolean[True]);
-    EditionComplete.VO := IIf(RecInconnu or VO.Undefined, False, VO.AsBoolean[False]);
-    EditionComplete.Etat := ROption.Create(IIf(RecInconnu or (Etat.Value = -1), cbxEtat.DefaultValueChecked, Etat.Value), '');
-    EditionComplete.Reliure := ROption.Create(IIf(RecInconnu or (Reliure.Value = -1), cbxReliure.DefaultValueChecked, Reliure.Value), '');
-    EditionComplete.Orientation := ROption.Create(IIf(RecInconnu or (Orientation.Value = -1), cbxOrientation.DefaultValueChecked, Orientation.Value), '');
-    EditionComplete.FormatEdition := ROption.Create(IIf(RecInconnu or (FormatEdition.Value = -1), cbxFormat.DefaultValueChecked, FormatEdition.Value), '');
-    EditionComplete.SensLecture := ROption.Create(IIf(RecInconnu or (SensLecture.Value = -1), cbxSensLecture.DefaultValueChecked, SensLecture.Value), '');
-    EditionComplete.TypeEdition := ROption.Create(IIf(RecInconnu or (TypeEdition.Value = -1), cbxEdition.DefaultValueChecked, TypeEdition.Value), '');
-  end;
+  EditionComplete.Couleur := IIf(FAlbum.Serie.RecInconnu or FAlbum.Serie.Couleur.Undefined, True, FAlbum.Serie.Couleur.AsBoolean[True]);
+  EditionComplete.VO := IIf(FAlbum.Serie.RecInconnu or FAlbum.Serie.VO.Undefined, False, FAlbum.Serie.VO.AsBoolean[False]);
+  EditionComplete.Etat := ROption.Create(IIf(FAlbum.Serie.RecInconnu or (FAlbum.Serie.Etat.Value = -1), cbxEtat.DefaultValueChecked, FAlbum.Serie.Etat.Value), '');
+  EditionComplete.Reliure := ROption.Create(IIf(FAlbum.Serie.RecInconnu or (FAlbum.Serie.Reliure.Value = -1), cbxReliure.DefaultValueChecked, FAlbum.Serie.Reliure.Value), '');
+  EditionComplete.Orientation := ROption.Create(IIf(FAlbum.Serie.RecInconnu or (FAlbum.Serie.Orientation.Value = -1), cbxOrientation.DefaultValueChecked, FAlbum.Serie.Orientation.Value), '');
+  EditionComplete.FormatEdition := ROption.Create(IIf(FAlbum.Serie.RecInconnu or (FAlbum.Serie.FormatEdition.Value = -1), cbxFormat.DefaultValueChecked, FAlbum.Serie.FormatEdition.Value), '');
+  EditionComplete.SensLecture := ROption.Create(IIf(FAlbum.Serie.RecInconnu or (FAlbum.Serie.SensLecture.Value = -1), cbxSensLecture.DefaultValueChecked, FAlbum.Serie.SensLecture.Value), '');
+  EditionComplete.TypeEdition := ROption.Create(IIf(FAlbum.Serie.RecInconnu or (FAlbum.Serie.TypeEdition.Value = -1), cbxEdition.DefaultValueChecked, FAlbum.Serie.TypeEdition.Value), '');
   // if not IsEqualGUID(vtSeries.CurrentValue, GUID_NULL) then
   if not IsEqualGUID(vtEditSerie.CurrentValue, GUID_NULL) then
   begin
@@ -1197,17 +1194,14 @@ begin
       vtEditEditeurs.CurrentValue := FAlbum.Serie.Editeur.ID_Editeur;
       vtEditCollections.CurrentValue := FAlbum.Serie.Collection.ID;
 
-      with FAlbum.Serie do
-      begin
-        cbCouleur.Checked := IIf(RecInconnu or Couleur.Undefined, True, Couleur.AsBoolean[True]);
-        cbVO.Checked := IIf(RecInconnu or VO.Undefined, False, VO.AsBoolean[False]);
-        cbxEtat.Value := IIf(RecInconnu or (Etat.Value = -1), cbxEtat.DefaultValueChecked, Etat.Value);
-        cbxReliure.Value := IIf(RecInconnu or (Reliure.Value = -1), cbxReliure.DefaultValueChecked, Reliure.Value);
-        cbxOrientation.Value := IIf(RecInconnu or (Orientation.Value = -1), cbxOrientation.DefaultValueChecked, Orientation.Value);
-        cbxFormat.Value := IIf(RecInconnu or (FormatEdition.Value = -1), cbxFormat.DefaultValueChecked, FormatEdition.Value);
-        cbxSensLecture.Value := IIf(RecInconnu or (SensLecture.Value = -1), cbxSensLecture.DefaultValueChecked, SensLecture.Value);
-        cbxEdition.Value := IIf(RecInconnu or (TypeEdition.Value = -1), cbxEdition.DefaultValueChecked, TypeEdition.Value);
-      end;
+      cbCouleur.Checked := IIf(FAlbum.Serie.RecInconnu or FAlbum.Serie.Couleur.Undefined, True, FAlbum.Serie.Couleur.AsBoolean[True]);
+      cbVO.Checked := IIf(FAlbum.Serie.RecInconnu or FAlbum.Serie.VO.Undefined, False, FAlbum.Serie.VO.AsBoolean[False]);
+      cbxEtat.Value := IIf(FAlbum.Serie.RecInconnu or (FAlbum.Serie.Etat.Value = -1), cbxEtat.DefaultValueChecked, FAlbum.Serie.Etat.Value);
+      cbxReliure.Value := IIf(FAlbum.Serie.RecInconnu or (FAlbum.Serie.Reliure.Value = -1), cbxReliure.DefaultValueChecked, FAlbum.Serie.Reliure.Value);
+      cbxOrientation.Value := IIf(FAlbum.Serie.RecInconnu or (FAlbum.Serie.Orientation.Value = -1), cbxOrientation.DefaultValueChecked, FAlbum.Serie.Orientation.Value);
+      cbxFormat.Value := IIf(FAlbum.Serie.RecInconnu or (FAlbum.Serie.FormatEdition.Value = -1), cbxFormat.DefaultValueChecked, FAlbum.Serie.FormatEdition.Value);
+      cbxSensLecture.Value := IIf(FAlbum.Serie.RecInconnu or (FAlbum.Serie.SensLecture.Value = -1), cbxSensLecture.DefaultValueChecked, FAlbum.Serie.SensLecture.Value);
+      cbxEdition.Value := IIf(FAlbum.Serie.RecInconnu or (FAlbum.Serie.TypeEdition.Value = -1), cbxEdition.DefaultValueChecked, FAlbum.Serie.TypeEdition.Value);
 
       // on reset parce que le tcheckbox et tedit le flag à tort dans ce cas
       FEditeurCollectionSelected[vtEditions.ItemIndex] := False;
@@ -1223,16 +1217,15 @@ begin
     Exit;
   PC := FCurrentEditionComplete.Couvertures[vstImages.FocusedNode.Index];
   if IsEqualGUID(PC.ID, GUID_NULL) then
-    with ChoixImageDialog do
+  begin
+    ChoixImageDialog.Options := ChoixImageDialog.Options - [ofAllowMultiSelect];
+    ChoixImageDialog.FileName := PC.NewNom;
+    if ChoixImageDialog.Execute then
     begin
-      Options := Options - [ofAllowMultiSelect];
-      FileName := PC.NewNom;
-      if Execute then
-      begin
-        PC.NewNom := FileName;
-        vstImages.InvalidateNode(vstImages.FocusedNode);
-      end;
+      PC.NewNom := ChoixImageDialog.FileName;
+      vstImages.InvalidateNode(vstImages.FocusedNode);
     end;
+  end;
 end;
 
 procedure TfrmEditAlbum.vstImagesDragDrop(Sender: TBaseVirtualTree; Source: TObject; DataObject: IDataObject; Formats: TFormatArray; Shift: TShiftState; Pt: TPoint; var Effect: Integer; Mode: TDropMode);
@@ -1368,16 +1361,13 @@ procedure TfrmEditAlbum.vstImagesMouseUp(Sender: TObject; Button: TMouseButton; 
 var
   pt: TPoint;
   Node: PVirtualNode;
+  DisplayRect: TRect;
 begin
   Node := vstImages.GetNodeAt(X, Y);
   if (Node <> nil) and (vstImages.Header.Columns.ColumnFromPosition(Point(X, Y)) = 1) then
   begin
-    with vstImages.GetDisplayRect(Node, 1, False) do
-    begin
-      X := Left;
-      Y := Bottom;
-    end;
-    pt := vstImages.ClientToScreen(Point(X, Y));
+    DisplayRect := vstImages.GetDisplayRect(Node, 1, False);
+    pt := vstImages.ClientToScreen(Point(DisplayRect.Left, DisplayRect.Bottom));
     pmChoixCategorie.PopupComponent := TComponent(Node.Index);
     pmChoixCategorie.Tag := FCurrentEditionComplete.Couvertures[Node.Index].Categorie;
     pmChoixCategorie.Popup(pt.X, pt.Y);

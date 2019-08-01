@@ -53,6 +53,7 @@ var
   i: Integer;
   tlb: TToolButton;
   LastButton: TTypeButton;
+  item: TListItem;
 begin
   VDTListView1.Items.BeginUpdate;
   LastButton := tbSep;
@@ -62,26 +63,22 @@ begin
       tlb := frmFond.ToolBar1.Buttons[i];
       if Assigned(tlb.Action) and (TActionList(tlb.Action.Owner) <> frmFond.ActionList1) then
       begin
-        with VDTListView1.Items.Add do
-        begin
-          Caption := StripHotkey(TCustomAction(tlb.Action).Caption);
-          ImageIndex := TCustomAction(tlb.Action).ImageIndex;
-          SubItems.Add(TCustomAction(tlb.Action).Hint);
-          SubItems.Add('B');
-          SubItems.Add(TCustomAction(tlb.Action).Name);
-        end;
+        item := VDTListView1.Items.Add;
+        item.Caption := StripHotkey(TCustomAction(tlb.Action).Caption);
+        item.ImageIndex := TCustomAction(tlb.Action).ImageIndex;
+        item.SubItems.Add(TCustomAction(tlb.Action).Hint);
+        item.SubItems.Add('B');
+        item.SubItems.Add(TCustomAction(tlb.Action).Name);
         LastButton := tbBut;
       end;
       if (tlb.Style = tbsSeparator) and (LastButton <> tbSep) then
       begin
-        with VDTListView1.Items.Add do
-        begin
-          Caption := 'Séparateur';
-          SubItems.Add('');
-          SubItems.Add('S');
-          SubItems.Add('');
-          ImageIndex := -1;
-        end;
+        item := VDTListView1.Items.Add;
+        item.Caption := 'Séparateur';
+        item.SubItems.Add('');
+        item.SubItems.Add('S');
+        item.SubItems.Add('');
+        item.ImageIndex := -1;
         LastButton := tbSep;
       end;
     end;
@@ -200,14 +197,12 @@ begin
     t := VDTListView1.Items.Insert(VDTListView1.Selected.Index + 1)
   else
     t := VDTListView1.Items.Add;
-  with t do
-  begin
-    Caption := 'Séparateur';
-    SubItems.Add('');
-    SubItems.Add('S');
-    SubItems.Add('');
-    ImageIndex := -1;
-  end;
+
+  t.Caption := 'Séparateur';
+  t.SubItems.Add('');
+  t.SubItems.Add('S');
+  t.SubItems.Add('');
+  t.ImageIndex := -1;
 end;
 
 procedure TfrmCustomize.ToolButton4Click(Sender: TObject);
@@ -229,14 +224,12 @@ begin
     t := VDTListView1.Items.Insert(VDTListView1.Selected.Index + 1)
   else
     t := VDTListView1.Items.Add;
-  with t do
-  begin
-    Caption := StripHotkey(TCustomAction(Commands.Selected.Data).Caption);
-    ImageIndex := TCustomAction(Commands.Selected.Data).ImageIndex;
-    SubItems.Add(TCustomAction(Commands.Selected.Data).Hint);
-    SubItems.Add('B');
-    SubItems.Add(TCustomAction(Commands.Selected.Data).Name);
-  end;
+
+  t.Caption := StripHotkey(TCustomAction(Commands.Selected.Data).Caption);
+  t.ImageIndex := TCustomAction(Commands.Selected.Data).ImageIndex;
+  t.SubItems.Add(TCustomAction(Commands.Selected.Data).Hint);
+  t.SubItems.Add('B');
+  t.SubItems.Add(TCustomAction(Commands.Selected.Data).Name);
 end;
 
 procedure TfrmCustomize.VDTButton4Click(Sender: TObject);
@@ -274,6 +267,7 @@ procedure TfrmCustomize.VDTListView1DragDrop(Sender, Source: TObject; X, Y: Inte
 var
   DestListItem: TListItem;
   newItemIndex: Integer;
+  item: TListItem;
 begin
   DestListItem := VDTListView1.GetItemAt(X, Y);
   if Assigned(DestListItem) then
@@ -286,14 +280,14 @@ begin
     VDTListView1.Items.Delete(VDTListView1.Selected.Index);
   end
   else
-    with VDTListView1.Items.AddItem(nil, newItemIndex) do
-    begin
-      Caption := StripHotkey(TCustomAction(Commands.Selected.Data).Caption);
-      ImageIndex := TCustomAction(Commands.Selected.Data).ImageIndex;
-      SubItems.Add(TCustomAction(Commands.Selected.Data).Hint);
-      SubItems.Add('B');
-      SubItems.Add(TCustomAction(Commands.Selected.Data).Name);
-    end;
+  begin
+    item := VDTListView1.Items.AddItem(nil, newItemIndex);
+    item.Caption := StripHotkey(TCustomAction(Commands.Selected.Data).Caption);
+    item.ImageIndex := TCustomAction(Commands.Selected.Data).ImageIndex;
+    item.SubItems.Add(TCustomAction(Commands.Selected.Data).Hint);
+    item.SubItems.Add('B');
+    item.SubItems.Add(TCustomAction(Commands.Selected.Data).Name);
+  end;
 end;
 
 end.

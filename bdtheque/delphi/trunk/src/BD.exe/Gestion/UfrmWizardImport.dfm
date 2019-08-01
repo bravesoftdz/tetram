@@ -320,10 +320,6 @@ object frmWizardImport: TfrmWizardImport
       object TabSheetChamps: TTabSheet
         Caption = 'TabSheetChamps'
         ImageIndex = 5
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
         object Label13: TLabel
           Left = 88
           Top = 272

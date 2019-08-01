@@ -129,14 +129,8 @@ object frmRepertoire: TfrmRepertoire
         BorderStyle = bsNone
         Header.AutoSizeIndex = 0
         Header.DefaultHeight = 17
-        Header.Font.Charset = DEFAULT_CHARSET
-        Header.Font.Color = clWindowText
-        Header.Font.Height = -11
-        Header.Font.Name = 'Tahoma'
-        Header.Font.Style = []
         Header.Height = 17
         Header.Options = [hoAutoResize, hoColumnResize, hoDrag]
-        HintAnimation = hatNone
         HintMode = hmTooltip
         HotCursor = crHandPoint
         Indent = 8
@@ -149,7 +143,7 @@ object frmRepertoire: TfrmRepertoire
           item
             Options = [coAllowClick, coEnabled, coParentBidiMode, coParentColor, coResizable, coShowDropMark, coVisible]
             Position = 0
-            Width = 333
+            Width = 329
           end>
       end
       inline FrameRechercheRapideAlbums: TframRechercheRapide
@@ -194,15 +188,9 @@ object frmRepertoire: TfrmRepertoire
         BorderStyle = bsNone
         Header.AutoSizeIndex = -1
         Header.DefaultHeight = 17
-        Header.Font.Charset = DEFAULT_CHARSET
-        Header.Font.Color = clWindowText
-        Header.Font.Height = -11
-        Header.Font.Name = 'Tahoma'
-        Header.Font.Style = []
         Header.Height = 17
         Header.MainColumn = -1
         Header.Options = [hoAutoResize, hoColumnResize, hoDrag]
-        HintAnimation = hatNone
         Indent = 8
         TabOrder = 1
         OnDblClick = vstAlbumsDblClick
@@ -250,15 +238,9 @@ object frmRepertoire: TfrmRepertoire
         BorderStyle = bsNone
         Header.AutoSizeIndex = -1
         Header.DefaultHeight = 17
-        Header.Font.Charset = DEFAULT_CHARSET
-        Header.Font.Color = clWindowText
-        Header.Font.Height = -11
-        Header.Font.Name = 'Tahoma'
-        Header.Font.Style = []
         Header.Height = 17
         Header.MainColumn = -1
         Header.Options = [hoAutoResize, hoColumnResize, hoDrag]
-        HintAnimation = hatNone
         Indent = 8
         TabOrder = 1
         OnDblClick = vstAlbumsDblClick
@@ -306,15 +288,9 @@ object frmRepertoire: TfrmRepertoire
         BorderStyle = bsNone
         Header.AutoSizeIndex = -1
         Header.DefaultHeight = 17
-        Header.Font.Charset = DEFAULT_CHARSET
-        Header.Font.Color = clWindowText
-        Header.Font.Height = -11
-        Header.Font.Name = 'Tahoma'
-        Header.Font.Style = []
         Header.Height = 17
         Header.MainColumn = -1
         Header.Options = [hoAutoResize, hoColumnResize, hoDrag]
-        HintAnimation = hatNone
         Indent = 8
         TabOrder = 1
         OnDblClick = vstAlbumsDblClick
@@ -362,15 +338,9 @@ object frmRepertoire: TfrmRepertoire
         BorderStyle = bsNone
         Header.AutoSizeIndex = -1
         Header.DefaultHeight = 17
-        Header.Font.Charset = DEFAULT_CHARSET
-        Header.Font.Color = clWindowText
-        Header.Font.Height = -11
-        Header.Font.Name = 'Tahoma'
-        Header.Font.Style = []
         Header.Height = 17
         Header.MainColumn = -1
         Header.Options = [hoAutoResize, hoColumnResize, hoDrag]
-        HintAnimation = hatNone
         Indent = 8
         TabOrder = 1
         OnDblClick = vstAlbumsDblClick

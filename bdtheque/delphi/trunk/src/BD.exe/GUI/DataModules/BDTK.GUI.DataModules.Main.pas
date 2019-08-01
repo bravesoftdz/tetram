@@ -8,7 +8,6 @@ uses
   System.ImageList;
 
 const
-  AntiAliasing = True;
   DBPageSize = 16384;
 
 type
@@ -375,6 +374,7 @@ function TdmPrinc.CheckExeVersion(Force: Boolean): Boolean;
 // True: mise à jour et utilisateur demande à fermer l'appli
 var
   doVerif: Boolean;
+  ini: TIniFile;
 begin
   if Force then
     doVerif := True
@@ -393,20 +393,18 @@ begin
     end;
 
   if not doVerif then
-    Result := False
-  else
-  begin
+    Exit(False);
+
+  try
+    Result := CheckVersionNet.CheckVersion('TetramCorpBDTheque', 'bdtheque', TGlobalVar.Utilisateur.ExeVersion, Force, not Force) = 1;
+    ini := TIniFile.Create(FichierIni);
     try
-      Result := CheckVersionNet.CheckVersion('TetramCorpBDTheque', 'bdtheque', TGlobalVar.Utilisateur.ExeVersion, Force, not Force) = 1;
-      with TIniFile.Create(FichierIni) do
-        try
-          WriteInteger('Divers', 'LastVerifMAJ', Trunc(Now));
-        finally
-          Free;
-        end;
-    except
-      Result := False;
+      ini.WriteInteger('Divers', 'LastVerifMAJ', Trunc(Now));
+    finally
+      ini.Free;
     end;
+  except
+    Result := False;
   end;
 end;
 

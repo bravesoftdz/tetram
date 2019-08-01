@@ -27,11 +27,6 @@ object frmSeriesIncompletes: TfrmSeriesIncompletes
     BorderStyle = bsNone
     Header.AutoSizeIndex = -1
     Header.DefaultHeight = 17
-    Header.Font.Charset = DEFAULT_CHARSET
-    Header.Font.Color = clWindowText
-    Header.Font.Height = -11
-    Header.Font.Name = 'Tahoma'
-    Header.Font.Style = []
     Header.Height = 17
     Header.Images = frmFond.ImageList1
     Header.Options = [hoAutoResize, hoColumnResize, hoShowImages, hoVisible]
@@ -45,14 +40,14 @@ object frmSeriesIncompletes: TfrmSeriesIncompletes
     Columns = <
       item
         Position = 0
+        Text = 'S'#233'rie'
         Width = 250
-        WideText = 'Serie'
       end
       item
         MinWidth = 50
         Position = 1
-        Width = 564
-        WideText = 'Albums manquants'
+        Text = 'Albums manquants'
+        Width = 560
       end>
   end
   object Panel1: TPanel

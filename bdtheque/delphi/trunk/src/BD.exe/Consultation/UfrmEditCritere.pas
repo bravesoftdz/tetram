@@ -168,6 +168,7 @@ var
   pt: TPoint;
   hg: IHourGlass;
   ParentItem: TSubItem;
+  SubItem: TSubItem;
 begin
   hg := THourGlass.Create;
   FRecherche := TFrmRecherche(Owner);
@@ -183,17 +184,19 @@ begin
     ParentItem := champs.Items.Add(Groupes[j]);
     for i := 1 to High(ChampsRecherche^) do
       if j = ChampsRecherche^[i].Groupe then
-        with ParentItem.SubItems.Add(ChampsRecherche^[i].LibelleChamp) do
-        begin
-          Valeur := ChampsRecherche^[i].ID;
-          Data := TObject(@ChampsRecherche^[i]);
-        end;
+      begin
+        SubItem := ParentItem.SubItems.Add(ChampsRecherche^[i].LibelleChamp);
+        SubItem.Valeur := ChampsRecherche^[i].ID;
+        SubItem.Data := TObject(@ChampsRecherche^[i]);
+      end;
   end;
 end;
 
 procedure TfrmEditCritere.champsChange(Sender: TObject);
 
   procedure AssignItems(Items: TItems; qrySource: TUIBQuery; ChampValeurs: TStrings); overload;
+  var
+    Item: TSubItem;
   begin
     try
       qrySource.Transaction := dmPrinc.DBConnection.GetTransaction;
@@ -202,12 +205,10 @@ procedure TfrmEditCritere.champsChange(Sender: TObject);
       qrySource.Open;
       while not qrySource.Eof do
       begin
-        with Items.Add do
-        begin
-          Caption := qrySource.Fields.AsString[1];
-          Valeur := Index;
-          ChampValeurs.Add(qrySource.Fields.AsString[0]);
-        end;
+        Item := Items.Add;
+        Item.Caption := qrySource.Fields.AsString[1];
+        Item.Valeur := Item.Index;
+        ChampValeurs.Add(qrySource.Fields.AsString[0]);
         qrySource.Next;
       end;
       qrySource.Close;
@@ -218,18 +219,14 @@ procedure TfrmEditCritere.champsChange(Sender: TObject);
 
   procedure AssignItems(Items: TItems; qrySource: TUIBQuery); overload;
   begin
+    qrySource.Transaction := dmPrinc.DBConnection.GetTransaction;
     try
-      qrySource.Transaction := dmPrinc.DBConnection.GetTransaction;
       Items.Clear;
       FChampValeurs.Clear;
       qrySource.Open;
       while not qrySource.Eof do
       begin
-        with Items.Add do
-        begin
-          Caption := qrySource.Fields.AsString[1];
-          Valeur := qrySource.Fields.AsInteger[0];
-        end;
+        Items.Add(qrySource.Fields.AsString[1], qrySource.Fields.AsInteger[0]);
         qrySource.Next;
       end;
       qrySource.Close;

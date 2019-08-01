@@ -130,10 +130,10 @@ var
   i: Integer;
 begin
   for i := 0 to Pred(PageControl1.PageCount) do
-    with PageControl1.Pages[i] do begin
-      TabVisible := False;
-      Tag := 1;
-    end;
+  begin
+    PageControl1.Pages[i].TabVisible := False;
+    PageControl1.Pages[i].Tag := 1;
+  end;
 
   PageControl1.ActivePageIndex := 0;
   Source := '';

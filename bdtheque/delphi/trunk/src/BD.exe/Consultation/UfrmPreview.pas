@@ -5,7 +5,8 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, Generics.Collections, System.Types,
-  StdCtrls, ExtCtrls, ToolWin, Menus, Printers, PrintObject, ImgList, BD.GUI.Forms, ComCtrls;
+  StdCtrls, ExtCtrls, ToolWin, Menus, Printers, PrintObject, ImgList, BD.GUI.Forms, ComCtrls,
+  System.ImageList;
 
 type
   TfrmPreview = class(TBdtForm, IPrintObjectPreview)
@@ -570,12 +571,15 @@ begin
 end;
 
 procedure TfrmPreview.ToolButton6Click(Sender: TObject);
+var
+  prn: TPrintObject;
 begin
-  with TPrintObject.Create(nil) do try
-    Titre := Caption;
-    PrintPages(Pages);
+  prn := TPrintObject.Create(nil);
+  try
+    prn.Titre := Caption;
+    prn.PrintPages(Pages);
   finally
-    Free;
+    prn.Free;
   end;
 end;
 
@@ -600,4 +604,3 @@ initialization
   Screen.Cursors[CurHand] := LoadCursor(HInstance, 'HAND');
 
 end.
-

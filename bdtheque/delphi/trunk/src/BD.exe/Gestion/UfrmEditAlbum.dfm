@@ -909,8 +909,8 @@ object frmEditAlbum: TfrmEditAlbum
         Top = 66
         Width = 101
         Height = 21
-        Date = 38158.758085983800000000
-        Time = 38158.758085983800000000
+        Date = 38158.000000000000000000
+        Time = 0.758085983798082500
         ShowCheckbox = True
         Checked = False
         TabOrder = 4
@@ -1208,11 +1208,6 @@ object frmEditAlbum: TfrmEditAlbum
       ButtonFillMode = fmShaded
       Header.AutoSizeIndex = 0
       Header.DefaultHeight = 17
-      Header.Font.Charset = DEFAULT_CHARSET
-      Header.Font.Color = clWindowText
-      Header.Font.Height = -11
-      Header.Font.Name = 'Tahoma'
-      Header.Font.Style = []
       Header.Height = 17
       Header.Options = [hoAutoResize, hoColumnResize, hoDrag]
       TabOrder = 19

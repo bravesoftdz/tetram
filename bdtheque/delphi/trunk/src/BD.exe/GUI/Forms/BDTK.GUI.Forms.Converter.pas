@@ -45,54 +45,53 @@ begin
   ListFC := TList<TframConvertisseur>.Create;
   PC := TFactoryConversionLite.getInstance;
   q := dmPrinc.DBConnection.GetQuery;
-  with q do
-    try
-      SQL.Add('select');
-      SQL.Add('  Monnaie1, Monnaie2, Taux');
-      SQL.Add('from');
-      SQL.Add('  conversions');
-      SQL.Add('where');
-      SQL.Add('  Monnaie1 = ? or Monnaie2 = ?');
-      SQL.Add('order by');
-      SQL.Add('  case Monnaie1 when ? then Monnaie2 else Monnaie1 end');
-      Prepare(True);
-      Params.AsString[0] := Copy(TGlobalVar.Utilisateur.Options.SymboleMonnetaire, 1, Params.MaxStrLen[0]);
-      Params.AsString[1] := Copy(TGlobalVar.Utilisateur.Options.SymboleMonnetaire, 1, Params.MaxStrLen[1]);
-      Params.AsString[2] := Copy(TGlobalVar.Utilisateur.Options.SymboleMonnetaire, 1, Params.MaxStrLen[2]);
-      Open;
-      i := 0;
-      while not Eof do
+  try
+    q.SQL.Add('select');
+    q.SQL.Add('  Monnaie1, Monnaie2, Taux');
+    q.SQL.Add('from');
+    q.SQL.Add('  conversions');
+    q.SQL.Add('where');
+    q.SQL.Add('  Monnaie1 = ? or Monnaie2 = ?');
+    q.SQL.Add('order by');
+    q.SQL.Add('  case Monnaie1 when ? then Monnaie2 else Monnaie1 end');
+    q.Prepare(True);
+    q.Params.AsString[0] := Copy(TGlobalVar.Utilisateur.Options.SymboleMonnetaire, 1, q.Params.MaxStrLen[0]);
+    q.Params.AsString[1] := Copy(TGlobalVar.Utilisateur.Options.SymboleMonnetaire, 1, q.Params.MaxStrLen[1]);
+    q.Params.AsString[2] := Copy(TGlobalVar.Utilisateur.Options.SymboleMonnetaire, 1, q.Params.MaxStrLen[2]);
+    q.Open;
+    i := 0;
+    while not q.Eof do
+    begin
+      TDaoConversionLite.Fill(PC, q);
+      fc := TframConvertisseur.Create(Self);
+      if PC.Monnaie1 = TGlobalVar.Utilisateur.Options.SymboleMonnetaire then
       begin
-        TDaoConversionLite.Fill(PC, q);
-        fc := TframConvertisseur.Create(Self);
-        if PC.Monnaie1 = TGlobalVar.Utilisateur.Options.SymboleMonnetaire then
-        begin
-          fc.Label1.Caption := PC.Monnaie2;
-          fc.FTaux := 1 / PC.Taux;
-        end
-        else
-        begin
-          fc.Label1.Caption := PC.Monnaie1;
-          fc.FTaux := PC.Taux;
-        end;
-        fc.Edit1.Text := '';
-        fc.Visible := True;
-        fc.Parent := Panel1;
-        fc.Name := fc.Name + IntToStr(i);
-        ListFC.Add(fc);
-        Inc(i, fc.Height);
-        fc.Top := i + 1;
-
-        if not Assigned(FFirstEdit) then
-          FFirstEdit := fc.Edit1;
-        Next;
+        fc.Label1.Caption := PC.Monnaie2;
+        fc.FTaux := 1 / PC.Taux;
+      end
+      else
+      begin
+        fc.Label1.Caption := PC.Monnaie1;
+        fc.FTaux := PC.Taux;
       end;
-      ClientHeight := Frame11.Height + i + 4;
-    finally
-      ActiveControl := FFirstEdit;
-      Free;
-      PC.Free;
+      fc.Edit1.Text := '';
+      fc.Visible := True;
+      fc.Parent := Panel1;
+      fc.Name := fc.Name + IntToStr(i);
+      ListFC.Add(fc);
+      Inc(i, fc.Height);
+      fc.Top := i + 1;
+
+      if not Assigned(FFirstEdit) then
+        FFirstEdit := fc.Edit1;
+      q.Next;
     end;
+    ClientHeight := Frame11.Height + i + 4;
+  finally
+    ActiveControl := FFirstEdit;
+    q.Free;
+    PC.Free;
+  end;
 end;
 
 procedure TFrmConvers.FormDestroy(Sender: TObject);

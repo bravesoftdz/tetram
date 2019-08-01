@@ -80,6 +80,7 @@ var
   pt: TPoint;
   hg: IHourGlass;
   ParentItem: TSubItem;
+  Item: TSubItem;
 begin
   hg := THourGlass.Create;
   FRecherche := TFrmRecherche(Owner);
@@ -92,11 +93,11 @@ begin
     ParentItem := champs.Items.Add(Groupes[j]);
     for i := 1 to High(ChampsRecherche^) do
       if j = ChampsRecherche^[i].Groupe then
-        with ParentItem.SubItems.Add(ChampsRecherche^[i].LibelleChamp) do
-        begin
-          Valeur := ChampsRecherche^[i].ID;
-          Data := TObject(@ChampsRecherche^[i]);
-        end;
+      begin
+        Item := ParentItem.SubItems.Add(ChampsRecherche^[i].LibelleChamp);
+        Item.Valeur := ChampsRecherche^[i].ID;
+        Item.Data := TObject(@ChampsRecherche^[i]);
+      end;
   end;
 end;
 

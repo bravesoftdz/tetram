@@ -129,38 +129,39 @@ var
   largeuraff, hauteuraff, largeurimg, hauteurimg: Integer;
   marge: Integer;
   hg: IHourGlass;
+  p: TPicture;
 begin
   Result := False;
   Image.Picture := nil;
   if not TFile.Exists(Fichier) then
     Exit;
   hg := THourGlass.Create;
-  with TPicture.Create do
-    try
-      LoadFromFile(Fichier);
-      hauteurimg := Height;
-      largeurimg := Width;
-      largeuraff := Image.Width;
-      hauteuraff := Image.Height;
-      if (hauteurimg >= hauteuraff) and (largeurimg >= largeuraff) then
-        if (hauteurimg / largeurimg) > (hauteuraff / largeuraff) then
-        begin
-          largeuraff := Winapi.Windows.MulDiv(hauteuraff, largeurimg, hauteurimg);
-          marge := (Image.Width - largeuraff) div 2;
-          Image.Canvas.StretchDraw(Rect(marge, 0, marge + largeuraff, hauteuraff), Graphic);
-        end
-        else
-        begin
-          hauteuraff := Winapi.Windows.MulDiv(largeuraff, hauteurimg, largeurimg);
-          marge := (Image.Height - hauteuraff) div 2;
-          Image.Canvas.StretchDraw(Rect(0, marge, largeuraff, marge + hauteuraff), Graphic);
-        end
+  p := TPicture.Create;
+  try
+    p.LoadFromFile(Fichier);
+    hauteurimg := p.Height;
+    largeurimg := p.Width;
+    largeuraff := Image.Width;
+    hauteuraff := Image.Height;
+    if (hauteurimg >= hauteuraff) and (largeurimg >= largeuraff) then
+      if (hauteurimg / largeurimg) > (hauteuraff / largeuraff) then
+      begin
+        largeuraff := Winapi.Windows.MulDiv(hauteuraff, largeurimg, hauteurimg);
+        marge := (Image.Width - largeuraff) div 2;
+        Image.Canvas.StretchDraw(Rect(marge, 0, marge + largeuraff, hauteuraff), p.Graphic);
+      end
       else
-        Image.Canvas.Draw((largeuraff - largeurimg) div 2, (hauteuraff - hauteurimg) div 2, Graphic);
-      Result := True;
-    finally
-      Free;
-    end;
+      begin
+        hauteuraff := Winapi.Windows.MulDiv(largeuraff, hauteurimg, largeurimg);
+        marge := (Image.Height - hauteuraff) div 2;
+        Image.Canvas.StretchDraw(Rect(0, marge, largeuraff, marge + hauteuraff), p.Graphic);
+      end
+    else
+      Image.Canvas.Draw((largeuraff - largeurimg) div 2, (hauteuraff - hauteurimg) div 2, p.Graphic);
+    Result := True;
+  finally
+    p.Free;
+  end;
 end;
 
 function ChargeImage(Picture: TPicture; const ResName: string): Boolean;
@@ -219,23 +220,29 @@ end;
 procedure PrepareLV(Form: TForm);
 var
   i, j, w: Integer;
+  hdr: TVTHeader;
+  lv: TListView;
 begin
   for i := 0 to Form.ComponentCount - 1 do
     try
       if Form.Components[i] is TListView then
-        with Form.Components[i] as TListView do
-          if Columns.Count = 1 then
-            Columns[0].Width := ClientWidth - GetSystemMetrics(SM_CXVSCROLL);
-      if Form.Components[i] is TVirtualStringTree then
-        with (Form.Components[i] as TVirtualStringTree).Header do
-          if Columns.Count > 0 then
-          begin
-            w := 0;
-            for j := 0 to Pred(Columns.Count) do
-              if j <> MainColumn then
-                Inc(w, Columns[j].Width);
-            Columns[MainColumn].Width := TreeView.ClientWidth - w - GetSystemMetrics(SM_CXVSCROLL);
-          end;
+      begin
+        lv := TListView(Form.Components[i]);
+        if lv.Columns.Count = 1 then
+          lv.Columns[0].Width := lv.ClientWidth - GetSystemMetrics(SM_CXVSCROLL);
+      end
+      else if Form.Components[i] is TVirtualStringTree then
+      begin
+        hdr := TVirtualStringTree(Form.Components[i]).Header;
+        if hdr.Columns.Count > 0 then
+        begin
+          w := 0;
+          for j := 0 to Pred(hdr.Columns.Count) do
+            if j <> hdr.MainColumn then
+              Inc(w, hdr.Columns[j].Width);
+          hdr.Columns[hdr.MainColumn].Width := hdr.TreeView.ClientWidth - w - GetSystemMetrics(SM_CXVSCROLL);
+        end;
+      end;
     except
     end;
 end;
@@ -332,13 +339,12 @@ begin
     FForm.ProgressBar1.Max := FMaxi;
     FForm.ProgressBar1.Position := FValeur;
     tmp := FMessage;
-    with FForm.op do
-      if Canvas.TextWidth(tmp) > Width then
-      begin
-        while Canvas.TextWidth(tmp + '...') > Width do
-          Delete(tmp, Length(tmp) div 2, 1);
-        Insert('...', tmp, Length(tmp) div 2);
-      end;
+    if FForm.op.Canvas.TextWidth(tmp) > FForm.op.Width then
+    begin
+      while FForm.op.Canvas.TextWidth(tmp + '...') > FForm.op.Width do
+        Delete(tmp, Length(tmp) div 2, 1);
+      Insert('...', tmp, Length(tmp) div 2);
+    end;
     FForm.op.Caption := tmp;
   end;
   if FromMainThread then
@@ -420,10 +426,13 @@ var
   NewLargeur, NewHauteur, i: Integer;
   Bmp: TBitmap;
   BMP32Src, BMP32Dst: TBitmap32;
+  j: TJPEGImage;
 begin
   Result := TMemoryStream.Create;
   try
-    if (Hauteur <> -1) or (Largeur <> -1) then
+    if (Hauteur = -1) and (Largeur = -1) then
+      Image.Graphic.SaveToStream(Result)
+    else
     begin
       if Hauteur = -1 then
       begin
@@ -495,22 +504,20 @@ begin
           end;
         end;
 
-        with TJPEGImage.Create do
-          try
-            Assign(Bmp);
-            PixelFormat := jf24Bit;
-            CompressionQuality := 70;
-            Compress;
-            SaveToStream(Result);
-          finally
-            Free;
-          end;
+        j := TJPEGImage.Create;
+        try
+          j.Assign(Bmp);
+          j.PixelFormat := jf24Bit;
+          j.CompressionQuality := 70;
+          j.Compress;
+          j.SaveToStream(Result);
+        finally
+          j.Free;
+        end;
       finally
         Bmp.Free;
       end;
-    end
-    else
-      Image.Graphic.SaveToStream(Result);
+    end;
 
     Result.Position := 0;
   except
@@ -640,39 +647,33 @@ end;
 
 procedure TInformation.SetupDialog;
 var
-  FPanel: TPanel;
+  panel: TPanel;
 begin
   if Assigned(FInfo) then
     Exit;
+
   FInfo := TbdtForm.Create(Application);
-  with FInfo do
-  begin
-    AutoSize := True;
-    BorderWidth := 0;
-    PopupMode := pmExplicit;
-    Position := poScreenCenter;
-    BorderStyle := bsNone;
-    BorderIcons := [];
-  end;
-  FPanel := TPanel.Create(FInfo);
-  with FPanel do
-  begin
-    Parent := FInfo;
-    AutoSize := True;
-    BorderWidth := 8;
-    Left := 0;
-    Top := 0;
-    Visible := True;
-  end;
+  FInfo.AutoSize := True;
+  FInfo.BorderWidth := 0;
+  FInfo.PopupMode := pmExplicit;
+  FInfo.Position := poScreenCenter;
+  FInfo.BorderStyle := bsNone;
+  FInfo.BorderIcons := [];
+
+  panel := TPanel.Create(FInfo);
+  panel.Parent := FInfo;
+  panel.AutoSize := True;
+  panel.BorderWidth := 8;
+  panel.Left := 0;
+  panel.Top := 0;
+  panel.Visible := True;
+
   FLabel := TLabel.Create(FInfo);
-  with FLabel do
-  begin
-    Parent := FPanel;
-    AutoSize := True;
-    Left := 0;
-    Top := 0;
-    Visible := True;
-  end;
+  FLabel.Parent := panel;
+  FLabel.AutoSize := True;
+  FLabel.Left := 0;
+  FLabel.Top := 0;
+  FLabel.Visible := True;
 end;
 
 procedure TInformation.ShowInfo(const Msg: string);

@@ -51,51 +51,38 @@ end;
 
 procedure InitializeParametres;
 begin
-  with UIBDBSrc do
-  begin
-    LibraryName := 'fbembed.dll';
-    name := 'UIBDBSrc';
-    Params.Clear;
-    Params.Add('sql_dialect=3');
-    Params.Add('lc_ctype=NONE');
-    UserName := 'SYSDBA';
-    PassWord := 'masterkey';
-  end;
-  with UIBDBDst do
-  begin
-    LibraryName := 'fbembed.dll';
-    name := 'UIBDBDst';
-    Params.Clear;
-    Params.Add('sql_dialect=3');
-    Params.Add('lc_ctype=ISO8859_1');
-    UserName := 'SYSDBA';
-    PassWord := 'masterkey';
-  end;
-  with UIBTransaction1 do
-  begin
-    name := 'UIBTransaction1';
-    DataBase := UIBDBDst;
-    AddDatabase(UIBDBSrc);
-  end;
-  with UIBQuerySrc do
-  begin
-    name := 'UIBQuerySrc';
-    Transaction := UIBTransaction1;
-    DataBase := UIBDBSrc;
-    FetchBlobs := True;
-  end;
-  with UIBQueryDst do
-  begin
-    name := 'UIBQueryDst';
-    Transaction := UIBTransaction1;
-    DataBase := UIBDBDst;
-  end;
-  with UIBScriptDst do
-  begin
-    name := 'UIBScriptDst';
-    DataBase := UIBDBDst;
-    Transaction := UIBTransaction1;
-  end;
+  UIBDBSrc.LibraryName := 'fbembed.dll';
+  UIBDBSrc.Name := 'UIBDBSrc';
+  UIBDBSrc.Params.Clear;
+  UIBDBSrc.Params.Add('sql_dialect=3');
+  UIBDBSrc.Params.Add('lc_ctype=NONE');
+  UIBDBSrc.UserName := 'SYSDBA';
+  UIBDBSrc.PassWord := 'masterkey';
+
+  UIBDBDst.LibraryName := 'fbembed.dll';
+  UIBDBDst.Name := 'UIBDBDst';
+  UIBDBDst.Params.Clear;
+  UIBDBDst.Params.Add('sql_dialect=3');
+  UIBDBDst.Params.Add('lc_ctype=ISO8859_1');
+  UIBDBDst.UserName := 'SYSDBA';
+  UIBDBDst.PassWord := 'masterkey';
+
+  UIBTransaction1.Name := 'UIBTransaction1';
+  UIBTransaction1.DataBase := UIBDBDst;
+  UIBTransaction1.AddDatabase(UIBDBSrc);
+
+  UIBQuerySrc.Name := 'UIBQuerySrc';
+  UIBQuerySrc.Transaction := UIBTransaction1;
+  UIBQuerySrc.DataBase := UIBDBSrc;
+  UIBQuerySrc.FetchBlobs := True;
+
+  UIBQueryDst.Name := 'UIBQueryDst';
+  UIBQueryDst.Transaction := UIBTransaction1;
+  UIBQueryDst.DataBase := UIBDBDst;
+
+  UIBScriptDst.Name := 'UIBScriptDst';
+  UIBScriptDst.DataBase := UIBDBDst;
+  UIBScriptDst.Transaction := UIBTransaction1;
 end;
 
 procedure PrepareMigration;

@@ -56,35 +56,33 @@ end;
 
 function TStatsAlbumsCreate(AOwner: TComponent; Info: TStats): TFrmStatsAlbums;
 var
-  i: Integer;
+  genre: TGenreLite;
 begin
   Result := TFrmStatsAlbums.Create(AOwner);
-  with Result do begin
-    nb_Albums.Caption := IntToStr(Info.NbAlbums);
-    nb_Series.Caption := IntToStr(Info.NbSeries);
-    AlbumsNB.Caption := Format(FormatPourcent, [Info.NbAlbumsNB, MulDiv(Info.NbAlbumsNB, 100, Info.NbAlbums)]);
-    AlbumsVO.Caption := Format(FormatPourcent, [Info.NbAlbumsVO, MulDiv(Info.NbAlbumsVO, 100, Info.NbAlbums)]);
-    AlbumsStock.Caption := Format(FormatPourcent, [Info.NbAlbumsStock, MulDiv(Info.NbAlbumsStock, 100, Info.NbAlbums)]);
-    AlbumsIntegrales.Caption := Format(FormatPourcent, [Info.NbAlbumsIntegrale, MulDiv(Info.NbAlbumsIntegrale, 100, Info.NbAlbums)]);
-    AlbumsHorsSerie.Caption := Format(FormatPourcent, [Info.NbAlbumsHorsSerie, MulDiv(Info.NbAlbumsHorsSerie, 100, Info.NbAlbums)]);
-    minannee.Caption := IntToStr(Info.MinAnnee);
-    maxannee.Caption := IntToStr(Info.MaxAnnee);
+  Result.nb_Albums.Caption := IntToStr(Info.NbAlbums);
+  Result.nb_Series.Caption := IntToStr(Info.NbSeries);
+  Result.AlbumsNB.Caption := Format(FormatPourcent, [Info.NbAlbumsNB, MulDiv(Info.NbAlbumsNB, 100, Info.NbAlbums)]);
+  Result.AlbumsVO.Caption := Format(FormatPourcent, [Info.NbAlbumsVO, MulDiv(Info.NbAlbumsVO, 100, Info.NbAlbums)]);
+  Result.AlbumsStock.Caption := Format(FormatPourcent, [Info.NbAlbumsStock, MulDiv(Info.NbAlbumsStock, 100, Info.NbAlbums)]);
+  Result.AlbumsIntegrales.Caption := Format(FormatPourcent, [Info.NbAlbumsIntegrale, MulDiv(Info.NbAlbumsIntegrale, 100, Info.NbAlbums)]);
+  Result.AlbumsHorsSerie.Caption := Format(FormatPourcent, [Info.NbAlbumsHorsSerie, MulDiv(Info.NbAlbumsHorsSerie, 100, Info.NbAlbums)]);
+  Result.minannee.Caption := IntToStr(Info.MinAnnee);
+  Result.maxannee.Caption := IntToStr(Info.MaxAnnee);
 
-    for i := 0 to Info.ListGenre.Count - 1 do
-      with TGenreLite(Info.ListGenre[i]) do
-        Result.genre.Items.Add(Format('%s - ' + FormatPourcent, [ChaineAffichage, Quantite, MulDiv(Quantite, 100, Info.NbAlbums)]));
-  end;
+  for genre in Info.ListGenre do
+    Result.genre.Items.Add(Format('%s - ' + FormatPourcent, [genre.ChaineAffichage, genre.Quantite, MulDiv(genre.Quantite, 100, Info.NbAlbums)]));
 end;
 
-procedure TfrmStatsAlbums.genreDrawItem(Control: TWinControl; Index: Integer;
-  Rect: TRect; State: TOwnerDrawState);
+procedure TfrmStatsAlbums.genreDrawItem(Control: TWinControl; Index: Integer; Rect: TRect; State: TOwnerDrawState);
 var
+  ListBox: TListBox absolute Control;
   txt: string;
 begin
-  txt := (Control as TListBox).Items[Index];
-  with (Control as TListBox).Canvas do begin
-    FillRect(Rect);
-    TextOut((Rect.Left + Rect.Right - TextWidth(txt)) div 2, Rect.Top, txt)
+  if Control is TListBox then
+  begin
+    txt := ListBox.Items[Index];
+    ListBox.Canvas.FillRect(Rect);
+    ListBox.Canvas.TextOut((Rect.Left + Rect.Right - ListBox.Canvas.TextWidth(txt)) div 2, Rect.Top, txt)
   end;
 end;
 

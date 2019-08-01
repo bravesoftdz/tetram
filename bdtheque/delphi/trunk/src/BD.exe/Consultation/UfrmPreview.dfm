@@ -179,7 +179,6 @@ object frmPreview: TfrmPreview
     DoubleBuffered = True
     ParentDoubleBuffered = False
     TabOrder = 1
-    ExplicitHeight = 340
     object ScrollBarV: TScrollBar
       Left = 543
       Top = 0

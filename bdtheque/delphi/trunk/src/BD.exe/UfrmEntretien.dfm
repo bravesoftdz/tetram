@@ -62,11 +62,6 @@ object frmEntretien: TfrmEntretien
     BorderStyle = bsNone
     Header.AutoSizeIndex = 1
     Header.DefaultHeight = 17
-    Header.Font.Charset = DEFAULT_CHARSET
-    Header.Font.Color = clWindowText
-    Header.Font.Height = -11
-    Header.Font.Name = 'Tahoma'
-    Header.Font.Style = []
     Header.Height = 17
     Header.Options = [hoAutoResize, hoColumnResize, hoDrag]
     HintMode = hmTooltip
@@ -90,7 +85,7 @@ object frmEntretien: TfrmEntretien
       end
       item
         Position = 1
-        Width = 133
+        Width = 129
       end>
   end
   object ActionList1: TActionList

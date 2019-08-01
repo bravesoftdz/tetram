@@ -44,8 +44,8 @@ object frmPublier: TfrmPublier
       Top = 38
       Width = 89
       Height = 21
-      Date = 39587.542089050920000000
-      Time = 39587.542089050920000000
+      Date = 39587.000000000000000000
+      Time = 0.542089050919457800
       TabOrder = 0
       OnChange = DateTimePicker1Change
     end

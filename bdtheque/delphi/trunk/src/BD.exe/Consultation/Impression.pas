@@ -876,133 +876,127 @@ begin
       Prn.CreateColumn1(5, 25, -1, taLeftJustify, Prn.Font.name, 10, [fsItalic]); // résumé de la série
 
       PAl := TFactoryAlbumLite.getInstance;
-      with qrySource do
+      index := 1;
+      qrySource.Open;
+      sl := False;
+      OldSerie := GUID_FULL;
+      fWaiting.ShowProgression(Format('%s (%s %d)...', [rsTransAlbums, rsTransPage, Prn.GetPageNumber]), 0, NbAlbums + 2);
+      while not qrySource.Eof do
       begin
-        index := 1;
-        Open;
-        sl := False;
-        OldSerie := GUID_FULL;
-        fWaiting.ShowProgression(Format('%s (%s %d)...', [rsTransAlbums, rsTransPage, Prn.GetPageNumber]), 0, NbAlbums + 2);
-        while not Eof do
+        if liste = mrNo then
         begin
-          if liste = mrNo then
+          Sujet := '';
+          if (daoHistoire in DetailsOptions) then
           begin
-            Sujet := '';
-            if (daoHistoire in DetailsOptions) then
-            begin
-              SujetSerie := Fields.ByNameAsString['SUJETSERIE'];
-              Sujet := Fields.ByNameAsString['SUJETALBUM'];
-            end;
-            if (daoNotes in DetailsOptions) then
-            begin
-              AjoutString(SujetSerie, Fields.ByNameAsString['REMARQUESSERIE'], #13#10#13#10);
-              AjoutString(Sujet, Fields.ByNameAsString['REMARQUESALBUM'], #13#10#13#10);
-            end;
-            if ([daoScenario, daoDessins, daoCouleurs] * DetailsOptions) <> [] then
-            begin
-              sEquipe := '';
-              qryEquipe.Close;
-              qryEquipe.Params.AsString[0] := Fields.ByNameAsString['ID_Album'];
-              qryEquipe.Open;
-              with qryEquipe do
-              begin
-                s := '';
-                while (daoScenario in DetailsOptions) and (not Eof) and (TMetierAuteur(Fields.ByNameAsInteger['Metier']) = maScenariste) do
-                begin
-                  PA := TDaoAuteurAlbumLite.Make(qryEquipe);
-                  AjoutString(s, PA.ChaineAffichage, ', ');
-                  PA.Free;
-                  Next;
-                end;
-                AjoutString(sEquipe, s, #13#10, rsTransScenario + ': ', '.');
-                s := '';
-                while (daoDessins in DetailsOptions) and (not Eof) and (TMetierAuteur(Fields.ByNameAsInteger['Metier']) = maDessinateur) do
-                begin
-                  PA := TDaoAuteurAlbumLite.Make(qryEquipe);
-                  AjoutString(s, PA.ChaineAffichage, ', ');
-                  PA.Free;
-                  Next;
-                end;
-                AjoutString(sEquipe, s, #13#10, rsTransDessins + ': ', '.');
-                s := '';
-                while (daoCouleurs in DetailsOptions) and (not Eof) and (TMetierAuteur(Fields.ByNameAsInteger['Metier']) = maColoriste) do
-                begin
-                  PA := TDaoAuteurAlbumLite.Make(qryEquipe);
-                  AjoutString(s, PA.ChaineAffichage, ', ');
-                  PA.Free;
-                  Next;
-                end;
-                AjoutString(sEquipe, s, #13#10, rsTransCouleurs + ': ', '.');
-              end;
-            end;
+            SujetSerie := qrySource.Fields.ByNameAsString['SUJETSERIE'];
+            Sujet := qrySource.Fields.ByNameAsString['SUJETALBUM'];
           end;
+          if (daoNotes in DetailsOptions) then
+          begin
+            AjoutString(SujetSerie, qrySource.Fields.ByNameAsString['REMARQUESSERIE'], #13#10#13#10);
+            AjoutString(Sujet, qrySource.Fields.ByNameAsString['REMARQUESALBUM'], #13#10#13#10);
+          end;
+          if ([daoScenario, daoDessins, daoCouleurs] * DetailsOptions) <> [] then
+          begin
+            sEquipe := '';
+            qryEquipe.Close;
+            qryEquipe.Params.AsString[0] := qrySource.Fields.ByNameAsString['ID_Album'];
+            qryEquipe.Open;
+            s := '';
+            while (daoScenario in DetailsOptions) and (not qryEquipe.Eof) and (TMetierAuteur(qryEquipe.Fields.ByNameAsInteger['Metier']) = maScenariste) do
+            begin
+              PA := TDaoAuteurAlbumLite.Make(qryEquipe);
+              AjoutString(s, PA.ChaineAffichage, ', ');
+              PA.Free;
+              qryEquipe.Next;
+            end;
+            AjoutString(sEquipe, s, #13#10, rsTransScenario + ': ', '.');
+            s := '';
+            while (daoDessins in DetailsOptions) and (not qryEquipe.Eof) and (TMetierAuteur(qryEquipe.Fields.ByNameAsInteger['Metier']) = maDessinateur) do
+            begin
+              PA := TDaoAuteurAlbumLite.Make(qryEquipe);
+              AjoutString(s, PA.ChaineAffichage, ', ');
+              PA.Free;
+              qryEquipe.Next;
+            end;
+            AjoutString(sEquipe, s, #13#10, rsTransDessins + ': ', '.');
+            s := '';
+            while (daoCouleurs in DetailsOptions) and (not qryEquipe.Eof) and (TMetierAuteur(qryEquipe.Fields.ByNameAsInteger['Metier']) = maColoriste) do
+            begin
+              PA := TDaoAuteurAlbumLite.Make(qryEquipe);
+              AjoutString(s, PA.ChaineAffichage, ', ');
+              PA.Free;
+              qryEquipe.Next;
+            end;
+            AjoutString(sEquipe, s, #13#10, rsTransCouleurs + ': ', '.');
+          end;
+        end;
 
-          if (index <> 1) and (liste = mrNo) and (SujetSerie + Sujet + sEquipe <> '') and (Prn.GetLinesLeftFont(Prn.Columns[2].Font) < 3) then
+        if (index <> 1) and (liste = mrNo) and (SujetSerie + Sujet + sEquipe <> '') and (Prn.GetLinesLeftFont(Prn.Columns[2].Font) < 3) then
+        begin
+          Prn.NewPage;
+          sl := False;
+        end;
+
+        TDaoAlbumLite.Fill(PAl, qrySource);
+
+        if not IsEqualGUID(OldSerie, PAl.ID_Serie) then
+        begin
+          if (Prn.GetLinesLeftFont(Prn.Columns[1].Font) < 3) then
           begin
             Prn.NewPage;
             sl := False;
           end;
-
-          TDaoAlbumLite.Fill(PAl, qrySource);
-
-          if not IsEqualGUID(OldSerie, PAl.ID_Serie) then
-          begin
-            if (Prn.GetLinesLeftFont(Prn.Columns[1].Font) < 3) then
-            begin
-              Prn.NewPage;
-              sl := False;
-            end;
-            if sl then
-              Prn.NextLine;
-            s := FormatTitre(PAl.Serie);
-            if s = '' then
-              s := '<Sans série>';
-            Prn.WriteLineColumn(4, IIf(sl, -1, -2), s);
-            if (liste = mrNo) then
-            begin
-              if SujetSerie <> '' then
-                Prn.WriteColumn(5, -1, SujetSerie);
-            end;
-          end;
-
-          // Prn.WriteLineColumn(0, IIf(sl or (OldSerie <> PAl.ID_Serie), -1, -2), '#' + IntToStr(index));
-
-          s := '';
-          if PAl.Integrale then
-          begin
-            s2 := NonZero(IntToStr(PAl.TomeDebut));
-            AjoutString(s2, NonZero(IntToStr(PAl.TomeFin)), ' à ');
-            AjoutString(s, 'Intégrale ', ' - ', '', TrimRight(' ' + NonZero(IntToStr(PAl.Tome))));
-            AjoutString(s, s2, ' ', '[', ']');
-          end
-          else if PAl.HorsSerie then
-            AjoutString(s, 'Hors série ', ' - ', '', TrimRight(' ' + NonZero(IntToStr(PAl.Tome))))
-          else
-            AjoutString(s, NonZero(IntToStr(PAl.Tome)), ' - ', 'Tome ');
-
-          AjoutString(s, FormatTitre(PAl.Titre), ' - ');
-
+          if sl then
+            Prn.NextLine;
+          s := FormatTitre(PAl.Serie);
           if s = '' then
-            s := FormatTitre(PAl.Serie); // si l'album n'a pas de titre c'est qu'il a une série
-
-          // Prn.WriteLineColumn(1, -2, s);
-          Prn.WriteLineColumn(1, IIf(sl or (not IsEqualGUID(OldSerie, PAl.ID_Serie)), -1, -2), s);
-
-          sl := True;
+            s := '<Sans série>';
+          Prn.WriteLineColumn(4, IIf(sl, -1, -2), s);
           if (liste = mrNo) then
           begin
-            if sEquipe <> '' then
-              Prn.WriteColumn(3, -1, sEquipe);
-            if Sujet <> '' then
-              Prn.WriteColumn(2, -1, Sujet);
+            if SujetSerie <> '' then
+              Prn.WriteColumn(5, -1, SujetSerie);
           end;
-          OldSerie := PAl.ID_Serie;
-          Next;
-          fWaiting.ShowProgression(Format('%s (%s %d)...', [rsTransAlbums, rsTransPage, Prn.GetPageNumber]), epNext);
-          Inc(index);
         end;
-        PAl.Free;
+
+        // Prn.WriteLineColumn(0, IIf(sl or (OldSerie <> PAl.ID_Serie), -1, -2), '#' + IntToStr(index));
+
+        s := '';
+        if PAl.Integrale then
+        begin
+          s2 := NonZero(IntToStr(PAl.TomeDebut));
+          AjoutString(s2, NonZero(IntToStr(PAl.TomeFin)), ' à ');
+          AjoutString(s, 'Intégrale ', ' - ', '', TrimRight(' ' + NonZero(IntToStr(PAl.Tome))));
+          AjoutString(s, s2, ' ', '[', ']');
+        end
+        else if PAl.HorsSerie then
+          AjoutString(s, 'Hors série ', ' - ', '', TrimRight(' ' + NonZero(IntToStr(PAl.Tome))))
+        else
+          AjoutString(s, NonZero(IntToStr(PAl.Tome)), ' - ', 'Tome ');
+
+        AjoutString(s, FormatTitre(PAl.Titre), ' - ');
+
+        if s = '' then
+          s := FormatTitre(PAl.Serie); // si l'album n'a pas de titre c'est qu'il a une série
+
+        // Prn.WriteLineColumn(1, -2, s);
+        Prn.WriteLineColumn(1, IIf(sl or (not IsEqualGUID(OldSerie, PAl.ID_Serie)), -1, -2), s);
+
+        sl := True;
+        if (liste = mrNo) then
+        begin
+          if sEquipe <> '' then
+            Prn.WriteColumn(3, -1, sEquipe);
+          if Sujet <> '' then
+            Prn.WriteColumn(2, -1, Sujet);
+        end;
+        OldSerie := PAl.ID_Serie;
+        qrySource.Next;
+        fWaiting.ShowProgression(Format('%s (%s %d)...', [rsTransAlbums, rsTransPage, Prn.GetPageNumber]), epNext);
+        Inc(index);
       end;
+      PAl.Free;
     finally
       fWaiting.ShowProgression(rsTransImpression + '...', epNext);
       if Prn.Printing then
@@ -1220,26 +1214,25 @@ var
   var
     i: Integer;
     s: string;
+    Group: TGroupCritere absolute aCritere;
   begin
     if aCritere is TCritere then
     begin
       s := IntToStr(aCritere.Level - 1) + '|';
-      with TCritere(aCritere) do
-        Criteres.Add(s + prefix + Champ + '|' + Test);
+      Criteres.Add(s + prefix + TCritere(aCritere).Champ + '|' + TCritere(aCritere).Test);
     end
     else
-      with TGroupCritere(aCritere) do
+    begin
+      if prefix <> '' then
+        Criteres.Add(IntToStr(aCritere.Level - 1) + '|' + prefix + '| ');
+      for i := 0 to Group.SousCriteres.Count - 1 do
       begin
-        if prefix <> '' then
-          Criteres.Add(IntToStr(aCritere.Level - 1) + '|' + prefix + '| ');
-        for i := 0 to SousCriteres.Count - 1 do
-        begin
-          if i > 0 then
-            ProcessCritere(SousCriteres[i], TLblGroupOption[GroupOption] + ' ')
-          else
-            ProcessCritere(SousCriteres[i]);
-        end;
+        if i > 0 then
+          ProcessCritere(Group.SousCriteres[i], TLblGroupOption[Group.GroupOption] + ' ')
+        else
+          ProcessCritere(Group.SousCriteres[i]);
       end;
+    end;
   end;
 
 begin
@@ -1338,11 +1331,9 @@ begin
               begin
                 CritereTri := TCritereTri(Recherche.SortBy[i]);
                 if CritereTri._Champ.Booleen then
-                  s := CritereTri.LabelChamp + ' - ' + IIf(CritereTri.Asc, 'Non puis Oui', 'Oui puis Non') + IIf(CritereTri.NullsFirst, ' - Vides en premier',
-                    '') + IIf(CritereTri.NullsLast, ' - Vides en dernier', '')
+                  s := CritereTri.LabelChamp + ' - ' + IIf(CritereTri.Asc, 'Non puis Oui', 'Oui puis Non') + IIf(CritereTri.NullsFirst, ' - Vides en premier', '') + IIf(CritereTri.NullsLast, ' - Vides en dernier', '')
                 else
-                  s := CritereTri.LabelChamp + ' - ' + IIf(CritereTri.Asc, 'Croissant', 'Décroissant') + IIf(CritereTri.NullsFirst, ' - Vides en premier', '') +
-                    IIf(CritereTri.NullsLast, ' - Vides en dernier', '');
+                  s := CritereTri.LabelChamp + ' - ' + IIf(CritereTri.Asc, 'Croissant', 'Décroissant') + IIf(CritereTri.NullsFirst, ' - Vides en premier', '') + IIf(CritereTri.NullsLast, ' - Vides en dernier', '');
                 Prn.WriteLineColumn(3, IIf(i = 0, -2, -1), s);
               end;
             end;
@@ -1390,46 +1381,37 @@ begin
             qryEquipe.Params.AsString[0] := GUIDToString(PAl.ID);
             qryEquipe.Open;
             sEquipe := '';
-            with qryEquipe do
+            s := '';
+            while (daoScenario in DetailsOptions) and (not qryEquipe.Eof) and (TMetierAuteur(qryEquipe.Fields.ByNameAsInteger['Metier']) = maScenariste) do
             begin
-              s := '';
-              while (daoScenario in DetailsOptions) and (not Eof) and (TMetierAuteur(Fields.ByNameAsInteger['Metier']) = maScenariste) do
-              begin
-                PA := TDaoAuteurAlbumLite.Make(qryEquipe);
-                AjoutString(s, PA.ChaineAffichage, ', ');
-                PA.Free;
-                Next;
-              end;
-              AjoutString(sEquipe, s, #13#10, rsTransScenario + ': ', '.');
-              s := '';
-              while (daoDessins in DetailsOptions) and (not Eof) and (TMetierAuteur(Fields.ByNameAsInteger['Metier']) = maDessinateur) do
-              begin
-                PA := TDaoAuteurAlbumLite.Make(qryEquipe);
-                AjoutString(s, PA.ChaineAffichage, ', ');
-                PA.Free;
-                Next;
-              end;
-              AjoutString(sEquipe, s, #13#10, rsTransDessins + ': ', '.');
-              s := '';
-              while (daoCouleurs in DetailsOptions) and (not Eof) and (TMetierAuteur(Fields.ByNameAsInteger['Metier']) = maColoriste) do
-              begin
-                PA := TDaoAuteurAlbumLite.Make(qryEquipe);
-                AjoutString(s, PA.ChaineAffichage, ', ');
-                PA.Free;
-                Next;
-              end;
-              AjoutString(sEquipe, s, #13#10, rsTransCouleurs + ': ', '.');
+              PA := TDaoAuteurAlbumLite.Make(qryEquipe);
+              AjoutString(s, PA.ChaineAffichage, ', ');
+              PA.Free;
+              qryEquipe.Next;
             end;
+            AjoutString(sEquipe, s, #13#10, rsTransScenario + ': ', '.');
+            s := '';
+            while (daoDessins in DetailsOptions) and (not qryEquipe.Eof) and (TMetierAuteur(qryEquipe.Fields.ByNameAsInteger['Metier']) = maDessinateur) do
+            begin
+              PA := TDaoAuteurAlbumLite.Make(qryEquipe);
+              AjoutString(s, PA.ChaineAffichage, ', ');
+              PA.Free;
+              qryEquipe.Next;
+            end;
+            AjoutString(sEquipe, s, #13#10, rsTransDessins + ': ', '.');
+            s := '';
+            while (daoCouleurs in DetailsOptions) and (not qryEquipe.Eof) and (TMetierAuteur(qryEquipe.Fields.ByNameAsInteger['Metier']) = maColoriste) do
+            begin
+              PA := TDaoAuteurAlbumLite.Make(qryEquipe);
+              AjoutString(s, PA.ChaineAffichage, ', ');
+              PA.Free;
+              qryEquipe.Next;
+            end;
+            AjoutString(sEquipe, s, #13#10, rsTransCouleurs + ': ', '.');
           end;
         end;
         if nTri = -1 then
-          with TStringList.Create do
-            try
-              Text := Recherche.ResultatsInfos[i];
-              nTri := Count;
-            finally
-              Free;
-            end;
+          nTri := Length(Recherche.ResultatsInfos[i].Split([sLineBreak], '"', '"', TStringSplitOptions.None));
 
         h := Prn.GetLineHeightMmsFont(Prn.Columns[1].Font);
         if (nTri > 0) then
@@ -1607,6 +1589,7 @@ var
   y1, y2: Single;
   fWaiting: IWaiting;
   Prn: TPrintObject;
+  SerieIncomplete: TSerieIncomplete;
 begin
   fWaiting := TWaiting.Create;
   fWaiting.ShowProgression(rsTransConfig, 0, 2);
@@ -1624,28 +1607,28 @@ begin
     Prn.CreateColumn1(2, 140, -1, taLeftJustify, Prn.Font.name, 12, []);
 
     for i := 0 to Pred(R.Series.Count) do
-      with TSerieIncomplete(R.Series[i]) do
+    begin
+      SerieIncomplete := R.Series[i];
+      if (i <> 0) and (Prn.GetLinesLeftFont(Prn.Columns[1].Font) < 2) then
+        Prn.NewPage;
+      y1 := Prn.GetYPosition;
+      Prn.WriteLineColumn(0, -1, '#' + IntToStr(i + 1));
+      Prn.SetYPosition(y1);
+      Prn.WriteColumn(1, -1, SerieIncomplete.Serie.ChaineAffichage(False));
+      y2 := Prn.GetYPosition;
+      s1 := '';
+      for j := 0 to SerieIncomplete.NumerosManquants.Count - 1 do
       begin
-        if (i <> 0) and (Prn.GetLinesLeftFont(Prn.Columns[1].Font) < 2) then
-          Prn.NewPage;
-        y1 := Prn.GetYPosition;
-        Prn.WriteLineColumn(0, -1, '#' + IntToStr(i + 1));
-        Prn.SetYPosition(y1);
-        Prn.WriteColumn(1, -1, Serie.ChaineAffichage(False));
-        y2 := Prn.GetYPosition;
-        s1 := '';
-        for j := 0 to NumerosManquants.Count - 1 do
-        begin
-          s2 := NumerosManquants[j];
-          if Pos('<>', s2) <> 0 then
-            s2 := StringReplace(s2, '<>', ' à ', []);
-          AjoutString(s1, s2, ', ');
-        end;
-        Prn.SetYPosition(y1);
-        Prn.WriteColumn(2, -1, s1);
-        if y2 > Prn.GetYPosition then
-          Prn.SetYPosition(y2);
+        s2 := SerieIncomplete.NumerosManquants[j];
+        if Pos('<>', s2) <> 0 then
+          s2 := StringReplace(s2, '<>', ' à ', []);
+        AjoutString(s1, s2, ', ');
       end;
+      Prn.SetYPosition(y1);
+      Prn.WriteColumn(2, -1, s1);
+      if y2 > Prn.GetYPosition then
+        Prn.SetYPosition(y2);
+    end;
   finally
     fWaiting.ShowProgression(rsTransImpression + '...', epNext);
     if Prn.Printing then
@@ -1761,41 +1744,38 @@ begin
 
       PreparePrintObject(Prn, Previsualisation, rsListeAchats);
 
-      with qrySource do
+      qrySource.Open;
+      PrixTotal := 0;
+      OldAlbum := GUID_FULL;
+      PAl := nil;
+      fWaiting.ShowProgression(Format('%s (%s %d)...', [rsTransAlbums, rsTransPage, Prn.GetPageNumber]), 0, NbAlbums + 2);
+      while not qrySource.Eof do
       begin
-        Open;
-        PrixTotal := 0;
-        OldAlbum := GUID_FULL;
-        PAl := nil;
-        fWaiting.ShowProgression(Format('%s (%s %d)...', [rsTransAlbums, rsTransPage, Prn.GetPageNumber]), 0, NbAlbums + 2);
-        while not Eof do
+        if not IsEqualGUID(OldAlbum, StringToGUID(qrySource.Fields.ByNameAsString['ID_ALBUM'])) then
         begin
-          if not IsEqualGUID(OldAlbum, StringToGUID(Fields.ByNameAsString['ID_ALBUM'])) then
+          PAl := TAchat.Create;
+          TDaoAlbumLite.Fill(PAl, qrySource);
+          PAl.PrixCalcule := True;
+          PAl.Prix := qrySource.Fields.ByNameAsCurrency['PRIXUNITAIRE'];
+          if PAl.Prix = 0 then
           begin
-            PAl := TAchat.Create;
-            TDaoAlbumLite.Fill(PAl, qrySource);
-            PAl.PrixCalcule := True;
-            PAl.Prix := Fields.ByNameAsCurrency['PRIXUNITAIRE'];
-            if PAl.Prix = 0 then
-            begin
-              PAl.PrixCalcule := False;
-              PAl.Prix := PrixMoyen;
-            end;
-            PrixTotal := PrixTotal + PAl.Prix;
-            OldAlbum := PAl.ID;
-            ListAlbums.Add(PAl);
-          end
-          else
-          begin
-            PrixTotal := PrixTotal - PAl.Prix;
             PAl.PrixCalcule := False;
             PAl.Prix := PrixMoyen;
-            PrixTotal := PrixTotal + PAl.Prix;
           end;
-
-          Next;
-          fWaiting.ShowProgression(Format('%s (%s %d)...', [rsTransAlbums, rsTransPage, Prn.GetPageNumber]), epNext);
+          PrixTotal := PrixTotal + PAl.Prix;
+          OldAlbum := PAl.ID;
+          ListAlbums.Add(PAl);
+        end
+        else
+        begin
+          PrixTotal := PrixTotal - PAl.Prix;
+          PAl.PrixCalcule := False;
+          PAl.Prix := PrixMoyen;
+          PrixTotal := PrixTotal + PAl.Prix;
         end;
+
+        qrySource.Next;
+        fWaiting.ShowProgression(Format('%s (%s %d)...', [rsTransAlbums, rsTransPage, Prn.GetPageNumber]), epNext);
       end;
 
       Prn.SetHeaderDimensions1(-1, -1, -1, 30, False, 0, clWhite);

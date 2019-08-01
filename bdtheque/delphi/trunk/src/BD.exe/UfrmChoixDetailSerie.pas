@@ -29,26 +29,27 @@ procedure TfrmChoixDetailSerie.SetMaxNiveauDetail(const Value: TDetailSerieOptio
 var
   i: TDetailSerieOption;
   nbButtons: Integer;
+  btn: TButton;
 begin
   FMaxNiveauDetail := Value;
 
   nbButtons := 0;
   for i := Low(TDetailSerieOption) to High(TDetailSerieOption) do
     if i >= FMaxNiveauDetail then
-      with TButton.Create(Self) do
-      begin
-        Parent := Self;
-        Left := 22;
-        Top := 23 + Integer(nbButtons) * 47;
-        Width := 350;
-        Height := 42;
-        Cursor := crHandPoint;
-        Style := bsCommandLink;
-        Caption := LibelleDetailSerieOption[FMaxNiveauDetail][i];
-        Default := i = FMaxNiveauDetail;
-        ModalResult := 110 + Integer(i);
-        Inc(nbButtons);
-      end;
+    begin
+      btn := TButton.Create(Self);
+      btn.Parent := Self;
+      btn.Left := 22;
+      btn.Top := 23 + Integer(nbButtons) * 47;
+      btn.Width := 350;
+      btn.Height := 42;
+      btn.Cursor := crHandPoint;
+      btn.Style := bsCommandLink;
+      btn.Caption := LibelleDetailSerieOption[FMaxNiveauDetail][i];
+      btn.Default := i = FMaxNiveauDetail;
+      btn.ModalResult := 110 + Integer(i);
+      Inc(nbButtons);
+    end;
   CheckBox1.Top := 23 + Integer(nbButtons) * 47 + 23;
   ClientHeight := CheckBox1.Top + framBoutons1.Height;
   if CheckBox1.Visible then

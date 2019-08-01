@@ -404,103 +404,99 @@ begin
   idRequete := '---------------------------26846888314793'; // valeur arbitraire: voir s'il faut la changer à chaque requête mais il semble que non
   MemoryStream := TMemoryStream.Create;
   dl := TDownloader.Create;
-  with dl do
-    try
-      if Pos('%', URL) > 0 then
-        FHttpCli.URL := URL
-      else
-        FHttpCli.URL := URLEncode(URL);
-      FHttpCli.SendStream := MemoryStream;
-      FHttpCli.RcvdStream := StreamAnswer;
+  try
+    if Pos('%', URL) > 0 then
+      dl.FHttpCli.URL := URL
+    else
+      dl.FHttpCli.URL := URLEncode(URL);
+    dl.FHttpCli.SendStream := MemoryStream;
+    dl.FHttpCli.RcvdStream := StreamAnswer;
 
-      MemoryStream.Position := 0;
+    MemoryStream.Position := 0;
 
-      httpHeader := '';
+    httpHeader := '';
 
-      if Length(Pieces) > 0 then
-      begin
-        for i := low(Pieces) to high(Pieces) do
-          if Pieces[i].IsFichier then
-          begin
-            fs := TFileStream.Create(Pieces[i].Valeur, fmOpenRead or fmShareDenyWrite);
-            try
-              httpHeader := '--' + UTF8Encode(idRequete) + #13#10;
-              httpHeader := httpHeader + 'Content-Disposition: form-data; name="' + UTF8Encode(Pieces[i].Nom) + '"; filename="' +
-                UTF8Encode(ExtractFileName(Pieces[i].Valeur)) + '"'#13#10;
-              httpHeader := httpHeader + 'Content-Type: application/octet-stream'#13#10;
-              httpHeader := httpHeader + 'Content-Length: ' + UTF8Encode(IntToStr(fs.Size)) + #13#10;
-              httpHeader := httpHeader + #13#10;
-              MemoryStream.WriteBuffer(httpHeader[1], Length(httpHeader));
-              MemoryStream.CopyFrom(fs, fs.Size);
-              httpHeader := #13#10;
-              MemoryStream.WriteBuffer(httpHeader[1], Length(httpHeader));
-            finally
-              fs.Free;
-            end;
-          end
-          else
-          begin
-            httpHeader := '--' + UTF8Encode(idRequete) + #13#10;
-            httpHeader := httpHeader + 'Content-Disposition: form-data; name="' + UTF8Encode(Pieces[i].Nom) + '"'#13#10;
-            httpHeader := httpHeader + #13#10;
-            httpHeader := httpHeader + UTF8Encode(Pieces[i].Valeur) + #13#10;
-            MemoryStream.WriteBuffer(httpHeader[1], Length(httpHeader));
-          end;
-
-        httpHeader := '--' + UTF8Encode(idRequete) + '--'#13#10;
-        MemoryStream.WriteBuffer(httpHeader[1], Length(httpHeader));
-
-        FHttpCli.ContentTypePost := 'multipart/form-data; charset=UTF-8; boundary=' + idRequete;
-      end;
-
-      MemoryStream.Position := 0;
-
-      if ShowProgress then
-      begin
-        FWaiting := TWaiting.Create('Chargement des données...', 1, @FUserCancel, False);
-        // pour forcer la fenêtre à afficher des choses dès son apparition
-        FWaiting.ShowProgression(URL, FHttpCli.RcvdCount, FHttpCli.ContentLength);
-      end;
-      try
-        if Length(Pieces) > 0 then
-          FHttpCli.Post
-        else
-          FHttpCli.Get;
-      except
-        on E: EHttpException do
-        else
-          raise;
-      end;
-
-      Result := FHttpCli.StatusCode;
-      // à remplacer par la valeur du header 'filename' ou equivalent
-      for i := 0 to Pred(FHttpCli.RcvdHeader.Count) do
-        if SameText('filename: ', Copy(FHttpCli.RcvdHeader[i], 1, 10)) then
+    if Length(Pieces) > 0 then
+    begin
+      for i := low(Pieces) to high(Pieces) do
+        if Pieces[i].IsFichier then
         begin
-          DocName := Copy(FHttpCli.RcvdHeader[i], 11, MaxInt);
-          Break;
+          fs := TFileStream.Create(Pieces[i].Valeur, fmOpenRead or fmShareDenyWrite);
+          try
+            httpHeader := '--' + UTF8Encode(idRequete) + #13#10;
+            httpHeader := httpHeader + 'Content-Disposition: form-data; name="' + UTF8Encode(Pieces[i].Nom) + '"; filename="' + UTF8Encode(ExtractFileName(Pieces[i].Valeur)) + '"'#13#10;
+            httpHeader := httpHeader + 'Content-Type: application/octet-stream'#13#10;
+            httpHeader := httpHeader + 'Content-Length: ' + UTF8Encode(IntToStr(fs.Size)) + #13#10;
+            httpHeader := httpHeader + #13#10;
+            MemoryStream.WriteBuffer(httpHeader[1], Length(httpHeader));
+            MemoryStream.CopyFrom(fs, fs.Size);
+            httpHeader := #13#10;
+            MemoryStream.WriteBuffer(httpHeader[1], Length(httpHeader));
+          finally
+            fs.Free;
+          end;
+        end
+        else
+        begin
+          httpHeader := '--' + UTF8Encode(idRequete) + #13#10;
+          httpHeader := httpHeader + 'Content-Disposition: form-data; name="' + UTF8Encode(Pieces[i].Nom) + '"'#13#10;
+          httpHeader := httpHeader + #13#10;
+          httpHeader := httpHeader + UTF8Encode(Pieces[i].Valeur) + #13#10;
+          MemoryStream.WriteBuffer(httpHeader[1], Length(httpHeader));
         end;
-      if DocName = '' then
-        DocName := GetFileNameFromURL(URL);
 
-      if IncludeHeaders then
-      begin
-        MemoryStream.Size := 0;
-        StreamAnswer.Position := 0;
-        MemoryStream.CopyFrom(StreamAnswer, 0);
+      httpHeader := '--' + UTF8Encode(idRequete) + '--'#13#10;
+      MemoryStream.WriteBuffer(httpHeader[1], Length(httpHeader));
 
-        FHttpCli.RcvdHeader.Add('X-URL-Origin: ' + FHttpCli.URL);
-        FHttpCli.RcvdHeader.Add('X-URL-Final: ' + FHttpCli.Location);
-        S := RawByteString(FHttpCli.RcvdHeader.Text) + #13#10;
-        StreamAnswer.Size := 0;
-        StreamAnswer.WriteBuffer(S[1], Length(S));
-        MemoryStream.Position := 0;
-        StreamAnswer.CopyFrom(MemoryStream, 0);
-      end;
-    finally
-      MemoryStream.Free;
-      Free;
+      dl.FHttpCli.ContentTypePost := 'multipart/form-data; charset=UTF-8; boundary=' + idRequete;
     end;
+
+    MemoryStream.Position := 0;
+
+    if ShowProgress then
+    begin
+      dl.FWaiting := TWaiting.Create('Chargement des données...', 1, @(dl.FUserCancel), False);
+      // pour forcer la fenêtre à afficher des choses dès son apparition
+      dl.FWaiting.ShowProgression(URL, dl.FHttpCli.RcvdCount, dl.FHttpCli.ContentLength);
+    end;
+    try
+      if Length(Pieces) > 0 then
+        dl.FHttpCli.Post
+      else
+        dl.FHttpCli.Get;
+    except
+      on E: EHttpException do ;
+    end;
+
+    Result := dl.FHttpCli.StatusCode;
+    // à remplacer par la valeur du header 'filename' ou equivalent
+    for i := 0 to Pred(dl.FHttpCli.RcvdHeader.Count) do
+      if SameText('filename: ', Copy(dl.FHttpCli.RcvdHeader[i], 1, 10)) then
+      begin
+        DocName := Copy(dl.FHttpCli.RcvdHeader[i], 11, MaxInt);
+        Break;
+      end;
+    if DocName = '' then
+      DocName := GetFileNameFromURL(URL);
+
+    if IncludeHeaders then
+    begin
+      MemoryStream.Size := 0;
+      StreamAnswer.Position := 0;
+      MemoryStream.CopyFrom(StreamAnswer, 0);
+
+      dl.FHttpCli.RcvdHeader.Add('X-URL-Origin: ' + dl.FHttpCli.URL);
+      dl.FHttpCli.RcvdHeader.Add('X-URL-Final: ' + dl.FHttpCli.Location);
+      S := RawByteString(dl.FHttpCli.RcvdHeader.Text) + #13#10;
+      StreamAnswer.Size := 0;
+      StreamAnswer.WriteBuffer(S[1], Length(S));
+      MemoryStream.Position := 0;
+      StreamAnswer.CopyFrom(MemoryStream, 0);
+    end;
+  finally
+    MemoryStream.Free;
+    dl.Free;
+  end;
 end;
 
 function OffsetFromUTC: TDateTime;
@@ -528,7 +524,6 @@ begin
 end;
 
 function TimeZoneBias: string;
-
 var
   TZI: TTimeZoneInformation;
   TZIResult, aBias: Integer;

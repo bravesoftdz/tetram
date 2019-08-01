@@ -428,13 +428,7 @@ object frmGestions: TfrmGestions
     BorderStyle = bsNone
     ButtonFillMode = fmShaded
     Header.AutoSizeIndex = -1
-    Header.Font.Charset = DEFAULT_CHARSET
-    Header.Font.Color = clWindowText
-    Header.Font.Height = -11
-    Header.Font.Name = 'Tahoma'
-    Header.Font.Style = []
     Header.Options = [hoColumnResize, hoDrag]
-    HintAnimation = hatNone
     HintMode = hmTooltip
     HotCursor = crHandPoint
     Indent = 8

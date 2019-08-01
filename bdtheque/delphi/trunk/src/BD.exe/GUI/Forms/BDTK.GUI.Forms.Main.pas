@@ -429,14 +429,16 @@ begin
 end;
 
 procedure TfrmFond.actChangementOptionsExecute(Sender: TObject);
+var
+  frm: TfrmOptions;
 begin
-  with TFrmOptions.Create(Self) do
-    try
-      if ShowModal <> mrOk then
-        Exit;
-    finally
-      Free;
-    end;
+  frm := TFrmOptions.Create(Self);
+  try
+    if frm.ShowModal <> mrOk then
+      Exit;
+  finally
+    frm.Free;
+  end;
   if Assigned(FCurrentForm) and Assigned(FCurrentForm.Menu) then
     if TGlobalVar.Utilisateur.Options.GrandesIconesMenus then
       FCurrentForm.Menu.Images := boutons_32x32_hot
@@ -462,15 +464,16 @@ end;
 procedure TfrmFond.actAfficheStatsGeneralesExecute(Sender: TObject);
 var
   R: TStats;
+  frm: TfrmStatsGenerales;
 begin
   R := TStats.BuildStats(False);
-  with TStatsGeneralesCreate(Self, R) do
-    try
-      ShowModal;
-    finally
-      Free;
-      R.Free;
-    end;
+  frm := TStatsGeneralesCreate(Self, R);
+  try
+    frm.ShowModal;
+  finally
+    frm.Free;
+    R.Free;
+  end;
 end;
 
 procedure TfrmFond.actAfficheRechercheExecute(Sender: TObject);
@@ -551,15 +554,16 @@ end;
 procedure TfrmFond.actAfficheStatsAlbumsExecute(Sender: TObject);
 var
   R: TStats;
+  frm: TfrmStatsAlbums;
 begin
   R := TStats.BuildStats(False);
-  with TStatsAlbumsCreate(Self, R) do
-    try
-      ShowModal;
-    finally
-      Free;
-      R.Free;
-    end;
+  frm := TStatsAlbumsCreate(Self, R);
+  try
+    frm.ShowModal;
+  finally
+    frm.Free;
+    R.Free;
+  end;
 end;
 
 procedure TfrmFond.ChargeToolBarres(sl: TStringList);
@@ -582,29 +586,26 @@ procedure TfrmFond.ChargeToolBarres(sl: TStringList);
   function NewAction(aAction: TAction): TToolButton;
   begin
     Result := TToolButton.Create(ToolBar1);
-    with Result do
+    Result.Parent := ToolBar1;
+    if aAction = nil then
     begin
-      Parent := ToolBar1;
-      if aAction = nil then
+      Result.Style := tbsSeparator;
+      Result.Width := 8;
+    end
+    else
+    begin
+      if aAction = HistoriqueBack then
       begin
-        Style := tbsSeparator;
-        Width := 8;
-      end
-      else
-      begin
-        if aAction = HistoriqueBack then
-        begin
-          Style := tbsDropDown;
-          MenuItem := mnuBack;
-        end;
-        if aAction = HistoriqueNext then
-        begin
-          Style := tbsDropDown;
-          MenuItem := mnuNext;
-        end;
-        Cursor := crHandPoint;
-        Action := aAction;
+        Result.Style := tbsDropDown;
+        Result.MenuItem := mnuBack;
       end;
+      if aAction = HistoriqueNext then
+      begin
+        Result.Style := tbsDropDown;
+        Result.MenuItem := mnuNext;
+      end;
+      Result.Cursor := crHandPoint;
+      Result.Action := aAction;
     end;
   end;
 
@@ -672,49 +673,53 @@ end;
 procedure TfrmFond.LoadToolBarres;
 var
   sl: TStringList;
+  ini: TIniFile;
 begin
   if TFile.Exists(FichierIni) then
-    with TIniFile.Create(FichierIni) do
-    begin
-      sl := TStringList.Create;
-      try
-        ReadSections(sl);
-        if sl.IndexOf('Barre') = -1 then
-          Exit;
-        sl.Clear;
-        ReadSectionValues('Barre', sl);
-        ChargeToolBarres(sl);
-        FToolCurrent.Assign(sl);
-      finally
-        sl.Free;
-        Free;
-      end;
+  begin
+    ini := TIniFile.Create(FichierIni);
+    sl := TStringList.Create;
+    try
+      ini.ReadSections(sl);
+      if sl.IndexOf('Barre') = -1 then
+        Exit;
+      sl.Clear;
+      ini.ReadSectionValues('Barre', sl);
+      ChargeToolBarres(sl);
+      FToolCurrent.Assign(sl);
+    finally
+      sl.Free;
+      ini.Free;
     end;
+  end;
 end;
 
 procedure TfrmFond.FormClose(Sender: TObject; var Action: TCloseAction);
 var
   i: Integer;
+  ini: TIniFile;
 begin
-  with TIniFile.Create(FichierIni) do
-    try
-      EraseSection('Barre');
-      for i := 0 to Pred(FToolCurrent.Count) do
-        WriteString('Barre', FToolCurrent.Names[i], FToolCurrent.ValueFromIndex[i]);
-    finally
-      Free;
-    end;
+  ini := TIniFile.Create(FichierIni);
+  try
+    ini.EraseSection('Barre');
+    for i := 0 to Pred(FToolCurrent.Count) do
+      ini.WriteString('Barre', FToolCurrent.Names[i], FToolCurrent.ValueFromIndex[i]);
+  finally
+    ini.Free;
+  end;
 end;
 
 procedure TfrmFond.actPersonnaliseBarreExecute(Sender: TObject);
+var
+  frm: TfrmCustomize;
 begin
-  with TFrmCustomize.Create(Self) do
-    try
-      if ShowModal = mrOk then
-        Historique.AddWaiting(fcRecreateToolBar);
-    finally
-      Free;
-    end;
+  frm := TFrmCustomize.Create(Self);
+  try
+    if frm.ShowModal = mrOk then
+      Historique.AddWaiting(fcRecreateToolBar);
+  finally
+    frm.Free;
+  end;
 end;
 
 procedure TfrmFond.ActionsOutilsUpdate(Action: TBasicAction; var Handled: Boolean);
@@ -779,13 +784,15 @@ begin
 end;
 
 procedure TfrmFond.actAideAboutExecute(Sender: TObject);
+var
+  frm: TfrmAboutBox;
 begin
-  with TfrmAboutBox.Create(Application) do
-    try
-      ShowModal;
-    finally
-      Free;
-    end;
+  frm := TfrmAboutBox.Create(Application);
+  try
+    frm.ShowModal;
+  finally
+    frm.Free;
+  end;
 end;
 
 procedure TfrmFond.actModeGestionExecute(Sender: TObject);
@@ -825,13 +832,15 @@ begin
 end;
 
 procedure TfrmFond.actSynchroniserExecute(Sender: TObject);
+var
+  frm: TfrmSynchroniser;
 begin
-  with TfrmSynchroniser.Create(nil) do
-    try
-      ShowModal;
-    finally
-      Free;
-    end;
+  frm := TfrmSynchroniser.Create(nil);
+  try
+    frm.ShowModal;
+  finally
+    frm.Free;
+  end;
 end;
 
 procedure TfrmFond.StatsInfosBDAppExecute(Sender: TObject);
@@ -850,8 +859,8 @@ procedure TfrmFond.ActionList1Update(Action: TBasicAction; var Handled: Boolean)
 begin
   CheminBase.Caption := dmPrinc.DBConnection.GetDatabase.DatabaseName;
   HistoriqueBack.Enabled := (TGlobalVar.Mode_en_cours = mdConsult) and LongBool(Historique.CurrentConsultation);
-  HistoriqueNext.Enabled := (TGlobalVar.Mode_en_cours = mdConsult) and LongBool(Historique.CountConsultation) and
-    (Historique.CurrentConsultation <> Historique.CountConsultation - 1);
+  HistoriqueNext.Enabled := (TGlobalVar.Mode_en_cours = mdConsult) and LongBool(Historique.CountConsultation)
+    and (Historique.CurrentConsultation <> Historique.CountConsultation - 1);
 end;
 
 function TfrmFond.SetModalChildForm(Form: TForm; Alignement: TAlign): Integer;
@@ -1141,47 +1150,51 @@ begin
 end;
 
 procedure TfrmFond.actPublierExecute(Sender: TObject);
+var
+  frm: TfrmPublier;
 begin
-  with TfrmPublier.Create(nil) do
-    try
-      ShowModal;
-    finally
-      Free;
-    end;
+  frm := TfrmPublier.Create(nil);
+  try
+    frm.ShowModal;
+  finally
+    frm.Free;
+  end;
 end;
 
 procedure TfrmFond.Loaded;
 var
   S, Taille, Position: string;
   i, iWidth, iHeight, iLeft, iTop: Integer;
+  ini: TIniFile;
 begin
   inherited;
-  with TIniFile.Create(FichierIni) do
-    try
-      S := ReadString('Options', 'WS', '');
-      if S <> '' then
-        try
-          i := Pos('-', S);
-          Taille := Copy(S, 1, i - 1);
-          Position := Copy(S, i + 1, MaxInt);
+  ini := TIniFile.Create(FichierIni);
+  try
+    S := ini.ReadString('Options', 'WS', '');
+  finally
+    ini.Free;
+  end;
+  if S.IsEmpty then
+    Exit;
+  try
+    i := Pos('-', S);
+    Taille := Copy(S, 1, i - 1);
+    Position := Copy(S, i + 1, MaxInt);
 
-          i := Pos('x', Taille);
-          iWidth := StrToInt(Copy(Taille, 1, i - 1));
-          iHeight := StrToInt(Copy(Taille, i + 1, MaxInt));
+    i := Pos('x', Taille);
+    iWidth := StrToInt(Copy(Taille, 1, i - 1));
+    iHeight := StrToInt(Copy(Taille, i + 1, MaxInt));
 
-          i := Pos('x', Position);
-          iLeft := StrToInt(Copy(Position, 1, i - 1));
-          iTop := StrToInt(Copy(Position, i + 1, MaxInt));
+    i := Pos('x', Position);
+    iLeft := StrToInt(Copy(Position, 1, i - 1));
+    iTop := StrToInt(Copy(Position, i + 1, MaxInt));
 
-          WindowState := wsNormal;
-          SetBounds(iLeft, iTop, iWidth, iHeight);
-        except
-          // on ne fait rien en cas d'erreur: la ligne DOIT être correcte
-          Assert(False, 'Taille de fenêtre mal décodée');
-        end;
-    finally
-      Free;
-    end;
+    WindowState := wsNormal;
+    SetBounds(iLeft, iTop, iWidth, iHeight);
+  except
+    // on ne fait rien en cas d'erreur: la ligne DOIT être correcte
+    Assert(False, 'Taille de fenêtre mal décodée');
+  end;
 end;
 
 procedure TfrmFond.DessineNote(Canvas: TCanvas; aRect: TRect; Notation: Integer);

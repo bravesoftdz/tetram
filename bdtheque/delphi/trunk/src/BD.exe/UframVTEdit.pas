@@ -61,22 +61,22 @@ begin
 end;
 
 procedure TframVTEdit.RefreshFiltre;
+var
+  tv: TVirtualStringTree;
 begin
-  with VTEdit.PopupWindow.TreeView do
-  begin
-    if not IsEqualGUID(ParentValue, GUID_NULL) then
-      case Mode of
-        vmCollections:
-          Filtre := 'id_editeur = ' + QuotedStr(GUIDToString(ParentValue));
-        vmUnivers:
-          Filtre := 'branche_univers not containing ' + QuotedStr('|' + GUIDToString(ParentValue) + '|');
+  tv := VTEdit.PopupWindow.TreeView;
+  if not IsEqualGUID(ParentValue, GUID_NULL) then
+    case Mode of
+      vmCollections:
+        tv.Filtre := 'id_editeur = ' + QuotedStr(GUIDToString(ParentValue));
+      vmUnivers:
+        tv.Filtre := 'branche_univers not containing ' + QuotedStr('|' + GUIDToString(ParentValue) + '|');
       else
-        Filtre := '';
-      end
-    else
-      Filtre := '';
-    UseFiltre := Filtre <> '';
-  end;
+        tv.Filtre := '';
+    end
+  else
+    tv.Filtre := '';
+  tv.UseFiltre := tv.Filtre <> '';
 end;
 
 procedure callbackAfterEdit(Data: TObject);

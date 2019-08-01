@@ -30,54 +30,60 @@ function ExtractRegExGroup(const Chaine, aRegEx, Group: string): string;
 implementation
 
 function MatchRegEx(const Chaine, aRegEx: string): Boolean;
+var
+  r: TBdtkRegEx;
 begin
-  with TBdtkRegEx.Create do
-    try
-      Result := FRegEx.Compile(aRegEx, True) and FRegEx.Match(Chaine);
-    finally
-      Free;
-    end;
+  r := TBdtkRegEx.Create;
+  try
+    Result := r.FRegEx.Compile(aRegEx, True) and r.FRegEx.Match(Chaine);
+  finally
+    r.Free;
+  end;
 end;
 
 function ExtractRegEx(const Chaine, aRegEx: string): string;
+var
+  r: TBdtkRegEx;
 begin
-  with TBdtkRegEx.Create do
-    try
-      FRegEx.Compile(aRegEx, True);
-      if FRegEx.Match(Chaine) and (FRegEx.CaptureCount > 0) then
-        Result := FRegEx.Captures[1]
-      else
-        Result := '';
-    finally
-      Free;
-    end;
+  r := TBdtkRegEx.Create;
+  try
+    r.FRegEx.Compile(aRegEx, True);
+    if r.FRegEx.Match(Chaine) and (r.FRegEx.CaptureCount > 0) then
+      Result := r.FRegEx.Captures[1]
+    else
+      Result := '';
+  finally
+    r.Free;
+  end;
 end;
 
 function ExtractRegExGroup(const Chaine, aRegEx, Group: string): string;
 var
   i: Integer;
+  r: TBdtkRegEx;
 begin
-  with TBdtkRegEx.Create do
-    try
-      if not FRegEx.Compile(aRegEx, True) then Exit;
-      if FRegEx.Match(Chaine) and (FRegEx.CaptureCount > 0) then
-      begin
-        if Group = '' then
-          Result := FRegEx.Captures[1]
-        else
-        begin
-          i := FRegEx.IndexOfName(Group);
-          if (i > 0) then
-            Result := FRegEx.Captures[i]
-          else
-            Result := '';
-        end;
-      end
+  r := TBdtkRegEx.Create;
+  try
+    if not r.FRegEx.Compile(aRegEx, True) then
+      Exit;
+    if r.FRegEx.Match(Chaine) and (r.FRegEx.CaptureCount > 0) then
+    begin
+      if Group = '' then
+        Result := r.FRegEx.Captures[1]
       else
-        Result := '';
-    finally
-      Free;
-    end;
+      begin
+        i := r.FRegEx.IndexOfName(Group);
+        if (i > 0) then
+          Result := r.FRegEx.Captures[i]
+        else
+          Result := '';
+      end;
+    end
+    else
+      Result := '';
+  finally
+    r.Free;
+  end;
 end;
 
 { TBdtkRegEx }
@@ -132,4 +138,3 @@ begin
 end;
 
 end.
-

@@ -224,20 +224,17 @@ end;
 
 procedure TfrmGestions.ajouterClick(Sender: TObject);
 begin
-  with GestionCourante^ do
-    Historique.AddWaiting(fcGestionAjout, nil, nil, @ProcAjouter, VirtualTreeView, FrameRechercheRapide1.edSearch.Text);
+  Historique.AddWaiting(fcGestionAjout, nil, nil, @GestionCourante^.ProcAjouter, VirtualTreeView, FrameRechercheRapide1.edSearch.Text);
 end;
 
 procedure TfrmGestions.modifierClick(Sender: TObject);
 begin
-  with GestionCourante^ do
-    Historique.AddWaiting(fcGestionModif, nil, nil, @ProcModifier, VirtualTreeView);
+  Historique.AddWaiting(fcGestionModif, nil, nil, @GestionCourante^.ProcModifier, VirtualTreeView);
 end;
 
 procedure TfrmGestions.supprimerClick(Sender: TObject);
 begin
-  with GestionCourante^ do
-    Historique.AddWaiting(fcGestionSupp, nil, nil, @ProcSupprimer, VirtualTreeView);
+  Historique.AddWaiting(fcGestionSupp, nil, nil, @GestionCourante^.ProcSupprimer, VirtualTreeView);
 end;
 
 procedure TfrmGestions.SpeedButton1Click(Sender: TObject);
@@ -249,26 +246,24 @@ begin
     Exit;
   LastButton := TSpeedButton(Sender);
   LastButton.Down := True;
-  with GestionCourante^ do
-  begin
-    ajouter.Hint := AjoutHint;
-    supprimer.Hint := SuppHint;
-    modifier.Hint := ModifHint;
-    VirtualTreeView.Mode := vmNone;
-    VirtualTreeView.UseFiltre := Filtre <> '';
-    VirtualTreeView.Filtre := Filtre;
-    VirtualTreeView.Mode := Mode;
-    VirtualTreeView.Header.Columns.Clear;
-    btImporter.Enabled := ProcImporter;
-    btExporter.Enabled := ProcExporter;
-    Bevel4.Visible := btImporter.Enabled or btExporter.Enabled;
-    btImporter.Visible := Bevel4.Visible;
-    btExporter.Visible := Bevel4.Visible;
-    btAcheter.Visible := Assigned(ProcAcheter);
-    Bevel7.Visible := btAcheter.Visible;
-    PrepareLV(Self);
-    FrameRechercheRapide1.edSearch.Text := DerniereRecherche;
-  end;
+
+  ajouter.Hint := GestionCourante^.AjoutHint;
+  supprimer.Hint := GestionCourante^.SuppHint;
+  modifier.Hint := GestionCourante^.ModifHint;
+  VirtualTreeView.Mode := vmNone;
+  VirtualTreeView.UseFiltre := GestionCourante^.Filtre <> '';
+  VirtualTreeView.Filtre := GestionCourante^.Filtre;
+  VirtualTreeView.Mode := GestionCourante^.Mode;
+  VirtualTreeView.Header.Columns.Clear;
+  btImporter.Enabled := GestionCourante^.ProcImporter;
+  btExporter.Enabled := GestionCourante^.ProcExporter;
+  Bevel4.Visible := btImporter.Enabled or btExporter.Enabled;
+  btImporter.Visible := Bevel4.Visible;
+  btExporter.Visible := Bevel4.Visible;
+  btAcheter.Visible := Assigned(GestionCourante^.ProcAcheter);
+  Bevel7.Visible := btAcheter.Visible;
+  PrepareLV(Self);
+  FrameRechercheRapide1.edSearch.Text := GestionCourante^.DerniereRecherche;
 end;
 
 procedure TfrmGestions.VDTButton2Click(Sender: TObject);
@@ -287,18 +282,19 @@ end;
 
 procedure TfrmGestions.btAcheterClick(Sender: TObject);
 begin
-  with GestionCourante^ do
-    Historique.AddWaiting(fcGestionAchat, nil, nil, @ProcAcheter, VirtualTreeView);
+  Historique.AddWaiting(fcGestionAchat, nil, nil, @GestionCourante^.ProcAcheter, VirtualTreeView);
 end;
 
 procedure TfrmGestions.btImporterClick(Sender: TObject);
+var
+  frm: TfrmWizardImport;
 begin
-  with TfrmWizardImport.Create(nil) do
-    try
-      ShowModal;
-    finally
-      Free;
-    end;
+  frm := TfrmWizardImport.Create(nil);
+  try
+    frm.ShowModal;
+  finally
+    frm.Free;
+  end;
 end;
 
 procedure TfrmGestions.FrameRechercheRapide1edSearchChange(Sender: TObject);

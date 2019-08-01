@@ -113,6 +113,7 @@ procedure TfrmOptions.btnOKClick(Sender: TObject);
 var
   PC: TConversionLite;
   i: Integer;
+  qry: TManagedQuery;
 begin
   if RepImages <> VDTButton1.Caption then
     if MessageDlg
@@ -123,60 +124,57 @@ begin
       Exit;
     end;
 
-  with TGlobalVar.Utilisateur.options do
-  begin
-    SymboleMonnetaire := ComboBox1.Text;
-    ModeDemarrage := not OpenStart.Checked;
-    FicheAlbumWithCouverture := FicheAlbumCouverture.Checked;
-    FicheParaBDWithImage := FicheParaBDCouverture.Checked;
-    Images := CheckBox3.Checked;
-    RepImages := VDTButton1.Caption;
-    AntiAliasing := CheckBox5.Checked;
-    ImagesStockees := CheckBox2.Checked;
-    FormatTitreAlbum := LightComboCheck2.Value;
-    AntiAliasing := CheckBox5.Checked;
-    AvertirPret := CheckBox6.Checked;
-    GrandesIconesMenus := GrandesIconesMenu.Checked;
-    GrandesIconesBarre := Self.GrandesIconesBarre.Checked;
-    VerifMAJDelai := LightComboCheck1.Value;
-    SerieObligatoireAlbums := CheckBox7.Checked;
-    SerieObligatoireParaBD := CheckBox8.Checked;
-    AfficheNoteListes := AfficherNotesListes.Checked;
+  TGlobalVar.Utilisateur.Options.SymboleMonnetaire := ComboBox1.Text;
+  TGlobalVar.Utilisateur.Options.ModeDemarrage := not OpenStart.Checked;
+  TGlobalVar.Utilisateur.Options.FicheAlbumWithCouverture := FicheAlbumCouverture.Checked;
+  TGlobalVar.Utilisateur.Options.FicheParaBDWithImage := FicheParaBDCouverture.Checked;
+  TGlobalVar.Utilisateur.Options.Images := CheckBox3.Checked;
+  RepImages := VDTButton1.Caption;
+  TGlobalVar.Utilisateur.Options.AntiAliasing := CheckBox5.Checked;
+  TGlobalVar.Utilisateur.Options.ImagesStockees := CheckBox2.Checked;
+  TGlobalVar.Utilisateur.Options.FormatTitreAlbum := LightComboCheck2.Value;
+  TGlobalVar.Utilisateur.Options.AvertirPret := CheckBox6.Checked;
+  TGlobalVar.Utilisateur.Options.GrandesIconesMenus := GrandesIconesMenu.Checked;
+  TGlobalVar.Utilisateur.Options.GrandesIconesBarre := Self.GrandesIconesBarre.Checked;
+  TGlobalVar.Utilisateur.Options.VerifMAJDelai := LightComboCheck1.Value;
+  TGlobalVar.Utilisateur.Options.SerieObligatoireAlbums := CheckBox7.Checked;
+  TGlobalVar.Utilisateur.Options.SerieObligatoireParaBD := CheckBox8.Checked;
+  TGlobalVar.Utilisateur.Options.AfficheNoteListes := AfficherNotesListes.Checked;
 
-    SiteWeb.Adresse := Edit2.Text;
-    SiteWeb.Cle := Edit3.Text;
-    SiteWeb.Modele := ComboBox4.Text;
-    SiteWeb.MySQLServeur := Edit4.Text;
-    SiteWeb.MySQLLogin := Edit5.Text;
-    SiteWeb.MySQLPassword := Edit7.Text;
-    SiteWeb.MySQLBDD := Edit8.Text;
-    SiteWeb.MySQLPrefix := Edit6.Text;
-    if RadioButton5.Checked then
-      SiteWeb.BddVersion := ''
-    else
-      SiteWeb.BddVersion := ComboBox5.Text;
-    SiteWeb.Paquets := StrToInt(ComboBox6.Text);
-  end;
-  with dmPrinc.DBConnection.GetQuery do
-    try
-      SQL.Text := 'update or insert into conversions (id_conversion, monnaie1, monnaie2, taux) values (?, ?, ?, ?) matching (id_conversion)';
-      Prepare(True);
-      for i := 0 to ListView1.Items.Count - 1 do
-      begin
-        PC := ListView1.Items[i].Data;
-        if IsEqualGUID(GUID_NULL, PC.ID) then
-          Params.IsNull[0] := True
-        else
-          Params.AsString[0] := GUIDToString(PC.ID);
-        Params.AsString[1] := Copy(PC.Monnaie1, 1, Params.MaxStrLen[1]);
-        Params.AsString[2] := Copy(PC.Monnaie2, 1, Params.MaxStrLen[2]);
-        Params.AsDouble[3] := PC.Taux;
-        Execute;
-      end;
-      Transaction.Commit;
-    finally
-      Free;
+  TGlobalVar.Utilisateur.Options.SiteWeb.Adresse := Edit2.Text;
+  TGlobalVar.Utilisateur.Options.SiteWeb.Cle := Edit3.Text;
+  TGlobalVar.Utilisateur.Options.SiteWeb.Modele := ComboBox4.Text;
+  TGlobalVar.Utilisateur.Options.SiteWeb.MySQLServeur := Edit4.Text;
+  TGlobalVar.Utilisateur.Options.SiteWeb.MySQLLogin := Edit5.Text;
+  TGlobalVar.Utilisateur.Options.SiteWeb.MySQLPassword := Edit7.Text;
+  TGlobalVar.Utilisateur.Options.SiteWeb.MySQLBDD := Edit8.Text;
+  TGlobalVar.Utilisateur.Options.SiteWeb.MySQLPrefix := Edit6.Text;
+  if RadioButton5.Checked then
+    TGlobalVar.Utilisateur.Options.SiteWeb.BddVersion := ''
+  else
+    TGlobalVar.Utilisateur.Options.SiteWeb.BddVersion := ComboBox5.Text;
+  TGlobalVar.Utilisateur.Options.SiteWeb.Paquets := StrToInt(ComboBox6.Text);
+
+  qry := dmPrinc.DBConnection.GetQuery;
+  try
+    qry.SQL.Text := 'update or insert into conversions (id_conversion, monnaie1, monnaie2, taux) values (?, ?, ?, ?) matching (id_conversion)';
+    qry.Prepare(True);
+    for i := 0 to ListView1.Items.Count - 1 do
+    begin
+      PC := ListView1.Items[i].Data;
+      if IsEqualGUID(GUID_NULL, PC.ID) then
+        qry.Params.IsNull[0] := True
+      else
+        qry.Params.AsString[0] := GUIDToString(PC.ID);
+      qry.Params.AsString[1] := Copy(PC.Monnaie1, 1, qry.Params.MaxStrLen[1]);
+      qry.Params.AsString[2] := Copy(PC.Monnaie2, 1, qry.Params.MaxStrLen[2]);
+      qry.Params.AsDouble[3] := PC.Taux;
+      qry.Execute;
     end;
+    qry.Transaction.Commit;
+  finally
+    qry.Free;
+  end;
   EcritOptions;
   LitOptions;
 end;
@@ -203,6 +201,7 @@ var
   q: TManagedQuery;
   MySQLUpdate: TMySQLUpdate;
   fileName: String;
+  item: TListItem;
 begin
   PrepareLV(Self);
   LitOptions;
@@ -223,81 +222,74 @@ begin
   SItem := nil;
 
   q := dmPrinc.DBConnection.GetQuery;
-  with q do
-    try
-      SQL.Add('SELECT Monnaie1 AS Monnaie FROM conversions');
-      SQL.Add('UNION');
-      SQL.Add('SELECT Monnaie2 AS Monnaie FROM conversions');
-      Open;
-      while not Eof do
-      begin
-        ComboBox1.Items.Add(Fields.ByNameAsString['Monnaie']);
-        ComboBox2.Items.Add(Fields.ByNameAsString['Monnaie']);
-        ComboBox3.Items.Add(Fields.ByNameAsString['Monnaie']);
-        Next;
-      end;
-      Close;
-      SQL.Clear;
-      SQL.Text := 'SELECT Id_Conversion, Monnaie1, Monnaie2, Taux FROM conversions';
-      Open;
-      while not Eof do
-      begin
-        with ListView1.Items.Add do
-        begin
-          Data := TDaoConversionLite.Make(q);
-          Caption := TConversionLite(Data).ChaineAffichage;
-          SubItems.Add('0');
-        end;
-        Next;
-      end;
-    finally
-      Free;
-    end;
-  with ComboBox1.Items, TGlobalVar.Utilisateur.options do
-  begin
-    if IndexOf(SymboleMonnetaire) = -1 then
-      Add(SymboleMonnetaire);
-    if IndexOf(FormatSettings.CurrencyString) = -1 then
-      Add(FormatSettings.CurrencyString);
-  end;
-
-  with TGlobalVar.Utilisateur.options do
-  begin
-    ComboBox1.ItemIndex := ComboBox1.Items.IndexOf(SymboleMonnetaire);
-    OpenStart.Checked := not ModeDemarrage;
-    FicheAlbumCouverture.Checked := FicheAlbumWithCouverture;
-    FicheParaBDCouverture.Checked := FicheParaBDWithImage;
-    CheckBox3.Checked := Images;
-    VDTButton1.Caption := RepImages;
-    CheckBox5.Checked := AntiAliasing;
-    CheckBox2.Checked := ImagesStockees;
-    LightComboCheck2.Value := FormatTitreAlbum;
-    CheckBox5.Checked := AntiAliasing;
-    CheckBox6.Checked := AvertirPret;
-    GrandesIconesMenu.Checked := GrandesIconesMenus;
-    Self.GrandesIconesBarre.Checked := GrandesIconesBarre;
-    LightComboCheck1.Value := VerifMAJDelai;
-    CheckBox7.Checked := SerieObligatoireAlbums;
-    CheckBox8.Checked := SerieObligatoireParaBD;
-    AfficherNotesListes.Checked := AfficheNoteListes;
-
-    Edit2.Text := SiteWeb.Adresse;
-    Edit3.Text := SiteWeb.Cle;
-    ComboBox4.ItemIndex := ComboBox4.Items.IndexOf(SiteWeb.Modele);
-    Edit4.Text := SiteWeb.MySQLServeur;
-    Edit5.Text := SiteWeb.MySQLLogin;
-    Edit7.Text := SiteWeb.MySQLPassword;
-    Edit8.Text := SiteWeb.MySQLBDD;
-    Edit6.Text := SiteWeb.MySQLPrefix;
-    if SiteWeb.BddVersion = '' then
-      RadioButton5.Checked := True
-    else
+  try
+    q.SQL.Add('SELECT Monnaie1 AS Monnaie FROM conversions');
+    q.SQL.Add('UNION');
+    q.SQL.Add('SELECT Monnaie2 AS Monnaie FROM conversions');
+    q.Open;
+    while not q.Eof do
     begin
-      RadioButton4.Checked := True;
-      ComboBox5.ItemIndex := ComboBox5.Items.IndexOf(SiteWeb.BddVersion);
+      ComboBox1.Items.Add(q.Fields.ByNameAsString['Monnaie']);
+      ComboBox2.Items.Add(q.Fields.ByNameAsString['Monnaie']);
+      ComboBox3.Items.Add(q.Fields.ByNameAsString['Monnaie']);
+      q.Next;
     end;
-    ComboBox6.ItemIndex := ComboBox6.Items.IndexOf(IntToStr(SiteWeb.Paquets));
+    q.Close;
+    q.SQL.Clear;
+    q.SQL.Text := 'SELECT Id_Conversion, Monnaie1, Monnaie2, Taux FROM conversions';
+    q.Open;
+    while not q.Eof do
+    begin
+      item := ListView1.Items.Add;
+      item.Data := TDaoConversionLite.Make(q);
+      item.Caption := TConversionLite(item.Data).ChaineAffichage;
+      item.SubItems.Add('0');
+
+      q.Next;
+    end;
+  finally
+    q.Free;
   end;
+
+  if ComboBox1.Items.IndexOf(TGlobalVar.Utilisateur.Options.SymboleMonnetaire) = -1 then
+    ComboBox1.Items.Add(TGlobalVar.Utilisateur.Options.SymboleMonnetaire);
+  if ComboBox1.Items.IndexOf(FormatSettings.CurrencyString) = -1 then
+    ComboBox1.Items.Add(FormatSettings.CurrencyString);
+
+  ComboBox1.ItemIndex := ComboBox1.Items.IndexOf(TGlobalVar.Utilisateur.Options.SymboleMonnetaire);
+  OpenStart.Checked := not TGlobalVar.Utilisateur.Options.ModeDemarrage;
+  FicheAlbumCouverture.Checked := TGlobalVar.Utilisateur.Options.FicheAlbumWithCouverture;
+  FicheParaBDCouverture.Checked := TGlobalVar.Utilisateur.Options.FicheParaBDWithImage;
+  CheckBox3.Checked := TGlobalVar.Utilisateur.Options.Images;
+  VDTButton1.Caption := RepImages;
+  CheckBox5.Checked := TGlobalVar.Utilisateur.Options.AntiAliasing;
+  CheckBox2.Checked := TGlobalVar.Utilisateur.Options.ImagesStockees;
+  LightComboCheck2.Value := TGlobalVar.Utilisateur.Options.FormatTitreAlbum;
+  CheckBox5.Checked := TGlobalVar.Utilisateur.Options.AntiAliasing;
+  CheckBox6.Checked := TGlobalVar.Utilisateur.Options.AvertirPret;
+  GrandesIconesMenu.Checked := TGlobalVar.Utilisateur.Options.GrandesIconesMenus;
+  Self.GrandesIconesBarre.Checked := TGlobalVar.Utilisateur.Options.GrandesIconesBarre;
+  LightComboCheck1.Value := TGlobalVar.Utilisateur.Options.VerifMAJDelai;
+  CheckBox7.Checked := TGlobalVar.Utilisateur.Options.SerieObligatoireAlbums;
+  CheckBox8.Checked := TGlobalVar.Utilisateur.Options.SerieObligatoireParaBD;
+  AfficherNotesListes.Checked := TGlobalVar.Utilisateur.Options.AfficheNoteListes;
+
+  Edit2.Text := TGlobalVar.Utilisateur.Options.SiteWeb.Adresse;
+  Edit3.Text := TGlobalVar.Utilisateur.Options.SiteWeb.Cle;
+  ComboBox4.ItemIndex := ComboBox4.Items.IndexOf(TGlobalVar.Utilisateur.Options.SiteWeb.Modele);
+  Edit4.Text := TGlobalVar.Utilisateur.Options.SiteWeb.MySQLServeur;
+  Edit5.Text := TGlobalVar.Utilisateur.Options.SiteWeb.MySQLLogin;
+  Edit7.Text := TGlobalVar.Utilisateur.Options.SiteWeb.MySQLPassword;
+  Edit8.Text := TGlobalVar.Utilisateur.Options.SiteWeb.MySQLBDD;
+  Edit6.Text := TGlobalVar.Utilisateur.Options.SiteWeb.MySQLPrefix;
+  if TGlobalVar.Utilisateur.Options.SiteWeb.BddVersion = '' then
+    RadioButton5.Checked := True
+  else
+  begin
+    RadioButton4.Checked := True;
+    ComboBox5.ItemIndex := ComboBox5.Items.IndexOf(TGlobalVar.Utilisateur.Options.SiteWeb.BddVersion);
+  end;
+  ComboBox6.ItemIndex := ComboBox6.Items.IndexOf(IntToStr(TGlobalVar.Utilisateur.Options.SiteWeb.Paquets));
 end;
 
 procedure TfrmOptions.Button2Click(Sender: TObject);

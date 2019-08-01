@@ -119,8 +119,7 @@ begin
   btnRecherche.Font.Style := btnRecherche.Font.Style + [fsBold];
   vtPersonnes.Mode := vmPersonnes;
   TypeRecherche := Recherche.TypeRecherche;
-  TreeView1.Selected := TreeView1.Items.AddChild(nil, 'Critères');
-  TreeView1.Selected.Data := Recherche.Criteres;
+  TreeView1.Selected := TreeView1.Items.AddChildObject(nil, 'Critères', Recherche.Criteres);
   methode.ItemIndex := Integer(Recherche.Criteres.GroupOption);
 end;
 
@@ -129,6 +128,8 @@ var
   ToModif: TTreeNode;
   p: TCritere;
   p2: TCritereTri;
+  frm: TfrmEditCritere;
+  frmTri: TfrmEditCritereTri;
 begin
   if PageControl1.ActivePage = TabSheet1 then
   begin
@@ -136,20 +137,18 @@ begin
     if not(Assigned(ToModif) and (Integer(ToModif.Data) > 0)) then
       Exit;
     p := ToModif.Data;
-    with TFrmEditCritere.Create(Self) do
-    begin
-      try
-        Critere := p;
-        if ShowModal <> mrOk then
-          Exit;
-        p.Assign(Critere);
-        if TypeRecherche = trComplexe then
-          TypeRecherche := trAucune;
-        ReconstructLabels(ToModif.Parent);
-      finally
-        Free;
-      end;
+    frm := TFrmEditCritere.Create(Self);
+    try
+      frm.Critere := p;
+      if frm.ShowModal <> mrOk then
+        Exit;
+      p.Assign(frm.Critere);
+    finally
+      frm.Free;
     end;
+    if TypeRecherche = trComplexe then
+      TypeRecherche := trAucune;
+    ReconstructLabels(ToModif.Parent);
   end
   else
   begin
@@ -157,20 +156,18 @@ begin
     if not Assigned(ToModif) then
       Exit;
     p2 := ToModif.Data;
-    with TFrmEditCritereTri.Create(Self) do
-    begin
-      try
-        Critere := p2;
-        if ShowModal <> mrOk then
-          Exit;
-        p2.Assign(Critere);
-        if TypeRecherche = trComplexe then
-          TypeRecherche := trAucune;
-        ReconstructSortLabel(ToModif);
-      finally
-        Free;
-      end;
+    frmTri := TfrmEditCritereTri.Create(Self);
+    try
+      frmTri.Critere := p2;
+      if frmTri.ShowModal <> mrOk then
+        Exit;
+      p2.Assign(frmTri.Critere);
+    finally
+      frmTri.Free;
     end;
+    if TypeRecherche = trComplexe then
+      TypeRecherche := trAucune;
+    ReconstructSortLabel(ToModif);
   end;
 end;
 
@@ -320,38 +317,38 @@ procedure TfrmRecherche.Critre1Click(Sender: TObject);
 var
   p: TCritere;
   ParentNode: TTreeNode;
+  frm: TfrmEditCritere;
+  Node: TTreeNode;
 begin
   if not Assigned(TreeView1.Selected) then
     Exit;
-  with TFrmEditCritere.Create(Self) do
-  begin
-    try
-      if ShowModal <> mrOk then
-        Exit;
-      if TBaseCritere(TreeView1.Selected.Data) is TGroupCritere then
-        ParentNode := TreeView1.Selected
-      else
-        ParentNode := TreeView1.Selected.Parent;
 
-      p := Recherche.AddCritere(TGroupCritere(ParentNode.Data));
-      p.Assign(Critere);
-      with TreeView1.Items.AddChild(ParentNode, '') do
-      begin
-        Data := p;
-        ReconstructLabels(ParentNode);
-        Selected := True;
-      end;
-      if TypeRecherche = trComplexe then
-        TypeRecherche := trAucune;
-    finally
-      Free;
-    end;
+  frm := TfrmEditCritere.Create(Self);
+  try
+    if frm.ShowModal <> mrOk then
+      Exit;
+    if TBaseCritere(TreeView1.Selected.Data) is TGroupCritere then
+      ParentNode := TreeView1.Selected
+    else
+      ParentNode := TreeView1.Selected.Parent;
+
+    p := Recherche.AddCritere(TGroupCritere(ParentNode.Data));
+    p.Assign(frm.Critere);
+  finally
+    frm.Free;
   end;
+
+  Node := TreeView1.Items.AddChildObject(ParentNode, '', p);
+  ReconstructLabels(ParentNode);
+  Node.Selected := True;
+
+  if TypeRecherche = trComplexe then
+    TypeRecherche := trAucune;
 end;
 
 procedure TfrmRecherche.Groupedecritre1Click(Sender: TObject);
 var
-  ParentNode: TTreeNode;
+  ParentNode, Node: TTreeNode;
 begin
   if not Assigned(TreeView1.Selected) then
     ParentNode := nil
@@ -360,17 +357,15 @@ begin
   else
     ParentNode := TreeView1.Selected.Parent;
 
-  with TreeView1.Items.AddChild(ParentNode, methode.Items[0]) do
+  Node := TreeView1.Items.AddChild(ParentNode, methode.Items[0]);
+  if Assigned(ParentNode) then
   begin
-    if Assigned(ParentNode) then
-    begin
-      Data := Recherche.AddGroup(TGroupCritere(ParentNode.Data));
-      ReconstructLabels(ParentNode);
-    end
-    else
-      Data := Recherche.AddGroup(nil);
-    Selected := True;
-  end;
+    Node.Data := Recherche.AddGroup(TGroupCritere(ParentNode.Data));
+    ReconstructLabels(ParentNode);
+  end
+  else
+    Node.Data := Recherche.AddGroup(nil);
+  Node.Selected := True;
 end;
 
 procedure TfrmRecherche.btnRechercheClick(Sender: TObject);
@@ -512,19 +507,18 @@ end;
 
 procedure TfrmRecherche.LoadRechFromStream(Stream: TStream);
 
-  procedure Process(Critere: TGroupCritere; ParentNode: TTreeNode = nil);
+  procedure Process(ACritere: TGroupCritere; AParentNode: TTreeNode = nil);
   var
-    ANode: TTreeNode;
-    aCritere: TBaseCritere;
+    Node: TTreeNode;
+    SousCritere: TBaseCritere;
   begin
-    ANode := TreeView1.Items.AddChild(ParentNode, methode.Items[Integer(Critere.GroupOption)]);
-    ANode.Data := Critere;
-    for aCritere in Critere.SousCriteres do
-      if aCritere is TGroupCritere then
-        Process(aCritere as TGroupCritere, ANode)
+    Node := TreeView1.Items.AddChildObject(AParentNode, methode.Items[Integer(ACritere.GroupOption)], ACritere);
+    for SousCritere in ACritere.SousCriteres do
+      if SousCritere is TGroupCritere then
+        Process(TGroupCritere(SousCritere), Node)
       else
-        TreeView1.Items.AddChild(ANode, TCritere(aCritere).Champ + ' ' + TCritere(aCritere).Test).Data := aCritere;
-    ReconstructLabels(ANode);
+        TreeView1.Items.AddChildObject(Node, TCritere(SousCritere).Champ + ' ' + TCritere(SousCritere).Test, SousCritere);
+    ReconstructLabels(Node);
   end;
 
 begin
@@ -544,18 +538,18 @@ end;
 procedure TfrmRecherche.ReconstructLabels(ParentNode: TTreeNode);
 var
   i: Integer;
+  Data: TObject;
 begin
-  with ParentNode do
-    for i := 0 to Count - 1 do
-      with Item[i] do
-        if TObject(Data) is TGroupCritere then
-          Text := methode.Text + '...'
-        else
-          with TCritere(Data) do
-            if i = 0 then
-              Text := Champ + ' ' + Test
-            else
-              Text := methode.Text + ' ' + Champ + ' ' + Test;
+  for i := 0 to ParentNode.Count - 1 do
+  begin
+    Data := TObject(ParentNode.Item[i].Data);
+    if Data is TGroupCritere then
+      Text := methode.Text + '...'
+    else if i = 0 then
+      Text := TCritere(Data).Champ + ' ' + TCritere(Data).Test
+    else
+      Text := methode.Text + ' ' + TCritere(Data).Champ + ' ' + TCritere(Data).Test;
+  end;
 end;
 
 procedure TfrmRecherche.PageControl1Change(Sender: TObject);
@@ -571,36 +565,35 @@ procedure TfrmRecherche.AddCritereTri;
 var
   p: TCritereTri;
   Node: TTreeNode;
+  frm: TfrmEditCritereTri;
 begin
   if not Assigned(TreeView1.Selected) then
     Exit;
-  with TFrmEditCritereTri.Create(Self) do
-  begin
-    try
-      if ShowModal <> mrOk then
-        Exit;
+  frm := TFrmEditCritereTri.Create(Self);
+  try
+    if frm.ShowModal <> mrOk then
+      Exit;
 
-      p := Recherche.AddSort;
-      p.Assign(Critere);
-      Node := TreeView2.Items.Add(nil, '');
-      with Node do
-      begin
-        Data := p;
-        ReconstructSortLabel(Node);
-        Selected := True;
-      end;
-      if TypeRecherche = trComplexe then
-        TypeRecherche := trAucune;
-    finally
-      Free;
-    end;
+    p := Recherche.AddSort;
+    p.Assign(frm.Critere);
+  finally
+    frm.Free;
   end;
+
+  Node := TreeView2.Items.AddObject(nil, '', p);
+  ReconstructSortLabel(Node);
+  Node.Selected := True;
+
+  if TypeRecherche = trComplexe then
+    TypeRecherche := trAucune;
 end;
 
 procedure TfrmRecherche.ReconstructSortLabel(Node: TTreeNode);
+var
+  Critere: TCritereTri;
 begin
-  with TCritereTri(Node.Data) do
-    Node.Text := '(' + IIf(NullsFirst, '*', '') + IIf(Asc, '+', '-') + IIf(NullsLast, '*', '') + ') ' + LabelChamp;
+  Critere := TCritereTri(Node.Data);
+  Node.Text := '(' + IIf(Critere.NullsFirst, '*', '') + IIf(Critere.Asc, '+', '-') + IIf(Critere.NullsLast, '*', '') + ') ' + Critere.LabelChamp;
 end;
 
 procedure TfrmRecherche.TreeView2Change(Sender: TObject; Node: TTreeNode);

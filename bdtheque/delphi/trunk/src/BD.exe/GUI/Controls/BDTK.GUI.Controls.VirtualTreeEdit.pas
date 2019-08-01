@@ -168,17 +168,15 @@ begin
       VK_PRIOR, VK_NEXT, VK_UP, VK_DOWN, VK_RETURN:
         if PopupVisible then
         begin
-          with Msg do
-          begin
-            Msg := WM_KEYDOWN;
-            CharCode := Key;
-            Unused := 0;
-            if ssAlt in Shift then // les autres etats du clavier ne sont pas pris dans KeyData
-              KeyData := $20000000
-            else
-              KeyData := 0;
-            Result := 0;
-          end;
+          Msg.Msg := WM_KEYDOWN;
+          Msg.CharCode := Key;
+          Msg.Unused := 0;
+          if ssAlt in Shift then // les autres etats du clavier ne sont pas pris dans KeyData
+            Msg.KeyData := $20000000
+          else
+            Msg.KeyData := 0;
+          Msg.Result := 0;
+
           TCrackWinControl(PopupWindow.TreeView).Dispatch(Msg);
           Key := 0;
         end;
@@ -193,17 +191,21 @@ begin
 end;
 
 procedure TJvComboEdit.Paint;
+var
+  Canvas: TControlCanvas;
 begin
   inherited;
   if Text = '' then
-    with TControlCanvas.Create do
-      try
-        Control := Self;
-        Font.Color := clInactiveCaptionText;
-        TextRect(Self.BoundsRect, 0, 0, FLastSearch);
-      finally
-        Free;
-      end;
+  begin
+    Canvas := TControlCanvas.Create;
+    try
+      Canvas.Control := Self;
+      Canvas.Font.Color := clInactiveCaptionText;
+      Canvas.TextRect(Self.BoundsRect, 0, 0, FLastSearch);
+    finally
+      Canvas.Free;
+    end;
+  end;
 end;
 
 procedure TJvComboEdit.PopupChange;

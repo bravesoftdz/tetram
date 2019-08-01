@@ -106,24 +106,25 @@ uses
   UIB, BD.Utils.StrUtils, UfrmEditAlbum, UfrmEditSerie, BD.Strings, UfrmEditEditeur, BDTK.GUI.DataModules.Main,
   Math, BDTK.GUI.Forms.Main, BD.Utils.GUIUtils, BDTK.GUI.Utils, UfrmEditCollection, UfrmEditAuteur, UfrmEditParaBD,
   UfrmEditAchatAlbum, UfrmEditUnivers, BDTK.Entities.Dao.Lite, BDTK.Entities.Dao.Full,
-  BD.Entities.Common;
+  BD.Entities.Common, BD.DB.Connection;
 
 function FindRec(const Table, Champ: string; const Reference: TGUID; WithMessage: Boolean): Boolean;
+var
+  q: TManagedQuery;
 begin
-  with dmPrinc.DBConnection.GetQuery do
-    try
-      SQL.Text := Format('select %s from %s where %s = ?', [Champ, Table, Champ]);
-      Params.AsString[0] := GUIDToString(Reference);
-      Open;
-      Result := not Eof;
-      if not Result and WithMessage then
-        AffMessage(rsErrorFindEnr, mtConfirmation, [mbOk], True);
-    finally
-      Free;
-    end;
+  q := dmPrinc.DBConnection.GetQuery;
+  try
+    q.SQL.Text := Format('select %s from %s where %s = ?', [Champ, Table, Champ]);
+    q.Params.AsString[0] := GUIDToString(Reference);
+    q.Open;
+    Result := not q.Eof;
+    if not Result and WithMessage then
+      AffMessage(rsErrorFindEnr, mtConfirmation, [mbOk], True);
+  finally
+    q.Free;
+  end;
 end;
 
-// **********************************************************************************************
 type
   TLambdaEdition = function(var ID: TGUID; Creation: Boolean; const Valeur: string): Boolean;
   TLambdaEditionSrc = function(Source: TObjetFull): Boolean;
@@ -160,6 +161,7 @@ function CreationLambdaChampSimple(const TypeInfo, Table, Champ, ChampRef, Valeu
 var
   Chaine: string;
   hg: IHourGlass;
+  q: TManagedQuery;
 begin
   Result := GUID_NULL;
   Chaine := ValeurDefaut;
@@ -169,106 +171,106 @@ begin
   if (Chaine = '') then
     Exit;
   hg := THourGlass.Create;
-  with dmPrinc.DBConnection.GetQuery do
+  q := dmPrinc.DBConnection.GetQuery;
+  try
     try
-      try
-        SQL.Text := Format('select %s from %s where %s = ?', [ChampRef, Table, Champ]);
-        Prepare(True);
-        Params.AsString[0] := Copy(Chaine, 1, Params.MaxStrLen[0]);
-        Open;
-        if not Eof then
-          raise Exception.CreateFmt(rsTitreStillUsed, [TypeInfo]);
+      q.SQL.Text := Format('select %s from %s where %s = ?', [ChampRef, Table, Champ]);
+      q.Prepare(True);
+      q.Params.AsString[0] := Copy(Chaine, 1, q.Params.MaxStrLen[0]);
+      q.Open;
+      if not q.Eof then
+        raise Exception.CreateFmt(rsTitreStillUsed, [TypeInfo]);
 
-        Params.Clear;
-        SQL.Text := Format('insert into %s (%s) values (?) returning %s', [Table, Champ, ChampRef]);
-        Prepare(True);
-        Params.AsString[0] := Copy(Chaine, 1, Params.MaxStrLen[0]);
-        Execute;
-        Result := StringToGUID(Fields.AsString[0]);
-        Transaction.Commit;
-      except
-        Transaction.Rollback;
-        AffMessage(rsErrorCreerEnr + #13#13 + Exception(ExceptObject).Message, mtInformation, [mbOk], True);
-        Result := GUID_NULL;
-      end;
-    finally
-      Free;
+      q.Params.Clear;
+      q.SQL.Text := Format('insert into %s (%s) values (?) returning %s', [Table, Champ, ChampRef]);
+      q.Prepare(True);
+      q.Params.AsString[0] := Copy(Chaine, 1, q.Params.MaxStrLen[0]);
+      q.Execute;
+      Result := StringToGUID(q.Fields.AsString[0]);
+      q.Transaction.Commit;
+    except
+      q.Transaction.Rollback;
+      AffMessage(rsErrorCreerEnr + #13#13 + Exception(ExceptObject).Message, mtInformation, [mbOk], True);
+      Result := GUID_NULL;
     end;
+  finally
+    q.Free;
+  end;
 end;
 
 function EditionLambdaChampSimple(const TypeInfo, Table, Champ, ChampRef: string; Reference: TGUID): Boolean;
 var
   Chaine: string;
   hg: IHourGlass;
+  q: TManagedQuery;
 begin
   hg := THourGlass.Create;
   Result := False;
-  with dmPrinc.DBConnection.GetQuery do
+  q := dmPrinc.DBConnection.GetQuery;
+  try
     try
-      try
-        SQL.Text := Format('select %s from %s where %s = ?', [Champ, Table, ChampRef]);
-        Params.AsString[0] := GUIDToString(Reference);
-        Open;
-        if Eof then
-          raise Exception.Create(rsErrorFindEnr);
-        Chaine := Fields.AsString[0];
+      q.SQL.Text := Format('select %s from %s where %s = ?', [Champ, Table, ChampRef]);
+      q.Params.AsString[0] := GUIDToString(Reference);
+      q.Open;
+      if q.Eof then
+        raise Exception.Create(rsErrorFindEnr);
+      Chaine := q.Fields.AsString[0];
 
-        if not InputQuery(Format(rsNewTitre, [TypeInfo]), Format(rsEntrerModifyTitre, [TypeInfo]), Chaine) then
-          Exit;
-        Chaine := Trim(Chaine);
-        if Chaine = '' then
-          Exit;
+      if not InputQuery(Format(rsNewTitre, [TypeInfo]), Format(rsEntrerModifyTitre, [TypeInfo]), Chaine) then
+        Exit;
+      Chaine := Trim(Chaine);
+      if Chaine = '' then
+        Exit;
 
-        Params.Clear;
-        SQL.Text := Format('select %s from %s where %s = ? and %s <> ?', [ChampRef, Table, Champ, ChampRef]);
-        Prepare(True);
-        Params.AsString[0] := Copy(Chaine, 1, Params.MaxStrLen[0]);
-        Params.AsString[1] := GUIDToString(Reference);
-        Open;
-        if not Eof then
-          raise Exception.CreateFmt(rsTitreStillUsed, [TypeInfo]);
+      q.Params.Clear;
+      q.SQL.Text := Format('select %s from %s where %s = ? and %s <> ?', [ChampRef, Table, Champ, ChampRef]);
+      q.Prepare(True);
+      q.Params.AsString[0] := Copy(Chaine, 1, q.Params.MaxStrLen[0]);
+      q.Params.AsString[1] := GUIDToString(Reference);
+      q.Open;
+      if not q.Eof then
+        raise Exception.CreateFmt(rsTitreStillUsed, [TypeInfo]);
 
-        SQL.Text := Format('update %s set %s = ? where %s = ?', [Table, Champ, ChampRef]);
-        Prepare(True);
-        Params.AsString[0] := Copy(Chaine, 1, Params.MaxStrLen[0]);
-        Params.AsString[1] := GUIDToString(Reference);
-        Execute;
-        Transaction.Commit;
-        Result := True;
-      except
-        Transaction.Rollback;
-        AffMessage(rsErrorModifEnr + #13#13 + Exception(ExceptObject).Message, mtInformation, [mbOk], True);
-        Result := False;
-      end;
-    finally
-      Free;
+      q.SQL.Text := Format('update %s set %s = ? where %s = ?', [Table, Champ, ChampRef]);
+      q.Prepare(True);
+      q.Params.AsString[0] := Copy(Chaine, 1, q.Params.MaxStrLen[0]);
+      q.Params.AsString[1] := GUIDToString(Reference);
+      q.Execute;
+      q.Transaction.Commit;
+      Result := True;
+    except
+      q.Transaction.Rollback;
+      AffMessage(rsErrorModifEnr + #13#13 + Exception(ExceptObject).Message, mtInformation, [mbOk], True);
+      Result := False;
     end;
+  finally
+    q.Free;
+  end;
 end;
 
 function DelLambda(const Table, Champ: string; const Ref: TGUID): Boolean;
 var
   hg: IHourGlass;
+  q: TManagedQuery;
 begin
   hg := THourGlass.Create;
   Result := False;
-  with dmPrinc.DBConnection.GetQuery do
+  q := dmPrinc.DBConnection.GetQuery;
+  try
+    q.SQL.Text := Format('delete from %s where %s=?', [Table, Champ]);
+    q.Params.AsString[0] := GUIDToString(Ref);
     try
-      SQL.Text := Format('delete from %s where %s=?', [Table, Champ]);
-      Params.AsString[0] := GUIDToString(Ref);
-      try
-        Execute;
-        Transaction.Commit;
-        Result := True;
-      except
-        Transaction.Rollback;
-        AffMessage(rsErrorSuppEnr + #13#13 + Exception(ExceptObject).Message, mtInformation, [mbOk], True);
-      end;
-    finally
-      Free;
+      q.Execute;
+      q.Transaction.Commit;
+      Result := True;
+    except
+      q.Transaction.Rollback;
+      AffMessage(rsErrorSuppEnr + #13#13 + Exception(ExceptObject).Message, mtInformation, [mbOk], True);
     end;
+  finally
+    q.Free;
+  end;
 end;
-
-// **********************************************************************************************
 
 function CreationAchatAlbum(const Valeur: string): TGUID;
 begin
@@ -312,26 +314,27 @@ begin
 end;
 
 function DelAchatAlbum(const ID: TGUID): Boolean;
+var
+  q: TManagedQuery;
 begin
-  with dmPrinc.DBConnection.GetQuery do
-    try
-      SQL.Text := 'select complet from albums where id_album = ?';
-      Params.AsString[0] := GUIDToString(ID);
-      Open;
-      if Fields.AsInteger[0] = 1 then
-      begin
-        SQL.Text := 'update albums set achat = 0 where id_album = ?';
-        Params.AsString[0] := GUIDToString(ID);
-        Execute;
-        Result := True;
-      end
-      else
-        Result := DelAlbum(ID);
-    finally
-      Free;
-    end;
+  q := dmPrinc.DBConnection.GetQuery;
+  try
+    q.SQL.Text := 'select complet from albums where id_album = ?';
+    q.Params.AsString[0] := GUIDToString(ID);
+    q.Open;
+    if q.Fields.AsInteger[0] = 1 then
+    begin
+      q.SQL.Text := 'update albums set achat = 0 where id_album = ?';
+      q.Params.AsString[0] := GUIDToString(ID);
+      q.Execute;
+      Result := True;
+    end
+    else
+      Result := DelAlbum(ID);
+  finally
+    q.Free;
+  end;
 end;
-// **********************************************************************************************
 
 function CreationAlbum(Source: TObjetFull): TGUID;
 begin
@@ -780,26 +783,27 @@ begin
 end;
 
 function DelAchatParaBD(const ID: TGUID): Boolean;
+var
+  q: TManagedQuery;
 begin
-  with dmPrinc.DBConnection.GetQuery do
-    try
-      SQL.Text := 'select complet from parabd where id_parabd = ?';
-      Params.AsString[0] := GUIDToString(ID);
-      Open;
-      if Fields.AsInteger[0] = 1 then
-      begin
-        SQL.Text := 'update parabd set achat = 0 where id_parabd = ?';
-        Params.AsString[0] := GUIDToString(ID);
-        Execute;
-        Result := True;
-      end
-      else
-        Result := DelParaBD(ID);
-    finally
-      Free;
-    end;
+  q := dmPrinc.DBConnection.GetQuery;
+  try
+    q.SQL.Text := 'select complet from parabd where id_parabd = ?';
+    q.Params.AsString[0] := GUIDToString(ID);
+    q.Open;
+    if q.Fields.AsInteger[0] = 1 then
+    begin
+      q.SQL.Text := 'update parabd set achat = 0 where id_parabd = ?';
+      q.Params.AsString[0] := GUIDToString(ID);
+      q.Execute;
+      Result := True;
+    end
+    else
+      Result := DelParaBD(ID);
+  finally
+    q.Free;
+  end;
 end;
 
 // **********************************************************************************************
 end.
-

@@ -57,6 +57,8 @@ const
   PosParaBD = 4;
 
 procedure TfrmRepertoire.FormCreate(Sender: TObject);
+var
+  ini: TIniFile;
 begin
   TGlobalVar.Mode_en_cours := mdConsult;
   PrepareLV(Self);
@@ -86,15 +88,15 @@ begin
   PageRep.ActivePageIndex := 0;
 
   vstAlbums.Mode := vmNone;
-  with TIniFile.Create(FichierIni) do
-    try
-      LightComboCheck1.OnChange := nil;
-      LightComboCheck1.Value := -1;
-      LightComboCheck1.OnChange := LightComboCheck1Change;
-      LightComboCheck1.Value := ReadInteger('Options', 'GroupBy', 1);
-    finally
-      Free;
-    end;
+  LightComboCheck1.OnChange := nil;
+  LightComboCheck1.Value := -1;
+  LightComboCheck1.OnChange := LightComboCheck1Change;
+  ini := TIniFile.Create(FichierIni);
+  try
+    LightComboCheck1.Value := ini.ReadInteger('Options', 'GroupBy', 1);
+  finally
+    ini.Free;
+  end;
   vstAuteurs.Mode := vmPersonnes;
   vstSeries.Mode := vmSeries;
   vstUnivers.Mode := vmUnivers;
@@ -108,23 +110,25 @@ begin
 end;
 
 procedure TfrmRepertoire.vstAlbumsDblClick(Sender: TObject);
+
+  procedure OuvreFiche(ARepertoire: TVirtualStringTree; AConsultation: TActionConsultation);
+  begin
+    if ARepertoire.GetNodeLevel(ARepertoire.FocusedNode) > 0 then
+      Historique.AddWaiting(AConsultation, ARepertoire.CurrentValue);
+  end;
+
 begin
   case PageRep.ActivePageIndex of
     PosAlbums:
-      with vstAlbums do
-        if GetNodeLevel(FocusedNode) > 0 then Historique.AddWaiting(fcAlbum, CurrentValue);
+      OuvreFiche(vstAlbums, fcAlbum);
     PosAuteurs:
-      with vstAuteurs do
-        if GetNodeLevel(FocusedNode) > 0 then Historique.AddWaiting(fcAuteur, CurrentValue);
+      OuvreFiche(vstAuteurs, fcAuteur);
     PosSeries:
-      with vstSeries do
-        if GetNodeLevel(FocusedNode) > 0 then Historique.AddWaiting(fcSerie, CurrentValue);
+      OuvreFiche(vstSeries, fcSerie);
     PosUnivers:
-      with vstUnivers do
-        if GetNodeLevel(FocusedNode) > 0 then Historique.AddWaiting(fcUnivers, CurrentValue);
+      OuvreFiche(vstUnivers, fcUnivers);
     PosParaBD:
-      with vstParaBD do
-        if GetNodeLevel(FocusedNode) > 0 then Historique.AddWaiting(fcParaBD, CurrentValue);
+      OuvreFiche(vstParaBD, fcParaBD);
   end;
 end;
 
@@ -146,14 +150,16 @@ end;
 procedure TfrmRepertoire.LightComboCheck1Change(Sender: TObject);
 const
   NewMode: array[0..5] of TVirtualMode = (vmAlbums, vmAlbumsSerie, vmAlbumsEditeur, vmAlbumsGenre, vmAlbumsAnnee, vmAlbumsCollection);
+var
+  ini: TIniFile;
 begin
   ChangeAlbumMode(NewMode[LightComboCheck1.Value]);
-  with TIniFile.Create(FichierIni) do
-    try
-      WriteInteger('Options', 'GroupBy', LightComboCheck1.Value);
-    finally
-      Free;
-    end;
+  ini := TIniFile.Create(FichierIni);
+  try
+    ini.WriteInteger('Options', 'GroupBy', LightComboCheck1.Value);
+  finally
+    ini.Free;
+  end;
 end;
 
 procedure TfrmRepertoire.FrameRechercheRapideedSearchKeyPress(Sender: TObject; var Key: Char);
@@ -166,4 +172,3 @@ begin
 end;
 
 end.
-

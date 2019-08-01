@@ -81,16 +81,19 @@ begin
 end;
 
 procedure TfrmPrevisionsSorties.FormCreate(Sender: TObject);
+var
+  ini: TIniFile;
 begin
   ChargeImage(vstPrevisionsSorties.Background, 'FONDVT');
   vstPrevisionsSorties.NodeDataSize := SizeOf(RNodeInfo);
   vstPrevisionsSorties.OnCompareNodeString := OnCompareNodeString;
 
   CheckBox1.OnClick := nil;
-  with TIniFile.Create(FichierIni) do try
-    CheckBox1.Checked := ReadBool('Options', 'PrevisionsAchats', True);
+  ini := TIniFile.Create(FichierIni);
+  try
+    CheckBox1.Checked := ini.ReadBool('Options', 'PrevisionsAchats', True);
   finally
-    Free;
+    ini.Free;
   end;
   CheckBox1.OnClick := CheckBox1Click;
 
@@ -104,12 +107,15 @@ var
   PS: TPrevisionSortie;
 begin
   NodeInfo := Sender.GetNodeData(Node);
-  if Assigned(NodeInfo) then begin
+  if Assigned(NodeInfo) then
+  begin
     Initialize(NodeInfo^);
-    if Node.Index in [Liste.AnneesPassees.Count, Liste.AnneesPassees.Count + Liste.AnneeEnCours.Count + 1] then begin
+    if Node.Index in [Liste.AnneesPassees.Count, Liste.AnneesPassees.Count + Liste.AnneeEnCours.Count + 1] then
+    begin
       NodeInfo.Serie := '-'; // séparateur
     end
-    else begin
+    else
+    begin
       if Node.Index < Cardinal(Liste.AnneesPassees.Count) then
         PS := TPrevisionSortie(Liste.AnneesPassees[Node.Index])
       else if Node.Index < Cardinal(Liste.AnneesPassees.Count + Liste.AnneeEnCours.Count) + 1 then
@@ -117,12 +123,10 @@ begin
       else
         PS := TPrevisionSortie(Liste.AnneesProchaines[Node.Index - Cardinal(Liste.AnneesPassees.Count + Liste.AnneeEnCours.Count) - 2]);
 
-      with PS do begin
-        NodeInfo.PSerie := Serie;
-        NodeInfo.Serie := Serie.ChaineAffichage(False);
-        NodeInfo.Annee := Annee;
-        NodeInfo.PrevisionSortie := Format('Tome %d - %s', [Tome, sAnnee]);
-      end;
+      NodeInfo.PSerie := PS.Serie;
+      NodeInfo.Serie := PS.Serie.ChaineAffichage(False);
+      NodeInfo.Annee := PS.Annee;
+      NodeInfo.PrevisionSortie := Format('Tome %d - %s', [PS.Tome, PS.sAnnee]);
     end;
   end;
 end;
@@ -262,11 +266,14 @@ begin
 end;
 
 procedure TfrmPrevisionsSorties.CheckBox1Click(Sender: TObject);
+var
+  ini: TIniFile;
 begin
-  with TIniFile.Create(FichierIni) do try
-    WriteBool('Options', 'PrevisionsAchats', CheckBox1.Checked);
+  ini := TIniFile.Create(FichierIni);
+  try
+    ini.WriteBool('Options', 'PrevisionsAchats', CheckBox1.Checked);
   finally
-    Free;
+    ini.Free;
   end;
   LoadListe;
 end;
@@ -355,4 +362,3 @@ begin
 end;
 
 end.
-

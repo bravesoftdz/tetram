@@ -41,18 +41,16 @@ end;
 procedure TframBoutons.btnOKClick(Sender: TObject);
 begin
   if Owner is TCustomForm then
-    with TCustomForm(Owner) do begin
-      ActiveControl.Perform(CM_EXIT, 0, 0);
-      ModalResult := mrOk;
-    end;
+  begin
+    TCustomForm(Owner).ActiveControl.Perform(CM_EXIT, 0, 0);
+    TCustomForm(Owner).ModalResult := mrOk;
+  end;
 end;
 
 procedure TframBoutons.btnAnnulerClick(Sender: TObject);
 begin
   if Owner is TCustomForm then
-    with TCustomForm(Owner) do begin
-      ModalResult := mrCancel;
-    end;
+    TCustomForm(Owner).ModalResult := mrCancel;
 end;
 
 end.

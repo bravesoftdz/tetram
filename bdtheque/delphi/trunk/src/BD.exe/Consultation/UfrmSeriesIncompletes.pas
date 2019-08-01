@@ -55,19 +55,21 @@ begin
 end;
 
 procedure TfrmSeriesIncompletes.FormCreate(Sender: TObject);
+var
+  ini: TIniFile;
 begin
   ChargeImage(vstAlbumsManquants.Background, 'FONDVT');
   vstAlbumsManquants.NodeDataSize := SizeOf(RNodeInfo);
 
   CheckBox1.OnClick := nil;
   CheckBox2.OnClick := nil;
-  with TIniFile.Create(FichierIni) do
-    try
-      CheckBox1.Checked := ReadBool('Options', 'ManquantsIntegrales', True);
-      CheckBox2.Checked := ReadBool('Options', 'ManquantsAchats', True);
-    finally
-      Free;
-    end;
+  ini := TIniFile.Create(FichierIni);
+  try
+    CheckBox1.Checked := ini.ReadBool('Options', 'ManquantsIntegrales', True);
+    CheckBox2.Checked := ini.ReadBool('Options', 'ManquantsAchats', True);
+  finally
+    ini.Free;
+  end;
   CheckBox1.OnClick := CheckBox1Click;
   CheckBox2.OnClick := CheckBox1Click;
 
@@ -78,16 +80,15 @@ end;
 procedure TfrmSeriesIncompletes.vstAlbumsManquantsInitNode(Sender: TBaseVirtualTree; ParentNode, Node: PVirtualNode; var InitialStates: TVirtualNodeInitStates);
 var
   NodeInfo: ^RNodeInfo;
+  SerieIncomplete: TSerieIncomplete;
 begin
   NodeInfo := Sender.GetNodeData(Node);
   if Assigned(NodeInfo) then
   begin
     Initialize(NodeInfo^);
-    with TSerieIncomplete(Liste.Series[Node.Index]) do
-    begin
-      NodeInfo.Serie := Serie.ChaineAffichage(False);
-      NodeInfo.AlbumsManquants := ChaineAffichage;
-    end;
+    SerieIncomplete := Liste.Series[Node.Index];
+    NodeInfo.Serie := SerieIncomplete.Serie.ChaineAffichage(False);
+    NodeInfo.AlbumsManquants := SerieIncomplete.ChaineAffichage;
   end;
 end;
 
@@ -141,14 +142,16 @@ begin
 end;
 
 procedure TfrmSeriesIncompletes.CheckBox1Click(Sender: TObject);
+var
+  ini: TIniFile;
 begin
-  with TIniFile.Create(FichierIni) do
-    try
-      WriteBool('Options', 'ManquantsIntegrales', CheckBox1.Checked);
-      WriteBool('Options', 'ManquantsAchats', CheckBox2.Checked);
-    finally
-      Free;
-    end;
+  ini := TIniFile.Create(FichierIni);
+  try
+    ini.WriteBool('Options', 'ManquantsIntegrales', CheckBox1.Checked);
+    ini.WriteBool('Options', 'ManquantsAchats', CheckBox2.Checked);
+  finally
+    ini.Free;
+  end;
   LoadListe;
 end;
 

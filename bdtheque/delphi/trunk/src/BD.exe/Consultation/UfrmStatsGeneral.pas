@@ -60,27 +60,26 @@ var
   i: Integer;
 begin
   Result := TFrmStatsGenerales.Create(AOwner);
-  with Result do begin
-    nb_Albums.Caption := IntToStr(Info.NbAlbums);
-    nb_Series.Caption := IntToStr(Info.NbSeries);
-    AlbumsNB.Caption := Format(FormatPourcent, [Info.NbAlbumsNB, MulDiv(Info.NbAlbumsNB, 100, Info.NbAlbums)]);
-    AlbumsVO.Caption := Format(FormatPourcent, [Info.NbAlbumsVO, MulDiv(Info.NbAlbumsVO, 100, Info.NbAlbums)]);
-    AlbumsStock.Caption := Format(FormatPourcent, [Info.NbAlbumsStock, MulDiv(Info.NbAlbumsStock, 100, Info.NbAlbums)]);
-    AlbumsIntegrales.Caption := Format(FormatPourcent, [Info.NbAlbumsIntegrale, MulDiv(Info.NbAlbumsIntegrale, 100, Info.NbAlbums)]);
-    AlbumsHorsSerie.Caption := Format(FormatPourcent, [Info.NbAlbumsHorsSerie, MulDiv(Info.NbAlbumsHorsSerie, 100, Info.NbAlbums)]);
 
-    PrixMoy.Caption := BDCurrencyToStr(Info.PrixAlbumMoyen);
+  Result.nb_Albums.Caption := IntToStr(Info.NbAlbums);
+  Result.nb_Series.Caption := IntToStr(Info.NbSeries);
+  Result.AlbumsNB.Caption := Format(FormatPourcent, [Info.NbAlbumsNB, MulDiv(Info.NbAlbumsNB, 100, Info.NbAlbums)]);
+  Result.AlbumsVO.Caption := Format(FormatPourcent, [Info.NbAlbumsVO, MulDiv(Info.NbAlbumsVO, 100, Info.NbAlbums)]);
+  Result.AlbumsStock.Caption := Format(FormatPourcent, [Info.NbAlbumsStock, MulDiv(Info.NbAlbumsStock, 100, Info.NbAlbums)]);
+  Result.AlbumsIntegrales.Caption := Format(FormatPourcent, [Info.NbAlbumsIntegrale, MulDiv(Info.NbAlbumsIntegrale, 100, Info.NbAlbums)]);
+  Result.AlbumsHorsSerie.Caption := Format(FormatPourcent, [Info.NbAlbumsHorsSerie, MulDiv(Info.NbAlbumsHorsSerie, 100, Info.NbAlbums)]);
 
-    PrixMax.Caption := BDCurrencyToStr(Info.PrixAlbumMaximun);
-    PrixMin.Caption := BDCurrencyToStr(Info.PrixAlbumMinimun);
-    TotalConnu.Caption := BDCurrencyToStr(Info.ValeurConnue);
-    TotalEstime.Caption := BDCurrencyToStr(Info.ValeurEstimee);
+  Result.PrixMoy.Caption := BDCurrencyToStr(Info.PrixAlbumMoyen);
 
-    i := Max(totalestime.Left + totalestime.Width, totalconnu.Left + totalconnu.Width);
-    PrixMoy.Left := i - PrixMoy.Width;
-    totalestime.Left := i - totalestime.Width;
-    totalconnu.Left := i - totalconnu.Width;
-  end;
+  Result.PrixMax.Caption := BDCurrencyToStr(Info.PrixAlbumMaximun);
+  Result.PrixMin.Caption := BDCurrencyToStr(Info.PrixAlbumMinimun);
+  Result.TotalConnu.Caption := BDCurrencyToStr(Info.ValeurConnue);
+  Result.TotalEstime.Caption := BDCurrencyToStr(Info.ValeurEstimee);
+
+  i := Max(Result.TotalEstime.Left + Result.TotalEstime.Width, Result.TotalConnu.Left + Result.TotalConnu.Width);
+  Result.PrixMoy.Left := i - Result.PrixMoy.Width;
+  Result.TotalEstime.Left := i - Result.TotalEstime.Width;
+  Result.TotalConnu.Left := i - Result.TotalConnu.Width;
 end;
 
 procedure TfrmStatsGenerales.listeExit(Sender: TObject);

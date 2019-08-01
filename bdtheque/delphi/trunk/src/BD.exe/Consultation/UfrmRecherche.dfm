@@ -128,15 +128,9 @@ object frmRecherche: TfrmRecherche
         BorderStyle = bsNone
         Header.AutoSizeIndex = -1
         Header.DefaultHeight = 17
-        Header.Font.Charset = DEFAULT_CHARSET
-        Header.Font.Color = clWindowText
-        Header.Font.Height = -11
-        Header.Font.Name = 'Tahoma'
-        Header.Font.Style = []
         Header.Height = 17
         Header.MainColumn = -1
         Header.Options = [hoAutoResize, hoColumnResize, hoDrag]
-        HintAnimation = hatNone
         HintMode = hmTooltip
         HotCursor = crHandPoint
         Indent = 8
@@ -176,6 +170,10 @@ object frmRecherche: TfrmRecherche
     object TabSheet4: TTabSheet
       Caption = 'Recherche avanc'#233'e'
       ImageIndex = 1
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       DesignSize = (
         392
         191)
@@ -243,6 +241,10 @@ object frmRecherche: TfrmRecherche
         OnChange = PageControl1Change
         object TabSheet1: TTabSheet
           Caption = 'Filtre'
+          ExplicitLeft = 0
+          ExplicitTop = 0
+          ExplicitWidth = 0
+          ExplicitHeight = 0
           object TreeView1: TTreeView
             Left = 0
             Top = 0
@@ -266,6 +268,10 @@ object frmRecherche: TfrmRecherche
         object TabSheet2: TTabSheet
           Caption = 'Tri'
           ImageIndex = 1
+          ExplicitLeft = 0
+          ExplicitTop = 0
+          ExplicitWidth = 0
+          ExplicitHeight = 0
           object TreeView2: TTreeView
             Left = 0
             Top = 0
@@ -310,11 +316,6 @@ object frmRecherche: TfrmRecherche
     BorderStyle = bsNone
     Header.AutoSizeIndex = 0
     Header.DefaultHeight = 17
-    Header.Font.Charset = DEFAULT_CHARSET
-    Header.Font.Color = clWindowText
-    Header.Font.Height = -11
-    Header.Font.Name = 'Tahoma'
-    Header.Font.Style = []
     Header.Height = 17
     Header.Images = frmFond.ImageList1
     Header.Options = [hoAutoResize, hoColumnResize, hoShowImages, hoVisible]
@@ -328,18 +329,18 @@ object frmRecherche: TfrmRecherche
     Columns = <
       item
         Position = 0
+        Text = 'Album'
         Width = 156
-        WideText = 'Album'
       end
       item
         Position = 1
+        Text = 'Tome'
         Width = 40
-        WideText = 'Tome'
       end
       item
         Position = 2
+        Text = 'Serie'
         Width = 200
-        WideText = 'Serie'
       end>
   end
   object PopupMenu1: TPopupMenu

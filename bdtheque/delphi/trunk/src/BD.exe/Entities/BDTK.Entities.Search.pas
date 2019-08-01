@@ -232,83 +232,82 @@ var
   CritereTri: TCritereTri;
 begin
   Clear;
-  q := dmPrinc.DBConnection.GetQuery;
   slFrom := TStringList.Create;
   slFrom.Sorted := True;
   slFrom.Duplicates := dupIgnore;
   slFrom.CaseSensitive := False;
   slWhere := TStringList.Create;
-  with q do
-    try
-      SQL.Clear;
-      SQL.Add('select distinct');
-      SQL.Add('  albums.id_album, albums.titrealbum, albums.tome, albums.tomedebut, albums.tomefin,');
-      SQL.Add('  albums.horsserie, albums.integrale, albums.moisparution, albums.anneeparution, albums.id_serie,');
-      SQL.Add('  series.titreserie');
-      SQL.Add(ProcessSort(sOrderBy));
-      slFrom.Add('albums');
-      slFrom.Add('series');
-      slFrom.Add('editions');
-      sWhere := ProcessCritere(Criteres);
+  q := dmPrinc.DBConnection.GetQuery;
+  try
+    q.SQL.Clear;
+    q.SQL.Add('select distinct');
+    q.SQL.Add('  albums.id_album, albums.titrealbum, albums.tome, albums.tomedebut, albums.tomefin,');
+    q.SQL.Add('  albums.horsserie, albums.integrale, albums.moisparution, albums.anneeparution, albums.id_serie,');
+    q.SQL.Add('  series.titreserie');
+    q.SQL.Add(ProcessSort(sOrderBy));
+    slFrom.Add('albums');
+    slFrom.Add('series');
+    slFrom.Add('editions');
+    sWhere := ProcessCritere(Criteres);
 
-      SQL.Add('from ' + ProcessTables);
+    q.SQL.Add('from ' + ProcessTables);
 
-      if sWhere <> '' then
-        SQL.Add('where ' + sWhere);
+    if sWhere <> '' then
+      q.SQL.Add('where ' + sWhere);
 
-      SQL.Add('order by');
-      SQL.Add('  ' + sOrderBy);
-      SQL.Add('  coalesce(albums.titrealbum, series.titreserie), series.titreserie, albums.horsserie nulls first,');
-      SQL.Add('  albums.integrale nulls first, albums.tome nulls first, albums.tomedebut nulls first,');
-      SQL.Add('  albums.tomefin nulls first, albums.anneeparution nulls first, albums.moisparution nulls first');
+    q.SQL.Add('order by');
+    q.SQL.Add('  ' + sOrderBy);
+    q.SQL.Add('  coalesce(albums.titrealbum, series.titreserie), series.titreserie, albums.horsserie nulls first,');
+    q.SQL.Add('  albums.integrale nulls first, albums.tome nulls first, albums.tomedebut nulls first,');
+    q.SQL.Add('  albums.tomefin nulls first, albums.anneeparution nulls first, albums.moisparution nulls first');
 
-      Open;
-      while not Eof do
-      begin
-        Album := TDaoAlbumLite.Make(q);
-        Resultats.Add(Album);
-        S := '';
-        for CritereTri in SortBy do
-          if CritereTri.Imprimer then
-          begin
-            AjoutString(S, CritereTri.LabelChamp + ' : ', #13#10);
-            if Fields.ByNameIsNull[CritereTri.Champ] then
-              S := S + '<vide>'
-            else if CritereTri._Champ.Booleen then
-              S := S + IIf(Fields.ByNameAsBoolean[CritereTri.Champ], 'Oui', 'Non')
+    q.Open;
+    while not q.Eof do
+    begin
+      Album := TDaoAlbumLite.Make(q);
+      Resultats.Add(Album);
+      S := '';
+      for CritereTri in SortBy do
+        if CritereTri.Imprimer then
+        begin
+          AjoutString(S, CritereTri.LabelChamp + ' : ', #13#10);
+          if q.Fields.ByNameIsNull[CritereTri.Champ] then
+            S := S + '<vide>'
+          else if CritereTri._Champ.Booleen then
+            S := S + IIf(q.Fields.ByNameAsBoolean[CritereTri.Champ], 'Oui', 'Non')
+          else
+            case CritereTri._Champ.Special of
+              csISBN:
+                S := S + FormatISBN(q.Fields.ByNameAsString[CritereTri.Champ]);
+              csTitre:
+                S := S + FormatTitre(q.Fields.ByNameAsString[CritereTri.Champ]);
+              csMonnaie:
+                S := S + BDCurrencyToStr(q.Fields.ByNameAsCurrency[CritereTri.Champ]);
             else
-              case CritereTri._Champ.Special of
-                csISBN:
-                  S := S + FormatISBN(Fields.ByNameAsString[CritereTri.Champ]);
-                csTitre:
-                  S := S + FormatTitre(Fields.ByNameAsString[CritereTri.Champ]);
-                csMonnaie:
-                  S := S + BDCurrencyToStr(Fields.ByNameAsCurrency[CritereTri.Champ]);
+              case CritereTri._Champ.TypeData of
+                uftDate:
+                  S := S + FormatDateTime('dd mmm yyyy', q.Fields.ByNameAsDate[CritereTri.Champ]);
+                uftTime:
+                  S := S + FormatDateTime('hh:mm:ss', q.Fields.ByNameAsTime[CritereTri.Champ]);
+                uftTimestamp:
+                  S := S + FormatDateTime('dd mmm yyyy, hh:mm:ss', q.Fields.ByNameAsDateTime[CritereTri.Champ]);
               else
-                case CritereTri._Champ.TypeData of
-                  uftDate:
-                    S := S + FormatDateTime('dd mmm yyyy', Fields.ByNameAsDate[CritereTri.Champ]);
-                  uftTime:
-                    S := S + FormatDateTime('hh:mm:ss', Fields.ByNameAsTime[CritereTri.Champ]);
-                  uftTimestamp:
-                    S := S + FormatDateTime('dd mmm yyyy, hh:mm:ss', Fields.ByNameAsDateTime[CritereTri.Champ]);
-                else
-                  S := S + StringReplace(AdjustLineBreaks(Fields.ByNameAsString[CritereTri.Champ], tlbsCRLF), #13#10, '\n', [rfReplaceAll]);
-                end;
+                S := S + StringReplace(AdjustLineBreaks(q.Fields.ByNameAsString[CritereTri.Champ], tlbsCRLF), #13#10, '\n', [rfReplaceAll]);
               end;
-          end;
-        ResultatsInfos.Add(S);
-        Next;
-      end;
-      if Resultats.Count > 0 then
-        TypeRecherche := trComplexe
-      else
-        TypeRecherche := trAucune;
-    finally
-      Free;
-      slFrom.Free;
-      slWhere.Free;
+            end;
+        end;
+      ResultatsInfos.Add(S);
+      q.Next;
     end;
+    if Resultats.Count > 0 then
+      TypeRecherche := trComplexe
+    else
+      TypeRecherche := trAucune;
+  finally
+    q.Free;
+    slFrom.Free;
+    slWhere.Free;
+  end;
 end;
 
 destructor TRecherche.Destroy;
@@ -336,59 +335,58 @@ begin
   if not IsEqualGUID(ID, GUID_NULL) then
   begin
     q := dmPrinc.DBConnection.GetQuery;
-    with q do
-      try
-        SQL.Text := 'select * from ' + Proc[Integer(Recherche)];
-        Params.AsString[0] := GUIDToString(ID);
-        FLibelle := Libelle;
-        Open;
-        oldID_Album := GUID_NULL;
-        oldIndex := -1;
-        S := '';
-        while not Eof do
+    try
+      q.SQL.Text := 'select * from ' + Proc[Integer(Recherche)];
+      q.Params.AsString[0] := GUIDToString(ID);
+      FLibelle := Libelle;
+      q.Open;
+      oldID_Album := GUID_NULL;
+      oldIndex := -1;
+      S := '';
+      while not q.Eof do
+      begin
+        if IsEqualGUID(oldID_Album, StringToGUID(q.Fields.ByNameAsString['id_album'])) and (oldIndex <> -1) then
         begin
-          if IsEqualGUID(oldID_Album, StringToGUID(Fields.ByNameAsString['id_album'])) and (oldIndex <> -1) then
+          if Recherche = rsAuteur then
           begin
-            if Recherche = rsAuteur then
-            begin
-              S := ResultatsInfos[oldIndex];
-              case TMetierAuteur(Fields.ByNameAsInteger['metier']) of
-                maScenariste:
-                  AjoutString(S, rsTransScenario, ', ');
-                maDessinateur:
-                  AjoutString(S, rsTransDessins, ', ');
-                maColoriste:
-                  AjoutString(S, rsTransCouleurs, ', ');
-              end;
-              ResultatsInfos[oldIndex] := S;
+            S := ResultatsInfos[oldIndex];
+            case TMetierAuteur(q.Fields.ByNameAsInteger['metier']) of
+              maScenariste:
+                AjoutString(S, rsTransScenario, ', ');
+              maDessinateur:
+                AjoutString(S, rsTransDessins, ', ');
+              maColoriste:
+                AjoutString(S, rsTransCouleurs, ', ');
             end;
-          end
-          else
-          begin
-            Album := TDaoAlbumLite.Make(q);
-            Resultats.Add(Album);
-            if Recherche = rsAuteur then
-              case TMetierAuteur(Fields.ByNameAsInteger['metier']) of
-                maScenariste:
-                  oldIndex := ResultatsInfos.Add(rsTransScenario);
-                maDessinateur:
-                  oldIndex := ResultatsInfos.Add(rsTransDessins);
-                maColoriste:
-                  oldIndex := ResultatsInfos.Add(rsTransCouleurs);
-              end
-            else
-              ResultatsInfos.Add('');
+            ResultatsInfos[oldIndex] := S;
           end;
-          oldID_Album := StringToGUID(Fields.ByNameAsString['id_album']);
-          Next;
-        end;
-        if Resultats.Count > 0 then
-          TypeRecherche := trSimple
+        end
         else
-          TypeRecherche := trAucune;
-      finally
-        Free;
+        begin
+          Album := TDaoAlbumLite.Make(q);
+          Resultats.Add(Album);
+          if Recherche = rsAuteur then
+            case TMetierAuteur(q.Fields.ByNameAsInteger['metier']) of
+              maScenariste:
+                oldIndex := ResultatsInfos.Add(rsTransScenario);
+              maDessinateur:
+                oldIndex := ResultatsInfos.Add(rsTransDessins);
+              maColoriste:
+                oldIndex := ResultatsInfos.Add(rsTransCouleurs);
+            end
+          else
+            ResultatsInfos.Add('');
+        end;
+        oldID_Album := StringToGUID(q.Fields.ByNameAsString['id_album']);
+        q.Next;
       end;
+      if Resultats.Count > 0 then
+        TypeRecherche := trSimple
+      else
+        TypeRecherche := trAucune;
+    finally
+      q.Free;
+    end;
   end;
 end;
 

@@ -67,12 +67,11 @@ var
   s: TResourceStream;
 begin
   s := TResourceStream.Create(HInstance, resName, 'ScriptsUpdate');
-  with s do
-    try
-      Script.LoadFromStream(s);
-    finally
-      Free;
-    end;
+  try
+    Script.LoadFromStream(s);
+  finally
+    s.Free;
+  end;
 end;
 
 { TBdtkUpdate.TBdtkUpdateComparer<T> }

@@ -58,6 +58,8 @@ uses Impression, IniFiles, BD.Common, BD.Entities.Lite, DateUtils, UHistorique,
 {$R *.dfm}
 
 procedure TfrmPrevisionsAchats.FormCreate(Sender: TObject);
+var
+  ini: TIniFile;
 begin
   ChargeImage(vstPrevisionsAchats.Background, 'FONDVT');
   vstPrevisionsAchats.ShowAchat := False; // on affiche que ça
@@ -66,13 +68,14 @@ begin
   vstPrevisionsAchats.UseFiltre := True;
 
   vstPrevisionsAchats.Mode := vmNone;
-  with TIniFile.Create(FichierIni) do try
-    LightComboCheck1.OnChange := nil;
-    LightComboCheck1.Value := -1;
-    LightComboCheck1.OnChange := LightComboCheck1Change;
-    LightComboCheck1.Value := ReadInteger('Options', 'AchatsGroupBy', 1);
+  LightComboCheck1.OnChange := nil;
+  LightComboCheck1.Value := -1;
+  LightComboCheck1.OnChange := LightComboCheck1Change;
+  ini := TIniFile.Create(FichierIni);
+  try
+    LightComboCheck1.Value := ini.ReadInteger('Options', 'AchatsGroupBy', 1);
   finally
-    Free;
+    ini.Free;
   end;
 end;
 
@@ -93,12 +96,15 @@ end;
 procedure TfrmPrevisionsAchats.LightComboCheck1Change(Sender: TObject);
 const
   NewMode: array[0..5] of TVirtualMode = (vmAlbums, vmAlbumsSerie, vmAchatsAlbumsEditeur, vmAlbumsGenre, vmAlbumsAnnee, vmAlbumsCollection);
+var
+  ini: TIniFile;
 begin
   ChangeAlbumMode(NewMode[LightComboCheck1.Value]);
-  with TIniFile.Create(FichierIni) do try
-    WriteInteger('Options', 'AchatsGroupBy', LightComboCheck1.Value);
+  ini := TIniFile.Create(FichierIni);
+  try
+    ini.WriteInteger('Options', 'AchatsGroupBy', LightComboCheck1.Value);
   finally
-    Free;
+    ini.Free;
   end
 end;
 

@@ -457,16 +457,15 @@ begin
     Exit;
   PP := FParaBD.Photos[vstImages.FocusedNode.Index];
   if IsEqualGUID(PP.ID, GUID_NULL) then
-    with ChoixImageDialog do
+  begin
+    ChoixImageDialog.Options := ChoixImageDialog.Options - [ofAllowMultiSelect];
+    ChoixImageDialog.FileName := PP.NewNom;
+    if ChoixImageDialog.Execute then
     begin
-      Options := Options - [ofAllowMultiSelect];
-      FileName := PP.NewNom;
-      if Execute then
-      begin
-        PP.NewNom := FileName;
-        vstImages.InvalidateNode(vstImages.FocusedNode);
-      end;
+      PP.NewNom := ChoixImageDialog.FileName;
+      vstImages.InvalidateNode(vstImages.FocusedNode);
     end;
+  end;
 end;
 
 procedure TfrmEditParaBD.vstImagesDragDrop(Sender: TBaseVirtualTree; Source: TObject; DataObject: IDataObject; Formats: TFormatArray; Shift: TShiftState; Pt: TPoint; var Effect: Integer; Mode: TDropMode);
@@ -558,16 +557,13 @@ procedure TfrmEditParaBD.vstImagesMouseUp(Sender: TObject; Button: TMouseButton;
 var
   pt: TPoint;
   Node: PVirtualNode;
+  DisplayRect: TRect;
 begin
   Node := vstImages.GetNodeAt(X, Y);
   if (Node <> nil) and (vstImages.Header.Columns.ColumnFromPosition(Point(X, Y)) = 1) then
   begin
-    with vstImages.GetDisplayRect(Node, 1, False) do
-    begin
-      X := Left;
-      Y := Bottom;
-    end;
-    pt := vstImages.ClientToScreen(Point(X, Y));
+    DisplayRect := vstImages.GetDisplayRect(Node, 1, False);
+    pt := vstImages.ClientToScreen(Point(DisplayRect.Left, DisplayRect.Bottom));
     pmChoixCategorie.PopupComponent := TComponent(Node.Index);
     pmChoixCategorie.Tag := FParaBD.Photos[Node.Index].Categorie;
     pmChoixCategorie.Popup(pt.X, pt.Y);
