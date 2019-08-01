@@ -89,6 +89,7 @@ type
     procedure Assign(Source: TPersistent); override;
     function Add: TSubItem; overload;
     function Add(const AChaine: string): TSubItem; overload;
+    function Add(const AChaine: string; AValeur: Integer): TSubItem; overload;
     procedure Insert(Index: Integer; const Chaine: string);
     function IndexOf(const Chaine: string): Integer;
     property Items[Index: Integer]: TSubItem read GetItem write SetItem; default;
@@ -105,6 +106,7 @@ type
     procedure Assign(Source: TPersistent); override;
     function Add: TSubItem; overload;
     function Add(const Chaine: string): TSubItem; overload;
+    function Add(const AChaine: string; AValeur: Integer): TSubItem; overload;
     procedure Insert(Index: Integer; const Chaine: string);
     function IndexOf(const Chaine: string): Integer;
     property Items[Index: Integer]: TSubItem read GetItem write SetItem; default;
@@ -368,6 +370,13 @@ begin
   end;
 end;
 
+function TItems.Add(const AChaine: string; AValeur: Integer): TSubItem;
+begin
+  Result := Add;
+  Add.Caption := AChaine;
+  Add.Valeur := AValeur;
+end;
+
 function TItems.IndexOf(const Chaine: string): Integer;
 
   function Process(Item: TSubItem): Integer;
@@ -508,6 +517,13 @@ begin
     Result.Caption := Copy(AChaine, 1, i - 1);
     Result.Valeur := StrToInt(Copy(AChaine, i + 1, Length(AChaine)));
   end;
+end;
+
+function TSubItems.Add(const AChaine: string; AValeur: Integer): TSubItem;
+begin
+  Result := Add;
+  Result.Caption := AChaine;
+  Result.Valeur := AValeur;
 end;
 
 function TSubItems.IndexOf(const Chaine: string): Integer;
