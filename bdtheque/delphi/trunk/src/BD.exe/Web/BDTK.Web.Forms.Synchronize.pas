@@ -99,7 +99,7 @@ end;
 
 constructor TSynchroWeb.Create;
 begin
-  inherited Create(TGlobalVar.Utilisateur.Options.ServerSynchro, 'synchro.php');
+  inherited Create(TGlobalVar.ServerSynchro, 'synchro.php');
   FParam[inherited GetParamLengthMin + 0].Nom := 'deviceid';
   FParam[inherited GetParamLengthMin + 0].Valeur := '';
 end;

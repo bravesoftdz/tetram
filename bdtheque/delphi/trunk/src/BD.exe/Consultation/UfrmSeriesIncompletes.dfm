@@ -47,7 +47,7 @@ object frmSeriesIncompletes: TfrmSeriesIncompletes
         MinWidth = 50
         Position = 1
         Text = 'Albums manquants'
-        Width = 560
+        Width = 564
       end>
   end
   object Panel1: TPanel

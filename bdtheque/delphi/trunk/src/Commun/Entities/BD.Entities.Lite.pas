@@ -263,7 +263,7 @@ end;
 constructor TImageLite.Create;
 begin
   inherited;
-  OldStockee := TGlobalVar.Utilisateur.Options.ImagesStockees;
+  OldStockee := TGlobalVar.Options.ImagesStockees;
   NewStockee := OldStockee;
 end;
 

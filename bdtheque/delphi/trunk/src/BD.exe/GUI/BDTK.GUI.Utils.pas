@@ -50,8 +50,7 @@ const
     'Liste détaillée des albums et para-BD', 'Liste simplifiée des éditions', 'Liste détaillée des éditions'), ('', '', '', '', ''),
     ('', '', 'Album seul', 'Liste simplifiée des éditions', 'Liste détaillée des éditions'), ('', '', '', '', ''), ('', '', '', '', ''));
 
-function ChoisirDetailSerie(NiveauDetailMax: TDetailSerieOption; out DetailSerieOption: TDetailSerieOption; out PrevisionsManquants: Boolean)
-  : TModalResult; overload;
+function ChoisirDetailSerie(NiveauDetailMax: TDetailSerieOption; out DetailSerieOption: TDetailSerieOption; out PrevisionsManquants: Boolean) : TModalResult; overload;
 function ChoisirDetailSerie(NiveauDetailMax: TDetailSerieOption; out DetailSerieOption: TDetailSerieOption): TModalResult; overload;
 
 procedure LitOptions;
@@ -62,8 +61,7 @@ function SupprimerToutDans(const ChampSupp, Table: string; UseTransaction: TMana
 function SupprimerToutDans(const ChampSupp, Table, Reference, Sauf: string; UseTransaction: TManagedTransaction = nil): Boolean; overload;
 function SupprimerToutDans(const ChampSupp, Table, Reference: string; const Valeur: RGUIDEx; UseTransaction: TManagedTransaction = nil): Boolean; overload;
 
-function GetCouvertureStream(isParaBD: Boolean; const ID_Couverture: RGUIDEx; Hauteur, Largeur: Integer; AntiAliasing: Boolean; Cadre: Boolean = False;
-  Effet3D: Integer = 0): TStream; overload;
+function GetCouvertureStream(isParaBD: Boolean; const ID_Couverture: RGUIDEx; Hauteur, Largeur: Integer; AntiAliasing: Boolean; Cadre: Boolean = False; Effet3D: Integer = 0): TStream; overload;
 procedure LoadCouverture(isParaBD: Boolean; const ID_Couverture: RGUIDEx; Picture: TPicture);
 function SearchNewFileName(const Chemin, Fichier: string; Reserve: Boolean = True): string;
 
@@ -346,41 +344,41 @@ begin
   try
     op.SQL.Text := 'select first 1 valeur from options where nom_option = ? order by dm_options desc';
     op.Prepare(True);
-    TGlobalVar.Utilisateur.Options.SymboleMonnetaire := LitStr(op, 'SymboleM', FormatSettings.CurrencyString);
-    RepImages := LitStr(op, 'RepImages', RepImages);
+    TGlobalVar.Options.SymboleMonnetaire := LitStr(op, 'SymboleM', FormatSettings.CurrencyString);
+    TGlobalVar.RepImages := LitStr(op, 'RepImages', TGlobalVar.RepImages);
   finally
     op.Free;
   end;
-  ini := TIniFile.Create(FichierIni);
+  ini := TIniFile.Create(TGlobalVar.FichierIni);
   try
-    TGlobalVar.Utilisateur.Options.ModeDemarrage := ini.ReadBool('DIVERS', 'ModeDemarrage', True);
-    TGlobalVar.Utilisateur.Options.FicheAlbumWithCouverture := ini.ReadBool('DIVERS', 'FicheWithCouverture', True);
-    TGlobalVar.Utilisateur.Options.FicheParaBDWithImage := ini.ReadBool('DIVERS', 'ParaBDWithImage', True);
-    TGlobalVar.Utilisateur.Options.Images := ini.ReadBool('DIVERS', 'Images', True);
-    TGlobalVar.Utilisateur.Options.AntiAliasing := ini.ReadBool('DIVERS', 'AntiAliasing', True);
-    TGlobalVar.Utilisateur.Options.ImagesStockees := ini.ReadBool('ModeEdition', 'ImagesStockees', False);
-    TGlobalVar.Utilisateur.Options.FormatTitreAlbum := ini.ReadInteger('DIVERS', 'FormatTitreAlbum', 0);
-    TGlobalVar.Utilisateur.Options.AvertirPret := ini.ReadBool('DIVERS', 'AvertirPret', False);
-    TGlobalVar.Utilisateur.Options.GrandesIconesMenus := ini.ReadBool('DIVERS', 'GrandesIconesMenus', True);
-    TGlobalVar.Utilisateur.Options.GrandesIconesBarre := ini.ReadBool('DIVERS', 'GrandesIconesBarre', True);
-    TGlobalVar.Utilisateur.Options.VerifMAJDelai := ini.ReadInteger('Divers', 'VerifMAJDelai', 4);
-    TGlobalVar.Utilisateur.Options.SerieObligatoireAlbums := ini.ReadBool('DIVERS', 'SerieObligatoireAlbums', False);
-    TGlobalVar.Utilisateur.Options.SerieObligatoireParaBD := ini.ReadBool('DIVERS', 'SerieObligatoireParaBD', False);
-    TGlobalVar.Utilisateur.Options.AfficheNoteListes := ini.ReadBool('DIVERS', 'AfficheNoteListes', True);
+    TGlobalVar.Options.ModeDemarrage := ini.ReadBool('DIVERS', 'ModeDemarrage', True);
+    TGlobalVar.Options.FicheAlbumWithCouverture := ini.ReadBool('DIVERS', 'FicheWithCouverture', True);
+    TGlobalVar.Options.FicheParaBDWithImage := ini.ReadBool('DIVERS', 'ParaBDWithImage', True);
+    TGlobalVar.Options.Images := ini.ReadBool('DIVERS', 'Images', True);
+    TGlobalVar.Options.AntiAliasing := ini.ReadBool('DIVERS', 'AntiAliasing', True);
+    TGlobalVar.Options.ImagesStockees := ini.ReadBool('ModeEdition', 'ImagesStockees', False);
+    TGlobalVar.Options.FormatTitreAlbum := ini.ReadInteger('DIVERS', 'FormatTitreAlbum', 0);
+    TGlobalVar.Options.AvertirPret := ini.ReadBool('DIVERS', 'AvertirPret', False);
+    TGlobalVar.Options.GrandesIconesMenus := ini.ReadBool('DIVERS', 'GrandesIconesMenus', True);
+    TGlobalVar.Options.GrandesIconesBarre := ini.ReadBool('DIVERS', 'GrandesIconesBarre', True);
+    TGlobalVar.Options.VerifMAJDelai := ini.ReadInteger('Divers', 'VerifMAJDelai', 4);
+    TGlobalVar.Options.SerieObligatoireAlbums := ini.ReadBool('DIVERS', 'SerieObligatoireAlbums', False);
+    TGlobalVar.Options.SerieObligatoireParaBD := ini.ReadBool('DIVERS', 'SerieObligatoireParaBD', False);
+    TGlobalVar.Options.AfficheNoteListes := ini.ReadBool('DIVERS', 'AfficheNoteListes', True);
 
-    TGlobalVar.Utilisateur.Options.SiteWeb.Adresse := ini.ReadString('WWW', 'Adresse', '');
-    TGlobalVar.Utilisateur.Options.SiteWeb.Cle := ini.ReadString('WWW', 'AuthKey', '');
-    TGlobalVar.Utilisateur.Options.SiteWeb.Modele := ini.ReadString('WWW', 'Modele', 'Site par défaut');
-    TGlobalVar.Utilisateur.Options.SiteWeb.MySQLServeur := ini.ReadString('WWW', 'MySQLServeur', 'localhost');
-    TGlobalVar.Utilisateur.Options.SiteWeb.MySQLLogin := ini.ReadString('WWW', 'MySQLLogin', '');
-    TGlobalVar.Utilisateur.Options.SiteWeb.MySQLPassword := ini.ReadString('WWW', 'MySQLPassword', '');
-    TGlobalVar.Utilisateur.Options.SiteWeb.MySQLBDD := ini.ReadString('WWW', 'MySQLBDD', TGlobalVar.Utilisateur.Options.SiteWeb.MySQLLogin);
-    TGlobalVar.Utilisateur.Options.SiteWeb.MySQLPrefix := ini.ReadString('WWW', 'MySQLPrefix', 'bdt');
-    TGlobalVar.Utilisateur.Options.SiteWeb.BddVersion := ini.ReadString('WWW', 'BddVersion', '');
-    TGlobalVar.Utilisateur.Options.SiteWeb.Paquets := ini.ReadInteger('WWW', 'Paquets', 4096);
+    TGlobalVar.SiteWeb.Adresse := ini.ReadString('WWW', 'Adresse', '');
+    TGlobalVar.SiteWeb.Cle := ini.ReadString('WWW', 'AuthKey', '');
+    TGlobalVar.SiteWeb.Modele := ini.ReadString('WWW', 'Modele', 'Site par défaut');
+    TGlobalVar.SiteWeb.MySQLServeur := ini.ReadString('WWW', 'MySQLServeur', 'localhost');
+    TGlobalVar.SiteWeb.MySQLLogin := ini.ReadString('WWW', 'MySQLLogin', '');
+    TGlobalVar.SiteWeb.MySQLPassword := ini.ReadString('WWW', 'MySQLPassword', '');
+    TGlobalVar.SiteWeb.MySQLBDD := ini.ReadString('WWW', 'MySQLBDD', TGlobalVar.SiteWeb.MySQLLogin);
+    TGlobalVar.SiteWeb.MySQLPrefix := ini.ReadString('WWW', 'MySQLPrefix', 'bdt');
+    TGlobalVar.SiteWeb.BddVersion := ini.ReadString('WWW', 'BddVersion', '');
+    TGlobalVar.SiteWeb.Paquets := ini.ReadInteger('WWW', 'Paquets', 4096);
 
     {$IFDEF DEBUG}
-    TGlobalVar.Utilisateur.Options.ServerSynchro := TGlobalVar.Utilisateur.Options.SiteWeb;
+    TGlobalVar.ServerSynchro.Assign(TGlobalVar.SiteWeb);
     {$ENDIF}
   finally
     ini.Free;
@@ -415,41 +413,41 @@ begin
   hg := THourGlass.Create;
   op := dmPrinc.DBConnection.GetQuery;
   try
-    Sauve(op, 'SymboleM', TGlobalVar.Utilisateur.Options.SymboleMonnetaire);
-    Sauve(op, 'RepImages', RepImages);
+    Sauve(op, 'SymboleM', TGlobalVar.Options.SymboleMonnetaire);
+    Sauve(op, 'RepImages', TGlobalVar.RepImages);
     op.Transaction.Commit;
   finally
     op.Free;
   end;
-  ini := TIniFile.Create(FichierIni);
+  ini := TIniFile.Create(TGlobalVar.FichierIni);
   try
-    ini.WriteBool('DIVERS', 'ModeDemarrage', TGlobalVar.Utilisateur.Options.ModeDemarrage);
-    ini.WriteBool('DIVERS', 'Images', TGlobalVar.Utilisateur.Options.Images);
-    ini.WriteBool('DIVERS', 'FicheWithCouverture', TGlobalVar.Utilisateur.Options.FicheAlbumWithCouverture);
-    ini.WriteBool('DIVERS', 'ParaBDWithImage', TGlobalVar.Utilisateur.Options.FicheParaBDWithImage);
-    ini.WriteBool('DIVERS', 'AntiAliasing', TGlobalVar.Utilisateur.Options.AntiAliasing);
-    ini.WriteBool('DIVERS', 'AvertirPret', TGlobalVar.Utilisateur.Options.AvertirPret);
-    ini.WriteBool('DIVERS', 'GrandesIconesMenus', TGlobalVar.Utilisateur.Options.GrandesIconesMenus);
-    ini.WriteBool('DIVERS', 'GrandesIconesBarre', TGlobalVar.Utilisateur.Options.GrandesIconesBarre);
-    ini.WriteBool('ModeEdition', 'ImagesStockees', TGlobalVar.Utilisateur.Options.ImagesStockees);
-    ini.WriteInteger('DIVERS', 'FormatTitreAlbum', TGlobalVar.Utilisateur.Options.FormatTitreAlbum);
-    ini.WriteInteger('Divers', 'VerifMAJDelai', TGlobalVar.Utilisateur.Options.VerifMAJDelai);
-    ini.WriteBool('DIVERS', 'SerieObligatoireAlbums', TGlobalVar.Utilisateur.Options.SerieObligatoireAlbums);
-    ini.WriteBool('DIVERS', 'SerieObligatoireParaBD', TGlobalVar.Utilisateur.Options.SerieObligatoireParaBD);
-    ini.WriteBool('DIVERS', 'AfficheNoteListes', TGlobalVar.Utilisateur.Options.AfficheNoteListes);
+    ini.WriteBool('DIVERS', 'ModeDemarrage', TGlobalVar.Options.ModeDemarrage);
+    ini.WriteBool('DIVERS', 'Images', TGlobalVar.Options.Images);
+    ini.WriteBool('DIVERS', 'FicheWithCouverture', TGlobalVar.Options.FicheAlbumWithCouverture);
+    ini.WriteBool('DIVERS', 'ParaBDWithImage', TGlobalVar.Options.FicheParaBDWithImage);
+    ini.WriteBool('DIVERS', 'AntiAliasing', TGlobalVar.Options.AntiAliasing);
+    ini.WriteBool('DIVERS', 'AvertirPret', TGlobalVar.Options.AvertirPret);
+    ini.WriteBool('DIVERS', 'GrandesIconesMenus', TGlobalVar.Options.GrandesIconesMenus);
+    ini.WriteBool('DIVERS', 'GrandesIconesBarre', TGlobalVar.Options.GrandesIconesBarre);
+    ini.WriteBool('ModeEdition', 'ImagesStockees', TGlobalVar.Options.ImagesStockees);
+    ini.WriteInteger('DIVERS', 'FormatTitreAlbum', TGlobalVar.Options.FormatTitreAlbum);
+    ini.WriteInteger('Divers', 'VerifMAJDelai', TGlobalVar.Options.VerifMAJDelai);
+    ini.WriteBool('DIVERS', 'SerieObligatoireAlbums', TGlobalVar.Options.SerieObligatoireAlbums);
+    ini.WriteBool('DIVERS', 'SerieObligatoireParaBD', TGlobalVar.Options.SerieObligatoireParaBD);
+    ini.WriteBool('DIVERS', 'AfficheNoteListes', TGlobalVar.Options.AfficheNoteListes);
 
     ini.WriteString('DIVERS', 'RepImages', ''); // efface la ligne
 
-    ini.WriteString('WWW', 'Adresse', TGlobalVar.Utilisateur.Options.SiteWeb.Adresse);
-    ini.WriteString('WWW', 'AuthKey', TGlobalVar.Utilisateur.Options.SiteWeb.Cle);
-    ini.WriteString('WWW', 'Modele', TGlobalVar.Utilisateur.Options.SiteWeb.Modele);
-    ini.WriteString('WWW', 'MySQLServeur', TGlobalVar.Utilisateur.Options.SiteWeb.MySQLServeur);
-    ini.WriteString('WWW', 'MySQLLogin', TGlobalVar.Utilisateur.Options.SiteWeb.MySQLLogin);
-    ini.WriteString('WWW', 'MySQLPassword', TGlobalVar.Utilisateur.Options.SiteWeb.MySQLPassword);
-    ini.WriteString('WWW', 'MySQLBDD', TGlobalVar.Utilisateur.Options.SiteWeb.MySQLBDD);
-    ini.WriteString('WWW', 'MySQLPrefix', TGlobalVar.Utilisateur.Options.SiteWeb.MySQLPrefix);
-    ini.WriteString('WWW', 'BddVersion', TGlobalVar.Utilisateur.Options.SiteWeb.BddVersion);
-    ini.WriteInteger('WWW', 'Paquets', TGlobalVar.Utilisateur.Options.SiteWeb.Paquets);
+    ini.WriteString('WWW', 'Adresse', TGlobalVar.SiteWeb.Adresse);
+    ini.WriteString('WWW', 'AuthKey', TGlobalVar.SiteWeb.Cle);
+    ini.WriteString('WWW', 'Modele', TGlobalVar.SiteWeb.Modele);
+    ini.WriteString('WWW', 'MySQLServeur', TGlobalVar.SiteWeb.MySQLServeur);
+    ini.WriteString('WWW', 'MySQLLogin', TGlobalVar.SiteWeb.MySQLLogin);
+    ini.WriteString('WWW', 'MySQLPassword', TGlobalVar.SiteWeb.MySQLPassword);
+    ini.WriteString('WWW', 'MySQLBDD', TGlobalVar.SiteWeb.MySQLBDD);
+    ini.WriteString('WWW', 'MySQLPrefix', TGlobalVar.SiteWeb.MySQLPrefix);
+    ini.WriteString('WWW', 'BddVersion', TGlobalVar.SiteWeb.BddVersion);
+    ini.WriteInteger('WWW', 'Paquets', TGlobalVar.SiteWeb.Paquets);
   finally
     ini.Free;
   end;
@@ -563,7 +561,7 @@ begin
         Fichier := TPath.GetFileName(qry.Fields.AsString[2]);
         Chemin := TPath.GetDirectoryName(qry.Fields.AsString[2]);
         if Chemin = '' then
-          Chemin := RepImages;
+          Chemin := TGlobalVar.RepImages;
         qry.SQL.Text := 'select blobcontent from loadblobfromfile(:chemin, :fichier);';
         qry.Prepare(True);
         qry.Params.AsString[0] := Copy(Chemin, 1, qry.Params.MaxStrLen[0]);

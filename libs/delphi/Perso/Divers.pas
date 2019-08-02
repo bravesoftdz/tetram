@@ -114,8 +114,8 @@ type
   private type
     TArrayOfInteger = array of Integer;
 
-  class procedure DecodeVer(const Ver: string; var AVer: TArrayOfInteger; Sep: Char); static;
-  function GetIndexVersion(const Index: Integer): Integer;
+    class procedure DecodeVer(const Ver: string; var AVer: TArrayOfInteger; Sep: Char); static;
+    function GetIndexVersion(const Index: Integer): Integer;
   public
     value: string;
 

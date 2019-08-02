@@ -193,7 +193,7 @@ procedure TfrmEditAchatAlbum.Frame11btnOKClick(Sender: TObject);
 begin
   if rbNouvelAlbum.Checked then
   begin
-    if TGlobalVar.Utilisateur.Options.SerieObligatoireAlbums and IsEqualGUID(vtEditSeries.CurrentValue, GUID_NULL) then
+    if TGlobalVar.Options.SerieObligatoireAlbums and IsEqualGUID(vtEditSeries.CurrentValue, GUID_NULL) then
     begin
       AffMessage(rsSerieObligatoire, mtInformation, [mbOk], True);
       vtEditSeries.SetFocus;

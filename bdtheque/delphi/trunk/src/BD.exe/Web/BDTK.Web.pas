@@ -19,10 +19,10 @@ type
     FslReponse: TStringList;
     FDBVersion: TVersionNumber;
 
-    FSite: RSiteWeb;
+    FSite: TSiteWeb;
     FScript: string;
     FAddXMLHeader: Boolean;
-    procedure SetSite(const Value: RSiteWeb);
+    procedure SetSite(const Value: TSiteWeb);
     procedure SetScript(const Value: string);
 
     procedure BuildURL;
@@ -42,7 +42,7 @@ type
     procedure SendOption(const cle, Valeur: string); virtual; abstract;
     function GetOption(const cle: string): string;
   public
-    constructor Create(Site: RSiteWeb; const Script: string); virtual;
+    constructor Create(Site: TSiteWeb; const Script: string); virtual;
     destructor Destroy; override;
 
     procedure SendData(Action: Integer; const Data: string = '');
@@ -53,7 +53,7 @@ type
 
     property AddXMLHeader: Boolean read FAddXMLHeader write SetAddXMLHeader;
 
-    property Site: RSiteWeb read FSite write SetSite;
+    property Site: TSiteWeb read FSite write SetSite;
     property Script: string read FScript write SetScript;
 
     property DBVersion: TVersionNumber read FDBVersion;
@@ -189,7 +189,7 @@ begin
   end;
 end;
 
-constructor TWeb.Create(Site: RSiteWeb; const Script: string);
+constructor TWeb.Create(Site: TSiteWeb; const Script: string);
 begin
   FReponse := TStringStream.Create('');
   FslReponse := TStringList.Create;
@@ -326,7 +326,7 @@ begin
   BuildURL;
 end;
 
-procedure TWeb.SetSite(const Value: RSiteWeb);
+procedure TWeb.SetSite(const Value: TSiteWeb);
 begin
   FSite := Value;
   FParam[0].Valeur := FSite.cle;

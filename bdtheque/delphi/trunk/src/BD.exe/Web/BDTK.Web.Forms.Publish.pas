@@ -248,7 +248,7 @@ end;
 
 constructor TPublicationWeb.Create;
 begin
-  inherited Create(TGlobalVar.Utilisateur.Options.SiteWeb, 'interface.php');
+  inherited Create(TGlobalVar.SiteWeb, 'interface.php');
   AddXMLHeader := True;
 end;
 
@@ -332,8 +332,8 @@ begin
           end;
         end;
       end;
-      SendOption('moneysymbol', CleanHTTP(TGlobalVar.Utilisateur.Options.SymboleMonnetaire));
-      SendOption('formattitrealbum', IntToStr(TGlobalVar.Utilisateur.Options.FormatTitreAlbum));
+      SendOption('moneysymbol', CleanHTTP(TGlobalVar.Options.SymboleMonnetaire));
+      SendOption('formattitrealbum', IntToStr(TGlobalVar.Options.FormatTitreAlbum));
       SendOption('lastsynchro', DateToStr(FStartTime, TGlobalVar.SQLSettings));
 
       ShowMessage('Publication terminée');
@@ -524,7 +524,7 @@ begin
     if GetLabel(l) = 'file not found' then
     begin
       ms := GetCouvertureStream(False, StringToGUIDDef(Query.Fields.ByNameAsString[InfoTable.ID], GUID_NULL), 400, 500,
-        TGlobalVar.Utilisateur.Options.AntiAliasing);
+        TGlobalVar.Options.AntiAliasing);
       if Assigned(ms) then
       begin
         es := TStringStream.Create('');

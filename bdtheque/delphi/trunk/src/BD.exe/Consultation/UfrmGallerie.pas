@@ -310,7 +310,7 @@ begin
 
     Thumb.FImage.Picture.Assign(nil);
     try
-      ms := GetCouvertureStream(False, Couverture.ID, 150, -1, TGlobalVar.Utilisateur.Options.AntiAliasing);
+      ms := GetCouvertureStream(False, Couverture.ID, 150, -1, TGlobalVar.Options.AntiAliasing);
       if Assigned(ms) then
         try
           jpg := TJPEGImage.Create;

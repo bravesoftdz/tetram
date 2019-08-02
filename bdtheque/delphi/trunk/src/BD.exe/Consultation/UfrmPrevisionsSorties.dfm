@@ -54,7 +54,7 @@ object frmPrevisionsSorties: TfrmPrevisionsSorties
         MinWidth = 50
         Position = 1
         Text = 'Pr'#233'visions'
-        Width = 560
+        Width = 564
       end>
   end
   object Panel1: TPanel

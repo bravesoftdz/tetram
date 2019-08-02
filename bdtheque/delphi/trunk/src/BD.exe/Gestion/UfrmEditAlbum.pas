@@ -238,7 +238,7 @@ begin
   vstImages.TreeOptions.MiscOptions := vstImages.TreeOptions.MiscOptions + [toCheckSupport];
   vstImages.TreeOptions.PaintOptions := vstImages.TreeOptions.PaintOptions - [toShowButtons, toShowRoot, toShowTreeLines];
   FEditionChanging := False;
-  edPrix.CurrencyChar := TGlobalVar.Utilisateur.Options.SymboleMonnetaire[1];
+  edPrix.CurrencyChar := TGlobalVar.Options.SymboleMonnetaire[1];
   FScenaristesSelected := False;
   FDessinateursSelected := False;
   FColoristesSelected := False;
@@ -440,7 +440,7 @@ var
   cs: string;
 begin
   // if TGlobalVar.Utilisateur.Options.SerieObligatoireAlbums and IsEqualGUID(vtSeries.CurrentValue, GUID_NULL) then
-  if TGlobalVar.Utilisateur.Options.SerieObligatoireAlbums and IsEqualGUID(vtEditSerie.CurrentValue, GUID_NULL) then
+  if TGlobalVar.Options.SerieObligatoireAlbums and IsEqualGUID(vtEditSerie.CurrentValue, GUID_NULL) then
   begin
     AffMessage(rsSerieObligatoire, mtInformation, [mbOk], True);
     vtEditSerie.SetFocus;
@@ -626,7 +626,7 @@ procedure TfrmEditAlbum.ChoixImageClick(Sender: TObject);
 begin
   ChoixImageDialog.Options := ChoixImageDialog.Options + [ofAllowMultiSelect];
   ChoixImageDialog.Filter := GraphicFilter(TGraphic);
-  ChoixImageDialog.InitialDir := RepImages;
+  ChoixImageDialog.InitialDir := TGlobalVar.RepImages;
   ChoixImageDialog.FileName := '';
   if ChoixImageDialog.Execute then
     AddImageFiles(ChoixImageDialog.Files);
@@ -647,9 +647,9 @@ begin
     PC := FCurrentEditionComplete.Couvertures[Node.Index];
     hg := THourGlass.Create;
     if IsEqualGUID(PC.ID, GUID_NULL) then
-      ms := GetJPEGStream(PC.NewNom, imgVisu.Height, imgVisu.Width, TGlobalVar.Utilisateur.Options.AntiAliasing)
+      ms := GetJPEGStream(PC.NewNom, imgVisu.Height, imgVisu.Width, TGlobalVar.Options.AntiAliasing)
     else
-      ms := GetCouvertureStream(False, PC.ID, imgVisu.Height, imgVisu.Width, TGlobalVar.Utilisateur.Options.AntiAliasing);
+      ms := GetCouvertureStream(False, PC.ID, imgVisu.Height, imgVisu.Width, TGlobalVar.Options.AntiAliasing);
     if Assigned(ms) then
       try
         jpg := TJPEGImage.Create;
@@ -828,7 +828,7 @@ procedure TfrmEditAlbum.SpeedButton3Click(Sender: TObject);
 var
   c: Currency;
 begin
-  c := BDStrToDoubleDef(StringReplace(edPrix.Text, TGlobalVar.Utilisateur.Options.SymboleMonnetaire, '', []), 0);
+  c := BDStrToDoubleDef(StringReplace(edPrix.Text, TGlobalVar.Options.SymboleMonnetaire, '', []), 0);
   if Convertisseur(SpeedButton3, c) then
     if edPrix.Focused then
       edPrix.Text := BDDoubleToStr(c)
@@ -1120,9 +1120,9 @@ begin
   PC := FCurrentEditionComplete.Couvertures[vstImages.FocusedNode.Index];
   hg := THourGlass.Create;
   if IsEqualGUID(PC.ID, GUID_NULL) then
-    ms := GetJPEGStream(PC.NewNom, 400, 500, TGlobalVar.Utilisateur.Options.AntiAliasing)
+    ms := GetJPEGStream(PC.NewNom, 400, 500, TGlobalVar.Options.AntiAliasing)
   else
-    ms := GetCouvertureStream(False, PC.ID, 400, 500, TGlobalVar.Utilisateur.Options.AntiAliasing);
+    ms := GetCouvertureStream(False, PC.ID, 400, 500, TGlobalVar.Options.AntiAliasing);
   if Assigned(ms) then
     try
       jpg := TJPEGImage.Create;

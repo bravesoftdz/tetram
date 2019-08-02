@@ -168,13 +168,13 @@ function ChargeImage(Picture: TPicture; const ResName: string): Boolean;
 begin
   Result := False;
   Picture.Bitmap.FreeImage;
-  if TGlobalVar.Utilisateur.Options.Images and not IsRemoteSession then
+  if TGlobalVar.Options.Images and not IsRemoteSession then
   begin
-    if HandleDLLPic <= 32 then
-      HandleDLLPic := LoadLibrary(PChar(RessourcePic));
-    if HandleDLLPic > 32 then
+    if TGlobalVar.HandleDLLPic <= 32 then
+      TGlobalVar.HandleDLLPic := LoadLibrary(PChar(TGlobalVar.RessourcePic));
+    if TGlobalVar.HandleDLLPic > 32 then
       try
-        Picture.Bitmap.LoadFromResourceName(HandleDLLPic, ResName);
+        Picture.Bitmap.LoadFromResourceName(TGlobalVar.HandleDLLPic, ResName);
         Result := True;
       except
       end;

@@ -20,9 +20,9 @@ var
   FichierBackup: string;
   pre25: Boolean;
 begin
-  FichierBackup := TPath.Combine(TempPath, 'bdtk-upgrade.fbk');
+  FichierBackup := TPath.Combine(TGlobalVar.TempPath, 'bdtk-upgrade.fbk');
   if TFile.Exists(FichierBackup) then TFile.Delete(FichierBackup);
-  TFile.Copy(dmPrinc.DBConnection.GetDatabase.InfoDbFileName, TPath.Combine(TempPath, TPath.GetFileName(dmPrinc.DBConnection.GetDatabase.InfoDbFileName)), True);
+  TFile.Copy(dmPrinc.DBConnection.GetDatabase.InfoDbFileName, TPath.Combine(TGlobalVar.TempPath, TPath.GetFileName(dmPrinc.DBConnection.GetDatabase.InfoDbFileName)), True);
 
   pre25 := Format('%d.%d', [dmPrinc.DBConnection.GetDatabase.InfoOdsVersion, dmPrinc.DBConnection.GetDatabase.InfoOdsMinorVersion]) < TVersionNumber('11.2'); // ODS11.2 = FB2.5
 
@@ -336,9 +336,9 @@ begin
   toUpgrade := toUpgrade or (dmPrinc.DBConnection.GetDatabase.InfoPageSize < DBPageSize);
   if toUpgrade then
   begin
-    GetDiskFreeSpaceEx(PChar(TempPath), AvailableSpace, TotalSpace, nil);
+    GetDiskFreeSpaceEx(PChar(TGlobalVar.TempPath), AvailableSpace, TotalSpace, nil);
     if AvailableSpace < 2 * (dmPrinc.DBConnection.GetDatabase.InfoDbSizeInPages * dmPrinc.DBConnection.GetDatabase.InfoPageSize) then
-      raise Exception.CreateFmt('Espace insuffisant sur le disque "%s" pour procéder à la mise à jour', [ExtractFileDrive(TempPath)]);
+      raise Exception.CreateFmt('Espace insuffisant sur le disque "%s" pour procéder à la mise à jour', [ExtractFileDrive(TGlobalVar.TempPath)]);
 
     // le fullrebuild ne peut pas être utilisé tant que l'extraction des metadata des uib ne sait pas
     // gérer les type of et les domain pour le type de paramètre/variable dans les procédures stockées

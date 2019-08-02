@@ -89,7 +89,7 @@ begin
   vstPrevisionsSorties.OnCompareNodeString := OnCompareNodeString;
 
   CheckBox1.OnClick := nil;
-  ini := TIniFile.Create(FichierIni);
+  ini := TIniFile.Create(TGlobalVar.FichierIni);
   try
     CheckBox1.Checked := ini.ReadBool('Options', 'PrevisionsAchats', True);
   finally
@@ -269,7 +269,7 @@ procedure TfrmPrevisionsSorties.CheckBox1Click(Sender: TObject);
 var
   ini: TIniFile;
 begin
-  ini := TIniFile.Create(FichierIni);
+  ini := TIniFile.Create(TGlobalVar.FichierIni);
   try
     ini.WriteBool('Options', 'PrevisionsAchats', CheckBox1.Checked);
   finally

@@ -142,7 +142,7 @@ begin
 
   nbImageHorz := Trunc((Prn.Detail.Width + ThumbInterval) / (ThumbWidth + ThumbInterval));
   // si nbImageHorz = 0 alors on n'a pas assez de place pour mettre les images dans une page donc pas necessaire de passer à la page suivante
-  if TGlobalVar.Utilisateur.Options.FicheAlbumWithCouverture and (nbImageHorz > 0) then
+  if TGlobalVar.Options.FicheAlbumWithCouverture and (nbImageHorz > 0) then
   begin
     numCol := 1;
     Repositionne := False;
@@ -152,7 +152,7 @@ begin
     begin
       fWaiting.ShowProgression(rsTransImage + '...', epNext);
       ms := GetCouvertureStream(False, PC.ID, Prn.MmsToPixelsVertical(ThumbHeigth), Prn.MmsToPixelsHorizontal(ThumbWidth),
-        TGlobalVar.Utilisateur.Options.AntiAliasing, True, Prn.MmsToPixelsHorizontal(1));
+        TGlobalVar.Options.AntiAliasing, True, Prn.MmsToPixelsHorizontal(1));
       if Assigned(ms) then
         try
           if not Repositionne then
@@ -208,11 +208,11 @@ begin
   fWaiting.ShowProgression(Format('%s (%s %d)...', [rsTransAlbums, rsTransPage, Prn.GetPageNumber]), 1, 7);
 
   MinTop := -1;
-  if TGlobalVar.Utilisateur.Options.FicheParaBDWithImage and (ParaBD.Photos.Count > 0) then
+  if TGlobalVar.Options.FicheParaBDWithImage and (ParaBD.Photos.Count > 0) then
   begin
     fWaiting.ShowProgression(rsTransImage + '...', epNext);
     ms := GetCouvertureStream(True, ParaBD.Photos[0].ID, Prn.MmsToPixelsVertical(60), Prn.MmsToPixelsHorizontal(60),
-      TGlobalVar.Utilisateur.Options.AntiAliasing, True, Prn.MmsToPixelsHorizontal(1));
+      TGlobalVar.Options.AntiAliasing, True, Prn.MmsToPixelsHorizontal(1));
     if Assigned(ms) then
       try
         fWaiting.ShowProgression(rsTransImage + '...', epNext);
@@ -1035,23 +1035,22 @@ var
     Prn.WriteLineColumn(1, -2, IntToStr(R.NbAlbums));
     Prn.Columns[0].Font.Style := [];
     Prn.WriteLineColumn(2, -2, rsAlbumsStock + ' :');
-    Prn.WriteLineColumn(3, -2, Format(FormatPourcent, [R.NbAlbumsStock, MulDiv(R.NbAlbumsStock, 100, R.NbAlbums)]));
+    Prn.WriteLineColumn(3, -2, Format(TGlobalVar.FormatPourcent, [R.NbAlbumsStock, MulDiv(R.NbAlbumsStock, 100, R.NbAlbums)]));
     Prn.Columns[0].Font.Style := [fsBold];
     Prn.WriteLineColumn(0, -1, rsNombreSeries + ' :');
-    Prn.WriteLineColumn(1, -2, IntToStr(R.NbSeries) + ' (dont terminées: ' + Format(FormatPourcent,
-      [R.NbSeriesTerminee, MulDiv(R.NbSeriesTerminee, 100, R.NbSeries)]) + ')');
+    Prn.WriteLineColumn(1, -2, IntToStr(R.NbSeries) + ' (dont terminées: ' + Format(TGlobalVar.FormatPourcent, [R.NbSeriesTerminee, MulDiv(R.NbSeriesTerminee, 100, R.NbSeries)]) + ')');
     Prn.Columns[0].Font.Style := [];
     Prn.WriteLineColumn(0, -1, rsAlbumsNB + ' :');
-    Prn.WriteLineColumn(1, -2, Format(FormatPourcent, [R.NbAlbumsNB, MulDiv(R.NbAlbumsNB, 100, R.NbAlbums)]));
+    Prn.WriteLineColumn(1, -2, Format(TGlobalVar.FormatPourcent, [R.NbAlbumsNB, MulDiv(R.NbAlbumsNB, 100, R.NbAlbums)]));
     Position[3] := Prn.GetYPosition;
     Prn.WriteLineColumn(0, -1, rsAlbumsVO + ' :');
-    Prn.WriteLineColumn(1, -2, Format(FormatPourcent, [R.NbAlbumsVO, MulDiv(R.NbAlbumsVO, 100, R.NbAlbums)]));
+    Prn.WriteLineColumn(1, -2, Format(TGlobalVar.FormatPourcent, [R.NbAlbumsVO, MulDiv(R.NbAlbumsVO, 100, R.NbAlbums)]));
     Prn.WriteLineColumn(0, -1, rsAlbumsIntegrales + ' :');
-    Prn.WriteLineColumn(1, -2, Format(FormatPourcent, [R.NbAlbumsIntegrale, MulDiv(R.NbAlbumsIntegrale, 100, R.NbAlbums)]));
+    Prn.WriteLineColumn(1, -2, Format(TGlobalVar.FormatPourcent, [R.NbAlbumsIntegrale, MulDiv(R.NbAlbumsIntegrale, 100, R.NbAlbums)]));
     Prn.WriteLineColumn(0, -1, rsAlbumsHorsSerie + ' :');
-    Prn.WriteLineColumn(1, -2, Format(FormatPourcent, [R.NbAlbumsHorsSerie, MulDiv(R.NbAlbumsHorsSerie, 100, R.NbAlbums)]));
+    Prn.WriteLineColumn(1, -2, Format(TGlobalVar.FormatPourcent, [R.NbAlbumsHorsSerie, MulDiv(R.NbAlbumsHorsSerie, 100, R.NbAlbums)]));
     Prn.WriteLineColumn(0, -1, rsAlbumsDedicaces + ' :');
-    Prn.WriteLineColumn(1, -2, Format(FormatPourcent, [R.NbAlbumsDedicace, MulDiv(R.NbAlbumsDedicace, 100, R.NbAlbums)]));
+    Prn.WriteLineColumn(1, -2, Format(TGlobalVar.FormatPourcent, [R.NbAlbumsDedicace, MulDiv(R.NbAlbumsDedicace, 100, R.NbAlbums)]));
     Prn.NextLineFont(Prn.Columns[0].Font);
     Prn.NextLine;
     Prn.DrawLine(Prn.Detail.Left, Prn.GetYPosition, Prn.Detail.Left + Prn.Detail.Width, Prn.GetYPosition, 1, clBlack);
@@ -1500,7 +1499,7 @@ begin
 
       // ShowMessage(Format('W %d H %d', [Prn.MmsToPixelsHorizontal(Prn.Detail.Width), Prn.MmsToPixelsVertical(Prn.Detail.Height)]));
       ms := GetCouvertureStream(False, ID_Couverture, Prn.MmsToPixelsVertical(Prn.Detail.Height), Prn.MmsToPixelsHorizontal(Prn.Detail.Width),
-        TGlobalVar.Utilisateur.Options.AntiAliasing);
+        TGlobalVar.Options.AntiAliasing);
       if Assigned(ms) then
         try
           fWaiting.ShowProgression(rsTransImage + '...', epNext);
@@ -1556,7 +1555,7 @@ begin
 
       // ShowMessage(Format('W %d H %d', [Prn.MmsToPixelsHorizontal(Prn.Detail.Width), Prn.MmsToPixelsVertical(Prn.Detail.Height)]));
       ms := GetCouvertureStream(True, ID_Photo, Prn.MmsToPixelsVertical(Prn.Detail.Height), Prn.MmsToPixelsHorizontal(Prn.Detail.Width),
-        TGlobalVar.Utilisateur.Options.AntiAliasing);
+        TGlobalVar.Options.AntiAliasing);
       if Assigned(ms) then
         try
           fWaiting.ShowProgression(rsTransImage + '...', epNext);

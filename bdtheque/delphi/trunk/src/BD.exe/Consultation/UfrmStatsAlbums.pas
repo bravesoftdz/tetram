@@ -61,16 +61,16 @@ begin
   Result := TFrmStatsAlbums.Create(AOwner);
   Result.nb_Albums.Caption := IntToStr(Info.NbAlbums);
   Result.nb_Series.Caption := IntToStr(Info.NbSeries);
-  Result.AlbumsNB.Caption := Format(FormatPourcent, [Info.NbAlbumsNB, MulDiv(Info.NbAlbumsNB, 100, Info.NbAlbums)]);
-  Result.AlbumsVO.Caption := Format(FormatPourcent, [Info.NbAlbumsVO, MulDiv(Info.NbAlbumsVO, 100, Info.NbAlbums)]);
-  Result.AlbumsStock.Caption := Format(FormatPourcent, [Info.NbAlbumsStock, MulDiv(Info.NbAlbumsStock, 100, Info.NbAlbums)]);
-  Result.AlbumsIntegrales.Caption := Format(FormatPourcent, [Info.NbAlbumsIntegrale, MulDiv(Info.NbAlbumsIntegrale, 100, Info.NbAlbums)]);
-  Result.AlbumsHorsSerie.Caption := Format(FormatPourcent, [Info.NbAlbumsHorsSerie, MulDiv(Info.NbAlbumsHorsSerie, 100, Info.NbAlbums)]);
+  Result.AlbumsNB.Caption := Format(TGlobalVar.FormatPourcent, [Info.NbAlbumsNB, MulDiv(Info.NbAlbumsNB, 100, Info.NbAlbums)]);
+  Result.AlbumsVO.Caption := Format(TGlobalVar.FormatPourcent, [Info.NbAlbumsVO, MulDiv(Info.NbAlbumsVO, 100, Info.NbAlbums)]);
+  Result.AlbumsStock.Caption := Format(TGlobalVar.FormatPourcent, [Info.NbAlbumsStock, MulDiv(Info.NbAlbumsStock, 100, Info.NbAlbums)]);
+  Result.AlbumsIntegrales.Caption := Format(TGlobalVar.FormatPourcent, [Info.NbAlbumsIntegrale, MulDiv(Info.NbAlbumsIntegrale, 100, Info.NbAlbums)]);
+  Result.AlbumsHorsSerie.Caption := Format(TGlobalVar.FormatPourcent, [Info.NbAlbumsHorsSerie, MulDiv(Info.NbAlbumsHorsSerie, 100, Info.NbAlbums)]);
   Result.minannee.Caption := IntToStr(Info.MinAnnee);
   Result.maxannee.Caption := IntToStr(Info.MaxAnnee);
 
   for genre in Info.ListGenre do
-    Result.genre.Items.Add(Format('%s - ' + FormatPourcent, [genre.ChaineAffichage, genre.Quantite, MulDiv(genre.Quantite, 100, Info.NbAlbums)]));
+    Result.genre.Items.Add(Format('%s - ' + TGlobalVar.FormatPourcent, [genre.ChaineAffichage, genre.Quantite, MulDiv(genre.Quantite, 100, Info.NbAlbums)]));
 end;
 
 procedure TfrmStatsAlbums.genreDrawItem(Control: TWinControl; Index: Integer; Rect: TRect; State: TOwnerDrawState);

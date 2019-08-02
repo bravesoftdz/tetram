@@ -229,7 +229,7 @@ var
   i: Integer;
   ini: TIniFile;
 begin
-  ini := TIniFile.Create(FichierIni);
+  ini := TIniFile.Create(TGlobalVar.FichierIni);
   try
     case WindowState of
       wsMaximized:
@@ -421,7 +421,7 @@ begin
   boutons_16x16_norm.EndUpdate;
   boutons_16x16_hot.EndUpdate;
 
-  if TGlobalVar.Utilisateur.Options.GrandesIconesMenus then
+  if TGlobalVar.Options.GrandesIconesMenus then
     Menu.Images := boutons_32x32_hot
   else
     Menu.Images := boutons_16x16_hot;
@@ -440,11 +440,11 @@ begin
     frm.Free;
   end;
   if Assigned(FCurrentForm) and Assigned(FCurrentForm.Menu) then
-    if TGlobalVar.Utilisateur.Options.GrandesIconesMenus then
+    if TGlobalVar.Options.GrandesIconesMenus then
       FCurrentForm.Menu.Images := boutons_32x32_hot
     else
       FCurrentForm.Menu.Images := boutons_16x16_hot;
-  if TGlobalVar.Utilisateur.Options.GrandesIconesMenus then
+  if TGlobalVar.Options.GrandesIconesMenus then
     Menu.Images := boutons_32x32_hot
   else
     Menu.Images := boutons_16x16_hot;
@@ -624,7 +624,7 @@ begin
   for i := 0 to ToolBar1.ButtonCount - 1 do
     ToolBar1.Buttons[0].Free;
 
-  if TGlobalVar.Utilisateur.Options.GrandesIconesBarre then
+  if TGlobalVar.Options.GrandesIconesBarre then
   begin
     ToolBar1.Images := boutons_32x32_norm;
     ToolBar1.HotImages := boutons_32x32_hot;
@@ -667,7 +667,7 @@ end;
 
 procedure TfrmFond.CheminBaseExecute(Sender: TObject);
 begin
-  ShellExecute(Application.DialogHandle, nil, PChar('explorer.exe'), PChar('/select,' + DatabasePath), nil, SW_NORMAL);
+  ShellExecute(Application.DialogHandle, nil, PChar('explorer.exe'), PChar('/select,' + TGlobalVar.DatabasePath), nil, SW_NORMAL);
 end;
 
 procedure TfrmFond.LoadToolBarres;
@@ -675,9 +675,9 @@ var
   sl: TStringList;
   ini: TIniFile;
 begin
-  if TFile.Exists(FichierIni) then
+  if TFile.Exists(TGlobalVar.FichierIni) then
   begin
-    ini := TIniFile.Create(FichierIni);
+    ini := TIniFile.Create(TGlobalVar.FichierIni);
     sl := TStringList.Create;
     try
       ini.ReadSections(sl);
@@ -699,7 +699,7 @@ var
   i: Integer;
   ini: TIniFile;
 begin
-  ini := TIniFile.Create(FichierIni);
+  ini := TIniFile.Create(TGlobalVar.FichierIni);
   try
     ini.EraseSection('Barre');
     for i := 0 to Pred(FToolCurrent.Count) do
@@ -943,7 +943,7 @@ var
 begin
   if Assigned(MergedMenu) then
   begin
-    if TGlobalVar.Utilisateur.Options.GrandesIconesMenus then
+    if TGlobalVar.Options.GrandesIconesMenus then
       MergedMenu.Images := boutons_32x32_hot
     else
       MergedMenu.Images := boutons_16x16_hot;
@@ -1168,7 +1168,7 @@ var
   ini: TIniFile;
 begin
   inherited;
-  ini := TIniFile.Create(FichierIni);
+  ini := TIniFile.Create(TGlobalVar.FichierIni);
   try
     S := ini.ReadString('Options', 'WS', '');
   finally
@@ -1207,7 +1207,7 @@ begin
 
   // imlNotation_32x32.PngImages[Notation].PngImage.Draw(Canvas, Rect(aRect.Left, aRect.Top, aRect.Left + 16, aRect.Top + 16));
 
-  if not TGlobalVar.Utilisateur.Options.AfficheNoteListes then
+  if not TGlobalVar.Options.AfficheNoteListes then
     Exit;
 
   aRect.Left := aRect.Right - imgSize * 4 - 4;

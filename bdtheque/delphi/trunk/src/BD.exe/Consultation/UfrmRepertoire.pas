@@ -91,7 +91,7 @@ begin
   LightComboCheck1.OnChange := nil;
   LightComboCheck1.Value := -1;
   LightComboCheck1.OnChange := LightComboCheck1Change;
-  ini := TIniFile.Create(FichierIni);
+  ini := TIniFile.Create(TGlobalVar.FichierIni);
   try
     LightComboCheck1.Value := ini.ReadInteger('Options', 'GroupBy', 1);
   finally
@@ -154,7 +154,7 @@ var
   ini: TIniFile;
 begin
   ChangeAlbumMode(NewMode[LightComboCheck1.Value]);
-  ini := TIniFile.Create(FichierIni);
+  ini := TIniFile.Create(TGlobalVar.FichierIni);
   try
     ini.WriteInteger('Options', 'GroupBy', LightComboCheck1.Value);
   finally

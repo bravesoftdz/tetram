@@ -448,8 +448,8 @@ begin
         if (not pi.NewStockee) then
         begin // photos liées (q1)
           pi.OldNom := pi.NewNom;
-          pi.NewNom := SearchNewFileName(RepImages, ExtractFileName(pi.NewNom), True);
-          qry6.Params.ByNameAsString['chemin'] := RepImages;
+          pi.NewNom := SearchNewFileName(TGlobalVar.RepImages, ExtractFileName(pi.NewNom), True);
+          qry6.Params.ByNameAsString['chemin'] := TGlobalVar.RepImages;
           qry6.Params.ByNameAsString['fichier'] := pi.NewNom;
           Stream := GetJPEGStream(pi.OldNom, -1, -1, False);
           try
@@ -498,15 +498,15 @@ begin
               qry3.Params.ByNameAsString['pk'] := GUIDToString(pi.ID);
               qry3.Execute;
               if TPath.GetDirectoryName(pi.NewNom) = '' then
-                FichiersImages.Add(TPath.Combine(RepImages, pi.NewNom))
+                FichiersImages.Add(TPath.Combine(TGlobalVar.RepImages, pi.NewNom))
               else
                 FichiersImages.Add(pi.NewNom);
               pi.NewNom := TPath.GetFileNameWithoutExtension(pi.NewNom);
             end
             else
             begin // conversion photos stockées en liées
-              pi.NewNom := SearchNewFileName(RepImages, pi.NewNom + '.jpg', True);
-              qry6.Params.ByNameAsString['chemin'] := RepImages;
+              pi.NewNom := SearchNewFileName(TGlobalVar.RepImages, pi.NewNom + '.jpg', True);
+              qry6.Params.ByNameAsString['chemin'] := TGlobalVar.RepImages;
               qry6.Params.ByNameAsString['fichier'] := pi.NewNom;
               qry6.ParamsSetBlob('blobcontent', Stream);
               qry6.Open;

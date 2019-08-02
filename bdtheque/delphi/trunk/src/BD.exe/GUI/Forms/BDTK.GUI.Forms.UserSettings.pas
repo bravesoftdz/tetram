@@ -115,45 +115,43 @@ var
   i: Integer;
   qry: TManagedQuery;
 begin
-  if RepImages <> VDTButton1.Caption then
-    if MessageDlg
-      ('Vous avez choisi de modifier le répertoire de stockage des images.'#13'N''oubliez pas de déplacer les fichiers de l''ancien répertoire vers le nouveau.',
-      mtWarning, mbOKCancel, 0) = mrCancel then
+  if TGlobalVar.RepImages <> VDTButton1.Caption then
+    if MessageDlg('Vous avez choisi de modifier le répertoire de stockage des images.'#13'N''oubliez pas de déplacer les fichiers de l''ancien répertoire vers le nouveau.', mtWarning, mbOKCancel, 0) = mrCancel then
     begin
       ModalResult := mrNone;
       Exit;
     end;
 
-  TGlobalVar.Utilisateur.Options.SymboleMonnetaire := ComboBox1.Text;
-  TGlobalVar.Utilisateur.Options.ModeDemarrage := not OpenStart.Checked;
-  TGlobalVar.Utilisateur.Options.FicheAlbumWithCouverture := FicheAlbumCouverture.Checked;
-  TGlobalVar.Utilisateur.Options.FicheParaBDWithImage := FicheParaBDCouverture.Checked;
-  TGlobalVar.Utilisateur.Options.Images := CheckBox3.Checked;
-  RepImages := VDTButton1.Caption;
-  TGlobalVar.Utilisateur.Options.AntiAliasing := CheckBox5.Checked;
-  TGlobalVar.Utilisateur.Options.ImagesStockees := CheckBox2.Checked;
-  TGlobalVar.Utilisateur.Options.FormatTitreAlbum := LightComboCheck2.Value;
-  TGlobalVar.Utilisateur.Options.AvertirPret := CheckBox6.Checked;
-  TGlobalVar.Utilisateur.Options.GrandesIconesMenus := GrandesIconesMenu.Checked;
-  TGlobalVar.Utilisateur.Options.GrandesIconesBarre := Self.GrandesIconesBarre.Checked;
-  TGlobalVar.Utilisateur.Options.VerifMAJDelai := LightComboCheck1.Value;
-  TGlobalVar.Utilisateur.Options.SerieObligatoireAlbums := CheckBox7.Checked;
-  TGlobalVar.Utilisateur.Options.SerieObligatoireParaBD := CheckBox8.Checked;
-  TGlobalVar.Utilisateur.Options.AfficheNoteListes := AfficherNotesListes.Checked;
+  TGlobalVar.Options.SymboleMonnetaire := ComboBox1.Text;
+  TGlobalVar.Options.ModeDemarrage := not OpenStart.Checked;
+  TGlobalVar.Options.FicheAlbumWithCouverture := FicheAlbumCouverture.Checked;
+  TGlobalVar.Options.FicheParaBDWithImage := FicheParaBDCouverture.Checked;
+  TGlobalVar.Options.Images := CheckBox3.Checked;
+  TGlobalVar.RepImages := VDTButton1.Caption;
+  TGlobalVar.Options.AntiAliasing := CheckBox5.Checked;
+  TGlobalVar.Options.ImagesStockees := CheckBox2.Checked;
+  TGlobalVar.Options.FormatTitreAlbum := LightComboCheck2.Value;
+  TGlobalVar.Options.AvertirPret := CheckBox6.Checked;
+  TGlobalVar.Options.GrandesIconesMenus := GrandesIconesMenu.Checked;
+  TGlobalVar.Options.GrandesIconesBarre := Self.GrandesIconesBarre.Checked;
+  TGlobalVar.Options.VerifMAJDelai := LightComboCheck1.Value;
+  TGlobalVar.Options.SerieObligatoireAlbums := CheckBox7.Checked;
+  TGlobalVar.Options.SerieObligatoireParaBD := CheckBox8.Checked;
+  TGlobalVar.Options.AfficheNoteListes := AfficherNotesListes.Checked;
 
-  TGlobalVar.Utilisateur.Options.SiteWeb.Adresse := Edit2.Text;
-  TGlobalVar.Utilisateur.Options.SiteWeb.Cle := Edit3.Text;
-  TGlobalVar.Utilisateur.Options.SiteWeb.Modele := ComboBox4.Text;
-  TGlobalVar.Utilisateur.Options.SiteWeb.MySQLServeur := Edit4.Text;
-  TGlobalVar.Utilisateur.Options.SiteWeb.MySQLLogin := Edit5.Text;
-  TGlobalVar.Utilisateur.Options.SiteWeb.MySQLPassword := Edit7.Text;
-  TGlobalVar.Utilisateur.Options.SiteWeb.MySQLBDD := Edit8.Text;
-  TGlobalVar.Utilisateur.Options.SiteWeb.MySQLPrefix := Edit6.Text;
+  TGlobalVar.SiteWeb.Adresse := Edit2.Text;
+  TGlobalVar.SiteWeb.Cle := Edit3.Text;
+  TGlobalVar.SiteWeb.Modele := ComboBox4.Text;
+  TGlobalVar.SiteWeb.MySQLServeur := Edit4.Text;
+  TGlobalVar.SiteWeb.MySQLLogin := Edit5.Text;
+  TGlobalVar.SiteWeb.MySQLPassword := Edit7.Text;
+  TGlobalVar.SiteWeb.MySQLBDD := Edit8.Text;
+  TGlobalVar.SiteWeb.MySQLPrefix := Edit6.Text;
   if RadioButton5.Checked then
-    TGlobalVar.Utilisateur.Options.SiteWeb.BddVersion := ''
+    TGlobalVar.SiteWeb.BddVersion := ''
   else
-    TGlobalVar.Utilisateur.Options.SiteWeb.BddVersion := ComboBox5.Text;
-  TGlobalVar.Utilisateur.Options.SiteWeb.Paquets := StrToInt(ComboBox6.Text);
+    TGlobalVar.SiteWeb.BddVersion := ComboBox5.Text;
+  TGlobalVar.SiteWeb.Paquets := StrToInt(ComboBox6.Text);
 
   qry := dmPrinc.DBConnection.GetQuery;
   try
@@ -209,7 +207,7 @@ begin
     ComboBox5.Items.Insert(0, MySQLUpdate.Version);
   ComboBox5.ItemIndex := 0;
 
-  for fileName in TDirectory.GetFiles(RepWebServer,
+  for fileName in TDirectory.GetFiles(TGlobalVar.RepWebServer,
     function(const Path: string; const SearchRec: TSearchRec): Boolean
     begin
       Result := TPath.MatchesPattern(SearchRec.Name, '*.zip', False) or TPath.MatchesPattern(SearchRec.Name, '*.7z', False);
@@ -251,45 +249,45 @@ begin
     q.Free;
   end;
 
-  if ComboBox1.Items.IndexOf(TGlobalVar.Utilisateur.Options.SymboleMonnetaire) = -1 then
-    ComboBox1.Items.Add(TGlobalVar.Utilisateur.Options.SymboleMonnetaire);
+  if ComboBox1.Items.IndexOf(TGlobalVar.Options.SymboleMonnetaire) = -1 then
+    ComboBox1.Items.Add(TGlobalVar.Options.SymboleMonnetaire);
   if ComboBox1.Items.IndexOf(FormatSettings.CurrencyString) = -1 then
     ComboBox1.Items.Add(FormatSettings.CurrencyString);
 
-  ComboBox1.ItemIndex := ComboBox1.Items.IndexOf(TGlobalVar.Utilisateur.Options.SymboleMonnetaire);
-  OpenStart.Checked := not TGlobalVar.Utilisateur.Options.ModeDemarrage;
-  FicheAlbumCouverture.Checked := TGlobalVar.Utilisateur.Options.FicheAlbumWithCouverture;
-  FicheParaBDCouverture.Checked := TGlobalVar.Utilisateur.Options.FicheParaBDWithImage;
-  CheckBox3.Checked := TGlobalVar.Utilisateur.Options.Images;
-  VDTButton1.Caption := RepImages;
-  CheckBox5.Checked := TGlobalVar.Utilisateur.Options.AntiAliasing;
-  CheckBox2.Checked := TGlobalVar.Utilisateur.Options.ImagesStockees;
-  LightComboCheck2.Value := TGlobalVar.Utilisateur.Options.FormatTitreAlbum;
-  CheckBox5.Checked := TGlobalVar.Utilisateur.Options.AntiAliasing;
-  CheckBox6.Checked := TGlobalVar.Utilisateur.Options.AvertirPret;
-  GrandesIconesMenu.Checked := TGlobalVar.Utilisateur.Options.GrandesIconesMenus;
-  Self.GrandesIconesBarre.Checked := TGlobalVar.Utilisateur.Options.GrandesIconesBarre;
-  LightComboCheck1.Value := TGlobalVar.Utilisateur.Options.VerifMAJDelai;
-  CheckBox7.Checked := TGlobalVar.Utilisateur.Options.SerieObligatoireAlbums;
-  CheckBox8.Checked := TGlobalVar.Utilisateur.Options.SerieObligatoireParaBD;
-  AfficherNotesListes.Checked := TGlobalVar.Utilisateur.Options.AfficheNoteListes;
+  ComboBox1.ItemIndex := ComboBox1.Items.IndexOf(TGlobalVar.Options.SymboleMonnetaire);
+  OpenStart.Checked := not TGlobalVar.Options.ModeDemarrage;
+  FicheAlbumCouverture.Checked := TGlobalVar.Options.FicheAlbumWithCouverture;
+  FicheParaBDCouverture.Checked := TGlobalVar.Options.FicheParaBDWithImage;
+  CheckBox3.Checked := TGlobalVar.Options.Images;
+  VDTButton1.Caption := TGlobalVar.RepImages;
+  CheckBox5.Checked := TGlobalVar.Options.AntiAliasing;
+  CheckBox2.Checked := TGlobalVar.Options.ImagesStockees;
+  LightComboCheck2.Value := TGlobalVar.Options.FormatTitreAlbum;
+  CheckBox5.Checked := TGlobalVar.Options.AntiAliasing;
+  CheckBox6.Checked := TGlobalVar.Options.AvertirPret;
+  GrandesIconesMenu.Checked := TGlobalVar.Options.GrandesIconesMenus;
+  Self.GrandesIconesBarre.Checked := TGlobalVar.Options.GrandesIconesBarre;
+  LightComboCheck1.Value := TGlobalVar.Options.VerifMAJDelai;
+  CheckBox7.Checked := TGlobalVar.Options.SerieObligatoireAlbums;
+  CheckBox8.Checked := TGlobalVar.Options.SerieObligatoireParaBD;
+  AfficherNotesListes.Checked := TGlobalVar.Options.AfficheNoteListes;
 
-  Edit2.Text := TGlobalVar.Utilisateur.Options.SiteWeb.Adresse;
-  Edit3.Text := TGlobalVar.Utilisateur.Options.SiteWeb.Cle;
-  ComboBox4.ItemIndex := ComboBox4.Items.IndexOf(TGlobalVar.Utilisateur.Options.SiteWeb.Modele);
-  Edit4.Text := TGlobalVar.Utilisateur.Options.SiteWeb.MySQLServeur;
-  Edit5.Text := TGlobalVar.Utilisateur.Options.SiteWeb.MySQLLogin;
-  Edit7.Text := TGlobalVar.Utilisateur.Options.SiteWeb.MySQLPassword;
-  Edit8.Text := TGlobalVar.Utilisateur.Options.SiteWeb.MySQLBDD;
-  Edit6.Text := TGlobalVar.Utilisateur.Options.SiteWeb.MySQLPrefix;
-  if TGlobalVar.Utilisateur.Options.SiteWeb.BddVersion = '' then
+  Edit2.Text := TGlobalVar.SiteWeb.Adresse;
+  Edit3.Text := TGlobalVar.SiteWeb.Cle;
+  ComboBox4.ItemIndex := ComboBox4.Items.IndexOf(TGlobalVar.SiteWeb.Modele);
+  Edit4.Text := TGlobalVar.SiteWeb.MySQLServeur;
+  Edit5.Text := TGlobalVar.SiteWeb.MySQLLogin;
+  Edit7.Text := TGlobalVar.SiteWeb.MySQLPassword;
+  Edit8.Text := TGlobalVar.SiteWeb.MySQLBDD;
+  Edit6.Text := TGlobalVar.SiteWeb.MySQLPrefix;
+  if TGlobalVar.SiteWeb.BddVersion = '' then
     RadioButton5.Checked := True
   else
   begin
     RadioButton4.Checked := True;
-    ComboBox5.ItemIndex := ComboBox5.Items.IndexOf(TGlobalVar.Utilisateur.Options.SiteWeb.BddVersion);
+    ComboBox5.ItemIndex := ComboBox5.Items.IndexOf(TGlobalVar.SiteWeb.BddVersion);
   end;
-  ComboBox6.ItemIndex := ComboBox6.Items.IndexOf(IntToStr(TGlobalVar.Utilisateur.Options.SiteWeb.Paquets));
+  ComboBox6.ItemIndex := ComboBox6.Items.IndexOf(IntToStr(TGlobalVar.SiteWeb.Paquets));
 end;
 
 procedure TfrmOptions.Button2Click(Sender: TObject);
@@ -459,8 +457,8 @@ begin
   if not FileCtrl.SelectDirectory('Sélectionnez un répertoire dans lequel créer le site web', '', repSave, [sdNewUI, sdNewFolder, sdValidateDir], Self) then
     Exit;
 
-  ExtractArchive(RepWebServer + 'interface', repSave);
-  ExtractArchive(RepWebServer + TGlobalVar.Utilisateur.options.SiteWeb.Modele, repSave);
+  ExtractArchive(TGlobalVar.RepWebServer + 'interface', repSave);
+  ExtractArchive(TGlobalVar.RepWebServer + TGlobalVar.SiteWeb.Modele, repSave);
 
   sl := TStringList.Create;
   try

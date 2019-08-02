@@ -313,7 +313,7 @@ begin
     Couverture.Picture := nil;
     try
       TfrmConsole.AddEvent(UnitName, '> GetCouvertureStream');
-      ms := GetCouvertureStream(False, FCurrentEdition.Couvertures[Num].ID, Couverture.Height, Couverture.Width, TGlobalVar.Utilisateur.Options.AntiAliasing);
+      ms := GetCouvertureStream(False, FCurrentEdition.Couvertures[Num].ID, Couverture.Height, Couverture.Width, TGlobalVar.Options.AntiAliasing);
       TfrmConsole.AddEvent(UnitName, '< GetCouvertureStream');
 
       if Assigned(ms) then

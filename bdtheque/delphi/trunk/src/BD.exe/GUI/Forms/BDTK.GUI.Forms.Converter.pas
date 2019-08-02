@@ -55,16 +55,16 @@ begin
     q.SQL.Add('order by');
     q.SQL.Add('  case Monnaie1 when ? then Monnaie2 else Monnaie1 end');
     q.Prepare(True);
-    q.Params.AsString[0] := Copy(TGlobalVar.Utilisateur.Options.SymboleMonnetaire, 1, q.Params.MaxStrLen[0]);
-    q.Params.AsString[1] := Copy(TGlobalVar.Utilisateur.Options.SymboleMonnetaire, 1, q.Params.MaxStrLen[1]);
-    q.Params.AsString[2] := Copy(TGlobalVar.Utilisateur.Options.SymboleMonnetaire, 1, q.Params.MaxStrLen[2]);
+    q.Params.AsString[0] := Copy(TGlobalVar.Options.SymboleMonnetaire, 1, q.Params.MaxStrLen[0]);
+    q.Params.AsString[1] := Copy(TGlobalVar.Options.SymboleMonnetaire, 1, q.Params.MaxStrLen[1]);
+    q.Params.AsString[2] := Copy(TGlobalVar.Options.SymboleMonnetaire, 1, q.Params.MaxStrLen[2]);
     q.Open;
     i := 0;
     while not q.Eof do
     begin
       TDaoConversionLite.Fill(PC, q);
       fc := TframConvertisseur.Create(Self);
-      if PC.Monnaie1 = TGlobalVar.Utilisateur.Options.SymboleMonnetaire then
+      if PC.Monnaie1 = TGlobalVar.Options.SymboleMonnetaire then
       begin
         fc.Label1.Caption := PC.Monnaie2;
         fc.FTaux := 1 / PC.Taux;

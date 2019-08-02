@@ -299,7 +299,7 @@ var
   PrixCote: Currency;
   hg: IHourGlass;
 begin
-  if TGlobalVar.Utilisateur.Options.SerieObligatoireParaBD and IsEqualGUID(vtEditSeries.CurrentValue, GUID_NULL) then
+  if TGlobalVar.Options.SerieObligatoireParaBD and IsEqualGUID(vtEditSeries.CurrentValue, GUID_NULL) then
   begin
     AffMessage(rsSerieObligatoire, mtInformation, [mbOk], True);
     vtEditSeries.SetFocus;
@@ -403,7 +403,7 @@ procedure TfrmEditParaBD.ChoixImageClick(Sender: TObject);
 begin
   ChoixImageDialog.Options := ChoixImageDialog.Options + [ofAllowMultiSelect];
   ChoixImageDialog.Filter := GraphicFilter(TGraphic);
-  ChoixImageDialog.InitialDir := RepImages;
+  ChoixImageDialog.InitialDir := TGlobalVar.RepImages;
   ChoixImageDialog.FileName := '';
   if ChoixImageDialog.Execute then
     AddImageFiles(ChoixImageDialog.Files);
@@ -424,9 +424,9 @@ begin
     PP := FParaBD.Photos[Node.Index];
     hg := THourGlass.Create;
     if IsEqualGUID(PP.ID, GUID_NULL) then
-      ms := GetJPEGStream(PP.NewNom, imgVisu.Height, imgVisu.Width, TGlobalVar.Utilisateur.Options.AntiAliasing)
+      ms := GetJPEGStream(PP.NewNom, imgVisu.Height, imgVisu.Width, TGlobalVar.Options.AntiAliasing)
     else
-      ms := GetCouvertureStream(True, PP.ID, imgVisu.Height, imgVisu.Width, TGlobalVar.Utilisateur.Options.AntiAliasing);
+      ms := GetCouvertureStream(True, PP.ID, imgVisu.Height, imgVisu.Width, TGlobalVar.Options.AntiAliasing);
     if Assigned(ms) then
       try
         jpg := TJPEGImage.Create;
@@ -768,9 +768,9 @@ begin
   PP := FParaBD.Photos[vstImages.FocusedNode.Index];
   hg := THourGlass.Create;
   if IsEqualGUID(PP.ID, GUID_NULL) then
-    ms := GetJPEGStream(PP.NewNom, 400, 500, TGlobalVar.Utilisateur.Options.AntiAliasing)
+    ms := GetJPEGStream(PP.NewNom, 400, 500, TGlobalVar.Options.AntiAliasing)
   else
-    ms := GetCouvertureStream(True, PP.ID, 400, 500, TGlobalVar.Utilisateur.Options.AntiAliasing);
+    ms := GetCouvertureStream(True, PP.ID, 400, 500, TGlobalVar.Options.AntiAliasing);
   if Assigned(ms) then
     try
       jpg := TJPEGImage.Create;

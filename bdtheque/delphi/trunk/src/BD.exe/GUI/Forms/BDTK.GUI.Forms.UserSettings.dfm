@@ -405,6 +405,10 @@ object frmOptions: TfrmOptions
     object TabSheet2: TTabSheet
       Caption = 'Monnaies'
       ImageIndex = 1
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       DesignSize = (
         352
         330)
@@ -497,11 +501,9 @@ object frmOptions: TfrmOptions
           object Label10: TLabel
             Left = 2
             Top = 2
-            Width = 153
-            Height = 14
+            Width = 3
+            Height = 13
             Align = alClient
-            ExplicitWidth = 3
-            ExplicitHeight = 13
           end
         end
         inline Frame12: TframBoutons

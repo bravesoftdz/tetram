@@ -379,7 +379,7 @@ begin
   else
     AjoutString(sTome, NonZero(IntToStr(Tome)), ' - ', resTome[sAlbum = '']);
 
-  case TGlobalVar.Utilisateur.Options.FormatTitreAlbum of
+  case TGlobalVar.Options.FormatTitreAlbum of
     0: // Album (Serie - Tome)
       begin
         AjoutString(sSerie, sTome, ' - ');
@@ -430,7 +430,7 @@ end;
 
 function BDCurrencyToStr(const Value: Double): string;
 begin
-  Result := ICUCurrencyToStr(Value, uloc_getDefault, TGlobalVar.Utilisateur.Options.SymboleMonnetaire);
+  Result := ICUCurrencyToStr(Value, uloc_getDefault, TGlobalVar.Options.SymboleMonnetaire);
 end;
 
 function BDDoubleToStr(const Value: Double): string;
@@ -440,12 +440,12 @@ end;
 
 function BDStrToDouble(const Value: string): Double;
 begin
-  Result := ICUStrToDouble(StringReplace(Value, TGlobalVar.Utilisateur.Options.SymboleMonnetaire, '', []), uloc_getDefault);
+  Result := ICUStrToDouble(StringReplace(Value, TGlobalVar.Options.SymboleMonnetaire, '', []), uloc_getDefault);
 end;
 
 function BDStrToDoubleDef(const Value: string; const Default: Double): Double;
 begin
-  Result := ICUStrToDoubleDef(StringReplace(Value, TGlobalVar.Utilisateur.Options.SymboleMonnetaire, '', []), Default, uloc_getDefault);
+  Result := ICUStrToDoubleDef(StringReplace(Value, TGlobalVar.Options.SymboleMonnetaire, '', []), Default, uloc_getDefault);
 end;
 
 initialization

@@ -63,11 +63,11 @@ begin
 
   Result.nb_Albums.Caption := IntToStr(Info.NbAlbums);
   Result.nb_Series.Caption := IntToStr(Info.NbSeries);
-  Result.AlbumsNB.Caption := Format(FormatPourcent, [Info.NbAlbumsNB, MulDiv(Info.NbAlbumsNB, 100, Info.NbAlbums)]);
-  Result.AlbumsVO.Caption := Format(FormatPourcent, [Info.NbAlbumsVO, MulDiv(Info.NbAlbumsVO, 100, Info.NbAlbums)]);
-  Result.AlbumsStock.Caption := Format(FormatPourcent, [Info.NbAlbumsStock, MulDiv(Info.NbAlbumsStock, 100, Info.NbAlbums)]);
-  Result.AlbumsIntegrales.Caption := Format(FormatPourcent, [Info.NbAlbumsIntegrale, MulDiv(Info.NbAlbumsIntegrale, 100, Info.NbAlbums)]);
-  Result.AlbumsHorsSerie.Caption := Format(FormatPourcent, [Info.NbAlbumsHorsSerie, MulDiv(Info.NbAlbumsHorsSerie, 100, Info.NbAlbums)]);
+  Result.AlbumsNB.Caption := Format(TGlobalVar.FormatPourcent, [Info.NbAlbumsNB, MulDiv(Info.NbAlbumsNB, 100, Info.NbAlbums)]);
+  Result.AlbumsVO.Caption := Format(TGlobalVar.FormatPourcent, [Info.NbAlbumsVO, MulDiv(Info.NbAlbumsVO, 100, Info.NbAlbums)]);
+  Result.AlbumsStock.Caption := Format(TGlobalVar.FormatPourcent, [Info.NbAlbumsStock, MulDiv(Info.NbAlbumsStock, 100, Info.NbAlbums)]);
+  Result.AlbumsIntegrales.Caption := Format(TGlobalVar.FormatPourcent, [Info.NbAlbumsIntegrale, MulDiv(Info.NbAlbumsIntegrale, 100, Info.NbAlbums)]);
+  Result.AlbumsHorsSerie.Caption := Format(TGlobalVar.FormatPourcent, [Info.NbAlbumsHorsSerie, MulDiv(Info.NbAlbumsHorsSerie, 100, Info.NbAlbums)]);
 
   Result.PrixMoy.Caption := BDCurrencyToStr(Info.PrixAlbumMoyen);
 

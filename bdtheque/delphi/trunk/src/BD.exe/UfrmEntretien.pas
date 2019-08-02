@@ -104,7 +104,7 @@ var
   s: string;
   act: TContainedAction;
 begin
-  BDDOpen.Hint := DatabasePath;
+  BDDOpen.Hint := TGlobalVar.DatabasePath;
   vstEntretien.NodeDataSize := SizeOf(RActionNodeData);
   s := '';
   Node := nil;
@@ -252,7 +252,7 @@ begin
       UpdateQuery.Prepare(True);
       UpdateQuery.Params.AsString[0] := Copy(TPath.GetFileNameWithoutExtension(Fichier), 1, UpdateQuery.Params.MaxStrLen[0]);
       if TPath.GetDirectoryName(Fichier) = '' then
-        FichiersImages.Add(TPath.Combine(RepImages, Fichier))
+        FichiersImages.Add(TPath.Combine(TGlobalVar.RepImages, Fichier))
       else
         FichiersImages.Add(Fichier);
       Stream := GetCouvertureStream(False, StringToGUID(qry.Fields.AsString[0]), -1, -1, False);
@@ -324,8 +324,8 @@ begin
     qry.Open;
     while not qry.Eof do
     begin
-      Fichier := SearchNewFileName(RepImages, qry.Fields.AsString[1] + '.jpg', True);
-      ExtractQuery.Params.AsString[0] := Copy(RepImages, 1, ExtractQuery.Params.MaxStrLen[0]);
+      Fichier := SearchNewFileName(TGlobalVar.RepImages, qry.Fields.AsString[1] + '.jpg', True);
+      ExtractQuery.Params.AsString[0] := Copy(TGlobalVar.RepImages, 1, ExtractQuery.Params.MaxStrLen[0]);
       ExtractQuery.Params.AsString[1] := Copy(Fichier, 1, ExtractQuery.Params.MaxStrLen[1]);
       Stream := GetCouvertureStream(False, StringToGUID(qry.Fields.AsString[0]), -1, -1, False);
       try
@@ -347,7 +347,7 @@ begin
     end;
     qry.Transaction.Commit;
     fWaiting := nil;
-    ShowMessageFmt('%d Couvertures extraites sur %d à extraire.'#13#10'Répertoire de destination: %s', [nbExtrais, nbAExtraire, RepImages]);
+    ShowMessageFmt('%d Couvertures extraites sur %d à extraire.'#13#10'Répertoire de destination: %s', [nbExtrais, nbAExtraire, TGlobalVar.RepImages]);
   finally
     qry.Free;
     UpdateQuery.Free;
@@ -407,8 +407,8 @@ end;
 
 procedure TfrmEntretien.BDDBackupBeforeExecute(Sender: TObject);
 begin
-  BDDBackup.Dialog.InitialDir := TPath.GetDirectoryName(DatabasePath);
-  BDDBackup.Dialog.FileName := TPath.ChangeExtension(DatabasePath, '.gbk');
+  BDDBackup.Dialog.InitialDir := TPath.GetDirectoryName(TGlobalVar.DatabasePath);
+  BDDBackup.Dialog.FileName := TPath.ChangeExtension(TGlobalVar.DatabasePath, '.gbk');
 end;
 
 procedure TfrmEntretien.BDDBackupAccept(Sender: TObject);
@@ -418,8 +418,8 @@ end;
 
 procedure TfrmEntretien.BDDRestoreBeforeExecute(Sender: TObject);
 begin
-  BDDRestore.Dialog.InitialDir := TPath.GetDirectoryName(DatabasePath);
-  BDDRestore.Dialog.FileName := TPath.ChangeExtension(DatabasePath, '.gbk');
+  BDDRestore.Dialog.InitialDir := TPath.GetDirectoryName(TGlobalVar.DatabasePath);
+  BDDRestore.Dialog.FileName := TPath.ChangeExtension(TGlobalVar.DatabasePath, '.gbk');
 end;
 
 procedure TfrmEntretien.BDDRestoreAccept(Sender: TObject);
@@ -430,19 +430,19 @@ end;
 
 procedure TfrmEntretien.BDDOpenBeforeExecute(Sender: TObject);
 begin
-  BDDOpen.Dialog.InitialDir := TPath.GetDirectoryName(DatabasePath);
-  BDDOpen.Dialog.FileName := DatabasePath;
+  BDDOpen.Dialog.InitialDir := TPath.GetDirectoryName(TGlobalVar.DatabasePath);
+  BDDOpen.Dialog.FileName := TGlobalVar.DatabasePath;
 end;
 
 procedure TfrmEntretien.BDDOpenAccept(Sender: TObject);
 var
   ini: TIniFile;
 begin
-  DatabasePath := BDDOpen.Dialog.FileName;
-  BDDOpen.Hint := DatabasePath;
-  ini := TIniFile.Create(FichierIni);
+  TGlobalVar.DatabasePath := BDDOpen.Dialog.FileName;
+  BDDOpen.Hint := TGlobalVar.DatabasePath;
+  ini := TIniFile.Create(TGlobalVar.FichierIni);
   try
-    ini.WriteString('Database', 'Database', DatabasePath);
+    ini.WriteString('Database', 'Database', TGlobalVar.DatabasePath);
   finally
     ini.Free;
   end;

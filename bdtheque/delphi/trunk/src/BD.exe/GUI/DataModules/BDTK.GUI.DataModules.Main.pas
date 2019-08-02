@@ -70,7 +70,7 @@ type
   var
     Script: TUIBScript;
   begin
-    if (Version > CurrentVersion) and (Version <= TGlobalVar.Utilisateur.ExeVersion) then
+    if (Version > CurrentVersion) and (Version <= TGlobalVar.ExeVersion) then
     begin
       Affiche_act('Mise à jour ' + Version + '...');
       Script := TUIBScript.Create(nil);
@@ -143,10 +143,10 @@ begin
         // 335544855 = collation not installed
         if E.GDSCode = 335544855 then
         begin
-          backupFile := TPath.Combine(TempPath, 'bdtk-upgrade.fbk');
+          backupFile := TPath.Combine(TGlobalVar.TempPath, 'bdtk-upgrade.fbk');
           if TFile.Exists(backupFile) then
             TFile.Delete(backupFile);
-          TFile.Copy(DBConnection.GetDatabase.InfoDbFileName, TPath.Combine(TempPath, TPath.GetFileName(DBConnection.GetDatabase.InfoDbFileName)), True);
+          TFile.Copy(DBConnection.GetDatabase.InfoDbFileName, TPath.Combine(TGlobalVar.TempPath, TPath.GetFileName(DBConnection.GetDatabase.InfoDbFileName)), True);
           doBackup(backupFile);
           doRestore(backupFile);
         end
@@ -182,7 +182,7 @@ begin
 
   Msg := 'BDthèque ne peut pas utiliser cette base de données.'#13#10'Version de la base de données: ' + CurrentVersion;
 
-  if (CurrentVersion > ListFBUpdates.Last.Version) and (CurrentVersion > TGlobalVar.Utilisateur.ExeVersion) then
+  if (CurrentVersion > ListFBUpdates.Last.Version) and (CurrentVersion > TGlobalVar.ExeVersion) then
   begin
     ShowMessage('Base de données trop récente.'#13#10 + Msg);
     Exit;
@@ -351,21 +351,21 @@ end;
 procedure TdmPrinc.PrepareDBConnexion;
 begin
   DBConnection.GetDatabase.Connected := False;
-  DBConnection.GetDatabase.DatabaseName := DatabasePath;
-  DBConnection.GetDatabase.UserName := DatabaseUserName;
-  DBConnection.GetDatabase.PassWord := DatabasePassword;
-  DBConnection.GetDatabase.LibraryName := DataBaseLibraryName;
-  DBConnection.GetDatabase.Params.Values['sql_role_name'] := DatabaseRole;
+  DBConnection.GetDatabase.DatabaseName := TGlobalVar.DatabasePath;
+  DBConnection.GetDatabase.UserName := TGlobalVar.DatabaseUserName;
+  DBConnection.GetDatabase.PassWord := TGlobalVar.DatabasePassword;
+  DBConnection.GetDatabase.LibraryName := TGlobalVar.DataBaseLibraryName;
+  DBConnection.GetDatabase.Params.Values['sql_role_name'] := TGlobalVar.DatabaseRole;
 
-  UIBBackup.Database := DatabasePath;
-  UIBBackup.UserName := DatabaseUserName;
-  UIBBackup.PassWord := DatabasePassword;
-  UIBBackup.LibraryName := DataBaseLibraryName;
+  UIBBackup.Database := TGlobalVar.DatabasePath;
+  UIBBackup.UserName := TGlobalVar.DatabaseUserName;
+  UIBBackup.PassWord := TGlobalVar.DatabasePassword;
+  UIBBackup.LibraryName := TGlobalVar.DataBaseLibraryName;
 
-  UIBRestore.Database := DatabasePath;
-  UIBRestore.UserName := DatabaseUserName;
-  UIBRestore.PassWord := DatabasePassword;
-  UIBRestore.LibraryName := DataBaseLibraryName;
+  UIBRestore.Database := TGlobalVar.DatabasePath;
+  UIBRestore.UserName := TGlobalVar.DatabaseUserName;
+  UIBRestore.PassWord := TGlobalVar.DatabasePassword;
+  UIBRestore.LibraryName := TGlobalVar.DataBaseLibraryName;
 end;
 
 function TdmPrinc.CheckExeVersion(Force: Boolean): Boolean;
@@ -379,25 +379,25 @@ begin
   if Force then
     doVerif := True
   else
-    case TGlobalVar.Utilisateur.Options.VerifMAJDelai of
+    case TGlobalVar.Options.VerifMAJDelai of
       0: // jamais de verification
         doVerif := False;
       1: // à chaque démarrage
         doVerif := True;
       2: // une fois par jour
-        doVerif := DaysBetween(Now, TGlobalVar.Utilisateur.Options.LastVerifMAJ) > 0;
+        doVerif := DaysBetween(Now, TGlobalVar.Options.LastVerifMAJ) > 0;
       3: // une fois par semaine
-        doVerif := WeeksBetween(Now, TGlobalVar.Utilisateur.Options.LastVerifMAJ) > 0;
+        doVerif := WeeksBetween(Now, TGlobalVar.Options.LastVerifMAJ) > 0;
     else // une fois par mois
-      doVerif := MonthsBetween(Now, TGlobalVar.Utilisateur.Options.LastVerifMAJ) > 0;
+      doVerif := MonthsBetween(Now, TGlobalVar.Options.LastVerifMAJ) > 0;
     end;
 
   if not doVerif then
     Exit(False);
 
   try
-    Result := CheckVersionNet.CheckVersion('TetramCorpBDTheque', 'bdtheque', TGlobalVar.Utilisateur.ExeVersion, Force, not Force) = 1;
-    ini := TIniFile.Create(FichierIni);
+    Result := CheckVersionNet.CheckVersion('TetramCorpBDTheque', 'bdtheque', TGlobalVar.ExeVersion, Force, not Force) = 1;
+    ini := TIniFile.Create(TGlobalVar.FichierIni);
     try
       ini.WriteInteger('Divers', 'LastVerifMAJ', Trunc(Now));
     finally
@@ -442,7 +442,7 @@ begin
       GuidToOpen := StringToGUID(ParamValue);
     // je force en mode gestion quand on demande la création d'un nouvel élément
     // mais rien n'y oblige
-    if not TGlobalVar.Utilisateur.Options.ModeDemarrage or ForceGestion then
+    if not TGlobalVar.Options.ModeDemarrage or ForceGestion then
       ModeToOpen := fcModeGestion;
     Historique.AddWaiting(ModeToOpen);
     // if ModeToOpen <> fcModeScript then
@@ -481,7 +481,7 @@ var
   frmSplash: TfrmSplash;
 begin
   TGlobalVar.Mode_en_cours := mdLoad;
-  Application.Title := '© TeträmCorp ' + TitreApplication + ' ' + TGlobalVar.Utilisateur.AppVersion;
+  Application.Title := '© TeträmCorp ' + TitreApplication + ' ' + TGlobalVar.AppVersion;
   if not LongBool(CreateMutex(nil, True, 'TetramCorpBDMutex')) then
     RaiseLastOSError
   else if GetLastError = ERROR_ALREADY_EXISTS then

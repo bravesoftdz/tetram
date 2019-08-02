@@ -63,7 +63,7 @@ begin
 
   CheckBox1.OnClick := nil;
   CheckBox2.OnClick := nil;
-  ini := TIniFile.Create(FichierIni);
+  ini := TIniFile.Create(TGlobalVar.FichierIni);
   try
     CheckBox1.Checked := ini.ReadBool('Options', 'ManquantsIntegrales', True);
     CheckBox2.Checked := ini.ReadBool('Options', 'ManquantsAchats', True);
@@ -145,7 +145,7 @@ procedure TfrmSeriesIncompletes.CheckBox1Click(Sender: TObject);
 var
   ini: TIniFile;
 begin
-  ini := TIniFile.Create(FichierIni);
+  ini := TIniFile.Create(TGlobalVar.FichierIni);
   try
     ini.WriteBool('Options', 'ManquantsIntegrales', CheckBox1.Checked);
     ini.WriteBool('Options', 'ManquantsAchats', CheckBox2.Checked);

@@ -193,7 +193,7 @@ begin
     ImageParaBD.Picture := nil;
     try
       TfrmConsole.AddEvent(UnitName, '> GetCouvertureStream');
-      ms := GetCouvertureStream(True, FParaBD.Photos[Num].ID, ImageParaBD.Height, ImageParaBD.Width, TGlobalVar.Utilisateur.Options.AntiAliasing);
+      ms := GetCouvertureStream(True, FParaBD.Photos[Num].ID, ImageParaBD.Height, ImageParaBD.Width, TGlobalVar.Options.AntiAliasing);
       TfrmConsole.AddEvent(UnitName, '< GetCouvertureStream');
 
       if Assigned(ms) then
