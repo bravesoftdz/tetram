@@ -17,7 +17,6 @@ type
     ProcModifier: TActionGestionModif;
     ProcSupprimer: TActionGestionSupp;
     ProcAcheter: TActionGestionAchat;
-    ProcImporter, ProcExporter: Boolean;
     Filtre: string;
     DerniereRecherche: string;
   end;
@@ -25,7 +24,6 @@ type
   TfrmGestions = class(TbdtForm)
     Panel3: TPanel;
     VDTButton2: TVDTButton;
-    Bevel4: TBevel;
     ajouter: TVDTButton;
     modifier: TVDTButton;
     supprimer: TVDTButton;
@@ -49,8 +47,6 @@ type
     btParaBD: TVDTButton;
     btAchatsParaBD: TVDTButton;
     FrameRechercheRapide1: TFramRechercheRapide;
-    btExporter: TVDTButton;
-    btImporter: TVDTButton;
     procedure FormCreate(Sender: TObject);
     function GestionCourante(SB: TSpeedButton = nil): PInfo_Gestion;
     procedure ajouterClick(Sender: TObject);
@@ -60,7 +56,6 @@ type
     procedure VDTButton2Click(Sender: TObject);
     procedure ScanEditKeyPress(Sender: TObject; var Key: Char);
     procedure btAcheterClick(Sender: TObject);
-    procedure btImporterClick(Sender: TObject);
     procedure FrameRechercheRapide1edSearchChange(Sender: TObject);
   protected
   private
@@ -79,7 +74,7 @@ var
 implementation
 
 uses
-  BD.Utils.StrUtils, BD.Common, BD.Utils.GUIUtils, UfrmWizardImport, UHistorique;
+  BD.Utils.StrUtils, BD.Common, BD.Utils.GUIUtils, UHistorique;
 
 const
   HintListeAlbums = 'Liste des albums';
@@ -134,13 +129,6 @@ begin
   IG.Mode := Mode;
   IG.Filtre := Filtre;
   IG.ProcAcheter := Acheter;
-{$IFDEF RELEASE}
-  IG.ProcImporter := False;
-  IG.ProcExporter := False;
-{$ELSE}
-  IG.ProcImporter := Importer;
-  IG.ProcExporter := Exporter;
-{$ENDIF}
   IG.DerniereRecherche := '';
 end;
 
@@ -255,11 +243,6 @@ begin
   VirtualTreeView.Filtre := GestionCourante^.Filtre;
   VirtualTreeView.Mode := GestionCourante^.Mode;
   VirtualTreeView.Header.Columns.Clear;
-  btImporter.Enabled := GestionCourante^.ProcImporter;
-  btExporter.Enabled := GestionCourante^.ProcExporter;
-  Bevel4.Visible := btImporter.Enabled or btExporter.Enabled;
-  btImporter.Visible := Bevel4.Visible;
-  btExporter.Visible := Bevel4.Visible;
   btAcheter.Visible := Assigned(GestionCourante^.ProcAcheter);
   Bevel7.Visible := btAcheter.Visible;
   PrepareLV(Self);
@@ -283,18 +266,6 @@ end;
 procedure TfrmGestions.btAcheterClick(Sender: TObject);
 begin
   Historique.AddWaiting(fcGestionAchat, nil, nil, @GestionCourante^.ProcAcheter, VirtualTreeView);
-end;
-
-procedure TfrmGestions.btImporterClick(Sender: TObject);
-var
-  frm: TfrmWizardImport;
-begin
-  frm := TfrmWizardImport.Create(nil);
-  try
-    frm.ShowModal;
-  finally
-    frm.Free;
-  end;
 end;
 
 procedure TfrmGestions.FrameRechercheRapide1edSearchChange(Sender: TObject);

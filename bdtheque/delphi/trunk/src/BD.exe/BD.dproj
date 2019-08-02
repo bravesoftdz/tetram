@@ -292,10 +292,6 @@ $(PreBuildEvent)]]>
             <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="Updates\BDTK.Updates.pas"/>
-        <DCCReference Include="Gestion\UfrmWizardImport.pas">
-            <Form>frmWizardImport</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
         <DCCReference Include="Gestion\UImportXML.pas"/>
         <DCCReference Include="GUI\BDTK.GUI.Utils.pas"/>
         <DCCReference Include="UfrmChoixDetailSerie.pas">

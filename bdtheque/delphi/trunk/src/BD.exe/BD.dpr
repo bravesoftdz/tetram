@@ -53,7 +53,6 @@ uses
   UfrmSeriesIncompletes in 'Consultation\UfrmSeriesIncompletes.pas' {frmSeriesIncompletes},
   UfrmPrevisionAchats in 'Consultation\UfrmPrevisionAchats.pas' {frmPrevisionsAchats},
   BDTK.Updates in 'Updates\BDTK.Updates.pas',
-  UfrmWizardImport in 'Gestion\UfrmWizardImport.pas' {frmWizardImport},
   UImportXML in 'Gestion\UImportXML.pas',
   BDTK.GUI.Utils in 'GUI\BDTK.GUI.Utils.pas',
   UfrmChoixDetailSerie in 'UfrmChoixDetailSerie.pas' {frmChoixDetailSerie},
