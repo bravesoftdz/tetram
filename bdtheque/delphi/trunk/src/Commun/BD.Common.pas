@@ -150,7 +150,7 @@ begin
 
   InitPath;
   FFormatPourcent := '%d (%f%%)';
-  ExeVersion := GetFichierVersion(TPath.GetLibraryPath);
+  ExeVersion := GetFichierVersion(Application.ExeName);
   AppVersion := Format('%d.%d', [ExeVersion.MajorVersion, ExeVersion.MinorVersion]);
   ReadIniFile;
 end;
