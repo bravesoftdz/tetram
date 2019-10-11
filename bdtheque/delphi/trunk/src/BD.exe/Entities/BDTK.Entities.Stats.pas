@@ -11,7 +11,8 @@ type
     FNbAlbumsGratuit: Integer;
     FNbAlbumsNB: Integer;
     FPrixAlbumMaximun: Currency;
-    FPrixAlbumMoyen: Currency;
+    FPrixAlbumMoyenMoyenne: Currency;
+    FPrixAlbumMoyenMediane: Currency;
     FValeurConnue: Currency;
     FNbAlbumsIntegrale: Integer;
     FMaxAnnee: Integer;
@@ -20,7 +21,9 @@ type
     FNbSeries: Integer;
     FListEditeurs: TObjectList<TStats>;
     FPrixAlbumMinimun: Currency;
-    FValeurEstimee: Currency;
+    FValeurEstimeeMoyenne: Currency;
+    FValeurEstimeeMediane: Currency;
+    FValeurEstimeeRegression: Currency;
     FMinAnnee: Integer;
     FNbAlbumsOffert: Integer;
     FNbSeriesTerminee: Integer;
@@ -35,6 +38,7 @@ type
   strict private
     procedure CreateStats(Stats: TStats); overload;
     procedure CreateStats(Stats: TStats; const ID_Editeur: TGUID; const Editeur: string); overload;
+    function EstimationAlbumsSansPrixParRegression: Currency;
   public
     constructor Create; override;
     class function BuildStats(Complete: Boolean): TStats;
@@ -58,9 +62,12 @@ type
     property MaxAnnee: Integer read FMaxAnnee;
     property NbAlbumsSansPrix: Integer read FNbAlbumsSansPrix;
     property ValeurConnue: Currency read FValeurConnue;
-    property ValeurEstimee: Currency read FValeurEstimee;
+    property ValeurEstimeeMoyenne: Currency read FValeurEstimeeMoyenne;
+    property ValeurEstimeeMediane: Currency read FValeurEstimeeMediane;
+    property ValeurEstimeeRegression: Currency read FValeurEstimeeRegression;
     property PrixAlbumMinimun: Currency read FPrixAlbumMinimun;
-    property PrixAlbumMoyen: Currency read FPrixAlbumMoyen;
+    property PrixAlbumMoyenMoyenne: Currency read FPrixAlbumMoyenMoyenne;
+    property PrixAlbumMoyenMediane: Currency read FPrixAlbumMoyenMediane;
     property PrixAlbumMaximun: Currency read FPrixAlbumMaximun;
     property ListAlbumsMin: TObjectList<TAlbumLite> read FListAlbumsMin;
     property ListAlbumsMax: TObjectList<TAlbumLite> read FListAlbumsMax;
@@ -136,9 +143,34 @@ implementation
 
 uses
   BD.Utils.StrUtils, BD.Utils.GUIUtils, uib, BDTK.GUI.DataModules.Main, System.DateUtils, Divers, BDTK.Entities.Dao.Lite,
-  BD.Entities.Factory.Lite, BD.DB.Connection;
+  BD.Entities.Factory.Lite, BD.DB.Connection, System.Math,
+  xalglib, BD.Utils.RandomForest.Classes;
 
 { TStats }
+
+class function TStats.BuildStats(Complete: Boolean): TStats;
+begin
+  Result := Create;
+  Result.Fill(Complete);
+end;
+
+constructor TStats.Create;
+begin
+  inherited;
+  FListAlbumsMax := TObjectList<TAlbumLite>.Create;
+  FListAlbumsMin := TObjectList<TAlbumLite>.Create;
+  FListGenre := TObjectList<TGenreLite>.Create;
+  FListEditeurs := TObjectList<TStats>.Create;
+end;
+
+destructor TStats.Destroy;
+begin
+  FListAlbumsMax.Free;
+  FListAlbumsMin.Free;
+  FListGenre.Free;
+  FListEditeurs.Free;
+  inherited;
+end;
 
 procedure TStats.ResetInstance;
 begin
@@ -149,24 +181,9 @@ begin
   ListEditeurs.Clear;
 end;
 
-class function TStats.BuildStats(Complete: Boolean): TStats;
-begin
-  Result := Create;
-  Result.Fill(Complete);
-end;
-
 procedure TStats.CreateStats(Stats: TStats);
 begin
   CreateStats(Stats, GUID_NULL, '');
-end;
-
-constructor TStats.Create;
-begin
-  inherited;
-  FListAlbumsMax := TObjectList<TAlbumLite>.Create;
-  FListAlbumsMin := TObjectList<TAlbumLite>.Create;
-  FListGenre := TObjectList<TGenreLite>.Create;
-  FListEditeurs := TObjectList<TStats>.Create;
 end;
 
 procedure TStats.CreateStats(Stats: TStats; const ID_Editeur: TGUID; const Editeur: string);
@@ -290,12 +307,13 @@ begin
       q.SQL.Add('where id_editeur = ' + QuotedStr(GUIDToString(ID_Editeur)));
     q.Open;
     Stats.FValeurConnue := q.Fields.ByNameAsCurrency['sumprix'];
-    Stats.FPrixAlbumMoyen := 0;
+    Stats.FPrixAlbumMoyenMoyenne := 0;
+    Stats.FPrixAlbumMoyenMediane := 0;
     Stats.FPrixAlbumMinimun := 0;
     Stats.FPrixAlbumMaximun := 0;
     if not q.Eof and q.Fields.ByNameAsBoolean['countprix'] then
     begin
-      Stats.FPrixAlbumMoyen := q.Fields.ByNameAsCurrency['sumprix'] / q.Fields.ByNameAsInteger['countprix'];
+      Stats.FPrixAlbumMoyenMoyenne := q.Fields.ByNameAsCurrency['sumprix'] / q.Fields.ByNameAsInteger['countprix'];
       Stats.FPrixAlbumMinimun := q.Fields.ByNameAsCurrency['minprix'];
       Stats.FPrixAlbumMaximun := q.Fields.ByNameAsCurrency['maxprix'];
     end;
@@ -314,19 +332,198 @@ begin
     Stats.FNbAlbumsSansPrix := 0;
     if not q.Eof then
       Stats.FNbAlbumsSansPrix := q.Fields.ByNameAsInteger['countref'] - Stats.NbAlbumsGratuit;
-    Stats.FValeurEstimee := Stats.ValeurConnue + Stats.NbAlbumsSansPrix * Stats.PrixAlbumMoyen;
+
+    Stats.FValeurEstimeeRegression := Stats.ValeurConnue + Stats.EstimationAlbumsSansPrixParRegression; // calcule aussi la médiane
+
+    Stats.FValeurEstimeeMoyenne := Stats.ValeurConnue + Stats.NbAlbumsSansPrix * Stats.PrixAlbumMoyenMoyenne;
+    Stats.FValeurEstimeeMediane := Stats.ValeurConnue + Stats.NbAlbumsSansPrix * Stats.PrixAlbumMoyenMediane;
   finally
     q.Free;
   end;
 end;
 
-destructor TStats.Destroy;
+function TStats.EstimationAlbumsSansPrixParRegression: Currency;
+
+  function Percentile(const Valeurs: TVector; APercentile: Double): Currency;
+  var
+    p: Double;
+  begin
+    if not InRange(APercentile, 0, 1) then
+      Exit(NAN);
+
+    p := Length(Valeurs) * APercentile;
+    if IsZero(Frac(p)) then
+      Result := Valeurs[Trunc(p)]
+    else
+      Result := (Valeurs[Trunc(p)] + Valeurs[Ceil(p)]) / 2;
+  end;
+
+var
+  q: TManagedQuery;
+  Prix: TVector;
+  PrixCount: Integer;
+  Quartile25, Quartile75, ExtremeMin, ExtremeMax: Currency;
+
+  TrainingSet, EvaluationSet: TArray<TArray<Variant>>;
+  TrainingSetCount, EvaluationSetCount: Integer;
+  Ligne: ^TArray<Variant>;
+  i: Integer;
+  RFData: TRFData;
+  builder: Tdecisionforestbuilder;
+  data: TMatrix;
+  forest: Tdecisionforest;
+  rep: Tdfreport;
 begin
-  FListAlbumsMax.Free;
-  FListAlbumsMin.Free;
-  FListGenre.Free;
-  FListEditeurs.Free;
-  inherited;
+  Result := 0;
+  FPrixAlbumMoyenMediane := 0;
+
+  data := nil;
+
+  try
+    q := dmPrinc.DBConnection.GetQuery;
+    try
+      q.SQL.Add('select');
+      q.SQL.Add('  e.prix'); // prix doit être le dernier champ des set
+      q.SQL.Add('from');
+      q.SQL.Add('  editions e');
+      q.SQL.Add('  inner join albums a on');
+      q.SQL.Add('    e.id_album = a.id_album');
+      q.SQL.Add('where');
+      q.SQL.Add('  e.prix is not null');
+      q.SQL.Add('order by');
+      q.SQL.Add('  e.prix'); // /!\ important
+
+      try
+        SetLength(Prix, NbAlbums);
+        PrixCount := 0;
+        q.Open;
+        while not q.Eof do
+        begin
+          Prix[PrixCount] := q.Fields.AsCurrency[q.Fields.FieldCount - 1];
+          Inc(PrixCount);
+          q.Next;
+        end;
+        SetLength(Prix, PrixCount);
+
+        Quartile25 := Percentile(Prix, 0.25);
+        Quartile75 := Percentile(Prix, 0.75);
+        ExtremeMin := Quartile25 - (Quartile75 - Quartile25) * 1.5;
+        ExtremeMax := Quartile75 + (Quartile75 - Quartile25) * 1.5;
+
+        FPrixAlbumMoyenMediane := Percentile(Prix, 0.50);
+      finally
+        Prix := nil;
+      end;
+
+      q.SQL.Clear;
+      q.SQL.Add('select');
+      q.SQL.Add('  e.anneeedition, e.vo, e.couleur, e.etat, e.reliure, e.typeedition, e.dateachat, e.nombredepages, e.orientation, e.formatedition, e.senslecture,');
+      q.SQL.Add('  a.moisparution, a.anneeparution, a.tome, a.tomedebut, a.tomefin, a.horsserie, a.integrale,');
+      q.SQL.Add('  e.prix'); // prix doit être le dernier champ des set
+      q.SQL.Add('from');
+      q.SQL.Add('  editions e');
+      q.SQL.Add('  inner join albums a on');
+      q.SQL.Add('    e.id_album = a.id_album');
+      q.SQL.Add('where');
+      q.SQL.Add('  e.prix is null or e.prix between :extrememin and :extrememax');
+      q.Params.AsCurrency[0] := ExtremeMin;
+      q.Params.AsCurrency[1] := ExtremeMax;
+
+      SetLength(TrainingSet, NbAlbums);
+      TrainingSetCount := 0;
+      SetLength(EvaluationSet, NbAlbums);
+      EvaluationSetCount := 0;
+
+      q.Open;
+      while not q.Eof do
+      begin
+        if not q.Fields.IsNull[q.Fields.FieldCount - 1] then
+        begin
+          Ligne := @TrainingSet[TrainingSetCount];
+          Inc(TrainingSetCount);
+        end
+        else
+        begin
+          Ligne := @EvaluationSet[EvaluationSetCount];
+          Inc(EvaluationSetCount);
+        end;
+
+        SetLength(Ligne^, q.Fields.FieldCount);
+        for i := 0 to Pred(q.Fields.FieldCount) do
+          Ligne^[i] := q.Fields.AsVariant[i];
+
+        q.Next;
+      end;
+      SetLength(TrainingSet, TrainingSetCount);
+      SetLength(EvaluationSet, EvaluationSetCount);
+    finally
+      q.Free;
+    end;
+
+    if TrainingSetCount = 0 then
+      Exit;
+
+    builder := nil;
+    forest := nil;
+    RFData := TRFData.Create;
+    try
+      // ils doivent être dans le même ordre que les champs du training set donc de la requête
+      RFData.Criterias.Add(TRFCriteria.Create('ANNEEEDITION', -1));
+      RFData.Criterias.Add(TRFCriteria.Create('VO', -1));
+      RFData.Criterias.Add(TRFCriteria.Create('COULEUR', -1));
+      RFData.Criterias.Add(TRFNominalCriteria.Create('ETAT', [0, 100, 103, 105, 108, 110]));
+      RFData.Criterias.Add(TRFNominalCriteria.Create('RELIURE', [0, 200, 201]));
+      RFData.Criterias.Add(TRFNominalCriteria.Create('TYPEEDITION', [0, 301, 302, 303]));
+      RFData.Criterias.Add(TRFCriteria.Create('DATEACHAT', -1));
+      RFData.Criterias.Add(TRFCriteria.Create('NOMBREDEPAGES', -1));
+      RFData.Criterias.Add(TRFNominalCriteria.Create('ORIENTATION', [0, 401, 402]));
+      RFData.Criterias.Add(TRFNominalCriteria.Create('FORMATEDITION', [0, 501, 503, 504, 510]));
+      RFData.Criterias.Add(TRFNominalCriteria.Create('SENSLECTURE', [0, 801, 802]));
+      RFData.Criterias.Add(TRFCriteria.Create('MOISPARUTION', -1));
+      RFData.Criterias.Add(TRFCriteria.Create('ANNEEPARUTION', -1));
+      RFData.Criterias.Add(TRFCriteria.Create('TOME', -1));
+      RFData.Criterias.Add(TRFCriteria.Create('TOMEDEBUT', -1));
+      RFData.Criterias.Add(TRFCriteria.Create('TOMEFIN', -1));
+      RFData.Criterias.Add(TRFCriteria.Create('HORSSERIE', -1));
+      RFData.Criterias.Add(TRFCriteria.Create('INTEGRALE', -1));
+
+      RFData.Criterias.Add(TRFCriteria.Create('PRIX', NAN)); // Output
+
+      Assert(RFData.Criterias.Count = Length(TrainingSet[0]));
+
+      dfbuildercreate(builder);
+
+      dfbuildersetsubsampleratio(builder, 0.5); // use only 50% of the training set for each tree
+      dfbuildersetrdfsplitstrength(builder, 2); // strong split at the best point of the range
+      dfbuildersetrndvarsauto(builder); // use only sqrt(nvars) vars in the trees
+
+      try
+        // "data" contains needed ones only. Last col is the one to guess
+        data := RFData.GetDatas(TrainingSet);
+        dfbuildersetdataset(builder, data, Length(data), Length(data[0]) - 1, 1 { regression } );
+
+        dfbuilderbuildrandomforest(builder, 30, forest, rep); // 30 trees seems to be the least to have the minimum oob error
+      finally
+        data := nil;
+      end;
+
+      try
+        data := RFData.GetDatas(EvaluationSet);
+        // en dessous de 40000 lignes dans EvaluationSet, il semble qu'un traitement parallèle soit contre-performant
+        for i := Low(data) to High(data) do
+          Result := Result + dfprocess0(forest, TVector(data[i]));
+      finally
+        data := nil;
+      end;
+    finally
+      RFData.Free;
+      forest.Free;
+      builder.Free;
+    end;
+  finally
+    TrainingSet := nil;
+    EvaluationSet := nil;
+  end;
 end;
 
 procedure TStats.Fill(Complete: Boolean);

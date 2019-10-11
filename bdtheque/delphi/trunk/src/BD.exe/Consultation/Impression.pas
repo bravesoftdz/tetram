@@ -1072,12 +1072,12 @@ var
     end;
 
     Prn.WriteLineColumn(0, -2, rsValeurMoyenne + ' :');
-    Prn.WriteLineColumn(1, -2, BDCurrencyToStr(R.PrixAlbumMoyen));
+    Prn.WriteLineColumn(1, -2, BDCurrencyToStr(R.PrixAlbumMoyenMoyenne));
     Prn.WriteLineColumn(3, -2, BDCurrencyToStr(R.PrixAlbumMinimun) + ' < ' + rsTransPrix + ' < ' + BDCurrencyToStr(R.PrixAlbumMaximun));
     Prn.WriteLineColumn(2, -1, rsValeurConnue + ' :');
     Prn.WriteLineColumn(1, -2, BDCurrencyToStr(R.ValeurConnue));
     Prn.WriteLineColumn(2, -1, rsValeurEstimee + ' :');
-    Prn.WriteLineColumn(1, -2, BDCurrencyToStr(R.ValeurEstimee));
+    Prn.WriteLineColumn(1, -2, BDCurrencyToStr(R.ValeurEstimeeMoyenne));
 
     fWaiting.ShowProgression(Format('%s (%s %d)...', [rsTransEmprunteurs, rsTransPage, Prn.GetPageNumber]), epNext);
     Prn.Columns.Clear;

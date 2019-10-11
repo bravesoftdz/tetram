@@ -22,13 +22,7 @@ type
     AlbumsVO: TLabel;
     AlbumsStock: TLabel;
     PrixMoy: TLabel;
-    min_emprunteurs: TLabel;
-    max_emprunteurs: TLabel;
-    moy_emprunteurs: TLabel;
-    min_empruntee: TLabel;
-    max_empruntee: TLabel;
-    moy_empruntee: TLabel;
-    TotalEstime: TLabel;
+    TotalEstimeMoyenne: TLabel;
     TotalConnu: TLabel;
     PrixMax: TLabel;
     PrixMin: TLabel;
@@ -40,6 +34,13 @@ type
     AlbumsIntegrales: TLabel;
     Label6: TLabel;
     AlbumsHorsSerie: TLabel;
+    Label7: TLabel;
+    PrixMedian: TLabel;
+    Label10: TLabel;
+    TotalEstimeMediane: TLabel;
+    Label14: TLabel;
+    TotalEstimeRF: TLabel;
+    Label16: TLabel;
     procedure listeExit(Sender: TObject);
   private
     { Déclarations privées }
@@ -57,7 +58,7 @@ uses BD.Common, BD.Entities.Lite, Math, Divers, BD.Utils.StrUtils;
 
 function TStatsGeneralesCreate(AOwner: TComponent; Info: TStats): TFrmStatsGenerales;
 var
-  i: Integer;
+  maxWidth: Integer;
 begin
   Result := TFrmStatsGenerales.Create(AOwner);
 
@@ -69,17 +70,31 @@ begin
   Result.AlbumsIntegrales.Caption := Format(TGlobalVar.FormatPourcent, [Info.NbAlbumsIntegrale, MulDiv(Info.NbAlbumsIntegrale, 100, Info.NbAlbums)]);
   Result.AlbumsHorsSerie.Caption := Format(TGlobalVar.FormatPourcent, [Info.NbAlbumsHorsSerie, MulDiv(Info.NbAlbumsHorsSerie, 100, Info.NbAlbums)]);
 
-  Result.PrixMoy.Caption := BDCurrencyToStr(Info.PrixAlbumMoyen);
+  Result.PrixMoy.Caption := BDCurrencyToStr(Info.PrixAlbumMoyenMoyenne);
+  Result.PrixMedian.Caption := BDCurrencyToStr(Info.PrixAlbumMoyenMediane);
 
   Result.PrixMax.Caption := BDCurrencyToStr(Info.PrixAlbumMaximun);
   Result.PrixMin.Caption := BDCurrencyToStr(Info.PrixAlbumMinimun);
   Result.TotalConnu.Caption := BDCurrencyToStr(Info.ValeurConnue);
-  Result.TotalEstime.Caption := BDCurrencyToStr(Info.ValeurEstimee);
+  Result.TotalEstimeMoyenne.Caption := BDCurrencyToStr(Info.ValeurEstimeeMoyenne);
+  Result.TotalEstimeMediane.Caption := BDCurrencyToStr(Info.ValeurEstimeeMediane);
+  Result.TotalEstimeRF.Caption := BDCurrencyToStr(Info.ValeurEstimeeRegression);
 
-  i := Max(Result.TotalEstime.Left + Result.TotalEstime.Width, Result.TotalConnu.Left + Result.TotalConnu.Width);
-  Result.PrixMoy.Left := i - Result.PrixMoy.Width;
-  Result.TotalEstime.Left := i - Result.TotalEstime.Width;
-  Result.TotalConnu.Left := i - Result.TotalConnu.Width;
+  maxWidth := Result.TotalConnu.Left + Result.TotalConnu.Width;
+  maxWidth := Max(maxWidth, Result.PrixMoy.Left + Result.PrixMoy.Width);
+  maxWidth := Max(maxWidth, Result.PrixMedian.Left + Result.PrixMedian.Width);
+  maxWidth := Max(maxWidth, Result.TotalEstimeMoyenne.Left + Result.TotalEstimeMoyenne.Width);
+  maxWidth := Max(maxWidth, Result.TotalEstimeMediane.Left + Result.TotalEstimeMediane.Width);
+  maxWidth := Max(maxWidth, Result.TotalEstimeRF.Left + Result.TotalEstimeRF.Width);
+  Result.PrixMoy.Left := maxWidth - Result.PrixMoy.Width;
+  Result.PrixMedian.Left := maxWidth - Result.PrixMedian.Width;
+  Result.TotalEstimeMoyenne.Left := maxWidth - Result.TotalEstimeMoyenne.Width;
+  Result.Label10.Left := Result.TotalEstimeMoyenne.Left + Result.TotalEstimeMoyenne.Width + 8;
+  Result.TotalEstimeMediane.Left := maxWidth - Result.TotalEstimeMediane.Width;
+  Result.Label14.Left := Result.TotalEstimeMediane.Left + Result.TotalEstimeMediane.Width + 8;
+  Result.TotalEstimeRF.Left := maxWidth - Result.TotalEstimeRF.Width;
+  Result.Label16.Left := Result.TotalEstimeRF.Left + Result.TotalEstimeRF.Width + 8;
+  Result.TotalConnu.Left := maxWidth - Result.TotalConnu.Width;
 end;
 
 procedure TfrmStatsGenerales.listeExit(Sender: TObject);

@@ -56,7 +56,7 @@
         <DCC_Namespace>System;Xml;Data;Datasnap;Web;Soap;Vcl;Vcl.Imaging;Vcl.Touch;Vcl.Samples;Vcl.Shell;$(DCC_Namespace)</DCC_Namespace>
         <DCC_SYMBOL_PLATFORM>false</DCC_SYMBOL_PLATFORM>
         <DCC_UNIT_PLATFORM>false</DCC_UNIT_PLATFORM>
-        <DCC_UnitSearchPath>..\..\..\..\..\libs\delphi\fastmm;..\..\..\..\..\libs\delphi\Perso;..\..\..\..\..\libs\delphi\Perso\icu;..\..\..\..\..\libs\delphi\Perso\icu\lib;..\..\..\..\..\libs\delphi\pngcomponents\source;..\..\..\..\..\libs\delphi\uib\source;..\..\..\..\..\libs\delphi\virtual-treeview\source;..\..\..\..\..\libs\delphi\graphics32\source;..\..\..\..\..\libs\delphi\dwscript\source;..\..\..\..\..\libs\delphi\ics\source;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
+        <DCC_UnitSearchPath>..\..\..\..\..\libs\delphi\fastmm;..\..\..\..\..\libs\delphi\Perso;..\..\..\..\..\libs\delphi\Perso\icu;..\..\..\..\..\libs\delphi\Perso\icu\lib;..\..\..\..\..\libs\delphi\pngcomponents\source;..\..\..\..\..\libs\delphi\uib\source;..\..\..\..\..\libs\delphi\virtual-treeview\source;..\..\..\..\..\libs\delphi\graphics32\source;..\..\..\..\..\libs\delphi\dwscript\source;..\..\..\..\..\libs\delphi\ics\source;..\..\..\..\..\libs\delphi\alglib\delphi\wrapper;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
         <DCC_WriteableConstants>true</DCC_WriteableConstants>
         <Manifest_File>$(BDS)\bin\default_app.manifest</Manifest_File>
         <PostBuildEvent>
@@ -429,6 +429,7 @@ $(PreBuildEvent)]]>
         <DCCReference Include="GUI\Controls\BDTK.GUI.Controls.Spin.pas"/>
         <DCCReference Include="Updates\BDTK.Updates.v2_2_3_33.pas"/>
         <DCCReference Include="..\Commun\Utils\BD.Utils.IOUtils.pas"/>
+        <DCCReference Include="..\Commun\Utils\BD.Utils.RandomForest.Classes.pas"/>
         <RcItem Include="..\Commun\Resources\network.png">
             <ResourceType>RCDATA</ResourceType>
             <ResourceId>BT_LINK</ResourceId>

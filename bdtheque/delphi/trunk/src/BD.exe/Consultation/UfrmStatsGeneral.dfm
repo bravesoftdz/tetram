@@ -6,7 +6,7 @@ object frmStatsGenerales: TfrmStatsGenerales
   BorderIcons = []
   BorderStyle = bsDialog
   Caption = 'Informations sur la BDth'#232'que'
-  ClientHeight = 175
+  ClientHeight = 243
   ClientWidth = 504
   Color = clWhite
   Font.Charset = ANSI_CHARSET
@@ -30,7 +30,7 @@ object frmStatsGenerales: TfrmStatsGenerales
     Left = 0
     Top = 81
     Width = 504
-    Height = 64
+    Height = 127
     Align = alTop
     Shape = bsBottomLine
   end
@@ -109,7 +109,7 @@ object frmStatsGenerales: TfrmStatsGenerales
   end
   object Label12: TLabel
     Left = 50
-    Top = 107
+    Top = 135
     Width = 86
     Height = 15
     Alignment = taRightJustify
@@ -125,7 +125,7 @@ object frmStatsGenerales: TfrmStatsGenerales
   end
   object Label13: TLabel
     Left = 47
-    Top = 121
+    Top = 149
     Width = 89
     Height = 15
     Alignment = taRightJustify
@@ -204,87 +204,9 @@ object frmStatsGenerales: TfrmStatsGenerales
     ParentFont = False
     Transparent = True
   end
-  object min_emprunteurs: TLabel
-    Left = 433
-    Top = 185
-    Width = 3
-    Height = 15
-    Font.Charset = ANSI_CHARSET
-    Font.Color = clBlue
-    Font.Height = -13
-    Font.Name = 'Times New Roman'
-    Font.Style = []
-    ParentFont = False
-    Transparent = True
-  end
-  object max_emprunteurs: TLabel
-    Left = 433
-    Top = 164
-    Width = 3
-    Height = 15
-    Font.Charset = ANSI_CHARSET
-    Font.Color = clBlue
-    Font.Height = -13
-    Font.Name = 'Times New Roman'
-    Font.Style = []
-    ParentFont = False
-    Transparent = True
-  end
-  object moy_emprunteurs: TLabel
-    Left = 433
-    Top = 149
-    Width = 3
-    Height = 15
-    Font.Charset = ANSI_CHARSET
-    Font.Color = clBlue
-    Font.Height = -13
-    Font.Name = 'Times New Roman'
-    Font.Style = []
-    ParentFont = False
-    Transparent = True
-  end
-  object min_empruntee: TLabel
-    Left = 433
-    Top = 251
-    Width = 3
-    Height = 15
-    Font.Charset = ANSI_CHARSET
-    Font.Color = clBlue
-    Font.Height = -13
-    Font.Name = 'Times New Roman'
-    Font.Style = []
-    ParentFont = False
-    Transparent = True
-  end
-  object max_empruntee: TLabel
-    Left = 433
-    Top = 230
-    Width = 3
-    Height = 15
-    Font.Charset = ANSI_CHARSET
-    Font.Color = clBlue
-    Font.Height = -13
-    Font.Name = 'Times New Roman'
-    Font.Style = []
-    ParentFont = False
-    Transparent = True
-  end
-  object moy_empruntee: TLabel
-    Left = 433
-    Top = 215
-    Width = 3
-    Height = 15
-    Font.Charset = ANSI_CHARSET
-    Font.Color = clBlue
-    Font.Height = -13
-    Font.Name = 'Times New Roman'
-    Font.Style = []
-    ParentFont = False
-    Transparent = True
-  end
-  object TotalEstime: TLabel
+  object TotalEstimeMoyenne: TLabel
     Left = 141
-    Top = 121
+    Top = 149
     Width = 3
     Height = 15
     Font.Charset = ANSI_CHARSET
@@ -297,7 +219,7 @@ object frmStatsGenerales: TfrmStatsGenerales
   end
   object TotalConnu: TLabel
     Left = 141
-    Top = 107
+    Top = 135
     Width = 3
     Height = 15
     Font.Charset = ANSI_CHARSET
@@ -410,9 +332,85 @@ object frmStatsGenerales: TfrmStatsGenerales
     ParentFont = False
     Transparent = True
   end
+  object Label7: TLabel
+    Left = 73
+    Top = 102
+    Width = 62
+    Height = 15
+    Alignment = taRightJustify
+    Caption = 'Prix m'#233'dian :'
+    ShowAccelChar = False
+    Transparent = True
+  end
+  object PrixMedian: TLabel
+    Left = 141
+    Top = 102
+    Width = 3
+    Height = 15
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clBlue
+    Font.Height = -13
+    Font.Name = 'Times New Roman'
+    Font.Style = []
+    ParentFont = False
+    Transparent = True
+  end
+  object Label10: TLabel
+    Left = 217
+    Top = 149
+    Width = 55
+    Height = 15
+    Caption = '(Moyenne)'
+    ShowAccelChar = False
+    Transparent = True
+  end
+  object TotalEstimeMediane: TLabel
+    Left = 141
+    Top = 164
+    Width = 3
+    Height = 15
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clBlue
+    Font.Height = -13
+    Font.Name = 'Times New Roman'
+    Font.Style = []
+    ParentFont = False
+    Transparent = True
+  end
+  object Label14: TLabel
+    Left = 222
+    Top = 164
+    Width = 50
+    Height = 15
+    Caption = '(M'#233'diane)'
+    ShowAccelChar = False
+    Transparent = True
+  end
+  object TotalEstimeRF: TLabel
+    Left = 141
+    Top = 179
+    Width = 3
+    Height = 15
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clBlue
+    Font.Height = -13
+    Font.Name = 'Times New Roman'
+    Font.Style = []
+    ParentFont = False
+    Transparent = True
+  end
+  object Label16: TLabel
+    Left = 116
+    Top = 179
+    Width = 156
+    Height = 15
+    Caption = '(R'#233'gression par Random Forest)'
+    ShowAccelChar = False
+    Transparent = True
+  end
   object fermer: TButton
     Left = 216
-    Top = 151
+    Top = 214
     Width = 72
     Height = 21
     Cursor = crHandPoint

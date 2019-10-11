@@ -172,7 +172,8 @@ uses
   BD.GUI.DataModules.Common in '..\Commun\GUI\DataModules\BD.GUI.DataModules.Common.pas' {dmCommon: TDataModule},
   BDTK.GUI.Controls.Spin in 'GUI\Controls\BDTK.GUI.Controls.Spin.pas',
   BDTK.Updates.v2_2_3_33 in 'Updates\BDTK.Updates.v2_2_3_33.pas',
-  BD.Utils.IOUtils in '..\Commun\Utils\BD.Utils.IOUtils.pas';
+  BD.Utils.IOUtils in '..\Commun\Utils\BD.Utils.IOUtils.pas',
+  BD.Utils.RandomForest.Classes in '..\Commun\Utils\BD.Utils.RandomForest.Classes.pas';
 
 begin
   Application.Title := 'BDthèque';
