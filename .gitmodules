@@ -68,3 +68,7 @@
 	path = libs/delphi/alglib
 	url = https://github.com/Tetram76/vendors.git
 	branch = alglib
+[submodule "libs/delphi/CEF4Delphi"]
+	path = libs/delphi/CEF4Delphi
+	url = https://github.com/Tetram76/vendors.git
+	branch = CEF4Delphi
