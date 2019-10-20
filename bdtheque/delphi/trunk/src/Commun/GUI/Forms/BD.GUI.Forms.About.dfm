@@ -313,7 +313,7 @@ object frmAboutBox: TfrmAboutBox
   end
   object VlCopyright: TfshVersionLabel
     Left = 303
-    Top = 66
+    Top = 82
     Width = 55
     Height = 13
     Caption = 'VlCopyright'
@@ -334,7 +334,7 @@ object frmAboutBox: TfrmAboutBox
   end
   object LbMemoireLibre: TLabel
     Left = 310
-    Top = 171
+    Top = 139
     Width = 64
     Height = 11
     Margins.Top = 2
@@ -349,7 +349,7 @@ object frmAboutBox: TfrmAboutBox
   end
   object LbMemoirePhysique: TLabel
     Left = 310
-    Top = 158
+    Top = 126
     Width = 83
     Height = 11
     Margins.Top = 2
@@ -365,7 +365,7 @@ object frmAboutBox: TfrmAboutBox
   object Label2: TLabel
     AlignWithMargins = True
     Left = 303
-    Top = 145
+    Top = 113
     Width = 42
     Height = 11
     Margins.Top = 2
@@ -378,40 +378,9 @@ object frmAboutBox: TfrmAboutBox
     ParentFont = False
     Transparent = True
   end
-  object Label3: TLabel
-    Left = 303
-    Top = 100
-    Width = 43
-    Height = 11
-    Caption = 'Syst'#232'me :'
-    Font.Charset = ANSI_CHARSET
-    Font.Color = clBlack
-    Font.Height = -9
-    Font.Name = 'Tahoma'
-    Font.Style = []
-    ParentFont = False
-    Transparent = True
-  end
-  object LbSysteme: TLabel
-    Left = 310
-    Top = 114
-    Width = 174
-    Height = 28
-    Margins.Top = 2
-    AutoSize = False
-    Caption = 'LbSysteme'
-    Font.Charset = ANSI_CHARSET
-    Font.Color = clBlack
-    Font.Height = -9
-    Font.Name = 'Tahoma'
-    Font.Style = []
-    ParentFont = False
-    Transparent = True
-    WordWrap = True
-  end
   object LbMemoireVirtuelle: TLabel
     Left = 310
-    Top = 184
+    Top = 152
     Width = 79
     Height = 11
     Margins.Top = 2
@@ -426,7 +395,7 @@ object frmAboutBox: TfrmAboutBox
   end
   object LbMemoireVirtuelleDisponible: TLabel
     Left = 310
-    Top = 197
+    Top = 165
     Width = 121
     Height = 11
     Margins.Top = 2
@@ -438,6 +407,28 @@ object frmAboutBox: TfrmAboutBox
     Font.Style = []
     ParentFont = False
     Transparent = True
+  end
+  object VlFullVersion: TfshVersionLabel
+    Left = 303
+    Top = 60
+    Width = 186
+    Height = 16
+    AutoSize = False
+    Caption = 'VlFullVersion'
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clBlack
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+    Transparent = True
+    VersionResource = vrFileVersion
+    VersionResourceKey = 'FileVersion'
+    InfoPrefix = 'Version de fichier:'
+    ShowInfoPrefix = True
+    LangCharset = '-1'
+    DateTimeFormat = 'dd/MM/yyyy'
+    FileSizeFormat = '#,#0" Bytes"'
   end
   object BtnOk: TButton
     Left = 202
