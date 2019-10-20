@@ -409,7 +409,12 @@ begin
     try
       q.SQL.Text := 'select ' + vmModeInfos[FMode].FIELDS + ' from ' + vmModeInfos[FMode].Filtre;
       q.Prepare(True);
-      q.Params.AsString[0] := Copy(FCountPointers[Node.Index].sValue, 1, q.Params.MaxStrLen[0]);
+      case q.Params.FieldType[0] of
+        uftChar, uftVarchar, uftCstring:
+          q.Params.AsString[0] := Copy(FCountPointers[Node.Index].sValue, 1, q.Params.MaxStrLen[0]);
+        uftSmallint:
+          q.Params.AsSmallint[0] := FCountPointers[Node.Index].sValue.ToInteger;
+      end;
       if FUseFiltre then
         q.Params.AsString[1] := Copy(FFiltre, 1, q.Params.MaxStrLen[1])
       else if FUseDefaultFiltre and (vmModeInfos[FMode].DEFAULTFILTRE <> '') then
