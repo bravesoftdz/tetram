@@ -92,6 +92,33 @@ var
   FSortColumn: Integer;
   FSortDirection: TSortDirection;
 
+function AlbumCompare(const Left, Right: TAlbumLite): Integer;
+begin
+  case FSortColumn of
+    0:
+      if not TAlbumLite(Left).Titre.IsEmpty and not TAlbumLite(Right).Titre.IsEmpty then
+        Result := CompareText(TAlbumLite(Left).Titre, TAlbumLite(Right).Titre)
+      else if not TAlbumLite(Left).Titre.IsEmpty and TAlbumLite(Right).Titre.IsEmpty then
+        Result := CompareText(TAlbumLite(Left).Titre, TAlbumLite(Right).Serie)
+      else if TAlbumLite(Left).Titre.IsEmpty and not TAlbumLite(Right).Titre.IsEmpty then
+        Result := CompareText(TAlbumLite(Left).Serie, TAlbumLite(Right).Titre)
+      else
+        Result := CompareText(TAlbumLite(Left).Serie, TAlbumLite(Right).Serie);
+    1:
+      Result := CompareValue(TAlbumLite(Left).Tome, TAlbumLite(Right).Tome);
+    2:
+      begin
+        Result := CompareText(TAlbumLite(Left).Serie, TAlbumLite(Right).Serie);
+        if Result = 0 then
+          Result := CompareValue(TAlbumLite(Left).Tome, TAlbumLite(Right).Tome);
+      end;
+  else
+    Result := 0;
+  end;
+  if FSortDirection = sdDescending then
+    Result := -Result;
+end;
+
 procedure TfrmRecherche.FormCreate(Sender: TObject);
 var
   hg: IHourGlass;
@@ -235,8 +262,6 @@ end;
 
 procedure TfrmRecherche.SetTypeRecherche(Value: TTypeRecherche);
 begin
-  FSortColumn := 2;
-  FSortDirection := sdDescending;
   VTResult.Header.Columns[0].ImageIndex := -1;
   VTResult.Header.Columns[1].ImageIndex := -1;
   VTResult.Header.Columns[2].ImageIndex := -1;
@@ -271,6 +296,7 @@ begin
     lbResult.Caption := '';
 
     Recherche.Fill(TRechercheSimple(LightComboCheck1.Value), vtPersonnes.CurrentValue, vtPersonnes.Caption);
+    Recherche.Resultats.Sort(TComparer<TAlbumLite>.Construct(AlbumCompare));
 
     TypeRecherche := Recherche.TypeRecherche;
 
@@ -395,7 +421,7 @@ begin
   if TextType = ttNormal then
     case Column of
       0:
-        CellText := FormatTitre(Recherche.Resultats[Node.Index].Titre);
+        CellText := Recherche.Resultats[Node.Index].ChaineAffichage(Recherche.Resultats[Node.Index].Titre.IsEmpty);
       1:
         CellText := NonZero(IntToStr(Recherche.Resultats[Node.Index].Tome));
       2:
@@ -415,36 +441,8 @@ begin
     TargetCanvas.Font.Style := TargetCanvas.Font.Style + [fsItalic];
 end;
 
-type
-  TAlbumCompare = class(TComparer<TAlbumLite>)
-    function Compare(const Left, Right: TAlbumLite): Integer; override;
-  end;
-
-function TAlbumCompare.Compare(const Left, Right: TAlbumLite): Integer;
-begin
-  case FSortColumn of
-    0:
-      Result := CompareText(TAlbumLite(Left).Titre, TAlbumLite(Right).Titre);
-    1:
-      Result := CompareValue(TAlbumLite(Left).Tome, TAlbumLite(Right).Tome);
-    2:
-      begin
-        Result := CompareText(TAlbumLite(Left).Serie, TAlbumLite(Right).Serie);
-        if Result = 0 then
-          Result := CompareValue(TAlbumLite(Left).Tome, TAlbumLite(Right).Tome);
-      end;
-  else
-    Result := 0;
-  end;
-  if FSortDirection = sdDescending then
-    Result := -Result;
-end;
-
 procedure TfrmRecherche.VTResultHeaderClick(Sender: TVTHeader; HitInfo: TVTHeaderHitInfo);
 begin
-  // attention: resultatsinfos n'est pas trié!!!!
-  Exit;
-
   if HitInfo.Column <> FSortColumn then
     FSortDirection := sdAscending
   else if FSortDirection = sdAscending then
@@ -459,7 +457,7 @@ begin
   else
     VTResult.Header.Columns[FSortColumn].ImageIndex := 1;
   VTResult.Header.SortColumn := FSortColumn;
-  Recherche.Resultats.Sort(TAlbumCompare.Create);
+  Recherche.Resultats.Sort(TComparer<TAlbumLite>.Construct(AlbumCompare));
   VTResult.ReinitNode(VTResult.RootNode, True);
   VTResult.Invalidate;
   VTResult.Refresh;
@@ -601,5 +599,9 @@ begin
   Modif.Enabled := Assigned(Node);
   moins.Enabled := Assigned(Node);
 end;
+
+initialization
+  FSortColumn := 2;
+  FSortDirection := sdDescending;
 
 end.
