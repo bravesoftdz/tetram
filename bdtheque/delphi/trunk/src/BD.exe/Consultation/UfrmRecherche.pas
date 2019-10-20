@@ -504,12 +504,12 @@ procedure TfrmRecherche.LoadRechFromStream(Stream: TStream);
     Node: TTreeNode;
     SousCritere: TBaseCritere;
   begin
-    Node := TreeView1.Items.AddChildObject(AParentNode, methode.Items[Integer(ACritere.GroupOption)], ACritere);
+    Node := TreeView1.Items.AddChildObject(AParentNode, '', ACritere);
     for SousCritere in ACritere.SousCriteres do
       if SousCritere is TGroupCritere then
         Process(TGroupCritere(SousCritere), Node)
       else
-        TreeView1.Items.AddChildObject(Node, TCritere(SousCritere).Champ + ' ' + TCritere(SousCritere).Test, SousCritere);
+        TreeView1.Items.AddChildObject(Node, '', SousCritere);
     ReconstructLabels(Node);
   end;
 
@@ -536,11 +536,11 @@ begin
   begin
     Data := TObject(ParentNode.Item[i].Data);
     if Data is TGroupCritere then
-      Text := methode.Text + '...'
+      ParentNode.Item[i].Text := methode.Text + '...'
     else if i = 0 then
-      Text := TCritere(Data).Champ + ' ' + TCritere(Data).Test
+      ParentNode.Item[i].Text := TCritere(Data).Champ + ' ' + TCritere(Data).Test
     else
-      Text := methode.Text + ' ' + TCritere(Data).Champ + ' ' + TCritere(Data).Test;
+      ParentNode.Item[i].Text := methode.Text + ' ' + TCritere(Data).Champ + ' ' + TCritere(Data).Test;
   end;
 end;
 
