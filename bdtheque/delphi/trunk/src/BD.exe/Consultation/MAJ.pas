@@ -181,7 +181,7 @@ begin
     FDest.PageControl1.ActivePageIndex := 0;
     FDest.LightComboCheck1.Value := TypeSimple;
     FDest.VTPersonnes.CurrentValue := Reference;
-    FDest.SpeedButton1Click(nil);
+    FDest.VTResultDblClick(nil);
   end;
 
   if Historique.CurrentConsultation = 0 then

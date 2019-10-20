@@ -44,7 +44,7 @@ type
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure RechPrint(Sender: TObject);
-    procedure SpeedButton1Click(Sender: TObject);
+    procedure vtPersonnesDblClick(Sender: TObject);
     procedure VTResultDblClick(Sender: TObject);
     procedure ModifClick(Sender: TObject);
     procedure methodeChange(Sender: TObject);
@@ -112,8 +112,8 @@ begin
         if Result = 0 then
           Result := CompareValue(TAlbumLite(Left).Tome, TAlbumLite(Right).Tome);
       end;
-  else
-    Result := 0;
+    else
+      Result := 0;
   end;
   if FSortDirection = sdDescending then
     Result := -Result;
@@ -173,8 +173,6 @@ begin
     finally
       frm.Free;
     end;
-    if TypeRecherche = trComplexe then
-      TypeRecherche := trAucune;
     ReconstructLabels(ToModif.Parent);
   end
   else
@@ -192,8 +190,6 @@ begin
     finally
       frmTri.Free;
     end;
-    if TypeRecherche = trComplexe then
-      TypeRecherche := trAucune;
     ReconstructSortLabel(ToModif);
   end;
 end;
@@ -224,8 +220,6 @@ var
   Critere: TCritereTri;
   ParentNode: TTreeNode;
 begin
-  if TypeRecherche = trComplexe then
-    TypeRecherche := trAucune;
   if PageControl1.ActivePage = TabSheet1 then
   begin
     if Assigned(TreeView1.Selected) and (TreeView1.Selected <> TreeView1.Items.GetFirstNode) then
@@ -265,10 +259,11 @@ begin
   VTResult.Header.Columns[0].ImageIndex := -1;
   VTResult.Header.Columns[1].ImageIndex := -1;
   VTResult.Header.Columns[2].ImageIndex := -1;
-  if FSortDirection = sdAscending then
-    VTResult.Header.Columns[FSortColumn].ImageIndex := 0
-  else
-    VTResult.Header.Columns[FSortColumn].ImageIndex := 1;
+  if (Value = trSimple) or (Recherche.SortBy.Count = 0) then
+    if FSortDirection = sdAscending then
+      VTResult.Header.Columns[FSortColumn].ImageIndex := 0
+    else
+      VTResult.Header.Columns[FSortColumn].ImageIndex := 1;
   if Value = trSimple then
     VTResult.TreeOptions.StringOptions := VTResult.TreeOptions.StringOptions + [toShowStaticText]
   else
@@ -286,7 +281,7 @@ begin
   frmFond.actApercuImpression.Update;
 end;
 
-procedure TfrmRecherche.SpeedButton1Click(Sender: TObject);
+procedure TfrmRecherche.vtPersonnesDblClick(Sender: TObject);
 begin
   if not IsEqualGUID(vtPersonnes.CurrentValue, GUID_NULL) then
   begin
@@ -314,8 +309,6 @@ end;
 
 procedure TfrmRecherche.methodeChange(Sender: TObject);
 begin
-  if (TypeRecherche = trComplexe) then
-    TypeRecherche := trAucune;
   TGroupCritere(TreeView1.Selected.Parent.Data).GroupOption := TGroupOption(methode.ItemIndex);
   ReconstructLabels(TreeView1.Selected.Parent);
 end;
@@ -367,9 +360,6 @@ begin
   Node := TreeView1.Items.AddChildObject(ParentNode, '', p);
   ReconstructLabels(ParentNode);
   Node.Selected := True;
-
-  if TypeRecherche = trComplexe then
-    TypeRecherche := trAucune;
 end;
 
 procedure TfrmRecherche.Groupedecritre1Click(Sender: TObject);
@@ -443,6 +433,10 @@ end;
 
 procedure TfrmRecherche.VTResultHeaderClick(Sender: TVTHeader; HitInfo: TVTHeaderHitInfo);
 begin
+  // si on n'affiche pas le tri en cours, c'est qu'on est en recherche avancée avec critère de tri : on ne peut donc pas changer le tri
+  if (VTResult.Header.Columns[FSortColumn].ImageIndex = -1) then
+    Exit;
+
   if HitInfo.Column <> FSortColumn then
     FSortDirection := sdAscending
   else if FSortDirection = sdAscending then
@@ -581,9 +575,6 @@ begin
   Node := TreeView2.Items.AddObject(nil, '', p);
   ReconstructSortLabel(Node);
   Node.Selected := True;
-
-  if TypeRecherche = trComplexe then
-    TypeRecherche := trAucune;
 end;
 
 procedure TfrmRecherche.ReconstructSortLabel(Node: TTreeNode);

@@ -137,7 +137,7 @@ object frmRecherche: TfrmRecherche
         ParentShowHint = False
         ShowHint = True
         TabOrder = 0
-        OnDblClick = SpeedButton1Click
+        OnDblClick = vtPersonnesDblClick
         Columns = <>
       end
       inline FrameRechercheRapide1: TframRechercheRapide
