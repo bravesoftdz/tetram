@@ -30,6 +30,8 @@ type
   protected
     function GetNVars: Integer; override;
   public
+    class function CreateFromList(const AName: string; ACategorie: Integer): TRFNominalCriteria;
+  public
     constructor Create(const AName: string; const AValues: TArray<Integer>); reintroduce;
     destructor Destroy; override;
 
@@ -68,7 +70,7 @@ type
 implementation
 
 uses
-  Variants;
+  Variants, BDTK.GUI.DataModules.Main, BD.DB.Connection;
 
 { TRFCriteria }
 
@@ -97,6 +99,28 @@ begin
 end;
 
 { TRFNominalCriteria }
+
+class function TRFNominalCriteria.CreateFromList(const AName: string; ACategorie: Integer): TRFNominalCriteria;
+var
+  q: TManagedQuery;
+  Valeurs: TArray<Integer>;
+begin
+  q := dmPrinc.DBConnection.GetQuery;
+  try
+    q.SQL.Text := 'SELECT REF FROM LISTES WHERE CATEGORIE = :Categorie';
+    q.Params.AsInteger[0] := ACategorie;
+    q.Open;
+    Valeurs := nil;
+    while not q.Eof do
+    begin
+      Valeurs := Valeurs + [q.Fields.AsInteger[0]];
+      q.Next;
+    end;
+    Result := TRFNominalCriteria.Create(AName, [0] + Valeurs);
+  finally
+    q.Free;
+  end;
+end;
 
 constructor TRFNominalCriteria.Create(const AName: string; const AValues: TArray<Integer>);
 begin
