@@ -262,6 +262,7 @@ begin
     q.SQL.Add('  albums.tomefin nulls first, albums.anneeparution nulls first, albums.moisparution nulls first');
 
     q.Open;
+    TDaoAlbumLite.Prepare(q);
     while not q.Eof do
     begin
       Album := TDaoAlbumLite.Make(q);
@@ -304,6 +305,7 @@ begin
     else
       TypeRecherche := trAucune;
   finally
+    TDaoAlbumLite.Unprepare(q);
     q.Free;
     slFrom.Free;
     slWhere.Free;
@@ -343,6 +345,7 @@ begin
       oldID_Album := GUID_NULL;
       oldIndex := -1;
       S := '';
+      TDaoAlbumLite.Prepare(q);
       while not q.Eof do
       begin
         if IsEqualGUID(oldID_Album, StringToGUID(q.Fields.ByNameAsString['id_album'])) and (oldIndex <> -1) then
@@ -385,6 +388,7 @@ begin
       else
         TypeRecherche := trAucune;
     finally
+      TDaoAlbumLite.Unprepare(q);
       q.Free;
     end;
   end;
