@@ -72,7 +72,7 @@ type
       (TableName: 'GENRESERIES'; ID: 'id_genreseries'; SkipFields: 'ds_genreseries'),
       (TableName: 'LISTES'; ID: 'id_liste'; SkipFields: 'ds_listes'),
       (TableName: 'ALBUMS_MANQUANTS'; UpperFields: 'titreserie'; ProcedureStockee: 'ALBUMS_MANQUANTS(1, 1, NULL)'),
-      (TableName: 'PREVISIONS_SORTIES'; UpperFields: 'titreserie'; ProcedureStockee: 'PREVISIONS_SORTIES(1, NULL)'),
+      (TableName: 'PREVISIONS_SORTIES'; SkipFields: 'terminee'; UpperFields: 'titreserie'; ProcedureStockee: 'PREVISIONS_SORTIES(1, NULL)'),
       (TableName: 'COUVERTURES'; ID: 'id_couverture'; TypeSynchro: tsImages; SkipFields: 'stockagecouverture@imagecouverture@fichiercouverture@ds_couvertures'),
       (TableName: 'UNIVERS'; ID: 'id_univers'; SkipFields: 'ds_univers'; UpperFields: 'nomunivers'),
       (TableName: 'SERIES_UNIVERS'; ID: 'id_serie_univers'; SkipFields: 'ds_series_univers'),
