@@ -40,6 +40,11 @@ type
     function Dump(const AVars: array of Double; APosition: Integer): string; override;
   end;
 
+  TRFBooleanCriteria = class(TRFNominalCriteria)
+  public
+    constructor Create(const AName: string); reintroduce;
+  end;
+
   TRFCriterias = class(TObjectList<TRFCriteria>)
   private
     function GetNVars: Integer;
@@ -167,6 +172,13 @@ begin
       else
         Exit(FloatToStr(FValues[i]));
   Result := FloatToStr(NaN);
+end;
+
+{ TRFBooleanCriteria }
+
+constructor TRFBooleanCriteria.Create(const AName: string);
+begin
+  inherited Create(AName, [-1, 0, 1]);
 end;
 
 { TRFData }

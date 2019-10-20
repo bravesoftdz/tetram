@@ -469,8 +469,8 @@ begin
     try
       // ils doivent être dans le même ordre que les champs du training set donc de la requête
       RFData.Criterias.Add(TRFCriteria.Create('ANNEEEDITION', -1));
-      RFData.Criterias.Add(TRFCriteria.Create('VO', -1));
-      RFData.Criterias.Add(TRFCriteria.Create('COULEUR', -1));
+      RFData.Criterias.Add(TRFBooleanCriteria.Create('VO'));
+      RFData.Criterias.Add(TRFBooleanCriteria.Create('COULEUR'));
       RFData.Criterias.Add(TRFNominalCriteria.CreateFromList('ETAT', 1));
       RFData.Criterias.Add(TRFNominalCriteria.CreateFromList('RELIURE', 2));
       RFData.Criterias.Add(TRFNominalCriteria.CreateFromList('TYPEEDITION', 3));
@@ -484,8 +484,8 @@ begin
       RFData.Criterias.Add(TRFCriteria.Create('TOME', -1));
       RFData.Criterias.Add(TRFCriteria.Create('TOMEDEBUT', -1));
       RFData.Criterias.Add(TRFCriteria.Create('TOMEFIN', -1));
-      RFData.Criterias.Add(TRFCriteria.Create('HORSSERIE', -1));
-      RFData.Criterias.Add(TRFCriteria.Create('INTEGRALE', -1));
+      RFData.Criterias.Add(TRFBooleanCriteria.Create('HORSSERIE'));
+      RFData.Criterias.Add(TRFBooleanCriteria.Create('INTEGRALE'));
 
       RFData.Criterias.Add(TRFCriteria.Create('PRIX', NAN)); // Output
 
