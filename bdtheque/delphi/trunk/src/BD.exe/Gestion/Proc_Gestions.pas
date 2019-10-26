@@ -77,11 +77,9 @@ begin
     Result := CreationEditeur(Valeur);
   if IsEqualGUID(Result, GUID_NULL) then
     Exit;
+  TVirtualStringTree.InitializeRep(vmPARENT_EDITEURS + vmCHILD_EDITEURS, VT);
   if Assigned(VT) then
-  begin
-    VT.InitializeRep(False);
     VT.CurrentValue := Result;
-  end;
 end;
 
 function ModifierEditeurs(VT: TVirtualStringTree; Source: TObjetFull = nil): Boolean;
@@ -94,7 +92,7 @@ begin
     Exit;
   Result := EditionEditeur(i);
   if Result then
-    VT.InitializeRep;
+    TVirtualStringTree.InitializeRep(vmPARENT_EDITEURS + vmCHILD_EDITEURS);
 end;
 
 function SupprimerEditeurs(VT: TVirtualStringTree): Boolean;
@@ -105,17 +103,11 @@ begin
   i := VT.CurrentValue;
   if IsEqualGUID(i, GUID_NULL) then
     Exit;
-  VT.MemorizeIndexNode;
   if AffMessage(rsLienEditeur + #13 + rsSupprimerEditeur, mtConfirmation, [mbYes, mbNo], True) <> mrYes then
     Exit;
   Result := DelEditeur(i);
   if Result then
-  begin
-    VT.InitializeRep(False);
-    VT.FindIndexNode;
-  end
-  else
-    VT.ClearIndexNode;
+    TVirtualStringTree.InitializeRep(vmPARENT_EDITEURS, vmCHILD_EDITEURS, i);
 end;
 // ********************************************************************************************************
 
@@ -124,11 +116,9 @@ begin
   Result := CreationAchatAlbum(Valeur);
   if IsEqualGUID(Result, GUID_NULL) then
     Exit;
+  TVirtualStringTree.InitializeRep(vmPARENT_ALBUMS + vmCHILD_ALBUMS, VT);
   if Assigned(VT) then
-  begin
     VT.InitializeRep(False);
-    VT.CurrentValue := Result;
-  end;
 end;
 
 function ModifierAchatsAlbum(VT: TVirtualStringTree; Source: TObjetFull = nil): Boolean;
@@ -141,7 +131,7 @@ begin
     Exit;
   Result := EditionAchatAlbum(i);
   if Result then
-    VT.InitializeRep;
+    TVirtualStringTree.InitializeRep(vmPARENT_ALBUMS + vmCHILD_ALBUMS);
 end;
 
 function SupprimerAchatsAlbum(VT: TVirtualStringTree): Boolean;
@@ -154,7 +144,6 @@ begin
   i := VT.CurrentValue;
   if IsEqualGUID(i, GUID_NULL) then
     Exit;
-  VT.MemorizeIndexNode;
   PA := VT.GetFocusedNodeData as TAlbumLite;
   s := rsSupprimerAchat;
   if Assigned(PA) and not PA.Complet then
@@ -163,12 +152,7 @@ begin
     Exit;
   Result := DelAchatAlbum(i);
   if Result then
-  begin
-    VT.InitializeRep(False);
-    VT.FindIndexNode;
-  end
-  else
-    VT.ClearIndexNode;
+    TVirtualStringTree.InitializeRep(vmPARENT_ALBUMS, vmCHILD_ALBUMS, i);
 end;
 // *********************************************************************************************************
 
@@ -180,11 +164,9 @@ begin
     Result := CreationAlbum(Valeur);
   if IsEqualGUID(Result, GUID_NULL) then
     Exit;
+  TVirtualStringTree.InitializeRep(vmPARENT_ALBUMS + vmCHILD_ALBUMS, VT);
   if Assigned(VT) then
-  begin
-    VT.InitializeRep(False);
     VT.CurrentValue := Result;
-  end;
 end;
 
 function ModifierAlbums2(const ID: TGUID; Source: TObjetFull = nil): Boolean;
@@ -202,7 +184,7 @@ function ModifierAlbums(VT: TVirtualStringTree; Source: TObjetFull = nil): Boole
 begin
   Result := ModifierAlbums2(VT.CurrentValue);
   if Result then
-    VT.InitializeRep;
+    TVirtualStringTree.InitializeRep(vmPARENT_ALBUMS + vmCHILD_ALBUMS);
 end;
 
 function AcheterAlbums(VT: TVirtualStringTree): Boolean;
@@ -215,7 +197,7 @@ begin
     Exit;
   Result := EditionAlbum(i, False, '', True);
   if Result then
-    VT.InitializeRep;
+    TVirtualStringTree.InitializeRep(vmPARENT_ALBUMS + vmCHILD_ALBUMS);
 end;
 
 function SupprimerAlbums(VT: TVirtualStringTree): Boolean;
@@ -226,17 +208,11 @@ begin
   i := VT.CurrentValue;
   if IsEqualGUID(i, GUID_NULL) then
     Exit;
-  VT.MemorizeIndexNode;
   if AffMessage(rsLienAlbum + #13 + rsSupprimerAlbum, mtConfirmation, [mbYes, mbNo], True) <> mrYes then
     Exit;
   Result := DelAlbum(i);
   if Result then
-  begin
-    VT.InitializeRep(False);
-    VT.FindIndexNode;
-  end
-  else
-    VT.ClearIndexNode;
+    TVirtualStringTree.InitializeRep(vmPARENT_ALBUMS, vmCHILD_ALBUMS, i);
 end;
 // *********************************************************************************************************
 
@@ -245,11 +221,9 @@ begin
   Result := CreationGenre(Valeur);
   if IsEqualGUID(Result, GUID_NULL) then
     Exit;
+  TVirtualStringTree.InitializeRep(vmPARENT_GENRES + vmCHILD_GENRES, VT);
   if Assigned(VT) then
-  begin
-    VT.InitializeRep(False);
     VT.CurrentValue := Result;
-  end;
 end;
 
 function ModifierGenres(VT: TVirtualStringTree; Source: TObjetFull = nil): Boolean;
@@ -262,7 +236,7 @@ begin
     Exit;
   Result := EditionGenre(i);
   if Result then
-    VT.InitializeRep;
+    TVirtualStringTree.InitializeRep(vmPARENT_GENRES + vmCHILD_GENRES);
 end;
 
 function SupprimerGenres(VT: TVirtualStringTree): Boolean;
@@ -273,17 +247,11 @@ begin
   i := VT.CurrentValue;
   if IsEqualGUID(i, GUID_NULL) then
     Exit;
-  VT.MemorizeIndexNode;
   if AffMessage(rsLienGenre + #13 + rsSupprimerGenre, mtConfirmation, [mbYes, mbNo], True) <> mrYes then
     Exit;
   Result := DelGenre(i);
   if Result then
-  begin
-    VT.InitializeRep(False);
-    VT.FindIndexNode;
-  end
-  else
-    VT.ClearIndexNode;
+    TVirtualStringTree.InitializeRep(vmPARENT_GENRES, vmCHILD_GENRES, i);
 end;
 // ********************************************************************************************************************
 
@@ -292,11 +260,9 @@ begin
   Result := CreationAuteur(FormalizeNom(Valeur));
   if IsEqualGUID(Result, GUID_NULL) then
     Exit;
+  TVirtualStringTree.InitializeRep(vmPARENT_PERSONNES + vmCHILD_PERSONNES, VT);
   if Assigned(VT) then
-  begin
-    VT.InitializeRep(False);
     VT.CurrentValue := Result;
-  end;
 end;
 
 function AjouterAuteurs2(VT: TVirtualStringTree; const Valeur: string; Source: TObjetFull = nil): TGUID;
@@ -304,11 +270,9 @@ begin
   Result := CreationAuteur2(FormalizeNom(Valeur));
   if IsEqualGUID(Result, GUID_NULL) then
     Exit;
+  TVirtualStringTree.InitializeRep(vmPARENT_PERSONNES + vmCHILD_PERSONNES, VT);
   if Assigned(VT) then
-  begin
-    VT.InitializeRep(False);
     VT.CurrentValue := Result;
-  end;
 end;
 
 function ModifierAuteurs2(const ID: TGUID; Source: TObjetFull = nil): Boolean;
@@ -326,7 +290,7 @@ function ModifierAuteurs(VT: TVirtualStringTree; Source: TObjetFull = nil): Bool
 begin
   Result := ModifierAuteurs2(VT.CurrentValue);
   if Result then
-    VT.InitializeRep;
+    TVirtualStringTree.InitializeRep(vmPARENT_PERSONNES + vmCHILD_PERSONNES);
 end;
 
 function SupprimerAuteurs(VT: TVirtualStringTree): Boolean;
@@ -337,17 +301,11 @@ begin
   i := VT.CurrentValue;
   if IsEqualGUID(i, GUID_NULL) then
     Exit;
-  VT.MemorizeIndexNode;
   if AffMessage(rsLienAuteur + #13 + rsSupprimerAuteur, mtConfirmation, [mbYes, mbNo], True) <> mrYes then
     Exit;
   Result := DelAuteur(i);
   if Result then
-  begin
-    VT.InitializeRep(False);
-    VT.FindIndexNode;
-  end
-  else
-    VT.ClearIndexNode;
+    TVirtualStringTree.InitializeRep(vmPARENT_PERSONNES, vmCHILD_PERSONNES, i);
 end;
 // ********************************************************************************************************************
 
@@ -359,11 +317,9 @@ begin
     Result := CreationSerie(Valeur);
   if IsEqualGUID(Result, GUID_NULL) then
     Exit;
+  TVirtualStringTree.InitializeRep(vmPARENT_SERIES + vmCHILD_SERIES, VT);
   if Assigned(VT) then
-  begin
-    VT.InitializeRep(False);
     VT.CurrentValue := Result;
-  end;
 end;
 
 function ModifierSeries2(const ID: TGUID; Source: TObjetFull = nil): Boolean;
@@ -381,7 +337,7 @@ function ModifierSeries(VT: TVirtualStringTree; Source: TObjetFull = nil): Boole
 begin
   Result := ModifierSeries2(VT.CurrentValue);
   if Result then
-    VT.InitializeRep;
+    TVirtualStringTree.InitializeRep(vmPARENT_SERIES + vmCHILD_SERIES);
 end;
 
 function SupprimerSeries(VT: TVirtualStringTree): Boolean;
@@ -392,17 +348,11 @@ begin
   i := VT.CurrentValue;
   if IsEqualGUID(i, GUID_NULL) then
     Exit;
-  VT.MemorizeIndexNode;
   if AffMessage(rsLienSerie + #13 + rsSupprimerSerie, mtConfirmation, [mbYes, mbNo], True) <> mrYes then
     Exit;
   Result := DelSerie(i);
   if Result then
-  begin
-    VT.InitializeRep(False);
-    VT.FindIndexNode;
-  end
-  else
-    VT.ClearIndexNode;
+    TVirtualStringTree.InitializeRep(vmPARENT_SERIES, vmCHILD_SERIES, i);
 end;
 // ********************************************************************************************************************
 
@@ -414,11 +364,9 @@ begin
     Result := CreationUnivers(Valeur);
   if IsEqualGUID(Result, GUID_NULL) then
     Exit;
+  TVirtualStringTree.InitializeRep(vmPARENT_UNIVERS + vmCHILD_UNIVERS, VT);
   if Assigned(VT) then
-  begin
-    VT.InitializeRep(False);
     VT.CurrentValue := Result;
-  end;
 end;
 
 function ModifierUnivers2(const ID: TGUID; Source: TObjetFull = nil): Boolean;
@@ -436,7 +384,7 @@ function ModifierUnivers(VT: TVirtualStringTree; Source: TObjetFull = nil): Bool
 begin
   Result := ModifierUnivers2(VT.CurrentValue);
   if Result then
-    VT.InitializeRep;
+    TVirtualStringTree.InitializeRep(vmPARENT_UNIVERS + vmCHILD_UNIVERS);
 end;
 
 function SupprimerUnivers(VT: TVirtualStringTree): Boolean;
@@ -447,17 +395,11 @@ begin
   i := VT.CurrentValue;
   if IsEqualGUID(i, GUID_NULL) then
     Exit;
-  VT.MemorizeIndexNode;
   if AffMessage(rsLienUnivers + #13 + rsSupprimerUnivers, mtConfirmation, [mbYes, mbNo], True) <> mrYes then
     Exit;
   Result := DelUnivers(i);
   if Result then
-  begin
-    VT.InitializeRep(False);
-    VT.FindIndexNode;
-  end
-  else
-    VT.ClearIndexNode;
+    TVirtualStringTree.InitializeRep(vmPARENT_UNIVERS, vmCHILD_UNIVERS, i);
 end;
 // ********************************************************************************************************************
 
@@ -466,11 +408,9 @@ begin
   Result := CreationCollection(ID_Editeur, Valeur);
   if IsEqualGUID(Result, GUID_NULL) then
     Exit;
+  TVirtualStringTree.InitializeRep(vmPARENT_COLLECTIONS + vmCHILD_COLLECTIONS, VT);
   if Assigned(VT) then
-  begin
-    VT.InitializeRep(False);
     VT.CurrentValue := Result;
-  end;
 end;
 
 function AjouterCollections(VT: TVirtualStringTree; const Valeur: string; Source: TObjetFull = nil): TGUID;
@@ -481,11 +421,9 @@ begin
     Result := CreationCollection(GUID_NULL, Valeur);
   if IsEqualGUID(Result, GUID_NULL) then
     Exit;
+  TVirtualStringTree.InitializeRep(vmPARENT_COLLECTIONS + vmCHILD_COLLECTIONS, VT);
   if Assigned(VT) then
-  begin
-    VT.InitializeRep(False);
     VT.CurrentValue := Result;
-  end;
 end;
 
 function ModifierCollections(VT: TVirtualStringTree; Source: TObjetFull = nil): Boolean;
@@ -498,7 +436,7 @@ begin
     Exit;
   Result := EditionCollection(i);
   if Result then
-    VT.InitializeRep;
+    TVirtualStringTree.InitializeRep(vmPARENT_COLLECTIONS + vmCHILD_COLLECTIONS);
 end;
 
 function SupprimerCollections(VT: TVirtualStringTree): Boolean;
@@ -509,17 +447,11 @@ begin
   i := VT.CurrentValue;
   if IsEqualGUID(i, GUID_NULL) then
     Exit;
-  VT.MemorizeIndexNode;
   if AffMessage(rsLienCollection + #13 + rsSupprimerCollection, mtConfirmation, [mbYes, mbNo], True) <> mrYes then
     Exit;
   Result := DelCollection(i);
   if Result then
-  begin
-    VT.InitializeRep(False);
-    VT.FindIndexNode;
-  end
-  else
-    VT.ClearIndexNode;
+    TVirtualStringTree.InitializeRep(vmPARENT_COLLECTIONS, vmCHILD_COLLECTIONS, i);
 end;
 // ********************************************************************************************************************
 
@@ -528,11 +460,9 @@ begin
   Result := CreationParaBD(Valeur);
   if IsEqualGUID(Result, GUID_NULL) then
     Exit;
+  TVirtualStringTree.InitializeRep(vmPARENT_PARABD + vmCHILD_PARABD, VT);
   if Assigned(VT) then
-  begin
-    VT.InitializeRep(False);
     VT.CurrentValue := Result;
-  end;
 end;
 
 function ModifierParaBD2(const ID: TGUID; Source: TObjetFull = nil): Boolean;
@@ -550,7 +480,7 @@ function ModifierParaBD(VT: TVirtualStringTree; Source: TObjetFull = nil): Boole
 begin
   Result := ModifierParaBD2(VT.CurrentValue);
   if Result then
-    VT.InitializeRep;
+    TVirtualStringTree.InitializeRep(vmPARENT_PARABD + vmCHILD_PARABD);
 end;
 
 function AcheterParaBD(VT: TVirtualStringTree): Boolean;
@@ -563,7 +493,7 @@ begin
     Exit;
   Result := EditionParaBD(i, False, '', True);
   if Result then
-    VT.InitializeRep;
+    TVirtualStringTree.InitializeRep(vmPARENT_PARABD + vmCHILD_PARABD);
 end;
 
 function SupprimerParaBD(VT: TVirtualStringTree): Boolean;
@@ -574,17 +504,11 @@ begin
   i := VT.CurrentValue;
   if IsEqualGUID(i, GUID_NULL) then
     Exit;
-  VT.MemorizeIndexNode;
   if AffMessage(rsLienParaBD + #13 + rsSupprimerParaBD, mtConfirmation, [mbYes, mbNo], True) <> mrYes then
     Exit;
   Result := DelParaBD(i);
   if Result then
-  begin
-    VT.InitializeRep(False);
-    VT.FindIndexNode;
-  end
-  else
-    VT.ClearIndexNode;
+    TVirtualStringTree.InitializeRep(vmPARENT_PARABD, vmCHILD_PARABD, i);
 end;
 // *********************************************************************************************************
 
@@ -593,11 +517,9 @@ begin
   Result := CreationAchatParaBD(Valeur);
   if IsEqualGUID(Result, GUID_NULL) then
     Exit;
+  TVirtualStringTree.InitializeRep(vmPARENT_PARABD + vmCHILD_PARABD, VT);
   if Assigned(VT) then
-  begin
-    VT.InitializeRep(False);
     VT.CurrentValue := Result;
-  end;
 end;
 
 function ModifierAchatsParaBD(VT: TVirtualStringTree; Source: TObjetFull = nil): Boolean;
@@ -610,7 +532,7 @@ begin
     Exit;
   Result := EditionAchatParaBD(i);
   if Result then
-    VT.InitializeRep;
+    TVirtualStringTree.InitializeRep(vmPARENT_PARABD + vmCHILD_PARABD);
 end;
 
 function SupprimerAchatsParaBD(VT: TVirtualStringTree): Boolean;
@@ -623,7 +545,6 @@ begin
   i := VT.CurrentValue;
   if IsEqualGUID(i, GUID_NULL) then
     Exit;
-  VT.MemorizeIndexNode;
   PA := VT.GetFocusedNodeData as TParaBDLite;
   s := rsSupprimerAchat;
   if Assigned(PA) and not PA.Complet then
@@ -632,12 +553,7 @@ begin
     Exit;
   Result := DelAchatParaBD(i);
   if Result then
-  begin
-    VT.InitializeRep(False);
-    VT.FindIndexNode;
-  end
-  else
-    VT.ClearIndexNode;
+    TVirtualStringTree.InitializeRep(vmPARENT_PARABD, vmCHILD_PARABD, i);
 end;
 
 // *********************************************************************************************************

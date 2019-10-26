@@ -116,7 +116,6 @@ type
     procedure vstImagesKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure VDTButton4Click(Sender: TObject);
     procedure VDTButton5Click(Sender: TObject);
-    procedure OnNewSerie(Sender: TObject);
     procedure OnEditSerie(Sender: TObject);
     procedure FormActivate(Sender: TObject);
     procedure longueur2KeyPress(Sender: TObject; var Key: Char);
@@ -217,7 +216,6 @@ begin
   vtEditEditeurs.VTEdit.LinkControls.Add(Label5);
   vtEditCollections.VTEdit.LinkControls.Add(Label8);
 
-  vtEditSerie.AfterAppend := OnNewSerie;
   vtEditSerie.AfterEdit := OnEditSerie;
   vtEditPersonnes.AfterEdit := OnEditAuteurs;
 
@@ -694,24 +692,9 @@ begin
   vstImages.Invalidate;
 end;
 
-procedure TfrmEditAlbum.OnNewSerie(Sender: TObject);
-begin
-  vtEditEditeurs.VTEdit.PopupWindow.TreeView.InitializeRep;
-  vtEditCollections.VTEdit.PopupWindow.TreeView.InitializeRep;
-  JvComboEdit1Change(vtEditSerie.VTEdit);
-end;
-
 procedure TfrmEditAlbum.OnEditSerie(Sender: TObject);
-var
-  i: TGUID;
 begin
-  // on recharge la série
   TDaoSerieFull.Fill(FAlbum.Serie, FAlbum.ID_Serie, nil);
-  i := vtEditCollections.CurrentValue;
-  vtEditEditeurs.VTEdit.PopupWindow.TreeView.InitializeRep;
-  vtEditCollections.VTEdit.PopupWindow.TreeView.InitializeRep;
-  vtEditCollections.CurrentValue := i;
-  JvComboEdit1Change(vtEditSerie.VTEdit);
 end;
 
 procedure TfrmEditAlbum.FormActivate(Sender: TObject);
