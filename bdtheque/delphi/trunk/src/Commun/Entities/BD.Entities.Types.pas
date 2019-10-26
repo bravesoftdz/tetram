@@ -37,13 +37,13 @@ type
     function GetAsBoolean(DefaultIfUndefined: Boolean): Boolean;
   public
     class operator Implicit(a: Boolean): RTriStateValue;
-    class operator Implicit(a: RTriStateValue): Integer;
+    class operator Implicit(a: Integer): RTriStateValue;
     class operator Implicit(a: TCheckBoxState): RTriStateValue;
+    class operator Implicit(a: RTriStateValue): Integer;
     class operator Implicit(a: RTriStateValue): TCheckBoxState;
     class operator Equal(a, b: RTriStateValue): Boolean;
     class operator NotEqual(a, b: RTriStateValue): Boolean;
 
-    class function FromInteger(a: Integer): RTriStateValue; static;
     class function Default: RTriStateValue; static;
 
     procedure SetUndefined;
@@ -110,9 +110,9 @@ begin
   Result := a.Value = b.Value;
 end;
 
-class function RTriStateValue.FromInteger(a: Integer): RTriStateValue;
+class operator RTriStateValue.Implicit(a: Integer): RTriStateValue;
 begin
-  if (a = -1) or (a in [0 .. 1]) then
+  if (a = -1) or (a in [0..1]) then
     Result.Value := a
   else
     Result.SetUndefined;

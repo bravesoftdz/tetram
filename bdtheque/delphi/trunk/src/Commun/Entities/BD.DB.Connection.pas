@@ -47,6 +47,17 @@ type
     constructor Create(const Connection: IDBConnection); reintroduce;
     destructor Destroy; override;
 
+    function GetFieldIndex(const AName: string): Integer;
+
+    function NotNull(const AFieldName: string; ADefault: Boolean): Boolean; overload; inline;
+    function NotNull(const AFieldName: string; ADefault: Integer): Integer; overload; inline;
+    function NotNull(const AFieldName: string; ADefault: string): string; overload; inline;
+    function NotNull(const AFieldName: string): TGUID; overload; inline;
+    function NotNull(AFieldIndex: Integer; ADefault: Boolean): Boolean; overload;
+    function NotNull(AFieldIndex: Integer; ADefault: Integer): Integer; overload;
+    function NotNull(AFieldIndex: Integer; ADefault: string): string; overload;
+    function NotNull(AFieldIndex: Integer): TGUID; overload;
+
     // property DoLog: Boolean read FDoLog write FDoLog;
     property Connection: IDBConnection read FConnection;
     property Transaction: TManagedTransaction read GetTransaction write SetTransaction;
@@ -70,6 +81,8 @@ type
 implementation
 
 { TDBConnection }
+
+uses BD.Utils.StrUtils;
 
 procedure TDBConnection.AfterConstruction;
 begin
@@ -203,9 +216,65 @@ begin
   inherited;
 end;
 
+function TManagedQuery.GetFieldIndex(const AName: string): Integer;
+begin
+  for Result := 0 to Pred(Fields.FieldCount) do
+    if SameText(Fields.AliasName[Result], AName) then
+      Exit;
+  Result := -1;
+end;
+
 function TManagedQuery.GetTransaction: TManagedTransaction;
 begin
   Result := (inherited Transaction) as TManagedTransaction
+end;
+
+function TManagedQuery.NotNull(const AFieldName: string): TGUID;
+begin
+  Result := NotNull(GetFieldIndex(AFieldName));
+end;
+
+function TManagedQuery.NotNull(const AFieldName: string; ADefault: string): string;
+begin
+  Result := NotNull(GetFieldIndex(AFieldName), ADefault);
+end;
+
+function TManagedQuery.NotNull(const AFieldName: string; ADefault: Integer): Integer;
+begin
+  Result := NotNull(GetFieldIndex(AFieldName), ADefault);
+end;
+
+function TManagedQuery.NotNull(const AFieldName: string; ADefault: Boolean): Boolean;
+begin
+  Result := NotNull(GetFieldIndex(AFieldName), ADefault);
+end;
+
+function TManagedQuery.NotNull(AFieldIndex: Integer): TGUID;
+begin
+  if (AFieldIndex = -1) or Fields.IsNull[AFieldIndex] or Fields.AsString[AFieldIndex].Trim.IsEmpty then
+    Exit(GUID_NULL);
+  Result := StringToGUID(Fields.AsString[AFieldIndex].Trim);
+end;
+
+function TManagedQuery.NotNull(AFieldIndex: Integer; ADefault: string): string;
+begin
+  if (AFieldIndex = -1) or Fields.IsNull[AFieldIndex] then
+    Exit(ADefault);
+  Result := Fields.AsString[AFieldIndex];
+end;
+
+function TManagedQuery.NotNull(AFieldIndex, ADefault: Integer): Integer;
+begin
+  if (AFieldIndex = -1) or Fields.IsNull[AFieldIndex] then
+    Exit(ADefault);
+  Result := Fields.AsInteger[AFieldIndex];
+end;
+
+function TManagedQuery.NotNull(AFieldIndex: Integer; ADefault: Boolean): Boolean;
+begin
+  if (AFieldIndex = -1) or Fields.IsNull[AFieldIndex] then
+    Exit(ADefault);
+  Result := Fields.AsBoolean[AFieldIndex];
 end;
 
 procedure TManagedQuery.SetTransaction(const Value: TManagedTransaction);

@@ -33,11 +33,6 @@ type
     class procedure SaveToDatabase(Entity: TDBEntity; UseTransaction: TManagedTransaction = nil);
 
     class property DBConnection: IDBConnection read FDBConnection write SetDBConnection;
-
-    class function NonNull(Query: TManagedQuery; const Champ: string; Default: Integer): Integer; overload;
-    class function NonNull(Query: TManagedQuery; const Champ: string): TGUID; overload;
-    class function NonNull(Query: TManagedQuery; Champ, Default: Integer): Integer; overload;
-    class function NonNull(Query: TManagedQuery; Champ: Integer): TGUID; overload;
   end;
 
   TDaoGenericDBEntity<T: TDBEntity> = class abstract(TDaoDBEntity)
@@ -94,50 +89,6 @@ class function TDaoDBEntity.getInstance(const Reference: TGUID): TDBEntity;
 begin
   Result := FactoryClass.getInstance as TDBEntity;
   Fill(Result, Reference, nil);
-end;
-
-class function TDaoDBEntity.NonNull(Query: TManagedQuery; const Champ: string): TGUID;
-begin
-  Result := GUID_NULL;
-  if Query.Fields.ByNameAsString[Champ].Trim.IsEmpty then
-    Exit;
-  try
-    Result := StringToGUID(Query.Fields.ByNameAsString[Champ]);
-  except
-  end;
-end;
-
-class function TDaoDBEntity.NonNull(Query: TManagedQuery; const Champ: string; Default: Integer): Integer;
-begin
-  Result := Default;
-  if Query.Fields.ByNameIsNull[Champ] then
-    Exit;
-  try
-    Result := Query.Fields.ByNameAsInteger[Champ];
-  except
-  end;
-end;
-
-class function TDaoDBEntity.NonNull(Query: TManagedQuery; Champ: Integer): TGUID;
-begin
-  Result := GUID_NULL;
-  if (Champ = -1) or Query.Fields.IsNull[Champ] then
-    Exit;
-  try
-    Result := StringToGUID(Query.Fields.AsString[Champ]);
-  except
-  end;
-end;
-
-class function TDaoDBEntity.NonNull(Query: TManagedQuery; Champ, Default: Integer): Integer;
-begin
-  Result := Default;
-  if (Champ = -1) or Query.Fields.IsNull[Champ] then
-    Exit;
-  try
-    Result := Query.Fields.AsInteger[Champ];
-  except
-  end;
 end;
 
 class procedure TDaoDBEntity.SaveToDatabase(Entity: TDBEntity; UseTransaction: TManagedTransaction);

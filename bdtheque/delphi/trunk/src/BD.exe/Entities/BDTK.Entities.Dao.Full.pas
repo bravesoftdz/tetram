@@ -64,8 +64,7 @@ type
     class function getInstance(const Reference, IdAuteurFiltre: TGUID; ForceLoad: Boolean): TSerieFull; reintroduce; overload;
 
     class procedure Fill(Entity: TSerieFull; const Reference, IdAuteurFiltre: TGUID; UseTransaction: TManagedTransaction); reintroduce; overload;
-    class procedure Fill(Entity: TSerieFull; const Reference, IdAuteurFiltre: TGUID; ForceLoad: Boolean; UseTransaction: TManagedTransaction);
-      reintroduce; overload;
+    class procedure Fill(Entity: TSerieFull; const Reference, IdAuteurFiltre: TGUID; ForceLoad: Boolean; UseTransaction: TManagedTransaction); reintroduce; overload;
     class procedure ChangeNotation(Entity: TSerieFull; Note: Integer);
 
     class procedure InitSerie(Entity: TEntity);
@@ -1617,9 +1616,9 @@ begin
       Entity.Notation := qry.Fields.ByNameAsSmallint['notation'];
       if Entity.Notation = 0 then
         Entity.Notation := 900;
-      Entity.Terminee := RTriStateValue.FromInteger(qry.Fields.ByNameAsInteger['terminee']);
-      Entity.VO := RTriStateValue.FromInteger(qry.Fields.ByNameAsInteger['vo']);
-      Entity.Couleur := RTriStateValue.FromInteger(qry.Fields.ByNameAsInteger['couleur']);
+      Entity.Terminee := qry.Fields.ByNameAsInteger['terminee'];
+      Entity.VO := qry.Fields.ByNameAsInteger['vo'];
+      Entity.Couleur := qry.Fields.ByNameAsInteger['couleur'];
       Entity.SuivreSorties := Entity.RecInconnu or qry.Fields.ByNameAsBoolean['suivresorties'];
       Entity.Complete := qry.Fields.ByNameAsBoolean['complete'];
       Entity.SuivreManquants := Entity.RecInconnu or qry.Fields.ByNameAsBoolean['suivremanquants'];
