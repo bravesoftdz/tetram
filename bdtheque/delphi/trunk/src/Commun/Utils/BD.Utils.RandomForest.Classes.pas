@@ -75,7 +75,7 @@ type
 implementation
 
 uses
-  Variants, BDTK.GUI.DataModules.Main, BD.DB.Connection;
+  System.Variants, BDTK.GUI.DataModules.Main, BD.DB.Connection;
 
 { TRFCriteria }
 

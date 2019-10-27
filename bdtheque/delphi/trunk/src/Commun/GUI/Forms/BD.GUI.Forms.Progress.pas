@@ -3,11 +3,12 @@ unit BD.GUI.Forms.Progress;
 { .$D- }
 interface
 
-uses Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, ComCtrls, BD.GUI.Forms, JvExControls, JvLabel,
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ComCtrls, BD.GUI.Forms, JvExControls, JvLabel,
   BD.GUI.Frames.Buttons;
 
 type
-  TProgressBar = class(ComCtrls.TProgressBar)
+  TProgressBar = class(VCL.ComCtrls.TProgressBar)
   private
     function GetPosition: Integer;
     procedure SetPosition(Value: Integer);
@@ -39,7 +40,8 @@ implementation
 
 {$R *.DFM}
 
-uses BD.Utils.GUIUtils;
+uses
+  BD.Utils.GUIUtils;
 
 function TProgressBar.GetMax: Integer;
 begin

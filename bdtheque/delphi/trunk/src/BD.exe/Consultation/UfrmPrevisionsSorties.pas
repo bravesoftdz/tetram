@@ -3,8 +3,8 @@ unit UfrmPrevisionsSorties;
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, Dialogs, BDTK.Entities.Stats, VirtualTrees, BDTK.GUI.Controls.VirtualTree, ToolWin,
-  BDTK.GUI.Utils, StdCtrls, ExtCtrls, Menus, ActnList, Buttons, VDTButton, BD.GUI.Forms, StrUtils,
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, BDTK.Entities.Stats, VirtualTrees, BDTK.GUI.Controls.VirtualTree, Vcl.ToolWin,
+  BDTK.GUI.Utils, Vcl.StdCtrls, Vcl.ExtCtrls, Vcl.Menus, Vcl.ActnList, Vcl.Buttons, VDTButton, BD.GUI.Forms, System.StrUtils,
   EditLabeled, PngSpeedButton, System.Actions, Proc_Gestions,
   BD.Entities.Full;
 
@@ -61,7 +61,8 @@ type
 
 implementation
 
-uses Impression, DateUtils, IniFiles, BD.Common, Divers, BD.Entities.Lite, BD.Utils.StrUtils,
+uses
+  Impression, System.DateUtils, System.IniFiles, BD.Common, Divers, BD.Entities.Lite, BD.Utils.StrUtils,
   UHistorique, BD.Utils.GUIUtils, BD.Entities.Common, BDTK.Entities.Dao.Full,
   BD.Entities.Types;
 

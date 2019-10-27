@@ -3,8 +3,8 @@ unit UfrmEntretien;
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, Buttons,
-  VirtualTrees, VDTButton, ExtCtrls, VCL.ActnList, Browss, StdActns, BDTK.GUI.Utils, BD.GUI.Forms,
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Buttons,
+  VirtualTrees, VDTButton, Vcl.ExtCtrls, VCL.ActnList, Browss, Vcl.StdActns, BDTK.GUI.Utils, BD.GUI.Forms,
   PngSpeedButton, System.Actions;
 
 type
@@ -43,17 +43,14 @@ type
     procedure FormDestroy(Sender: TObject);
     procedure vstEntretienFreeNode(Sender: TBaseVirtualTree; Node: PVirtualNode);
   private
-    { Déclarations privées }
     procedure CheckDBVersion;
-  public
-    { Déclarations publiques }
   end;
 
 implementation
 
 uses
-  IOUtils, BDTK.GUI.Forms.Main, BD.Common, BDTK.GUI.DataModules.Main, UIB, BD.Utils.StrUtils, BD.Utils.GUIUtils, BD.Strings,
-  BD.GUI.Forms.Verbose, UHistorique, UfrmGestion, IniFiles, Math, uiblib,
+  System.IOUtils, BDTK.GUI.Forms.Main, BD.Common, BDTK.GUI.DataModules.Main, UIB, BD.Utils.StrUtils, BD.Utils.GUIUtils, BD.Strings,
+  BD.GUI.Forms.Verbose, UHistorique, UfrmGestion, System.IniFiles, System.Math, uiblib,
   BD.DB.Connection;
 
 {$R *.dfm}

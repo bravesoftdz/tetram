@@ -442,15 +442,9 @@ object frmConsultationSerie: TfrmConsultationSerie
       ButtonFillMode = fmShaded
       Header.AutoSizeIndex = -1
       Header.DefaultHeight = 17
-      Header.Font.Charset = DEFAULT_CHARSET
-      Header.Font.Color = clWindowText
-      Header.Font.Height = -11
-      Header.Font.Name = 'Tahoma'
-      Header.Font.Style = []
       Header.Height = 17
       Header.MainColumn = -1
       Header.Options = [hoAutoResize, hoColumnResize, hoDrag]
-      HintAnimation = hatNone
       HintMode = hmTooltip
       HotCursor = crHandPoint
       Indent = 8
@@ -473,11 +467,6 @@ object frmConsultationSerie: TfrmConsultationSerie
       ButtonFillMode = fmShaded
       Header.AutoSizeIndex = -1
       Header.DefaultHeight = 17
-      Header.Font.Charset = DEFAULT_CHARSET
-      Header.Font.Color = clWindowText
-      Header.Font.Height = -11
-      Header.Font.Name = 'Tahoma'
-      Header.Font.Style = []
       Header.Height = 17
       Header.MainColumn = -1
       Header.Options = [hoAutoResize, hoColumnResize, hoDrag]

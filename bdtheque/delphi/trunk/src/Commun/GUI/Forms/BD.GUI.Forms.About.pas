@@ -4,7 +4,7 @@ unit BD.GUI.Forms.About;
 interface
 
 uses
-  Windows, SysUtils, Classes, Graphics, Forms, Controls, StdCtrls, Buttons, ExtCtrls, verslabp, ShellAPI, jpeg, Dialogs, BD.GUI.Forms,
+  Winapi.Windows, System.SysUtils, System.Classes, Vcl.Graphics, Vcl.Forms, Vcl.Controls, Vcl.StdCtrls, Vcl.Buttons, Vcl.ExtCtrls, verslabp, Winapi.ShellAPI, Vcl.Imaging.jpeg, Vcl.Dialogs, BD.GUI.Forms,
   Vcl.Imaging.pngimage;
 
 type
@@ -36,7 +36,8 @@ type
 
 implementation
 
-uses BD.Utils.GUIUtils, Math;
+uses
+  BD.Utils.GUIUtils, System.Math;
 
 resourcestring
   MemoirePhysique = 'Physique';

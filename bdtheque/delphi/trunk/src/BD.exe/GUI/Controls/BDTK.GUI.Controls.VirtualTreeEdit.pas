@@ -3,7 +3,7 @@ unit BDTK.GUI.Controls.VirtualTreeEdit;
 interface
 
 uses
-  SysUtils, Windows, Classes, Controls, Messages, JvToolEdit, VirtualTrees, BDTK.GUI.Controls.VirtualTree, Variants, EditLabeled, LinkControls, BD.Entities.Lite, Vcl.ExtCtrls;
+  System.SysUtils, Winapi.Windows, System.Classes, Vcl.Controls, Winapi.Messages, JvToolEdit, VirtualTrees, BDTK.GUI.Controls.VirtualTree, System.Variants, EditLabeled, LinkControls, BD.Entities.Lite, Vcl.ExtCtrls;
 
 type
   TJvComboEdit = class(JvToolEdit.TJvComboEdit)
@@ -74,7 +74,7 @@ type
 implementation
 
 uses
-  BD.Utils.StrUtils, Forms, Math, Graphics;
+  BD.Utils.StrUtils, Vcl.Forms, System.Math, Vcl.Graphics;
 
 constructor TJvComboEdit.Create(AOwner: TComponent);
 begin

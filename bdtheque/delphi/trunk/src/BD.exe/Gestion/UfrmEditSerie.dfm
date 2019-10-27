@@ -537,14 +537,8 @@ object frmEditSerie: TfrmEditSerie
       BevelKind = bkTile
       BorderStyle = bsNone
       Header.AutoSizeIndex = -1
-      Header.Font.Charset = DEFAULT_CHARSET
-      Header.Font.Color = clWindowText
-      Header.Font.Height = -11
-      Header.Font.Name = 'Tahoma'
-      Header.Font.Style = []
       Header.MainColumn = -1
       Header.Options = [hoAutoResize, hoColumnResize, hoDrag]
-      HintAnimation = hatNone
       HintMode = hmTooltip
       HotCursor = crHandPoint
       Indent = 8
@@ -624,14 +618,8 @@ object frmEditSerie: TfrmEditSerie
       BorderStyle = bsNone
       ButtonFillMode = fmShaded
       Header.AutoSizeIndex = -1
-      Header.Font.Charset = DEFAULT_CHARSET
-      Header.Font.Color = clWindowText
-      Header.Font.Height = -11
-      Header.Font.Name = 'Tahoma'
-      Header.Font.Style = []
       Header.MainColumn = -1
       Header.Options = [hoAutoResize, hoColumnResize, hoDrag]
-      HintAnimation = hatNone
       HintMode = hmTooltip
       HotCursor = crHandPoint
       Indent = 8
@@ -731,14 +719,8 @@ object frmEditSerie: TfrmEditSerie
       BorderStyle = bsNone
       ButtonFillMode = fmShaded
       Header.AutoSizeIndex = -1
-      Header.Font.Charset = DEFAULT_CHARSET
-      Header.Font.Color = clWindowText
-      Header.Font.Height = -11
-      Header.Font.Name = 'Tahoma'
-      Header.Font.Style = []
       Header.MainColumn = -1
       Header.Options = [hoAutoResize, hoColumnResize, hoDrag]
-      HintAnimation = hatNone
       HintMode = hmTooltip
       HotCursor = crHandPoint
       Indent = 8
@@ -775,7 +757,7 @@ object frmEditSerie: TfrmEditSerie
           item
             Control = Label17
           end>
-        ExplicitWidth = 157
+        ExplicitWidth = 160
       end
     end
     object cbSorties: TCheckBoxLabeled

@@ -49,7 +49,7 @@ function BDStrToDoubleDef(const Value: string; const Default: Double): Double;
 implementation
 
 uses
-  VCL.Forms, BD.Common, Generics.Collections, JclSimpleXML, System.Math, ICUNumberFormatter, _uloc, icu_globals;
+  VCL.Forms, BD.Common, System.Generics.Collections, JclSimpleXML, System.Math, ICUNumberFormatter, _uloc, icu_globals;
 
 function StringToGUIDDef(const GUID: string; const Default: TGUID): TGUID;
 begin

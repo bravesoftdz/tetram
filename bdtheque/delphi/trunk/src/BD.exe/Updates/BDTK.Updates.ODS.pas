@@ -3,7 +3,7 @@ unit BDTK.Updates.ODS;
 interface
 
 uses
-  SysUtils, Windows, Classes, Forms;
+  System.SysUtils, Winapi.Windows, System.Classes, Vcl.Forms;
 
 const
   FB_ODS = '11.2';
@@ -13,7 +13,7 @@ procedure MAJ_ODS(FullRebuild: Boolean);
 implementation
 
 uses
-  IOUtils, BD.Common, BD.GUI.Forms.Verbose, BDTK.GUI.DataModules.Main, Divers, UIB, UIBLib, UIBMetadata, UIBConst;
+  System.IOUtils, BD.Common, BD.GUI.Forms.Verbose, BDTK.GUI.DataModules.Main, Divers, UIB, UIBLib, UIBMetadata, UIBConst;
 
 procedure MAJ_ODS_BackupRestore;
 var

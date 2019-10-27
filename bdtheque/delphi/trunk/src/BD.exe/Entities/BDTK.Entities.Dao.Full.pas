@@ -8,7 +8,7 @@ uses
   BD.Entities.Common, BD.Entities.Dao.Common, BD.Entities.Factory.Common, BD.Entities.Types;
 
 type
-  // ce serait trop facile si XE4 acceptait cette syntaxe....
+  // ce serait trop facile si Delphi acceptait cette syntaxe....
   // TClassDaoComplet = class of TDaoComplet<>;
   // je suis donc obligé de faire des classes "classique"
   TDaoFullClass = class of TDaoFull;

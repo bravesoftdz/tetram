@@ -4,7 +4,8 @@ interface
 
 implementation
 
-uses UIB, BDTK.Updates;
+uses
+  UIB, BDTK.Updates;
 
 procedure MAJ2_0_1_0(Query: TUIBScript);
 begin

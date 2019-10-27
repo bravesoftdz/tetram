@@ -3,8 +3,8 @@ unit BD.Entities.Full;
 interface
 
 uses
-  System.SysUtils, Windows, Classes, Dialogs, BD.Entities.Lite, BD.Utils.StrUtils, BD.Common, DateUtils, Generics.Collections,
-  Generics.Defaults, System.Generics.Collections, BD.Entities.Common, BD.Entities.Types;
+  System.SysUtils, Winapi.Windows, System.Classes, Vcl.Dialogs, BD.Entities.Lite, BD.Utils.StrUtils, BD.Common, System.DateUtils,
+  System.Generics.Defaults, System.Generics.Collections, BD.Entities.Common, BD.Entities.Types;
 
 type
   TObjetFullClass = class of TObjetFull;

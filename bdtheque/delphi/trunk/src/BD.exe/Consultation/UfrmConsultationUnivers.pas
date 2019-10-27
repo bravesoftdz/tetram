@@ -3,9 +3,9 @@ unit UfrmConsultationUnivers;
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, StrUtils, System.UITypes,
-  Dialogs, BD.Entities.Full, StdCtrls, VirtualTrees, ExtCtrls, BDTK.GUI.Forms.Main, BD.Utils.GUIUtils,
-  ComCtrls, VDTButton, Buttons, ActnList, Menus, BDTK.GUI.Utils, BD.GUI.Forms, BDTK.GUI.Controls.VirtualTree,
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, System.StrUtils, System.UITypes,
+  Vcl.Dialogs, BD.Entities.Full, Vcl.StdCtrls, VirtualTrees, Vcl.ExtCtrls, BDTK.GUI.Forms.Main, BD.Utils.GUIUtils,
+  Vcl.ComCtrls, VDTButton, Vcl.Buttons, Vcl.ActnList, Vcl.Menus, BDTK.GUI.Utils, BD.GUI.Forms, BDTK.GUI.Controls.VirtualTree,
   LabeledCheckBox, System.Actions;
 
 type
@@ -64,7 +64,8 @@ type
 
 implementation
 
-uses BD.Utils.StrUtils, BD.Entities.Lite, UHistorique, Divers, ShellAPI, BD.Strings, BD.Common, jpeg, Impression,
+uses
+  BD.Utils.StrUtils, BD.Entities.Lite, UHistorique, Divers, Winapi.ShellAPI, BD.Strings, BD.Common, Vcl.Imaging.jpeg, Impression,
   Proc_Gestions, BDTK.Entities.Dao.Full, BD.Entities.Common, BD.Entities.Factory.Full;
 
 {$R *.dfm}

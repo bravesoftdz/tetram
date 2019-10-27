@@ -2,7 +2,8 @@ unit BDTK.GUI.Utils;
 
 interface
 
-uses SysUtils, Windows, StdCtrls, Forms, Controls, ExtCtrls, BD.Common, Graphics, StrUtils, Dialogs, SyncObjs,
+uses
+  System.SysUtils, Winapi.Windows, Vcl.StdCtrls, Vcl.Forms, Vcl.Controls, Vcl.ExtCtrls, BD.Common, Vcl.Graphics, System.StrUtils, Vcl.Dialogs, System.SyncObjs,
   uib, BD.Utils.StrUtils, System.Classes, ComboCheck, BD.Entities.Full, BD.Entities.Types,
   BD.DB.Connection;
 
@@ -69,7 +70,8 @@ procedure LoadCombo(Combo: TLightComboCheck; List: TStrings; DefaultValue: ROpti
 
 implementation
 
-uses UfrmChoixDetail, UfrmChoix, BDTK.GUI.Forms.Converter, BDTK.GUI.Forms.Main, Divers, BD.Utils.GUIUtils, Math, BD.Strings, ActnList, UfrmChoixDetailSerie,
+uses
+  UfrmChoixDetail, UfrmChoix, BDTK.GUI.Forms.Converter, BDTK.GUI.Forms.Main, Divers, BD.Utils.GUIUtils, System.Math, BD.Strings, Vcl.ActnList, UfrmChoixDetailSerie,
   BDTK.GUI.DataModules.Main, System.IniFiles, Vcl.Imaging.jpeg, System.IOUtils;
 
 function Choisir(const Texte1, Texte2: string; Bouton: Integer): TModalResult;

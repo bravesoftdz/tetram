@@ -3,8 +3,8 @@ unit UfrmEditCollection;
 interface
 
 uses
-  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, Mask, DBCtrls, ExtCtrls, ComCtrls, VDTButton,
-  Buttons, EditLabeled, VirtualTrees, BDTK.GUI.Controls.VirtualTree, BDTK.GUI.Frames.QuickSearch, BD.Entities.Full,
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Mask, Vcl.DBCtrls, Vcl.ExtCtrls, Vcl.ComCtrls, VDTButton,
+  Vcl.Buttons, EditLabeled, VirtualTrees, BDTK.GUI.Controls.VirtualTree, BDTK.GUI.Frames.QuickSearch, BD.Entities.Full,
   BD.GUI.Forms, UframVTEdit, BD.GUI.Frames.Buttons;
 
 type

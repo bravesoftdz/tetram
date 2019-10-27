@@ -3,7 +3,7 @@ unit MAJ;
 interface
 
 uses
-  Windows, SysUtils, Forms, Controls, ComCtrls, BD.Entities.Lite, BD.Entities.Full, Classes, BD.Utils.StrUtils;
+  Winapi.Windows, System.SysUtils, Vcl.Forms, Vcl.Controls, Vcl.ComCtrls, BD.Entities.Lite, BD.Entities.Full, System.Classes, BD.Utils.StrUtils;
 
 function MAJConsultationAlbum(const Reference: TGUID): Boolean;
 function MAJConsultationAuteur(const Reference: TGUID): Boolean;
@@ -20,7 +20,7 @@ function ZoomCouverture(isParaBD: Boolean; const ID_Item, ID_Couverture: TGUID):
 implementation
 
 uses
-  BD.Common, BD.Utils.GUIUtils, BDTK.GUI.Forms.Main, DB, StdCtrls, UfrmSeriesIncompletes, UfrmPrevisionsSorties, Graphics, UfrmConsultationAlbum, UfrmRecherche, UfrmZoomCouverture,
+  BD.Common, BD.Utils.GUIUtils, BDTK.GUI.Forms.Main, Data.DB, Vcl.StdCtrls, UfrmSeriesIncompletes, UfrmPrevisionsSorties, Vcl.Graphics, UfrmConsultationAlbum, UfrmRecherche, UfrmZoomCouverture,
   UfrmConsultationAuteur, UfrmPrevisionAchats, UHistorique, UfrmConsultationParaBD, UfrmConsultationSerie, UfrmGallerie, UfrmConsultationUnivers,
   JclCompression, System.IOUtils, BDTK.GUI.Utils, BD.Entities.Dao.Lambda, JclSysUtils, Divers;
 

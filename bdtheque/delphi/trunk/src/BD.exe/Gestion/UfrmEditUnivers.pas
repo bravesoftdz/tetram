@@ -3,9 +3,9 @@ unit UfrmEditUnivers;
 interface
 
 uses
-  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, Db, StdCtrls, ExtCtrls, DBCtrls, Mask, Buttons, VDTButton, ComCtrls,
-  EditLabeled, VirtualTrees, BDTK.GUI.Controls.VirtualTree, BD.Entities.Full, Menus, ExtDlgs, BDTK.GUI.Frames.QuickSearch, BD.GUI.Frames.Buttons, BD.GUI.Forms,
-  ComboCheck, StrUtils, PngSpeedButton, UframVTEdit;
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Data.DB, Vcl.StdCtrls, Vcl.ExtCtrls, Vcl.DBCtrls, Vcl.Mask, Vcl.Buttons, VDTButton, Vcl.ComCtrls,
+  EditLabeled, VirtualTrees, BDTK.GUI.Controls.VirtualTree, BD.Entities.Full, Vcl.Menus, Vcl.ExtDlgs, BDTK.GUI.Frames.QuickSearch, BD.GUI.Frames.Buttons, BD.GUI.Forms,
+  ComboCheck, System.StrUtils, PngSpeedButton, UframVTEdit;
 
 type
   TfrmEditUnivers = class(TbdtForm)
@@ -52,7 +52,7 @@ type
 implementation
 
 uses
-  BD.Utils.StrUtils, Proc_Gestions, BD.Entities.Lite, BD.Utils.GUIUtils, Divers, BD.Strings, StdConvs, ShellAPI, BD.Common, JPEG,
+  BD.Utils.StrUtils, Proc_Gestions, BD.Entities.Lite, BD.Utils.GUIUtils, Divers, BD.Strings, System.StdConvs, Winapi.ShellAPI, BD.Common, Vcl.Imaging.jpeg,
   UHistorique, BD.Entities.Metadata, BDTK.Entities.Dao.Full, BDTK.Entities.Dao.Lite, BD.Entities.Common;
 
 {$R *.DFM}

@@ -2,8 +2,9 @@ unit UfrmConsultationAuteur;
 
 interface
 
-uses Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, System.UITypes, Db, ExtCtrls, DBCtrls, StdCtrls, Menus, ComCtrls, BDTK.GUI.Utils,
-  VDTButton, ActnList, Buttons, ToolWin, VirtualTrees, jpeg, BD.Utils.GUIUtils, ShellAPI, BD.GUI.Controls.VirtualTree, BD.Entities.Full, BD.GUI.Forms, StrUtils,
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, System.UITypes, Data.DB, Vcl.ExtCtrls, Vcl.DBCtrls, Vcl.StdCtrls, Vcl.Menus, Vcl.ComCtrls, BDTK.GUI.Utils,
+  VDTButton, Vcl.ActnList, Vcl.Buttons, Vcl.ToolWin, VirtualTrees, Vcl.Imaging.jpeg, BD.Utils.GUIUtils, Winapi.ShellAPI, BD.GUI.Controls.VirtualTree, BD.Entities.Full, BD.GUI.Forms, System.StrUtils,
   System.Actions;
 
 type
@@ -65,7 +66,8 @@ implementation
 
 {$R *.DFM}
 
-uses BD.Utils.StrUtils, BD.Entities.Lite, Impression, DateUtils, UHistorique, Proc_Gestions, BDTK.GUI.Forms.Main,
+uses
+  BD.Utils.StrUtils, BD.Entities.Lite, Impression, System.DateUtils, UHistorique, Proc_Gestions, BDTK.GUI.Forms.Main,
   BDTK.Entities.Dao.Full, BD.Entities.Common, BD.Entities.Factory.Full;
 
 type

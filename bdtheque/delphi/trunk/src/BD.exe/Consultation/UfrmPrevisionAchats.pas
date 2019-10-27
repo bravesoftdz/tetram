@@ -3,9 +3,9 @@ unit UfrmPrevisionAchats;
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, Menus, ActnList, VirtualTrees, BDTK.GUI.Controls.VirtualTree, Buttons, VDTButton, BDTK.GUI.Utils,
-  ExtCtrls, BD.Utils.GUIUtils, ComboCheck, StdCtrls, BD.GUI.Forms, PngSpeedButton,
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms,
+  Vcl.Dialogs, Vcl.Menus, Vcl.ActnList, VirtualTrees, BDTK.GUI.Controls.VirtualTree, Vcl.Buttons, VDTButton, BDTK.GUI.Utils,
+  Vcl.ExtCtrls, BD.Utils.GUIUtils, ComboCheck, Vcl.StdCtrls, BD.GUI.Forms, PngSpeedButton,
   System.Actions;
 
 type
@@ -52,7 +52,8 @@ type
 
 implementation
 
-uses Impression, IniFiles, BD.Common, BD.Entities.Lite, DateUtils, UHistorique,
+uses
+  Impression, System.IniFiles, BD.Common, BD.Entities.Lite, System.DateUtils, UHistorique,
   Proc_Gestions, BD.Utils.StrUtils;
 
 {$R *.dfm}

@@ -3,9 +3,9 @@ unit UfrmEditAlbum;
 interface
 
 uses
-  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, System.UITypes, ExtCtrls, DBCtrls, StdCtrls, ImgList, EditLabeled,
-  VDTButton, ExtDlgs, Mask, ComCtrls, Buttons, VirtualTrees, BDTK.GUI.Controls.VirtualTree, Menus, BD.Entities.Lite, ActnList, BD.Entities.Full, ComboCheck,
-  BDTK.GUI.Frames.QuickSearch, BD.GUI.Frames.Buttons, BD.GUI.Forms, Generics.Collections, StrUtils,
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, System.UITypes, Vcl.ExtCtrls, Vcl.DBCtrls, Vcl.StdCtrls, Vcl.ImgList, EditLabeled,
+  VDTButton, Vcl.ExtDlgs, Vcl.Mask, Vcl.ComCtrls, Vcl.Buttons, VirtualTrees, BDTK.GUI.Controls.VirtualTree, Vcl.Menus, BD.Entities.Lite, Vcl.ActnList, BD.Entities.Full, ComboCheck,
+  BDTK.GUI.Frames.QuickSearch, BD.GUI.Frames.Buttons, BD.GUI.Forms, System.Generics.Collections, System.StrUtils,
   JvExMask, JvToolEdit, BDTK.GUI.Controls.VirtualTreeEdit, BDTK.GUI.Forms.Main, PngSpeedButton,
   UframVTEdit, System.ImageList, WinAPI.ActiveX, BD.Utils.IOUtils;
 
@@ -194,9 +194,9 @@ type
 implementation
 
 uses
-  Math, BD.Utils.StrUtils, BD.Common, BD.Strings, Divers, Proc_Gestions, BD.Utils.GUIUtils, BDTK.GUI.Utils, Types, jpeg, DateUtils,
+  System.Math, BD.Utils.StrUtils, BD.Common, BD.Strings, Divers, Proc_Gestions, BD.Utils.GUIUtils, BDTK.GUI.Utils, System.Types, Vcl.Imaging.jpeg, System.DateUtils,
   UHistorique, BD.Entities.Metadata, BDTK.Entities.Dao.Lite, BDTK.Entities.Dao.Full, BD.Entities.Common, BD.Entities.Types,
-  BD.Entities.Factory.Lite, BD.Entities.Factory.Full, BD.Entities.Dao.Lambda, Clipbrd;
+  BD.Entities.Factory.Lite, BD.Entities.Factory.Full, BD.Entities.Dao.Lambda, Vcl.Clipbrd;
 
 {$R *.DFM}
 

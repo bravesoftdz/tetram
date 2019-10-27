@@ -3,8 +3,8 @@ unit UfrmChoixDetailSerie;
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, BD.GUI.Frames.Buttons, StdCtrls, ComboCheck, BDTK.GUI.Utils, BD.GUI.Forms;
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms,
+  Vcl.Dialogs, BD.GUI.Frames.Buttons, Vcl.StdCtrls, ComboCheck, BDTK.GUI.Utils, BD.GUI.Forms;
 
 type
   TfrmChoixDetailSerie = class(TbdtForm)
@@ -13,9 +13,7 @@ type
   private
     FMaxNiveauDetail: TDetailSerieOption;
     procedure SetMaxNiveauDetail(const Value: TDetailSerieOption);
-    { Déclarations privées }
   public
-    { Déclarations publiques }
     property MaxNiveauDetail: TDetailSerieOption read FMaxNiveauDetail write SetMaxNiveauDetail;
   end;
 

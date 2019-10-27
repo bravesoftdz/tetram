@@ -3,9 +3,9 @@ unit UfrmConsultationSerie;
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, Dialogs, System.UITypes, BD.Entities.Full, StdCtrls, VirtualTrees, ExtCtrls,
-  ComCtrls, VDTButton, Buttons, BDTK.GUI.Controls.VirtualTree, BD.Utils.GUIUtils, BDTK.GUI.Utils, BD.GUI.Forms, StrUtils,
-  ActnList, Menus, PngSpeedButton, LabeledCheckBox, System.Actions;
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, System.UITypes, BD.Entities.Full, Vcl.StdCtrls, VirtualTrees, Vcl.ExtCtrls,
+  Vcl.ComCtrls, VDTButton, Vcl.Buttons, BDTK.GUI.Controls.VirtualTree, BD.Utils.GUIUtils, BDTK.GUI.Utils, BD.GUI.Forms, System.StrUtils,
+  Vcl.ActnList, Vcl.Menus, PngSpeedButton, LabeledCheckBox, System.Actions;
 
 type
   TfrmConsultationSerie = class(TBdtForm, IImpressionApercu, IFicheEditable)
@@ -92,7 +92,8 @@ type
 
 implementation
 
-uses BD.Utils.StrUtils, Divers, BD.Entities.Lite, ShellAPI, UHistorique, Impression, Proc_Gestions,
+uses
+  BD.Utils.StrUtils, Divers, BD.Entities.Lite, Winapi.ShellAPI, UHistorique, Impression, Proc_Gestions,
   BDTK.GUI.Forms.Main, BDTK.Entities.Dao.Full, BD.Entities.Common, BD.Entities.Factory.Full;
 
 {$R *.dfm}

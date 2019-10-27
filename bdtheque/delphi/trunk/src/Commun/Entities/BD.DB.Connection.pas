@@ -3,7 +3,7 @@ unit BD.DB.Connection;
 interface
 
 uses
-  System.Classes, System.SysUtils, TypInfo, UIB, UIBLib, UFichierLog;
+  System.Classes, System.SysUtils, System.TypInfo, UIB, UIBLib, UFichierLog;
 
 type
   TManagedQuery = class;
@@ -82,7 +82,8 @@ implementation
 
 { TDBConnection }
 
-uses BD.Utils.StrUtils;
+uses
+  BD.Utils.StrUtils;
 
 procedure TDBConnection.AfterConstruction;
 begin

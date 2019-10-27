@@ -3,8 +3,8 @@ unit BDTK.GUI.Forms.UserSettings;
 interface
 
 uses
-  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, ExtCtrls, System.UITypes, System.Types, ComCtrls, IniFiles, CommCtrl, ImgList,
-  Buttons, VDTButton, BD.GUI.Frames.Buttons, Browss, EditLabeled, ComboCheck, BDTK.GUI.Controls.Spin, BD.GUI.Forms, FileCtrl,
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ExtCtrls, System.UITypes, System.Types, Vcl.ComCtrls, System.IniFiles, Winapi.CommCtrl, Vcl.ImgList,
+  Vcl.Buttons, VDTButton, BD.GUI.Frames.Buttons, Browss, EditLabeled, ComboCheck, BDTK.GUI.Controls.Spin, BD.GUI.Forms, Vcl.FileCtrl,
   PngSpeedButton, PngImageList, JvComponentBase, JclCompression,
   System.ImageList;
 
@@ -103,7 +103,8 @@ type
 
 implementation
 
-uses BD.Common, BDTK.GUI.DataModules.Main, BD.Entities.Lite, UIB, BD.Utils.StrUtils, BD.Utils.GUIUtils, BDTK.Updates, IOUtils,
+uses
+  BD.Common, BDTK.GUI.DataModules.Main, BD.Entities.Lite, UIB, BD.Utils.StrUtils, BD.Utils.GUIUtils, BDTK.Updates, System.IOUtils,
   BDTK.Entities.Dao.Lite, BDTK.GUI.Utils, BD.Entities.Common, BD.Entities.Factory.Lite, ICUNumberFormatter, _uloc,
   BD.DB.Connection;
 
@@ -454,7 +455,7 @@ var
   repSave: string;
   sl: TStringList;
 begin
-  if not FileCtrl.SelectDirectory('Sélectionnez un répertoire dans lequel créer le site web', '', repSave, [sdNewUI, sdNewFolder, sdValidateDir], Self) then
+  if not Vcl.FileCtrl.SelectDirectory('Sélectionnez un répertoire dans lequel créer le site web', '', repSave, [sdNewUI, sdNewFolder, sdValidateDir], Self) then
     Exit;
 
   ExtractArchive(TGlobalVar.RepWebServer + 'interface', repSave);

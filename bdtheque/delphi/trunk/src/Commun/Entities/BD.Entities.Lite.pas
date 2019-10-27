@@ -3,7 +3,7 @@ unit BD.Entities.Lite;
 interface
 
 uses
-  Windows, SysUtils, DB, Classes, ComCtrls, StdCtrls, BD.Utils.StrUtils, BD.Entities.Metadata, SyncObjs, Generics.Collections,
+  Winapi.Windows, System.SysUtils, Data.DB, System.Classes, Vcl.ComCtrls, Vcl.StdCtrls, BD.Utils.StrUtils, BD.Entities.Metadata, System.SyncObjs, System.Generics.Collections,
   BD.Entities.Common, BD.Entities.Types;
 
 type
@@ -207,7 +207,7 @@ function MakeUnivers(const Nom: string): TUniversLite;
 implementation
 
 uses
-  StrUtils, BD.Entities.Factory.Lite, BD.Common, BD.Entities.Factory.Common;
+  System.StrUtils, BD.Entities.Factory.Lite, BD.Common, BD.Entities.Factory.Common;
 
 function MakeAuteur(Factory: TFactoryClass; const Nom: string; Metier: TMetierAuteur): TAuteurSerieLite;
 begin

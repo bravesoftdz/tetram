@@ -98,7 +98,7 @@ object frmChoixDetail: TfrmChoixDetail
     ParentBackground = False
     ParentColor = False
     TabOrder = 7
-    ExplicitTop = 206
+    ExplicitTop = 187
     ExplicitWidth = 337
     inherited btnOK: TButton
       Left = 174

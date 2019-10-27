@@ -3,8 +3,8 @@ unit BD.GUI.Forms.Splash;
 interface
 
 uses
-  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
-  ExtCtrls, StdCtrls, verslabp, jpeg, BD.GUI.Forms, Vcl.Imaging.pngimage;
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
+  Vcl.ExtCtrls, Vcl.StdCtrls, verslabp, Vcl.Imaging.jpeg, BD.GUI.Forms, Vcl.Imaging.pngimage;
 
 type
   TfrmSplash = class(TbdtForm)
@@ -31,7 +31,8 @@ type
 
 implementation
 
-uses BD.Common;
+uses
+  BD.Common;
 
 {$R *.DFM}
 

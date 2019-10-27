@@ -3,7 +3,7 @@ unit Editions;
 interface
 
 uses
-  SysUtils, Windows, Dialogs, DB, DBCtrls, Forms, Controls, ComCtrls, Classes, BD.Entities.Full;
+  System.SysUtils, Winapi.Windows, Vcl.Dialogs, Data.DB, Vcl.DBCtrls, Vcl.Forms, Vcl.Controls, Vcl.ComCtrls, System.Classes, BD.Entities.Full;
 
 {
   Principes de base:
@@ -104,7 +104,7 @@ implementation
 
 uses
   UIB, BD.Utils.StrUtils, UfrmEditAlbum, UfrmEditSerie, BD.Strings, UfrmEditEditeur, BDTK.GUI.DataModules.Main,
-  Math, BDTK.GUI.Forms.Main, BD.Utils.GUIUtils, BDTK.GUI.Utils, UfrmEditCollection, UfrmEditAuteur, UfrmEditParaBD,
+  System.Math, BDTK.GUI.Forms.Main, BD.Utils.GUIUtils, BDTK.GUI.Utils, UfrmEditCollection, UfrmEditAuteur, UfrmEditParaBD,
   UfrmEditAchatAlbum, UfrmEditUnivers, BDTK.Entities.Dao.Lite, BDTK.Entities.Dao.Full,
   BD.Entities.Common, BD.DB.Connection;
 

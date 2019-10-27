@@ -4,8 +4,8 @@ unit UfrmPreview;
 interface
 
 uses
-  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, Generics.Collections, System.Types,
-  StdCtrls, ExtCtrls, ToolWin, Menus, Printers, PrintObject, ImgList, BD.GUI.Forms, ComCtrls,
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, System.Generics.Collections, System.Types,
+  Vcl.StdCtrls, Vcl.ExtCtrls, Vcl.ToolWin, Vcl.Menus, Vcl.Printers, PrintObject, Vcl.ImgList, BD.GUI.Forms, Vcl.ComCtrls,
   System.ImageList;
 
 type
@@ -85,7 +85,8 @@ type
 
 implementation
 
-uses MMSystem, UHistorique;
+uses
+  Winapi.MMSystem, UHistorique;
 
 resourcestring
   zoompleinepage = 'Pleine page';
@@ -269,7 +270,7 @@ begin
 end;
 
 type
-  TPanel = class(ExtCtrls.TPanel);
+  TPanel = class(Vcl.ExtCtrls.TPanel);
 
 function TfrmPreview.ShowPage(Page: Integer): Boolean;
 const

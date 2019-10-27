@@ -29,7 +29,8 @@ var
 
 implementation
 
-uses BD.Common, BD.Entities.Lite, BDTK.GUI.DataModules.Main, UIB, BD.Utils.StrUtils, BDTK.Entities.Dao.Lite,
+uses
+  BD.Common, BD.Entities.Lite, BDTK.GUI.DataModules.Main, UIB, BD.Utils.StrUtils, BDTK.Entities.Dao.Lite,
   BD.Entities.Factory.Lite, BD.DB.Connection;
 
 {$R *.DFM}

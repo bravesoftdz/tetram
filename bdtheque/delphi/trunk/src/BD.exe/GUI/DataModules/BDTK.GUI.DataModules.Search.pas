@@ -3,8 +3,8 @@ unit BDTK.GUI.DataModules.Search;
 interface
 
 uses
-  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
-  DB, uib;
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
+  Data.DB, uib;
 
 type
   TdmSearch = class(TDataModule)

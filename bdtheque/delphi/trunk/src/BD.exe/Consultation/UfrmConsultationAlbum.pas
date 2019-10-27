@@ -3,9 +3,9 @@ unit UfrmConsultationAlbum;
 interface
 
 uses
-  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, System.UITypes, Db, ExtCtrls, DBCtrls, StdCtrls, Menus, ComCtrls,
-  BDTK.GUI.Forms.Main, VDTButton, ActnList, Buttons, ToolWin, VirtualTrees, BDTK.GUI.Controls.VirtualTree, BDTK.GUI.Utils, BD.GUI.Forms, StrUtils,
-  jpeg, ShellAPI, BD.Entities.Full, Generics.Defaults, PngSpeedButton, pngimage,
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, System.UITypes, Data.DB, Vcl.ExtCtrls, Vcl.DBCtrls, Vcl.StdCtrls, Vcl.Menus, Vcl.ComCtrls,
+  BDTK.GUI.Forms.Main, VDTButton, Vcl.ActnList, Vcl.Buttons, Vcl.ToolWin, VirtualTrees, BDTK.GUI.Controls.VirtualTree, BDTK.GUI.Utils, BD.GUI.Forms, System.StrUtils,
+  Vcl.Imaging.jpeg, Winapi.ShellAPI, BD.Entities.Full, System.Generics.Defaults, PngSpeedButton, Vcl.Imaging.pngimage,
   LabeledCheckBox, System.Actions;
 
 type
@@ -162,7 +162,7 @@ implementation
 {$R *.DFM}
 
 uses
-  BD.Utils.StrUtils, BD.Entities.Lite, BD.Common, MAJ, Impression, DateUtils, UHistorique, BD.Utils.GUIUtils,
+  BD.Utils.StrUtils, BD.Entities.Lite, BD.Common, MAJ, Impression, System.DateUtils, UHistorique, BD.Utils.GUIUtils,
   Divers, BD.Strings, Proc_Gestions, BD.GUI.Forms.Console, BDTK.Entities.Dao.Full,
   BD.Entities.Common, BD.Entities.Factory.Full, BDTK.GUI.DataModules.Main,
   BD.GUI.DataModules.Common;

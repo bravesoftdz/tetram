@@ -3,7 +3,7 @@ unit UImportXML;
 interface
 
 uses
-  XMLDoc;
+  Xml.XMLDoc;
 
 type
   TImportXML = class

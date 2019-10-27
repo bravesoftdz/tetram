@@ -2,8 +2,9 @@ unit BDTK.GUI.Controls.Spin;
 
 interface
 
-uses Windows, Classes, StdCtrls, ExtCtrls, Controls, Messages, SysUtils,
-  Forms, Graphics, Menus, Buttons;
+uses
+  Winapi.Windows, System.Classes, Vcl.StdCtrls, Vcl.ExtCtrls, Vcl.Controls, Winapi.Messages, System.SysUtils,
+  Vcl.Forms, Vcl.Graphics, Vcl.Menus, Vcl.Buttons;
 
 const
   InitRepeatPause = 400;  { pause before repeat timer (ms) }
@@ -11,7 +12,7 @@ const
 
 type
 
-  TNumGlyphs = Buttons.TNumGlyphs;
+  TNumGlyphs = Vcl.Buttons.TNumGlyphs;
 
   TTimerSpeedButton = class;
 
@@ -182,7 +183,8 @@ type
 
 implementation
 
-uses Themes;
+uses
+  Vcl.Themes;
 
 {$R BDTK.GUI.Controls.Spin.res}
 

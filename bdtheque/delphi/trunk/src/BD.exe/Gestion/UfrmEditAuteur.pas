@@ -3,9 +3,9 @@ unit UfrmEditAuteur;
 interface
 
 uses
-  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, DBCtrls, Mask, Menus, ExtCtrls,
-  EditLabeled, Buttons, VDTButton, BD.GUI.Frames.Buttons, BD.Entities.Full, BD.GUI.Forms,
-  PngSpeedButton, ComCtrls;
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.DBCtrls, Vcl.Mask, Vcl.Menus, Vcl.ExtCtrls,
+  EditLabeled, Vcl.Buttons, VDTButton, BD.GUI.Frames.Buttons, BD.Entities.Full, BD.GUI.Forms,
+  PngSpeedButton, Vcl.ComCtrls;
 
 type
   TfrmEditAuteur = class(TbdtForm)
@@ -39,7 +39,8 @@ type
 
 implementation
 
-uses BD.Utils.StrUtils, ShellAPI, BD.Utils.GUIUtils, BD.Strings, BDTK.GUI.Controls.VirtualTree, BDTK.Entities.Dao.Full,
+uses
+  BD.Utils.StrUtils, Winapi.ShellAPI, BD.Utils.GUIUtils, BD.Strings, BDTK.GUI.Controls.VirtualTree, BDTK.Entities.Dao.Full,
   BD.Entities.Common;
 
 {$R *.DFM}

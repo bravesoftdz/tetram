@@ -3,7 +3,7 @@ unit BD.Utils.RegEx;
 interface
 
 uses
-  SysUtils, Classes, JclPCRE;
+  System.SysUtils, System.Classes, JclPCRE;
 
 type
   TBdtkRegEx = class

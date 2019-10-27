@@ -3,8 +3,9 @@ unit BDTK.GUI.Frames.Converter;
 interface
 
 uses
-  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
-  StdCtrls, ExtCtrls, EditLabeled;
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Classes,
+  Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
+  Vcl.StdCtrls, Vcl.ExtCtrls, EditLabeled;
 
 type
   TframConvertisseur = class(TFrame)
@@ -14,23 +15,20 @@ type
     Edit1: TEditLabeled;
     procedure Edit1Change(Sender: TObject);
     procedure Edit1KeyPress(Sender: TObject; var Key: Char);
-  private
-    { Déclarations privées }
   public
-    { Déclarations publiques }
     FTaux: Currency;
   end;
 
 implementation
 
-uses BD.Utils.StrUtils, BD.Common, BDTK.GUI.Forms.Converter;
+uses
+  BD.Utils.StrUtils, BD.Common, BDTK.GUI.Forms.Converter;
 
 {$R *.DFM}
 
-var
-  travail: Boolean = False;
-
 procedure TframConvertisseur.Edit1Change(Sender: TObject);
+const
+  travail: Boolean = False;
 var
   val: Currency;
   Position: Integer;
@@ -39,7 +37,8 @@ begin
   Label2.Caption := '';
   val := BDStrToDoubleDef(Edit1.Text, 0) * FTaux;
   Label2.Caption := BDCurrencyToStr(val);
-  if not travail then begin
+  if not travail then
+  begin
     travail := True;
     TFrmConvers(Owner).Valeur := val;
     Edit1.SelStart := Position;
@@ -49,9 +48,14 @@ end;
 
 procedure TframConvertisseur.Edit1KeyPress(Sender: TObject; var Key: Char);
 begin
-  if not CharInSet(Key, ['0'..'9', #8, FormatSettings.DecimalSeparator, '.', ',']) then Key := #0;
-  if CharInSet(Key, ['.', ',']) then Key := FormatSettings.DecimalSeparator;
-  if (Pos(FormatSettings.DecimalSeparator, Edit1.Text) <> 0) and (Key = FormatSettings.DecimalSeparator) then Key := #0;
+  if not CharInSet(Key, ['0' .. '9', #8, FormatSettings.DecimalSeparator, '.',
+    ',']) then
+    Key := #0;
+  if CharInSet(Key, ['.', ',']) then
+    Key := FormatSettings.DecimalSeparator;
+  if (Pos(FormatSettings.DecimalSeparator, Edit1.Text) <> 0) and
+    (Key = FormatSettings.DecimalSeparator) then
+    Key := #0;
 end;
 
 end.

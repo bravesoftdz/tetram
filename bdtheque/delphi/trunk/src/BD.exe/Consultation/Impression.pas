@@ -3,8 +3,8 @@ unit Impression;
 interface
 
 uses
-  Dialogs, Controls, Forms, Classes, SysUtils, Windows, ExtCtrls, Graphics, System.UITypes, Printers, BD.Utils.StrUtils, PrintObject, BD.Strings, BD.Common,
-  Divers, BD.Entities.Lite, BDTK.GUI.Forms.Main, BDTK.GUI.DataModules.Main, UfrmRecherche, UIB, jpeg, Generics.Collections, BD.Entities.Full,
+  Vcl.Dialogs, Vcl.Controls, Vcl.Forms, System.Classes, System.SysUtils, Winapi.Windows, Vcl.ExtCtrls, Vcl.Graphics, System.UITypes, Vcl.Printers, BD.Utils.StrUtils, PrintObject, BD.Strings, BD.Common,
+  Divers, BD.Entities.Lite, BDTK.GUI.Forms.Main, BDTK.GUI.DataModules.Main, UfrmRecherche, UIB, Vcl.Imaging.jpeg, System.Generics.Collections, BD.Entities.Full,
   BDTK.Entities.Search, BDTK.Entities.Stats;
 
 procedure ImpressionListeCompleteAlbums(Previsualisation: Boolean);
@@ -28,7 +28,7 @@ procedure ImpressionListePrevisionsAchats(Previsualisation: Boolean);
 implementation
 
 uses
-  UfrmPreview, Math, BD.Utils.GUIUtils, BDTK.GUI.Utils, DateUtils, UIBlib, StrUtils, BD.Entities.Metadata,
+  UfrmPreview, System.Math, BD.Utils.GUIUtils, BDTK.GUI.Utils, System.DateUtils, UIBlib, System.StrUtils, BD.Entities.Metadata,
   BDTK.Entities.Dao.Lite, BDTK.Entities.Dao.Full, BD.Entities.Common, BD.Entities.Factory.Lite,
   BD.DB.Connection;
 

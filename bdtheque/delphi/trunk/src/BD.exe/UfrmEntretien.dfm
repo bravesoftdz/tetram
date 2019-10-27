@@ -38,6 +38,7 @@ object frmEntretien: TfrmEntretien
       Height = 24
       Anchors = [akLeft, akTop, akRight]
       Caption = 'Fermer'
+      Flat = False
       OnClick = VDTButton20Click
     end
     object Label1: TLabel

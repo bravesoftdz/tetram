@@ -3,9 +3,9 @@ unit UfrmFusionEditions;
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, BD.GUI.Forms, StdCtrls, ExtCtrls, BD.GUI.Frames.Buttons, BD.Entities.Full,
-  Generics.Collections, LabeledCheckBox;
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms,
+  Vcl.Dialogs, BD.GUI.Forms, Vcl.StdCtrls, Vcl.ExtCtrls, BD.GUI.Frames.Buttons, BD.Entities.Full,
+  System.Generics.Collections, LabeledCheckBox;
 
 type
   TfrmFusionEditions = class(TBdtForm)
@@ -103,7 +103,7 @@ type
 implementation
 
 uses
-  BD.Strings, BD.Utils.StrUtils, BD.Common, StrUtils, BD.Entities.Common;
+  BD.Strings, BD.Utils.StrUtils, BD.Common, System.StrUtils, BD.Entities.Common;
 
 {$R *.dfm}
 

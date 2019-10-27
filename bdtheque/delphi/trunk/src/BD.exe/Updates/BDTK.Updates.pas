@@ -2,7 +2,8 @@ unit BDTK.Updates;
 
 interface
 
-uses Classes, UIB, Divers, Generics.Collections, Generics.Defaults;
+uses
+  System.Classes, UIB, Divers, System.Generics.Collections, System.Generics.Defaults;
 
 type
   TUpdateFBCallback = procedure(Query: TUIBScript);

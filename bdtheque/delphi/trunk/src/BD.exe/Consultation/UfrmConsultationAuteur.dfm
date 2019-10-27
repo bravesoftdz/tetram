@@ -139,11 +139,6 @@ object frmConsultationAuteur: TfrmConsultationAuteur
       Color = clWhite
       Header.AutoSizeIndex = 0
       Header.DefaultHeight = 17
-      Header.Font.Charset = DEFAULT_CHARSET
-      Header.Font.Color = clWindowText
-      Header.Font.Height = -11
-      Header.Font.Name = 'Tahoma'
-      Header.Font.Style = []
       Header.Height = 17
       Header.Options = [hoColumnResize, hoDrag]
       TabOrder = 1

@@ -4,7 +4,7 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, VirtualTrees, Vcl.ComCtrls, Vcl.ToolWin, Generics.Collections,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, VirtualTrees, Vcl.ComCtrls, Vcl.ToolWin, System.Generics.Collections,
   Vcl.ExtCtrls, Vcl.StdCtrls;
 
 type
@@ -50,7 +50,7 @@ type
 implementation
 
 uses
-  BDTK.GUI.DataModules.Main, DateUtils;
+  BDTK.GUI.DataModules.Main, System.DateUtils;
 
 {$R *.dfm}
 { TTraceEvent }

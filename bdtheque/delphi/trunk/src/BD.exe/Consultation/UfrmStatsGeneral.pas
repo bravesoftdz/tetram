@@ -3,8 +3,8 @@ unit UfrmStatsGeneral;
 interface
 
 uses
-  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
-  StdCtrls, ExtCtrls, BDTK.Entities.Stats, BD.GUI.Forms;
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
+  Vcl.StdCtrls, Vcl.ExtCtrls, BDTK.Entities.Stats, BD.GUI.Forms;
 
 type
   TfrmStatsGenerales = class(TbdtForm)
@@ -52,7 +52,8 @@ function TStatsGeneralesCreate(AOwner: TComponent; Info: TStats): TfrmStatsGener
 
 implementation
 
-uses BD.Common, BD.Entities.Lite, Math, Divers, BD.Utils.StrUtils;
+uses
+  BD.Common, BD.Entities.Lite, System.Math, Divers, BD.Utils.StrUtils;
 
 {$R *.DFM}
 

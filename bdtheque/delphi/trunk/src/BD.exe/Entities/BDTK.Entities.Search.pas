@@ -3,7 +3,7 @@ unit BDTK.Entities.Search;
 interface
 
 uses
-  System.SysUtils, System.Classes, Generics.Collections, UChampsRecherche, BD.Entities.Full, BD.Entities.Lite,
+  System.SysUtils, System.Classes, System.Generics.Collections, UChampsRecherche, BD.Entities.Full, BD.Entities.Lite,
   BD.Entities.Common;
 
 type

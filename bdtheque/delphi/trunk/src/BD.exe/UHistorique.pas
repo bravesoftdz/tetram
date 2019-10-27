@@ -2,7 +2,8 @@ unit UHistorique;
 
 interface
 
-uses SysUtils, Windows, Classes, Generics.Collections, BD.Utils.StrUtils;
+uses
+  System.SysUtils, Winapi.Windows, System.Classes, System.Generics.Collections, BD.Utils.StrUtils;
 
 type
   TActionConsultation = (fcActionBack, fcActionRefresh, fcAlbum, fcAuteur, fcCouverture, fcRecherche, fcPreview, fcSeriesIncompletes,
@@ -67,8 +68,7 @@ type
     procedure AddWaiting(Consultation: TActionConsultation; const Ref: RGUIDEx; Ref2: Integer = -1); overload;
     procedure AddWaiting(Consultation: TActionConsultation; const Ref, Ref2: RGUIDEx); overload;
     procedure AddWaiting(Consultation: TActionConsultation; Callback: TConsultCallback; CallbackData: TObject; Proc, VTV: Pointer; const Valeur: string = ''); overload;
-    procedure AddWaiting(Consultation: TActionConsultation; Callback: TConsultCallback; CallbackData: TObject; Proc, VTV: Pointer; const Ref: RGUIDEx;
-      const Valeur: string = ''); overload;
+    procedure AddWaiting(Consultation: TActionConsultation; Callback: TConsultCallback; CallbackData: TObject; Proc, VTV: Pointer; const Ref: RGUIDEx; const Valeur: string = ''); overload;
 
     procedure Refresh;
     procedure Back;
@@ -95,7 +95,8 @@ procedure RefreshCallBack(Data: TObject);
 
 implementation
 
-uses MAJ, BDTK.GUI.Forms.Main, Forms, Proc_Gestions, BD.GUI.Forms.Console, TypInfo, BDTK.GUI.DataModules.Main,
+uses
+  MAJ, BDTK.GUI.Forms.Main, Vcl.Forms, Proc_Gestions, BD.GUI.Forms.Console, System.TypInfo, BDTK.GUI.DataModules.Main,
   BD.Entities.Full;
 
 const

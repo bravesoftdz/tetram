@@ -3,8 +3,8 @@ unit UfrmEditEditeur;
 interface
 
 uses
-  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, Mask, DBCtrls, ExtCtrls, ComCtrls, VDTButton,
-  Buttons, EditLabeled, ShellAPI, BD.Entities.Full, BD.GUI.Forms,
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Mask, Vcl.DBCtrls, Vcl.ExtCtrls, Vcl.ComCtrls, VDTButton,
+  Vcl.Buttons, EditLabeled, Winapi.ShellAPI, BD.Entities.Full, BD.GUI.Forms,
   PngSpeedButton, BD.GUI.Frames.Buttons;
 
 type

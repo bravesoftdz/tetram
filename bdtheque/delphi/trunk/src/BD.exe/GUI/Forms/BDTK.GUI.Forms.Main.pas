@@ -6,8 +6,8 @@ interface
 {$WARN SYMBOL_DEPRECATED OFF}
 
 uses
-  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, ImgList, Menus, ComCtrls, ExtCtrls, Buttons, ActnList,
-  Printers, iniFiles, jpeg, Generics.Collections, ToolWin, BD.GUI.Forms, PngImageList, pngImage, PngFunctions, UHistorique,
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ImgList, Vcl.Menus, Vcl.ComCtrls, Vcl.ExtCtrls, Vcl.Buttons, Vcl.ActnList,
+  Vcl.Printers, System.IniFiles, Vcl.Imaging.jpeg, System.Generics.Collections, Vcl.ToolWin, BD.GUI.Forms, PngImageList, Vcl.Imaging.pngimage, PngFunctions, UHistorique,
   System.Actions, System.ImageList;
 
 const
@@ -17,7 +17,7 @@ const
 type
   RMSGSendData = record
     l: Integer;
-    a: array [0 .. 2047] of Char;
+    a: array[0..2047] of Char;
   end;
 
   TActionUpdate = function: Boolean of object;
@@ -178,7 +178,6 @@ type
     procedure CheminBaseExecute(Sender: TObject);
     procedure actSynchroniserExecute(Sender: TObject);
   private
-    { Déclarations privées }
     FToolOriginal: TStringList;
     FModalWindows: TStack<TForm>;
     procedure ChargeToolBarres(sl: TStringList);
@@ -190,7 +189,6 @@ type
   protected
     procedure Loaded; override;
   public
-    { Déclarations publiques }
     FCurrentForm: TForm;
     FToolCurrent: TStringList;
     procedure MergeMenu(MergedMenu: TMainMenu);
@@ -210,8 +208,8 @@ implementation
 {$R *.DFM}
 
 uses
-  IOUtils, BDTK.GUI.Utils, UfrmRepertoire, BD.Common, BDTK.GUI.Forms.UserSettings, UfrmStatsGeneral, UfrmStatsAlbums, BD.Entities.Full, Impression,
-  UfrmGestion, BDTK.GUI.Forms.Customize, BD.GUI.Forms.About, BDTK.GUI.DataModules.Main, Types, BD.Utils.GUIUtils, UfrmEntretien, ShellAPI, Math, BDTK.Web.Forms.Publish, JumpList, ShlObj,
+  System.IOUtils, BDTK.GUI.Utils, UfrmRepertoire, BD.Common, BDTK.GUI.Forms.UserSettings, UfrmStatsGeneral, UfrmStatsAlbums, BD.Entities.Full, Impression,
+  UfrmGestion, BDTK.GUI.Forms.Customize, BD.GUI.Forms.About, BDTK.GUI.DataModules.Main, System.Types, BD.Utils.GUIUtils, UfrmEntretien, Winapi.ShellAPI, System.Math, BDTK.Web.Forms.Publish, JumpList, Winapi.ShlObj,
   BDTK.Entities.Stats, BDTK.Web.Forms.Synchronize;
 
 procedure TfrmFond.WMSyscommand(var msg: TWmSysCommand);

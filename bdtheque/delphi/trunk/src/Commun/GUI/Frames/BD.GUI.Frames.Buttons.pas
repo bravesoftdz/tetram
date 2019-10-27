@@ -3,8 +3,8 @@ unit BD.GUI.Frames.Buttons;
 interface
 
 uses
-  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
-  Buttons, StdCtrls, BD.GUI.DataModules.Common;
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
+  Vcl.Buttons, Vcl.StdCtrls, BD.GUI.DataModules.Common;
 
 type
   TframBoutons = class(TFrame)

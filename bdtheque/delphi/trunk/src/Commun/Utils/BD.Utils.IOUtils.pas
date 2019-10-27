@@ -3,7 +3,7 @@ unit BD.Utils.IOUtils;
 interface
 
 uses
-  System.SysUtils, Winapi.Windows, Classes, WinAPI.ActiveX, ComObj;
+  System.SysUtils, Winapi.Windows, System.Classes, WinAPI.ActiveX, System.Win.ComObj;
 
 procedure GetFileListFromExplorerDropObj(const DataObj: IDataObject; FileList: TStrings);
 
@@ -13,7 +13,7 @@ function MatchesMasks(const AFilename: string; const AMasks: TArray<string>): Bo
 implementation
 
 uses
-  ShellAPI, Masks;
+  Winapi.ShellAPI, System.Masks;
 
 function SplitMasks(const AMask: string): TArray<string>;
 var

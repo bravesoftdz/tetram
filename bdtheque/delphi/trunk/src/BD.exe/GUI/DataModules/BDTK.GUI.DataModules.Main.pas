@@ -3,7 +3,7 @@ unit BDTK.GUI.DataModules.Main;
 interface
 
 uses
-  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, System.UITypes, SyncObjs, jpeg, Menus, uib,
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, System.UITypes, System.SyncObjs, Vcl.Imaging.jpeg, Vcl.Menus, uib,
   Vcl.AppEvnts, Vcl.ImgList, PngImageList, BD.DB.Connection,
   System.ImageList;
 
@@ -50,8 +50,8 @@ implementation
 {$R *.DFM}
 
 uses
-  IOUtils, BD.Common, BD.Utils.StrUtils, BD.Strings, BDTK.GUI.DataModules.Search, UIBLib, Divers, IniFiles, BD.Utils.GUIUtils, UHistorique, Math, UIBase, BDTK.Updates, BDTK.GUI.Forms.Main, CheckVersionNet,
-  DateUtils, BDTK.Updates.ODS, JumpList, BD.GUI.Forms.Splash, Proc_Gestions, Generics.Collections,
+  System.IOUtils, BD.Common, BD.Utils.StrUtils, BD.Strings, BDTK.GUI.DataModules.Search, UIBLib, Divers, System.IniFiles, BD.Utils.GUIUtils, UHistorique, System.Math, UIBase, BDTK.Updates, BDTK.GUI.Forms.Main, CheckVersionNet,
+  System.DateUtils, BDTK.Updates.ODS, JumpList, BD.GUI.Forms.Splash, Proc_Gestions, System.Generics.Collections,
   BD.GUI.Forms.Verbose, BD.GUI.Forms.Console, BDTK.GUI.Utils, JclCompression,
   BD.Entities.Dao.Lambda, System.TypInfo, BD.Entities.Full,
   BD.Entities.Dao.Common, BD.GUI.DataModules.Common;

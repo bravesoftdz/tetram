@@ -3,10 +3,10 @@ unit UfrmEditParaBD;
 interface
 
 uses
-  Windows, Messages, SysUtils, System.Types, Variants, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, EditLabeled, VirtualTrees, ComCtrls, VDTButton,
-  BDTK.GUI.Controls.VirtualTree, ComboCheck, ExtCtrls, Buttons, BDTK.GUI.Frames.QuickSearch, Vcl.ExtDlgs, BD.Entities.Full,
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Types, System.Variants, System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, EditLabeled, VirtualTrees, Vcl.ComCtrls, VDTButton,
+  BDTK.GUI.Controls.VirtualTree, ComboCheck, Vcl.ExtCtrls, Vcl.Buttons, BDTK.GUI.Frames.QuickSearch, Vcl.ExtDlgs, BD.Entities.Full,
   BD.GUI.Frames.Buttons, BD.GUI.Forms, PngSpeedButton, UframVTEdit, Vcl.Menus,
-  BD.Utils.IOUtils, ActiveX;
+  BD.Utils.IOUtils, Winapi.ActiveX;
 
 type
   TfrmEditParaBD = class(TbdtForm)
@@ -125,7 +125,7 @@ type
 implementation
 
 uses
-  Math, BD.Utils.StrUtils, BD.Common, BD.Strings, BD.Utils.GUIUtils, BDTK.GUI.Utils, jpeg, Proc_Gestions, BD.Entities.Lite, Divers, UHistorique,
+  System.Math, BD.Utils.StrUtils, BD.Common, BD.Strings, BD.Utils.GUIUtils, BDTK.GUI.Utils, Vcl.Imaging.jpeg, Proc_Gestions, BD.Entities.Lite, Divers, UHistorique,
   BD.Entities.Metadata, BDTK.Entities.Dao.Lite, BDTK.Entities.Dao.Full, BD.Entities.Common,
   BD.Entities.Factory.Lite, BD.Entities.Dao.Lambda, BD.Entities.Types;
 

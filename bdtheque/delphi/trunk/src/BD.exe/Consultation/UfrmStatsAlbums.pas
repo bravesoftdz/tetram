@@ -3,8 +3,8 @@ unit UfrmStatsAlbums;
 interface
 
 uses
-  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
-  StdCtrls, ExtCtrls, BDTK.Entities.Stats, BD.GUI.Forms;
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
+  Vcl.StdCtrls, Vcl.ExtCtrls, BDTK.Entities.Stats, BD.GUI.Forms;
 
 type
   TfrmStatsAlbums = class(TbdtForm)
@@ -45,7 +45,8 @@ function TStatsAlbumsCreate(AOwner: TComponent; Info: TStats): TfrmStatsAlbums;
 
 implementation
 
-uses BD.Common, BD.Entities.Lite, Divers;
+uses
+  BD.Common, BD.Entities.Lite, Divers;
 
 {$R *.DFM}
 

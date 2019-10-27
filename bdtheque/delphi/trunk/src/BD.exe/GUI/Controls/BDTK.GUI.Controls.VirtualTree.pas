@@ -5,9 +5,9 @@ unit BDTK.GUI.Controls.VirtualTree;
 interface
 
 uses
-  Windows, SysUtils, Classes, Controls, Graphics, VirtualTrees, BD.GUI.Controls.VirtualTree, System.UITypes,
-  EditLabeled, BD.Entities.Lite, StrUtils, LinkControls, Generics.Collections,
-{$IFDEF DEBUG}Clipbrd, {$ENDIF}
+  Winapi.Windows, System.SysUtils, System.Classes, Vcl.Controls, Vcl.Graphics, VirtualTrees, BD.GUI.Controls.VirtualTree, System.UITypes,
+  EditLabeled, BD.Entities.Lite, System.StrUtils, LinkControls, System.Generics.Collections,
+{$IFDEF DEBUG}Vcl.Clipbrd, {$ENDIF}
   BDTK.Entities.Dao.Lite;
 
 type
@@ -289,7 +289,7 @@ const
 implementation
 
 uses
-  UIB, BDTK.GUI.DataModules.Main, BD.Utils.StrUtils, Types, UIBLib, Divers, BD.Entities.Common,
+  UIB, BDTK.GUI.DataModules.Main, BD.Utils.StrUtils, System.Types, UIBLib, Divers, BD.Entities.Common,
   BD.DB.Connection;
 
 type

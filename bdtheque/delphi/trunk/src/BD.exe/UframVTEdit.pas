@@ -3,8 +3,8 @@ unit UframVTEdit;
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, Buttons, VDTButton, StdCtrls, Mask, JvExMask,
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms,
+  Vcl.Dialogs, Vcl.Buttons, VDTButton, Vcl.StdCtrls, Vcl.Mask, JvExMask,
   JvToolEdit, BDTK.GUI.Controls.VirtualTreeEdit, BDTK.GUI.Controls.VirtualTree, UHistorique, PngSpeedButton, BDTK.GUI.Forms.Main,
   Vcl.ExtCtrls;
 

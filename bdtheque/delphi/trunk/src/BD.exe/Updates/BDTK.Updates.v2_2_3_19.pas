@@ -2,10 +2,10 @@ unit BDTK.Updates.v2_2_3_19;
 
 interface
 
-uses
-  SysUtils, UIB, UIBLib, BDTK.Updates;
-
 implementation
+
+uses
+  System.SysUtils, UIB, UIBLib, BDTK.Updates;
 
 procedure MAJ2_2_3_19(Query: TUIBScript);
 begin

@@ -2,7 +2,8 @@ unit BDTK.Web.Forms.Publish;
 
 interface
 
-uses Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, ComCtrls, ExtCtrls, BD.GUI.Frames.Buttons, BD.GUI.Forms;
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ComCtrls, Vcl.ExtCtrls, BD.GUI.Frames.Buttons, BD.GUI.Forms;
 
 type
   TfrmPublier = class(TbdtForm)
@@ -22,18 +23,15 @@ type
     procedure Button1Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure DateTimePicker1Change(Sender: TObject);
-  private
-    { Déclarations privées }
-  public
-    { Déclarations publiques }
   end;
 
 implementation
 
 {$R *.dfm}
 
-uses Math, BD.Utils.Net, Divers, BDTK.Updates, UIB, UIBLib, BDTK.GUI.DataModules.Main, BD.Utils.StrUtils, DateUtils, BD.Utils.GUIUtils, BD.Common, VarUtils, StrUtils,
-  Generics.Collections, JclMime, BDTK.GUI.Utils, BDTK.Web;
+uses
+  System.Math, BD.Utils.Net, Divers, BDTK.Updates, UIB, UIBLib, BDTK.GUI.DataModules.Main, BD.Utils.StrUtils, System.DateUtils, BD.Utils.GUIUtils, BD.Common, System.VarUtils, System.StrUtils,
+  System.Generics.Collections, JclMime, BDTK.GUI.Utils, BDTK.Web;
 
 type
   TPublicationWeb = class(TWeb)

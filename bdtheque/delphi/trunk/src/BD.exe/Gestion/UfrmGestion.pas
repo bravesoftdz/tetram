@@ -3,8 +3,8 @@ unit UfrmGestion;
 interface
 
 uses
-  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, DBCtrls, ComCtrls, Db, Menus,
-  ExtCtrls, Buttons, Proc_Gestions, VDTButton, VirtualTrees, BDTK.GUI.Controls.VirtualTree,
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.DBCtrls, Vcl.ComCtrls, Data.DB, Vcl.Menus,
+  Vcl.ExtCtrls, Vcl.Buttons, Proc_Gestions, VDTButton, VirtualTrees, BDTK.GUI.Controls.VirtualTree,
   BDTK.GUI.Frames.QuickSearch, BD.GUI.Forms, PngSpeedButton;
 
 type

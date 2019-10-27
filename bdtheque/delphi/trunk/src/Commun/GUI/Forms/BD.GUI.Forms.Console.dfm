@@ -28,11 +28,6 @@ object frmConsole: TfrmConsole
     Height = 280
     Align = alClient
     Header.AutoSizeIndex = 2
-    Header.Font.Charset = DEFAULT_CHARSET
-    Header.Font.Color = clWindowText
-    Header.Font.Height = -11
-    Header.Font.Name = 'Tahoma'
-    Header.Font.Style = []
     Header.MainColumn = 2
     Header.Options = [hoColumnResize, hoDrag, hoShowSortGlyphs, hoVisible]
     TabOrder = 0
@@ -60,7 +55,7 @@ object frmConsole: TfrmConsole
       item
         Position = 2
       end>
-    WideDefaultText = ''
+    DefaultText = ''
   end
   object Panel1: TPanel
     Left = 0

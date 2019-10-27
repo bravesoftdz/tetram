@@ -3,9 +3,9 @@ unit UfrmEditAchatAlbum;
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, EditLabeled, VirtualTrees, ComCtrls, VDTButton,
-  ExtCtrls, Buttons, BD.GUI.Frames.Buttons, BDTK.GUI.Controls.VirtualTree, BD.Entities.Lite, BDTK.GUI.Frames.QuickSearch, BD.Entities.Full,
-  BD.GUI.Forms, Generics.Collections, PngSpeedButton, UframVTEdit;
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, EditLabeled, VirtualTrees, Vcl.ComCtrls, VDTButton,
+  Vcl.ExtCtrls, Vcl.Buttons, BD.GUI.Frames.Buttons, BDTK.GUI.Controls.VirtualTree, BD.Entities.Lite, BDTK.GUI.Frames.QuickSearch, BD.Entities.Full,
+  BD.GUI.Forms, System.Generics.Collections, PngSpeedButton, UframVTEdit;
 
 type
   TfrmEditAchatAlbum = class(TbdtForm)
@@ -76,7 +76,7 @@ type
 implementation
 
 uses
-  Math, BD.Common, Proc_Gestions, BD.Utils.StrUtils, BD.Utils.GUIUtils, BD.Strings, Divers, StrUtils,
+  System.Math, BD.Common, Proc_Gestions, BD.Utils.StrUtils, BD.Utils.GUIUtils, BD.Strings, Divers, System.StrUtils,
   UHistorique, BD.Entities.Metadata, BDTK.Entities.Dao.Lite, BDTK.Entities.Dao.Full, BD.Entities.Common,
   BD.Entities.Factory.Lite;
 

@@ -3,8 +3,8 @@ unit UfrmChoixDetail;
 interface
 
 uses
-  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
-  StdCtrls, ExtCtrls, BD.GUI.Forms, BD.GUI.Frames.Buttons;
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
+  Vcl.StdCtrls, Vcl.ExtCtrls, BD.GUI.Forms, BD.GUI.Frames.Buttons;
 
 type
   TfrmChoixDetail = class(TbdtForm)
@@ -16,10 +16,6 @@ type
     cbScenario: TCheckBox;
     cbCouleurs: TCheckBox;
     framBoutons1: TframBoutons;
-  private
-    { Déclarations privées }
-  public
-    { Déclarations publiques }
   end;
 
 implementation

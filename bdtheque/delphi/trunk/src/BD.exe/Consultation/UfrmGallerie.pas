@@ -3,8 +3,8 @@ unit UfrmGallerie;
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, System.UITypes,
-  Dialogs, ExtCtrls, StdCtrls, BD.Entities.Full, Generics.Collections, BD.Entities.Lite,
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, System.UITypes,
+  Vcl.Dialogs, Vcl.ExtCtrls, Vcl.StdCtrls, BD.Entities.Full, System.Generics.Collections, BD.Entities.Lite,
   BD.GUI.Forms;
 
 type
@@ -75,7 +75,7 @@ implementation
 {$R *.dfm}
 
 uses
-  BD.Utils.GUIUtils, BD.Common, jpeg, UHistorique, BD.Utils.StrUtils, BDTK.Entities.Dao.Lite, BDTK.Entities.Dao.Full,
+  BD.Utils.GUIUtils, BD.Common, Vcl.Imaging.jpeg, UHistorique, BD.Utils.StrUtils, BDTK.Entities.Dao.Lite, BDTK.Entities.Dao.Full,
   BDTK.GUI.Utils, BD.Entities.Common, BD.Entities.Factory.Lite;
 
 { TThumbList.TThumb }

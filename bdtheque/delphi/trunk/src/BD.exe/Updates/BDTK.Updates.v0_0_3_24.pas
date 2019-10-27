@@ -4,7 +4,8 @@ interface
 
 implementation
 
-uses UIB, BDTK.Updates, SysUtils;
+uses
+  UIB, BDTK.Updates, System.SysUtils;
 
 procedure MAJ0_0_3_24(Query: TUIBScript);
 var

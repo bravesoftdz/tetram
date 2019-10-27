@@ -133,7 +133,7 @@ object frmEditCollection: TfrmEditCollection
       end
       inherited VTEdit: TJvComboEdit
         Width = 663
-        ExplicitWidth = 660
+        ExplicitWidth = 663
       end
     end
     object edAssociations: TMemoLabeled

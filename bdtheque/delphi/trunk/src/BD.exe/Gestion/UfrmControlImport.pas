@@ -3,8 +3,8 @@ unit UfrmControlImport;
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, BD.GUI.Frames.Buttons, BD.GUI.Forms, StdCtrls, UframVTEdit, BDTK.GUI.Controls.VirtualTree, BD.Entities.Full;
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms,
+  Vcl.Dialogs, BD.GUI.Frames.Buttons, BD.GUI.Forms, Vcl.StdCtrls, UframVTEdit, BDTK.GUI.Controls.VirtualTree, BD.Entities.Full;
 
 type
   TfrmControlImport = class(TbdtForm)

@@ -3,7 +3,7 @@ unit BD.GUI.Controls.VirtualTree;
 interface
 
 uses
-  SysUtils, Classes, Graphics, LinkControls, VirtualTrees, Controls;
+  System.SysUtils, System.Classes, Vcl.Graphics, LinkControls, VirtualTrees, Vcl.Controls;
 
 type
   TVirtualStringTree = class(VirtualTrees.TVirtualStringTree)

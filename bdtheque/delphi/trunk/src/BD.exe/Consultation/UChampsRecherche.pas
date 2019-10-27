@@ -3,7 +3,7 @@ unit UChampsRecherche;
 interface
 
 uses
-  Windows, SysUtils, Classes, UIBLib, AnsiStrings;
+  Winapi.Windows, System.SysUtils, System.Classes, UIBLib, System.AnsiStrings;
 
 type
   TChampSpecial = (csNone, csTitre, csGenre, csAffiche, csEtat, csReliure, csOrientation, csFormatEdition, csTypeEdition, csISBN, csMonnaie, csSensLecture, csNotation);

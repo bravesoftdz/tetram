@@ -3,8 +3,8 @@ unit BDTK.GUI.Frames.QuickSearch;
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, BDTK.GUI.Controls.VirtualTree, Buttons, VDTButton, StdCtrls, EditLabeled,
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms,
+  Vcl.Dialogs, BDTK.GUI.Controls.VirtualTree, Vcl.Buttons, VDTButton, Vcl.StdCtrls, EditLabeled,
   PngSpeedButton, Vcl.ExtCtrls;
 
 type
@@ -44,7 +44,7 @@ type
 implementation
 
 uses
-  Proc_Gestions, UHistorique, DateUtils;
+  Proc_Gestions, UHistorique, System.DateUtils;
 
 {$R *.dfm}
 

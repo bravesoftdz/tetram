@@ -3,8 +3,8 @@ unit UfrmRepertoire;
 interface
 
 uses
-  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, Db, StdCtrls, DBCtrls, Menus, Buttons, ComCtrls, ExtCtrls,
-  ScanEdit, VDTButton, VirtualTrees, ActnList, BDTK.GUI.Controls.VirtualTree, jpeg, EditLabeled, ComboCheck, BDTK.GUI.Utils,
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Data.DB, Vcl.StdCtrls, Vcl.DBCtrls, Vcl.Menus, Vcl.Buttons, Vcl.ComCtrls, Vcl.ExtCtrls,
+  ScanEdit, VDTButton, VirtualTrees, Vcl.ActnList, BDTK.GUI.Controls.VirtualTree, Vcl.Imaging.jpeg, EditLabeled, ComboCheck, BDTK.GUI.Utils,
   BDTK.GUI.Frames.QuickSearch, BD.GUI.Forms;
 
 type
@@ -45,7 +45,7 @@ var
 implementation
 
 uses
-  BD.Common, IniFiles, BD.Utils.GUIUtils, UHistorique, BDTK.GUI.Forms.Main, BD.Entities.Lite;
+  BD.Common, System.IniFiles, BD.Utils.GUIUtils, UHistorique, BDTK.GUI.Forms.Main, BD.Entities.Lite;
 
 {$R *.DFM}
 

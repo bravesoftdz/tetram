@@ -3,8 +3,8 @@ unit UfrmZoomCouverture;
 interface
 
 uses
-  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, System.Types, ExtCtrls, ActnList, ToolWin, StdCtrls,
-  BD.Utils.GUIUtils, Menus, BDTK.GUI.Utils, BD.GUI.Forms, System.Actions;
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, System.Types, Vcl.ExtCtrls, Vcl.ActnList, Vcl.ToolWin, Vcl.StdCtrls,
+  BD.Utils.GUIUtils, Vcl.Menus, BDTK.GUI.Utils, BD.GUI.Forms, System.Actions;
 
 type
   TfrmZoomCouverture = class(TBdtForm, IImpressionApercu)
@@ -46,7 +46,8 @@ type
 
 implementation
 
-uses Impression, UHistorique, jpeg, Math;
+uses
+  Impression, UHistorique, Vcl.Imaging.jpeg, System.Math;
 
 {$R *.DFM}
 

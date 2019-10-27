@@ -2,13 +2,10 @@ unit BDTK.Updates.v2_2_3_24;
 
 interface
 
-uses
-  System.SysUtils;
-
 implementation
 
 uses
-  uib, BDTK.Updates;
+  System.SysUtils, UIB, UIBLib, BDTK.Updates;
 
 procedure MAJ2_2_3_24(Query: TUIBScript);
 var

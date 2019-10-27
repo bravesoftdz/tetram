@@ -3,9 +3,9 @@ unit BDTK.GUI.Forms.Customize;
 interface
 
 uses
-  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, Menus,
-  StdCtrls, ComCtrls, CheckLst, ActnList, VDTButton, Buttons, ExtCtrls, BD.GUI.Frames.Buttons,
-  ToolWin, BD.GUI.Forms, PngSpeedButton;
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.Menus,
+  Vcl.StdCtrls, Vcl.ComCtrls, Vcl.CheckLst, Vcl.ActnList, VDTButton, Vcl.Buttons, Vcl.ExtCtrls, BD.GUI.Frames.Buttons,
+  Vcl.ToolWin, BD.GUI.Forms, PngSpeedButton;
 
 type
   TfrmCustomize = class(TbdtForm)
@@ -31,8 +31,7 @@ type
     procedure VDTButton3Click(Sender: TObject);
     procedure VDTButton4Click(Sender: TObject);
     procedure Frame11btnOKClick(Sender: TObject);
-    procedure VDTListView1DragOver(Sender, Source: TObject; X, Y: Integer;
-      State: TDragState; var Accept: Boolean);
+    procedure VDTListView1DragOver(Sender, Source: TObject; X, Y: Integer; State: TDragState; var Accept: Boolean);
     procedure VDTListView1DragDrop(Sender, Source: TObject; X, Y: Integer);
   public
     procedure FillCategories;
@@ -42,7 +41,8 @@ type
 
 implementation
 
-uses BDTK.GUI.Forms.Main, BD.Common, BD.Utils.GUIUtils, BD.Strings;
+uses
+  BDTK.GUI.Forms.Main, BD.Common, BD.Utils.GUIUtils, BD.Strings;
 
 {$R *.DFM}
 
