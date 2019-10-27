@@ -320,6 +320,7 @@ begin
   // pas besoin de vérifier si on est au moins en Windows 7, TJumpList le fait
   jl := TJumpList.Create(nil);
   try
+    jl.AppId := Application.ExeName;
     jl.Tasks.AddShellLink('Ajouter un nouvel album', '/album=new', '', '', 2);
     jl.Tasks.AddShellLink('Ajouter une nouvelle série', '/serie=new', '', '', 2);
     jl.Tasks.AddShellLink('Ajouter un nouvel auteur', '/auteur=new', '', '', 2);

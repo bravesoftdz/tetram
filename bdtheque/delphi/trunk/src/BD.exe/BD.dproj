@@ -425,6 +425,10 @@ $(PreBuildEvent)]]></PreBuildEvent>
         <DCCReference Include="Updates\BDTK.Updates.v2_2_3_33.pas"/>
         <DCCReference Include="..\Commun\Utils\BD.Utils.IOUtils.pas"/>
         <DCCReference Include="..\Commun\Utils\BD.Utils.RandomForest.Classes.pas"/>
+        <DCCReference Include="Web\BDTK.Web.Browser.pas">
+            <Form>frmBDTKWebBrowser</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
         <RcItem Include="..\Commun\Resources\network.png">
             <ResourceType>RCDATA</ResourceType>
             <ResourceId>BT_LINK</ResourceId>
