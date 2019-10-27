@@ -107,6 +107,7 @@ type
     Label29: TLabel;
     btUnivers: TVDTButton;
     lvUnivers: TVDTListViewLabeled;
+    btnScript: TButton;
     procedure ajoutClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -164,6 +165,7 @@ type
     procedure edISBNPaste(Sender: TObject; var Handled: Boolean);
     procedure vstImagesDragDrop(Sender: TBaseVirtualTree; Source: TObject; DataObject: IDataObject; Formats: TFormatArray; Shift: TShiftState; Pt: TPoint; var Effect: Integer; Mode: TDropMode);
     procedure vstImagesDragOver(Sender: TBaseVirtualTree; Source: TObject; Shift: TShiftState; State: TDragState; Pt: TPoint; Mode: TDropMode; var Effect: Integer; var Accept: Boolean);
+    procedure btnScriptClick(Sender: TObject);
   strict private
     FAlbum: TAlbumFull;
     FCurrentEditionComplete: TEditionFull;
@@ -196,7 +198,8 @@ implementation
 uses
   System.Math, BD.Utils.StrUtils, BD.Common, BD.Strings, Divers, Proc_Gestions, BD.Utils.GUIUtils, BDTK.GUI.Utils, System.Types, Vcl.Imaging.jpeg, System.DateUtils,
   UHistorique, BD.Entities.Metadata, BDTK.Entities.Dao.Lite, BDTK.Entities.Dao.Full, BD.Entities.Common, BD.Entities.Types,
-  BD.Entities.Factory.Lite, BD.Entities.Factory.Full, BD.Entities.Dao.Lambda, Vcl.Clipbrd;
+  BD.Entities.Factory.Lite, BD.Entities.Factory.Full, BD.Entities.Dao.Lambda, Vcl.Clipbrd,
+  BDTK.Web.Browser;
 
 {$R *.DFM}
 
@@ -369,6 +372,17 @@ begin
     end;
   finally
     FreeAndNil(frm.FAlbumImport);
+  end;
+end;
+
+procedure TfrmEditAlbum.btnScriptClick(Sender: TObject);
+begin
+  inherited;
+  with TfrmBDTKWebBrowser.Create(Application) do
+  try
+    ShowModal;
+  finally
+    Free;
   end;
 end;
 

@@ -50,7 +50,7 @@ object frmEditAlbum: TfrmEditAlbum
     Height = 796
     Align = alClient
     BorderStyle = bsNone
-    TabOrder = 0
+    TabOrder = 2
     DesignSize = (
       734
       779)
@@ -1523,6 +1523,21 @@ object frmEditAlbum: TfrmEditAlbum
       Left = 651
       ExplicitLeft = 651
     end
+  end
+  object btnScript: TButton
+    Left = 185
+    Top = 6
+    Width = 69
+    Height = 21
+    Cursor = crHandPoint
+    Caption = 'Importer'
+    Default = True
+    DoubleBuffered = True
+    ImageIndex = 12
+    Images = dmPrinc.ShareImageList
+    ParentDoubleBuffered = False
+    TabOrder = 0
+    OnClick = btnScriptClick
   end
   object ChoixImageDialog: TOpenPictureDialog
     DefaultExt = 'bmp'
