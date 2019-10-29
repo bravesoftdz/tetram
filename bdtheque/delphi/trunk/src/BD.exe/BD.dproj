@@ -68,6 +68,7 @@ $(PreBuildEvent)]]></PreBuildEvent>
         <VerInfo_MajorVer>2</VerInfo_MajorVer>
         <VerInfo_MinorVer>2</VerInfo_MinorVer>
         <VerInfo_Release>4</VerInfo_Release>
+        <DCC_Namespace>System;Xml;Data;Datasnap;Web;Soap;Vcl;Vcl.Imaging;Vcl.Touch;Vcl.Samples;Vcl.Shell;$(DCC_Namespace);$(DCC_Namespace)</DCC_Namespace>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win64)'!=''">
         <AppDPIAwarenessMode>PerMonitor</AppDPIAwarenessMode>
