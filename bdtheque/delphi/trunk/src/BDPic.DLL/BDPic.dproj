@@ -34,9 +34,15 @@
         <CfgParent>Base</CfgParent>
         <Base>true</Base>
     </PropertyGroup>
+    <PropertyGroup Condition="('$(Platform)'=='Win64' and '$(Cfg_2)'=='true') or '$(Cfg_2_Win64)'!=''">
+        <Cfg_2_Win64>true</Cfg_2_Win64>
+        <CfgParent>Cfg_2</CfgParent>
+        <Cfg_2>true</Cfg_2>
+        <Base>true</Base>
+    </PropertyGroup>
     <PropertyGroup Condition="'$(Base)'!=''">
         <SanitizedProjectName>BDPic</SanitizedProjectName>
-        <DCC_DcuOutput>dcu\$(platform)</DCC_DcuOutput>
+        <DCC_DcuOutput>..\dcu\$(platform)\$(config)</DCC_DcuOutput>
         <DCC_DebugInformation>0</DCC_DebugInformation>
         <DCC_DependencyCheckOutputName>..\..\bin\BDPic.dll</DCC_DependencyCheckOutputName>
         <DCC_ExeOutput>..\..\deploy\$(platform)</DCC_ExeOutput>
@@ -52,14 +58,10 @@
         <DCC_WriteableConstants>true</DCC_WriteableConstants>
         <GenDll>true</GenDll>
         <Manifest_File>None</Manifest_File>
-        <PostBuildEvent>
-            <![CDATA[$(PROJECTDIR)\post_build.bat $(PROJECTPATH) $(OUTPUTPATH) $(Platform)
-$(PostBuildEvent)]]>
-        </PostBuildEvent>
-        <PreBuildEvent>
-            <![CDATA[$(PROJECTDIR)\pre_build.bat $(PROJECTPATH) $(OUTPUTPATH) $(Platform)
-$(PreBuildEvent)]]>
-        </PreBuildEvent>
+        <PostBuildEvent><![CDATA[$(PROJECTDIR)\post_build.bat $(PROJECTPATH) $(OUTPUTPATH) $(Platform)
+$(PostBuildEvent)]]></PostBuildEvent>
+        <PreBuildEvent><![CDATA[$(PROJECTDIR)\pre_build.bat $(PROJECTPATH) $(OUTPUTPATH) $(Platform)
+$(PreBuildEvent)]]></PreBuildEvent>
         <VerInfo_Keys>CompanyName=;FileDescription=;FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=;ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
         <VerInfo_Locale>1036</VerInfo_Locale>
     </PropertyGroup>
@@ -95,15 +97,15 @@ $(PreBuildEvent)]]>
             <ResourceType>BITMAP</ResourceType>
             <ResourceId>STOCK</ResourceId>
         </RcItem>
+        <BuildConfiguration Include="Debug">
+            <Key>Cfg_2</Key>
+            <CfgParent>Base</CfgParent>
+        </BuildConfiguration>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
         <BuildConfiguration Include="Release">
             <Key>Cfg_1</Key>
-            <CfgParent>Base</CfgParent>
-        </BuildConfiguration>
-        <BuildConfiguration Include="Debug">
-            <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
         </BuildConfiguration>
     </ItemGroup>
@@ -117,7 +119,10 @@ $(PreBuildEvent)]]>
                 <Source>
                     <Source Name="MainSource">BDPic.dpr</Source>
                 </Source>
-                <Excluded_Packages/>
+                <Excluded_Packages>
+                    <Excluded_Packages Name="$(BDSBIN)\dcloffice2k260.bpl">Composants Microsoft Office 2000 Sample Automation Server Wrapper</Excluded_Packages>
+                    <Excluded_Packages Name="$(BDSBIN)\dclofficexp260.bpl">Composants Microsoft Office XP Sample Automation Server Wrapper</Excluded_Packages>
+                </Excluded_Packages>
                 <VersionInfo>
                     <VersionInfo Name="IncludeVerInfo">False</VersionInfo>
                     <VersionInfo Name="AutoIncBuild">False</VersionInfo>
@@ -148,7 +153,6 @@ $(PreBuildEvent)]]>
                 <Parameters/>
             </Delphi.Personality>
             <Platforms>
-                <Platform value="Linux64">False</Platform>
                 <Platform value="Win32">True</Platform>
                 <Platform value="Win64">True</Platform>
             </Platforms>
