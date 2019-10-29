@@ -172,7 +172,8 @@ uses
   BDTK.Updates.v2_2_3_33 in 'Updates\BDTK.Updates.v2_2_3_33.pas',
   BD.Utils.IOUtils in '..\Commun\Utils\BD.Utils.IOUtils.pas',
   BD.Utils.RandomForest.Classes in '..\Commun\Utils\BD.Utils.RandomForest.Classes.pas',
-  BDTK.Web.Browser in 'Web\BDTK.Web.Browser.pas' {frmBDTKWebBrowser};
+  BDTK.Web.Browser in 'Web\BDTK.Web.Browser.pas' {frmBDTKWebBrowser},
+  BD.Utils.Chromium in '..\Commun\Utils\BD.Utils.Chromium.pas';
 
 begin
   Application.Title := 'BDthèque';

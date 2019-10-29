@@ -1,16 +1,21 @@
 ﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup>
-        <Base>True</Base>
-        <AppType>Application</AppType>
-        <Config Condition="'$(Config)'==''">Debug</Config>
-        <FrameworkType>VCL</FrameworkType>
-        <MainSource>BD.dpr</MainSource>
-        <Platform Condition="'$(Platform)'==''">Win64</Platform>
-        <ProjectGuid>{022E3FB6-83D5-4439-8F05-C27BDD308694}</ProjectGuid>
+        <ProjectGuid>{16089277-4B7C-4A61-93A6-88DA69FF9EEA}</ProjectGuid>
         <ProjectVersion>18.7</ProjectVersion>
+        <FrameworkType>None</FrameworkType>
+        <MainSource>BD.Chromium.dpr</MainSource>
+        <Base>True</Base>
+        <Config Condition="'$(Config)'==''">Debug</Config>
+        <Platform Condition="'$(Platform)'==''">Win64</Platform>
         <TargetedPlatforms>2</TargetedPlatforms>
+        <AppType>Console</AppType>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Config)'=='Base' or '$(Base)'!=''">
+        <Base>true</Base>
+    </PropertyGroup>
+    <PropertyGroup Condition="('$(Platform)'=='Win32' and '$(Base)'=='true') or '$(Base_Win32)'!=''">
+        <Base_Win32>true</Base_Win32>
+        <CfgParent>Base</CfgParent>
         <Base>true</Base>
     </PropertyGroup>
     <PropertyGroup Condition="('$(Platform)'=='Win64' and '$(Base)'=='true') or '$(Base_Win64)'!=''">
@@ -23,20 +28,14 @@
         <CfgParent>Base</CfgParent>
         <Base>true</Base>
     </PropertyGroup>
+    <PropertyGroup Condition="('$(Platform)'=='Win32' and '$(Cfg_1)'=='true') or '$(Cfg_1_Win32)'!=''">
+        <Cfg_1_Win32>true</Cfg_1_Win32>
+        <CfgParent>Cfg_1</CfgParent>
+        <Cfg_1>true</Cfg_1>
+        <Base>true</Base>
+    </PropertyGroup>
     <PropertyGroup Condition="('$(Platform)'=='Win64' and '$(Cfg_1)'=='true') or '$(Cfg_1_Win64)'!=''">
         <Cfg_1_Win64>true</Cfg_1_Win64>
-        <CfgParent>Cfg_1</CfgParent>
-        <Cfg_1>true</Cfg_1>
-        <Base>true</Base>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(Config)'=='DCU Debug' or '$(Cfg_3)'!=''">
-        <Cfg_3>true</Cfg_3>
-        <CfgParent>Cfg_1</CfgParent>
-        <Cfg_1>true</Cfg_1>
-        <Base>true</Base>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(Config)'=='FullDebug' or '$(Cfg_4)'!=''">
-        <Cfg_4>true</Cfg_4>
         <CfgParent>Cfg_1</CfgParent>
         <Cfg_1>true</Cfg_1>
         <Base>true</Base>
@@ -46,646 +45,123 @@
         <CfgParent>Base</CfgParent>
         <Base>true</Base>
     </PropertyGroup>
+    <PropertyGroup Condition="('$(Platform)'=='Win32' and '$(Cfg_2)'=='true') or '$(Cfg_2_Win32)'!=''">
+        <Cfg_2_Win32>true</Cfg_2_Win32>
+        <CfgParent>Cfg_2</CfgParent>
+        <Cfg_2>true</Cfg_2>
+        <Base>true</Base>
+    </PropertyGroup>
     <PropertyGroup Condition="'$(Base)'!=''">
-        <SanitizedProjectName>BD</SanitizedProjectName>
-        <DCC_DUPLICATE_CTOR_DTOR>false</DCC_DUPLICATE_CTOR_DTOR>
         <DCC_DcuOutput>..\dcu\$(platform)\$(config)</DCC_DcuOutput>
-        <DCC_Define>FB25;UIBLANG_FR;FBEMBED;GIFGraphic;UseLZW;PortableNetworkGraphic;PS_USESSUPPORT;PCRE_STATICLINK;7ZIP_LINKONREQUEST;NO_ADVANCED_HTTP_CLIENT_FEATURES;UseContentCoding;USE_SSL;NO_OSSL_VERSION_CHECK;$(DCC_Define)</DCC_Define>
-        <DCC_ExeOutput>..\..\deploy\$(platform)</DCC_ExeOutput>
-        <DCC_Inlining>off</DCC_Inlining>
-        <DCC_SYMBOL_PLATFORM>false</DCC_SYMBOL_PLATFORM>
-        <DCC_UNIT_PLATFORM>false</DCC_UNIT_PLATFORM>
-        <DCC_UnitSearchPath>..\..\..\..\..\libs\delphi\fastmm;..\..\..\..\..\libs\delphi\Perso;..\..\..\..\..\libs\delphi\Perso\icu;..\..\..\..\..\libs\delphi\Perso\icu\lib;..\..\..\..\..\libs\delphi\pngcomponents\source;..\..\..\..\..\libs\delphi\uib\source;..\..\..\..\..\libs\delphi\virtual-treeview\source;..\..\..\..\..\libs\delphi\graphics32\source;..\..\..\..\..\libs\delphi\dwscript\source;..\..\..\..\..\libs\delphi\ics\source;..\..\..\..\..\libs\delphi\alglib\delphi\wrapper;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
-        <DCC_WriteableConstants>true</DCC_WriteableConstants>
-        <Manifest_File>$(BDS)\bin\default_app.manifest</Manifest_File>
-        <PostBuildEvent><![CDATA[$(PROJECTDIR)\post_build.bat $(PROJECTPATH) $(OUTPUTPATH) $(Platform)
-$(PostBuildEvent)]]></PostBuildEvent>
-        <PreBuildEvent><![CDATA[$(PROJECTDIR)\pre_build.bat $(PROJECTPATH) $(OUTPUTPATH) $(Platform)
-$(PreBuildEvent)]]></PreBuildEvent>
-        <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
-        <VerInfo_Keys>CompanyName=Teträm Corp;FileDescription=;FileVersion=2.2.4.0;InternalName=BDT;LegalCopyright=Teträm Corp 1997-2019;LegalTrademarks=;OriginalFilename=;ProductName=BDtheque;ProductVersion=2.2;Comments=</VerInfo_Keys>
+        <DCC_ExeOutput>..\..\deploy\$(platform)\Chromium</DCC_ExeOutput>
+        <DCC_E>false</DCC_E>
+        <DCC_N>false</DCC_N>
+        <DCC_S>false</DCC_S>
+        <DCC_F>false</DCC_F>
+        <DCC_K>false</DCC_K>
         <VerInfo_Locale>1036</VerInfo_Locale>
-        <VerInfo_MajorVer>2</VerInfo_MajorVer>
-        <VerInfo_MinorVer>2</VerInfo_MinorVer>
-        <VerInfo_Release>4</VerInfo_Release>
-        <DCC_Namespace>System;Xml;Data;Datasnap;Web;Soap;Vcl;Vcl.Imaging;Vcl.Touch;Vcl.Samples;Vcl.Shell;$(DCC_Namespace);$(DCC_Namespace)</DCC_Namespace>
+        <SanitizedProjectName>BD_Chromium</SanitizedProjectName>
+        <VerInfo_Keys>CompanyName=;FileDescription=$(MSBuildProjectName);FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProgramID=com.embarcadero.$(MSBuildProjectName);ProductName=$(MSBuildProjectName);ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
+        <DCC_UnitSearchPath>..\..\..\..\..\libs\delphi\CEF4Delphi\source;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
+        <DCC_Namespace>System;Xml;Data;Datasnap;Web;Soap;Winapi;$(DCC_Namespace)</DCC_Namespace>
+        <PostBuildEvent><![CDATA[post_build.bat
+$(PostBuildEvent)]]></PostBuildEvent>
+        <PreBuildEvent><![CDATA[pre_build.bat
+$(PreBuildEvent)]]></PreBuildEvent>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Base_Win32)'!=''">
+        <DCC_UsePackage>DBXSqliteDriver;RESTComponents;DBXInterBaseDriver;vclactnband;vclFireDAC;tethering;svnui;JvGlobus;FireDACADSDriver;JvPluginSystem;JvMM;PngComponentsD;vcltouch;JvBands;vcldb;bindcompfmx;svn;JvJans;JvNet;UIBD25Win32R;inetdb;JvAppFrm;CEF4Delphi;JvDotNetCtrls;fmx;FireDACIBDriver;fmxdae;JvWizards;dbexpress;IndyCore;vclx;JvPageComps;dsnap;FireDACCommon;JvDB;RESTBackendComponents;VCLRESTComponents;soapserver;JclDeveloperTools;vclie;bindengine;DBXMySQLDriver;CloudService;JvCmp;FireDACMySQLDriver;JvHMI;FireDACCommonODBC;FireDACCommonDriver;inet;bindcompdbx;JvCustom;IndyIPCommon;vcl;IndyIPServer;JvXPCtrls;IndySystem;dsnapcon;VirtualTreesR;FireDACMSAccDriver;fmxFireDAC;vclimg;Jcl;FireDAC;JvCore;JvCrypt;FireDACSqliteDriver;FireDACPgDriver;soaprtl;DbxCommonDriver;JvDlgs;JvRuntimeDesign;JvManagedThreads;xmlrtl;soapmidas;JvTimeFramework;fmxobj;vclwinx;rtl;MediaKit;DbxClientDriver;CustomIPTransport;vcldsnap;JvSystem;JvStdCtrls;bindcomp;appanalytics;IndyIPClient;bindcompvcl;JvDocking;dbxcds;VclSmp;JvPascalInterpreter;adortl;JclVcl;dsnapxml;dbrtl;IndyProtocols;inetdbxpress;JvControls;JvPrintPreview;JclContainers;fmxase;$(DCC_UsePackage)</DCC_UsePackage>
+        <BT_BuildType>Debug</BT_BuildType>
+        <VerInfo_Locale>1033</VerInfo_Locale>
+        <DCC_ConsoleTarget>true</DCC_ConsoleTarget>
+        <UWP_DelphiLogo44>$(BDS)\bin\Artwork\Windows\UWP\delphi_UwpDefault_44.png</UWP_DelphiLogo44>
+        <UWP_DelphiLogo150>$(BDS)\bin\Artwork\Windows\UWP\delphi_UwpDefault_150.png</UWP_DelphiLogo150>
+        <Manifest_File>(vide)</Manifest_File>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win64)'!=''">
-        <AppDPIAwarenessMode>PerMonitor</AppDPIAwarenessMode>
-        <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
-        <DCC_Namespace>Winapi;System.Win;Data.Win;Datasnap.Win;Web.Win;Soap.Win;Xml.Win;$(DCC_Namespace)</DCC_Namespace>
-        <Icon_MainIcon>..\Commun\Resources\BD_Icon.ico</Icon_MainIcon>
-        <UWP_DelphiLogo150>$(BDS)\bin\Artwork\Windows\UWP\delphi_UwpDefault_150.png</UWP_DelphiLogo150>
+        <DCC_UsePackage>DBXSqliteDriver;RESTComponents;DBXInterBaseDriver;vclactnband;vclFireDAC;tethering;FireDACADSDriver;PngComponentsD;vcltouch;vcldb;bindcompfmx;inetdb;CEF4Delphi;fmx;FireDACIBDriver;fmxdae;dbexpress;IndyCore;vclx;dsnap;FireDACCommon;RESTBackendComponents;VCLRESTComponents;soapserver;vclie;bindengine;DBXMySQLDriver;CloudService;FireDACMySQLDriver;FireDACCommonODBC;FireDACCommonDriver;inet;bindcompdbx;IndyIPCommon;vcl;IndyIPServer;IndySystem;dsnapcon;VirtualTreesR;FireDACMSAccDriver;fmxFireDAC;vclimg;FireDAC;FireDACSqliteDriver;FireDACPgDriver;soaprtl;DbxCommonDriver;xmlrtl;soapmidas;fmxobj;vclwinx;rtl;DbxClientDriver;CustomIPTransport;vcldsnap;bindcomp;appanalytics;IndyIPClient;bindcompvcl;dbxcds;VclSmp;adortl;dsnapxml;dbrtl;IndyProtocols;inetdbxpress;fmxase;$(DCC_UsePackage)</DCC_UsePackage>
+        <DCC_ConsoleTarget>true</DCC_ConsoleTarget>
         <UWP_DelphiLogo44>$(BDS)\bin\Artwork\Windows\UWP\delphi_UwpDefault_44.png</UWP_DelphiLogo44>
+        <UWP_DelphiLogo150>$(BDS)\bin\Artwork\Windows\UWP\delphi_UwpDefault_150.png</UWP_DelphiLogo150>
+        <DCC_Namespace>System.Win;Data.Win;Datasnap.Win;Web.Win;Soap.Win;Xml.Win;$(DCC_Namespace)</DCC_Namespace>
+        <BT_BuildType>Debug</BT_BuildType>
+        <VerInfo_Locale>1033</VerInfo_Locale>
+        <Manifest_File>(vide)</Manifest_File>
+        <Icon_MainIcon>..\Commun\Resources\BD_Icon.ico</Icon_MainIcon>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1)'!=''">
-        <DCC_DebugInfoInExe>true</DCC_DebugInfoInExe>
         <DCC_Define>DEBUG;$(DCC_Define)</DCC_Define>
-        <DCC_GenerateStackFrames>true</DCC_GenerateStackFrames>
+        <DCC_DebugDCUs>true</DCC_DebugDCUs>
         <DCC_Optimize>false</DCC_Optimize>
+        <DCC_GenerateStackFrames>true</DCC_GenerateStackFrames>
+        <DCC_DebugInfoInExe>true</DCC_DebugInfoInExe>
         <DCC_RemoteDebug>true</DCC_RemoteDebug>
-        <VerInfo_Debug>true</VerInfo_Debug>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Cfg_1_Win32)'!=''">
+        <DCC_RemoteDebug>false</DCC_RemoteDebug>
+        <VerInfo_Locale>1033</VerInfo_Locale>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_Win64)'!=''">
-        <BT_BuildType>Debug</BT_BuildType>
-        <AppEnableRuntimeThemes>true</AppEnableRuntimeThemes>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(Cfg_3)'!=''">
-        <DCC_DebugDCUs>true</DCC_DebugDCUs>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(Cfg_4)'!=''">
-        <DCC_Define>FullDebugMode;ClearLogFileOnStartup;LoadDebugDLLDynamically;$(DCC_Define)</DCC_Define>
+        <VerInfo_Locale>1033</VerInfo_Locale>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2)'!=''">
-        <DCC_DebugInformation>0</DCC_DebugInformation>
-        <DCC_Define>RELEASE;$(DCC_Define)</DCC_Define>
         <DCC_LocalDebugSymbols>false</DCC_LocalDebugSymbols>
+        <DCC_Define>RELEASE;$(DCC_Define)</DCC_Define>
         <DCC_SymbolReferenceInfo>0</DCC_SymbolReferenceInfo>
-        <Manifest_File>$(BDS)\bin\default_app.manifest</Manifest_File>
-        <VerInfo_AutoIncVersion>true</VerInfo_AutoIncVersion>
+        <DCC_DebugInformation>0</DCC_DebugInformation>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Cfg_2_Win32)'!=''">
+        <VerInfo_Locale>1033</VerInfo_Locale>
     </PropertyGroup>
     <ItemGroup>
         <DelphiCompile Include="$(MainSource)">
             <MainSource>MainSource</MainSource>
         </DelphiCompile>
-        <DCCReference Include="GUI\Forms\BDTK.GUI.Forms.Main.pas">
-            <Form>frmFond</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
-        <DCCReference Include="GUI\DataModules\BDTK.GUI.DataModules.Main.pas">
-            <Form>dmPrinc</Form>
-            <FormType>dfm</FormType>
-            <DesignClass>TDataModule</DesignClass>
-        </DCCReference>
-        <DCCReference Include="Consultation\UfrmRepertoire.pas">
-            <Form>frmRepertoire</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
-        <DCCReference Include="Consultation\UfrmConsultationAuteur.pas">
-            <Form>frmConsultationAuteur</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
-        <DCCReference Include="Consultation\UfrmConsultationSerie.pas">
-            <Form>frmConsultationSerie</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
-        <DCCReference Include="Consultation\UfrmConsultationParaBD.pas">
-            <Form>frmConsultationParaBD</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
-        <DCCReference Include="Consultation\UfrmZoomCouverture.pas">
-            <Form>frmZoomCouverture</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
-        <DCCReference Include="Consultation\UfrmRecherche.pas">
-            <Form>frmRecherche</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
-        <DCCReference Include="Consultation\UfrmEditCritereTri.pas">
-            <Form>frmEditCritereTri</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
-        <DCCReference Include="Consultation\UfrmStatsGeneral.pas">
-            <Form>frmStatsGenerales</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
-        <DCCReference Include="Consultation\UfrmStatsAlbums.pas">
-            <Form>frmStatsAlbums</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
-        <DCCReference Include="GUI\DataModules\BDTK.GUI.DataModules.Search.pas">
-            <Form>dmSearch</Form>
-            <FormType>dfm</FormType>
-            <DesignClass>TDataModule</DesignClass>
-        </DCCReference>
-        <DCCReference Include="Gestion\Editions.pas"/>
-        <DCCReference Include="Gestion\Proc_Gestions.pas"/>
-        <DCCReference Include="Gestion\UfrmGestion.pas">
-            <Form>frmGestions</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
-        <DCCReference Include="Gestion\UfrmEditAlbum.pas">
-            <Form>frmEditAlbum</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
-        <DCCReference Include="Gestion\UfrmEditAchatAlbum.pas">
-            <Form>frmEditAchatAlbum</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
-        <DCCReference Include="Gestion\UfrmEditEditeur.pas">
-            <Form>frmEditEditeur</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
-        <DCCReference Include="Gestion\UfrmEditSerie.pas">
-            <Form>frmEditSerie</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
-        <DCCReference Include="Gestion\UfrmEditCollection.pas">
-            <Form>frmEditCollection</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
-        <DCCReference Include="Gestion\UfrmEditAuteur.pas">
-            <Form>frmEditAuteur</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
-        <DCCReference Include="Gestion\UfrmEditParaBD.pas">
-            <Form>frmEditParaBD</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
-        <DCCReference Include="Consultation\Impression.pas"/>
-        <DCCReference Include="GUI\Forms\BDTK.GUI.Forms.UserSettings.pas">
-            <Form>frmOptions</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
-        <DCCReference Include="GUI\Forms\BDTK.GUI.Forms.Customize.pas">
-            <Form>frmCustomize</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
-        <DCCReference Include="UfrmChoix.pas">
-            <Form>frmChoix</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
-        <DCCReference Include="UfrmChoixDetail.pas">
-            <Form>frmChoixDetail</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
-        <DCCReference Include="GUI\Forms\BDTK.GUI.Forms.Converter.pas">
-            <Form>FrmConvers</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
-        <DCCReference Include="GUI\Frames\BDTK.GUI.Frames.Converter.pas">
-            <Form>framConvertisseur</Form>
-            <FormType>dfm</FormType>
-            <DesignClass>TFrame</DesignClass>
-        </DCCReference>
-        <DCCReference Include="GUI\Frames\BDTK.GUI.Frames.QuickSearch.pas">
-            <Form>framRechercheRapide</Form>
-            <FormType>dfm</FormType>
-            <DesignClass>TFrame</DesignClass>
-        </DCCReference>
-        <DCCReference Include="Consultation\MAJ.pas"/>
-        <DCCReference Include="Consultation\UfrmPreview.pas">
-            <Form>frmPreview</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
-        <DCCReference Include="UHistorique.pas"/>
-        <DCCReference Include="UfrmEntretien.pas">
-            <Form>frmEntretien</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
-        <DCCReference Include="Consultation\UfrmPrevisionsSorties.pas">
-            <Form>frmPrevisionsSorties</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
-        <DCCReference Include="Consultation\UfrmSeriesIncompletes.pas">
-            <Form>frmSeriesIncompletes</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
-        <DCCReference Include="Consultation\UfrmPrevisionAchats.pas">
-            <Form>frmPrevisionsAchats</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
-        <DCCReference Include="Updates\BDTK.Updates.pas"/>
-        <DCCReference Include="GUI\BDTK.GUI.Utils.pas"/>
-        <DCCReference Include="UfrmChoixDetailSerie.pas">
-            <Form>frmChoixDetailSerie</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
-        <DCCReference Include="Updates\BDTK.Updates.ODS.pas"/>
-        <DCCReference Include="Consultation\UfrmEditCritere.pas">
-            <Form>frmEditCritere</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
-        <DCCReference Include="Consultation\UChampsRecherche.pas"/>
-        <DCCReference Include="Web\BDTK.Web.Forms.Publish.pas">
-            <Form>frmPublier</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
-        <DCCReference Include="Web\Updates\BDTK.Web.Updates.v1_0_0_1.pas"/>
-        <DCCReference Include="Web\Updates\BDTK.Web.Updates.v1_0_0_0.pas"/>
-        <DCCReference Include="Web\Updates\BDTK.Web.Updates.v1_0_0_2.pas"/>
-        <DCCReference Include="Gestion\UfrmControlImport.pas">
-            <Form>frmControlImport</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
-        <DCCReference Include="GUI\Controls\BDTK.GUI.Controls.VirtualTreeEdit.pas"/>
-        <DCCReference Include="UframVTEdit.pas">
-            <Form>framVTEdit</Form>
-            <FormType>dfm</FormType>
-            <DesignClass>TFrame</DesignClass>
-        </DCCReference>
-        <DCCReference Include="Updates\BDTK.Updates.v2_1_1_7.pas"/>
-        <DCCReference Include="Updates\BDTK.Updates.v0_0_0_6.pas"/>
-        <DCCReference Include="Updates\BDTK.Updates.v0_0_0_8.pas"/>
-        <DCCReference Include="Updates\BDTK.Updates.v0_0_0_9.pas"/>
-        <DCCReference Include="Updates\BDTK.Updates.v0_0_1_2.pas"/>
-        <DCCReference Include="Updates\BDTK.Updates.v0_0_1_7.pas"/>
-        <DCCReference Include="Updates\BDTK.Updates.v0_0_2_2.pas"/>
-        <DCCReference Include="Updates\BDTK.Updates.v0_0_2_3.pas"/>
-        <DCCReference Include="Updates\BDTK.Updates.v0_0_2_5.pas"/>
-        <DCCReference Include="Updates\BDTK.Updates.v0_0_2_7.pas"/>
-        <DCCReference Include="Updates\BDTK.Updates.v0_0_2_19.pas"/>
-        <DCCReference Include="Updates\BDTK.Updates.v0_0_2_23.pas"/>
-        <DCCReference Include="Updates\BDTK.Updates.v0_0_3_01.pas"/>
-        <DCCReference Include="Updates\BDTK.Updates.v0_0_3_02.pas"/>
-        <DCCReference Include="Updates\BDTK.Updates.v0_0_3_07.pas"/>
-        <DCCReference Include="Updates\BDTK.Updates.v0_0_3_14.pas"/>
-        <DCCReference Include="Updates\BDTK.Updates.v0_0_3_16.pas"/>
-        <DCCReference Include="Updates\BDTK.Updates.v0_0_3_19.pas"/>
-        <DCCReference Include="Updates\BDTK.Updates.v0_0_3_21.pas"/>
-        <DCCReference Include="Updates\BDTK.Updates.v0_0_3_22.pas"/>
-        <DCCReference Include="Updates\BDTK.Updates.v0_0_3_23.pas"/>
-        <DCCReference Include="Updates\BDTK.Updates.v0_0_3_24.pas"/>
-        <DCCReference Include="Updates\BDTK.Updates.v0_0_3_25.pas"/>
-        <DCCReference Include="Updates\BDTK.Updates.v0_0_3_27.pas"/>
-        <DCCReference Include="Updates\BDTK.Updates.v1_0_0_0.pas"/>
-        <DCCReference Include="Updates\BDTK.Updates.v1_0_0_2.pas"/>
-        <DCCReference Include="Updates\BDTK.Updates.v1_0_0_3.pas"/>
-        <DCCReference Include="Updates\BDTK.Updates.v1_1_0_0.pas"/>
-        <DCCReference Include="Updates\BDTK.Updates.v1_2_0_0.pas"/>
-        <DCCReference Include="Updates\BDTK.Updates.v1_2_0_8.pas"/>
-        <DCCReference Include="Updates\BDTK.Updates.v1_2_1_0.pas"/>
-        <DCCReference Include="Updates\BDTK.Updates.v1_2_2_0.pas"/>
-        <DCCReference Include="Updates\BDTK.Updates.v1_2_3_3.pas"/>
-        <DCCReference Include="Updates\BDTK.Updates.v1_2_3_14.pas"/>
-        <DCCReference Include="Updates\BDTK.Updates.v1_2_3_20.pas"/>
-        <DCCReference Include="Updates\BDTK.Updates.v1_2_3_22.pas"/>
-        <DCCReference Include="Updates\BDTK.Updates.v1_2_3_25.pas"/>
-        <DCCReference Include="Updates\BDTK.Updates.v1_2_3_26.pas"/>
-        <DCCReference Include="Updates\BDTK.Updates.v2_0_0_5.pas"/>
-        <DCCReference Include="Updates\BDTK.Updates.v2_0_1_0.pas"/>
-        <DCCReference Include="Updates\BDTK.Updates.v2_1_0_0.pas"/>
-        <DCCReference Include="Updates\BDTK.Updates.v2_1_0_16.pas"/>
-        <DCCReference Include="Updates\BDTK.Updates.v2_1_0_22.pas"/>
-        <DCCReference Include="Updates\BDTK.Updates.v2_1_0_72.pas"/>
-        <DCCReference Include="Updates\BDTK.Updates.v2_1_1_2.pas"/>
-        <DCCReference Include="Gestion\UfrmFusionEditions.pas">
-            <Form>frmFusionEditions</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
-        <DCCReference Include="Updates\BDTK.Updates.v2_1_1_4.pas"/>
-        <DCCReference Include="Updates\BDTK.Updates.v2_1_1_8.pas"/>
-        <DCCReference Include="Consultation\UfrmGallerie.pas">
-            <Form>frmGallerie</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
-        <DCCReference Include="GUI\Controls\BDTK.GUI.Controls.VirtualTree.pas"/>
-        <DCCReference Include="Updates\BDTK.Updates.v2_1_1_10.pas"/>
-        <DCCReference Include="Updates\BDTK.Updates.v2_1_1_17.pas"/>
-        <DCCReference Include="Updates\BDTK.Updates.v2_1_1_155.pas"/>
-        <DCCReference Include="Consultation\UfrmConsultationAlbum.pas">
-            <Form>frmConsultationAlbum</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
-        <DCCReference Include="Updates\BDTK.Updates.v2_2_2_233.pas"/>
-        <DCCReference Include="Updates\BDTK.Updates.v2_2_3_13.pas"/>
-        <DCCReference Include="Consultation\UfrmConsultationUnivers.pas">
-            <Form>frmConsultationUnivers</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
-        <DCCReference Include="Gestion\UfrmEditUnivers.pas">
-            <Form>frmEditUnivers</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
-        <DCCReference Include="Updates\BDTK.Updates.v2_2_3_16.pas"/>
-        <DCCReference Include="Updates\BDTK.Updates.v2_2_3_17.pas"/>
-        <DCCReference Include="Updates\BDTK.Updates.v2_2_3_19.pas"/>
-        <DCCReference Include="Updates\BDTK.Updates.v2_2_3_21.pas"/>
-        <DCCReference Include="Web\Updates\BDTK.Web.Updates.v1_0_0_3.pas"/>
-        <DCCReference Include="Updates\BDTK.Updates.v2_2_3_22.pas"/>
-        <DCCReference Include="Updates\BDTK.Updates.v2_2_3_23.pas"/>
-        <DCCReference Include="..\Commun\BD.Common.pas"/>
-        <DCCReference Include="..\Commun\Utils\BD.Utils.StrUtils.pas"/>
-        <DCCReference Include="..\Commun\BD.Strings.pas"/>
-        <DCCReference Include="..\Commun\GUI\Forms\BD.GUI.Forms.pas">
-            <Form>bdtForm</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
-        <DCCReference Include="..\Commun\GUI\Frames\BD.GUI.Frames.Buttons.pas">
-            <Form>framBoutons</Form>
-            <FormType>dfm</FormType>
-            <DesignClass>TFrame</DesignClass>
-        </DCCReference>
-        <DCCReference Include="..\Commun\GUI\Forms\BD.GUI.Forms.About.pas">
-            <Form>frmAboutBox</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
-        <DCCReference Include="..\Commun\GUI\Forms\BD.GUI.Forms.Console.pas">
-            <Form>frmConsole</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
-        <DCCReference Include="..\Commun\GUI\Forms\BD.GUI.Forms.Progress.pas">
-            <Form>frmProgression</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
-        <DCCReference Include="..\Commun\GUI\Forms\BD.GUI.Forms.Splash.pas">
-            <Form>frmSplash</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
-        <DCCReference Include="..\Commun\GUI\Forms\BD.GUI.Forms.Verbose.pas">
-            <Form>frmVerbose</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
-        <DCCReference Include="..\Commun\Entities\BD.Entities.Metadata.pas"/>
-        <DCCReference Include="..\Commun\Utils\BD.Utils.GUIUtils.pas"/>
-        <DCCReference Include="..\Commun\Utils\BD.Utils.Net.pas"/>
-        <DCCReference Include="..\Commun\GUI\Controls\BD.GUI.Controls.VirtualTree.pas"/>
-        <DCCReference Include="Entities\BDTK.Entities.Dao.Full.pas"/>
-        <DCCReference Include="Entities\BDTK.Entities.Dao.Lite.pas"/>
-        <DCCReference Include="Entities\BDTK.Entities.Dao.Search.pas"/>
-        <DCCReference Include="Entities\BDTK.Entities.Dao.Stats.pas"/>
-        <DCCReference Include="Entities\BDTK.Entities.Search.pas"/>
-        <DCCReference Include="Entities\BDTK.Entities.Stats.pas"/>
-        <DCCReference Include="..\Commun\Entities\BD.Entities.Full.pas"/>
-        <DCCReference Include="..\Commun\Entities\BD.Entities.Lite.pas"/>
-        <DCCReference Include="..\Commun\Entities\BD.Entities.Common.pas"/>
-        <DCCReference Include="..\Commun\Entities\BD.Entities.Factory.Common.pas"/>
-        <DCCReference Include="..\Commun\Entities\BD.Entities.Dao.Lambda.pas"/>
-        <DCCReference Include="Entities\BDTK.Entities.Dao.Lambda.pas"/>
-        <DCCReference Include="..\Commun\Utils\BD.Utils.Net.ICS.pas"/>
-        <DCCReference Include="Web\BDTK.Web.Forms.Synchronize.pas">
-            <Form>frmSynchroniser</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
-        <DCCReference Include="Web\BDTK.Web.pas"/>
-        <DCCReference Include="Updates\BDTK.Updates.v2_2_3_24.pas"/>
-        <DCCReference Include="Updates\BDTK.Updates.v2_2_3_25.pas"/>
-        <DCCReference Include="Updates\BDTK.Updates.v2_2_3_29.pas"/>
-        <DCCReference Include="..\Commun\Entities\BD.Entities.Types.pas"/>
-        <DCCReference Include="..\Commun\Entities\BD.Entities.Factory.Full.pas"/>
-        <DCCReference Include="..\Commun\Entities\BD.Entities.Factory.Lite.pas"/>
-        <DCCReference Include="..\Commun\Entities\BD.DB.Connection.pas"/>
-        <DCCReference Include="..\Commun\Entities\BD.Entities.Dao.Common.pas"/>
-        <DCCReference Include="..\Commun\GUI\DataModules\BD.GUI.DataModules.Common.pas">
-            <Form>dmCommon</Form>
-            <FormType>dfm</FormType>
-            <DesignClass>TDataModule</DesignClass>
-        </DCCReference>
-        <DCCReference Include="GUI\Controls\BDTK.GUI.Controls.Spin.pas"/>
-        <DCCReference Include="Updates\BDTK.Updates.v2_2_3_33.pas"/>
-        <DCCReference Include="..\Commun\Utils\BD.Utils.IOUtils.pas"/>
-        <DCCReference Include="..\Commun\Utils\BD.Utils.RandomForest.Classes.pas"/>
-        <DCCReference Include="Web\BDTK.Web.Browser.pas">
-            <Form>frmBDTKWebBrowser</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
         <DCCReference Include="..\Commun\Utils\BD.Utils.Chromium.pas"/>
-        <RcItem Include="..\Commun\Resources\network.png">
-            <ResourceType>RCDATA</ResourceType>
-            <ResourceId>BT_LINK</ResourceId>
-        </RcItem>
-        <RcItem Include="..\Commun\Resources\brokenimage.jpg">
-            <ResourceType>RCDATA</ResourceType>
-            <ResourceId>IMAGENONVALIDE</ResourceId>
-        </RcItem>
-        <RcItem Include="..\Commun\Resources\imgAbout.bmp">
-            <ResourceType>BITMAP</ResourceType>
-            <ResourceId>ABOUT</ResourceId>
-        </RcItem>
-        <RcItem Include="..\Commun\Resources\my-documents.ico">
-            <ResourceType>ICON</ResourceType>
-            <ResourceId>MAINICON_1</ResourceId>
-        </RcItem>
-        <RcItem Include="..\Commun\Resources\unknown.ico">
-            <ResourceType>ICON</ResourceType>
-            <ResourceId>MAINICON_2</ResourceId>
-        </RcItem>
-        <RcItem Include="..\Commun\Resources\ISBNRanges.xml">
-            <ContainerId>ResourceItem</ContainerId>
-            <ResourceType>RCDATA</ResourceType>
-            <ResourceId>ISBN_RANGES</ResourceId>
-        </RcItem>
-        <RcItem Include="..\Commun\Resources\handpoint.cur">
-            <ResourceType>RCDATA</ResourceType>
-            <ResourceId>CUR_HANDPOINT</ResourceId>
-        </RcItem>
-        <RcItem Include="Updates\BDTK.Updates.v1_2_0_0-1.sql">
-            <ContainerId>ResourceItem</ContainerId>
-            <ResourceType>ScriptsUpdate</ResourceType>
-            <ResourceId>MAJ1_2_0_0part1</ResourceId>
-        </RcItem>
-        <RcItem Include="Updates\BDTK.Updates.v1_2_0_0-2.sql">
-            <ContainerId>ResourceItem</ContainerId>
-            <ResourceType>ScriptsUpdate</ResourceType>
-            <ResourceId>MAJ1_2_0_0part2</ResourceId>
-        </RcItem>
-        <RcItem Include="Updates\BDTK.Updates.v2_1_0_72-1.sql">
-            <ContainerId>ResourceItem</ContainerId>
-            <ResourceType>ScriptsUpdate</ResourceType>
-            <ResourceId>MAJ2_1_0_72part1</ResourceId>
-        </RcItem>
-        <RcItem Include="Updates\BDTK.Updates.v2_1_0_72-2.sql">
-            <ContainerId>ResourceItem</ContainerId>
-            <ResourceType>ScriptsUpdate</ResourceType>
-            <ResourceId>MAJ2_1_0_72part2</ResourceId>
-        </RcItem>
-        <RcItem Include="Updates\BDTK.Updates.v2_1_0_72-3.sql">
-            <ContainerId>ResourceItem</ContainerId>
-            <ResourceType>ScriptsUpdate</ResourceType>
-            <ResourceId>MAJ2_1_0_72part3</ResourceId>
-        </RcItem>
-        <RcItem Include="Updates\BDTK.Updates.v2_1_1_17.sql">
-            <ContainerId>ResourceItem</ContainerId>
-            <ResourceType>ScriptsUpdate</ResourceType>
-            <ResourceId>MAJ2_1_1_17</ResourceId>
-        </RcItem>
-        <RcItem Include="Updates\BDTK.Updates.v2_1_1_8-1.sql">
-            <ContainerId>ResourceItem</ContainerId>
-            <ResourceType>ScriptsUpdate</ResourceType>
-            <ResourceId>MAJ2_1_1_8part1</ResourceId>
-        </RcItem>
-        <RcItem Include="Updates\BDTK.Updates.v2_1_1_8-2.sql">
-            <ContainerId>ResourceItem</ContainerId>
-            <ResourceType>ScriptsUpdate</ResourceType>
-            <ResourceId>MAJ2_1_1_8part2</ResourceId>
-        </RcItem>
-        <RcItem Include="Updates\BDTK.Updates.v2_1_1_8-3.sql">
-            <ContainerId>ResourceItem</ContainerId>
-            <ResourceType>ScriptsUpdate</ResourceType>
-            <ResourceId>MAJ2_1_1_8part3</ResourceId>
-        </RcItem>
-        <BuildConfiguration Include="Base">
-            <Key>Base</Key>
-        </BuildConfiguration>
-        <BuildConfiguration Include="FullDebug">
-            <Key>Cfg_4</Key>
-            <CfgParent>Cfg_1</CfgParent>
-        </BuildConfiguration>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
         </BuildConfiguration>
-        <BuildConfiguration Include="DCU Debug">
-            <Key>Cfg_3</Key>
-            <CfgParent>Cfg_1</CfgParent>
+        <BuildConfiguration Include="Base">
+            <Key>Base</Key>
         </BuildConfiguration>
         <BuildConfiguration Include="Debug">
             <Key>Cfg_1</Key>
             <CfgParent>Base</CfgParent>
         </BuildConfiguration>
     </ItemGroup>
-    <Import Condition="Exists('$(BDS)\Bin\CodeGear.Delphi.Targets')" Project="$(BDS)\Bin\CodeGear.Delphi.Targets"/>
-    <Import Condition="Exists('$(APPDATA)\Embarcadero\$(BDSAPPDATABASEDIR)\$(PRODUCTVERSION)\UserTools.proj')" Project="$(APPDATA)\Embarcadero\$(BDSAPPDATABASEDIR)\$(PRODUCTVERSION)\UserTools.proj"/>
     <ProjectExtensions>
         <Borland.Personality>Delphi.Personality.12</Borland.Personality>
-        <Borland.ProjectType/>
+        <Borland.ProjectType>Application</Borland.ProjectType>
         <BorlandProject>
             <Delphi.Personality>
                 <Source>
-                    <Source Name="MainSource">BD.dpr</Source>
+                    <Source Name="MainSource">BD.Chromium.dpr</Source>
                 </Source>
                 <Excluded_Packages>
                     <Excluded_Packages Name="$(BDSBIN)\dcloffice2k260.bpl">Composants Microsoft Office 2000 Sample Automation Server Wrapper</Excluded_Packages>
                     <Excluded_Packages Name="$(BDSBIN)\dclofficexp260.bpl">Composants Microsoft Office XP Sample Automation Server Wrapper</Excluded_Packages>
                 </Excluded_Packages>
-                <VersionInfo>
-                    <VersionInfo Name="IncludeVerInfo">True</VersionInfo>
-                    <VersionInfo Name="AutoIncBuild">True</VersionInfo>
-                    <VersionInfo Name="MajorVer">2</VersionInfo>
-                    <VersionInfo Name="MinorVer">2</VersionInfo>
-                    <VersionInfo Name="Release">3</VersionInfo>
-                    <VersionInfo Name="Build">71</VersionInfo>
-                    <VersionInfo Name="Debug">False</VersionInfo>
-                    <VersionInfo Name="PreRelease">False</VersionInfo>
-                    <VersionInfo Name="Special">False</VersionInfo>
-                    <VersionInfo Name="Private">False</VersionInfo>
-                    <VersionInfo Name="DLL">False</VersionInfo>
-                    <VersionInfo Name="Locale">1036</VersionInfo>
-                    <VersionInfo Name="CodePage">1252</VersionInfo>
-                </VersionInfo>
-                <VersionInfoKeys>
-                    <VersionInfoKeys Name="CompanyName">Teträm Corp</VersionInfoKeys>
-                    <VersionInfoKeys Name="FileDescription"/>
-                    <VersionInfoKeys Name="FileVersion">2.2.3.71</VersionInfoKeys>
-                    <VersionInfoKeys Name="InternalName">BDT</VersionInfoKeys>
-                    <VersionInfoKeys Name="LegalCopyright">Teträm Corp 1997-2011</VersionInfoKeys>
-                    <VersionInfoKeys Name="LegalTrademarks"/>
-                    <VersionInfoKeys Name="OriginalFilename"/>
-                    <VersionInfoKeys Name="ProductName">BDtheque</VersionInfoKeys>
-                    <VersionInfoKeys Name="ProductVersion">2</VersionInfoKeys>
-                    <VersionInfoKeys Name="Comments"/>
-                    <VersionInfoKeys Name="CFBundleName"/>
-                    <VersionInfoKeys Name="CFBundleDisplayName"/>
-                    <VersionInfoKeys Name="UIDeviceFamily"/>
-                    <VersionInfoKeys Name="CFBundleIdentifier"/>
-                    <VersionInfoKeys Name="CFBundleVersion"/>
-                    <VersionInfoKeys Name="CFBundlePackageType"/>
-                    <VersionInfoKeys Name="CFBundleSignature"/>
-                    <VersionInfoKeys Name="CFBundleAllowMixedLocalizations"/>
-                    <VersionInfoKeys Name="UISupportedInterfaceOrientations"/>
-                    <VersionInfoKeys Name="CFBundleExecutable"/>
-                    <VersionInfoKeys Name="CFBundleResourceSpecification"/>
-                    <VersionInfoKeys Name="LSRequiresIPhoneOS"/>
-                    <VersionInfoKeys Name="CFBundleInfoDictionaryVersion"/>
-                    <VersionInfoKeys Name="CFBundleDevelopmentRegion"/>
-                </VersionInfoKeys>
             </Delphi.Personality>
             <Deployment Version="3">
-                <DeployFile LocalName="..\Commun\Resources\brokenimage.jpg" Configuration="Debug" Class="ProjectFile">
-                    <Platform Name="Win64">
-                        <RemoteDir>.\</RemoteDir>
+                <DeployFile LocalName="..\..\deploy\Win32\BD.Chromium.exe" Configuration="Debug" Class="ProjectOutput">
+                    <Platform Name="Win32">
+                        <RemoteName>BD_Chromium.exe</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName="..\Commun\Resources\imgAbout.bmp" Configuration="Debug" Class="ProjectFile">
-                    <Platform Name="Win64">
-                        <RemoteDir>.\</RemoteDir>
+                <DeployFile LocalName="$(BDS)\Redist\osx32\libcgunwind.1.0.dylib" Class="DependencyModule">
+                    <Platform Name="OSX32">
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName="..\Commun\Resources\ISBNRanges.xml" Configuration="Debug" Class="ProjectFile">
-                    <Platform Name="Win64">
-                        <RemoteDir>.\</RemoteDir>
+                <DeployFile LocalName="$(BDS)\Redist\iossimulator\libcgunwind.1.0.dylib" Class="DependencyModule">
+                    <Platform Name="iOSSimulator">
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName="Updates\BDTK.Updates.v2_1_0_72-2.sql" Configuration="Debug" Class="ProjectFile">
-                    <Platform Name="Win64">
-                        <RemoteDir>.\</RemoteDir>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
-                <DeployFile LocalName="..\..\deploy\Win64\BD.exe" Configuration="Debug" Class="ProjectOutput">
-                    <Platform Name="Win64">
-                        <RemoteName>BD.exe</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
-                <DeployFile LocalName="..\Commun\Resources\handpoint.cur" Configuration="Debug" Class="ProjectFile">
-                    <Platform Name="Win64">
-                        <RemoteDir>.\</RemoteDir>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
-                <DeployFile LocalName="..\Commun\Resources\network.png" Configuration="Debug" Class="ProjectFile">
-                    <Platform Name="Win64">
-                        <RemoteDir>.\</RemoteDir>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
-                <DeployFile LocalName="Updates\BDTK.Updates.v1_2_0_0-1.sql" Configuration="Debug" Class="ProjectFile">
-                    <Platform Name="Win64">
-                        <RemoteDir>.\</RemoteDir>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
-                <DeployFile LocalName="Updates\BDTK.Updates.v2_1_0_72-1.sql" Configuration="Debug" Class="ProjectFile">
-                    <Platform Name="Win64">
-                        <RemoteDir>.\</RemoteDir>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
-                <DeployFile LocalName="Updates\BDTK.Updates.v2_1_0_72-3.sql" Configuration="Debug" Class="ProjectFile">
-                    <Platform Name="Win64">
-                        <RemoteDir>.\</RemoteDir>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
-                <DeployFile LocalName="Updates\BDTK.Updates.v2_1_1_17.sql" Configuration="Debug" Class="ProjectFile">
-                    <Platform Name="Win64">
-                        <RemoteDir>.\</RemoteDir>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
-                <DeployFile LocalName="Updates\BDTK.Updates.v2_1_1_8-1.sql" Configuration="Debug" Class="ProjectFile">
-                    <Platform Name="Win64">
-                        <RemoteDir>.\</RemoteDir>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
-                <DeployFile LocalName="..\Commun\Resources\unknown.ico" Configuration="Debug" Class="ProjectFile">
-                    <Platform Name="Win64">
-                        <RemoteDir>.\</RemoteDir>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
-                <DeployFile LocalName="Updates\BDTK.Updates.v2_1_1_8-2.sql" Configuration="Debug" Class="ProjectFile">
-                    <Platform Name="Win64">
-                        <RemoteDir>.\</RemoteDir>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
-                <DeployFile LocalName="..\..\deploy\Win64\BD.rsm" Configuration="Debug" Class="DebugSymbols">
-                    <Platform Name="Win64">
-                        <RemoteName>BD.rsm</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
-                <DeployFile LocalName="Updates\BDTK.Updates.v2_1_1_8-3.sql" Configuration="Debug" Class="ProjectFile">
-                    <Platform Name="Win64">
-                        <RemoteDir>.\</RemoteDir>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
-                <DeployFile LocalName="Updates\BDTK.Updates.v1_2_0_0-2.sql" Configuration="Debug" Class="ProjectFile">
-                    <Platform Name="Win64">
-                        <RemoteDir>.\</RemoteDir>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
-                <DeployFile LocalName="..\Commun\Resources\my-documents.ico" Configuration="Debug" Class="ProjectFile">
-                    <Platform Name="Win64">
-                        <RemoteDir>.\</RemoteDir>
+                <DeployFile LocalName="$(BDS)\Redist\iossimulator\libpcre.dylib" Class="DependencyModule">
+                    <Platform Name="iOSSimulator">
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
@@ -1377,8 +853,8 @@ $(PreBuildEvent)]]></PreBuildEvent>
                         <Operation>1</Operation>
                     </Platform>
                 </DeployClass>
-                <ProjectRoot Platform="Win64" Name="$(PROJECTNAME)"/>
                 <ProjectRoot Platform="iOSDevice64" Name="$(PROJECTNAME).app"/>
+                <ProjectRoot Platform="Win64" Name="$(PROJECTNAME)"/>
                 <ProjectRoot Platform="iOSDevice32" Name="$(PROJECTNAME).app"/>
                 <ProjectRoot Platform="Linux64" Name="$(PROJECTNAME)"/>
                 <ProjectRoot Platform="Win32" Name="$(PROJECTNAME)"/>
@@ -1391,73 +867,42 @@ $(PreBuildEvent)]]></PreBuildEvent>
                 <Platform value="Win32">False</Platform>
                 <Platform value="Win64">True</Platform>
             </Platforms>
-            <ModelSupport>False</ModelSupport>
         </BorlandProject>
         <ProjectFileVersion>12</ProjectFileVersion>
     </ProjectExtensions>
+    <Import Project="$(BDS)\Bin\CodeGear.Delphi.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Delphi.Targets')"/>
+    <Import Project="$(APPDATA)\Embarcadero\$(BDSAPPDATABASEDIR)\$(PRODUCTVERSION)\UserTools.proj" Condition="Exists('$(APPDATA)\Embarcadero\$(BDSAPPDATABASEDIR)\$(PRODUCTVERSION)\UserTools.proj')"/>
     <Import Project="$(MSBuildProjectName).deployproj" Condition="Exists('$(MSBuildProjectName).deployproj')"/>
     <PropertyGroup Condition="'$(Config)'=='Debug' And '$(Platform)'=='Win32'">
-        <PreBuildEvent>$(PROJECTDIR)\pre_build.bat $(PROJECTPATH) $(OUTPUTPATH) $(Platform)</PreBuildEvent>
+        <PreBuildEvent>pre_build.bat</PreBuildEvent>
         <PreBuildEventIgnoreExitCode>False</PreBuildEventIgnoreExitCode>
         <PreLinkEvent/>
         <PreLinkEventIgnoreExitCode>False</PreLinkEventIgnoreExitCode>
-        <PostBuildEvent>$(PROJECTDIR)\post_build.bat $(PROJECTPATH) $(OUTPUTPATH) $(Platform)</PostBuildEvent>
+        <PostBuildEvent>post_build.bat</PostBuildEvent>
         <PostBuildEventIgnoreExitCode>False</PostBuildEventIgnoreExitCode>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Config)'=='Debug' And '$(Platform)'=='Win64'">
-        <PreBuildEvent>$(PROJECTDIR)\pre_build.bat $(PROJECTPATH) $(OUTPUTPATH) $(Platform)</PreBuildEvent>
+        <PreBuildEvent>pre_build.bat</PreBuildEvent>
         <PreBuildEventIgnoreExitCode>False</PreBuildEventIgnoreExitCode>
         <PreLinkEvent/>
         <PreLinkEventIgnoreExitCode>False</PreLinkEventIgnoreExitCode>
-        <PostBuildEvent>$(PROJECTDIR)\post_build.bat $(PROJECTPATH) $(OUTPUTPATH) $(Platform)</PostBuildEvent>
-        <PostBuildEventIgnoreExitCode>False</PostBuildEventIgnoreExitCode>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(Config)'=='DCU Debug' And '$(Platform)'=='Win32'">
-        <PreBuildEvent>$(PROJECTDIR)\pre_build.bat $(PROJECTPATH) $(OUTPUTPATH) $(Platform)</PreBuildEvent>
-        <PreBuildEventIgnoreExitCode>False</PreBuildEventIgnoreExitCode>
-        <PreLinkEvent/>
-        <PreLinkEventIgnoreExitCode>False</PreLinkEventIgnoreExitCode>
-        <PostBuildEvent>$(PROJECTDIR)\post_build.bat $(PROJECTPATH) $(OUTPUTPATH) $(Platform)</PostBuildEvent>
-        <PostBuildEventIgnoreExitCode>False</PostBuildEventIgnoreExitCode>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(Config)'=='DCU Debug' And '$(Platform)'=='Win64'">
-        <PreBuildEvent>$(PROJECTDIR)\pre_build.bat $(PROJECTPATH) $(OUTPUTPATH) $(Platform)</PreBuildEvent>
-        <PreBuildEventIgnoreExitCode>False</PreBuildEventIgnoreExitCode>
-        <PreLinkEvent/>
-        <PreLinkEventIgnoreExitCode>False</PreLinkEventIgnoreExitCode>
-        <PostBuildEvent>$(PROJECTDIR)\post_build.bat $(PROJECTPATH) $(OUTPUTPATH) $(Platform)</PostBuildEvent>
-        <PostBuildEventIgnoreExitCode>False</PostBuildEventIgnoreExitCode>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(Config)'=='FullDebug' And '$(Platform)'=='Win32'">
-        <PreBuildEvent>$(PROJECTDIR)\pre_build.bat $(PROJECTPATH) $(OUTPUTPATH) $(Platform)</PreBuildEvent>
-        <PreBuildEventIgnoreExitCode>False</PreBuildEventIgnoreExitCode>
-        <PreLinkEvent/>
-        <PreLinkEventIgnoreExitCode>False</PreLinkEventIgnoreExitCode>
-        <PostBuildEvent>$(PROJECTDIR)\post_build.bat $(PROJECTPATH) $(OUTPUTPATH) $(Platform)</PostBuildEvent>
-        <PostBuildEventIgnoreExitCode>False</PostBuildEventIgnoreExitCode>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(Config)'=='FullDebug' And '$(Platform)'=='Win64'">
-        <PreBuildEvent>$(PROJECTDIR)\pre_build.bat $(PROJECTPATH) $(OUTPUTPATH) $(Platform)</PreBuildEvent>
-        <PreBuildEventIgnoreExitCode>False</PreBuildEventIgnoreExitCode>
-        <PreLinkEvent/>
-        <PreLinkEventIgnoreExitCode>False</PreLinkEventIgnoreExitCode>
-        <PostBuildEvent>$(PROJECTDIR)\post_build.bat $(PROJECTPATH) $(OUTPUTPATH) $(Platform)</PostBuildEvent>
+        <PostBuildEvent>post_build.bat</PostBuildEvent>
         <PostBuildEventIgnoreExitCode>False</PostBuildEventIgnoreExitCode>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Config)'=='Release' And '$(Platform)'=='Win32'">
-        <PreBuildEvent>$(PROJECTDIR)\pre_build.bat $(PROJECTPATH) $(OUTPUTPATH) $(Platform)</PreBuildEvent>
+        <PreBuildEvent>pre_build.bat</PreBuildEvent>
         <PreBuildEventIgnoreExitCode>False</PreBuildEventIgnoreExitCode>
         <PreLinkEvent/>
         <PreLinkEventIgnoreExitCode>False</PreLinkEventIgnoreExitCode>
-        <PostBuildEvent>$(PROJECTDIR)\post_build.bat $(PROJECTPATH) $(OUTPUTPATH) $(Platform)</PostBuildEvent>
+        <PostBuildEvent>post_build.bat</PostBuildEvent>
         <PostBuildEventIgnoreExitCode>False</PostBuildEventIgnoreExitCode>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Config)'=='Release' And '$(Platform)'=='Win64'">
-        <PreBuildEvent>$(PROJECTDIR)\pre_build.bat $(PROJECTPATH) $(OUTPUTPATH) $(Platform)</PreBuildEvent>
+        <PreBuildEvent>pre_build.bat</PreBuildEvent>
         <PreBuildEventIgnoreExitCode>False</PreBuildEventIgnoreExitCode>
         <PreLinkEvent/>
         <PreLinkEventIgnoreExitCode>False</PreLinkEventIgnoreExitCode>
-        <PostBuildEvent>$(PROJECTDIR)\post_build.bat $(PROJECTPATH) $(OUTPUTPATH) $(Platform)</PostBuildEvent>
+        <PostBuildEvent>post_build.bat</PostBuildEvent>
         <PostBuildEventIgnoreExitCode>False</PostBuildEventIgnoreExitCode>
     </PropertyGroup>
 </Project>

@@ -16,7 +16,7 @@ type
 implementation
 
 uses
-  uCEFApplication, BD.Utils.GUIUtils;
+  uCEFApplication, BD.Utils.GUIUtils, BD.Utils.Chromium;
 
 {$R *.dfm}
 
@@ -28,35 +28,7 @@ begin
     Exit;
 
   HourGlass := THourGlass.Create;
-
-  GlobalCEFApp := TCefApplication.Create;
-
-  // obligatoire pour permettre à bdtheque d'être lancé sans donner le chemin de démarrage
-  // (= les dll de Chromium se trouvent toujours avec l'appli, on n'autorise pas à contourner leur emplacement)
-  GlobalCEFApp.SetCurrentDir := True;
-
-  // obligatoire puisqu'on n'initialise pas GlobalCEFApp dans le dpr
-  GlobalCEFApp.SingleProcess := True;
-
-  GlobalCEFApp.FrameworkDirPath := 'Chromium';
-  GlobalCEFApp.ResourcesDirPath := 'Chromium';
-  GlobalCEFApp.LocalesDirPath := 'Chromium';
-  GlobalCEFApp.LocalesRequired := 'fr';
-
-  if not GlobalCEFApp.StartMainProcess then
-    Exit;
-end;
-
-procedure FinalizeBrowser;
-var
-  HourGlass: IHourGlass;
-begin
-  if not Assigned(GlobalCEFApp) then
-    Exit;
-
-  HourGlass := THourGlass.Create;
-
-  GlobalCEFApp.Free;
+  InitializeChromium;
 end;
 
 { TfrmBDTKWebBrowser }
@@ -71,11 +43,5 @@ destructor TfrmBDTKWebBrowser.Destroy;
 begin
   inherited;
 end;
-
-initialization
-  // on attend le dernier moment pour charger Chromimum (pas besoin de surcharger le process si on ne s'en sert pas)
-
-finalization
-  FinalizeBrowser;
 
 end.

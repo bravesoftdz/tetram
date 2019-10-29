@@ -9,8 +9,11 @@
         <Projects Include="BDT_UDF.DLL\BDT_UDF.dproj">
             <Dependencies/>
         </Projects>
+        <Projects Include="BD.Chromium\BD.Chromium.dproj">
+            <Dependencies/>
+        </Projects>
         <Projects Include="BD.exe\BD.dproj">
-            <Dependencies>BDPic.DLL\BDPic.dproj;BDT_UDF.DLL\BDT_UDF.dproj</Dependencies>
+            <Dependencies>BD.Chromium\BD.Chromium.dproj;BDPic.DLL\BDPic.dproj;BDT_UDF.DLL\BDT_UDF.dproj</Dependencies>
         </Projects>
     </ItemGroup>
     <ProjectExtensions>
@@ -38,23 +41,32 @@
     <Target Name="BDT_UDF:Make">
         <MSBuild Projects="BDT_UDF.DLL\BDT_UDF.dproj" Targets="Make"/>
     </Target>
-    <Target Name="BD" DependsOnTargets="BDPic;BDT_UDF">
+    <Target Name="BD_Chromium">
+        <MSBuild Projects="BD.Chromium\BD.Chromium.dproj"/>
+    </Target>
+    <Target Name="BD_Chromium:Clean">
+        <MSBuild Projects="BD.Chromium\BD.Chromium.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="BD_Chromium:Make">
+        <MSBuild Projects="BD.Chromium\BD.Chromium.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="BD" DependsOnTargets="BD.Chromium;BDPic;BDT_UDF">
         <MSBuild Projects="BD.exe\BD.dproj"/>
     </Target>
-    <Target Name="BD:Clean" DependsOnTargets="BDPic:Clean;BDT_UDF:Clean">
+    <Target Name="BD:Clean" DependsOnTargets="BD.Chromium:Clean;BDPic:Clean;BDT_UDF:Clean">
         <MSBuild Projects="BD.exe\BD.dproj" Targets="Clean"/>
     </Target>
-    <Target Name="BD:Make" DependsOnTargets="BDPic:Make;BDT_UDF:Make">
+    <Target Name="BD:Make" DependsOnTargets="BD.Chromium:Make;BDPic:Make;BDT_UDF:Make">
         <MSBuild Projects="BD.exe\BD.dproj" Targets="Make"/>
     </Target>
     <Target Name="Build">
-        <CallTarget Targets="BDPic;BDT_UDF;BD"/>
+        <CallTarget Targets="BDPic;BDT_UDF;BD_Chromium;BD"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="BDPic:Clean;BDT_UDF:Clean;BD:Clean"/>
+        <CallTarget Targets="BDPic:Clean;BDT_UDF:Clean;BD_Chromium:Clean;BD:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="BDPic:Make;BDT_UDF:Make;BD:Make"/>
+        <CallTarget Targets="BDPic:Make;BDT_UDF:Make;BD_Chromium:Make;BD:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
     <ItemGroup Condition="'$(BuildGroup)'=='Release'">
@@ -75,6 +87,12 @@
             <Configurations>Release</Configurations>
             <Platforms>Win32;Win64</Platforms>
             <Enabled>True</Enabled>
+        </BuildGroupProject>
+        <BuildGroupProject Include="BD.Chromium\BD.Chromium.dproj">
+            <ProjectGuid>{16089277-4B7C-4A61-93A6-88DA69FF9EEA}</ProjectGuid>
+            <Configurations>Debug</Configurations>
+            <Platforms>Win32</Platforms>
+            <Enabled>False</Enabled>
         </BuildGroupProject>
     </ItemGroup>
 </Project>
