@@ -9,6 +9,8 @@ uses
 type
   TfrmBDTKWebBrowser = class(TBdtForm)
   public
+    class function DoPopup(const AKeyWords: string): Boolean;
+
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
   end;
@@ -32,6 +34,20 @@ begin
 end;
 
 { TfrmBDTKWebBrowser }
+
+class function TfrmBDTKWebBrowser.DoPopup(const AKeyWords: string): Boolean;
+var
+  frm: TfrmBDTKWebBrowser;
+begin
+  frm := TfrmBDTKWebBrowser.Create(Application);
+  try
+    frm.ShowModal;
+
+    Result := True;
+  finally
+    frm.Free;
+  end;
+end;
 
 constructor TfrmBDTKWebBrowser.Create(AOwner: TComponent);
 begin

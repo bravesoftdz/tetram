@@ -1111,7 +1111,7 @@ object frmEditAlbum: TfrmEditAlbum
     end
     object edTitre: TEditLabeled
       Left = 56
-      Top = 4
+      Top = 3
       Width = 675
       Height = 21
       Anchors = [akLeft, akTop, akRight]
@@ -1525,9 +1525,9 @@ object frmEditAlbum: TfrmEditAlbum
     end
   end
   object btnScript: TButton
-    Left = 185
+    Left = 180
     Top = 6
-    Width = 69
+    Width = 109
     Height = 21
     Cursor = crHandPoint
     Caption = 'Importer'

@@ -318,6 +318,9 @@ begin
     vtEditions.ItemIndex := OldvtEditionsItemIndex;
     vtEditionsClick(nil);
 
+    if not FAlbum.RecInconnu then
+      btnScript.Caption := 'Mettre à jour';
+
     if (FAlbum.RecInconnu and (FAlbum.Editions.Count = 0)) or isAchat then
       VDTButton3.Click;
   finally
@@ -376,14 +379,19 @@ begin
 end;
 
 procedure TfrmEditAlbum.btnScriptClick(Sender: TObject);
+var
+  KeyWords: string;
 begin
-  inherited;
-  with TfrmBDTKWebBrowser.Create(Application) do
-  try
-    ShowModal;
-  finally
-    Free;
-  end;
+  KeyWords := '';
+  if Assigned(FCurrentEditionComplete) and Assigned(FCurrentEditionComplete.Editeur) then
+    AjoutString(KeyWords, FormatTitre(FCurrentEditionComplete.Editeur.NomEditeur), ' ');
+  if Assigned(FAlbum.Serie) then
+    AjoutString(KeyWords, FormatTitre(FAlbum.Serie.TitreSerie), ' ');
+  if Trim(edTitre.Text) <> '' then
+    AjoutString(KeyWords, FormatTitre(Trim(edTitre.Text)), ' ');
+
+  if TfrmBDTKWebBrowser.DoPopup(KeyWords) then
+    ;
 end;
 
 procedure TfrmEditAlbum.btUniversClick(Sender: TObject);
