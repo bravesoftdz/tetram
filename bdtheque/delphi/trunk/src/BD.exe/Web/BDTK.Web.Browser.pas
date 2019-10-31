@@ -4,15 +4,21 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, BD.GUI.Forms;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, BD.GUI.Forms, BD.GUI.Frames.Buttons,
+  BD.Entities.Full;
 
 type
   TfrmBDTKWebBrowser = class(TBdtForm)
+    Frame11: TframBoutons;
+  private
+    FAutoSearchKeyWords: string;
+    FAlbum: TAlbumFull;
   public
-    class function DoPopup(const AKeyWords: string): Boolean;
-
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
+
+    property Album: TAlbumFull read FAlbum write FAlbum;
+    property AutoSearchKeyWords: string read FAutoSearchKeyWords write FAutoSearchKeyWords;
   end;
 
 implementation
@@ -34,20 +40,6 @@ begin
 end;
 
 { TfrmBDTKWebBrowser }
-
-class function TfrmBDTKWebBrowser.DoPopup(const AKeyWords: string): Boolean;
-var
-  frm: TfrmBDTKWebBrowser;
-begin
-  frm := TfrmBDTKWebBrowser.Create(Application);
-  try
-    frm.ShowModal;
-
-    Result := True;
-  finally
-    frm.Free;
-  end;
-end;
 
 constructor TfrmBDTKWebBrowser.Create(AOwner: TComponent);
 begin

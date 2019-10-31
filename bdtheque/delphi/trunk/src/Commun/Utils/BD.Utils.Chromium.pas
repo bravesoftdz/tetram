@@ -10,7 +10,13 @@ procedure InitializeChromium;
 implementation
 
 uses
-  uCEFApplication;
+  uCEFApplication, uCEFWorkScheduler;
+
+procedure GlobalCEFApp_OnScheduleMessagePumpWork(const ADelayMS: Int64);
+begin
+  if (GlobalCEFWorkScheduler <> nil) then
+    GlobalCEFWorkScheduler.ScheduleMessagePumpWork(ADelayMS);
+end;
 
 procedure InitializeChromium;
 var
@@ -18,6 +24,7 @@ var
 begin
   IsSubProcess := SameText(ExtractFileName(ParamStr(0)), 'BD.Chromium.exe');
 
+  GlobalCEFWorkScheduler := TCEFWorkScheduler.Create(nil);
   GlobalCEFApp := TCefApplication.Create;
 
   // obligatoire pour permettre à bdtheque d'être lancé sans donner le chemin de démarrage
@@ -37,6 +44,10 @@ begin
   GlobalCEFApp.LocalesDirPath := 'Chromium';
   GlobalCEFApp.LocalesRequired := 'fr';
 
+  GlobalCEFApp.ExternalMessagePump := True;
+  GlobalCEFApp.MultiThreadedMessageLoop := False;
+  GlobalCEFApp.OnScheduleMessagePumpWork := GlobalCEFApp_OnScheduleMessagePumpWork;
+
   // on n'utilise pas Application.ExeName pour éviter les uses trop gourmand (Forms)
   if IsSubProcess then
     GlobalCEFApp.StartSubProcess
@@ -48,6 +59,7 @@ end;
 procedure FinalizeChromium;
 begin
   FreeAndNil(GlobalCEFApp);
+  FreeAndNil(GlobalCEFWorkScheduler);
 end;
 
 initialization

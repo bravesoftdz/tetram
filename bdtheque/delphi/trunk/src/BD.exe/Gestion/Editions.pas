@@ -52,6 +52,7 @@ function EditionAlbum(var ID: TGUID; Creation: Boolean = False; const Valeur: st
 function EditionAlbum(Source: TObjetFull; Achat: Boolean): Boolean; overload;
 function EditionAlbum(Source: TObjetFull): Boolean; overload;
 function DelAlbum(const ID: TGUID): Boolean;
+function ImportAlbum(const AAutoSearchKeyWords: string; ADestination: TAlbumFull): Boolean;
 
 function CreationEditeur(const Valeur: string): TGUID; overload;
 function CreationEditeur(Source: TObjetFull): TGUID; overload;
@@ -106,7 +107,7 @@ uses
   UIB, BD.Utils.StrUtils, UfrmEditAlbum, UfrmEditSerie, BD.Strings, UfrmEditEditeur, BDTK.GUI.DataModules.Main,
   System.Math, BDTK.GUI.Forms.Main, BD.Utils.GUIUtils, BDTK.GUI.Utils, UfrmEditCollection, UfrmEditAuteur, UfrmEditParaBD,
   UfrmEditAchatAlbum, UfrmEditUnivers, BDTK.Entities.Dao.Lite, BDTK.Entities.Dao.Full,
-  BD.Entities.Common, BD.DB.Connection;
+  BD.Entities.Common, BD.DB.Connection, BDTK.Web.Browser;
 
 function FindRec(const Table, Champ: string; const Reference: TGUID; WithMessage: Boolean): Boolean;
 var
@@ -396,6 +397,25 @@ end;
 function DelAlbum(const ID: TGUID): Boolean;
 begin
   Result := DelLambda('ALBUMS', 'ID_Album', ID);
+end;
+
+function ImportAlbum(const AAutoSearchKeyWords: string; ADestination: TAlbumFull): Boolean;
+var
+  hg: IHourGlass;
+  me: IModeEditing;
+  f: TfrmBDTKWebBrowser;
+begin
+  hg := THourGlass.Create;
+  me := TModeEditing.Create;
+  f := TfrmBDTKWebBrowser.Create(Application);
+  try
+    f.AutoSearchKeyWords := AAutoSearchKeyWords;
+    f.Album := ADestination;
+    hg := nil;
+    Result := frmFond.SetModalChildForm(f) = mrOk;
+  finally
+    f.Free;
+  end;
 end;
 // **********************************************************************************************
 

@@ -182,7 +182,6 @@ type
     function GetID_Album: TGUID;
     function GetCreation: Boolean;
   private
-    FAlbumImport: TAlbumFull;
     procedure SaveToObject;
     procedure AddImageFiles(AImageList: TStrings; AAtPosition: Integer = -1);
   public
@@ -198,8 +197,7 @@ implementation
 uses
   System.Math, BD.Utils.StrUtils, BD.Common, BD.Strings, Divers, Proc_Gestions, BD.Utils.GUIUtils, BDTK.GUI.Utils, System.Types, Vcl.Imaging.jpeg, System.DateUtils,
   UHistorique, BD.Entities.Metadata, BDTK.Entities.Dao.Lite, BDTK.Entities.Dao.Full, BD.Entities.Common, BD.Entities.Types,
-  BD.Entities.Factory.Lite, BD.Entities.Factory.Full, BD.Entities.Dao.Lambda, Vcl.Clipbrd,
-  BDTK.Web.Browser;
+  BD.Entities.Factory.Lite, BD.Entities.Factory.Full, BD.Entities.Dao.Lambda, Vcl.Clipbrd, Editions;
 
 {$R *.DFM}
 
@@ -351,47 +349,43 @@ begin
   FlagAuteur := True;
 end;
 
-procedure ImportScript(frm: TfrmEditAlbum);
-var
-  oldIsAchat: Boolean;
-begin
-  try
-    if frm.FAlbumImport.ReadyToFusion then
-    begin
-      frm.SaveToObject;
-      frm.vtEditSerie.VTEdit.PopupWindow.TreeView.InitializeRep;
-      frm.vtEditUnivers.VTEdit.PopupWindow.TreeView.InitializeRep;
-      frm.vtEditPersonnes.VTEdit.PopupWindow.TreeView.InitializeRep;
-      frm.vtEditEditeurs.VTEdit.PopupWindow.TreeView.InitializeRep;
-      frm.vtEditCollections.VTEdit.PopupWindow.TreeView.InitializeRep;
-      TDaoAlbumFull.FusionneInto(frm.FAlbumImport, frm.Album);
-      oldIsAchat := frm.isAchat;
-      try
-        frm.isAchat := False;
-        frm.Album := frm.Album; // recharger la fenêtre avec frm.Album
-      finally
-        frm.isAchat := oldIsAchat;
-      end;
-    end;
-  finally
-    FreeAndNil(frm.FAlbumImport);
-  end;
-end;
-
 procedure TfrmEditAlbum.btnScriptClick(Sender: TObject);
 var
   KeyWords: string;
+  AlbumToImport: TAlbumFull;
+  oldIsAchat: Boolean;
 begin
+  SaveToObject;
+
   KeyWords := '';
   if Assigned(FCurrentEditionComplete) and Assigned(FCurrentEditionComplete.Editeur) then
     AjoutString(KeyWords, FormatTitre(FCurrentEditionComplete.Editeur.NomEditeur), ' ');
   if Assigned(FAlbum.Serie) then
     AjoutString(KeyWords, FormatTitre(FAlbum.Serie.TitreSerie), ' ');
-  if Trim(edTitre.Text) <> '' then
-    AjoutString(KeyWords, FormatTitre(Trim(edTitre.Text)), ' ');
+  if not FAlbum.TitreAlbum.IsEmpty then
+    AjoutString(KeyWords, FormatTitre(FAlbum.TitreAlbum), ' ');
 
-  if TfrmBDTKWebBrowser.DoPopup(KeyWords) then
-    ;
+  AlbumToImport := TFactoryAlbumFull.getInstance;
+  try
+    if ImportAlbum(KeyWords, AlbumToImport) and AlbumToImport.ReadyToFusion then
+    begin
+      vtEditSerie.VTEdit.PopupWindow.TreeView.InitializeRep;
+      vtEditUnivers.VTEdit.PopupWindow.TreeView.InitializeRep;
+      vtEditPersonnes.VTEdit.PopupWindow.TreeView.InitializeRep;
+      vtEditEditeurs.VTEdit.PopupWindow.TreeView.InitializeRep;
+      vtEditCollections.VTEdit.PopupWindow.TreeView.InitializeRep;
+      TDaoAlbumFull.FusionneInto(AlbumToImport, Album);
+      oldIsAchat := isAchat;
+      try
+        isAchat := False;
+        Album := Album; // recharger la fenêtre avec .Album
+      finally
+        isAchat := oldIsAchat;
+      end;
+    end;
+  finally
+    FreeAndNil(AlbumToImport);
+  end;
 end;
 
 procedure TfrmEditAlbum.btUniversClick(Sender: TObject);
@@ -448,7 +442,6 @@ begin
   lvColoristes.Items.Count := 0;
   FCurrentEditionComplete := nil;
   vtEditions.Clear;
-  FreeAndNil(FAlbumImport); // si on a annulé la précédente maj par script, l'objet n'avait pas été détruit
 end;
 
 procedure TfrmEditAlbum.Frame11btnOKClick(Sender: TObject);
