@@ -384,7 +384,7 @@ begin
       end;
     end;
   finally
-    FreeAndNil(AlbumToImport);
+    AlbumToImport.Free;
   end;
 end;
 
