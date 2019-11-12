@@ -23,7 +23,7 @@ type
     procedure WMPASTE(var Message: TWMPaste); message WM_PASTE;
     type TCrackWinControl = class(TWinControl);
   protected
-    { Déclarations protégées }
+    { Dï¿½clarations protï¿½gï¿½es }
     procedure DoEnter; override;
     procedure DoExit; override;
     procedure KeyPress(var Key: Char); override;
@@ -44,7 +44,7 @@ type
     FLinkControls: TControlList;
     procedure SetLinkControls(const Value: TControlList);
   protected
-    { Déclarations protégées }
+    { Dï¿½clarations protï¿½gï¿½es }
     procedure DoEnter; override;
     procedure DoExit; override;
   public
@@ -59,7 +59,7 @@ type
     FLinkControls: TControlList;
     procedure SetLinkControls(const Value: TControlList);
   protected
-    { Déclarations protégées }
+    { Dï¿½clarations protï¿½gï¿½es }
     procedure DoEnter; override;
     procedure DoExit; override;
   public
@@ -74,7 +74,7 @@ type
     FLinkControls: TControlList;
     procedure SetLinkControls(const Value: TControlList);
   protected
-    { Déclarations protégées }
+    { Dï¿½clarations protï¿½gï¿½es }
     procedure DoEnter; override;
     procedure DoExit; override;
   public
@@ -89,7 +89,7 @@ type
     FLinkControls: TControlList;
     procedure SetLinkControls(const Value: TControlList);
   protected
-    { Déclarations protégées }
+    { Dï¿½clarations protï¿½gï¿½es }
     procedure DoEnter; override;
     procedure DoExit; override;
   public
@@ -104,7 +104,7 @@ type
     FLinkControls: TControlList;
     procedure SetLinkControls(const Value: TControlList);
   protected
-    { Déclarations protégées }
+    { Dï¿½clarations protï¿½gï¿½es }
     procedure DoEnter; override;
     procedure DoExit; override;
   public
@@ -119,7 +119,7 @@ type
     FLinkControls: TControlList;
     procedure SetLinkControls(const Value: TControlList);
   protected
-    { Déclarations protégées }
+    { Dï¿½clarations protï¿½gï¿½es }
     procedure DoEnter; override;
     procedure DoExit; override;
   public
@@ -134,7 +134,7 @@ type
     FLinkControls: TControlList;
     procedure SetLinkControls(const Value: TControlList);
   protected
-    { Déclarations protégées }
+    { Dï¿½clarations protï¿½gï¿½es }
     procedure DoEnter; override;
     procedure DoExit; override;
   public
@@ -154,7 +154,7 @@ type
     FLinkControls: TControlList;
     procedure SetLinkControls(const Value: TControlList);
   protected
-    { Déclarations protégées }
+    { Dï¿½clarations protï¿½gï¿½es }
     procedure DoEnter; override;
     procedure DoExit; override;
   public
@@ -169,7 +169,7 @@ type
     FLinkControls: TControlList;
     procedure SetLinkControls(const Value: TControlList);
   protected
-    { Déclarations protégées }
+    { Dï¿½clarations protï¿½gï¿½es }
     procedure DoEnter; override;
     procedure DoExit; override;
   public
@@ -184,7 +184,7 @@ type
     FLinkControls: TControlList;
     procedure SetLinkControls(const Value: TControlList);
   protected
-    { Déclarations protégées }
+    { Dï¿½clarations protï¿½gï¿½es }
     procedure DoEnter; override;
     procedure DoExit; override;
   public
@@ -199,7 +199,7 @@ type
     FLinkControls: TControlList;
     procedure SetLinkControls(const Value: TControlList);
   protected
-    { Déclarations protégées }
+    { Dï¿½clarations protï¿½gï¿½es }
     procedure DoEnter; override;
     procedure DoExit; override;
   public
@@ -366,6 +366,8 @@ begin
   if Assigned(FOnPaste) then
     FOnPaste(Self, Handled);
   Message.Result := Ord(Handled);
+  if not Handled then
+    inherited;
 end;
 
 procedure TEditLabeled.KeyPress(var Key: Char);
