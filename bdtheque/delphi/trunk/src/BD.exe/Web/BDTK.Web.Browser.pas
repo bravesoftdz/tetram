@@ -26,11 +26,13 @@ const
   BDTKBROWSER_SHOWDEVTOOLS = WM_APP + $04;
   BDTKBROWSER_HIDEDEVTOOLS = WM_APP + $05;
 
-  BDTKBROWSER_CONTEXTMENU_SHOWDEVTOOLS = MENU_ID_USER_FIRST + 1;
-  BDTKBROWSER_CONTEXTMENU_HIDEDEVTOOLS = MENU_ID_USER_FIRST + 2;
-  BDTKBROWSER_CONTEXTMENU_MUTEAUDIO = MENU_ID_USER_FIRST + 3;
-  BDTKBROWSER_CONTEXTMENU_UNMUTEAUDIO = MENU_ID_USER_FIRST + 4;
-  BDTKBROWSER_CONTEXTMENU_ACTION = MENU_ID_USER_FIRST + 5;
+  BDTKBROWSER_CONTEXTMENU_TOOLS = MENU_ID_USER_FIRST;
+  BDTKBROWSER_CONTEXTMENU_IMPORT = MENU_ID_USER_FIRST + $100;
+
+  BDTKBROWSER_CONTEXTMENU_SHOWDEVTOOLS = BDTKBROWSER_CONTEXTMENU_TOOLS + $01;
+  BDTKBROWSER_CONTEXTMENU_HIDEDEVTOOLS = BDTKBROWSER_CONTEXTMENU_TOOLS + $02;
+  BDTKBROWSER_CONTEXTMENU_MUTEAUDIO = BDTKBROWSER_CONTEXTMENU_TOOLS + $03;
+  BDTKBROWSER_CONTEXTMENU_UNMUTEAUDIO = BDTKBROWSER_CONTEXTMENU_TOOLS + $04;
 
 type
   TBrowserTabSheet = class(TTabSheet)
@@ -542,6 +544,27 @@ begin
 end;
 
 procedure TfrmBDTKWebBrowser.Chromium_OnBeforeContextMenu(ASender: TObject; const ABrowser: ICefBrowser; const AFrame: ICefFrame; const AParams: ICefContextMenuParams; const AModel: ICefMenuModel);
+
+  procedure CleanSeparators(AMenu: ICefMenuModel);
+  var
+    i: Integer;
+    SubMenu: ICefMenuModel;
+  begin
+    for i := Pred(AMenu.GetCount) downto 0 do
+      case AMenu.GetTypeAt(i) of
+        MENUITEMTYPE_SEPARATOR:
+          if (i = 0) or (i = AMenu.GetCount - 1) or (AMenu.GetTypeAt(i + 1) = MENUITEMTYPE_SEPARATOR) then
+            AMenu.RemoveAt(i);
+        MENUITEMTYPE_SUBMENU:
+          begin
+            SubMenu := AMenu.GetSubMenuAt(i);
+            CleanSeparators(SubMenu);
+            if SubMenu.GetCount = 0 then
+              AMenu.RemoveAt(i);
+          end;
+      end;
+  end;
+
 var
   PageIndex: Integer;
   Page: TBrowserTabSheet;
@@ -549,17 +572,22 @@ begin
   if not (GetPageIndex(ASender, PageIndex) and GetPage(PageIndex, Page)) then
     Exit;
 
+  AModel.Remove(MENU_ID_PRINT);
+  AModel.Remove(MENU_ID_VIEW_SOURCE);
+
   AModel.AddSeparator;
   if Page.DevTools.Visible then
-    AModel.AddItem(BDTKBROWSER_CONTEXTMENU_HIDEDEVTOOLS, 'Hide DevTools')
+    AModel.AddItem(BDTKBROWSER_CONTEXTMENU_HIDEDEVTOOLS, 'Cacher les outils de développement')
   else
-    AModel.AddItem(BDTKBROWSER_CONTEXTMENU_SHOWDEVTOOLS, 'Show DevTools');
+    AModel.AddItem(BDTKBROWSER_CONTEXTMENU_SHOWDEVTOOLS, 'Afficher les outils de développement');
 
   if Page.Chromium.AudioMuted then
-    AModel.AddItem(BDTKBROWSER_CONTEXTMENU_UNMUTEAUDIO, 'Unmute audio')
+    AModel.AddItem(BDTKBROWSER_CONTEXTMENU_UNMUTEAUDIO, 'Réactiver le son de l''onglet')
   else
-    AModel.AddItem(BDTKBROWSER_CONTEXTMENU_MUTEAUDIO, 'Mute audio');
+    AModel.AddItem(BDTKBROWSER_CONTEXTMENU_MUTEAUDIO, 'Couper le son de l''onglet');
   AModel.AddSeparator;
+
+  CleanSeparators(AModel);
 end;
 
 procedure TfrmBDTKWebBrowser.Chromium_OnContextMenuCommand(ASender: TObject; const ABrowser: ICefBrowser; const AFrame: ICefFrame; const AParams: ICefContextMenuParams; ACommandId: Integer; AEventFlags: Cardinal; out AResult: Boolean);
