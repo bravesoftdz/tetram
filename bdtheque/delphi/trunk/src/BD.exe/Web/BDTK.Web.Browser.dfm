@@ -186,7 +186,7 @@ object frmBDTKWebBrowser: TfrmBDTKWebBrowser
         Left = 0
         Top = 2
         Width = 595
-        Height = 21
+        Height = 23
         Align = alClient
         TabOrder = 0
         Text = 'https://www.google.com'

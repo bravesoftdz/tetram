@@ -42,7 +42,7 @@ type
     FSplitter: TSplitter;
     FDevTools: TCEFWindowParent;
   public
-    constructor Create(AOwner: TPageControl); reintroduce;
+    constructor Create(AOwner: TPageControl; const ADefaultUrl: string = ''); reintroduce;
 
     property WindowParent: TCEFWindowParent read FWindowParent;
     property Chromium: TChromium read FChromium;
@@ -79,8 +79,7 @@ type
     procedure PageControl1Change(Sender: TObject);
     procedure Frame11btnOKClick(Sender: TObject);
     procedure Frame11btnAnnulerClick(Sender: TObject);
-    procedure ApplicationEvents1Message(var Msg: tagMSG;
-      var Handled: Boolean);
+    procedure ApplicationEvents1Message(var Msg: tagMSG; var Handled: Boolean);
   private
     FAutoSearchKeyWords: string;
     FAlbum: TAlbumFull;
@@ -131,7 +130,8 @@ type
 implementation
 
 uses
-  BD.Utils.GUIUtils, BD.Utils.Chromium, System.Math, BD.Utils.Net;
+  BD.Utils.GUIUtils, BD.Utils.Chromium, System.Math, BD.Utils.Net,
+  System.StrUtils;
 
 {$R *.dfm}
 
@@ -154,7 +154,7 @@ end;
 
 { TBrowserTabSheet }
 
-constructor TBrowserTabSheet.Create(AOwner: TPageControl);
+constructor TBrowserTabSheet.Create(AOwner: TPageControl; const ADefaultUrl: string);
 begin
   inherited Create(AOwner);
 
@@ -167,6 +167,7 @@ begin
   FWindowParent.Align := alClient;
 
   FChromium := TChromium.Create(Self);
+  FChromium.DefaultUrl := ADefaultUrl;
   FChromium.OnAfterCreated := TfrmBDTKWebBrowser(AOwner.Owner).Chromium_OnAfterCreated;
   FChromium.OnAddressChange := TfrmBDTKWebBrowser(AOwner.Owner).Chromium_OnAddressChange;
   FChromium.OnTitleChange := TfrmBDTKWebBrowser(AOwner.Owner).Chromium_OnTitleChange;
@@ -281,6 +282,7 @@ begin
     URLCbx.Items[0] := 'https://www.google.com'
   else
     URLCbx.Items[0] := 'https://www.google.com/search?q=' + FAutoSearchKeyWords.Replace(' ', '+');
+  URLCbx.Text := URLCbx.Items[0];
 
   AddTabBtn.Click;
 end;
@@ -315,7 +317,7 @@ procedure TfrmBDTKWebBrowser.AddTabBtnClick(ASender: TObject);
 begin
   ButtonPnl.Enabled := False;
   PageControl1.Enabled := False;
-  TBrowserTabSheet.Create(PageControl1);
+  TBrowserTabSheet.Create(PageControl1, IfThen(PageControl1.PageCount = 0, URLCbx.Text, ''));
 end;
 
 procedure TfrmBDTKWebBrowser.RemoveTabBtnClick(Sender: TObject);
@@ -433,10 +435,7 @@ begin
   PageControl1.Enabled := True;
 
   if GetPage(AMessage.LParam, Page) then
-  begin
     Page.WindowParent.UpdateSize;
-    Page.Chromium.LoadURL(URLCbx.Items[0]);
-  end;
 end;
 
 procedure TfrmBDTKWebBrowser.Chromium_OnBeforePopup(ASender: TObject; const ABrowser: ICefBrowser; const AFrame: ICefFrame; const ATargetUrl,
