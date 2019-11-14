@@ -29,10 +29,9 @@ const
   BDTKBROWSER_CONTEXTMENU_TOOLS = MENU_ID_USER_FIRST;
   BDTKBROWSER_CONTEXTMENU_IMPORT = MENU_ID_USER_FIRST + $100;
 
-  BDTKBROWSER_CONTEXTMENU_SHOWDEVTOOLS = BDTKBROWSER_CONTEXTMENU_TOOLS + $01;
-  BDTKBROWSER_CONTEXTMENU_HIDEDEVTOOLS = BDTKBROWSER_CONTEXTMENU_TOOLS + $02;
-  BDTKBROWSER_CONTEXTMENU_MUTEAUDIO = BDTKBROWSER_CONTEXTMENU_TOOLS + $03;
-  BDTKBROWSER_CONTEXTMENU_UNMUTEAUDIO = BDTKBROWSER_CONTEXTMENU_TOOLS + $04;
+  BDTKBROWSER_CONTEXTMENU_TOGGLEDEVTOOLS = BDTKBROWSER_CONTEXTMENU_TOOLS + $01;
+  BDTKBROWSER_CONTEXTMENU_TOGGLEAUDIO = BDTKBROWSER_CONTEXTMENU_TOOLS + $02;
+  BDTKBROWSER_CONTEXTMENU_LINK_TO_NEW_TAB = BDTKBROWSER_CONTEXTMENU_TOOLS + $03;
 
 type
   TBrowserTabSheet = class(TTabSheet)
@@ -443,7 +442,18 @@ procedure TfrmBDTKWebBrowser.Chromium_OnBeforePopup(ASender: TObject; const ABro
   var AWindowInfo: TCefWindowInfo; var AClient: ICefClient; var ASettings: TCefBrowserSettings; var AExtraInfo: ICefDictionaryValue;
   var ANoJavascriptAccess, AResult: Boolean);
 begin
-  // For simplicity, this demo blocks all popup windows and new tabs
+  case ATargetDisposition of
+    WOD_NEW_FOREGROUND_TAB, WOD_NEW_BACKGROUND_TAB:
+      begin
+        AResult := True;
+      end;
+    WOD_NEW_POPUP:
+      AResult := True;
+    WOD_NEW_WINDOW:
+      AResult := True;
+    else
+      AResult := False;
+  end;
   AResult := (ATargetDisposition in [WOD_NEW_FOREGROUND_TAB, WOD_NEW_BACKGROUND_TAB, WOD_NEW_POPUP, WOD_NEW_WINDOW]);
 end;
 
@@ -575,15 +585,11 @@ begin
   AModel.Remove(MENU_ID_VIEW_SOURCE);
 
   AModel.AddSeparator;
-  if Page.DevTools.Visible then
-    AModel.AddItem(BDTKBROWSER_CONTEXTMENU_HIDEDEVTOOLS, 'Cacher les outils de développement')
-  else
-    AModel.AddItem(BDTKBROWSER_CONTEXTMENU_SHOWDEVTOOLS, 'Afficher les outils de développement');
-
-  if Page.Chromium.AudioMuted then
-    AModel.AddItem(BDTKBROWSER_CONTEXTMENU_UNMUTEAUDIO, 'Réactiver le son de l''onglet')
-  else
-    AModel.AddItem(BDTKBROWSER_CONTEXTMENU_MUTEAUDIO, 'Couper le son de l''onglet');
+  if AParams.LinkUrl <> '' then
+    AModel.AddItem(BDTKBROWSER_CONTEXTMENU_LINK_TO_NEW_TAB, 'Ouvrir le lien dans un nouvel onglet');
+  AModel.AddSeparator;
+  AModel.AddItem(BDTKBROWSER_CONTEXTMENU_TOGGLEDEVTOOLS, IfThen(Page.DevTools.Visible, 'Cacher les outils de développement', 'Afficher les outils de développement'));
+  AModel.AddItem(BDTKBROWSER_CONTEXTMENU_TOGGLEAUDIO, IfThen(Page.Chromium.AudioMuted, 'Réactiver le son de l''onglet', 'Couper le son de l''onglet'));
   AModel.AddSeparator;
 
   CleanSeparators(AModel);
@@ -599,14 +605,12 @@ begin
     Exit;
 
   case ACommandId of
-    BDTKBROWSER_CONTEXTMENU_HIDEDEVTOOLS:
-      PostMessage(Handle, BDTKBROWSER_HIDEDEVTOOLS, 0, PageIndex);
-    BDTKBROWSER_CONTEXTMENU_SHOWDEVTOOLS :
-      PostMessage(Handle, BDTKBROWSER_SHOWDEVTOOLS, ((AParams.XCoord and $FFFF) shl 16) or (AParams.YCoord and $FFFF), PageIndex);
-    BDTKBROWSER_CONTEXTMENU_UNMUTEAUDIO:
-      Page.Chromium.AudioMuted := False;
-    BDTKBROWSER_CONTEXTMENU_MUTEAUDIO:
-      Page.Chromium.AudioMuted := True;
+    BDTKBROWSER_CONTEXTMENU_LINK_TO_NEW_TAB:
+      PageControl1.ActivePage := TBrowserTabSheet.Create(PageControl1, AParams.LinkUrl);
+    BDTKBROWSER_CONTEXTMENU_TOGGLEDEVTOOLS:
+      PostMessage(Handle, IfThen(Page.DevTools.Visible, BDTKBROWSER_HIDEDEVTOOLS, BDTKBROWSER_SHOWDEVTOOLS), ((AParams.XCoord and $FFFF) shl 16) or (AParams.YCoord and $FFFF), PageIndex);
+    BDTKBROWSER_CONTEXTMENU_TOGGLEAUDIO:
+      Page.Chromium.AudioMuted := not Page.Chromium.AudioMuted;
   end;
 end;
 
