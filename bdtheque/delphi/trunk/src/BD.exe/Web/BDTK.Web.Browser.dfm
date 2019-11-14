@@ -33,6 +33,7 @@ object frmBDTKWebBrowser: TfrmBDTKWebBrowser
     end
     inherited btnAnnuler: TButton
       Left = 737
+      Cancel = False
       ModalResult = 0
       OnClick = Frame11btnAnnulerClick
       ExplicitLeft = 737
@@ -186,7 +187,7 @@ object frmBDTKWebBrowser: TfrmBDTKWebBrowser
         Left = 0
         Top = 2
         Width = 595
-        Height = 23
+        Height = 21
         Align = alClient
         TabOrder = 0
         Text = 'https://www.google.com'
