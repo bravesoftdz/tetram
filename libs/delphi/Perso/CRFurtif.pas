@@ -1,4 +1,4 @@
-unit CRFurtif;
+ï»¿unit CRFurtif;
 
 interface
 
@@ -334,7 +334,7 @@ end;
 
 function TButtonGlyph.CreateButtonGlyph(State: TButtonState): Integer;
 type
-  TRGBArray = array[0..0] of TRGBTriple; // élément de bitmap (API windows)
+  TRGBArray = array[0..0] of TRGBTriple; // ï¿½lï¿½ment de bitmap (API windows)
   pRGBArray = ^TRGBArray; // type pointeur vers tableau 3 octets 24 bits
 const
   ROP_DSPDxax = $00E20746;
@@ -376,7 +376,7 @@ begin
         end;
       bsDisabled:
         if FDisableGrayed then begin
-          // on prend l'icone "normal" pour la rendre désactivée: plus joli avec les nouvelles icones de CardioXP
+          // on prend l'icone "normal" pour la rendre dï¿½sactivï¿½e: plus joli avec les nouvelles icones de CardioXP
           I := bsUp;
           ORect := Rect(Ord(I) * IWidth, 0, (Ord(I) + 1) * IWidth, IHeight);
 

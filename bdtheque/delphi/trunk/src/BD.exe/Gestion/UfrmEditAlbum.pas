@@ -1,4 +1,4 @@
-unit UfrmEditAlbum;
+ï»¿unit UfrmEditAlbum;
 
 interface
 
@@ -185,7 +185,7 @@ type
     procedure SaveToObject;
     procedure AddImageFiles(AImageList: TStrings; AAtPosition: Integer = -1);
   public
-    { Déclarations publiques }
+    { DÃ©clarations publiques }
     property isCreation: Boolean read GetCreation;
     property isAchat: Boolean read FisAchat write FisAchat;
     property ID_Album: TGUID read GetID_Album;
@@ -317,7 +317,7 @@ begin
     vtEditionsClick(nil);
 
     if not FAlbum.RecInconnu then
-      btnScript.Caption := 'Mettre à jour';
+      btnScript.Caption := 'Mettre Ã  jour';
 
     if (FAlbum.RecInconnu and (FAlbum.Editions.Count = 0)) or isAchat then
       VDTButton3.Click;
@@ -378,7 +378,7 @@ begin
       oldIsAchat := isAchat;
       try
         isAchat := False;
-        Album := Album; // recharger la fenêtre avec .Album
+        Album := Album; // recharger la fenÃªtre avec .Album
       finally
         isAchat := oldIsAchat;
       end;
@@ -476,7 +476,7 @@ begin
     Exit;
   end;
 
-  UpdateEdition; // force la mise à jour du REditionComplete en cours si c pas déjà fait
+  UpdateEdition; // force la mise Ã  jour du REditionComplete en cours si c pas dÃ©jÃ  fait
 
   AfficheEdition := -1;
   for i := 0 to Pred(vtEditions.Items.Count) do
@@ -490,8 +490,8 @@ begin
     cs := EditionComplete.ISBN;
     if cs = '' then
     begin
-      // l'utilisation de l'isbn n'étant obligatoire que depuis "quelques années", les bd anciennes n'en n'ont pas: donc pas obligatoire de le saisir
-      // AffMessage('Le numéro ISBN est obligatoire !', mtInformation, [mbOk], True);
+      // l'utilisation de l'isbn n'Ã©tant obligatoire que depuis "quelques annÃ©es", les bd anciennes n'en n'ont pas: donc pas obligatoire de le saisir
+      // AffMessage('Le numÃ©ro ISBN est obligatoire !', mtInformation, [mbOk], True);
       // AfficheEdition := i;
     end;
     lISBN := Length(cs);
@@ -507,12 +507,12 @@ begin
       end
       else
       begin
-        // AffMessage('Le numéro ISBN est obligatoire !', mtInformation, [mbOk], True);
+        // AffMessage('Le numÃ©ro ISBN est obligatoire !', mtInformation, [mbOk], True);
         // AfficheEdition := i;
       end;
     if (EditionComplete.AnneeCote * EditionComplete.PrixCote = 0) and (EditionComplete.AnneeCote + EditionComplete.PrixCote <> 0) then
     begin
-      // une cote doit être composée d'une année ET d'un prix
+      // une cote doit Ãªtre composÃ©e d'une annÃ©e ET d'un prix
       AffMessage(rsCoteIncomplete, mtInformation, [mbOk], True);
       AfficheEdition := i;
     end;
@@ -539,7 +539,7 @@ procedure TfrmEditAlbum.SaveToObject;
 var
   hg: IHourGlass;
 begin
-  UpdateEdition; // force la mise à jour du REditionComplete en cours si c pas déjà fait
+  UpdateEdition; // force la mise Ã  jour du REditionComplete en cours si c pas dÃ©jÃ  fait
 
   hg := THourGlass.Create;
 
@@ -725,8 +725,8 @@ end;
 
 procedure TfrmEditAlbum.FormShow(Sender: TObject);
 begin
-  // la selection de l'édition doit se faire ici à cause d'un bug du TDateTimePicker:
-  // il se forcerait à "Checked = True" si on le fait dans le SetID_Album
+  // la selection de l'Ã©dition doit se faire ici Ã  cause d'un bug du TDateTimePicker:
+  // il se forcerait Ã  "Checked = True" si on le fait dans le SetID_Album
   if vtEditions.ItemIndex = -1 then
   begin
     vtEditions.ItemIndex := 0;
@@ -898,8 +898,8 @@ begin
   // PC := FCurrentEditionComplete.Couvertures[Node.Index];
   // Allowed := (PC.Reference <> -1) and (PC.NewStockee) and (PC.NewStockee = PC.OldStockee);
 
-  // devrait être autorisé aussi pour changer le nom de l'image
-  // l'édition de la catégorie d'image n'est pas gérée par le virtualtreeview
+  // devrait Ãªtre autorisÃ© aussi pour changer le nom de l'image
+  // l'Ã©dition de la catÃ©gorie d'image n'est pas gÃ©rÃ©e par le virtualtreeview
   Allowed := False;
 end;
 
@@ -1201,7 +1201,7 @@ begin
       cbxSensLecture.Value := IIf(FAlbum.Serie.RecInconnu or (FAlbum.Serie.SensLecture.Value = -1), cbxSensLecture.DefaultValueChecked, FAlbum.Serie.SensLecture.Value);
       cbxEdition.Value := IIf(FAlbum.Serie.RecInconnu or (FAlbum.Serie.TypeEdition.Value = -1), cbxEdition.DefaultValueChecked, FAlbum.Serie.TypeEdition.Value);
 
-      // on reset parce que le tcheckbox et tedit le flag à tort dans ce cas
+      // on reset parce que le tcheckbox et tedit le flag Ã  tort dans ce cas
       FEditeurCollectionSelected[vtEditions.ItemIndex] := False;
     end;
   end;
@@ -1281,15 +1281,15 @@ procedure TfrmEditAlbum.VDTButton13Click(Sender: TObject);
 var
   dummy, Code: string;
 begin
-  if InputQuery('EAN-ISBN', 'Saisir le numéro EAN-ISBN de l''édition :', Code) then
+  if InputQuery('EAN-ISBN', 'Saisir le numÃ©ro EAN-ISBN de l''Ã©dition :', Code) then
   begin
     dummy := Code;
     if not VerifieEAN(dummy) and
-      (MessageDlg(Code + #13#13'Le caractère de contrôle de ce numéro EAN-ISBN n''est pas correct.'#13#10'Voulez-vous néanmoins utiliser ce code barre?',
+      (MessageDlg(Code + #13#13'Le caractÃ¨re de contrÃ´le de ce numÃ©ro EAN-ISBN n''est pas correct.'#13#10'Voulez-vous nÃ©anmoins utiliser ce code barre?',
       mtWarning, [mbYes, mbNo], 0) = mrNo) then
       Exit;
     if StrToIntDef(edAnneeEdition.Text, 0) >= 2007 then
-    begin // en 2007, les ISBN passent à 13 caractères
+    begin // en 2007, les ISBN passent Ã  13 caractÃ¨res
       Code := Copy(Code, 1, 12);
       VerifieISBN(Code, 13);
     end

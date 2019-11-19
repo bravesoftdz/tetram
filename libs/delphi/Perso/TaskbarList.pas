@@ -1,4 +1,4 @@
-unit TaskbarList;
+﻿unit TaskbarList;
 
 interface
 

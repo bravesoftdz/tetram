@@ -1,4 +1,4 @@
-object frmChoixDetailSerie: TfrmChoixDetailSerie
+﻿object frmChoixDetailSerie: TfrmChoixDetailSerie
   Left = 540
   Top = 358
   BorderStyle = bsDialog

@@ -1,4 +1,4 @@
-object frmEditCritere: TfrmEditCritere
+﻿object frmEditCritere: TfrmEditCritere
   Left = 732
   Top = 251
   BorderIcons = []

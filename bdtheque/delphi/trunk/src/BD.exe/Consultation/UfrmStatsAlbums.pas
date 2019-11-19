@@ -1,4 +1,4 @@
-unit UfrmStatsAlbums;
+ï»¿unit UfrmStatsAlbums;
 
 interface
 
@@ -36,9 +36,9 @@ type
     procedure listeExit(Sender: TObject);
     procedure genreDrawItem(Control: TWinControl; Index: Integer; Rect: TRect; State: TOwnerDrawState);
   private
-    { Déclarations privées }
+    { DÃ©clarations privÃ©es }
   public
-    { Déclarations publiques }
+    { DÃ©clarations publiques }
   end;
 
 function TStatsAlbumsCreate(AOwner: TComponent; Info: TStats): TfrmStatsAlbums;

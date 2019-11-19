@@ -1,4 +1,4 @@
-unit UfrmEditCritereTri;
+ï»¿unit UfrmEditCritereTri;
 
 interface
 
@@ -26,13 +26,13 @@ type
     procedure CheckBox2Click(Sender: TObject);
     procedure champsChange(Sender: TObject);
   private
-    { Déclarations privées }
+    { DÃ©clarations privÃ©es }
     FRecherche: TFrmRecherche;
     FCritere: TCritereTri;
     procedure SetCritere(Value: TCritereTri);
     function GetCritere: TCritereTri;
   public
-    { Déclarations publiques }
+    { DÃ©clarations publiques }
     property Critere: TCritereTri read GetCritere write SetCritere;
   end;
 
@@ -134,7 +134,7 @@ begin
     RadioButton2.Caption := 'Oui puis Non';
   end else begin
     RadioButton1.Caption := 'Croissant';
-    RadioButton2.Caption := 'Décroissant';
+    RadioButton2.Caption := 'DÃ©croissant';
   end;
   CheckBox3.Enabled := PChamp(champs.LastItemData).ChampImpressionTri;
 end;

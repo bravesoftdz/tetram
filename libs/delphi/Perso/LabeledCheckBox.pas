@@ -1,4 +1,4 @@
-unit LabeledCheckBox;
+﻿unit LabeledCheckBox;
 
 interface
 

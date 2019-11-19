@@ -1,4 +1,4 @@
-unit LinkControls;
+ï»¿unit LinkControls;
 
 {$D-}
 
@@ -88,7 +88,7 @@ begin
   if Assigned(Value) then
     for i := 0 to Pred(Collection.Count) do
       if TControlItem(Collection.Items[i]).Control = Value then
-        raise Exception.Create('Ce control fait déjà parti de la liste');
+        raise Exception.Create('Ce control fait dï¿½jï¿½ parti de la liste');
   FControl := Value;
 end;
 

@@ -1,4 +1,4 @@
-unit BD.GUI.Forms.Verbose;
+ï»¿unit BD.GUI.Forms.Verbose;
 
 interface
 
@@ -11,9 +11,9 @@ type
     Button1: TButton;
     procedure Button1Click(Sender: TObject);
   private
-    { Déclarations privées }
+    { DÃ©clarations privÃ©es }
   public
-    { Déclarations publiques }
+    { DÃ©clarations publiques }
     procedure Fin;
     procedure UIBVerbose(Sender: TObject; message: string);
     function Log(const pChaine: string; Ligne: Integer = -1): Integer;

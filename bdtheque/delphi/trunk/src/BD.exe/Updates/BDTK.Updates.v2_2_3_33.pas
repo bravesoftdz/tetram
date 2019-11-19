@@ -1,4 +1,4 @@
-unit BDTK.Updates.v2_2_3_33;
+ï»¿unit BDTK.Updates.v2_2_3_33;
 
 interface
 
@@ -148,7 +148,7 @@ begin
   Query.Script.Add('      tome, anneeparution, moisparution, s.id_serie');
   Query.Script.Add('    from');
   Query.Script.Add('      albums a');
-  Query.Script.Add('      /* pas de left join: on calcul les prévisions de sorties des nouveautés des séries */');
+  Query.Script.Add('      /* pas de left join: on calcul les prÃ©visions de sorties des nouveautÃ©s des sÃ©ries */');
   Query.Script.Add('      inner join series s on');
   Query.Script.Add('        s.id_serie = a.id_serie');
   Query.Script.Add('    where');
@@ -199,9 +199,9 @@ begin
   Query.Script.Add('        diffmois = 0;');
   Query.Script.Add('      else');
   Query.Script.Add('        diffmois = currentmois - moisprecedent;');
-  Query.Script.Add('      /* non pondéré: sommeponderee = sommeponderee + (((currentannee - anneeprecedente) * 12 + (coalesce(currentmois, 1) - coalesce(moisprecedent, 1))) / (currenttome - tomeprecedent)); */');
+  Query.Script.Add('      /* non pondÃ©rÃ©: sommeponderee = sommeponderee + (((currentannee - anneeprecedente) * 12 + (coalesce(currentmois, 1) - coalesce(moisprecedent, 1))) / (currenttome - tomeprecedent)); */');
   Query.Script.Add('      sommeponderee = sommeponderee + (((currentannee - anneeprecedente) * 12 + diffmois) / (currenttome - tomeprecedent)) * currenttome;');
-  Query.Script.Add('      /* non pondéré: comptealbum = comptealbum + 1;*/');
+  Query.Script.Add('      /* non pondÃ©rÃ©: comptealbum = comptealbum + 1;*/');
   Query.Script.Add('      comptealbum = comptealbum + currenttome;');
   Query.Script.Add('    end');
   Query.Script.Add('    tomeprecedent = currenttome;');

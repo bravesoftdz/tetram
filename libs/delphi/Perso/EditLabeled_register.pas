@@ -1,4 +1,4 @@
-unit EditLabeled_register;
+﻿unit EditLabeled_register;
 
 interface
 

@@ -1,4 +1,4 @@
-unit BD.Utils.RegEx;
+﻿unit BD.Utils.RegEx;
 
 interface
 

@@ -1,4 +1,4 @@
-unit BDTK.GUI.Frames.Converter;
+﻿unit BDTK.GUI.Frames.Converter;
 
 interface
 

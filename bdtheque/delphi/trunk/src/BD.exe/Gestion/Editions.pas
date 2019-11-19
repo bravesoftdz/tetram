@@ -1,4 +1,4 @@
-unit Editions;
+ï»¿unit Editions;
 
 interface
 
@@ -9,7 +9,7 @@ uses
   Principes de base:
   * Creation
   - ouvre une transaction
-  - renseigne les valeur par défaut
+  - renseigne les valeur par dÃ©faut
   - appel la proc d'edition
 
   * Edition
@@ -22,10 +22,10 @@ uses
   - efface l'enregistrement
   - ferme la transaction
 
-  Cas des tables à champ unique
+  Cas des tables Ã  champ unique
   * Creation
   - ouvre une transaction
-  - renseigne les valeur par défaut
+  - renseigne les valeur par dÃ©faut
   - ferme la transaction
 
   * Edition

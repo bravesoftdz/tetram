@@ -1,4 +1,4 @@
-unit BDTK.GUI.Forms.UserSettings;
+ï»¿unit BDTK.GUI.Forms.UserSettings;
 
 interface
 
@@ -117,7 +117,7 @@ var
   qry: TManagedQuery;
 begin
   if TGlobalVar.RepImages <> VDTButton1.Caption then
-    if MessageDlg('Vous avez choisi de modifier le répertoire de stockage des images.'#13'N''oubliez pas de déplacer les fichiers de l''ancien répertoire vers le nouveau.', mtWarning, mbOKCancel, 0) = mrCancel then
+    if MessageDlg('Vous avez choisi de modifier le rÃ©pertoire de stockage des images.'#13'N''oubliez pas de dÃ©placer les fichiers de l''ancien rÃ©pertoire vers le nouveau.', mtWarning, mbOKCancel, 0) = mrCancel then
     begin
       ModalResult := mrNone;
       Exit;
@@ -405,7 +405,7 @@ end;
 procedure TfrmOptions.VDTButton1Click(Sender: TObject);
 begin
   BrowseDirectoryDlg1.Selection := TVDTButton(Sender).Caption;
-  BrowseDirectoryDlg1.Title := 'Sélectionnez le ' + LowerCase(TVDTButton(Sender).Hint);
+  BrowseDirectoryDlg1.Title := 'SÃ©lectionnez le ' + LowerCase(TVDTButton(Sender).Hint);
   if BrowseDirectoryDlg1.Execute then
     TVDTButton(Sender).Caption := BrowseDirectoryDlg1.Selection;
 end;
@@ -455,7 +455,7 @@ var
   repSave: string;
   sl: TStringList;
 begin
-  if not Vcl.FileCtrl.SelectDirectory('Sélectionnez un répertoire dans lequel créer le site web', '', repSave, [sdNewUI, sdNewFolder, sdValidateDir], Self) then
+  if not Vcl.FileCtrl.SelectDirectory('SÃ©lectionnez un rÃ©pertoire dans lequel crÃ©er le site web', '', repSave, [sdNewUI, sdNewFolder, sdValidateDir], Self) then
     Exit;
 
   ExtractArchive(TGlobalVar.RepWebServer + 'interface', repSave);

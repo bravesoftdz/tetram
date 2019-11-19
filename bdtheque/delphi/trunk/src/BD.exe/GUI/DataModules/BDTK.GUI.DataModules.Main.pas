@@ -1,4 +1,4 @@
-unit BDTK.GUI.DataModules.Main;
+ï»¿unit BDTK.GUI.DataModules.Main;
 
 interface
 
@@ -72,7 +72,7 @@ type
   begin
     if (Version > CurrentVersion) and (Version <= TGlobalVar.ExeVersion) then
     begin
-      Affiche_act('Mise à jour ' + Version + '...');
+      Affiche_act('Mise Ã  jour ' + Version + '...');
       Script := TUIBScript.Create(nil);
       try
         Script.Transaction := DBConnection.GetTransaction;
@@ -134,8 +134,8 @@ begin
   try
     qry.SQL.Text := 'select titrealbum from albums';
     try
-      // on va chercher un champ texte pour forcer FB à verifier la présence des collations
-      // donc vérifier que la version des ICU sur disque correspondent à ceux utilisés par la base
+      // on va chercher un champ texte pour forcer FB Ã  verifier la prÃ©sence des collations
+      // donc vÃ©rifier que la version des ICU sur disque correspondent Ã  ceux utilisÃ©s par la base
       qry.Prepare;
     except
       on E: EUIBError do
@@ -180,17 +180,17 @@ begin
     qry.Free;
   end;
 
-  Msg := 'BDthèque ne peut pas utiliser cette base de données.'#13#10'Version de la base de données: ' + CurrentVersion;
+  Msg := 'BDthÃ¨que ne peut pas utiliser cette base de donnÃ©es.'#13#10'Version de la base de donnÃ©es: ' + CurrentVersion;
 
   if (CurrentVersion > ListFBUpdates.Last.Version) and (CurrentVersion > TGlobalVar.ExeVersion) then
   begin
-    ShowMessage('Base de données trop récente.'#13#10 + Msg);
+    ShowMessage('Base de donnÃ©es trop rÃ©cente.'#13#10 + Msg);
     Exit;
   end;
 
   if (ListFBUpdates.Last.Version > CurrentVersion) or (DBConnection.GetDatabase.InfoPageSize < DBPageSize) then
   begin
-    if not(Force or (MessageDlg(Msg + #13#10'Voulez-vous la mettre à jour?', mtConfirmation, [mbYes, mbNo], 0) = mrYes)) then
+    if not(Force or (MessageDlg(Msg + #13#10'Voulez-vous la mettre Ã  jour?', mtConfirmation, [mbYes, mbNo], 0) = mrYes)) then
       Exit;
 
     MAJ_ODS(False);
@@ -213,7 +213,7 @@ begin
   CheckIndex;
 
   if (ListFBUpdates.Last.Version > CurrentVersion) and not Force then
-    ShowMessage('Mise à jour terminée.');
+    ShowMessage('Mise Ã  jour terminÃ©e.');
   Result := True;
 end;
 
@@ -317,12 +317,12 @@ procedure TdmPrinc.MakeJumpList;
 var
   jl: TJumpList;
 begin
-  // pas besoin de vérifier si on est au moins en Windows 7, TJumpList le fait
+  // pas besoin de vÃ©rifier si on est au moins en Windows 7, TJumpList le fait
   jl := TJumpList.Create(nil);
   try
     jl.AppId := Application.ExeName;
     jl.Tasks.AddShellLink('Ajouter un nouvel album', '/album=new', '', '', 2);
-    jl.Tasks.AddShellLink('Ajouter une nouvelle série', '/serie=new', '', '', 2);
+    jl.Tasks.AddShellLink('Ajouter une nouvelle sÃ©rie', '/serie=new', '', '', 2);
     jl.Tasks.AddShellLink('Ajouter un nouvel auteur', '/auteur=new', '', '', 2);
     jl.DisplayKnowCategories := [jlkcRecent];
     jl.Commit;
@@ -371,8 +371,8 @@ end;
 
 function TdmPrinc.CheckExeVersion(Force: Boolean): Boolean;
 // Valeurs de retour:
-// False: pas de mise à jour ou mise à jour "reportée"
-// True: mise à jour et utilisateur demande à fermer l'appli
+// False: pas de mise Ã  jour ou mise Ã  jour "reportÃ©e"
+// True: mise Ã  jour et utilisateur demande Ã  fermer l'appli
 var
   doVerif: Boolean;
   ini: TIniFile;
@@ -383,7 +383,7 @@ begin
     case TGlobalVar.Options.VerifMAJDelai of
       0: // jamais de verification
         doVerif := False;
-      1: // à chaque démarrage
+      1: // Ã  chaque dÃ©marrage
         doVerif := True;
       2: // une fois par jour
         doVerif := DaysBetween(Now, TGlobalVar.Options.LastVerifMAJ) > 0;
@@ -441,7 +441,7 @@ begin
     ForceGestion := SameText(ParamValue, 'new');
     if not ForceGestion and (PageToOpen <> fcActionBack) then
       GuidToOpen := StringToGUID(ParamValue);
-    // je force en mode gestion quand on demande la création d'un nouvel élément
+    // je force en mode gestion quand on demande la crÃ©ation d'un nouvel Ã©lÃ©ment
     // mais rien n'y oblige
     if not TGlobalVar.Options.ModeDemarrage or ForceGestion then
       ModeToOpen := fcModeGestion;
@@ -459,11 +459,11 @@ var
   TitreApplication: string;
 begin
   TitreApplication := Application.Title;
-  Application.Title := ''; // on change le titre car sinon, on trouverait toujours une Application déjà lancée (la notre!)
+  Application.Title := ''; // on change le titre car sinon, on trouverait toujours une Application dÃ©jÃ  lancÃ©e (la notre!)
   try
     try
       Result := FindWindow('TfrmFond', PChar(TitreApplication));
-      // renvoie le Handle de la première fenêtre de Class (type) ClassName et de titre TitreApplication (0 s'il n'y en a pas)
+      // renvoie le Handle de la premiÃ¨re fenÃªtre de Class (type) ClassName et de titre TitreApplication (0 s'il n'y en a pas)
     finally
       Application.Title := TitreApplication; // restauration du vrai titre
     end;
@@ -482,15 +482,15 @@ var
   frmSplash: TfrmSplash;
 begin
   TGlobalVar.Mode_en_cours := mdLoad;
-  Application.Title := '© TeträmCorp ' + TitreApplication + ' ' + TGlobalVar.AppVersion;
+  Application.Title := 'Â© TetrÃ¤mCorp ' + TitreApplication + ' ' + TGlobalVar.AppVersion;
   if not LongBool(CreateMutex(nil, True, 'TetramCorpBDMutex')) then
     RaiseLastOSError
   else if GetLastError = ERROR_ALREADY_EXISTS then
   begin
     hdl := GetHandleOtherInstance;
     if hdl = 0 then
-      // c'est pas vrai mais bon... comme on devrait jamais passer là...
-      ShowMessage('Une instance de BDthèque est déjà ouverte!')
+      // c'est pas vrai mais bon... comme on devrait jamais passer lÃ ...
+      ShowMessage('Une instance de BDthÃ¨que est dÃ©jÃ  ouverte!')
     else
     begin
       if ParamCount > 0 then

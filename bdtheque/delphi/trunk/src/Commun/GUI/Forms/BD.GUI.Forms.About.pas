@@ -1,4 +1,4 @@
-unit BD.GUI.Forms.About;
+ï»¿unit BD.GUI.Forms.About;
 
 { $D- }
 interface
@@ -54,11 +54,11 @@ var
   e: integer;
 begin
   b := bytes;
-  // On gére le cas des tailles de fichier négatives
+  // On gÃ©re le cas des tailles de fichier nÃ©gatives
   if (b > 0) then
   begin
     e := trunc(logn(1024, b));
-    // Si on n'a pas l'unité on retourne en To
+    // Si on n'a pas l'unitÃ© on retourne en To
     e := min(high(units), e);
     b := b / Power(1024, e);
   end

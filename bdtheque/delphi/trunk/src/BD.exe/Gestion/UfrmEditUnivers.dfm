@@ -1,4 +1,4 @@
-object frmEditUnivers: TfrmEditUnivers
+﻿object frmEditUnivers: TfrmEditUnivers
   Left = 302
   Top = 146
   ActiveControl = edNom

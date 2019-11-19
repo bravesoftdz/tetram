@@ -1,4 +1,4 @@
-unit BD.Utils.IOUtils;
+﻿unit BD.Utils.IOUtils;
 
 interface
 

@@ -1,4 +1,4 @@
-unit ICUDateFormatter;
+﻿unit ICUDateFormatter;
 
 {$I icu.inc}
 

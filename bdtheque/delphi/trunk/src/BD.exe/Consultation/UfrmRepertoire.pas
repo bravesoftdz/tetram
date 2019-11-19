@@ -1,4 +1,4 @@
-unit UfrmRepertoire;
+ï»¿unit UfrmRepertoire;
 
 interface
 
@@ -33,10 +33,10 @@ type
     procedure FrameRechercheRapideedSearchKeyPress(Sender: TObject; var Key: Char);
     procedure vstAlbumsAfterItemPaint(Sender: TBaseVirtualTree; TargetCanvas: TCanvas; Node: PVirtualNode; ItemRect: TRect);
   private
-    { Déclarations privées }
+    { DÃ©clarations privÃ©es }
     procedure ChangeAlbumMode(Mode: TVirtualMode);
   public
-    { Déclarations publiques }
+    { DÃ©clarations publiques }
   end;
 
 var

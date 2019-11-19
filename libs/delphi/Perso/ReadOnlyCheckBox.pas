@@ -1,4 +1,4 @@
-unit ReadOnlyCheckBox;
+ï»¿unit ReadOnlyCheckBox;
 
 interface
 
@@ -9,17 +9,17 @@ uses
 type
   TReadOnlyCheckBox = class(TCheckBox)
   private
-    { Déclarations privées }
+    { Dï¿½clarations privï¿½es }
     OldValue: TCheckBoxState;
   protected
-    { Déclarations protégées }
+    { Dï¿½clarations protï¿½gï¿½es }
     procedure MouseDown(Button: TMouseButton; Shift: TShiftState; X, Y: Integer); override;
     procedure MouseUp(Button: TMouseButton; Shift: TShiftState; X, Y: Integer); override;
     procedure KeyDown(var Key: Word; Shift: TShiftState); override;
   public
-    { Déclarations publiques }
+    { Dï¿½clarations publiques }
   published
-    { Déclarations publiées }
+    { Dï¿½clarations publiï¿½es }
   end;
 
 procedure Register;

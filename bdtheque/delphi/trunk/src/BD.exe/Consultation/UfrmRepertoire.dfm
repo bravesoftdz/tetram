@@ -1,4 +1,4 @@
-object frmRepertoire: TfrmRepertoire
+﻿object frmRepertoire: TfrmRepertoire
   Left = 679
   Top = 323
   BorderIcons = [biSystemMenu, biMinimize]

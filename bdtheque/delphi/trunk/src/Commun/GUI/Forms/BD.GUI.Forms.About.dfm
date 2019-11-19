@@ -1,4 +1,4 @@
-object frmAboutBox: TfrmAboutBox
+﻿object frmAboutBox: TfrmAboutBox
   Left = 408
   Top = 197
   AutoSize = True

@@ -1,4 +1,4 @@
-unit UHistorique;
+ï»¿unit UHistorique;
 
 interface
 
@@ -104,8 +104,8 @@ const
   Modes = [fcModeConsultation, fcModeGestion];
   Specials = [fcActionBack, fcActionRefresh, fcPreview, fcRecreateToolBar, fcRefreshRepertoire, fcRefreshRepertoireData, fcConsole];
   NoSaveHistorique = Specials
-  // à cause des callback, les appels de gestion ne peuvent pas être sauvés dans l'historique
-  // et puis je vois pas bien à quoi ça pourrait servir
+  // Ã  cause des callback, les appels de gestion ne peuvent pas Ãªtre sauvÃ©s dans l'historique
+  // et puis je vois pas bien Ã  quoi Ã§a pourrait servir
     + UsedInGestion + Modes;
   CanRefresh = [fcAlbum, fcAuteur, fcSeriesIncompletes, fcPrevisionsSorties, fcPrevisionsAchats, fcGallerie, fcUnivers];
   MustRefresh = [fcRecherche];

@@ -1,4 +1,4 @@
-object frmGallerie: TfrmGallerie
+﻿object frmGallerie: TfrmGallerie
   Left = 0
   Top = 0
   Caption = 'frmGallerie'

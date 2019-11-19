@@ -1,4 +1,4 @@
-unit BD.Entities.Full;
+ï»¿unit BD.Entities.Full;
 
 interface
 
@@ -426,7 +426,7 @@ procedure TAlbumFull.ResetInstance;
 begin
   inherited;
   FReadyToFusion := False;
-  // le statut doit être conservé même si on fait un clear
+  // le statut doit Ãªtre conservÃ© mÃªme si on fait un clear
   // FFusionneEditions := True;
 
   ID_Album := GUID_NULL;

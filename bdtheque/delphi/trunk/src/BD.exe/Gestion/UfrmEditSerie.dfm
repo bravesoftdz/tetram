@@ -1,4 +1,4 @@
-object frmEditSerie: TfrmEditSerie
+﻿object frmEditSerie: TfrmEditSerie
   Left = 302
   Top = 146
   ActiveControl = edTitre

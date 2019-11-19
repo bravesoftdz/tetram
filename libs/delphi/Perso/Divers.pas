@@ -1,4 +1,4 @@
-unit Divers;
+ï»¿unit Divers;
 
 { .$D- }
 interface
@@ -162,7 +162,7 @@ end;
 
 destructor TMesurePerf.Destroy;
 begin
-  ShowMessage('Durée ' + FLabel + ': ' + FormatDateTime('hh:mm:ss:zzz', Now - FStart));
+  ShowMessage('Durï¿½e ' + FLabel + ': ' + FormatDateTime('hh:mm:ss:zzz', Now - FStart));
   inherited;
 end;
 
@@ -445,8 +445,8 @@ end;
 {$HINTS OFF}
 
 function IsPrevInstance: HWND;
-// Retourne 0 si aucune instance n'est trouvée
-// sinon, retourne le handle de l'application trouvée.
+// Retourne 0 si aucune instance n'est trouvï¿½e
+// sinon, retourne le handle de l'application trouvï¿½e.
 var
   ClassName: array [0 .. 255] of Char;
   TitreApplication: string;
@@ -605,7 +605,7 @@ end;
 
 function SansAccents(str: string): string;
 const
-  Tab1: string = 'àáâãäåèéêëìíîïòóôõöùúûüıÿçñ';
+  Tab1: string = 'ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½';
   Tab2: string = 'aaaaaaeeeeiiiiooooouuuuyycn';
 var
   i, p: Integer;
@@ -1109,7 +1109,7 @@ begin
       if CharInSet(Ver[Index], ['0' .. '9']) then
         S := S + Ver[Index]
       else
-        raise Exception.Create('"' + Ver + '" n''est pas un numéro de version valide');
+        raise Exception.Create('"' + Ver + '" n''est pas un numï¿½ro de version valide');
       Inc(Index);
     end;
     SetLength(AVer, Length(AVer) + 1);

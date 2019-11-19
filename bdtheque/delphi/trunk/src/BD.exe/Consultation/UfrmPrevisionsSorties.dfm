@@ -1,4 +1,4 @@
-object frmPrevisionsSorties: TfrmPrevisionsSorties
+﻿object frmPrevisionsSorties: TfrmPrevisionsSorties
   Left = 379
   Top = 471
   Caption = 'Previsions de sorties'
@@ -54,7 +54,7 @@ object frmPrevisionsSorties: TfrmPrevisionsSorties
         MinWidth = 50
         Position = 1
         Text = 'Pr'#233'visions'
-        Width = 564
+        Width = 560
       end>
   end
   object Panel1: TPanel

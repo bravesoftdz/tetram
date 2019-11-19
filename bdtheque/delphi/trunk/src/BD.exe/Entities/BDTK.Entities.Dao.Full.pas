@@ -1,4 +1,4 @@
-unit BDTK.Entities.Dao.Full;
+Ôªøunit BDTK.Entities.Dao.Full;
 
 interface
 
@@ -10,7 +10,7 @@ uses
 type
   // ce serait trop facile si Delphi acceptait cette syntaxe....
   // TClassDaoComplet = class of TDaoComplet<>;
-  // je suis donc obligÈ de faire des classes "classique"
+  // je suis donc oblig√© de faire des classes "classique"
   TDaoFullClass = class of TDaoFull;
 
   TDaoFull = class abstract(TDaoDBEntity)
@@ -204,7 +204,7 @@ end;
 
 class procedure TDaoFullEntity<T>.SaveEntity(Entity: T; UseTransaction: TManagedTransaction);
 begin
-  // Assert(not IsEqualGUID(Entity.ID, GUID_NULL), 'L''ID ne peut Ítre GUID_NULL');
+  // Assert(not IsEqualGUID(Entity.ID, GUID_NULL), 'L''ID ne peut √™tre GUID_NULL');
 end;
 
 { TDaoSerieFull }
@@ -280,7 +280,7 @@ begin
   Entity.ID_Album := Reference;
   qry := DBConnection.GetQuery(UseTransaction);
   try
-    TfrmConsole.AddEvent(Self.UnitName, 'TDaoAlbumFull.Fill > donnÈes de base - ' + GUIDToString(Entity.ID_Album));
+    TfrmConsole.AddEvent(Self.UnitName, 'TDaoAlbumFull.Fill > donn√©es de base - ' + GUIDToString(Entity.ID_Album));
 
     qry.FetchBlobs := True;
     qry.SQL.Clear;
@@ -313,11 +313,11 @@ begin
 
       Entity.Complet := qry.Fields.ByNameAsBoolean['complet'];
 
-      TfrmConsole.AddEvent(Self.UnitName, 'TDaoAlbumFull.Fill < donnÈes de base - ' + GUIDToString(Entity.ID_Album));
+      TfrmConsole.AddEvent(Self.UnitName, 'TDaoAlbumFull.Fill < donn√©es de base - ' + GUIDToString(Entity.ID_Album));
 
-      TfrmConsole.AddEvent(Self.UnitName, 'TDaoAlbumFull.Fill > sÈrie - ' + GUIDToString(Entity.ID_Album));
+      TfrmConsole.AddEvent(Self.UnitName, 'TDaoAlbumFull.Fill > s√©rie - ' + GUIDToString(Entity.ID_Album));
       TDaoSerieFull.Fill(Entity.Serie, StringToGUIDDef(qry.Fields.ByNameAsString['id_serie'], GUID_NULL), qry.Transaction);
-      TfrmConsole.AddEvent(Self.UnitName, 'TDaoAlbumFull.Fill < sÈrie - ' + GUIDToString(Entity.ID_Album));
+      TfrmConsole.AddEvent(Self.UnitName, 'TDaoAlbumFull.Fill < s√©rie - ' + GUIDToString(Entity.ID_Album));
 
       TfrmConsole.AddEvent(Self.UnitName, 'TDaoAlbumFull.Fill > univers - ' + GUIDToString(Entity.ID_Album));
       qry.Close;
@@ -362,9 +362,9 @@ begin
       end;
       TfrmConsole.AddEvent(Self.UnitName, 'TDaoAlbumFull.Fill < auteurs - ' + GUIDToString(Entity.ID_Album));
 
-      TfrmConsole.AddEvent(Self.UnitName, 'TDaoAlbumFull.Fill > Èditions - ' + GUIDToString(Entity.ID_Album));
+      TfrmConsole.AddEvent(Self.UnitName, 'TDaoAlbumFull.Fill > √©ditions - ' + GUIDToString(Entity.ID_Album));
       TDaoEditionFull.FillList(Entity.Editions, Entity.ID_Album, qry.Transaction);
-      TfrmConsole.AddEvent(Self.UnitName, 'TDaoAlbumFull.Fill < Èditions - ' + GUIDToString(Entity.ID_Album));
+      TfrmConsole.AddEvent(Self.UnitName, 'TDaoAlbumFull.Fill < √©ditions - ' + GUIDToString(Entity.ID_Album));
     end;
   finally
     qry.Free;
@@ -439,7 +439,7 @@ begin
     if not SameText(Source.Notes, DefaultAlbum.Notes) then
       Dest.Notes := Source.Notes;
 
-    // SÈrie
+    // S√©rie
     if not IsEqualGUID(Source.ID_Serie, DefaultAlbum.ID_Serie) and not IsEqualGUID(Source.ID_Serie, Dest.ID_Serie) then
       TDaoSerieFull.Fill(Dest.Serie, Source.ID_Serie, nil);
 
@@ -596,7 +596,7 @@ begin
       if not Edition.RecInconnu then
         AjoutString(S, QuotedStr(GUIDToString(Edition.ID_Edition)), ',');
 
-    // Èditions supprimÈes
+    // √©ditions supprim√©es
     qry.SQL.Clear;
     qry.SQL.Add('delete from editions');
     qry.SQL.Add('where');
@@ -1099,7 +1099,7 @@ begin
       qry.FetchBlobs := False;
 
       qry.SQL.Clear;
-      // TitreSerie en premier pour forcer l'union ‡ trier sur le titre
+      // TitreSerie en premier pour forcer l'union √† trier sur le titre
       qry.SQL.Add('select');
       qry.SQL.Add('  titreserie, al.id_serie');
       qry.SQL.Add('from');
@@ -1198,7 +1198,7 @@ begin
   Entity.ID_Edition := Reference;
   qry := DBConnection.GetQuery(UseTransaction);
   try
-    TfrmConsole.AddEvent(Self.UnitName, 'TDaoEditionFull.Fill > donnÈes de base - ' + GUIDToString(Reference));
+    TfrmConsole.AddEvent(Self.UnitName, 'TDaoEditionFull.Fill > donn√©es de base - ' + GUIDToString(Reference));
     qry.SQL.Clear;
     qry.SQL.Add('select');
     qry.SQL.Add('  e.id_edition, e.id_album, e.id_editeur, e.id_collection, c.nomcollection, e.anneeedition, e.prix, e.vo,');
@@ -1261,7 +1261,7 @@ begin
       Entity.AnneeCote := qry.Fields.ByNameAsInteger['anneecote'];
       Entity.PrixCote := qry.Fields.ByNameAsCurrency['prixcote'];
       Entity.NumeroPerso := qry.Fields.ByNameAsString['numeroperso'];
-      TfrmConsole.AddEvent(Self.UnitName, 'TDaoEditionFull.Fill < donnÈes de base - ' + GUIDToString(Reference));
+      TfrmConsole.AddEvent(Self.UnitName, 'TDaoEditionFull.Fill < donn√©es de base - ' + GUIDToString(Reference));
 
       TfrmConsole.AddEvent(Self.UnitName, 'TDaoEditionFull.Fill > images - ' + GUIDToString(Reference));
       qry.Close;
@@ -1332,14 +1332,14 @@ begin
   ZeroMemory(FusionsEditions, Length(FusionsEditions) * SizeOf(TEditionFull));
   SetLength(OptionsFusion, Source.Count);
   ZeroMemory(OptionsFusion, Length(OptionsFusion) * SizeOf(OptionFusion));
-  // mÍme si la destination n'a aucune donnÈes, on peut choisir de ne rien y importer
+  // m√™me si la destination n'a aucune donn√©es, on peut choisir de ne rien y importer
   // if Dest.Editions.Count > 0 then
   for i := 0 to Pred(Source.Count) do
   begin
     frm := TfrmFusionEditions.Create(nil);
     try
       frm.SetEditionSrc(Source[i]);
-      // SetEditions doit Ítre fait aprËs SetEditionSrc
+      // SetEditions doit √™tre fait apr√®s SetEditionSrc
       frm.SetEditions(Dest, FusionsEditions);
 
       case frm.ShowModal of

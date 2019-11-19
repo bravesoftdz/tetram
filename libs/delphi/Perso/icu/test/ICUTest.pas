@@ -1,4 +1,4 @@
-unit ICUTest;
+ï»¿unit ICUTest;
 
 interface
 
@@ -43,7 +43,7 @@ end;
 
 procedure TICUTest.TearDown;
 begin
-  // pas besoin de les décharger, l'unité icu_globals s'en charge et ça fait gagner du temps sur les tests
+  // pas besoin de les dï¿½charger, l'unitï¿½ icu_globals s'en charge et ï¿½a fait gagner du temps sur les tests
   // UnloadICU;
   inherited;
 end;

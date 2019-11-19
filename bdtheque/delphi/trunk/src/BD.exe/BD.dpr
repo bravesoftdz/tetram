@@ -1,4 +1,4 @@
-program BD;
+﻿program BD;
 
 {$INCLUDE FastMM4Options.inc}
 
@@ -179,7 +179,7 @@ uses
   BD.Utils.Chromium.Extension in '..\Commun\Utils\BD.Utils.Chromium.Extension.pas';
 
 begin
-  Application.Title := 'BDth�que';
+  Application.Title := 'BDthèque';
   Application.MainFormOnTaskbar := True;
   Application.Initialize;
   Application.Run;

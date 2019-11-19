@@ -1,4 +1,4 @@
-object frmEditEditeur: TfrmEditEditeur
+﻿object frmEditEditeur: TfrmEditEditeur
   Left = 513
   Top = 494
   ActiveControl = edNom

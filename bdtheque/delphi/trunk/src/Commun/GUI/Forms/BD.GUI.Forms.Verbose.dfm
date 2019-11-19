@@ -1,4 +1,4 @@
-object frmVerbose: TfrmVerbose
+﻿object frmVerbose: TfrmVerbose
   Left = 410
   Top = 423
   BorderIcons = []

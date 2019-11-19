@@ -1,4 +1,4 @@
-unit BD.Utils.Serializer.JSON;
+﻿unit BD.Utils.Serializer.JSON;
 
 interface
 

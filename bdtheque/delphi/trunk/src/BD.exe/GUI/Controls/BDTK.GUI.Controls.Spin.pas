@@ -1,4 +1,4 @@
-unit BDTK.GUI.Controls.Spin;
+﻿unit BDTK.GUI.Controls.Spin;
 
 interface
 

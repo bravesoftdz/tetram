@@ -1,4 +1,4 @@
-object frmSeriesIncompletes: TfrmSeriesIncompletes
+﻿object frmSeriesIncompletes: TfrmSeriesIncompletes
   Left = 414
   Top = 463
   Caption = 'S'#233'ries incompl'#232'tes'
@@ -47,7 +47,7 @@ object frmSeriesIncompletes: TfrmSeriesIncompletes
         MinWidth = 50
         Position = 1
         Text = 'Albums manquants'
-        Width = 564
+        Width = 560
       end>
   end
   object Panel1: TPanel

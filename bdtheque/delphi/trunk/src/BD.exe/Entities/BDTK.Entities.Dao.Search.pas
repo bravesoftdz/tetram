@@ -1,4 +1,4 @@
-unit BDTK.Entities.Dao.Search;
+﻿unit BDTK.Entities.Dao.Search;
 
 interface
 

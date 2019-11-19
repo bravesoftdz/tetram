@@ -1,4 +1,4 @@
-unit BD.Entities.Factory.Full;
+﻿unit BD.Entities.Factory.Full;
 
 interface
 

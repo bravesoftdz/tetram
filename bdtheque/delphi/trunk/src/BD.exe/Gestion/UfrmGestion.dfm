@@ -1,4 +1,4 @@
-object frmGestions: TfrmGestions
+﻿object frmGestions: TfrmGestions
   Left = 414
   Top = 314
   BorderIcons = [biMinimize]

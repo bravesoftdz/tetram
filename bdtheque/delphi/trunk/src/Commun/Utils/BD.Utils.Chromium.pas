@@ -1,4 +1,4 @@
-unit BD.Utils.Chromium;
+ï»¿unit BD.Utils.Chromium;
 
 interface
 
@@ -40,12 +40,12 @@ begin
   GlobalCEFWorkScheduler := TCEFWorkScheduler.Create(nil);
   GlobalCEFApp := TCefApplication.Create;
 
-  // obligatoire pour permettre à bdtheque d'être lancé sans donner le chemin de démarrage
-  // (= les dll de Chromium se trouvent toujours avec l'appli, on n'autorise pas à contourner leur emplacement)
+  // obligatoire pour permettre Ã  bdtheque d'Ãªtre lancÃ© sans donner le chemin de dÃ©marrage
+  // (= les dll de Chromium se trouvent toujours avec l'appli, on n'autorise pas Ã  contourner leur emplacement)
   GlobalCEFApp.SetCurrentDir := True;
 
   GlobalCEFApp.SingleProcess := {$IFDEF DEBUG}AUseSingleProcess and not IsSubProcess{$ELSE}False{$ENDIF};
-  // utiliser un autre exe comme subprocess permet de ne pas avoir à initialiser Chromium dans le dpr
+  // utiliser un autre exe comme subprocess permet de ne pas avoir Ã  initialiser Chromium dans le dpr
   if not GlobalCEFApp.SingleProcess then
     if IsSubProcess then
       GlobalCEFApp.BrowserSubprocessPath := ParamStr(0)
@@ -74,11 +74,11 @@ begin
   GlobalCEFApp.LogProcessInfo := True;
 {$ENDIF}
 
-  // on n'utilise pas Application.ExeName pour éviter les uses trop gourmand (Forms)
+  // on n'utilise pas Application.ExeName pour Ã©viter les uses trop gourmand (Forms)
   if IsSubProcess then
     GlobalCEFApp.StartSubProcess
   else
-    // puisqu'on n'utilise pas le même exe pour les subprocess, pas besoin de réagir au résultat du retour de la fonction
+    // puisqu'on n'utilise pas le mÃªme exe pour les subprocess, pas besoin de rÃ©agir au rÃ©sultat du retour de la fonction
     GlobalCEFApp.StartMainProcess;
 end;
 

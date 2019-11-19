@@ -1,4 +1,4 @@
-object frmOptions: TfrmOptions
+﻿object frmOptions: TfrmOptions
   Left = 591
   Top = 278
   HorzScrollBar.Visible = False

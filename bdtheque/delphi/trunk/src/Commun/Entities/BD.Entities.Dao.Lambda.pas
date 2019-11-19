@@ -1,4 +1,4 @@
-unit BD.Entities.Dao.Lambda;
+﻿unit BD.Entities.Dao.Lambda;
 
 interface
 

@@ -1,4 +1,4 @@
-object frmEditParaBD: TfrmEditParaBD
+﻿object frmEditParaBD: TfrmEditParaBD
   Left = 188
   Top = 180
   ActiveControl = edTitre

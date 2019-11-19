@@ -1,4 +1,4 @@
-object frmZoomCouverture: TfrmZoomCouverture
+﻿object frmZoomCouverture: TfrmZoomCouverture
   Left = 492
   Top = 352
   Caption = 'Zoom image'

@@ -1,4 +1,4 @@
-unit BD.GUI.Forms.Splash;
+ï»¿unit BD.GUI.Forms.Splash;
 
 interface
 
@@ -22,9 +22,9 @@ type
   private
     function GetFileName: TFileName;
     procedure SetFileName(const Value: TFileName);
-    { Déclarations privées }
+    { DÃ©clarations privÃ©es }
   public
-    { Déclarations publiques }
+    { DÃ©clarations publiques }
     procedure Affiche_act(const Texte: string);
     property FileName: TFileName read GetFileName write SetFileName;
   end;

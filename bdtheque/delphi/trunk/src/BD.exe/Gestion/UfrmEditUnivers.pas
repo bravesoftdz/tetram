@@ -1,4 +1,4 @@
-unit UfrmEditUnivers;
+ï»¿unit UfrmEditUnivers;
 
 interface
 
@@ -39,12 +39,12 @@ type
     procedure vtParaBDDblClick(Sender: TObject);
     procedure vtAlbumsDblClick(Sender: TObject);
   private
-    { Déclarations privées }
+    { DÃ©clarations privÃ©es }
     FUnivers: TUniversFull;
     procedure SetUnivers(Value: TUniversFull);
     function GetID_Univers: TGUID;
   public
-    { Déclarations publiques }
+    { DÃ©clarations publiques }
     property ID_Univers: TGUID read GetID_Univers;
     property Univers: TUniversFull read FUnivers write SetUnivers;
   end;
@@ -116,7 +116,7 @@ begin
   vtEditUnivers.CurrentValue := FUnivers.ID_UniversParent;
 
   // pour le moment
-  // TODO: voir pour pouvoir appeler plusieurs fenêtres d'édition de même classe
+  // TODO: voir pour pouvoir appeler plusieurs fenÃªtres d'Ã©dition de mÃªme classe
   vtEditUnivers.CanCreate := False;
   vtEditUnivers.CanEdit := False;
 

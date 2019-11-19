@@ -1,4 +1,4 @@
-unit PrintObject;
+ï»¿unit PrintObject;
 {.$D-}
 interface
 
@@ -565,7 +565,7 @@ type
   {-------------------------------------------------------------------------------}
   IPrintObjectPreview = interface
     ['{B4D76B2C-95CC-4E7C-AA2C-5050A0B15DB7}']
-    procedure Start; safecall; // début de l'impression
+    procedure Start; safecall; // dï¿½but de l'impression
     procedure Abort; safecall; // Annulation de l'impression
     procedure Quit; safecall; // fin de l'impression
     function Pages: TList<TGraphic>; safecall; // liste des pages (TBitmap)
@@ -578,23 +578,23 @@ type
 
   TPrintObject = class(TComponent)
   private
-    { Déclarations privées }
+    { Dï¿½clarations privï¿½es }
     FPrintingState: TPrintingState; { En cours d'impression? }
     FPages: TList<TGraphic>; { liste des pages }
-    OPreview: IPrintObjectPreview; { Objet récupérant toutes les actions pour préview }
+    OPreview: IPrintObjectPreview; { Objet rï¿½cupï¿½rant toutes les actions pour prï¿½view }
     FDateTime: TDateTimeRecord; { Informations d'impression de la date }
-    FAutoPaging: Boolean; { Passage à la page automatique? }
-    FFont: TFont; { Font par défaut }
+    FAutoPaging: Boolean; { Passage ï¿½ la page automatique? }
+    FFont: TFont; { Font par dï¿½faut }
     FMargin: TMarginsPixels; { Margins in pixels }
     FMarginMm: TMarginsMms; { Margins in milimeters }
-    FHeader: THeaderRecords; { Informations d'impression du Tête de page }
+    FHeader: THeaderRecords; { Informations d'impression du Tï¿½te de page }
     FFooter: TFooterRecords; { Informations d'impression du Pied de page }
     FColumnInformation: TColumnInformationRecords; { Informations d'impression des colonnes }
-    FDetail: TDetailCoordinates; { Coordonnées du Detail }
-    FHeaderCoordinates: THeaderCoordinates; { Coordonnées du Tête de page }
-    FFooterCoordinates: TFooterCoordinates; { Coordonnées du Pied de page }
-    FPageNumber: TPageNumberRecord; { Informations d'impression du numéro de page }
-    FSizeOption: TSizeOption; { Option de calcul de la taille de la feuille d'apperçu }
+    FDetail: TDetailCoordinates; { Coordonnï¿½es du Detail }
+    FHeaderCoordinates: THeaderCoordinates; { Coordonnï¿½es du Tï¿½te de page }
+    FFooterCoordinates: TFooterCoordinates; { Coordonnï¿½es du Pied de page }
+    FPageNumber: TPageNumberRecord; { Informations d'impression du numï¿½ro de page }
+    FSizeOption: TSizeOption; { Option de calcul de la taille de la feuille d'apperï¿½u }
     //      FPageInfos: TPageInformations;    { Taille de la page }
     FPrinterSettings: TPrinterSettings;
 
@@ -616,11 +616,11 @@ type
     FAfterPageNumber: TNotifyEvent;
     FOnDestroy: TNotifyEvent;
 
-    StartDateTimePrint: TDateTime; { Début d'impression }
+    StartDateTimePrint: TDateTime; { Dï¿½but d'impression }
     CurrentTab: Single; { The value of the current tab }
     CurrentFont: TCurrentFontRecords; { Historique des Font en cours d'utilisation }
-    PrevFont: TFont; { Dernière Font utilisée pour imprimer }
-    FTitre: string; { Titre de la fenêtre d'apperçu ou du gestionnaire d'impression }
+    PrevFont: TFont; { Derniï¿½re Font utilisï¿½e pour imprimer }
+    FTitre: string; { Titre de la fenï¿½tre d'apperï¿½u ou du gestionnaire d'impression }
     LastYPosition: Single; { The Y position where the lastwrite occurred }
     TextMetrics: TTextMetric; { Tailles du texte en fonction de la Font courante }
 
@@ -653,10 +653,10 @@ type
     procedure CheckPrinting(States: TPrintingStates = []);
     procedure SetTitre(const Value: string);
   protected
-    { Déclarations protégées }
+    { Dï¿½clarations protï¿½gï¿½es }
     procedure DoDestroy; virtual;
   public
-    { Déclarations publiques }
+    { Dï¿½clarations publiques }
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
     procedure BeforeDestruction; override;
@@ -758,7 +758,7 @@ type
 
     procedure PrintPages(Pages: TList<TGraphic>);
   published
-    { Déclarations publiées }
+    { Dï¿½clarations publiï¿½es }
     property AutoPaging: Boolean read FAutoPaging write SetAutoPaging default True;
     property Columns: TColumnInformationRecords read FColumnInformation write SetColumnInformations;
     property DateTime: TDateTimeRecord read FDateTime write FDateTime;
@@ -2224,7 +2224,7 @@ begin
 end;
 {-------------------------------------------------------------------------------}
 
-procedure TPrintObject.SetMargins(Top, Bottom, Left, Right: Single); { Défini les marges haute, basse, gauche et droite en MMS ! }
+procedure TPrintObject.SetMargins(Top, Bottom, Left, Right: Single); { Dï¿½fini les marges haute, basse, gauche et droite en MMS ! }
 begin
   if (Left + Right >= PrinterSettings.WorkSheetWidthMms) then
   begin
@@ -2352,7 +2352,7 @@ begin
   //    1:
   Canvas.TextOut(l, t, CleanString(Text));
   //    else begin
-  //        LastSize := Canvas.Font.Height; // plus précis que Size
+  //        LastSize := Canvas.Font.Height; // plus prï¿½cis que Size
   //        Canvas.Font.Height := MulDiv(LastSize, ResolutionEcran, ResolutionPrinterY);
   //        Canvas.TextOut(MulDiv(l, ResolutionEcran, ResolutionPrinterX),
   //          MulDiv(t, ResolutionEcran, ResolutionPrinterY),
@@ -2383,7 +2383,7 @@ begin
 end;
 {-------------------------------------------------------------------------------}
 
-procedure TPrintObject.WriteLine(X, Y: Single; Text: string); { Ecrit Text à la position X, Y (en MM). }
+procedure TPrintObject.WriteLine(X, Y: Single; Text: string); { Ecrit Text ï¿½ la position X, Y (en MM). }
 var
   XPixels: Integer;
   YPixels: Integer;
@@ -2519,7 +2519,7 @@ begin
 end;
 {-------------------------------------------------------------------------------}
 
-procedure TPrintObject.WriteRotatedLine(X, Y: Single; Text: string; Font: TFont; Angle: Integer); { Ecrit Text à la position X, Y (en MM). }
+procedure TPrintObject.WriteRotatedLine(X, Y: Single; Text: string; Font: TFont; Angle: Integer); { Ecrit Text ï¿½ la position X, Y (en MM). }
 
   procedure Imprimer(Canvas: TCanvas; X, Y: Integer; Text: string; Angle: Integer);
   var
@@ -2548,7 +2548,7 @@ procedure TPrintObject.WriteRotatedLine(X, Y: Single; Text: string; Font: TFont;
     hNewFont := SelectObject(Canvas.Font.Handle, hOldFont);
     //        end;
     //      else begin
-    //          LastSize := Canvas.Font.Height; // plus précis que Size
+    //          LastSize := Canvas.Font.Height; // plus prï¿½cis que Size
     //          Canvas.Font.Height := MulDiv(LastSize, ResolutionEcran, ResolutionPrinterY);
     //          GetObject(Canvas.Font.Handle, SizeOf(TLogFont), @LFont);
     //          LFont.lfEscapement := Angle;
@@ -3218,7 +3218,7 @@ begin
 end;
 {-------------------------------------------------------------------------------}
 
-procedure TPrintObject.Quit; { 'Quit' doit être appelée pour valider l'impression }
+procedure TPrintObject.Quit; { 'Quit' doit ï¿½tre appelï¿½e pour valider l'impression }
 var
   Cancel: Boolean;
 begin
@@ -3280,8 +3280,8 @@ procedure TPrintObject.SetFontInformation2(Font: TFont);
 //var
 //  LastSize: Integer;
 begin
-  Destination.Font.Assign(Font); // buggé: ne transmet pas l'Escapement !!!!
-  // correction: pas buggé: TFont n'utilise pas l'Escapement
+  Destination.Font.Assign(Font); // buggï¿½: ne transmet pas l'Escapement !!!!
+  // correction: pas buggï¿½: TFont n'utilise pas l'Escapement
 //  if FPreview then begin
 //    LastSize := Destination.Font.Size;
 //    Destination.Font.PixelsPerInch := ResolutionPrinterY;
@@ -3304,7 +3304,7 @@ begin
 end;
 {-------------------------------------------------------------------------------}
 
-procedure TPrintObject.Start(Title: string); { doit TOUJOURS être appelée avant de commencer une impression }
+procedure TPrintObject.Start(Title: string); { doit TOUJOURS ï¿½tre appelï¿½e avant de commencer une impression }
 var
   Cancel: Boolean;
 begin

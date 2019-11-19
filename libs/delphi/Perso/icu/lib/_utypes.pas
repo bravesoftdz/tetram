@@ -1,4 +1,4 @@
-unit _utypes;
+﻿unit _utypes;
 
 {$I icu.inc}
 

@@ -1,4 +1,4 @@
-object frmControlImport: TfrmControlImport
+﻿object frmControlImport: TfrmControlImport
   Left = 0
   Top = 0
   Caption = 'Importation de donn'#233'e'

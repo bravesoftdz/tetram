@@ -1,4 +1,4 @@
-unit UfrmConsultationAuteur;
+ï»¿unit UfrmConsultationAuteur;
 
 interface
 
@@ -57,7 +57,7 @@ type
     procedure ModificationExecute(Sender: TObject);
     function ModificationUpdate: Boolean;
   public
-    { Déclarations publiques }
+    { DÃ©clarations publiques }
     property Auteur: TAuteurFull read FAuteur;
     property ID_Auteur: TGUID read GetID_Auteur write SetID_Auteur;
   end;
@@ -241,7 +241,7 @@ begin
     begin
       CellText := FormatTitre(NodeInfo.Serie.TitreSerie);
       if CellText = '' then
-        CellText := '<Sans série>';
+        CellText := '<Sans sÃ©rie>';
     end
     else
     begin

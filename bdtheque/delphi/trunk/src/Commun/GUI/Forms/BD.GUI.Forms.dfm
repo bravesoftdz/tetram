@@ -1,4 +1,4 @@
-object bdtForm: TbdtForm
+﻿object bdtForm: TbdtForm
   Left = 0
   Top = 0
   ClientHeight = 213

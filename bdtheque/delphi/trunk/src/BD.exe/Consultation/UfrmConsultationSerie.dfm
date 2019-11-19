@@ -1,4 +1,4 @@
-object frmConsultationSerie: TfrmConsultationSerie
+﻿object frmConsultationSerie: TfrmConsultationSerie
   Left = 1349
   Top = 58
   Caption = 'frmConsultationSerie'

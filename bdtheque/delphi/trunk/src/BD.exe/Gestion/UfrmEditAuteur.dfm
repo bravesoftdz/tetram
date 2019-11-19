@@ -1,4 +1,4 @@
-object frmEditAuteur: TfrmEditAuteur
+﻿object frmEditAuteur: TfrmEditAuteur
   Left = 537
   Top = 280
   HorzScrollBar.Visible = False

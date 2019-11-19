@@ -1,4 +1,4 @@
-unit BD.Entities.Factory.Lite;
+﻿unit BD.Entities.Factory.Lite;
 
 interface
 

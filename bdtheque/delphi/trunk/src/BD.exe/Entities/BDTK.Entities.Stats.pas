@@ -1,4 +1,4 @@
-unit BDTK.Entities.Stats;
+ï»¿unit BDTK.Entities.Stats;
 
 interface
 
@@ -333,7 +333,7 @@ begin
     if not q.Eof then
       Stats.FNbAlbumsSansPrix := q.Fields.ByNameAsInteger['countref'] - Stats.NbAlbumsGratuit;
 
-    Stats.FValeurEstimeeRegression := Stats.ValeurConnue + Stats.EstimationAlbumsSansPrixParRegression; // calcule aussi la médiane
+    Stats.FValeurEstimeeRegression := Stats.ValeurConnue + Stats.EstimationAlbumsSansPrixParRegression; // calcule aussi la mÃ©diane
 
     Stats.FValeurEstimeeMoyenne := Stats.ValeurConnue + Stats.NbAlbumsSansPrix * Stats.PrixAlbumMoyenMoyenne;
     Stats.FValeurEstimeeMediane := Stats.ValeurConnue + Stats.NbAlbumsSansPrix * Stats.PrixAlbumMoyenMediane;
@@ -383,7 +383,7 @@ begin
     q := dmPrinc.DBConnection.GetQuery;
     try
       q.SQL.Add('select');
-      q.SQL.Add('  e.prix'); // prix doit être le dernier champ des set
+      q.SQL.Add('  e.prix'); // prix doit Ãªtre le dernier champ des set
       q.SQL.Add('from');
       q.SQL.Add('  editions e');
       q.SQL.Add('  inner join albums a on');
@@ -419,7 +419,7 @@ begin
       q.SQL.Add('select');
       q.SQL.Add('  e.anneeedition, e.vo, e.couleur, e.etat, e.reliure, e.typeedition, e.dateachat, e.nombredepages, e.orientation, e.formatedition, e.senslecture,');
       q.SQL.Add('  a.moisparution, a.anneeparution, a.tome, a.tomedebut, a.tomefin, a.horsserie, a.integrale,');
-      q.SQL.Add('  e.prix'); // prix doit être le dernier champ des set
+      q.SQL.Add('  e.prix'); // prix doit Ãªtre le dernier champ des set
       q.SQL.Add('from');
       q.SQL.Add('  editions e');
       q.SQL.Add('  inner join albums a on');
@@ -467,7 +467,7 @@ begin
     forest := nil;
     RFData := TRFData.Create;
     try
-      // ils doivent être dans le même ordre que les champs du training set donc de la requête
+      // ils doivent Ãªtre dans le mÃªme ordre que les champs du training set donc de la requÃªte
       RFData.Criterias.Add(TRFCriteria.Create('ANNEEEDITION', -1));
       RFData.Criterias.Add(TRFBooleanCriteria.Create('VO'));
       RFData.Criterias.Add(TRFBooleanCriteria.Create('COULEUR'));
@@ -509,7 +509,7 @@ begin
 
       try
         data := RFData.GetDatas(EvaluationSet);
-        // en dessous de 40000 lignes dans EvaluationSet, il semble qu'un traitement parallèle soit contre-performant
+        // en dessous de 40000 lignes dans EvaluationSet, il semble qu'un traitement parallÃ¨le soit contre-performant
         for i := Low(data) to High(data) do
           Result := Result + dfprocess0(forest, TVector(data[i]));
       finally
@@ -773,7 +773,7 @@ function TPrevisionSortie.GetsAnnee: string;
 begin
   Result := IntToStr(Annee);
   if Mois > 0 then
-    Result := Choose(Mois - 1, ['début', 'début', 'début', 'début', 'mi', 'mi', 'mi', 'mi', 'fin', 'fin', 'fin', 'fin']) + ' ' + Result;
+    Result := Choose(Mois - 1, ['dÃ©but', 'dÃ©but', 'dÃ©but', 'dÃ©but', 'mi', 'mi', 'mi', 'mi', 'fin', 'fin', 'fin', 'fin']) + ' ' + Result;
 end;
 
 { TSerieIncomplete }
@@ -788,7 +788,7 @@ begin
   begin
     S := NumerosManquants[i];
     if Pos('<>', S) <> 0 then
-      S := StringReplace(S, '<>', ' à ', []);
+      S := StringReplace(S, '<>', ' Ã  ', []);
     AjoutString(Result, S, ', ');
   end;
 end;

@@ -1,4 +1,4 @@
-object frmRecherche: TfrmRecherche
+﻿object frmRecherche: TfrmRecherche
   Left = 212
   Top = 321
   Caption = 'Recherche'

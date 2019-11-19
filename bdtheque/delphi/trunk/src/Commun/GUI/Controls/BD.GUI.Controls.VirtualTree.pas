@@ -1,4 +1,4 @@
-unit BD.GUI.Controls.VirtualTree;
+﻿unit BD.GUI.Controls.VirtualTree;
 
 interface
 

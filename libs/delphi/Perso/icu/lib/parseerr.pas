@@ -1,4 +1,4 @@
-unit parseerr;
+﻿unit parseerr;
 
 {$I icu.inc}
 

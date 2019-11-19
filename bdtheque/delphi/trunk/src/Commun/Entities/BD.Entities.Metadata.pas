@@ -1,4 +1,4 @@
-unit BD.Entities.Metadata;
+﻿unit BD.Entities.Metadata;
 
 interface
 

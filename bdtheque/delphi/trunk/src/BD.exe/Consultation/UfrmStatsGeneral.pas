@@ -1,4 +1,4 @@
-unit UfrmStatsGeneral;
+ï»¿unit UfrmStatsGeneral;
 
 interface
 
@@ -43,9 +43,9 @@ type
     Label16: TLabel;
     procedure listeExit(Sender: TObject);
   private
-    { Déclarations privées }
+    { DÃ©clarations privÃ©es }
   public
-    { Déclarations publiques }
+    { DÃ©clarations publiques }
   end;
 
 function TStatsGeneralesCreate(AOwner: TComponent; Info: TStats): TfrmStatsGenerales;

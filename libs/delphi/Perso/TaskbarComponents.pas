@@ -1,4 +1,4 @@
-unit TaskbarComponents;
+﻿unit TaskbarComponents;
 
 interface
 

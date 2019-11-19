@@ -1,4 +1,4 @@
-unit BDTK.Entities.Dao.Stats;
+﻿unit BDTK.Entities.Dao.Stats;
 
 interface
 

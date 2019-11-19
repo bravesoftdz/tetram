@@ -1,4 +1,4 @@
-unit BDTK.Web.Forms.Publish;
+ï»¿unit BDTK.Web.Forms.Publish;
 
 interface
 
@@ -156,19 +156,19 @@ begin
         else
           moyExecTimeTable := ExecTimeTable div OperationFaitesTable;
         if moyExecTimeTable < 10 then
-          moyExecTimeTable := 10; // au départ la moyenne n'est pas forcément très juste: par tatonnement, il faut au moins 10ms par enregistrement
+          moyExecTimeTable := 10; // au dÃ©part la moyenne n'est pas forcÃ©ment trÃ¨s juste: par tatonnement, il faut au moins 10ms par enregistrement
         if OperationFaitesAutresTables = 0 then
           moyExecTimeAutresTables := moyExecTimeTable
         else
           moyExecTimeAutresTables := ExecTimeAutresTables div OperationFaitesAutresTables;
         if moyExecTimeAutresTables < 10 then
-          moyExecTimeAutresTables := 10; // au départ la moyenne n'est pas forcément très juste: par tatonnement, il faut au moins 10ms par enregistrement
+          moyExecTimeAutresTables := 10; // au dÃ©part la moyenne n'est pas forcÃ©ment trÃ¨s juste: par tatonnement, il faut au moins 10ms par enregistrement
 
         TempsRestantTable := moyExecTimeTable * OperationRestantTable;
         TempsRestantAutresTables := moyExecTimeAutresTables * OperationRestantAutresTables;
         TempsRestantTotal := TempsRestantTable + TempsRestantAutresTables;
 
-        Label9.Caption := Format('Fin estimée : %s (%s)', [FormatDateTime('HH:mm:ss', IncMilliSecond(Now, TempsRestantTotal)),
+        Label9.Caption := Format('Fin estimÃ©e : %s (%s)', [FormatDateTime('HH:mm:ss', IncMilliSecond(Now, TempsRestantTotal)),
           TimeToStr(IncMilliSecond(0, TempsRestantTotal))]);
         Application.ProcessMessages;
       end;
@@ -283,7 +283,7 @@ begin
         case table.TypeSynchro of
           tsImages:
             if includeImages then
-              Inc(rc, CompteUpdates(qry, table) * 2); // la synchro des images est faite en 2 fois : les données puis les fichiers
+              Inc(rc, CompteUpdates(qry, table) * 2); // la synchro des images est faite en 2 fois : les donnÃ©es puis les fichiers
         else
           Inc(rc, CompteUpdates(qry, table));
         end;
@@ -291,7 +291,7 @@ begin
     if rc = 0 then
     begin
       SendOption('lastsynchro', DateToStr(FStartTime, TGlobalVar.SQLSettings));
-      ShowMessage('Rien à publier');
+      ShowMessage('Rien Ã  publier');
     end
     else
     begin
@@ -318,7 +318,7 @@ begin
             tsImages:
               if includeImages then
               begin
-                SendData(ActionCreateImagesDirectory); // création du répertoire
+                SendData(ActionCreateImagesDirectory); // crÃ©ation du rÃ©pertoire
                 if fullPublish then
                 begin
                   SendData(ActionEmptyImagesDirectory); // enlever toutes les images
@@ -334,7 +334,7 @@ begin
       SendOption('formattitrealbum', IntToStr(TGlobalVar.Options.FormatTitreAlbum));
       SendOption('lastsynchro', DateToStr(FStartTime, TGlobalVar.SQLSettings));
 
-      ShowMessage('Publication terminée');
+      ShowMessage('Publication terminÃ©e');
     end;
   finally
     qry.Free;
@@ -372,7 +372,7 @@ begin
     begin
       champ := LowerCase(Query.Fields.AliasName[i]);
 
-      // champ à passer ?
+      // champ Ã  passer ?
       s := '@' + InfoTable.SkipFields + '@';
       l := Pos('@' + champ + '=', s);
       if l > 0 then
@@ -380,7 +380,7 @@ begin
         l := l + Length(champ) + 2;
         if DBVersion >= Copy(s, l, PosEx('@', s, l) - l) then
           listFields.Add(i);
-        Continue; // ce n'est pas grave si on ne fait pas le test du champ à upper: si on l'a passé c'est qu'il ne l'est pas
+        Continue; // ce n'est pas grave si on ne fait pas le test du champ Ã  upper: si on l'a passÃ© c'est qu'il ne l'est pas
       end;
       if Pos('@' + champ + '@', s) = 0 then
         listFields.Add(i);

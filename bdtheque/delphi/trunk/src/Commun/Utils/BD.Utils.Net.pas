@@ -1,4 +1,4 @@
-unit BD.Utils.Net;
+ï»¿unit BD.Utils.Net;
 
 interface
 
@@ -195,7 +195,7 @@ var
   i: Integer;
   idRequete, Serveur, Agent, Action: string;
 begin
-  idRequete := '---------------------------26846888314793'; // valeur arbitraire: voir s'il faut la changer à chaque requête mais il semble que non
+  idRequete := '---------------------------26846888314793'; // valeur arbitraire: voir s'il faut la changer Ã  chaque requÃªte mais il semble que non
   Result := 0;
   Agent := Format('%s/%s', [TPath.GetFileNameWithoutExtension(Application.ExeName), GetInfoVersion(Application.ExeName)]);
   hISession := InternetOpen(PChar(Agent), INTERNET_OPEN_TYPE_PRECONFIG, nil, nil, 0);
@@ -212,7 +212,7 @@ begin
     if not InternetCrackUrl(PChar(URL), Length(URL), 0, URLComponents) then
       RaiseLastOSError;
     if not(URLComponents.nScheme in [INTERNET_SERVICE_HTTP, INTERNET_SERVICE_FTP]) then
-      raise Exception.Create('Type d''adresse non supporté:'#13#10 + URL);
+      raise Exception.Create('Type d''adresse non supportÃ©:'#13#10 + URL);
     Serveur := Copy(URLComponents.lpszHostName, 1, Pos('/', string(URLComponents.lpszHostName) + '/') - 1);
     Serveur := Copy(Serveur, 1, Pos(':', Serveur + ':') - 1);
     hConnect := InternetConnect(hISession, PChar(Serveur), URLComponents.nPort, URLComponents.lpszUserName, URLComponents.lpszPassword,
@@ -372,7 +372,7 @@ procedure TDownloader.SendData(Sender: TObject; Buffer: Pointer; Len: Integer);
 begin
   if FUserCancel > 0 then
     FHttpCli.Abort;
-  // les ICS ne permettent pas de gérer une progressbar en envoi
+  // les ICS ne permettent pas de gÃ©rer une progressbar en envoi
   // if Assigned(FWaiting) then
   // FWaiting.ShowProgression('', FHttpCli.RcvdCount, FHttpCli.ContentLength);
 end;
@@ -401,7 +401,7 @@ var
   dl: TDownloader;
 begin
   Result := 0;
-  idRequete := '---------------------------26846888314793'; // valeur arbitraire: voir s'il faut la changer à chaque requête mais il semble que non
+  idRequete := '---------------------------26846888314793'; // valeur arbitraire: voir s'il faut la changer Ã  chaque requÃªte mais il semble que non
   MemoryStream := TMemoryStream.Create;
   dl := TDownloader.Create;
   try
@@ -455,8 +455,8 @@ begin
 
     if ShowProgress then
     begin
-      dl.FWaiting := TWaiting.Create('Chargement des données...', 1, @(dl.FUserCancel), False);
-      // pour forcer la fenêtre à afficher des choses dès son apparition
+      dl.FWaiting := TWaiting.Create('Chargement des donnÃ©es...', 1, @(dl.FUserCancel), False);
+      // pour forcer la fenÃªtre Ã  afficher des choses dÃ¨s son apparition
       dl.FWaiting.ShowProgression(URL, dl.FHttpCli.RcvdCount, dl.FHttpCli.ContentLength);
     end;
     try
@@ -469,7 +469,7 @@ begin
     end;
 
     Result := dl.FHttpCli.StatusCode;
-    // à remplacer par la valeur du header 'filename' ou equivalent
+    // Ã  remplacer par la valeur du header 'filename' ou equivalent
     for i := 0 to Pred(dl.FHttpCli.RcvdHeader.Count) do
       if SameText('filename: ', Copy(dl.FHttpCli.RcvdHeader[i], 1, 10)) then
       begin

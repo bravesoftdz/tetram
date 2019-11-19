@@ -1,4 +1,4 @@
-unit UfrmPrevisionAchats;
+ï»¿unit UfrmPrevisionAchats;
 
 interface
 
@@ -41,9 +41,9 @@ type
     procedure actAcheterExecute(Sender: TObject);
   private
     procedure ChangeAlbumMode(Mode: TVirtualMode);
-    { Déclarations privées }
+    { DÃ©clarations privÃ©es }
   public
-    { Déclarations publiques }
+    { DÃ©clarations publiques }
     procedure ImpressionExecute(Sender: TObject);
     procedure ApercuExecute(Sender: TObject);
     function ImpressionUpdate: Boolean;
@@ -63,7 +63,7 @@ var
   ini: TIniFile;
 begin
   ChargeImage(vstPrevisionsAchats.Background, 'FONDVT');
-  vstPrevisionsAchats.ShowAchat := False; // on affiche que ça
+  vstPrevisionsAchats.ShowAchat := False; // on affiche que Ã§a
   vstPrevisionsAchats.ShowDateParutionAlbum := True;
   vstPrevisionsAchats.Filtre := 'ACHAT = 1';
   vstPrevisionsAchats.UseFiltre := True;

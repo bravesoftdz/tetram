@@ -1,4 +1,4 @@
-unit UFichierLog;
+ï»¿unit UFichierLog;
 
 interface
 
@@ -228,7 +228,7 @@ begin
         end;
         Exit(False);
       except
-        // si le nom de fichier n'est pas décodable, c'est qu'il n'est pas un fichier de backup
+        // si le nom de fichier n'est pas dï¿½codable, c'est qu'il n'est pas un fichier de backup
         Result := False;
       end;
     end) do
@@ -335,11 +335,11 @@ begin
 
       cutPos := FFichierLog.Position;
 
-      // on copie le BOM en même temps s'il est présent
+      // on copie le BOM en mï¿½me temps s'il est prï¿½sent
       FFichierLog.Position := 0;
       bckStream.CopyFrom(FFichierLog, cutPos);
 
-      // FFichierLog a été repositionné sur cutPos
+      // FFichierLog a ï¿½tï¿½ repositionnï¿½ sur cutPos
       tmpStream.CopyFrom(FFichierLog, FFichierLog.Size - cutPos);
 
       FFichierLog.Size := Length(TFichierLog.Instance.Encoding.GetPreamble);
@@ -447,7 +447,7 @@ end;
 procedure TFichierLog.CheckLogging;
 begin
   if TLogWriter(FWriter).isOpen then
-    raise Exception.Create('Impossible de modifier les propriétés');
+    raise Exception.Create('Impossible de modifier les propriï¿½tï¿½s');
 end;
 
 constructor TFichierLog.Create;
@@ -569,7 +569,7 @@ end;
 procedure TFichierLog.SetKeepRatio(const Value: Integer);
 begin
   if not(Value in [0 .. 99]) then
-    raise Exception.Create('Le ratio doit être compris entre 0% et 99%');
+    raise Exception.Create('Le ratio doit ï¿½tre compris entre 0% et 99%');
   FKeepRatio := Value;
 end;
 

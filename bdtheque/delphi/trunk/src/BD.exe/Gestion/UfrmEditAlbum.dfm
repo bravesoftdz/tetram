@@ -1,4 +1,4 @@
-object frmEditAlbum: TfrmEditAlbum
+﻿object frmEditAlbum: TfrmEditAlbum
   Left = 480
   Top = 77
   ActiveControl = edTitre

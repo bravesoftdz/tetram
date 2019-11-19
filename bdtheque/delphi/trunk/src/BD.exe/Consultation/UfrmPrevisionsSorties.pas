@@ -1,4 +1,4 @@
-unit UfrmPrevisionsSorties;
+﻿unit UfrmPrevisionsSorties;
 
 interface
 
@@ -113,7 +113,7 @@ begin
     Initialize(NodeInfo^);
     if Node.Index in [Liste.AnneesPassees.Count, Liste.AnneesPassees.Count + Liste.AnneeEnCours.Count + 1] then
     begin
-      NodeInfo.Serie := '-'; // s�parateur
+      NodeInfo.Serie := '-'; // séparateur
     end
     else
     begin

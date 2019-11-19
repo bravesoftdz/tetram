@@ -1,4 +1,4 @@
-unit BDTK.GUI.Forms.Main;
+ï»¿unit BDTK.GUI.Forms.Main;
 
 interface
 
@@ -632,7 +632,7 @@ begin
     ToolBar1.Images := boutons_16x16_norm;
     ToolBar1.HotImages := boutons_16x16_hot;
   end;
-  ToolBar1.ButtonHeight := 0; // force la barre à se redimensionner correctement
+  ToolBar1.ButtonHeight := 0; // force la barre Ã  se redimensionner correctement
   ToolBar1.ButtonWidth := 0;
 
   LastButton := tbSep;
@@ -1190,8 +1190,8 @@ begin
     WindowState := wsNormal;
     SetBounds(iLeft, iTop, iWidth, iHeight);
   except
-    // on ne fait rien en cas d'erreur: la ligne DOIT être correcte
-    Assert(False, 'Taille de fenêtre mal décodée');
+    // on ne fait rien en cas d'erreur: la ligne DOIT Ãªtre correcte
+    Assert(False, 'Taille de fenÃªtre mal dÃ©codÃ©e');
   end;
 end;
 

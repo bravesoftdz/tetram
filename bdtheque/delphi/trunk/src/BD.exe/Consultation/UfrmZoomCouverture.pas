@@ -1,4 +1,4 @@
-unit UfrmZoomCouverture;
+ï»¿unit UfrmZoomCouverture;
 
 interface
 
@@ -28,7 +28,7 @@ type
     procedure ImageDblClick(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
   private
-    { Déclarations privées }
+    { DÃ©clarations privÃ©es }
     FisParaBD: Boolean;
     FID_Item, FID_Couverture: TGUID;
     PosClick: TPoint;
@@ -40,7 +40,7 @@ type
     function ImpressionUpdate: Boolean;
     function ApercuUpdate: Boolean;
   public
-    { Déclarations publiques }
+    { DÃ©clarations publiques }
     function LoadCouverture(isParaBD: Boolean; const ID_Item, ID_Couverture: TGUID): Boolean;
   end;
 

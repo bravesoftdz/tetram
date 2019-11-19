@@ -1,4 +1,4 @@
-unit TestICUDateFormatFunctions;
+﻿unit TestICUDateFormatFunctions;
 
 interface
 

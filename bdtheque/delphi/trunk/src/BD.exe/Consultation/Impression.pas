@@ -1,4 +1,4 @@
-unit Impression;
+ï»¿unit Impression;
 
 interface
 
@@ -141,7 +141,7 @@ begin
   end;
 
   nbImageHorz := Trunc((Prn.Detail.Width + ThumbInterval) / (ThumbWidth + ThumbInterval));
-  // si nbImageHorz = 0 alors on n'a pas assez de place pour mettre les images dans une page donc pas necessaire de passer à la page suivante
+  // si nbImageHorz = 0 alors on n'a pas assez de place pour mettre les images dans une page donc pas necessaire de passer Ã  la page suivante
   if TGlobalVar.Options.FicheAlbumWithCouverture and (nbImageHorz > 0) then
   begin
     numCol := 1;
@@ -330,8 +330,8 @@ begin
   if Album.Integrale then
   begin
     s := NonZero(IntToStr(Album.TomeDebut));
-    AjoutString(s, NonZero(IntToStr(Album.TomeFin)), ' à ');
-    AjoutString(s, 'Intégrale', ' ');
+    AjoutString(s, NonZero(IntToStr(Album.TomeFin)), ' Ã  ');
+    AjoutString(s, 'IntÃ©grale', ' ');
     s2 := NonZero(IntToStr(Album.Tome));
     AjoutString(s2, s, ' ', '[', ']');
     Prn.WriteLineColumn(1, -2, s2);
@@ -557,12 +557,12 @@ begin
             if Album.Integrale then
             begin
               s2 := NonZero(IntToStr(Album.TomeDebut));
-              AjoutString(s2, NonZero(IntToStr(Album.TomeFin)), ' à ');
-              AjoutString(s, 'Intégrale ', ' - ', '', TrimRight(' ' + NonZero(IntToStr(Album.Tome))));
+              AjoutString(s2, NonZero(IntToStr(Album.TomeFin)), ' Ã  ');
+              AjoutString(s, 'IntÃ©grale ', ' - ', '', TrimRight(' ' + NonZero(IntToStr(Album.Tome))));
               AjoutString(s, s2, ' ', '[', ']');
             end
             else if Album.HorsSerie then
-              AjoutString(s, 'Hors série ', ' - ', '', TrimRight(' ' + NonZero(IntToStr(Album.Tome))))
+              AjoutString(s, 'Hors sÃ©rie ', ' - ', '', TrimRight(' ' + NonZero(IntToStr(Album.Tome))))
             else
               AjoutString(s, NonZero(IntToStr(Album.Tome)), ' - ', 'Tome ');
 
@@ -696,7 +696,7 @@ begin
 
       ImprimeAlbum(Prn, Album, DetailsOptions, fWaiting);
 
-      // imprime album ne peut pas connaitre l'édition qu'on veut imprimer
+      // imprime album ne peut pas connaitre l'Ã©dition qu'on veut imprimer
       if (Edition <> nil) and (DetailsOptions = dsoAlbumsDetails) then
         ImprimeEdition(Prn, Edition, fWaiting);
 
@@ -868,12 +868,12 @@ begin
         ColumnStyle := [fsBold]
       else
         ColumnStyle := [];
-      Prn.CreateColumn1(0, 15, 15, taLeftJustify, Prn.Font.name, 12, ColumnStyle); // numéro
+      Prn.CreateColumn1(0, 15, 15, taLeftJustify, Prn.Font.name, 12, ColumnStyle); // numÃ©ro
       Prn.CreateColumn1(1, 25, -1, taLeftJustify, Prn.Font.name, 12, ColumnStyle); // titre
-      Prn.CreateColumn1(2, 35, -1, taLeftJustify, Prn.Font.name, 10, [fsItalic]); // résumé
-      Prn.CreateColumn1(3, 35, -1, taLeftJustify, Prn.Font.name, 8, []); // réalisation, acteurs
-      Prn.CreateColumn1(4, 15, -1, taLeftJustify, Prn.Font.name, 12, [fsBold]); // série
-      Prn.CreateColumn1(5, 25, -1, taLeftJustify, Prn.Font.name, 10, [fsItalic]); // résumé de la série
+      Prn.CreateColumn1(2, 35, -1, taLeftJustify, Prn.Font.name, 10, [fsItalic]); // rÃ©sumÃ©
+      Prn.CreateColumn1(3, 35, -1, taLeftJustify, Prn.Font.name, 8, []); // rÃ©alisation, acteurs
+      Prn.CreateColumn1(4, 15, -1, taLeftJustify, Prn.Font.name, 12, [fsBold]); // sÃ©rie
+      Prn.CreateColumn1(5, 25, -1, taLeftJustify, Prn.Font.name, 10, [fsItalic]); // rÃ©sumÃ© de la sÃ©rie
 
       PAl := TFactoryAlbumLite.getInstance;
       index := 1;
@@ -951,7 +951,7 @@ begin
             Prn.NextLine;
           s := FormatTitre(PAl.Serie);
           if s = '' then
-            s := '<Sans série>';
+            s := '<Sans sÃ©rie>';
           Prn.WriteLineColumn(4, IIf(sl, -1, -2), s);
           if (liste = mrNo) then
           begin
@@ -966,19 +966,19 @@ begin
         if PAl.Integrale then
         begin
           s2 := NonZero(IntToStr(PAl.TomeDebut));
-          AjoutString(s2, NonZero(IntToStr(PAl.TomeFin)), ' à ');
-          AjoutString(s, 'Intégrale ', ' - ', '', TrimRight(' ' + NonZero(IntToStr(PAl.Tome))));
+          AjoutString(s2, NonZero(IntToStr(PAl.TomeFin)), ' Ã  ');
+          AjoutString(s, 'IntÃ©grale ', ' - ', '', TrimRight(' ' + NonZero(IntToStr(PAl.Tome))));
           AjoutString(s, s2, ' ', '[', ']');
         end
         else if PAl.HorsSerie then
-          AjoutString(s, 'Hors série ', ' - ', '', TrimRight(' ' + NonZero(IntToStr(PAl.Tome))))
+          AjoutString(s, 'Hors sÃ©rie ', ' - ', '', TrimRight(' ' + NonZero(IntToStr(PAl.Tome))))
         else
           AjoutString(s, NonZero(IntToStr(PAl.Tome)), ' - ', 'Tome ');
 
         AjoutString(s, FormatTitre(PAl.Titre), ' - ');
 
         if s = '' then
-          s := FormatTitre(PAl.Serie); // si l'album n'a pas de titre c'est qu'il a une série
+          s := FormatTitre(PAl.Serie); // si l'album n'a pas de titre c'est qu'il a une sÃ©rie
 
         // Prn.WriteLineColumn(1, -2, s);
         Prn.WriteLineColumn(1, IIf(sl or (not IsEqualGUID(OldSerie, PAl.ID_Serie)), -1, -2), s);
@@ -1038,7 +1038,7 @@ var
     Prn.WriteLineColumn(3, -2, Format(TGlobalVar.FormatPourcent, [R.NbAlbumsStock, MulDiv(R.NbAlbumsStock, 100, R.NbAlbums)]));
     Prn.Columns[0].Font.Style := [fsBold];
     Prn.WriteLineColumn(0, -1, rsNombreSeries + ' :');
-    Prn.WriteLineColumn(1, -2, IntToStr(R.NbSeries) + ' (dont terminées: ' + Format(TGlobalVar.FormatPourcent, [R.NbSeriesTerminee, MulDiv(R.NbSeriesTerminee, 100, R.NbSeries)]) + ')');
+    Prn.WriteLineColumn(1, -2, IntToStr(R.NbSeries) + ' (dont terminÃ©es: ' + Format(TGlobalVar.FormatPourcent, [R.NbSeriesTerminee, MulDiv(R.NbSeriesTerminee, 100, R.NbSeries)]) + ')');
     Prn.Columns[0].Font.Style := [];
     Prn.WriteLineColumn(0, -1, rsAlbumsNB + ' :');
     Prn.WriteLineColumn(1, -2, Format(TGlobalVar.FormatPourcent, [R.NbAlbumsNB, MulDiv(R.NbAlbumsNB, 100, R.NbAlbums)]));
@@ -1155,7 +1155,7 @@ var
   i: Integer;
   Stats: TStats;
 begin
-  i := Choisir('Générique', 'Détaillée pour chaque éditeur', 1);
+  i := Choisir('GÃ©nÃ©rique', 'DÃ©taillÃ©e pour chaque Ã©diteur', 1);
   if i = mrCancel then
     Exit;
   fWaiting := TWaiting.Create;
@@ -1177,7 +1177,7 @@ begin
       for Stat in Stats.ListEditeurs do
       begin
         Prn.NewPage;
-        Prn.Headers[1].Text := 'Répartition pour ' + FormatTitre(Stat.Editeur);
+        Prn.Headers[1].Text := 'RÃ©partition pour ' + FormatTitre(Stat.Editeur);
         Imprimer(Stat, Stats.NbAlbums);
       end;
     finally
@@ -1277,11 +1277,11 @@ begin
       Prn.CreateColumn1(1, 30, -1, taLeftJustify, Prn.Font.name, 12, []);
       Prn.CreateColumn1(2, 20, -1, taLeftJustify, Prn.Font.name, 14, [fsBold, fsUnderline]);
       Prn.CreateColumn1(3, 55, -1, taLeftJustify, Prn.Font.name, 12, [fsItalic]);
-      Prn.CreateColumn1(4, 35, -1, taLeftJustify, Prn.Font.name, 10, [fsItalic]); // résumé
-      Prn.CreateColumn1(5, 35, -1, taLeftJustify, Prn.Font.name, 8, []); // réalisation, acteurs
-      Prn.CreateColumn1(6, 35, -1, taLeftJustify, Prn.Font.name, 8, [fsItalic]); // valeur des champs triés
+      Prn.CreateColumn1(4, 35, -1, taLeftJustify, Prn.Font.name, 10, [fsItalic]); // rÃ©sumÃ©
+      Prn.CreateColumn1(5, 35, -1, taLeftJustify, Prn.Font.name, 8, []); // rÃ©alisation, acteurs
+      Prn.CreateColumn1(6, 35, -1, taLeftJustify, Prn.Font.name, 8, [fsItalic]); // valeur des champs triÃ©s
 
-      Prn.WriteLineColumn(2, -2, 'Critères :');
+      Prn.WriteLineColumn(2, -2, 'CritÃ¨res :');
       Prn.NextLine;
       case Recherche.TypeRecherche of
         trSimple:
@@ -1332,7 +1332,7 @@ begin
                 if CritereTri._Champ.Booleen then
                   s := CritereTri.LabelChamp + ' - ' + IIf(CritereTri.Asc, 'Non puis Oui', 'Oui puis Non') + IIf(CritereTri.NullsFirst, ' - Vides en premier', '') + IIf(CritereTri.NullsLast, ' - Vides en dernier', '')
                 else
-                  s := CritereTri.LabelChamp + ' - ' + IIf(CritereTri.Asc, 'Croissant', 'Décroissant') + IIf(CritereTri.NullsFirst, ' - Vides en premier', '') + IIf(CritereTri.NullsLast, ' - Vides en dernier', '');
+                  s := CritereTri.LabelChamp + ' - ' + IIf(CritereTri.Asc, 'Croissant', 'DÃ©croissant') + IIf(CritereTri.NullsFirst, ' - Vides en premier', '') + IIf(CritereTri.NullsLast, ' - Vides en dernier', '');
                 Prn.WriteLineColumn(3, IIf(i = 0, -2, -1), s);
               end;
             end;
@@ -1340,7 +1340,7 @@ begin
       end;
 
       Prn.NewLines(1.5);
-      Prn.WriteLineColumn(2, -1, Format('Résultats: (%d)', [Recherche.Resultats.Count]));
+      Prn.WriteLineColumn(2, -1, Format('RÃ©sultats: (%d)', [Recherche.Resultats.Count]));
       Prn.NextLine;
       fWaiting.ShowProgression(Format('%s (%s %d)...', [rsTransAlbums, rsTransPage, Prn.GetPageNumber]), 0, Recherche.Resultats.Count + 1);
       if (liste = mrNo) then
@@ -1414,7 +1414,7 @@ begin
 
         h := Prn.GetLineHeightMmsFont(Prn.Columns[1].Font);
         if (nTri > 0) then
-          // le premier décalage sera de la hauteur de la colonne 1
+          // le premier dÃ©calage sera de la hauteur de la colonne 1
           // les suivants de la hauteur de la colonne 6
           h := h + Prn.GetLineHeightMmsFont(Prn.Columns[1].Font) + Prn.GetLineHeightMmsFont(Prn.Columns[6].Font) * (nTri - 1);
 
@@ -1493,7 +1493,7 @@ begin
       else
         AjoutString(s, NonZero(IntToStr(Album.Tome)), ' - T.');
       Prn.SetHeaderInformation1(1, -1, s, taCenter, Prn.Font.name, 16, [fsBold]);
-      // il serait bien d'indiqué ici dans l'entete la catégorie de l'image (couverture, planche, etc)
+      // il serait bien d'indiquÃ© ici dans l'entete la catÃ©gorie de l'image (couverture, planche, etc)
 
       Prn.PageNumber.Printed := False;
 
@@ -1597,7 +1597,7 @@ begin
     PreparePrintObject(Prn, Previsualisation, rsTransAlbumsManquants);
 
     Prn.SetHeaderDimensions1(-1, -1, -1, 20, False, 0, clWhite);
-    Prn.SetHeaderInformation1(0, 5, 'Séries incomplètes', taCenter, Prn.Font.name, 24, [fsBold]);
+    Prn.SetHeaderInformation1(0, 5, 'SÃ©ries incomplÃ¨tes', taCenter, Prn.Font.name, 24, [fsBold]);
 
     Prn.PageNumber.Printed := False;
 
@@ -1620,7 +1620,7 @@ begin
       begin
         s2 := SerieIncomplete.NumerosManquants[j];
         if Pos('<>', s2) <> 0 then
-          s2 := StringReplace(s2, '<>', ' à ', []);
+          s2 := StringReplace(s2, '<>', ' Ã  ', []);
         AjoutString(s1, s2, ', ');
       end;
       Prn.SetYPosition(y1);
@@ -1678,7 +1678,7 @@ begin
     PreparePrintObject(Prn, Previsualisation, rsTransPrevisionsSorties);
 
     Prn.SetHeaderDimensions1(-1, -1, -1, 20, False, 0, clWhite);
-    Prn.SetHeaderInformation1(0, 5, 'Prévisions de sorties', taCenter, Prn.Font.name, 24, [fsBold]);
+    Prn.SetHeaderInformation1(0, 5, 'PrÃ©visions de sorties', taCenter, Prn.Font.name, 24, [fsBold]);
 
     Prn.PageNumber.Printed := False;
 
@@ -1687,9 +1687,9 @@ begin
     Prn.CreateColumn1(2, 140, -1, taLeftJustify, Prn.Font.name, 12, []);
     Prn.CreateColumn1(3, 15, -1, taLeftJustify, Prn.Font.name, 16, [fsBold]);
 
-    PrintGroupe('Années passées', R.AnneesPassees);
-    PrintGroupe('Cette année', R.AnneeEnCours);
-    PrintGroupe('Prochaines années', R.AnneesProchaines);
+    PrintGroupe('AnnÃ©es passÃ©es', R.AnneesPassees);
+    PrintGroupe('Cette annÃ©e', R.AnneeEnCours);
+    PrintGroupe('Prochaines annÃ©es', R.AnneesProchaines);
   finally
     fWaiting.ShowProgression(rsTransImpression + '...', epNext);
     if Prn.Printing then
@@ -1781,13 +1781,13 @@ begin
       Prn.SetHeaderInformation1(0, 5, rsListeAchats, taCenter, Prn.Font.name, 24, [fsBold]);
       Prn.SetHeaderInformation1(1, -1, Format('%d %s - %s', [NbAlbums div 2
         { NbAlbums contient le double du nb d'albums }, rsTransAlbums, BDCurrencyToStr(PrixTotal)]), taCenter, Prn.Font.name, 12, []);
-      Prn.SetHeaderInformation1(2, -1, 'Prix moyen estimé d''un album: ' + BDCurrencyToStr(PrixMoyen), taCenter, Prn.Font.name, 12, []);
+      Prn.SetHeaderInformation1(2, -1, 'Prix moyen estimÃ© d''un album: ' + BDCurrencyToStr(PrixMoyen), taCenter, Prn.Font.name, 12, []);
 
-      Prn.CreateColumn1(0, 15, 15, taLeftJustify, Prn.Font.name, 12, []); // numéro
+      Prn.CreateColumn1(0, 15, 15, taLeftJustify, Prn.Font.name, 12, []); // numÃ©ro
       Prn.CreateColumn1(1, 25, -1, taLeftJustify, Prn.Font.name, 12, []); // titre
-      Prn.CreateColumn1(2, 35, -1, taLeftJustify, Prn.Font.name, 10, [fsItalic]); // résumé
-      Prn.CreateColumn1(3, 35, -1, taLeftJustify, Prn.Font.name, 8, []); // réalisation, acteurs
-      Prn.CreateColumn1(4, 15, -1, taLeftJustify, Prn.Font.name, 12, [fsBold]); // série
+      Prn.CreateColumn1(2, 35, -1, taLeftJustify, Prn.Font.name, 10, [fsItalic]); // rÃ©sumÃ©
+      Prn.CreateColumn1(3, 35, -1, taLeftJustify, Prn.Font.name, 8, []); // rÃ©alisation, acteurs
+      Prn.CreateColumn1(4, 15, -1, taLeftJustify, Prn.Font.name, 12, [fsBold]); // sÃ©rie
 
       sl := False;
       OldSerie := GUID_FULL;
@@ -1804,7 +1804,7 @@ begin
             Prn.NextLine;
           s := FormatTitre(PAl.Serie);
           if s = '' then
-            s := '<Sans série>';
+            s := '<Sans sÃ©rie>';
           Prn.WriteLineColumn(4, IIf(sl, -1, -2), s);
         end;
 
@@ -1821,12 +1821,12 @@ begin
           if PAl.Integrale then
           begin
             s2 := NonZero(IntToStr(PAl.TomeDebut));
-            AjoutString(s2, NonZero(IntToStr(PAl.TomeFin)), ' à ');
-            AjoutString(s, 'Intégrale ', ' - ', '', TrimRight(' ' + NonZero(IntToStr(PAl.Tome))));
+            AjoutString(s2, NonZero(IntToStr(PAl.TomeFin)), ' Ã  ');
+            AjoutString(s, 'IntÃ©grale ', ' - ', '', TrimRight(' ' + NonZero(IntToStr(PAl.Tome))));
             AjoutString(s, s2, ' ', '[', ']');
           end
           else if PAl.HorsSerie then
-            AjoutString(s, 'Hors série ', ' - ', '', TrimRight(' ' + NonZero(IntToStr(PAl.Tome))))
+            AjoutString(s, 'Hors sÃ©rie ', ' - ', '', TrimRight(' ' + NonZero(IntToStr(PAl.Tome))))
           else
             AjoutString(s, NonZero(IntToStr(PAl.Tome)), ' - ', 'Tome ');
 

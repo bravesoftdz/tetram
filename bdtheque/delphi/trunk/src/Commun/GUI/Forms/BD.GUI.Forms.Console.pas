@@ -1,4 +1,4 @@
-unit BD.GUI.Forms.Console;
+ï»¿unit BD.GUI.Forms.Console;
 
 interface
 
@@ -37,7 +37,7 @@ type
   strict private
     class var _instance: TfrmConsole;
   private
-    { Déclarations privées }
+    { DÃ©clarations privÃ©es }
     FListEvents: TObjectList<TTraceEvent>;
     procedure EventNotification(Sender: TObject; const Item: TTraceEvent; Action: TCollectionNotification);
   public

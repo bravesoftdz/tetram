@@ -1,4 +1,4 @@
-unit CheckVersionNet;
+ï»¿unit CheckVersionNet;
 
 interface
 
@@ -23,9 +23,9 @@ type
     procedure Label1MouseLeave(Sender: TObject);
     procedure Label2Click(Sender: TObject);
   private
-    { Déclarations privées }
+    { Dï¿½clarations privï¿½es }
   public
-    { Déclarations publiques }
+    { Dï¿½clarations publiques }
   protected
     FHomePage, FUpgrade, FProgramme, FVersion: string;
   end;
@@ -60,8 +60,8 @@ end;
 function CheckVersion(const Titre, Code: string; CurrentVersion: TVersionNumber; ForceMessage, CanContinue: Boolean): Integer;
 // Valeurs de retour:
 // -1: erreur durant l'interrogation du site
-// 0: pas de mise à jour
-// 1: mise à jour et utilisateur demande à fermer l'appli
+// 0: pas de mise ï¿½ jour
+// 1: mise ï¿½ jour et utilisateur demande ï¿½ fermer l'appli
 const
   FLAG_ICC_FORCE_CONNECTION = 1;
 var
@@ -150,14 +150,14 @@ begin
               end;
             end
             else if ForceMessage then
-              ShowMessage('Votre version est à jour.');
+              ShowMessage('Votre version est ï¿½ jour.');
           finally
             sl.Free;
           end;
         end
         else
         begin
-          ShowMessage('Impossible d''interroger le site de mise à jour.');
+          ShowMessage('Impossible d''interroger le site de mise ï¿½ jour.');
           Result := -1;
         end;
       finally
@@ -176,9 +176,9 @@ begin
   Label1.Visible := FHomePage <> '';
   Label2.Visible := FUpgrade <> '';
   if FProgramme <> '' then
-    Label3.Caption := Format('Votre version de %s est obsolète.', [FProgramme, FVersion]);
+    Label3.Caption := Format('Votre version de %s est obsolï¿½te.', [FProgramme, FVersion]);
   if FVersion <> '' then
-    Label3.Caption := Label3.Caption + Format(#13#10'Rendez-vous sur le site pour obtenir la dernière version (%s).', [FVersion]);
+    Label3.Caption := Label3.Caption + Format(#13#10'Rendez-vous sur le site pour obtenir la derniï¿½re version (%s).', [FVersion]);
 end;
 
 procedure TfrmVerifUpgrade.Label1Click(Sender: TObject);

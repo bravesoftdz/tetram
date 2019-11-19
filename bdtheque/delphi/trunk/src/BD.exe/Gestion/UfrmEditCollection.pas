@@ -1,4 +1,4 @@
-unit UfrmEditCollection;
+ï»¿unit UfrmEditCollection;
 
 interface
 
@@ -23,12 +23,12 @@ type
     procedure FormCreate(Sender: TObject);
     procedure Frame11btnOKClick(Sender: TObject);
   private
-    { Déclarations privées }
+    { DÃ©clarations privÃ©es }
     FCollection: TCollectionFull;
     procedure SetCollection(Value: TCollectionFull);
     function GetID_Collection: TGUID;
   public
-    { Déclarations publiques }
+    { DÃ©clarations publiques }
     property ID_Collection: TGUID read GetID_Collection;
     property Collection: TCollectionFull read FCollection write SetCollection;
   end;

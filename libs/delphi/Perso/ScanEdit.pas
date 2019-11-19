@@ -1,4 +1,4 @@
-unit ScanEdit;
+ï»¿unit ScanEdit;
 
 interface
 
@@ -9,7 +9,7 @@ uses
 type
   TScanEditDB = class(TEdit)
   private
-    { Déclarations privées }
+    { Dï¿½clarations privï¿½es }
     ffieldname: string;
     fdatasource: TDataSource;
     FOnChange: TNotifyEvent;
@@ -17,13 +17,13 @@ type
     procedure EventOnChange(Sender: TObject);
     procedure EventKeyPress(Sender: TObject; var Key: Char);
   protected
-    { Déclarations protégées }
+    { Dï¿½clarations protï¿½gï¿½es }
     property OnKeyPress: TKeyPressEvent read FOnKeyPress write FOnKeyPress;
   public
-    { Déclarations publiques }
+    { Dï¿½clarations publiques }
     constructor Create(AOwner: TComponent); override;
   published
-    { Déclarations publiées }
+    { Dï¿½clarations publiï¿½es }
     property FieldName: string read ffieldname write ffieldname;
     property DataSource: TDataSource read fdatasource write fdatasource;
     property OnChange: TNotifyEvent read FOnChange write FOnChange;
@@ -31,40 +31,40 @@ type
 
   TScanEditLV = class(TEdit)
   private
-    { Déclarations privées }
+    { Dï¿½clarations privï¿½es }
     FListView: TListView;
     FOnChange: TNotifyEvent;
     FOnKeyPress: TKeyPressEvent;
     procedure EventOnChange(Sender: TObject);
     procedure EventKeyPress(Sender: TObject; var Key: Char);
   protected
-    { Déclarations protégées }
+    { Dï¿½clarations protï¿½gï¿½es }
     property OnKeyPress: TKeyPressEvent read FOnKeyPress write FOnKeyPress;
   public
-    { Déclarations publiques }
+    { Dï¿½clarations publiques }
     constructor Create(AOwner: TComponent); override;
   published
-    { Déclarations publiées }
+    { Dï¿½clarations publiï¿½es }
     property ListView: TListView read FListView write FListView;
     property OnChange: TNotifyEvent read FOnChange write FOnChange;
   end;
 
   TScanEditTV = class(TEdit)
   private
-    { Déclarations privées }
+    { Dï¿½clarations privï¿½es }
     FTreeView: TTreeView;
     FOnChange: TNotifyEvent;
     FOnKeyPress: TKeyPressEvent;
     procedure EventOnChange(Sender: TObject);
     procedure EventKeyPress(Sender: TObject; var Key: Char);
   protected
-    { Déclarations protégées }
+    { Dï¿½clarations protï¿½gï¿½es }
     property OnKeyPress: TKeyPressEvent read FOnKeyPress write FOnKeyPress;
   public
-    { Déclarations publiques }
+    { Dï¿½clarations publiques }
     constructor Create(AOwner: TComponent); override;
   published
-    { Déclarations publiées }
+    { Dï¿½clarations publiï¿½es }
     property TreeView: TTreeView read FTreeView write FTreeView;
     property OnChange: TNotifyEvent read FOnChange write FOnChange;
   end;

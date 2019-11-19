@@ -1,4 +1,4 @@
-unit TaskbarThumbnails;
+﻿unit TaskbarThumbnails;
 
 interface
 

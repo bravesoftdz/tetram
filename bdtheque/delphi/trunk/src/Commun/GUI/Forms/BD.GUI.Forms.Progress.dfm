@@ -1,4 +1,4 @@
-object frmProgression: TfrmProgression
+﻿object frmProgression: TfrmProgression
   Left = 535
   Top = 202
   AutoSize = True

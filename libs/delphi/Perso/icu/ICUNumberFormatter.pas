@@ -1,4 +1,4 @@
-unit ICUNumberFormatter;
+ï»¿unit ICUNumberFormatter;
 
 {$I icu.inc}
 
@@ -183,8 +183,8 @@ var
   bufNeeded: Int32;
 begin
   ResetErrorCode(FFormatter.FStatus);
-  // à priori, le symbole le plus long est le code monétaire internationnal (3)
-  // tous les autres sont à 1 (sauf pour UNUM_FORMAT_SYMBOL_COUNT mais il demande un traitement spécial)
+  // ï¿½ priori, le symbole le plus long est le code monï¿½taire internationnal (3)
+  // tous les autres sont ï¿½ 1 (sauf pour UNUM_FORMAT_SYMBOL_COUNT mais il demande un traitement spï¿½cial)
   bufNeeded := 3;
   SetLength(buffer, bufNeeded);
   bufNeeded := unum_getSymbol(FFormatter.FFormat, Symbol, @buffer[1], bufNeeded, FFormatter.FStatus);

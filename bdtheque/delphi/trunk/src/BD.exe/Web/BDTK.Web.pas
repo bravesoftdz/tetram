@@ -1,4 +1,4 @@
-unit BDTK.Web;
+ï»¿unit BDTK.Web;
 
 interface
 
@@ -89,33 +89,33 @@ begin
   if (s1 <> 'intf_version') then
     raise Exception.Create('Erreur inattendue: '#13#10 + FslReponse.Text);
   if (TVersionNumber(s2) < '1') then
-    raise Exception.Create('Version d''interface non supportée.'#13#10'Veuillez mettre à jour BDThèque.')
+    raise Exception.Create('Version d''interface non supportÃ©e.'#13#10'Veuillez mettre Ã  jour BDThÃ¨que.')
   else if (TVersionNumber(s2) = '1') then
   begin
     Decoupe(1, s1, s2);
     if s1 <> 'php_version' then
       raise Exception.Create('Erreur inattendue: '#13#10 + FslReponse.Text);
     if Copy(s2, Length(s2) - 2, 2) <> 'OK' then
-      raise Exception.Create('La version de php disponible sur le serveur est insuffisante.'#13#10'Veuillez utiliser un autre hébergeur.');
+      raise Exception.Create('La version de php disponible sur le serveur est insuffisante.'#13#10'Veuillez utiliser un autre hÃ©bergeur.');
 
     Decoupe(2, s1, s2);
     if s1 <> 'XML' then
       raise Exception.Create('Erreur inattendue: '#13#10 + FslReponse.Text);
     if Copy(s2, Length(s2) - 2, 2) <> 'OK' then
-      raise Exception.Create('Le support XML n''est pas présent dans le moteur php du serveur.'#13#10'Veuillez utiliser un autre hébergeur.');
+      raise Exception.Create('Le support XML n''est pas prÃ©sent dans le moteur php du serveur.'#13#10'Veuillez utiliser un autre hÃ©bergeur.');
 
     // Decoupe(3, s1, s2); // support JSON
 
     i := 5;
     if IsError(4) then
       raise Exception.Create
-        ('Impossible de se connecter à la base de données MySQL:'#13#10'- vérifier le paramétrage de la base de données'#13#10'- Assurez-vous que le modèle est bien chargé sur le site après avoir regénéré le site'#13#10#13#10
+        ('Impossible de se connecter Ã  la base de donnÃ©es MySQL:'#13#10'- vÃ©rifier le paramÃ©trage de la base de donnÃ©es'#13#10'- Assurez-vous que le modÃ¨le est bien chargÃ© sur le site aprÃ¨s avoir regÃ©nÃ©rÃ© le site'#13#10#13#10
         + GetLabel(i));
     Decoupe(4, s1, s2);
     if s1 <> 'mysql_version' then
       raise Exception.Create('Erreur inattendue: '#13#10 + FslReponse.Text);
     if Copy(s2, Length(s2) - 2, 2) <> 'OK' then
-      raise Exception.Create('La version de MySQL disponible sur le serveur est insuffisante.'#13#10'Veuillez utiliser un autre hébergeur.');
+      raise Exception.Create('La version de MySQL disponible sur le serveur est insuffisante.'#13#10'Veuillez utiliser un autre hÃ©bergeur.');
 
     Decoupe(5, s1, s2);
     if s1 <> 'db_version' then
@@ -141,20 +141,20 @@ begin
         end;
 
       if not CheckConf('php_version') then
-        raise Exception.Create('La version de php disponible sur le serveur est insuffisante.'#13''#10'Veuillez utiliser un autre hébergeur.');
+        raise Exception.Create('La version de php disponible sur le serveur est insuffisante.'#13''#10'Veuillez utiliser un autre hÃ©bergeur.');
       if not CheckConf('XML') then
-        raise Exception.Create('Le support XML n''est pas présent dans le moteur php du serveur.'#13#10'Veuillez utiliser un autre hébergeur.');
+        raise Exception.Create('Le support XML n''est pas prÃ©sent dans le moteur php du serveur.'#13#10'Veuillez utiliser un autre hÃ©bergeur.');
       if not CheckConf('MYSQLI') then
-        raise Exception.Create('Le support MySQLi n''est pas présent dans le moteur php du serveur.'#13#10'Veuillez utiliser un autre hébergeur.');
+        raise Exception.Create('Le support MySQLi n''est pas prÃ©sent dans le moteur php du serveur.'#13#10'Veuillez utiliser un autre hÃ©bergeur.');
 
       if not CheckConf('DB') then
         raise Exception.Create
-          ('Impossible de se connecter à la base de données MySQL:'#13#10'- vérifier le paramétrage de la base de données et que la base de données est accessible'#13#10'- Assurez-vous que le modèle est bien chargé sur le site après avoir regénéré le site'#13#10#13#10
+          ('Impossible de se connecter Ã  la base de donnÃ©es MySQL:'#13#10'- vÃ©rifier le paramÃ©trage de la base de donnÃ©es et que la base de donnÃ©es est accessible'#13#10'- Assurez-vous que le modÃ¨le est bien chargÃ© sur le site aprÃ¨s avoir regÃ©nÃ©rÃ© le site'#13#10#13#10
           + lstValues.ValueFromIndex[i + 1])
       else
       begin
         if not CheckConf('mysql_version') then
-          raise Exception.Create('La version de MySQL disponible sur le serveur est insuffisante.'#13#10'Veuillez utiliser un autre hébergeur.');
+          raise Exception.Create('La version de MySQL disponible sur le serveur est insuffisante.'#13#10'Veuillez utiliser un autre hÃ©bergeur.');
         FDBVersion := lstValues.Values['db_version'];
         if FDBVersion = '' then
           raise Exception.Create('Erreur inattendue: '#13#10 + FslReponse.Text);
@@ -164,7 +164,7 @@ begin
     end;
   end
   // else
-  // raise Exception.Create('Version d''interface non supportée.'#13#10'Veuillez mettre à jour BDThèque.');
+  // raise Exception.Create('Version d''interface non supportÃ©e.'#13#10'Veuillez mettre Ã  jour BDThÃ¨que.');
 end;
 
 function TWeb.CleanHTTP(Valeur: string): string;
@@ -284,7 +284,7 @@ begin
   FReponse.Size := 0;
   if LoadStreamURL(FURL, FParam, FReponse, False) <> 200 then
     raise Exception.Create
-      ('Impossible d''accéder au site:'#13#10'- vérifiez le paramétrage de l''adresse'#13#10'- assurez-vous que le modèle est bien chargé sur le site'#13#10'- vérifiez que votre parefeu ne bloque pas la connexion');
+      ('Impossible d''accÃ©der au site:'#13#10'- vÃ©rifiez le paramÃ©trage de l''adresse'#13#10'- assurez-vous que le modÃ¨le est bien chargÃ© sur le site'#13#10'- vÃ©rifiez que votre parefeu ne bloque pas la connexion');
   FReponse.Position := 0;
   FslReponse.LoadFromStream(FReponse);
   // Memo1.Lines.Text := FReponse.DataString;

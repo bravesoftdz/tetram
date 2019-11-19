@@ -1,4 +1,4 @@
-unit ProgressBar;
+﻿unit ProgressBar;
 
 interface
 

@@ -1,4 +1,4 @@
-object frmStatsGenerales: TfrmStatsGenerales
+﻿object frmStatsGenerales: TfrmStatsGenerales
   Left = 519
   Top = 285
   HorzScrollBar.Visible = False

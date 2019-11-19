@@ -1,4 +1,4 @@
-unit UfrmEditEditeur;
+ï»¿unit UfrmEditEditeur;
 
 interface
 
@@ -27,12 +27,12 @@ type
     procedure VDTButton13Click(Sender: TObject);
     procedure edSiteChange(Sender: TObject);
   private
-    { Déclarations privées }
+    { DÃ©clarations privÃ©es }
     FEditeur: TEditeurFull;
     procedure SetEditeur(Value: TEditeurFull);
     function GetID_Editeur: TGUID;
   public
-    { Déclarations publiques }
+    { DÃ©clarations publiques }
     property ID_Editeur: TGUID read GetID_Editeur;
     property Editeur: TEditeurFull read FEditeur write SetEditeur;
   end;

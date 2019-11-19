@@ -1,4 +1,4 @@
-object frmPreview: TfrmPreview
+﻿object frmPreview: TfrmPreview
   Left = 289
   Top = 253
   HorzScrollBar.Visible = False

@@ -1,4 +1,4 @@
-object framConvertisseur: TframConvertisseur
+﻿object framConvertisseur: TframConvertisseur
   Left = 0
   Top = 0
   Width = 451

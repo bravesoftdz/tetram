@@ -1,4 +1,4 @@
-object frameBDTKWebBrowser: TframeBDTKWebBrowser
+﻿object frameBDTKWebBrowser: TframeBDTKWebBrowser
   Left = 0
   Top = 0
   Width = 876

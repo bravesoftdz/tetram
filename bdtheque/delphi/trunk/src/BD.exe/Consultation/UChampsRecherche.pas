@@ -1,4 +1,4 @@
-unit UChampsRecherche;
+ï»¿unit UChampsRecherche;
 
 interface
 
@@ -30,7 +30,7 @@ function ChampsRecherche: PArrayOfChamp;
 function ChampByID(Id: Integer): PChamp;
 
 const
-  Groupes: array[1..4] of string = ('Univers', 'Série', 'Album', 'Edition');
+  Groupes: array[1..4] of string = ('Univers', 'SÃ©rie', 'Album', 'Edition');
 
 implementation
 
@@ -44,7 +44,7 @@ const
   GP_EDITIONS = 4;
 
 var
-  // Bien que pas génant, il vaut mieux que les champs soient regroupés par table
+  // Bien que pas gÃ©nant, il vaut mieux que les champs soient regroupÃ©s par table
   _ChampsRecherche: TArrayOfChamp = (
     (Groupe: GP_ALBUMS; ID: 01; NomTable: 'ALBUMS'; NomChamp: 'titrealbum'; LibelleChamp: rsTransTitreAlbum; Special: csTitre),
     (Groupe: GP_ALBUMS; ID: 02; NomTable: 'ALBUMS'; NomChamp: 'anneeparution'; LibelleChamp: rsTransAnneeParution; ChampImpressionTri: True),

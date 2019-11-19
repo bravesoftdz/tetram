@@ -1,4 +1,4 @@
-object frmPublier: TfrmPublier
+﻿object frmPublier: TfrmPublier
   Left = 443
   Top = 163
   AutoSize = True

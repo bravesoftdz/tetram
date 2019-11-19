@@ -1,4 +1,4 @@
-unit BD.Utils.Deserializer.JSON;
+﻿unit BD.Utils.Deserializer.JSON;
 
 interface
 

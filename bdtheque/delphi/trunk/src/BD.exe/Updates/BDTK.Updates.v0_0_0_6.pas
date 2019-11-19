@@ -1,4 +1,4 @@
-unit BDTK.Updates.v0_0_0_6;
+ï»¿unit BDTK.Updates.v0_0_0_6;
 
 interface
 
@@ -10,9 +10,9 @@ uses
 procedure MAJ0_0_0_6(Query: TUIBScript);
 begin
   Query.Script.Clear;
-  Query.Script.Add('INSERT INTO LISTES (REF, CATEGORIE, LIBELLE, ORDRE, DEFAUT) VALUES (1, 3, ''Première édition'', 1, 0);');
-  Query.Script.Add('INSERT INTO LISTES (REF, CATEGORIE, LIBELLE, ORDRE, DEFAUT) VALUES (2, 3, ''Edition spéciale'', 2, 0);');
-  Query.Script.Add('INSERT INTO LISTES (REF, CATEGORIE, LIBELLE, ORDRE, DEFAUT) VALUES (3, 3, ''Tirage de tête'', 3, 0);');
+  Query.Script.Add('INSERT INTO LISTES (REF, CATEGORIE, LIBELLE, ORDRE, DEFAUT) VALUES (1, 3, ''PremiÃ¨re Ã©dition'', 1, 0);');
+  Query.Script.Add('INSERT INTO LISTES (REF, CATEGORIE, LIBELLE, ORDRE, DEFAUT) VALUES (2, 3, ''Edition spÃ©ciale'', 2, 0);');
+  Query.Script.Add('INSERT INTO LISTES (REF, CATEGORIE, LIBELLE, ORDRE, DEFAUT) VALUES (3, 3, ''Tirage de tÃªte'', 3, 0);');
 
   Query.Script.Add('ALTER TABLE EDITIONS ADD TYPEEDITION INTEGER;');
 

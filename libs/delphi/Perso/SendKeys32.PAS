@@ -1,4 +1,4 @@
-(*
+﻿(*
 SendKeys routine for 32-bit Delphi.
 
 Written by Ken Henderson

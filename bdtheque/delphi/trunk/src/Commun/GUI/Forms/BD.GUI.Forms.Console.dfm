@@ -1,4 +1,4 @@
-object frmConsole: TfrmConsole
+﻿object frmConsole: TfrmConsole
   Left = 0
   Top = 0
   AlphaBlendValue = 100

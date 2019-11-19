@@ -1,4 +1,4 @@
-unit UfrmChoix;
+﻿unit UfrmChoix;
 {$D-}
 interface
 

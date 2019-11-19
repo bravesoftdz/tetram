@@ -1,4 +1,4 @@
-unit UfrmEditSerie;
+ï»¿unit UfrmEditSerie;
 
 interface
 
@@ -100,12 +100,12 @@ type
     procedure lvUniversData(Sender: TObject; Item: TListItem);
     procedure lvUniversKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
   private
-    { Déclarations privées }
+    { DÃ©clarations privÃ©es }
     FSerie: TSerieFull;
     procedure SetSerie(Value: TSerieFull);
     function GetID_Serie: TGUID;
   public
-    { Déclarations publiques }
+    { DÃ©clarations publiques }
     property ID_Serie: TGUID read GetID_Serie;
     property Serie: TSerieFull read FSerie write SetSerie;
   end;
@@ -274,7 +274,7 @@ end;
 
 procedure TfrmEditSerie.edTitreChange(Sender: TObject);
 begin
-  Caption := 'Saisie de série - ' + FormatTitre(edTitre.Text);
+  Caption := 'Saisie de sÃ©rie - ' + FormatTitre(edTitre.Text);
 end;
 
 procedure TfrmEditSerie.vtGenresInitNode(Sender: TBaseVirtualTree; ParentNode, Node: PVirtualNode; var InitialStates: TVirtualNodeInitStates);
@@ -336,7 +336,7 @@ var
   var
     i: Integer;
   begin
-    // PRealisateur peut être utilisé pour transtyper un PActeur
+    // PRealisateur peut Ãªtre utilisÃ© pour transtyper un PActeur
     i := 0;
     Result := True;
     while Result and (i <= Pred(LV.Items.Count)) do

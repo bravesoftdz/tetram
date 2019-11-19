@@ -1,4 +1,4 @@
-unit BDTK.Web.Forms.Synchronize;
+ï»¿unit BDTK.Web.Forms.Synchronize;
 
 interface
 
@@ -20,7 +20,7 @@ type
     procedure Button1Click(Sender: TObject);
   private
   public
-    { Déclarations publiques }
+    { DÃ©clarations publiques }
   end;
 
 implementation
@@ -93,7 +93,7 @@ begin
   i := 0;
   s := GetLabel(i);
   if s = 'KO' then
-    raise Exception.Create('Une synchronisation est déjà en cours. Veuillez patienter.');
+    raise Exception.Create('Une synchronisation est dÃ©jÃ  en cours. Veuillez patienter.');
   DeviceID := s;
 end;
 
@@ -145,51 +145,51 @@ begin
 (*
   principe:
     * 3 modes de synchro: classique, reset du client, reset du serveur
-    * le serveur ne fait aucune résolution de conflit: elles sont faites par les applis, le serveur accepte tout ce qu'on lui envoie
-    * l'appli applique les modifs distantes et résoud les conflits
+    * le serveur ne fait aucune rÃ©solution de conflit: elles sont faites par les applis, le serveur accepte tout ce qu'on lui envoie
+    * l'appli applique les modifs distantes et rÃ©soud les conflits
       et envoie ses modifs locales restantes
-    * la synchro peut être annulée pendant la résolution de conflit: on applique toutes les modifs ou on n'en applique aucune
-    * un élément (par ex un album) est en conflit si un élément dont il dépend (par ex un auteur) est en conflit ou supprimé
-    * si un élément n'est plus en conflit, tous les éléments qui en dépendent en conflit uniquement à cause de lui ne sont plus en conflit
-      donc le conflit d'un élément à cause d'un élément supprimé ne peut être résolu que manuellement
-    * un conflit se résoud sur un élément dans son intégralité (et non propriété par propriété)
-      mais si le conflit porte sur des propriétés différentes, la résolution est automatique
-    * le serveur conserve les différentes versions (nécessaire pour la résolution de conflit)
+    * la synchro peut Ãªtre annulÃ©e pendant la rÃ©solution de conflit: on applique toutes les modifs ou on n'en applique aucune
+    * un Ã©lÃ©ment (par ex un album) est en conflit si un Ã©lÃ©ment dont il dÃ©pend (par ex un auteur) est en conflit ou supprimÃ©
+    * si un Ã©lÃ©ment n'est plus en conflit, tous les Ã©lÃ©ments qui en dÃ©pendent en conflit uniquement Ã  cause de lui ne sont plus en conflit
+      donc le conflit d'un Ã©lÃ©ment Ã  cause d'un Ã©lÃ©ment supprimÃ© ne peut Ãªtre rÃ©solu que manuellement
+    * un conflit se rÃ©soud sur un Ã©lÃ©ment dans son intÃ©gralitÃ© (et non propriÃ©tÃ© par propriÃ©tÃ©)
+      mais si le conflit porte sur des propriÃ©tÃ©s diffÃ©rentes, la rÃ©solution est automatique
+    * le serveur conserve les diffÃ©rentes versions (nÃ©cessaire pour la rÃ©solution de conflit)
 
   implementation (cf svn):
-    * update (recupération des modifs du serveur)
+    * update (recupÃ©ration des modifs du serveur)
     * resolution des conflits
     * commit des modifs restantes
-  nécessite d'avoir
-    - la date de dernière synchro (ok),
-    - et l'état "modifié localement" (soit par comparaison avec une copie de ce qu'a le serveur, soit par un flag, soit...)
+  nÃ©cessite d'avoir
+    - la date de derniÃ¨re synchro (ok),
+    - et l'Ã©tat "modifiÃ© localement" (soit par comparaison avec une copie de ce qu'a le serveur, soit par un flag, soit...)
 
   Avant update:
-    Date synchro = Null -> jamais synchronisé, création à envoyer
-    Date synchro < Date modif -> modifié, modifications à envoyer
-    Date synchro > Date modif -> non modifié, rien à faire
+    Date synchro = Null -> jamais synchronisÃ©, crÃ©ation Ã  envoyer
+    Date synchro < Date modif -> modifiÃ©, modifications Ã  envoyer
+    Date synchro > Date modif -> non modifiÃ©, rien Ã  faire
 
   Pendant update:
-    Date synchro < Date modif -> modifié, conflit à résoudre
-    Date synchro > Date modif -> non modifié, mettre à jour -> Date synchro := Now
-    Element supprimé -> conflit à résoudre
+    Date synchro < Date modif -> modifiÃ©, conflit Ã  rÃ©soudre
+    Date synchro > Date modif -> non modifiÃ©, mettre Ã  jour -> Date synchro := Now
+    Element supprimÃ© -> conflit Ã  rÃ©soudre
 
   Resolution du conflit:
-/!\ la différence de date n'implique pas une différence réelle de données !!
-/!\ Appliquer le revert complet dans le cas où il n'y a aucune modif réelle
+/!\ la diffÃ©rence de date n'implique pas une diffÃ©rence rÃ©elle de donnÃ©es !!
+/!\ Appliquer le revert complet dans le cas oÃ¹ il n'y a aucune modif rÃ©elle
     Revert complet: Date modif := old Date synchro, Date synchro := Now
     Revert partiel: eventuellement Date modif := Now
     Aucun revert: eventuellement Date modif := Now
 
-  Après résolution de conflit:
-    Date synchro = Null -> jamais synchronisé, création à envoyer
-    Date synchro < Date modif -> modifié, pas/plus de conflit, modifications à envoyer
-    Date synchro > Date modif -> non modifié, rien à faire
+  AprÃ¨s rÃ©solution de conflit:
+    Date synchro = Null -> jamais synchronisÃ©, crÃ©ation Ã  envoyer
+    Date synchro < Date modif -> modifiÃ©, pas/plus de conflit, modifications Ã  envoyer
+    Date synchro > Date modif -> non modifiÃ©, rien Ã  faire
 
-  pour la résolution de conflit:
-    - récupération de la dernière version synchronisée (le serveur a toutes les versions)
-    - comparer à la version locale pour connaitre les modifs locales
-    - comparer à la version distante pour connaitre les modifs à intégrer
+  pour la rÃ©solution de conflit:
+    - rÃ©cupÃ©ration de la derniÃ¨re version synchronisÃ©e (le serveur a toutes les versions)
+    - comparer Ã  la version locale pour connaitre les modifs locales
+    - comparer Ã  la version distante pour connaitre les modifs Ã  intÃ©grer
 
 *)
 

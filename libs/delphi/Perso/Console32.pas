@@ -1,4 +1,4 @@
-unit Console32;
+ï»¿unit Console32;
 
 interface
 
@@ -29,7 +29,7 @@ procedure Bouge_Curseur_en_X(x: Plage_x);
 { positionne le curseur en y}
 procedure Bouge_Curseur_en_Y(y: Plage_y);
 
-{ affiche mess en positions x,y de l'écran}
+{ affiche mess en positions x,y de l'ï¿½cran}
 procedure Affiche(const x: PLAGE_X; const y: PLAGE_Y; const mess: string); overload;
 procedure Affiche(const x: PLAGE_X; const y: PLAGE_Y; const mess: char); overload;
 
@@ -42,63 +42,63 @@ function PositionX_Curseur: PLAGE_X;
 { indique la position y du curseur}
 function PositionY_Curseur: PLAGE_Y;
 
-{ met l'écran dans les couleurs texte et fond d'écran}
+{ met l'ï¿½cran dans les couleurs texte et fond d'ï¿½cran}
 procedure Couleur_Ecran(const text, fond: COULEUR);
 
-{ sauve les couleurs texte et fond d'écran}
+{ sauve les couleurs texte et fond d'ï¿½cran}
 procedure Sauve_Couleur;
 
-{ restaure les couleurs texte et fond d'écran}
+{ restaure les couleurs texte et fond d'ï¿½cran}
 procedure Restaure_Couleur;
 
-{ efface l'écran}
+{ efface l'ï¿½cran}
 procedure Efface_Ecran;
 
-{présente un  écran  vierge en couleur de fond et text}
+{prï¿½sente un  ï¿½cran  vierge en couleur de fond et text}
 procedure Nouvel_Ecran(const text, fond: COULEUR);
 
-{ efface la fin de ligne à partir du curseur}
+{ efface la fin de ligne ï¿½ partir du curseur}
 procedure Efface_Fin_Ligne;
 
-{ efface la fin de page à partir du curseur}
+{ efface la fin de page ï¿½ partir du curseur}
 procedure Efface_Fin_Page;
 
-{ sauve le contenu de l'écran texte et couleurs à 10 niveaux}
+{ sauve le contenu de l'ï¿½cran texte et couleurs ï¿½ 10 niveaux}
 procedure Sauve_Ecran;
 
-{ restaure le dernier écran}
+{ restaure le dernier ï¿½cran}
 procedure Restaure_Ecran;
 
-{ saisie d'un caractère sans l'afficher à l'écran
+{ saisie d'un caractï¿½re sans l'afficher ï¿½ l'ï¿½cran
  la fonction retourne RETKEY (AsciiChar+Scancode , utile pour les touches fonction).
- Nono40 a fortement contribué à l'élaboration de cette fonction}
+ Nono40 a fortement contribuï¿½ ï¿½ l'ï¿½laboration de cette fonction}
 function LireKey: RETKEY;
 
 { Fonction donnant TRUE si une touche est en attente
- elle ne prend en compte que les touches donnant un caractère, donc
+ elle ne prend en compte que les touches donnant un caractï¿½re, donc
  elle ne fonctionne pas avec les touches de fonctions.
- Nono40 a élaboré cette fonction}
+ Nono40 a ï¿½laborï¿½ cette fonction}
 function KeyAppuyee: Boolean;
 
-{ insère une ligne à l'endroit du curseur}
+{ insï¿½re une ligne ï¿½ l'endroit du curseur}
 procedure Insere_Ligne;
 
-{ supprime une ligne à l'endroit du curseur}
+{ supprime une ligne ï¿½ l'endroit du curseur}
 procedure Supprime_Ligne;
 
-{ temporise tant qu'une touche n'est pas appuyée}
+{ temporise tant qu'une touche n'est pas appuyï¿½e}
 procedure Appuie;
 
-{ met un libellé dans la barre de titre}
+{ met un libellï¿½ dans la barre de titre}
 procedure Titre_Fenetre(const Titre: string);
 
-{ transforme une chaine de caractères ANSI (windows) en OEM (DOS)}
+{ transforme une chaine de caractï¿½res ANSI (windows) en OEM (DOS)}
 function Oem(const st: string): string;
 
-{ retourne l'OS utilisé - 0 : Win3.11, 1 : Win9X, 2 : Win2k ou XP}
+{ retourne l'OS utilisï¿½ - 0 : Win3.11, 1 : Win9X, 2 : Win2k ou XP}
 function VersionWindows: integer;
 
-{ les 3 fonctions infra gèrent la capture d'écran}
+{ les 3 fonctions infra gï¿½rent la capture d'ï¿½cran}
 procedure Fichier_Ecran_Ouverture(const nomfic: string);
 procedure Fichier_Ecran_Capture(const debutligne, finligne: PLAGE_Y);
 procedure Fichier_Ecran_Fermeture; {lance automatiquement Wordpad}
@@ -311,7 +311,7 @@ begin
   with Zone.Event.KeyEvent do
   begin
     repeat
-      { Lecture du buffer des évènement}
+      { Lecture du buffer des ï¿½vï¿½nement}
       ReadConsoleInput(Clavier_handle, Zone, 1, Lus);
 
       ok := (Lus > 0)
@@ -321,7 +321,7 @@ begin
         (wvirtualscancode in [1, 71..73, 75, 77, 79..83]));
     until ok;
     retour.scancode := wvirtualscancode;
-    { permet d'harmoniser la touche ESC différents suivant OS }
+    { permet d'harmoniser la touche ESC diffï¿½rents suivant OS }
     if wvirtualscancode = 1 then
       retour.AsciiChar := #27
     else
@@ -338,19 +338,19 @@ var
   EnAttente: Cardinal;
   i: Cardinal;
 begin
-  {Demande de la liste des évènements en attente}
+  {Demande de la liste des ï¿½vï¿½nements en attente}
   PeekConsoleInput(Clavier_handle, Zone[1], TailleBuf, EnAttente);
   Result := False;
   i := 1;
   while not Result and (i <= EnAttente) and (i <= TailleBuf) do
   begin
-    Result := (Zone[i].EventType = 1) { C'est un évènement clavier}
-    and (Zone[i].Event.KeyEvent.bKeyDown) { C'est une touche appuyée }
+    Result := (Zone[i].EventType = 1) { C'est un ï¿½vï¿½nement clavier}
+    and (Zone[i].Event.KeyEvent.bKeyDown) { C'est une touche appuyï¿½e }
     and (Zone[i].Event.KeyEvent.AsciiChar <> #0); { ce n'est pas une touche de controle}
     Inc(i);
   end;
-  { Si il n'y a pas de touche, le buffer est vidé car windows
-   à une limite très basse d'évènements en attente}
+  { Si il n'y a pas de touche, le buffer est vidï¿½ car windows
+   ï¿½ une limite trï¿½s basse d'ï¿½vï¿½nements en attente}
   if (EnAttente <> 0) and not Result then ReadConsoleInput(Clavier_handle, Zone[1], EnAttente, i);
 end;
 

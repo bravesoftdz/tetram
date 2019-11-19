@@ -1,4 +1,4 @@
-object FrmConvers: TFrmConvers
+﻿object FrmConvers: TFrmConvers
   Left = 472
   Top = 177
   BorderStyle = bsNone

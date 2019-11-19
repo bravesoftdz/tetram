@@ -1,4 +1,4 @@
-unit UfrmRecherche;
+ï»¿unit UfrmRecherche;
 
 interface
 
@@ -61,7 +61,7 @@ type
     procedure PageControl1Change(Sender: TObject);
     procedure TreeView2Change(Sender: TObject; Node: TTreeNode);
   private
-    { Déclarations privées }
+    { DÃ©clarations privÃ©es }
     Recherche: TRecherche;
     FTypeRecherche: TTypeRecherche;
     procedure SetTypeRecherche(Value: TTypeRecherche);
@@ -73,7 +73,7 @@ type
     procedure ReconstructSortLabel(Node: TTreeNode);
     procedure AddCritereTri;
   public
-    { Déclarations publiques }
+    { DÃ©clarations publiques }
     CritereSimple: TGUID;
     property TypeRecherche: TTypeRecherche read FTypeRecherche write SetTypeRecherche;
     function ImpressionEnabled: Boolean;
@@ -146,7 +146,7 @@ begin
   btnRecherche.Font.Style := btnRecherche.Font.Style + [fsBold];
   vtPersonnes.Mode := vmPersonnes;
   TypeRecherche := Recherche.TypeRecherche;
-  TreeView1.Selected := TreeView1.Items.AddChildObject(nil, 'Critères', Recherche.Criteres);
+  TreeView1.Selected := TreeView1.Items.AddChildObject(nil, 'CritÃ¨res', Recherche.Criteres);
   methode.ItemIndex := Integer(Recherche.Criteres.GroupOption);
 end;
 
@@ -297,7 +297,7 @@ begin
 
     Historique.EditConsultation(CritereSimple, LightComboCheck1.Value);
     VTResult.RootNodeCount := Recherche.Resultats.Count;
-    lbResult.Caption := IntToStr(VTResult.RootNodeCount) + ' résultat(s) trouvé(s)';
+    lbResult.Caption := IntToStr(VTResult.RootNodeCount) + ' rÃ©sultat(s) trouvÃ©(s)';
   end;
 end;
 
@@ -402,7 +402,7 @@ begin
     RechStream.Free;
   end;
   VTResult.RootNodeCount := Recherche.Resultats.Count;
-  lbResult.Caption := IntToStr(VTResult.RootNodeCount) + ' résultat(s) trouvé(s)';
+  lbResult.Caption := IntToStr(VTResult.RootNodeCount) + ' rÃ©sultat(s) trouvÃ©(s)';
 end;
 
 procedure TfrmRecherche.VTResultGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: string);
@@ -433,7 +433,7 @@ end;
 
 procedure TfrmRecherche.VTResultHeaderClick(Sender: TVTHeader; HitInfo: TVTHeaderHitInfo);
 begin
-  // si on n'affiche pas le tri en cours, c'est qu'on est en recherche avancée avec critère de tri : on ne peut donc pas changer le tri
+  // si on n'affiche pas le tri en cours, c'est qu'on est en recherche avancÃ©e avec critÃ¨re de tri : on ne peut donc pas changer le tri
   if (VTResult.Header.Columns[FSortColumn].ImageIndex = -1) then
     Exit;
 

@@ -1,4 +1,4 @@
-unit BD.Common;
+ï»¿unit BD.Common;
 
 interface
 
@@ -9,8 +9,8 @@ uses
   sevenzip;
 
 const
-  TitreApplication = 'BDthèque';
-  CopyrightTetramCorp = 'Copyright © Teträm Corp';
+  TitreApplication = 'BDthÃ¨que';
+  CopyrightTetramCorp = 'Copyright Â© TetrÃ¤m Corp';
 
 const
   // Error codes are 32-bit values (bit 31 is the most significant bit). Bit 29 is reserved for application-defined error
@@ -182,8 +182,8 @@ begin
   FAppData := TPath.Combine(TPath.GetHomePath, FAppData);
   TDirectory.CreateDirectory(FAppData);
 
-  // si le fichier ini est dans le répertoire parent de l'exe (correspond à la version de développement)
-  // alors on utilise les anciennes valeurs par défaut
+  // si le fichier ini est dans le rÃ©pertoire parent de l'exe (correspond Ã  la version de dÃ©veloppement)
+  // alors on utilise les anciennes valeurs par dÃ©faut
   parentPath := TDirectory.GetParent(TPath.GetDirectoryName(TPath.GetLibraryPath));
   if TFile.Exists(TPath.Combine(parentPath, FichierIni)) then
   begin

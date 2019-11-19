@@ -1,4 +1,4 @@
-unit BD.GUI.DataModules.Common;
+﻿unit BD.GUI.DataModules.Common;
 
 interface
 

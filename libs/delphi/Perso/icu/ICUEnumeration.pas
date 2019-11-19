@@ -1,4 +1,4 @@
-unit ICUEnumeration;
+﻿unit ICUEnumeration;
 
 interface
 

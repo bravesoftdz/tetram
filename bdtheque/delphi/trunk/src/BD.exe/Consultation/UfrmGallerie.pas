@@ -1,4 +1,4 @@
-unit UfrmGallerie;
+ï»¿unit UfrmGallerie;
 
 interface
 
@@ -62,9 +62,9 @@ type
     procedure ShowSerie(Serie: TSerieFull);
     procedure ShowAlbum(Album: TAlbumLite);
     procedure ShowEdition(Edition: TEditionFull);
-    { Déclarations privées }
+    { DÃ©clarations privÃ©es }
   public
-    { Déclarations publiques }
+    { DÃ©clarations publiques }
     property ID_Serie: TGUID read FSerie write SetSerie;
     property ID_Album: TGUID read FAlbum write SetAlbum;
     property ID_Edition: TGUID read FEdition write SetEdition;
@@ -411,7 +411,7 @@ begin
       if l + Ctrl.Width > Self.Width then
       begin
         l := 0;
-        Inc(t, CtrlHeight); // on considère que tous les controles ont la même hauteur
+        Inc(t, CtrlHeight); // on considÃ¨re que tous les controles ont la mÃªme hauteur
       end;
       Ctrl.SetBounds(l, t, Ctrl.Width, Ctrl.Height);
       Inc(l, Ctrl.Width);

@@ -1,4 +1,4 @@
-unit TestICUNumberFormatFunctions;
+ï»¿unit TestICUNumberFormatFunctions;
 
 interface
 
@@ -6,7 +6,7 @@ uses
   System.Classes, System.SysUtils, TestFramework, ICUNumberFormatter, ICUTest;
 
 type
-  // Méthodes de test pour les fonctions globales de l'unité ICUNumberFormat
+  // Mï¿½thodes de test pour les fonctions globales de l'unitï¿½ ICUNumberFormat
 
   TestTICUNumberFormat = class(TICUTest)
   protected
@@ -41,28 +41,28 @@ end;
 
 procedure TestTICUNumberFormat.TestCurrencyToStr;
 begin
-  // ATTENTION: icu-fr utilise #160 (espace insécable) au lieu de #32 comme espace
-  CheckEquals('2'#160'145,46'#160'€', ICUCurrencyToStr(2145.456, 'fr-FR'), 'fr-FR');
+  // ATTENTION: icu-fr utilise #160 (espace insï¿½cable) au lieu de #32 comme espace
+  CheckEquals('2'#160'145,46'#160'ï¿½', ICUCurrencyToStr(2145.456, 'fr-FR'), 'fr-FR');
   CheckEquals('$2,145.46', ICUCurrencyToStr(2145.456, 'en-US'), 'en-US');
 end;
 
 procedure TestTICUNumberFormat.TestCurrencyToStrDefaultLocale;
 begin
   CheckEquals('fr_FR', uloc_getDefault);
-  CheckEquals('2'#160'145,46'#160'€', ICUCurrencyToStr(2145.456, uloc_getDefault), 'uloc_getDefault');
-  CheckEquals('2'#160'145,46'#160'€', ICUCurrencyToStr(2145.456), 'default');
+  CheckEquals('2'#160'145,46'#160'ï¿½', ICUCurrencyToStr(2145.456, uloc_getDefault), 'uloc_getDefault');
+  CheckEquals('2'#160'145,46'#160'ï¿½', ICUCurrencyToStr(2145.456), 'default');
 end;
 
 procedure TestTICUNumberFormat.TestCurrencyToStrShort;
 begin
-  // ATTENTION: icu-fr utilise #160 (espace insécable) au lieu de #32 comme espace
+  // ATTENTION: icu-fr utilise #160 (espace insï¿½cable) au lieu de #32 comme espace
   CheckEquals('2'#160'145,46', ICUCurrencyToStrShort(2145.456, 'fr-FR'), 'fr-FR');
   CheckEquals('2,145.46', ICUCurrencyToStrShort(2145.456, 'en-US'), 'en-US');
 end;
 
 procedure TestTICUNumberFormat.TestDoubleToStr;
 begin
-  // ATTENTION: icu-fr utilise #160 (espace insécable) au lieu de #32 comme espace
+  // ATTENTION: icu-fr utilise #160 (espace insï¿½cable) au lieu de #32 comme espace
   CheckEquals('2'#160'145,456', ICUDoubleToStr(2145.456, 'fr-FR'), 'fr-FR');
   CheckEquals('2,145.456', ICUDoubleToStr(2145.456, 'en-US'), 'en-US');
 
@@ -71,19 +71,19 @@ end;
 
 procedure TestTICUNumberFormat.TestStrToCurrency;
 begin
-  CheckEquals(2145.456, ICUStrToCurrency('2 145,456 €', 'fr-FR'), 'fr-FR - "2 145,456 €"');
-  CheckEquals(2145.456, ICUStrToCurrency('2'#160'145,456 €', 'fr-FR'), 'fr-FR - "2''#160''145,456 €"');
-  CheckEquals(2145.456, ICUStrToCurrency('2145,456 €', 'fr-FR'), 'fr-FR - "2145,456 €"');
+  CheckEquals(2145.456, ICUStrToCurrency('2 145,456 ï¿½', 'fr-FR'), 'fr-FR - "2 145,456 ï¿½"');
+  CheckEquals(2145.456, ICUStrToCurrency('2'#160'145,456 ï¿½', 'fr-FR'), 'fr-FR - "2''#160''145,456 ï¿½"');
+  CheckEquals(2145.456, ICUStrToCurrency('2145,456 ï¿½', 'fr-FR'), 'fr-FR - "2145,456 ï¿½"');
   CheckEquals(2145.456, ICUStrToCurrency('$2,145.456', 'en-US'), 'en-US - "$2,145.456"');
 end;
 
 procedure TestTICUNumberFormat.TestStrToCurrencyDef;
 begin
-  CheckEquals(2145.456, ICUStrToCurrencyDef('2 145,456 €', -1, 'fr-FR'), 'fr-FR - "2 145,456 €"');
-  CheckEquals(2145.456, ICUStrToCurrencyDef('2'#160'145,456 €', -1, 'fr-FR'), 'fr-FR - "2''#160''145,456 €"');
-  CheckEquals(2145.456, ICUStrToCurrencyDef('2145,456 €', -1, 'fr-FR'), 'fr-FR - "2145,456 €"');
-  CheckEquals(-1, ICUStrToCurrencyDef('2 145.456 €', -1, 'fr-FR'), 'fr-FR - "2 145.456 €"');
-  CheckEquals(2145, ICUStrToCurrencyDef('2 145 € ', -1, 'fr-FR'), 'fr-FR - "2 145 € "');
+  CheckEquals(2145.456, ICUStrToCurrencyDef('2 145,456 ï¿½', -1, 'fr-FR'), 'fr-FR - "2 145,456 ï¿½"');
+  CheckEquals(2145.456, ICUStrToCurrencyDef('2'#160'145,456 ï¿½', -1, 'fr-FR'), 'fr-FR - "2''#160''145,456 ï¿½"');
+  CheckEquals(2145.456, ICUStrToCurrencyDef('2145,456 ï¿½', -1, 'fr-FR'), 'fr-FR - "2145,456 ï¿½"');
+  CheckEquals(-1, ICUStrToCurrencyDef('2 145.456 ï¿½', -1, 'fr-FR'), 'fr-FR - "2 145.456 ï¿½"');
+  CheckEquals(2145, ICUStrToCurrencyDef('2 145 ï¿½ ', -1, 'fr-FR'), 'fr-FR - "2 145 ï¿½ "');
   CheckEquals(2145.456, ICUStrToCurrencyDef('$2,145.456', -1, 'en-US'), 'en-US - "$2,145.456"');
 end;
 

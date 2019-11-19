@@ -1,4 +1,4 @@
-unit UfrmEntretien;
+Ôªøunit UfrmEntretien;
 
 interface
 
@@ -56,7 +56,7 @@ uses
 {$R *.dfm}
 
 const
-  AdjustStr = ' ****'; // utilisÈe pour pallier ‡ un dÈfaut du VirtualTreeView ou de Windows
+  AdjustStr = ' ****'; // utilis√©e pour pallier √† un d√©faut du VirtualTreeView ou de Windows
 
 type
   PActionNodeData = ^RActionNodeData;
@@ -215,7 +215,7 @@ end;
 
 procedure TfrmEntretien.actCompresserExecute(Sender: TObject);
 begin
-  ShowMessage('Pour effectuer cette opÈration: Sauvez la base puis Restaurez l‡.');
+  ShowMessage('Pour effectuer cette op√©ration: Sauvez la base puis Restaurez l√†.');
 end;
 
 procedure TfrmEntretien.actConvertirExecute(Sender: TObject);
@@ -283,7 +283,7 @@ begin
       qry.Transaction.Commit;
     end;
     fWaiting := nil;
-    ShowMessageFmt('%d liens convertis sur %d ‡ convertir.', [nbConverti, nbAConvertir]);
+    ShowMessageFmt('%d liens convertis sur %d √† convertir.', [nbConverti, nbAConvertir]);
   finally
     qry.Free;
     FichiersImages.Free;
@@ -344,7 +344,7 @@ begin
     end;
     qry.Transaction.Commit;
     fWaiting := nil;
-    ShowMessageFmt('%d Couvertures extraites sur %d ‡ extraire.'#13#10'RÈpertoire de destination: %s', [nbExtrais, nbAExtraire, TGlobalVar.RepImages]);
+    ShowMessageFmt('%d Couvertures extraites sur %d √† extraire.'#13#10'R√©pertoire de destination: %s', [nbExtrais, nbAExtraire, TGlobalVar.RepImages]);
   finally
     qry.Free;
     UpdateQuery.Free;
@@ -395,7 +395,7 @@ begin
     end;
     qry.Transaction.Commit;
     fWaiting := nil;
-    ShowMessageFmt('%d liens supprimÈ(s) sur %d.', [nbSupprime, nbASupprimer]);
+    ShowMessageFmt('%d liens supprim√©(s) sur %d.', [nbSupprime, nbASupprimer]);
   finally
     qry.Free;
     UpdateQuery.Free;

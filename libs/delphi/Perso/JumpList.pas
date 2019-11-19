@@ -1,4 +1,4 @@
-unit JumpList;
+ï»¿unit JumpList;
 
 interface
 
@@ -15,12 +15,12 @@ const
     pid: 6);
 
 type
-  // on redéclare: il y a des erreurs dans la version de la VCL
+  // on redï¿½clare: il y a des erreurs dans la version de la VCL
   ICustomDestinationList = interface
     [SID_ICustomDestinationList]
     function SetAppID(pszAppID: LPCWSTR): HRESULT; stdcall;
     function BeginList(var pcMaxSlots: UINT; const riid: TIID; out ppv): HRESULT; stdcall;
-    // dans la VCL, poa est déclaré var ce qui est une erreur
+    // dans la VCL, poa est dï¿½clarï¿½ var ce qui est une erreur
     function AppendCategory(pszCategory: LPCWSTR; const poa: IObjectArray): HRESULT; stdcall;
     function AppendKnownCategory(category: Integer): HRESULT; stdcall;
     function AddUserTasks(const poa: IObjectArray): HRESULT; stdcall;

@@ -1,4 +1,4 @@
-unit BDTK.GUI.Forms.Customize;
+ï»¿unit BDTK.GUI.Forms.Customize;
 
 interface
 
@@ -74,7 +74,7 @@ begin
       if (tlb.Style = tbsSeparator) and (LastButton <> tbSep) then
       begin
         item := VDTListView1.Items.Add;
-        item.Caption := 'Séparateur';
+        item.Caption := 'SÃ©parateur';
         item.SubItems.Add('');
         item.SubItems.Add('S');
         item.SubItems.Add('');
@@ -198,7 +198,7 @@ begin
   else
     t := VDTListView1.Items.Add;
 
-  t.Caption := 'Séparateur';
+  t.Caption := 'SÃ©parateur';
   t.SubItems.Add('');
   t.SubItems.Add('S');
   t.SubItems.Add('');

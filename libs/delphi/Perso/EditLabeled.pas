@@ -1,4 +1,4 @@
-unit EditLabeled;
+﻿unit EditLabeled;
 
 {$D-}
 

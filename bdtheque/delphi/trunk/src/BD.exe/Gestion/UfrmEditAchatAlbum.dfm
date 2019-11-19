@@ -1,4 +1,4 @@
-object frmEditAchatAlbum: TfrmEditAchatAlbum
+﻿object frmEditAchatAlbum: TfrmEditAchatAlbum
   Left = 245
   Top = 418
   Caption = 'Achat'

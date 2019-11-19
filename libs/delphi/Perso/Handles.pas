@@ -1,4 +1,4 @@
-unit Handles;
+﻿unit Handles;
 
 interface
 

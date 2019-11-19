@@ -1,4 +1,4 @@
-object frmConsultationAuteur: TfrmConsultationAuteur
+﻿object frmConsultationAuteur: TfrmConsultationAuteur
   Left = 486
   Top = 211
   Caption = 'Fiche d'#39'auteur'

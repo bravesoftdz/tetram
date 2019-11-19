@@ -1,4 +1,4 @@
-object frmEditCollection: TfrmEditCollection
+﻿object frmEditCollection: TfrmEditCollection
   Left = 546
   Top = 535
   ActiveControl = edNom

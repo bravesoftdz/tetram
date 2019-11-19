@@ -1,4 +1,4 @@
-unit BD.Utils.Chromium.Extension;
+﻿unit BD.Utils.Chromium.Extension;
 
 {.$D-} // le debugage n'est possible qu'en single process, et les extensions javascript qu'en multi process...
 

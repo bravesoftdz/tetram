@@ -1,4 +1,4 @@
-unit VDTButton;
+ï»¿unit VDTButton;
 {$D-}
 
 interface
@@ -59,7 +59,7 @@ end;
 
 constructor TVDTListView.Create(AOwner: TComponent);
 begin
-  // si on le place au début, les "personnalisations" prennent le pas sur ce qu'on peut mettre dans l'EDI
+  // si on le place au dï¿½but, les "personnalisations" prennent le pas sur ce qu'on peut mettre dans l'EDI
   inherited Create(AOwner);
 
   Anchors := [akLeft, akTop, akRight, akBottom];

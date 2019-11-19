@@ -1,4 +1,4 @@
-unit _udisplaycontext;
+﻿unit _udisplaycontext;
 
 {$I icu.inc}
 

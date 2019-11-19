@@ -1,4 +1,4 @@
-unit _enum;
+﻿unit _enum;
 
 {$I icu.inc}
 

@@ -1,4 +1,4 @@
-object frmSplash: TfrmSplash
+﻿object frmSplash: TfrmSplash
   Left = 440
   Top = 366
   AutoSize = True

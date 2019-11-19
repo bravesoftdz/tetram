@@ -1,4 +1,4 @@
-unit BDTK.Updates.v0_0_3_07;
+ï»¿unit BDTK.Updates.v0_0_3_07;
 
 interface
 
@@ -166,8 +166,8 @@ begin
   Query.Script.Add('INSERT INTO LISTES (REF,CATEGORIE,LIBELLE,ORDRE,DEFAUT) VALUES (3,5,''Moyen (A5)'',2,0);');
   Query.Script.Add('INSERT INTO LISTES (REF,CATEGORIE,LIBELLE,ORDRE,DEFAUT) VALUES (4,5,''Normal (A4)'',3,1);');
   Query.Script.Add('INSERT INTO LISTES (REF,CATEGORIE,LIBELLE,ORDRE,DEFAUT) VALUES (5,5,''Grand (A3)'',4,0);');
-  Query.Script.Add('INSERT INTO LISTES (REF,CATEGORIE,LIBELLE,ORDRE,DEFAUT) VALUES (6,5,''Très grand (A2)'',5,0);');
-  Query.Script.Add('INSERT INTO LISTES (REF,CATEGORIE,LIBELLE,ORDRE,DEFAUT) VALUES (10,5,''Spécial'',6,0);');
+  Query.Script.Add('INSERT INTO LISTES (REF,CATEGORIE,LIBELLE,ORDRE,DEFAUT) VALUES (6,5,''TrÃ¨s grand (A2)'',5,0);');
+  Query.Script.Add('INSERT INTO LISTES (REF,CATEGORIE,LIBELLE,ORDRE,DEFAUT) VALUES (10,5,''SpÃ©cial'',6,0);');
 
   Query.ExecuteScript;
 end;

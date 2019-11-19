@@ -1,4 +1,4 @@
-unit _umachine;
+﻿unit _umachine;
 
 {$I icu.inc}
 

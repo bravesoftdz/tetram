@@ -1,4 +1,4 @@
-unit BDTK.GUI.Forms.Converter;
+ï»¿unit BDTK.GUI.Forms.Converter;
 
 interface
 
@@ -14,13 +14,13 @@ type
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
   private
-    { Déclarations privées }
+    { DÃ©clarations privÃ©es }
     FValeur: Currency;
     ListFC: TList<TframConvertisseur>;
     FFirstEdit: TEdit;
     procedure SetValue(Value: Currency);
   public
-    { Déclarations publiques }
+    { DÃ©clarations publiques }
     property Valeur: Currency read FValeur write SetValue;
   end;
 

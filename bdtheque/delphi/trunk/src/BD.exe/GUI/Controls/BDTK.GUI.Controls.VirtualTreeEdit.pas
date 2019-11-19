@@ -1,4 +1,4 @@
-unit BDTK.GUI.Controls.VirtualTreeEdit;
+﻿unit BDTK.GUI.Controls.VirtualTreeEdit;
 
 interface
 

@@ -1,4 +1,4 @@
-unit UnrarComp;
+﻿unit UnrarComp;
 
 interface
 

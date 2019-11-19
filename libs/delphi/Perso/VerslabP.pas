@@ -1,4 +1,4 @@
-unit verslabp;
+ï»¿unit verslabp;
 
 {$H+}
 
@@ -175,13 +175,13 @@ begin
     if FixedFileInfo.dwFileFlags and VS_FF_PRERELEASE <> 0 then
       Result := Result + ', Pre-Release';
     if FixedFileInfo.dwFileFlags and VS_FF_PATCHED <> 0 then
-      Result := Result + ', Patchée';
+      Result := Result + ', Patchï¿½e';
     if FixedFileInfo.dwFileFlags and VS_FF_PRIVATEBUILD <> 0 then
-      Result := Result + ', Privée';
+      Result := Result + ', Privï¿½e';
     if FixedFileInfo.dwFileFlags and VS_FF_INFOINFERRED <> 0 then
       Result := Result + ', InfoInferred';
     if FixedFileInfo.dwFileFlags and VS_FF_SPECIALBUILD <> 0 then
-      Result := Result + ', Spéciale';
+      Result := Result + ', Spï¿½ciale';
     if Result <> '' then
       if Result[1] = ',' then
         Delete(Result, 1, 2);

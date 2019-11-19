@@ -1,4 +1,4 @@
-unit icu_globals;
+﻿unit icu_globals;
 
 {$I icu.inc}
 

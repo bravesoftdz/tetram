@@ -1,4 +1,4 @@
-object frmPrevisionsAchats: TfrmPrevisionsAchats
+﻿object frmPrevisionsAchats: TfrmPrevisionsAchats
   Left = 262
   Top = 208
   Caption = 'Achats pr'#233'vus'

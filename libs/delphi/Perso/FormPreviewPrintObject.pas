@@ -1,4 +1,4 @@
-unit FormPreviewPrintObject;
+ï»¿unit FormPreviewPrintObject;
 { .$D- }
 {$B-}
 
@@ -57,7 +57,7 @@ type
   protected
     procedure CreateParams(var Params: TCreateParams); override;
   private
-    { Déclarations privées }
+    { Dï¿½clarations privï¿½es }
     procedure SysCommand(var Msg: TWMSysCommand); message WM_SYSCOMMAND;
     procedure ShowNoPage;
     function ShowPage(Page: Integer): Boolean;
@@ -65,7 +65,7 @@ type
     function PWidth: Integer;
     function PHeight: Integer;
   public
-    { Déclarations publiques }
+    { Dï¿½clarations publiques }
     HeightMM: Single;
     WidthMM: Single;
     FPages: TList<TGraphic>;
@@ -85,16 +85,16 @@ uses MMSystem;
 
 resourcestring
   zoompleinepage = 'Pleine page';
-  zoomecran = 'Largeur de fenêtre';
+  zoomecran = 'Largeur de fenï¿½tre';
   listezoom = '';
-  premiere = 'Première page';
+  premiere = 'Premiï¿½re page';
   suivante = 'Page suivante';
-  precedente = 'Page précédente';
-  derniere = 'Dernière page';
-  allera = 'Aller à la page...';
-  numpage = 'Numéro de page';
+  precedente = 'Page prï¿½cï¿½dente';
+  derniere = 'Derniï¿½re page';
+  allera = 'Aller ï¿½ la page...';
+  numpage = 'Numï¿½ro de page';
   nbpages = 'Nombre de pages';
-  quitter = 'Fermer l''apperçu';
+  quitter = 'Fermer l''apperï¿½u';
 
 var
   PosClick: TPoint;

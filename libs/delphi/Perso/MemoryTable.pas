@@ -1,4 +1,4 @@
-unit MemoryTable;
+ï»¿unit MemoryTable;
 
 {$B-} {- Complete Boolean Evaluation }
 {$R-} {- Range-Checking }
@@ -79,7 +79,7 @@ uses DBConsts, Forms;
 { TMemoryTable }
 
 const
-  SInvalidBatchMove = 'Paramètres de déplacement batch incorrects';
+  SInvalidBatchMove = 'Paramï¿½tres de dï¿½placement batch incorrects';
 
 constructor TMemoryTable.Create(AOwner: TComponent);
 begin

@@ -1,4 +1,4 @@
-unit BDTK.Entities.Dao.Lambda;
+ï»¿unit BDTK.Entities.Dao.Lambda;
 
 interface
 
@@ -6,8 +6,8 @@ uses
   System.Classes, BD.Entities.Dao.Lambda;
 
 type
-  // surcharge de TDaoListe pour pouvoir accéder aux elements protected
-  // mais dans ce type de classe, ce n'est pas possible de surcharger les méthodes (dont Create/Destroy)
+  // surcharge de TDaoListe pour pouvoir accÃ©der aux elements protected
+  // mais dans ce type de classe, ce n'est pas possible de surcharger les mÃ©thodes (dont Create/Destroy)
   // donc obligation d'utiliser les sections initialization/finalization
   TDaoListeDB = class(TDaoListe)
   protected

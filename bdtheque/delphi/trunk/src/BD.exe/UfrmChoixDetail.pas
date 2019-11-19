@@ -1,4 +1,4 @@
-unit UfrmChoixDetail;
+﻿unit UfrmChoixDetail;
 {$D-}
 interface
 

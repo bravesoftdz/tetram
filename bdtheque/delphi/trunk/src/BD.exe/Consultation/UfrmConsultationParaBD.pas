@@ -1,4 +1,4 @@
-unit UfrmConsultationParaBD;
+﻿unit UfrmConsultationParaBD;
 
 interface
 
@@ -88,7 +88,7 @@ type
     function ModificationUpdate: Boolean;
     procedure ShowPhoto(Num: Integer);
   public
-    { D�clarations publiques }
+    { Déclarations publiques }
     property ParaBD: TParaBDFull read FParaBD;
     property ID_ParaBD: TGUID read GetID_ParaBD write SetID_ParaBD;
   end;

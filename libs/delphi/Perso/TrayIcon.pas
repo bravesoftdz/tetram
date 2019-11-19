@@ -1,4 +1,4 @@
-unit TrayIcon;
+ï»¿unit TrayIcon;
 {.$D-}
 interface
 
@@ -10,8 +10,8 @@ type
 
   TTrayIcon = class(TComponent)
   private
-    { Déclarations privées }
-    NotifyData : TNotifyIconData; // "structure" de l'icône
+    { Dï¿½clarations privï¿½es }
+    NotifyData : TNotifyIconData; // "structure" de l'icï¿½ne
     FTrayIconMessage: Cardinal;
     FIcon: TIcon;
     FActive: Boolean;
@@ -48,7 +48,7 @@ type
     property OnMouseMove: TTrayIconEvent read FOnMouseMove write FOnMouseMove;
     property OnMouseUp: TTrayIconEvent read FOnMouseUp write FOnMouseUp;
 
-    property Active: Boolean read FActive write SetActive; // Important qu'il soit à la fin
+    property Active: Boolean read FActive write SetActive; // Important qu'il soit ï¿½ la fin
   end;
 
 procedure Register;

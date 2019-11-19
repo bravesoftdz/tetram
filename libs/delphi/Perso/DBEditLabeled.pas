@@ -1,4 +1,4 @@
-unit DBEditLabeled;
+ï»¿unit DBEditLabeled;
 
 {$D-}
 
@@ -13,7 +13,7 @@ type
     FLinkControls: TControlList;
     procedure SetLinkControls(const Value: TControlList);
   protected
-    { Déclarations protégées }
+    { Dï¿½clarations protï¿½gï¿½es }
     procedure DoEnter; override;
     procedure DoExit; override;
   public
@@ -28,7 +28,7 @@ type
     FLinkControls: TControlList;
     procedure SetLinkControls(const Value: TControlList);
   protected
-    { Déclarations protégées }
+    { Dï¿½clarations protï¿½gï¿½es }
     procedure DoEnter; override;
     procedure DoExit; override;
   public
@@ -43,7 +43,7 @@ type
     FLinkControls: TControlList;
     procedure SetLinkControls(const Value: TControlList);
   protected
-    { Déclarations protégées }
+    { Dï¿½clarations protï¿½gï¿½es }
     procedure DoEnter; override;
     procedure DoExit; override;
   public
@@ -58,7 +58,7 @@ type
     FLinkControls: TControlList;
     procedure SetLinkControls(const Value: TControlList);
   protected
-    { Déclarations protégées }
+    { Dï¿½clarations protï¿½gï¿½es }
     procedure DoEnter; override;
     procedure DoExit; override;
   public

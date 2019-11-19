@@ -1,4 +1,4 @@
-object framBoutons: TframBoutons
+﻿object framBoutons: TframBoutons
   Left = 0
   Top = 0
   Width = 451

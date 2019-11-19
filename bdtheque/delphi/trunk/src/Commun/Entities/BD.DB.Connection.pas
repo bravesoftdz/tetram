@@ -1,4 +1,4 @@
-unit BD.DB.Connection;
+ï»¿unit BD.DB.Connection;
 
 interface
 
@@ -150,7 +150,7 @@ begin
     s := #13#10'/*';
     if Params.FieldCount > 0 then
     begin
-      s := s + #13#10'Paramètres :';
+      s := s + #13#10'ParamÃ¨tres :';
       for i := 0 to Pred(Params.FieldCount) do
         if Params.IsNull[i] then
           s := s + Format(#13#10'  > %s = < null > (%s)', [Params.FieldName[i], GetEnumName(TypeInfo(TUIBFieldType), Ord(Params.FieldType[i]))])
@@ -181,7 +181,7 @@ var
   // i: Integer;
 begin
   try
-    // ne peut pas être utilisé tant que le describe réinitiolise les paramètres
+    // ne peut pas Ãªtre utilisÃ© tant que le describe rÃ©initiolise les paramÃ¨tres
     // describeParams := True;
     inherited;
   except

@@ -1,4 +1,4 @@
-unit BD.Utils.GUIUtils;
+Ôªøunit BD.Utils.GUIUtils;
 
 interface
 
@@ -461,7 +461,7 @@ begin
           BMP32Dst := TBitmap32.Create;
           try
             BMP32Src.Assign(Image.Graphic);
-            // pas besoin de variable: TBitmap32 va le dÈtruire
+            // pas besoin de variable: TBitmap32 va le d√©truire
             TLinearResampler.Create(BMP32Src);
             BMP32Dst.Height := NewHauteur;
             BMP32Dst.Width := NewLargeur;
@@ -560,7 +560,7 @@ begin
   f.Position := 0;
 
   if CompareMem(@buffer, @JPGMagic, Length(JPGMagic)) then
-    // dÈj‡ du JPEG
+    // d√©j√† du JPEG
     Exit(f)
   else if CompareMem(@buffer, @PNGMagic, Length(PNGMagic)) then
     // PNG
@@ -569,7 +569,7 @@ begin
     // GIF
     graphClass := TJvGIFImage
   else
-    // type inconnu = on laisse faire la VCL, avec un peu de bol Áa marchera
+    // type inconnu = on laisse faire la VCL, avec un peu de bol √ßa marchera
     graphClass := nil;
 
   Result := TMemoryStream.Create;

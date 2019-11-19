@@ -1,4 +1,4 @@
-unit kbShellNotify;
+﻿unit kbShellNotify;
 
 interface
 

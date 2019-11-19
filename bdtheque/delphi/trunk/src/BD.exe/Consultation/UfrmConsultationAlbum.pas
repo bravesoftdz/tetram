@@ -1,4 +1,4 @@
-unit UfrmConsultationAlbum;
+ï»¿unit UfrmConsultationAlbum;
 
 interface
 
@@ -152,7 +152,7 @@ type
     procedure ModificationExecute(Sender: TObject);
     function ModificationUpdate: Boolean;
   public
-    { Déclarations publiques }
+    { DÃ©clarations publiques }
     property Album: TAlbumFull read FAlbum;
     property ID_Album: TGUID read GetID_Album write SetID_Album;
   end;
@@ -486,7 +486,7 @@ begin
   TfrmConsole.AddEvent(UnitName, 'FAlbum.Fill() - ' + GUIDToString(Value));
   TDaoAlbumFull.Fill(FAlbum, Value, nil);
 
-  TfrmConsole.AddEvent(UnitName, 'Chargement des données... - ' + GUIDToString(Value));
+  TfrmConsole.AddEvent(UnitName, 'Chargement des donnÃ©es... - ' + GUIDToString(Value));
   Caption := 'Fiche d''album - ' + FAlbum.ChaineAffichage;
   if IsEqualGUID(FAlbum.Serie.ID_Serie, GUID_NULL) then
   begin
@@ -519,7 +519,7 @@ begin
   if cbIntegrale.Checked then
   begin
     s := NonZero(IntToStr(FAlbum.TomeDebut));
-    AjoutString(s, NonZero(IntToStr(FAlbum.TomeFin)), ' à ');
+    AjoutString(s, NonZero(IntToStr(FAlbum.TomeFin)), ' Ã  ');
     s2 := rsAlbumsIntegrale;
     AjoutString(s2, s, ' ', '[', ']');
     cbIntegrale.Caption := s2;
@@ -584,7 +584,7 @@ begin
   lvEditions.Items.EndUpdate;
   lvEditions.Visible := FAlbum.Editions.Count > 1;
 
-  TfrmConsole.AddEvent(UnitName, 'Chargement terminé - ' + GUIDToString(Value));
+  TfrmConsole.AddEvent(UnitName, 'Chargement terminÃ© - ' + GUIDToString(Value));
 end;
 
 procedure TfrmConsultationAlbum.TitreSerieDblClick(Sender: TObject);

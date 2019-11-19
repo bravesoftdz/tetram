@@ -1,4 +1,4 @@
-object frmFond: TfrmFond
+﻿object frmFond: TfrmFond
   Left = 451
   Top = 125
   Caption = 'frmFond'

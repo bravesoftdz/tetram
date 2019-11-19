@@ -1,4 +1,4 @@
-object framVTEdit: TframVTEdit
+﻿object framVTEdit: TframVTEdit
   Left = 0
   Top = 0
   Width = 320

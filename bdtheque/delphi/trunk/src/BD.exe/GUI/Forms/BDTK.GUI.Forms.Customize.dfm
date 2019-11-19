@@ -1,4 +1,4 @@
-object frmCustomize: TfrmCustomize
+﻿object frmCustomize: TfrmCustomize
   Left = 376
   Top = 201
   BorderIcons = [biMinimize, biMaximize]

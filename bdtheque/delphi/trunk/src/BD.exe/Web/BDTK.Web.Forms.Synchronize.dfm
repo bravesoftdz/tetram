@@ -1,4 +1,4 @@
-object frmSynchroniser: TfrmSynchroniser
+﻿object frmSynchroniser: TfrmSynchroniser
   Left = 0
   Top = 0
   AutoSize = True

@@ -1,4 +1,4 @@
-object frmChoixDetail: TfrmChoixDetail
+﻿object frmChoixDetail: TfrmChoixDetail
   Left = 303
   Top = 190
   BorderIcons = []

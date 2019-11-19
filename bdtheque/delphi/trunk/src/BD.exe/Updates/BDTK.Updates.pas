@@ -1,4 +1,4 @@
-unit BDTK.Updates;
+ï»¿unit BDTK.Updates;
 
 interface
 
@@ -44,7 +44,7 @@ begin
   Update.Version := Version;
   Update.UpdateCallback := ProcMAJ;
   ListFBUpdates.Add(Update);
-  // on passe par une variable temporaire pour bénéficier du comptage de référence: le const du Sort bypass le comptage
+  // on passe par une variable temporaire pour bÃ©nÃ©ficier du comptage de rÃ©fÃ©rence: le const du Sort bypass le comptage
   comp := TBdtkUpdateComparer<TFBUpdate>.Create;
   ListFBUpdates.Sort(comp);
 end;
@@ -58,7 +58,7 @@ begin
   Update.Version := Version;
   Update.UpdateCallback := ProcMAJ;
   ListMySQLUpdates.Add(Update);
-  // on passe par une variable temporaire pour bénéficier du comptage de référence: le const du Sort bypass le comptage
+  // on passe par une variable temporaire pour bÃ©nÃ©ficier du comptage de rÃ©fÃ©rence: le const du Sort bypass le comptage
   comp := TBdtkUpdateComparer<TMySQLUpdate>.Create;
   ListMySQLUpdates.Sort(comp);
 end;

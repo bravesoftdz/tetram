@@ -1,4 +1,4 @@
-unit Browss;
+﻿unit Browss;
 {$D-}
 interface
 

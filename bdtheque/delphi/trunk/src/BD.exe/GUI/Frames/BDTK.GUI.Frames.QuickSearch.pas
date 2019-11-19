@@ -1,4 +1,4 @@
-unit BDTK.GUI.Frames.QuickSearch;
+ï»¿unit BDTK.GUI.Frames.QuickSearch;
 
 interface
 
@@ -33,7 +33,7 @@ type
     procedure DoOnNew;
     procedure SetEnabled(Value: Boolean); override;
   public
-    { Déclarations publiques }
+    { DÃ©clarations publiques }
     constructor Create(AOwner: TComponent); override;
     property VirtualTreeView: TVirtualStringTree read FVirtualTreeView write SetVirtualTreeView;
     property ShowNewButton: Boolean read GetShowNewButton write SetShowNewButton;
@@ -116,12 +116,12 @@ begin
     try
       edSearch.LinkControls.Add(btNext);
     except
-      // y est peut-être déjà
+      // y est peut-Ãªtre dÃ©jÃ 
     end;
     try
       edSearch.LinkControls.Add(btNew);
     except
-      // y est peut-être déjà
+      // y est peut-Ãªtre dÃ©jÃ 
     end;
     FVirtualTreeView.LinkControls.Assign(edSearch.LinkControls);
   end;
@@ -161,7 +161,7 @@ begin
       vmUnivers:
         Historique.AddWaiting(fcGestionAjout, nil, nil, @AjouterUnivers, FVirtualTreeView, edSearch.Text);
     else
-      Assert(True, 'Mode non prévu dans l''ajout')
+      Assert(True, 'Mode non prÃ©vu dans l''ajout')
     end;
 end;
 

@@ -1,4 +1,4 @@
-// Delphi interface unit for UnRAR.dll
+﻿// Delphi interface unit for UnRAR.dll
 // Translated from unrar.h
 // Use Delphi 2.0 and higher to compile this module
 //

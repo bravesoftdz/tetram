@@ -1,4 +1,4 @@
-unit BD.Entities.Dao.Common;
+﻿unit BD.Entities.Dao.Common;
 
 interface
 
@@ -95,7 +95,7 @@ class procedure TDaoDBEntity.SaveToDatabase(Entity: TDBEntity; UseTransaction: T
 var
   Transaction: TManagedTransaction;
 begin
-  // Assert(not IsEqualGUID(Entity.ID, GUID_NULL), 'L''ID ne peut �tre GUID_NULL');
+  // Assert(not IsEqualGUID(Entity.ID, GUID_NULL), 'L''ID ne peut être GUID_NULL');
   if Assigned(UseTransaction) then
     Transaction := UseTransaction
   else

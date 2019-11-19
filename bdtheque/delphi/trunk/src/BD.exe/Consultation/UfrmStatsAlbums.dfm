@@ -1,4 +1,4 @@
-object frmStatsAlbums: TfrmStatsAlbums
+﻿object frmStatsAlbums: TfrmStatsAlbums
   Left = 658
   Top = 378
   BorderIcons = []

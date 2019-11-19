@@ -1,4 +1,4 @@
-unit UframVTEdit;
+﻿unit UframVTEdit;
 
 interface
 

@@ -1,4 +1,4 @@
-unit BDTK.Entities.Dao.Lite;
+ï»¿unit BDTK.Entities.Dao.Lite;
 
 interface
 
@@ -10,7 +10,7 @@ uses
 type
   // ce serait trop facile si Delphi acceptait cette syntaxe....
   // TClassEntities.DaoLite = class of TDaoLite<>;
-  // je suis donc obligé de faire des classes "classique"
+  // je suis donc obligÃ© de faire des classes "classique"
   TDaoLiteClass = class of TDaoLite;
 
   TDaoLite = class abstract(TDaoDBEntity)
@@ -250,7 +250,7 @@ end;
 
 class procedure TDaoLite.GetFieldIndices;
 begin
-  Assert(getPreparedQuery <> nil, 'Doit être préparé avant');
+  Assert(getPreparedQuery <> nil, 'Doit Ãªtre prÃ©parÃ© avant');
 end;
 
 class function TDaoLite.getPreparedQuery: TManagedQuery;
@@ -268,7 +268,7 @@ class procedure TDaoLite.Prepare(Query: TManagedQuery);
 var
   p: TManagedQuery;
 begin
-  // Ne peut pas être préparée plusieurs fois
+  // Ne peut pas Ãªtre prÃ©parÃ©e plusieurs fois
   p := getPreparedQuery;
   if (p <> nil) or (p = Query) then
     Exit;
@@ -440,7 +440,7 @@ begin
       if IsEqualGUID(pi.ID, GUID_NULL) then
       begin // nouvelles photos
         if (not pi.NewStockee) then
-        begin // photos liées (q1)
+        begin // photos liÃ©es (q1)
           pi.OldNom := pi.NewNom;
           pi.NewNom := SearchNewFileName(TGlobalVar.RepImages, ExtractFileName(pi.NewNom), True);
           qry6.Params.ByNameAsString['chemin'] := TGlobalVar.RepImages;
@@ -463,7 +463,7 @@ begin
           pi.ID := StringToGUID(qry1.Fields.AsString[0]);
         end
         else if TFile.Exists(pi.NewNom) then
-        begin // photos stockées (q2)
+        begin // photos stockÃ©es (q2)
           qry2.Params.ByNameAsString['pk_parent'] := GUIDToString(ReferenceParent);
           qry2.Params.ByNameAsString['fichier'] := TPath.GetFileNameWithoutExtension(pi.NewNom);
           qry2.Params.ByNameAsInteger['ordre'] := List.IndexOf(pi);
@@ -487,7 +487,7 @@ begin
           Stream := GetCouvertureStream(True, pi.ID, -1, -1, False);
           try
             if (pi.NewStockee) then
-            begin // conversion photos liées en stockées (q3)
+            begin // conversion photos liÃ©es en stockÃ©es (q3)
               qry3.ParamsSetBlob('image', Stream);
               qry3.Params.ByNameAsString['pk'] := GUIDToString(pi.ID);
               qry3.Execute;
@@ -498,7 +498,7 @@ begin
               pi.NewNom := TPath.GetFileNameWithoutExtension(pi.NewNom);
             end
             else
-            begin // conversion photos stockées en liées
+            begin // conversion photos stockÃ©es en liÃ©es
               pi.NewNom := SearchNewFileName(TGlobalVar.RepImages, pi.NewNom + '.jpg', True);
               qry6.Params.ByNameAsString['chemin'] := TGlobalVar.RepImages;
               qry6.Params.ByNameAsString['fichier'] := pi.NewNom;
@@ -512,7 +512,7 @@ begin
             Stream.Free;
           end;
         end;
-        // photos renommées, réordonnées, etc (q5)
+        // photos renommÃ©es, rÃ©ordonnÃ©es, etc (q5)
         // obligatoire pour les changement de stockage
         qry5.Params.ByNameAsString['fichier'] := pi.NewNom;
         qry5.Params.ByNameAsInteger['ordre'] := List.IndexOf(pi);
@@ -980,7 +980,7 @@ end;
 class procedure TDaoEditionLite.GetFieldIndices;
 begin
   inherited;
-  // le TDaoEditeurLite.Prepare(getPreparedQuery) sera appelé par TDaoCollectionLite.Prepare(getPreparedQuery)
+  // le TDaoEditeurLite.Prepare(getPreparedQuery) sera appelÃ© par TDaoCollectionLite.Prepare(getPreparedQuery)
   // TDaoEditeurLite.Prepare(getPreparedQuery);
   TDaoCollectionLite.Prepare(getPreparedQuery);
 end;

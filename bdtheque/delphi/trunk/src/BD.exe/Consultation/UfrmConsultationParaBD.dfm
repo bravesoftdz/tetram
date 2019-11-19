@@ -1,4 +1,4 @@
-object frmConsultationParaBD: TfrmConsultationParaBD
+﻿object frmConsultationParaBD: TfrmConsultationParaBD
   Left = 1405
   Top = 196
   Caption = 'frmConsultationParaBD'

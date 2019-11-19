@@ -1,4 +1,4 @@
-unit UfrmEditCritere;
+ï»¿unit UfrmEditCritere;
 
 interface
 
@@ -22,7 +22,7 @@ type
     procedure ActOkExecute(Sender: TObject);
     procedure ActionList1Update(Action: TBasicAction; var Handled: Boolean);
   private
-    { Déclarations privées }
+    { DÃ©clarations privÃ©es }
     wMin, WMax: Integer;
     FRecherche: TFrmRecherche;
     FChampValeurs: TStringList;
@@ -30,7 +30,7 @@ type
     procedure SetCritere(Value: TCritere);
     function GetCritere: TCritere;
   public
-    { Déclarations publiques }
+    { DÃ©clarations publiques }
     property Critere: TCritere read GetCritere write SetCritere;
   end;
 
@@ -63,7 +63,7 @@ begin
   case Champ.Special of
     csGenre:
       case Result.iSignes of
-        0: // Indifférent
+        0: // IndiffÃ©rent
           Result.TestSQL := Result.TestSQL + ' IS NOT NULL';
         1: // est
           Result.TestSQL := Result.TestSQL + '=' + QuotedStr(critereTexte);
@@ -72,7 +72,7 @@ begin
       end;
     csEtat, csReliure, csOrientation, csFormatEdition, csTypeEdition, csSensLecture:
       case Result.iSignes of
-        0: // Indifférent
+        0: // IndiffÃ©rent
           Result.TestSQL := Result.TestSQL + ' IS NOT NULL';
         1: // est
           Result.TestSQL := Result.TestSQL + '=' + IntToStr(Result.iCritere2);
@@ -81,7 +81,7 @@ begin
       end;
     csNotation:
       case Result.iSignes of
-        0: // Indifférent
+        0: // IndiffÃ©rent
           Result.TestSQL := 'coalesce(' + Result.TestSQL + ',0)>0';
         1: // est
           Result.TestSQL := 'coalesce(' + Result.TestSQL + ',0)=' + IntToStr(Result.iCritere2);
@@ -96,7 +96,7 @@ begin
           Result.TestSQL := Result.TestSQL + ' IS NULL';
         3: // Valide
           Result.TestSQL := 'UDF_AFFICHEVALIDE(' + Result.TestSQL + ')';
-        4: // (renseignée mais) Non valide
+        4: // (renseignÃ©e mais) Non valide
           Result.TestSQL := 'NOT UDF_AFFICHEVALIDE(' + Result.TestSQL + ')';
       end;
     csTitre:
@@ -163,7 +163,7 @@ type
 procedure TfrmEditCritere.FormCreate(Sender: TObject);
 const
   ListTables: array[0..2] of string = ('SERIES', 'ALBUMS', 'EDITIONS');
-  NomTables: array[0..2] of string = ('Série', 'Album', 'Edition');
+  NomTables: array[0..2] of string = ('SÃ©rie', 'Album', 'Edition');
 var
   i, j: Integer;
   pt: TPoint;

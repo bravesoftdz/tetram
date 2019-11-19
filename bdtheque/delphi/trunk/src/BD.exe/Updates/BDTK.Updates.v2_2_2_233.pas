@@ -1,4 +1,4 @@
-unit BDTK.Updates.v2_2_2_233;
+ï»¿unit BDTK.Updates.v2_2_2_233;
 
 interface
 
@@ -15,9 +15,9 @@ var
   procedure ProcessData(const TableName, FieldName, KeyFieldName: string);
   begin
     // vu que la connexion principale est en NONE,
-    // la routine ne sert pas à grand chose: un simple update suffirait
+    // la routine ne sert pas Ã  grand chose: un simple update suffirait
     // la routine devient utile si on passe la connexion principale en ISO8859_1 ou autre chose...
-    // mais dans ce cas on ne peut plus stocker de symbole €
+    // mais dans ce cas on ne peut plus stocker de symbole â‚¬
     // et on ne peut pas passer en utf8: des index sont trop gros pour exister en utf8
     qrySrc.SQL.Text := Format('select old_%1:s, %2:s from %0:s where nullif(trim(old_%1:s), '''') is not null', [TableName, FieldName, KeyFieldName]);
     qryDst.SQL.Text := Format('update %0:s set %1:s = :value where %2:s = :key', [TableName, FieldName, KeyFieldName]);

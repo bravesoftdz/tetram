@@ -1,4 +1,4 @@
-unit BDTK.Updates.ODS;
+ï»¿unit BDTK.Updates.ODS;
 
 interface
 
@@ -108,13 +108,13 @@ end;
 
 procedure VerifieMigration;
 begin
-  Log('Vérification de la migration');
+  Log('VÃ©rification de la migration');
 
   UIBDBSrc.Connected := True;
   if UIBDBSrc.InfoDbSqlDialect <> 1 then
-    raise Exception.Create('La base de données est déjà en Dialect 3');
+    raise Exception.Create('La base de donnÃ©es est dÃ©jÃ  en Dialect 3');
 
-  // Vérifier les mots clés
+  // VÃ©rifier les mots clÃ©s
   // mais comment faire
 end;
 
@@ -123,7 +123,7 @@ var
   script: string;
   NewBase: string;
 begin
-  Log('Création de la nouvelle base');
+  Log('CrÃ©ation de la nouvelle base');
 
   NewBase := UIBDBSrc.DatabaseName;
   NewBase := TPath.Combine(TPath.GetDirectoryName(NewBase), TPath.GetFileNameWithoutExtension(NewBase)) + '_D3' + TPath.GetExtension(NewBase);
@@ -167,7 +167,7 @@ var
   sqlSelect, sqlInsert: string;
   ms: TMemoryStream;
 begin
-  Log('Transfert des données');
+  Log('Transfert des donnÃ©es');
 
   nbRecords := 0;
   LstTables := TStringList.Create;
@@ -312,14 +312,14 @@ begin
 
       // Result := UIBDBDst.DatabaseName;
 
-      Log('Conversion terminée');
+      Log('Conversion terminÃ©e');
       Done := True;
     except
       Log(Exception(exceptobject).message);
     end;
   finally
     FinalizeMigration;
-    // pas de free, c'est la fenêtre qui va s'auto-libérer
+    // pas de free, c'est la fenÃªtre qui va s'auto-libÃ©rer
     if Done then
       frmVerbose.Free
     else
@@ -338,10 +338,10 @@ begin
   begin
     GetDiskFreeSpaceEx(PChar(TGlobalVar.TempPath), AvailableSpace, TotalSpace, nil);
     if AvailableSpace < 2 * (dmPrinc.DBConnection.GetDatabase.InfoDbSizeInPages * dmPrinc.DBConnection.GetDatabase.InfoPageSize) then
-      raise Exception.CreateFmt('Espace insuffisant sur le disque "%s" pour procéder à la mise à jour', [ExtractFileDrive(TGlobalVar.TempPath)]);
+      raise Exception.CreateFmt('Espace insuffisant sur le disque "%s" pour procÃ©der Ã  la mise Ã  jour', [ExtractFileDrive(TGlobalVar.TempPath)]);
 
-    // le fullrebuild ne peut pas être utilisé tant que l'extraction des metadata des uib ne sait pas
-    // gérer les type of et les domain pour le type de paramètre/variable dans les procédures stockées
+    // le fullrebuild ne peut pas Ãªtre utilisÃ© tant que l'extraction des metadata des uib ne sait pas
+    // gÃ©rer les type of et les domain pour le type de paramÃ¨tre/variable dans les procÃ©dures stockÃ©es
 
     // if FullRebuild then
     // RebuildDB

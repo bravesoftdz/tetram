@@ -1,4 +1,4 @@
-unit UfrmConsultationUnivers;
+ï»¿unit UfrmConsultationUnivers;
 
 interface
 
@@ -55,9 +55,9 @@ type
     function ImpressionUpdate: Boolean;
     procedure ModificationExecute(Sender: TObject);
     function ModificationUpdate: Boolean;
-    { Déclarations privées }
+    { DÃ©clarations privÃ©es }
   public
-    { Déclarations publiques }
+    { DÃ©clarations publiques }
     property Univers: TUniversFull read FUnivers;
     property ID_Univers: TGUID read GetID_Univers write SetID_Univers;
   end;

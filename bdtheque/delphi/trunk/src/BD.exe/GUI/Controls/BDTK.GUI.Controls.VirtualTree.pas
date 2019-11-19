@@ -1,4 +1,4 @@
-unit BDTK.GUI.Controls.VirtualTree;
+ï»¿unit BDTK.GUI.Controls.VirtualTree;
 
 {.$D-}
 
@@ -18,7 +18,7 @@ type
     sValue: string;
   end;
 
-  // !!! Les valeurs ne doivent pas être changées
+  // !!! Les valeurs ne doivent pas Ãªtre changÃ©es
   TVirtualMode = (vmNone = 0, vmAlbums = 1, vmCollections = 2, vmEditeurs = 3, {vmEmprunteurs = 4, }vmGenres = 5, vmPersonnes = 6, vmSeries = 7,
     vmAlbumsAnnee = 8, vmAlbumsCollection = 9, vmAlbumsEditeur = 10, vmAlbumsGenre = 11, vmAlbumsSerie = 12, vmParaBDSerie = 13, vmAchatsAlbumsEditeur = 14,
     vmUnivers = 15, vmAlbumsSerieUnivers = 16, vmParaBDSerieUnivers = 17);
@@ -160,7 +160,7 @@ const
       FIELDSEARCH: 'NOMEDITEUR';
       ClassPointeur: TEditeurLite; ClassDao: TDaoEditeurLite
     ),
-    ( // vmEmprunteurs = plus utilisé
+    ( // vmEmprunteurs = plus utilisÃ©
     (*
         FILTRECOUNT: 'VW_INITIALES_EMPRUNTEURS'; Filtre: 'EMPRUNTEURS_BY_INITIALE(?)';
         FIELDS: 'ID_EMPRUNTEUR, NOMEMPRUNTEUR';
@@ -383,7 +383,7 @@ end;
 
 procedure TVirtualStringTree.DoAfterPaint(Canvas: TCanvas);
 const
-  s = 'Pas d''éléments à afficher.';
+  s = 'Pas d''Ã©lÃ©ments Ã  afficher.';
 var
   Ext: TSize;
   p: TPoint;
@@ -493,7 +493,7 @@ begin
       else
         case FMode of
           vmAlbumsSerie, vmAlbumsSerieUnivers, vmParaBDSerie, vmParaBDSerieUnivers:
-            pEventArgs.CellText := '<Sans série>';
+            pEventArgs.CellText := '<Sans sÃ©rie>';
           else
             pEventArgs.CellText := '<Inconnu>';
         end;
@@ -664,15 +664,15 @@ begin
         while not Query.Eof do
         begin
           Inc(i);
-          // pour gagner en rapidité, on alloue par espace de 250 positions
+          // pour gagner en rapiditÃ©, on alloue par espace de 250 positions
           if i > Length(FFindArray) then
             SetLength(FFindArray, i + 250);
           FFindArray[i - 1] := StringToGUID(Query.Fields.AsString[0]);
           Query.Next;
         end;
-        // on retire ce qui est alloué en trop
+        // on retire ce qui est allouÃ© en trop
         SetLength(FFindArray, i + 1);
-        // recopie du permier à la fin pour pouvoir boucler la recherche
+        // recopie du permier Ã  la fin pour pouvoir boucler la recherche
         FFindArray[i] := FFindArray[0];
 
         if Length(FFindArray) = 0 then
@@ -853,7 +853,7 @@ begin
         Query.Next;
         Inc(i);
       end;
-      // on retire ce qui a été alloué en trop
+      // on retire ce qui a Ã©tÃ© allouÃ© en trop
       SetLength(FCountPointers, i);
 
       RootNodeCount := Length(FCountPointers);

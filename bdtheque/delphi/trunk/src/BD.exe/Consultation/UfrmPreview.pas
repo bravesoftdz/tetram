@@ -1,4 +1,4 @@
-unit UfrmPreview;
+ï»¿unit UfrmPreview;
 {.$D-}
 {$B-}
 interface
@@ -60,14 +60,14 @@ type
     procedure Edit1Change(Sender: TObject);
   private
     Fnumeropage: Integer;
-    { Déclarations privées }
+    { DÃ©clarations privÃ©es }
     function ShowPage(Page: Integer): Boolean;
     function Maximum: Integer; inline;
     function PWidth: Integer; inline;
     function PHeight: Integer; inline;
     procedure Setnumeropage(const Value: Integer);
   public
-    { Déclarations publiques }
+    { DÃ©clarations publiques }
     HeightMM: Single;
     WidthMM: Single;
     FPages: TList<TGraphic>;
@@ -90,16 +90,16 @@ uses
 
 resourcestring
   zoompleinepage = 'Pleine page';
-  zoomecran = 'Largeur de fenêtre';
+  zoomecran = 'Largeur de fenÃªtre';
   listezoom = '';
-  premiere = 'Première page';
+  premiere = 'PremiÃ¨re page';
   suivante = 'Page suivante';
-  precedente = 'Page précédente';
-  derniere = 'Dernière page';
-  AllerA = 'Aller à la page...';
-  numpage = 'Numéro de page';
+  precedente = 'Page prÃ©cÃ©dente';
+  derniere = 'DerniÃ¨re page';
+  AllerA = 'Aller Ã  la page...';
+  numpage = 'NumÃ©ro de page';
   nbpages = 'Nombre de pages';
-  quitter = 'Fermer l''aperçu';
+  quitter = 'Fermer l''aperÃ§u';
 
 const
   CurHand = 300;

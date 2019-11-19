@@ -1,4 +1,4 @@
-object frmConsultationAlbum: TfrmConsultationAlbum
+﻿object frmConsultationAlbum: TfrmConsultationAlbum
   Left = 440
   Top = 64
   Caption = 'Fiche d'#39'album'

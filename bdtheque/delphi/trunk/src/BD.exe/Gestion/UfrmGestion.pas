@@ -1,4 +1,4 @@
-unit UfrmGestion;
+ï»¿unit UfrmGestion;
 
 interface
 
@@ -59,12 +59,12 @@ type
     procedure FrameRechercheRapide1edSearchChange(Sender: TObject);
   protected
   private
-    { Déclarations privées }
+    { DÃ©clarations privÃ©es }
     GestionAchatAlbum, GestionAlbum, GestionAuteur, GestionGenre, GestionCollection, GestionUnivers, GestionEditeur, GestionSerie, GestionParaBD, GestionAchatParaBD: RInfo_Gestion;
     LastButton: TSpeedButton;
     procedure AssignIG(var IG: RInfo_Gestion; Ajouter: TActionGestionAdd; Modifier: TActionGestionModif; Supprimer: TActionGestionSupp; const Liste_Hint, Ajout_Hint, Modif_Hint, Supp_Hint: string; Mode: TVirtualMode; const Filtre: string = ''; Acheter: TActionGestionAchat = nil; Importer: Boolean = False; Exporter: Boolean = False);
   public
-    { Déclarations publiques }
+    { DÃ©clarations publiques }
     SelString: string;
   end;
 
@@ -79,38 +79,38 @@ uses
 const
   HintListeAlbums = 'Liste des albums';
   HintAjoutAlbum = 'Ajouter un album';
-  HintModifAlbum = 'Modifier l''album sélectionné';
-  HintSuppAlbum = 'Supprimer l''album sélectionné';
+  HintModifAlbum = 'Modifier l''album sÃ©lectionnÃ©';
+  HintSuppAlbum = 'Supprimer l''album sÃ©lectionnÃ©';
   HintListeAuteurs = 'Liste des auteurs';
   HintAjoutAuteur = 'Ajouter un auteur';
-  HintModifAuteur = 'Modifier l''auteur sélectionné';
-  HintSuppAuteur = 'Supprimer l''auteur sélectionné';
+  HintModifAuteur = 'Modifier l''auteur sÃ©lectionnÃ©';
+  HintSuppAuteur = 'Supprimer l''auteur sÃ©lectionnÃ©';
   HintListeUnivers = 'Liste des univers';
   HintAjoutUnivers = 'Ajouter un univers';
-  HintModifUnivers = 'Modifier l''univers sélectionné';
-  HintSuppUnivers = 'Supprimer l''univers sélectionné';
-  HintListeSeries = 'Liste des séries';
-  HintAjoutSerie = 'Ajouter une série';
-  HintModifSerie = 'Modifier la série sélectionnée';
-  HintSuppSerie = 'Supprimer la série sélectionnée';
+  HintModifUnivers = 'Modifier l''univers sÃ©lectionnÃ©';
+  HintSuppUnivers = 'Supprimer l''univers sÃ©lectionnÃ©';
+  HintListeSeries = 'Liste des sÃ©ries';
+  HintAjoutSerie = 'Ajouter une sÃ©rie';
+  HintModifSerie = 'Modifier la sÃ©rie sÃ©lectionnÃ©e';
+  HintSuppSerie = 'Supprimer la sÃ©rie sÃ©lectionnÃ©e';
   HintListeGenres = 'Liste des genres';
   HintAjoutGenre = 'Ajouter un genre';
-  HintModifGenre = 'Modifier le genre sélectionné';
-  HintSuppGenre = 'Supprimer le genre sélectionné';
-  HintListeEditeurs = 'Liste des éditeurs';
-  HintAjoutEditeur = 'Ajouter un éditeur';
-  HintModifEditeur = 'Modifier l''éditeur sélectionné';
-  HintSuppEditeur = 'Supprimer l''éditeur sélectionné';
+  HintModifGenre = 'Modifier le genre sÃ©lectionnÃ©';
+  HintSuppGenre = 'Supprimer le genre sÃ©lectionnÃ©';
+  HintListeEditeurs = 'Liste des Ã©diteurs';
+  HintAjoutEditeur = 'Ajouter un Ã©diteur';
+  HintModifEditeur = 'Modifier l''Ã©diteur sÃ©lectionnÃ©';
+  HintSuppEditeur = 'Supprimer l''Ã©diteur sÃ©lectionnÃ©';
   HintListeCollections = 'Liste des collections';
   HintAjoutCollection = 'Ajouter une collection';
-  HintModifCollection = 'Modifier la collection sélectionnée';
-  HintSuppCollection = 'Supprimer la collection sélectionnée';
+  HintModifCollection = 'Modifier la collection sÃ©lectionnÃ©e';
+  HintSuppCollection = 'Supprimer la collection sÃ©lectionnÃ©e';
   HintListeParaBD = 'Liste des objets para-BD';
   HintAjoutParaBD = 'Ajouter un objet para-BD';
-  HintModifParaBD = 'Modifier l''objet sélectionné';
-  HintSuppParaBD = 'Supprimer l''objet sélectionné';
+  HintModifParaBD = 'Modifier l''objet sÃ©lectionnÃ©';
+  HintSuppParaBD = 'Supprimer l''objet sÃ©lectionnÃ©';
 
-  NoSuppression = 'Impossible de supprimer un élément pendant l''édition d''un autre';
+  NoSuppression = 'Impossible de supprimer un Ã©lÃ©ment pendant l''Ã©dition d''un autre';
 
 const
   First: Boolean = True;

@@ -1,4 +1,4 @@
-unit BD.GUI.Forms;
+﻿unit BD.GUI.Forms;
 
 interface
 

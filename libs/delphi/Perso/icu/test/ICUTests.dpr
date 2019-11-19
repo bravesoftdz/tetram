@@ -1,12 +1,12 @@
-program ICUTests;
+ï»¿program ICUTests;
 {
 
   Projet de test DUnit Delphi
   -------------------------
-  Ce projet contient le framework de test DUnit et les exécuteurs de test GUI/Console.
-  Ajoutez "CONSOLE_TESTRUNNER" à l'entrée des définitions conditionnelles des options
-  de projet pour utiliser l'exécuteur de test console.  Sinon, l'exécuteur de test GUI sera
-  utilisé par défaut.
+  Ce projet contient le framework de test DUnit et les exï¿½cuteurs de test GUI/Console.
+  Ajoutez "CONSOLE_TESTRUNNER" ï¿½ l'entrï¿½e des dï¿½finitions conditionnelles des options
+  de projet pour utiliser l'exï¿½cuteur de test console.  Sinon, l'exï¿½cuteur de test GUI sera
+  utilisï¿½ par dï¿½faut.
 
 }
 

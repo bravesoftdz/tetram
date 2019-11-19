@@ -1,4 +1,4 @@
-unit Binaire;
+﻿unit Binaire;
 
 interface
 

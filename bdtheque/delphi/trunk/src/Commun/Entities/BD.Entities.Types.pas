@@ -1,4 +1,4 @@
-unit BD.Entities.Types;
+ï»¿unit BD.Entities.Types;
 
 interface
 
@@ -48,7 +48,7 @@ type
 
     procedure SetUndefined;
     property Undefined: Boolean read IsUndefined;
-    // des propriétés plutôt que des Implicit pour declencher des erreurs de compilation
+    // des propriÃ©tÃ©s plutÃ´t que des Implicit pour declencher des erreurs de compilation
     property AsBoolean[DefaultIfUndefined: Boolean]: Boolean read GetAsBoolean;
   end;
 

@@ -1,4 +1,4 @@
-unit BDTK.GUI.DataModules.Search;
+ï»¿unit BDTK.GUI.DataModules.Search;
 
 interface
 
@@ -22,7 +22,7 @@ type
     tblCritereNotation: TUIBQuery;
     procedure DataModuleDestroy(Sender: TObject);
   private
-    { Déclarations privées }
+    { DÃ©clarations privÃ©es }
   public
   end;
 

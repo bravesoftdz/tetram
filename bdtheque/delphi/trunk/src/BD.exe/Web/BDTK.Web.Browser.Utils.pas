@@ -1,4 +1,4 @@
-unit BDTK.Web.Browser.Utils;
+ï»¿unit BDTK.Web.Browser.Utils;
 
 interface
 
@@ -6,8 +6,8 @@ uses
   Winapi.Messages, uCEFConstants;
 
 const
-  // les threads de CEF empêchent d'utiliser Synchronize
-  // et puisque certains events CEF ne sont pas déclenchés dans le thread principal... il ne reste que la solution des messages
+  // les threads de CEF empÃªchent d'utiliser Synchronize
+  // et puisque certains events CEF ne sont pas dÃ©clenchÃ©s dans le thread principal... il ne reste que la solution des messages
   BDTKBROWSER = WM_APP + $100;
   BDTKBROWSER_CLOSE = BDTKBROWSER + $00;
   BDTKBROWSER_MODALRESULT = BDTKBROWSER + $01;

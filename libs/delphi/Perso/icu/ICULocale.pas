@@ -1,4 +1,4 @@
-unit ICULocale;
+﻿unit ICULocale;
 
 interface
 

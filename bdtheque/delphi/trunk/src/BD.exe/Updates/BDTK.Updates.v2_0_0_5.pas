@@ -1,4 +1,4 @@
-unit BDTK.Updates.v2_0_0_5;
+ï»¿unit BDTK.Updates.v2_0_0_5;
 
 interface
 
@@ -50,7 +50,7 @@ begin
   Query.Script.Add('      c.nomcollection');
   Query.Script.Add('    from');
   Query.Script.Add('      liste_tomes(:withintegrale, :in_idserie) a');
-  Query.Script.Add('      /* pas de left join: on cherche les manquants pour compléter les séries */');
+  Query.Script.Add('      /* pas de left join: on cherche les manquants pour complÃ©ter les sÃ©ries */');
   Query.Script.Add('      inner join series s on');
   Query.Script.Add('        a.id_serie = s.id_serie');
   Query.Script.Add('      left join editeurs e on');
@@ -119,8 +119,8 @@ begin
   Query.Script.Add('    end');
   Query.Script.Add('  end');
   Query.Script.Add('');
-  Query.Script.Add('  /* on ne peut pas utiliser un "union": le order by de la première requête');
-  Query.Script.Add('     est impératif */');
+  Query.Script.Add('  /* on ne peut pas utiliser un "union": le order by de la premiÃ¨re requÃªte');
+  Query.Script.Add('     est impÃ©ratif */');
   Query.Script.Add('  countserie = 0;');
   Query.Script.Add('  for');
   Query.Script.Add('    select');

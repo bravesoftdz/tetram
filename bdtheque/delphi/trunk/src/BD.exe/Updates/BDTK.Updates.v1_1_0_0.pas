@@ -1,4 +1,4 @@
-unit BDTK.Updates.v1_1_0_0;
+ï»¿unit BDTK.Updates.v1_1_0_0;
 
 interface
 
@@ -57,9 +57,9 @@ begin
 
   Query.Script.Add('INSERT INTO LISTES (REF, CATEGORIE, LIBELLE, ORDRE, DEFAUT) VALUES (0, 6, ''Couverture'', 1, 1);');
   Query.Script.Add('INSERT INTO LISTES (REF, CATEGORIE, LIBELLE, ORDRE, DEFAUT) VALUES (1, 6, ''Planche'', 4, 0);');
-  Query.Script.Add('INSERT INTO LISTES (REF, CATEGORIE, LIBELLE, ORDRE, DEFAUT) VALUES (2, 6, ''4ème de couverture'', 5, 0);');
+  Query.Script.Add('INSERT INTO LISTES (REF, CATEGORIE, LIBELLE, ORDRE, DEFAUT) VALUES (2, 6, ''4Ã¨me de couverture'', 5, 0);');
   Query.Script.Add('INSERT INTO LISTES (REF, CATEGORIE, LIBELLE, ORDRE, DEFAUT) VALUES (3, 6, ''Page de garde'', 3, 0);');
-  Query.Script.Add('INSERT INTO LISTES (REF, CATEGORIE, LIBELLE, ORDRE, DEFAUT) VALUES (4, 6, ''Dédicace'', 10, 0);');
+  Query.Script.Add('INSERT INTO LISTES (REF, CATEGORIE, LIBELLE, ORDRE, DEFAUT) VALUES (4, 6, ''DÃ©dicace'', 10, 0);');
 
   Query.Script.Add('INSERT INTO LISTES (REF, CATEGORIE, LIBELLE, ORDRE, DEFAUT) VALUES (0, 7, ''Ex-Libris'', 1, 1);');
   Query.Script.Add('INSERT INTO LISTES (REF, CATEGORIE, LIBELLE, ORDRE, DEFAUT) VALUES (1, 7, ''Objet'', 2, 0);');

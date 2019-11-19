@@ -1,4 +1,4 @@
-unit UfrmControlImport;
+ï»¿unit UfrmControlImport;
 
 interface
 
@@ -90,7 +90,7 @@ begin
     vmPersonnes:
       Label3.Caption := 'Auteur';
     vmSeries:
-      Label3.Caption := 'Série';
+      Label3.Caption := 'SÃ©rie';
     else
       Label3.Caption := '';
   end;
@@ -101,7 +101,7 @@ function TfrmControlImport.ShowModalEx: TModalResult;
   procedure DoEdit(EditProc: TActionGestionModif);
   begin
     if EditProc(framVTEdit1.VTEdit.PopupWindow.TreeView) then
-      // on force l'édit à avoir le nouvel intitulé
+      // on force l'Ã©dit Ã  avoir le nouvel intitulÃ©
       framVTEdit1.CurrentValue := framVTEdit1.CurrentValue;
   end;
 

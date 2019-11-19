@@ -1,4 +1,4 @@
-object dmPrinc: TdmPrinc
+﻿object dmPrinc: TdmPrinc
   OldCreateOrder = False
   OnCreate = DataModuleCreate
   OnDestroy = DataModuleDestroy

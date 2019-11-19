@@ -1,4 +1,4 @@
-unit ComboCheck;
+ï»¿unit ComboCheck;
 
 {.$D-}
 {$J+}
@@ -233,13 +233,13 @@ type
 
   TLightComboCheck = class(TCustomComboCheck)
   private
-    { Déclarations privées }
+    { Dï¿½clarations privï¿½es }
   protected
-    { Déclarations protégées }
+    { Dï¿½clarations protï¿½gï¿½es }
   public
-    { Déclarations publiques }
+    { Dï¿½clarations publiques }
   published
-    { Déclarations publiées }
+    { Dï¿½clarations publiï¿½es }
   end;
 
 procedure Register;
@@ -1349,7 +1349,7 @@ procedure TCustomComboCheck.AssignItemPop;
     NewItem.Visible := Item.Visible;
     NewItem.Enabled := Item.Enabled;
     NewItem.SubItem := Item; // surtout pas Integer(@Item)
-    dummy := NewItem.Caption; // pas de trim sinon une chaine vide sera transformée en ligne de séparation
+    dummy := NewItem.Caption; // pas de trim sinon une chaine vide sera transformï¿½e en ligne de sï¿½paration
     Change(dummy);
     NewItem.Caption := dummy;
     NewItem.Bitmap := nil;

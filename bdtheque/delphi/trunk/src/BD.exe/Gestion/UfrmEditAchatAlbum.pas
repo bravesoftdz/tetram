@@ -1,4 +1,4 @@
-unit UfrmEditAchatAlbum;
+ï»¿unit UfrmEditAchatAlbum;
 
 interface
 
@@ -59,7 +59,7 @@ type
     procedure vtEditPersonnesVTEditChange(Sender: TObject);
     procedure OnEditAuteurs(Sender: TObject);
   private
-    { Déclarations privées }
+    { DÃ©clarations privÃ©es }
     FAlbum, FAlbumImport: TAlbumFull;
     FScenaristesSelected, FDessinateursSelected, FColoristesSelected: Boolean;
     procedure AjouteAuteur(List: TList<TAuteurAlbumLite>; lvList: TVDTListViewLabeled; Auteur: TPersonnageLite; var FlagAuteur: Boolean); overload;
@@ -68,7 +68,7 @@ type
     procedure SaveToObject;
     procedure SetAlbum(const Value: TAlbumFull);
   public
-    { Déclarations publiques }
+    { DÃ©clarations publiques }
     property ID_Album: TGUID read GetID_Album;
     property Album: TAlbumFull read FAlbum write SetAlbum;
   end;
@@ -284,7 +284,7 @@ var
   var
     i: Integer;
   begin
-    // PRealisateur peut être utilisé pour transtyper un PActeur
+    // PRealisateur peut Ãªtre utilisÃ© pour transtyper un PActeur
     i := 0;
     Result := True;
     while Result and (i <= Pred(LV.Items.Count)) do
@@ -390,7 +390,7 @@ begin
       frm.vtEditSeries.VTEdit.PopupWindow.TreeView.InitializeRep;
       frm.vtEditPersonnes.VTEdit.PopupWindow.TreeView.InitializeRep;
       TDaoAlbumFull.FusionneInto(frm.FAlbumImport, frm.Album);
-      frm.Album := frm.Album; // recharger la fenêtre avec frm.Album
+      frm.Album := frm.Album; // recharger la fenÃªtre avec frm.Album
     end;
   finally
     FreeAndNil(frm.FAlbumImport);
@@ -433,7 +433,7 @@ end;
 
 procedure TfrmEditAchatAlbum.FormDestroy(Sender: TObject);
 begin
-  FreeAndNil(FAlbumImport); // si on a annulé la précédente maj par script, l'objet n'avait pas été détruit
+  FreeAndNil(FAlbumImport); // si on a annulÃ© la prÃ©cÃ©dente maj par script, l'objet n'avait pas Ã©tÃ© dÃ©truit
 end;
 
 procedure TfrmEditAchatAlbum.lvScenaristesData(Sender: TObject; Item: TListItem);

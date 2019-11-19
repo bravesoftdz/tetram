@@ -1,4 +1,4 @@
-unit BDTK.Updates.v0_0_2_5;
+ï»¿unit BDTK.Updates.v0_0_2_5;
 
 interface
 
@@ -109,9 +109,9 @@ begin
   Query.Script.Add('      anneeprecedente = -1;');
   Query.Script.Add('    end');
   Query.Script.Add('    if (tomeprecedent <> -1) then begin');
-  Query.Script.Add('      /* non pondéré: sommeponderee = sommeponderee + ((CURRENTANNEE - ANNEEPRECEDENTE) / (CURRENTTOME - TOMEPRECEDENT)); */');
+  Query.Script.Add('      /* non pondÃ©rÃ©: sommeponderee = sommeponderee + ((CURRENTANNEE - ANNEEPRECEDENTE) / (CURRENTTOME - TOMEPRECEDENT)); */');
   Query.Script.Add('      sommeponderee = sommeponderee + ((CURRENTANNEE - ANNEEPRECEDENTE) / (CURRENTTOME - TOMEPRECEDENT)) * CURRENTTOME;');
-  Query.Script.Add('      /* non pondéré: comptealbum = comptealbum + 1;*/');
+  Query.Script.Add('      /* non pondÃ©rÃ©: comptealbum = comptealbum + 1;*/');
   Query.Script.Add('      comptealbum = comptealbum + CURRENTTOME;');
   Query.Script.Add('    end');
   Query.Script.Add('    tomeprecedent = CURRENTTOME;');

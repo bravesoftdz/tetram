@@ -1,4 +1,4 @@
-unit BD.GUI.Forms.Progress;
+ï»¿unit BD.GUI.Forms.Progress;
 
 { .$D- }
 interface
@@ -31,9 +31,9 @@ type
     procedure FormCreate(Sender: TObject);
   private
     hg: IUnknown;
-    { Déclarations privées }
+    { DÃ©clarations privÃ©es }
   public
-    { Déclarations publiques }
+    { DÃ©clarations publiques }
   end;
 
 implementation

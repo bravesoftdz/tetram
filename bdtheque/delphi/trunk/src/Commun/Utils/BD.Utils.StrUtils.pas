@@ -1,4 +1,4 @@
-unit BD.Utils.StrUtils;
+ï»¿unit BD.Utils.StrUtils;
 
 interface
 
@@ -350,8 +350,8 @@ end;
 function FormatTitreAlbum(Simple, AvecSerie: Boolean; const Titre, Serie: string; Tome, TomeDebut, TomeFin: Integer; Integrale, HorsSerie: Boolean): string;
 const
   resTome: array [False .. True] of string = ('T. ', 'Tome ');
-  resHS: array [False .. True] of string = ('HS', 'Hors-série');
-  resIntegrale: array [False .. True] of string = ('INT.', 'Intégrale');
+  resHS: array [False .. True] of string = ('HS', 'Hors-sÃ©rie');
+  resIntegrale: array [False .. True] of string = ('INT.', 'IntÃ©grale');
 var
   sSerie, sAlbum, s2, sTome: string;
 begin
@@ -370,7 +370,7 @@ begin
   if Integrale then
   begin
     s2 := NonZero(IntToStr(TomeDebut));
-    AjoutString(s2, NonZero(IntToStr(TomeFin)), ' à ');
+    AjoutString(s2, NonZero(IntToStr(TomeFin)), ' Ã  ');
     AjoutString(sTome, resIntegrale[sAlbum = ''], ' - ', '', TrimRight(' ' + NonZero(IntToStr(Tome))));
     AjoutString(sTome, s2, ' ', '[', ']');
   end

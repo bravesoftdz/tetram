@@ -1,4 +1,4 @@
-unit TestICUDateFormat;
+﻿unit TestICUDateFormat;
 
 interface
 

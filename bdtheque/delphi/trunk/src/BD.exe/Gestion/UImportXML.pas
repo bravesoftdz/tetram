@@ -1,4 +1,4 @@
-unit UImportXML;
+﻿unit UImportXML;
 
 interface
 

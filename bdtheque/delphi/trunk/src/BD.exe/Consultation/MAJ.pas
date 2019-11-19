@@ -1,4 +1,4 @@
-unit MAJ;
+ï»¿unit MAJ;
 
 interface
 
@@ -158,17 +158,17 @@ begin
     Exit;
   FDest := TFrmRecherche.Create(frmFond);
 
-  // le TTreeView est une merde! si on fait la création de noeud avec Data
+  // le TTreeView est une merde! si on fait la crÃ©ation de noeud avec Data
   // avant l'assignation du Handle, les Data risquent de partir dans la nature
 
-  // TreeView1.HandleNeeded n'est d'aucune utilité!!!!
+  // TreeView1.HandleNeeded n'est d'aucune utilitÃ©!!!!
 
-  // du coup, obligation de faire le SetChildForm AVANT de recréer les critères de recherche
+  // du coup, obligation de faire le SetChildForm AVANT de recrÃ©er les critÃ¨res de recherche
 
   // conclusion:
   // virer le TTreeView!!!!!!!
 
-  // 16/05/2009: Etait vrai avec D7, semble plus le cas avec D2009: on verra à le changer pour homogénéiser
+  // 16/05/2009: Etait vrai avec D7, semble plus le cas avec D2009: on verra Ã  le changer pour homogÃ©nÃ©iser
   frmFond.SetChildForm(FDest);
 
   if Assigned(Stream) and (Stream.Size > 0) then

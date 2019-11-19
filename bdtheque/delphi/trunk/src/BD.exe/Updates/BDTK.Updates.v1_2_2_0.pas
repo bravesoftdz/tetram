@@ -1,4 +1,4 @@
-unit BDTK.Updates.v1_2_2_0;
+ï»¿unit BDTK.Updates.v1_2_2_0;
 
 interface
 
@@ -48,7 +48,7 @@ begin
   Query.Script.Add('        S.id_collection,');
   Query.Script.Add('        NOMCOLLECTION');
   Query.Script.Add('      from liste_tomes(:WITHINTEGRALE, :in_idserie) A');
-  Query.Script.Add('         /* pas de left join: on cherche les manquants pour compléter les séries */');
+  Query.Script.Add('         /* pas de left join: on cherche les manquants pour complÃ©ter les sÃ©ries */');
   Query.Script.Add('         inner join SERIES S on A.ID_SERIE = S.ID_SERIE');
   Query.Script.Add('         left join EDITEURS E on S.ID_EDITEUR = E.ID_EDITEUR');
   Query.Script.Add('         left join COLLECTIONS C on S.id_collection = C.ID_COLLECTION');
@@ -131,7 +131,7 @@ begin
   Query.Script.Add('  anneeprecedente = -1;');
   Query.Script.Add('  moisprecedent = null;');
   Query.Script.Add('  for select TOME, ANNEEPARUTION, MOISPARUTION, s.ID_SERIE');
-  Query.Script.Add('      /* pas de left join: on calcul les prévisions de sorties des nouveautés des séries */');
+  Query.Script.Add('      /* pas de left join: on calcul les prÃ©visions de sorties des nouveautÃ©s des sÃ©ries */');
   Query.Script.Add('      from albums a inner join series s on s.ID_SERIE = a.id_serie');
   Query.Script.Add('      where s.suivresorties = 1');
   Query.Script.Add('            and a.horsserie = 0 and a.integrale = 0 and a.anneeparution is not null');
@@ -168,9 +168,9 @@ begin
   Query.Script.Add('      else');
   Query.Script.Add('        diffmois = CURRENTMOIS - MOISPRECEDENT;');
   Query.Script.Add
-    ('      /* non pondéré: sommeponderee = sommeponderee + (((CURRENTANNEE - ANNEEPRECEDENTE) * 12 + (COALESCE(CURRENTMOIS, 1) - COALESCE(MOISPRECEDENT, 1))) / (CURRENTTOME - TOMEPRECEDENT)); */');
+    ('      /* non pondÃ©rÃ©: sommeponderee = sommeponderee + (((CURRENTANNEE - ANNEEPRECEDENTE) * 12 + (COALESCE(CURRENTMOIS, 1) - COALESCE(MOISPRECEDENT, 1))) / (CURRENTTOME - TOMEPRECEDENT)); */');
   Query.Script.Add('      sommeponderee = sommeponderee + (((CURRENTANNEE - ANNEEPRECEDENTE) * 12 + diffmois) / (CURRENTTOME - TOMEPRECEDENT)) * CURRENTTOME;');
-  Query.Script.Add('      /* non pondéré: comptealbum = comptealbum + 1;*/');
+  Query.Script.Add('      /* non pondÃ©rÃ©: comptealbum = comptealbum + 1;*/');
   Query.Script.Add('      comptealbum = comptealbum + CURRENTTOME;');
   Query.Script.Add('    end');
   Query.Script.Add('    tomeprecedent = CURRENTTOME;');

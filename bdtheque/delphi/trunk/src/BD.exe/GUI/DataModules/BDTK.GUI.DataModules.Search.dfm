@@ -1,4 +1,4 @@
-object dmSearch: TdmSearch
+﻿object dmSearch: TdmSearch
   OldCreateOrder = False
   OnDestroy = DataModuleDestroy
   Height = 351

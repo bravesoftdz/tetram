@@ -1,4 +1,4 @@
-unit BDTK.Updates.v2_1_1_8;
+ï»¿unit BDTK.Updates.v2_1_1_8;
 
 interface
 
@@ -11,15 +11,15 @@ procedure MAJ2_1_1_8(Query: TUIBScript);
 begin
   Query.Script.Clear;
 
-  // libération des dépendances
+  // libÃ©ration des dÃ©pendances
   LoadScript('MAJ2_1_1_8part1', Query.Script);
   Query.ExecuteScript;
 
-  // recréation des champs
+  // recrÃ©ation des champs
   LoadScript('MAJ2_1_1_8part2', Query.Script);
   Query.ExecuteScript;
 
-  // recréation des procs/vues/triggers
+  // recrÃ©ation des procs/vues/triggers
   LoadScript('MAJ2_1_1_8part3', Query.Script);
   Query.ExecuteScript;
 end;

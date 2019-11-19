@@ -1,4 +1,4 @@
-unit BDTK.Web.Updates.v1_0_0_0;
+﻿unit BDTK.Web.Updates.v1_0_0_0;
 
 interface
 

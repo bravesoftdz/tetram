@@ -1,4 +1,4 @@
-object dmCommon: TdmCommon
+﻿object dmCommon: TdmCommon
   OldCreateOrder = False
   Height = 150
   Width = 215

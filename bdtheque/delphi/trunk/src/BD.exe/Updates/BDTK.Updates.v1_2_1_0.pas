@@ -1,4 +1,4 @@
-unit BDTK.Updates.v1_2_1_0;
+﻿unit BDTK.Updates.v1_2_1_0;
 
 interface
 

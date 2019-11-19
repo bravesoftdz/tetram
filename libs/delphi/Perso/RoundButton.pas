@@ -1,4 +1,4 @@
-unit RoundButton;
+ï»¿unit RoundButton;
 
 interface
 
@@ -248,7 +248,7 @@ end;
 procedure TRoundButton.SetLien(Value: TRoundButton);
 begin
   if Value = FLien then Exit;
-  if (Value = Self) then raise Exception.Create('Références circulaires interdites');
+  if (Value = Self) then raise Exception.Create('Rï¿½fï¿½rences circulaires interdites');
   if Assigned(FLien) then FLien.FLien := nil;
   FLien := Value;
   if Assigned(FLien) then FLien.Lien := Self;
@@ -256,7 +256,7 @@ end;
 
 procedure TRoundButton.SetAngle(Value: Integer);
 begin
-  // aucune vérification car c'est une valeur calculée sur FAngle qui est utilisée
+  // aucune vï¿½rification car c'est une valeur calculï¿½e sur FAngle qui est utilisï¿½e
   if {(Value < 0) or (Value > Height div 2) or (Value > Width div 2) or }(Value = FAngle) then Exit;
   FAngle := Value;
   invalidate;
@@ -764,7 +764,7 @@ begin
         if FLstBMP.Count > 0 then imIndex := 0;
     end else
     case DrawState of
-      1:  // désactivé
+      1:  // dï¿½sactivï¿½
         begin
           if FLstBMP.Count > 1 then imIndex := 1;
           SCaption := FCaption;
@@ -784,7 +784,7 @@ begin
           SCaption := FRollOverCaption;
           Font.Assign(FRollOverFont);
         end;
-      else  // appuyé
+      else  // appuyï¿½
         begin
           if FLstBMP.Count > 3 then imIndex := 3;
           DessineBouton(clDkGray, clWhite);

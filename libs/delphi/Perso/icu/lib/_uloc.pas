@@ -1,4 +1,4 @@
-unit _uloc;
+﻿unit _uloc;
 
 {$I icu.inc}
 

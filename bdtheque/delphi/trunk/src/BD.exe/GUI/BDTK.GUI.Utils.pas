@@ -1,4 +1,4 @@
-unit BDTK.GUI.Utils;
+ï»¿unit BDTK.GUI.Utils;
 
 interface
 
@@ -47,9 +47,9 @@ type
   TDetailSerieOption = (dsoSerieSeule, dsoListeAlbums, dsoAlbumsDetails, dsoListeEditions, dsoEditionsDetaillees);
 
 const
-  LibelleDetailSerieOption: array [TDetailSerieOption, TDetailSerieOption] of string = (('Série seule', 'Liste simplifiée des albums et para-BD',
-    'Liste détaillée des albums et para-BD', 'Liste simplifiée des éditions', 'Liste détaillée des éditions'), ('', '', '', '', ''),
-    ('', '', 'Album seul', 'Liste simplifiée des éditions', 'Liste détaillée des éditions'), ('', '', '', '', ''), ('', '', '', '', ''));
+  LibelleDetailSerieOption: array [TDetailSerieOption, TDetailSerieOption] of string = (('SÃ©rie seule', 'Liste simplifiÃ©e des albums et para-BD',
+    'Liste dÃ©taillÃ©e des albums et para-BD', 'Liste simplifiÃ©e des Ã©ditions', 'Liste dÃ©taillÃ©e des Ã©ditions'), ('', '', '', '', ''),
+    ('', '', 'Album seul', 'Liste simplifiÃ©e des Ã©ditions', 'Liste dÃ©taillÃ©e des Ã©ditions'), ('', '', '', '', ''), ('', '', '', '', ''));
 
 function ChoisirDetailSerie(NiveauDetailMax: TDetailSerieOption; out DetailSerieOption: TDetailSerieOption; out PrevisionsManquants: Boolean) : TModalResult; overload;
 function ChoisirDetailSerie(NiveauDetailMax: TDetailSerieOption; out DetailSerieOption: TDetailSerieOption): TModalResult; overload;
@@ -237,12 +237,12 @@ begin
       end;
 
       btn := dlg.RadioButtons.Add;
-      btn.Caption := 'Inclure Prévisions de sorties/Manquants';
+      btn.Caption := 'Inclure PrÃ©visions de sorties/Manquants';
       btn.Default := True;
       btn.ModalResult := 105;
 
       btn := dlg.RadioButtons.Add;
-      btn.Caption := 'Exclure Prévisions de sorties/Manquants';
+      btn.Caption := 'Exclure PrÃ©visions de sorties/Manquants';
       btn.Default := False;
       btn.ModalResult := 106;
 
@@ -370,7 +370,7 @@ begin
 
     TGlobalVar.SiteWeb.Adresse := ini.ReadString('WWW', 'Adresse', '');
     TGlobalVar.SiteWeb.Cle := ini.ReadString('WWW', 'AuthKey', '');
-    TGlobalVar.SiteWeb.Modele := ini.ReadString('WWW', 'Modele', 'Site par défaut');
+    TGlobalVar.SiteWeb.Modele := ini.ReadString('WWW', 'Modele', 'Site par dÃ©faut');
     TGlobalVar.SiteWeb.MySQLServeur := ini.ReadString('WWW', 'MySQLServeur', 'localhost');
     TGlobalVar.SiteWeb.MySQLLogin := ini.ReadString('WWW', 'MySQLLogin', '');
     TGlobalVar.SiteWeb.MySQLPassword := ini.ReadString('WWW', 'MySQLPassword', '');
@@ -513,14 +513,14 @@ end;
 function SupprimerToutDans(const ChampSupp, Table, Reference, Sauf: string; UseTransaction: TManagedTransaction = nil): Boolean; overload;
 begin
   // /!\ Valeur = GUID_NULL et Sauf = '' => effacer la table !!!!
-  // dans ce cas, il faut utiliser la méthode spécifique
+  // dans ce cas, il faut utiliser la mÃ©thode spÃ©cifique
   Result := (Sauf = '') or SupprimerToutDans(ChampSupp, Table, Reference, GUID_NULL, Sauf, UseTransaction);
 end;
 
 function SupprimerToutDans(const ChampSupp, Table, Reference: string; const Valeur: RGUIDEx; UseTransaction: TManagedTransaction = nil): Boolean; overload;
 begin
   // /!\ Valeur = GUID_NULL et Sauf = '' => effacer la table !!!!
-  // dans ce cas, il faut utiliser la méthode spécifique
+  // dans ce cas, il faut utiliser la mÃ©thode spÃ©cifique
   Result := IsEqualGUID(Valeur, GUID_NULL) or SupprimerToutDans(ChampSupp, Table, Reference, Valeur, '', UseTransaction);
 end;
 

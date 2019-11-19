@@ -1,4 +1,4 @@
-unit _uformattable;
+﻿unit _uformattable;
 
 {$I icu.inc}
 

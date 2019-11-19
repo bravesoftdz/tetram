@@ -1,4 +1,4 @@
-object frmVerifUpgrade: TfrmVerifUpgrade
+﻿object frmVerifUpgrade: TfrmVerifUpgrade
   Left = 497
   Top = 332
   AutoSize = True

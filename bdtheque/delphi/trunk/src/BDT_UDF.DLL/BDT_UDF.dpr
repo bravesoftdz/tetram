@@ -1,4 +1,4 @@
-library BDT_UDF;
+ï»¿library BDT_UDF;
 
 uses
   Windows,
@@ -70,7 +70,7 @@ begin
       end;
     end;
   except
-  end; // pour être sûr de ne pas faire planter le serveur !!!!
+  end; // pour Ãªtre sÃ»r de ne pas faire planter le serveur !!!!
 end;
 
 function IntegerAsNatural(var Value: Integer; Locale: PAnsiChar): PAnsiChar; cdecl; export;
@@ -275,7 +275,7 @@ function CompareChaines2(Chaine1, Chaine2: PAnsiChar): Float; cdecl; export;
 
         for i := 1 - L1 to L2 - 1 do
         begin
-          // si on n'a plus assez de caractères pour faire mieux on s'arrête
+          // si on n'a plus assez de caractÃ¨res pour faire mieux on s'arrÃªte
           if Result >= L2 - i then
             Exit;
 
@@ -286,7 +286,7 @@ function CompareChaines2(Chaine1, Chaine2: PAnsiChar): Float; cdecl; export;
           if c > Result then
           begin
             Result := c;
-            // si on a retrouvé la chaine complète, on ne pourra pas faire mieux
+            // si on a retrouvÃ© la chaine complÃ¨te, on ne pourra pas faire mieux
             if Result = L1 then
               Exit;
           end;
@@ -368,11 +368,11 @@ procedure WriteLog(Chaine: string);
 begin
   with TStringList.Create do
     try
-      if FileExists('G:\Programmation\MEDIA.KIT\BDthèque 1.0\UDF\bdt_udf.log') then
-        LoadFromFile('G:\Programmation\MEDIA.KIT\BDthèque 1.0\UDF\bdt_udf.log');
+      if FileExists('G:\Programmation\MEDIA.KIT\BDthÃ¨que 1.0\UDF\bdt_udf.log') then
+        LoadFromFile('G:\Programmation\MEDIA.KIT\BDthÃ¨que 1.0\UDF\bdt_udf.log');
       Add('-- ' + DateTimeToStr(Now) + ' --');
       Add(Chaine);
-      SaveToFile('G:\Programmation\MEDIA.KIT\BDthèque 1.0\UDF\bdt_udf.log');
+      SaveToFile('G:\Programmation\MEDIA.KIT\BDthÃ¨que 1.0\UDF\bdt_udf.log');
     finally
       Free;
     end;
@@ -407,7 +407,7 @@ begin
       end;
   except
     Result := 0;
-  end; // pour être sûr de ne pas faire planter le serveur !!!!
+  end; // pour Ãªtre sÃ»r de ne pas faire planter le serveur !!!!
 end;
 
 procedure LoadBlobFromFile(Path, FileName: PAnsiChar; Blob: PBlobCallBack); cdecl; export;
@@ -429,7 +429,7 @@ begin
         Free;
       end;
   except
-  end; // pour être sûr de ne pas faire planter le serveur !!!!
+  end; // pour Ãªtre sÃ»r de ne pas faire planter le serveur !!!!
 end;
 
 type

@@ -1,4 +1,4 @@
-unit MyBarCode;
+ï»¿unit MyBarCode;
 
 interface
 
@@ -11,7 +11,7 @@ type
 
   TMyBarCode = class(TComponent)
   private
-    { Déclarations privées }
+    { Dï¿½clarations privï¿½es }
     FHeight: Integer;
     FText: string;
     FTop: Integer;
@@ -33,15 +33,15 @@ type
     procedure SetModul(v: Integer);
     function GetWidth: Integer;
   protected
-    { Déclarations protégées }
+    { Dï¿½clarations protï¿½gï¿½es }
     function MakeData: string;
   public
-    { Déclarations publiques }
+    { Dï¿½clarations publiques }
     constructor Create(Owner: TComponent); override;
     procedure DrawBarcode(Canvas: TCanvas);
     procedure DrawText(Canvas: TCanvas);
   published
-    { Déclarations publiées }
+    { Dï¿½clarations publiï¿½es }
     property Height: Integer read FHeight write FHeight;
     property Text: string  read FText write FText;
     property Top: Integer read FTop write FTop;

@@ -1,4 +1,4 @@
-unit BDTK.Web.Frames.Browser;
+ï»¿unit BDTK.Web.Frames.Browser;
 
 interface
 
@@ -80,7 +80,7 @@ uses
 
 procedure TframeBDTKWebBrowser.Initialize(const ADefaultUrl: string);
 begin
-  edUrl.Text := ADefaultUrl; // utile pour éviter que le TEdit montre autre chose au premier affichage (même brièvement)
+  edUrl.Text := ADefaultUrl; // utile pour Ã©viter que le TEdit montre autre chose au premier affichage (mÃªme briÃ¨vement)
   Chromium.DefaultUrl := ADefaultUrl;
   Chromium.CreateBrowser(WindowParent);
 end;
@@ -95,11 +95,11 @@ begin
     actReload.Caption := '@';
 
   if DevTools.Visible then
-    actToggleDevTools.Caption := 'Cacher les outils de développement'
+    actToggleDevTools.Caption := 'Cacher les outils de dÃ©veloppement'
   else
-    actToggleDevTools.Caption := 'Afficher les outils de développement';
+    actToggleDevTools.Caption := 'Afficher les outils de dÃ©veloppement';
   if Chromium.AudioMuted then
-    actToggleAudio.Caption := 'Réactiver le son de l''onglet'
+    actToggleAudio.Caption := 'RÃ©activer le son de l''onglet'
   else
     actToggleAudio.Caption := 'Couper le son de l''onglet';
 end;
@@ -185,7 +185,7 @@ end;
 
 procedure TframeBDTKWebBrowser.BrowserDetroyParentWindow(var AMessage: TMessage);
 begin
-  // déclenchera Chromium.OnBeforeClose
+  // dÃ©clenchera Chromium.OnBeforeClose
   FreeAndNil(WindowParent);
 end;
 
@@ -232,8 +232,8 @@ end;
 
 procedure TframeBDTKWebBrowser.ChromiumContextMenuCommand(ASender: TObject; const ABrowser: ICefBrowser; const AFrame: ICefFrame; const AParams: ICefContextMenuParams; ACommandId: Integer; AEventFlags: Cardinal; out AResult: Boolean);
 begin
-  // par défaut, on dit qu'on n'a rien fait et on laisse CEF faire le boulot
-  // comme on ne gère que des id User, CEF ne fera rien de plus
+  // par dÃ©faut, on dit qu'on n'a rien fait et on laisse CEF faire le boulot
+  // comme on ne gÃ¨re que des id User, CEF ne fera rien de plus
   AResult := False;
 
   case ACommandId of

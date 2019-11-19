@@ -1,4 +1,4 @@
-unit BD.Entities.Utils.Deserializer;
+﻿unit BD.Entities.Utils.Deserializer;
 
 interface
 

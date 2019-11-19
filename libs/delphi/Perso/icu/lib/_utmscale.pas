@@ -1,4 +1,4 @@
-unit _utmscale;
+﻿unit _utmscale;
 
 {$I icu.inc}
 

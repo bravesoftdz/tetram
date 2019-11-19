@@ -1,4 +1,4 @@
-unit UfrmConsultationSerie;
+﻿unit UfrmConsultationSerie;
 
 interface
 
@@ -112,7 +112,7 @@ begin
   ClearForm;
   TDaoSerieFull.Fill(FSerie, Value, nil);
 
-  Caption := 'Fiche de s�rie - ' + FSerie.ChaineAffichage;
+  Caption := 'Fiche de série - ' + FSerie.ChaineAffichage;
   TitreSerie.Caption := FormatTitre(FSerie.TitreSerie);
   if FSerie.SiteWeb <> '' then
   begin

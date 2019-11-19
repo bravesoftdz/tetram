@@ -1,4 +1,4 @@
-unit BDTK.Updates.v0_0_3_02;
+ï»¿unit BDTK.Updates.v0_0_3_02;
 
 interface
 
@@ -39,6 +39,6 @@ end;
 initialization
 
 RegisterFBUpdate('0.0.3.2', @MAJ0_0_3_02);
-RegisterFBUpdate('0.0.3.10', @MAJ0_0_3_02); // le passage de 0.0.2.22 à 0.0.3.7 n'a pas forcément vu cette maj
+RegisterFBUpdate('0.0.3.10', @MAJ0_0_3_02); // le passage de 0.0.2.22 Ã  0.0.3.7 n'a pas forcÃ©ment vu cette maj
 
 end.

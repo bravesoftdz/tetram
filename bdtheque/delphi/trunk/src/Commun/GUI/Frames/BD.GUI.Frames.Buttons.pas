@@ -1,4 +1,4 @@
-unit BD.GUI.Frames.Buttons;
+ï»¿unit BD.GUI.Frames.Buttons;
 {$D-}
 interface
 
@@ -14,9 +14,9 @@ type
     procedure btnOKClick(Sender: TObject);
     procedure btnAnnulerClick(Sender: TObject);
   private
-    { Déclarations privées }
+    { DÃ©clarations privÃ©es }
   public
-    { Déclarations publiques }
+    { DÃ©clarations publiques }
     procedure Loaded; override;
   end;
 
@@ -33,7 +33,7 @@ end;
 procedure TframBoutons.Loaded;
 begin
   inherited;
-  // code nécessaire pour faire afficher correctement les boutons pour le premier affichage de l'instance
+  // code nÃ©cessaire pour faire afficher correctement les boutons pour le premier affichage de l'instance
   btnOK.HandleNeeded;
   btnAnnuler.HandleNeeded;
 end;

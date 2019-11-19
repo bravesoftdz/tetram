@@ -1,4 +1,4 @@
-unit BDTK.Updates.v2_0_1_0;
+ï»¿unit BDTK.Updates.v2_0_1_0;
 
 interface
 
@@ -31,8 +31,8 @@ begin
   Query.Script.Add('  if (old.categorie = 8) then update editions set senslecture = :newvalue where senslecture = old.ref;');
   Query.Script.Add('end;');
 
-  Query.Script.Add('INSERT INTO LISTES (REF, CATEGORIE, LIBELLE, ORDRE, DEFAUT) VALUES (1, 8, ''Gauche à droite'', 1, 1);');
-  Query.Script.Add('INSERT INTO LISTES (REF, CATEGORIE, LIBELLE, ORDRE, DEFAUT) VALUES (2, 8, ''Droite à gauche'', 2, 0);');
+  Query.Script.Add('INSERT INTO LISTES (REF, CATEGORIE, LIBELLE, ORDRE, DEFAUT) VALUES (1, 8, ''Gauche Ã  droite'', 1, 1);');
+  Query.Script.Add('INSERT INTO LISTES (REF, CATEGORIE, LIBELLE, ORDRE, DEFAUT) VALUES (2, 8, ''Droite Ã  gauche'', 2, 0);');
 
   Query.Script.Add('create table criteres (');
   Query.Script.Add('    id_critere    t_guid_notnull,');
