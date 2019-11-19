@@ -1,4 +1,4 @@
-﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup>
         <Base>True</Base>
         <AppType>Application</AppType>
@@ -430,6 +430,13 @@ $(PreBuildEvent)]]></PreBuildEvent>
             <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="..\Commun\Utils\BD.Utils.Chromium.pas"/>
+        <DCCReference Include="Web\BDTK.Web.Frames.Browser.pas">
+            <Form>frameBDTKWebBrowser</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="Web\BDTK.Web.Browser.Utils.pas"/>
+        <DCCReference Include="..\Commun\Utils\BD.Utils.Chromium.Extension.pas"/>
         <RcItem Include="..\Commun\Resources\network.png">
             <ResourceType>RCDATA</ResourceType>
             <ResourceId>BT_LINK</ResourceId>

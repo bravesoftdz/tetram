@@ -1,7 +1,6 @@
 object frmBDTKWebBrowser: TfrmBDTKWebBrowser
   Left = 0
   Top = 0
-  Caption = ')'
   ClientHeight = 553
   ClientWidth = 820
   Color = clBtnFace
@@ -39,171 +38,14 @@ object frmBDTKWebBrowser: TfrmBDTKWebBrowser
       ExplicitLeft = 737
     end
   end
-  object ButtonPnl: TPanel
+  object PageControl1: TPageControl
     Left = 0
     Top = 29
     Width = 820
-    Height = 35
-    Align = alTop
-    BevelOuter = bvNone
-    Caption = 'ButtonPnl'
-    Padding.Left = 5
-    Padding.Top = 5
-    Padding.Right = 5
-    Padding.Bottom = 5
-    TabOrder = 1
-    object NavButtonPnl: TPanel
-      Left = 5
-      Top = 5
-      Width = 183
-      Height = 25
-      Align = alLeft
-      BevelOuter = bvNone
-      TabOrder = 1
-      object BackBtn: TButton
-        Left = 63
-        Top = 0
-        Width = 25
-        Height = 25
-        Caption = '3'
-        Font.Charset = SYMBOL_CHARSET
-        Font.Color = clWindowText
-        Font.Height = -19
-        Font.Name = 'Webdings'
-        Font.Style = []
-        ParentFont = False
-        TabOrder = 2
-        OnClick = BackBtnClick
-      end
-      object ForwardBtn: TButton
-        Left = 93
-        Top = 0
-        Width = 25
-        Height = 25
-        Caption = '4'
-        Font.Charset = SYMBOL_CHARSET
-        Font.Color = clWindowText
-        Font.Height = -19
-        Font.Name = 'Webdings'
-        Font.Style = []
-        ParentFont = False
-        TabOrder = 3
-        OnClick = ForwardBtnClick
-      end
-      object ReloadBtn: TButton
-        Left = 123
-        Top = 0
-        Width = 25
-        Height = 25
-        Caption = 'q'
-        Font.Charset = SYMBOL_CHARSET
-        Font.Color = clWindowText
-        Font.Height = -19
-        Font.Name = 'Webdings'
-        Font.Style = []
-        ParentFont = False
-        TabOrder = 4
-        OnClick = ReloadBtnClick
-      end
-      object StopBtn: TButton
-        Left = 153
-        Top = 0
-        Width = 25
-        Height = 25
-        Caption = '='
-        Font.Charset = SYMBOL_CHARSET
-        Font.Color = clWindowText
-        Font.Height = -19
-        Font.Name = 'Webdings'
-        Font.Style = []
-        ParentFont = False
-        TabOrder = 5
-        OnClick = StopBtnClick
-      end
-      object AddTabBtn: TButton
-        Left = 1
-        Top = 0
-        Width = 25
-        Height = 25
-        Caption = '+'
-        Font.Charset = DEFAULT_CHARSET
-        Font.Color = clWindowText
-        Font.Height = -13
-        Font.Name = 'Tahoma'
-        Font.Style = []
-        ParentFont = False
-        TabOrder = 0
-        OnClick = AddTabBtnClick
-      end
-      object RemoveTabBtn: TButton
-        Left = 32
-        Top = 0
-        Width = 25
-        Height = 25
-        Caption = '-'
-        Font.Charset = DEFAULT_CHARSET
-        Font.Color = clWindowText
-        Font.Height = -13
-        Font.Name = 'Tahoma'
-        Font.Style = []
-        ParentFont = False
-        TabOrder = 1
-        OnClick = RemoveTabBtnClick
-      end
-    end
-    object ConfigPnl: TPanel
-      Left = 783
-      Top = 5
-      Width = 32
-      Height = 25
-      Align = alRight
-      BevelOuter = bvNone
-      TabOrder = 2
-      object GoBtn: TButton
-        Left = 6
-        Top = 0
-        Width = 25
-        Height = 25
-        Caption = #9658
-        Font.Charset = ANSI_CHARSET
-        Font.Color = clWindowText
-        Font.Height = -17
-        Font.Name = 'Arial'
-        Font.Style = [fsBold]
-        ParentFont = False
-        TabOrder = 0
-      end
-    end
-    object URLEditPnl: TPanel
-      Left = 188
-      Top = 5
-      Width = 595
-      Height = 25
-      Align = alClient
-      BevelOuter = bvNone
-      Padding.Top = 2
-      TabOrder = 0
-      object URLCbx: TComboBox
-        Left = 0
-        Top = 2
-        Width = 595
-        Height = 21
-        Align = alClient
-        TabOrder = 0
-        Text = 'https://www.google.com'
-        Items.Strings = (
-          'https://www.google.com')
-      end
-    end
-  end
-  object PageControl1: TPageControl
-    Left = 0
-    Top = 64
-    Width = 820
-    Height = 489
+    Height = 524
     Align = alClient
-    TabOrder = 2
-    OnChange = PageControl1Change
+    PopupMenu = PopupMenu1
+    TabOrder = 1
   end
   object CEFSentinel1: TCEFSentinel
     OnClose = CEFSentinel1Close
@@ -214,5 +56,14 @@ object frmBDTKWebBrowser: TfrmBDTKWebBrowser
     OnMessage = ApplicationEvents1Message
     Left = 48
     Top = 96
+  end
+  object PopupMenu1: TPopupMenu
+    OnPopup = PopupMenu1Popup
+    Left = 408
+    Top = 280
+    object Fermerlonglet1: TMenuItem
+      Caption = 'Fermer l'#39'onglet'
+      OnClick = Fermerlonglet1Click
+    end
   end
 end

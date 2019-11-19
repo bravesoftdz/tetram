@@ -1,4 +1,4 @@
-﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup>
         <ProjectGuid>{16089277-4B7C-4A61-93A6-88DA69FF9EEA}</ProjectGuid>
         <ProjectVersion>18.7</ProjectVersion>
@@ -118,6 +118,7 @@ $(PreBuildEvent)]]></PreBuildEvent>
             <MainSource>MainSource</MainSource>
         </DelphiCompile>
         <DCCReference Include="..\Commun\Utils\BD.Utils.Chromium.pas"/>
+        <DCCReference Include="..\Commun\Utils\BD.Utils.Chromium.Extension.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

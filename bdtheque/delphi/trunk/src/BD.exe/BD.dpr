@@ -173,10 +173,13 @@ uses
   BD.Utils.IOUtils in '..\Commun\Utils\BD.Utils.IOUtils.pas',
   BD.Utils.RandomForest.Classes in '..\Commun\Utils\BD.Utils.RandomForest.Classes.pas',
   BDTK.Web.Browser in 'Web\BDTK.Web.Browser.pas' {frmBDTKWebBrowser},
-  BD.Utils.Chromium in '..\Commun\Utils\BD.Utils.Chromium.pas';
+  BD.Utils.Chromium in '..\Commun\Utils\BD.Utils.Chromium.pas',
+  BDTK.Web.Frames.Browser in 'Web\BDTK.Web.Frames.Browser.pas' {frameBDTKWebBrowser: TFrame},
+  BDTK.Web.Browser.Utils in 'Web\BDTK.Web.Browser.Utils.pas',
+  BD.Utils.Chromium.Extension in '..\Commun\Utils\BD.Utils.Chromium.Extension.pas';
 
 begin
-  Application.Title := 'BDthèque';
+  Application.Title := 'BDthï¿½que';
   Application.MainFormOnTaskbar := True;
   Application.Initialize;
   Application.Run;

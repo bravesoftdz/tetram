@@ -1,4 +1,4 @@
-unit BDTK.Web.Browser;
+ï»¿unit BDTK.Web.Browser;
 
 interface
 
@@ -7,83 +7,50 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, BD.GUI.Forms, BD.GUI.Frames.Buttons,
   BD.Entities.Full, Vcl.ComCtrls, Vcl.StdCtrls, Vcl.ExtCtrls,
   uCEFChromium, uCEFWindowParent, uCEFInterfaces, uCEFApplication, uCEFTypes, uCEFConstants,
-  uCEFSentinel, Vcl.AppEvnts;
+  uCEFSentinel, Vcl.AppEvnts, BDTK.Web.Frames.Browser, BDTK.Web.Browser.Utils,
+  Vcl.Menus;
 
 // This is the destruction sequence when a user closes a tab sheet:
 // 1. TChromium.CloseBrowser triggers a TChromium.OnClose event.
 // 2. TChromium.OnClose sends a BDTKBROWSER_DESTROYWNDPARENT message to destroy TCEFWindowParent in the main thread which triggers a TChromium.OnBeforeClose event.
 // 3. TChromium.OnBeforeClose sends a BDTKBROWSER_DESTROYTAB message to destroy the tab in the main thread.
 
-const
-  // les threads de CEF empêchent d'utiliser Synchronize
-  // et puisque certains events CEF ne sont pas déclenchés dans le thread principal... il ne reste que la solution des messages
-  BDTKBROWSER = WM_APP + $100;
-  BDTKBROWSER_CLOSE = BDTKBROWSER + $00;
-  BDTKBROWSER_MODALRESULT = BDTKBROWSER + $01;
-  BDTKBROWSER_DESTROYWNDPARENT = BDTKBROWSER + $02;
-  BDTKBROWSER_DESTROYTAB = BDTKBROWSER + $03;
-
-  BDTKBROWSER_SHOWDEVTOOLS = WM_APP + $04;
-  BDTKBROWSER_HIDEDEVTOOLS = WM_APP + $05;
-
-  BDTKBROWSER_CONTEXTMENU_TOOLS = MENU_ID_USER_FIRST;
-  BDTKBROWSER_CONTEXTMENU_IMPORT = MENU_ID_USER_FIRST + $100;
-
-  BDTKBROWSER_CONTEXTMENU_TOGGLEDEVTOOLS = BDTKBROWSER_CONTEXTMENU_TOOLS + $01;
-  BDTKBROWSER_CONTEXTMENU_TOGGLEAUDIO = BDTKBROWSER_CONTEXTMENU_TOOLS + $02;
-  BDTKBROWSER_CONTEXTMENU_LINK_TO_NEW_TAB = BDTKBROWSER_CONTEXTMENU_TOOLS + $03;
-
 type
   TBrowserTabSheet = class(TTabSheet)
   private
-    FChromium: TChromium;
-    FWindowParent: TCEFWindowParent;
-    FSplitter: TSplitter;
-    FDevTools: TCEFWindowParent;
+    FFrame: TframeBDTKWebBrowser;
+
+    procedure Chromium_OnTitleChange(ASender: TObject; const ABrowser: ICefBrowser; const ATitle: ustring);
+    procedure Chromium_BeforeClose(ASender: TObject; const ABrowser: ICefBrowser);
   public
     constructor Create(AOwner: TPageControl; const ADefaultUrl: string = ''); reintroduce;
 
-    property WindowParent: TCEFWindowParent read FWindowParent;
-    property Chromium: TChromium read FChromium;
-    property Splitter: TSplitter read FSplitter;
-    property DevTools: TCEFWindowParent read FDevTools;
+    property Frame: TframeBDTKWebBrowser read FFrame;
   end;
 
-  TfrmBDTKWebBrowser = class(TBdtForm)
+  TfrmBDTKWebBrowser = class(TbdtForm)
     Frame11: TframBoutons;
-    ButtonPnl: TPanel;
-    NavButtonPnl: TPanel;
-    BackBtn: TButton;
-    ForwardBtn: TButton;
-    ReloadBtn: TButton;
-    StopBtn: TButton;
-    AddTabBtn: TButton;
-    RemoveTabBtn: TButton;
-    ConfigPnl: TPanel;
-    GoBtn: TButton;
-    URLEditPnl: TPanel;
-    URLCbx: TComboBox;
     PageControl1: TPageControl;
     CEFSentinel1: TCEFSentinel;
     ApplicationEvents1: TApplicationEvents;
+    PopupMenu1: TPopupMenu;
+    Fermerlonglet1: TMenuItem;
     procedure FormShow(ASender: TObject);
     procedure CEFSentinel1Close(ASender: TObject);
-    procedure AddTabBtnClick(ASender: TObject);
-    procedure RemoveTabBtnClick(Sender: TObject);
     procedure FormCloseQuery(ASender: TObject; var ACanClose: Boolean);
-    procedure ForwardBtnClick(Sender: TObject);
-    procedure BackBtnClick(Sender: TObject);
-    procedure ReloadBtnClick(Sender: TObject);
-    procedure StopBtnClick(Sender: TObject);
-    procedure PageControl1Change(Sender: TObject);
     procedure Frame11btnOKClick(Sender: TObject);
     procedure Frame11btnAnnulerClick(Sender: TObject);
     procedure ApplicationEvents1Message(var Msg: tagMSG; var Handled: Boolean);
+    procedure Chromium_OnContextMenuCommand(ASender: TObject; const ABrowser: ICefBrowser; const AFrame: ICefFrame; const AParams: ICefContextMenuParams; ACommandId: Integer; AEventFlags: Cardinal; out AResult: Boolean);
+    procedure PopupMenu1Popup(Sender: TObject);
+    procedure Fermerlonglet1Click(Sender: TObject);
   private
     FAutoSearchKeyWords: string;
     FAlbum: TAlbumFull;
     FClosingTab, FCanClose, FClosing: Boolean;
     FRequestedModalResult: TModalResult;
+    procedure AddTab(const AUrl: string);
+    procedure RemoveTab(APageIndex: Integer);
     function GetPageIndex(ASender: TObject; out APageIndex: Integer): Boolean;
     function GetPage(APageIndex: Integer; out APage: TBrowserTabSheet): Boolean;
     procedure CloseAllBrowsers;
@@ -91,33 +58,13 @@ type
     procedure CloseModalMsg(var AMessage: TMessage); message BDTKBROWSER_CLOSE;
     procedure ModalResultMsg(var AMessage: TMessage); message BDTKBROWSER_MODALRESULT;
 
-    procedure Chromium_OnAfterCreated(ASender: TObject; const ABrowser: ICefBrowser);
-    procedure BrowserCreatedMsg(var AMessage: TMessage); message CEF_AFTERCREATED;
-    procedure Chromium_OnAddressChange(ASender: TObject; const ABrowser: ICefBrowser; const AFrame: ICefFrame; const AUrl: ustring);
-    procedure Chromium_OnTitleChange(ASender: TObject; const ABrowser: ICefBrowser; const ATitle: ustring);
-    procedure Chromium_OnClose(ASender: TObject; const ABrowser: ICefBrowser; var AAction: TCefCloseBrowserAction);
-    procedure BrowserDetroyParentWindow(var AMessage: TMessage); message BDTKBROWSER_DESTROYWNDPARENT;
-    procedure Chromium_OnBeforeClose(ASender: TObject; const ABrowser: ICefBrowser);
     procedure BrowserDestroyTabMsg(var AMessage: TMessage); message BDTKBROWSER_DESTROYTAB;
-    procedure Chromium_OnBeforePopup(ASender: TObject; const ABrowser: ICefBrowser; const AFrame: ICefFrame; const ATargetUrl, ATargetFrameName: ustring; ATargetDisposition: TCefWindowOpenDisposition; AUserGesture: Boolean; const APopupFeatures: TCefPopupFeatures; var AWindowInfo: TCefWindowInfo; var AClient: ICefClient; var ASettings: TCefBrowserSettings; var AExtraInfo: ICefDictionaryValue; var ANoJavascriptAccess: Boolean; var AResult: Boolean);
-    procedure Chromium_OnBeforeContextMenu(ASender: TObject; const ABrowser: ICefBrowser; const AFrame: ICefFrame; const AParams: ICefContextMenuParams; const AModel: ICefMenuModel);
-    procedure Chromium_OnContextMenuCommand(ASender: TObject; const ABrowser: ICefBrowser; const AFrame: ICefFrame; const AParams: ICefContextMenuParams; ACommandId: Integer; AEventFlags: Cardinal; out AResult: Boolean);
-    procedure Chromium_OnKeyEvent(ASender: TObject; const ABrowser: ICefBrowser; const AEvent: PCefKeyEvent; AosEvent: PMsg; out AResult: Boolean);
 
     procedure WMMove(var AMessage: TWMMove); message WM_MOVE;
     procedure WMMoving(var AMessage: TMessage); message WM_MOVING;
     procedure NotifyMoveOrResizeStarted;
     procedure WMEnterMenuLoop(var AMessage: TMessage); message WM_ENTERMENULOOP;
     procedure WMExitMenuLoop(var AMessage: TMessage); message WM_EXITMENULOOP;
-
-    procedure ShowDevToolsMsg(var AMessage: TMessage); message BDTKBROWSER_SHOWDEVTOOLS;
-    procedure HideDevToolsMsg(var AMessage: TMessage); message BDTKBROWSER_HIDEDEVTOOLS;
-    procedure ShowDevTools(APageIndex: Integer; APoint: TPoint); overload;
-    procedure ShowDevTools(APageIndex: Integer); overload;
-    procedure HideDevTools(APageIndex: Integer);
-
-    procedure HandleKeyUp(const AMsg: TMsg; var AHandled: Boolean);
-    procedure HandleKeyDown(const AMsg: TMsg; var AHandled: Boolean);
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
@@ -142,7 +89,7 @@ begin
     Exit;
 
   HourGlass := THourGlass.Create;
-  InitializeChromium;
+  InitializeChromium(False); // utiliser True pour faciliter le debuggage, mais les extensions javascript ne seront pas chargÃ©es
 end;
 
 procedure WaitForCEFInitializationEnd;
@@ -157,38 +104,27 @@ constructor TBrowserTabSheet.Create(AOwner: TPageControl; const ADefaultUrl: str
 begin
   inherited Create(AOwner);
 
-  Caption := 'New Tab';
+  Caption := '';
   PageControl := AOwner;
 
-  FWindowParent := TCEFWindowParent.Create(Self);
-  FWindowParent.Parent := Self;
-  FWindowParent.Color := clWhite;
-  FWindowParent.Align := alClient;
+  FFrame := TframeBDTKWebBrowser.Create(Self);
+  FFrame.Parent := Self;
+  FFrame.Align := alClient;
+  FFrame.Chromium.OnBeforeClose := Chromium_BeforeClose;
+  FFrame.Chromium.OnTitleChange := Chromium_OnTitleChange;
+  FFrame.OnContextMenuCommand := TfrmBDTKWebBrowser(AOwner.Owner).Chromium_OnContextMenuCommand;
+  FFrame.Initialize(ADefaultUrl);
+end;
 
-  FChromium := TChromium.Create(Self);
-  FChromium.DefaultUrl := ADefaultUrl;
-  FChromium.OnAfterCreated := TfrmBDTKWebBrowser(AOwner.Owner).Chromium_OnAfterCreated;
-  FChromium.OnAddressChange := TfrmBDTKWebBrowser(AOwner.Owner).Chromium_OnAddressChange;
-  FChromium.OnTitleChange := TfrmBDTKWebBrowser(AOwner.Owner).Chromium_OnTitleChange;
-  FChromium.OnClose := TfrmBDTKWebBrowser(AOwner.Owner).Chromium_OnClose;
-  FChromium.OnBeforeClose := TfrmBDTKWebBrowser(AOwner.Owner).Chromium_OnBeforeClose;
-  FChromium.OnBeforePopup := TfrmBDTKWebBrowser(AOwner.Owner).Chromium_OnBeforePopup;
-  FChromium.OnBeforeContextMenu := TfrmBDTKWebBrowser(AOwner.Owner).Chromium_OnBeforeContextMenu;
-  FChromium.OnContextMenuCommand := TfrmBDTKWebBrowser(AOwner.Owner).Chromium_OnContextMenuCommand;
-  FChromium.OnKeyEvent := TfrmBDTKWebBrowser(AOwner.Owner).Chromium_OnKeyEvent;
+procedure TBrowserTabSheet.Chromium_BeforeClose(ASender: TObject; const ABrowser: ICefBrowser);
+begin
+  PostMessage((Owner.Owner as TForm).Handle, BDTKBROWSER_DESTROYTAB, 0, LParam(Self));
+end;
 
-  FSplitter := TSplitter.Create(Self);
-  FSplitter.Parent := Self;
-  FSplitter.Align := alRight;
-  FSplitter.Visible := False;
-
-  FDevTools := TCEFWindowParent.Create(Self);
-  FDevTools.Parent := Self;
-  FDevTools.Color := clWhite;
-  FDevTools.Align := alRight;
-  FDevTools.Visible := False;
-
-  FChromium.CreateBrowser(FWindowParent, '');
+procedure TBrowserTabSheet.Chromium_OnTitleChange(ASender: TObject; const ABrowser: ICefBrowser; const ATitle: ustring);
+begin
+  if not FFrame.Closing then
+    Caption := ATitle;
 end;
 
 { TfrmBDTKWebBrowser }
@@ -228,7 +164,7 @@ begin
 
   for i := 0 to Pred(PageControl1.PageCount) do
     if GetPage(i, Page) then
-      Page.Chromium.NotifyMoveOrResizeStarted;
+      Page.Frame.Chromium.NotifyMoveOrResizeStarted;
 end;
 
 procedure TfrmBDTKWebBrowser.WMMove(var AMessage: TWMMove);
@@ -269,28 +205,37 @@ var
 begin
   for p := Pred(PageControl1.PageCount) downto 0 do
     if GetPage(p, Page) then
-      Page.Chromium.CloseBrowser(True);
+      Page.Frame.Chromium.CloseBrowser(True);
 end;
 
 procedure TfrmBDTKWebBrowser.FormShow(ASender: TObject);
+var
+  url: string;
 begin
   inherited;
   WaitForCEFInitializationEnd;
 
   if FAutoSearchKeyWords.IsEmpty then
-    URLCbx.Items[0] := 'https://www.google.com'
+    url := 'https://www.google.com'
   else
-    URLCbx.Items[0] := 'https://www.google.com/search?q=' + FAutoSearchKeyWords.Replace(' ', '+');
-  URLCbx.Text := URLCbx.Items[0];
+    url := 'https://www.google.com/search?q=' + FAutoSearchKeyWords.Replace(' ', '+');
 
-  AddTabBtn.Click;
+  AddTab(url);
 end;
 
 function TfrmBDTKWebBrowser.GetPageIndex(ASender: TObject; out APageIndex: Integer): Boolean;
 begin
-  Result := (ASender is TComponent) and (TComponent(ASender).Owner is TTabSheet);
-  if Result then
-    APageIndex := TTabSheet(TComponent(ASender).Owner).PageIndex;
+  if not (ASender is TComponent) then
+    Exit(False);
+
+  if (TComponent(ASender).Owner is TTabSheet) then
+    APageIndex := TTabSheet(TComponent(ASender).Owner).PageIndex
+  else if (TComponent(ASender).Owner.Owner is TTabSheet) then
+    APageIndex := TTabSheet(TComponent(ASender).Owner.Owner).PageIndex
+  else
+    APageIndex := -1;
+
+  Result := APageIndex > -1;
 end;
 
 function TfrmBDTKWebBrowser.GetPage(APageIndex: Integer; out APage: TBrowserTabSheet): Boolean;
@@ -301,75 +246,33 @@ begin
   Result := Assigned(APage);
 end;
 
+procedure TfrmBDTKWebBrowser.AddTab(const AUrl: string);
+begin
+//  PageControl1.Enabled := False;
+  PageControl1.ActivePage := TBrowserTabSheet.Create(PageControl1, AUrl);
+end;
+
+procedure TfrmBDTKWebBrowser.RemoveTab(APageIndex: Integer);
+var
+  Page: TBrowserTabSheet;
+begin
+  if (PageControl1.PageCount > 1) and GetPage(APageIndex, Page) then
+  begin
+//    FClosingTab := True;
+//    PageControl1.Enabled := False;
+    Page.Frame.Chromium.CloseBrowser(True);
+  end;
+end;
+
 procedure TfrmBDTKWebBrowser.ApplicationEvents1Message(var Msg: tagMSG; var Handled: Boolean);
 begin
   inherited;
   case Msg.message of
     WM_KEYUP:
-      HandleKeyUp(Msg, Handled);
+      TBrowserTabSheet(PageControl1.ActivePage).Frame.HandleKeyUp(Msg, Handled);
     WM_KEYDOWN:
-      HandleKeyDown(Msg, Handled);
+      TBrowserTabSheet(PageControl1.ActivePage).Frame.HandleKeyDown(Msg, Handled);
   end;
-end;
-
-procedure TfrmBDTKWebBrowser.AddTabBtnClick(ASender: TObject);
-begin
-  ButtonPnl.Enabled := False;
-  PageControl1.Enabled := False;
-  TBrowserTabSheet.Create(PageControl1, IfThen(PageControl1.PageCount = 0, URLCbx.Text, ''));
-end;
-
-procedure TfrmBDTKWebBrowser.RemoveTabBtnClick(Sender: TObject);
-var
-  Page: TBrowserTabSheet;
-begin
-  if (PageControl1.PageCount > 1) and GetPage(PageControl1.TabIndex, Page) then
-  begin
-    FClosingTab := True;
-    ButtonPnl.Enabled := False;
-    PageControl1.Enabled := False;
-    Page.Chromium.CloseBrowser(True);
-  end;
-end;
-
-procedure TfrmBDTKWebBrowser.ForwardBtnClick(Sender: TObject);
-var
-  Page: TBrowserTabSheet;
-begin
-  if GetPage(PageControl1.TabIndex, Page) then
-    Page.Chromium.GoForward;
-end;
-
-procedure TfrmBDTKWebBrowser.BackBtnClick(Sender: TObject);
-var
-  Page: TBrowserTabSheet;
-begin
-  if GetPage(PageControl1.TabIndex, Page) then
-    Page.Chromium.GoBack;
-end;
-
-procedure TfrmBDTKWebBrowser.ReloadBtnClick(Sender: TObject);
-var
-  Page: TBrowserTabSheet;
-begin
-  if GetPage(PageControl1.TabIndex, Page) then
-    Page.Chromium.Reload;
-end;
-
-procedure TfrmBDTKWebBrowser.StopBtnClick(Sender: TObject);
-var
-  Page: TBrowserTabSheet;
-begin
-  if GetPage(PageControl1.TabIndex, Page) then
-    Page.Chromium.StopLoad;
-end;
-
-procedure TfrmBDTKWebBrowser.PageControl1Change(Sender: TObject);
-var
-  Page: TBrowserTabSheet;
-begin
-  if Showing and GetPage(PageControl1.TabIndex, Page) then
-    URLCbx.Text := Page.Chromium.DocumentURL;
 end;
 
 procedure TfrmBDTKWebBrowser.Frame11btnOKClick(Sender: TObject);
@@ -395,7 +298,7 @@ begin
   FClosing := True;
   FRequestedModalResult := TModalResult(AMessage.WParam);
   CEFSentinel1.Start;
-  CloseAllBrowsers; // CEFSentinel1 nous dira quand on peut fermer la fenêtre
+  CloseAllBrowsers; // CEFSentinel1 nous dira quand on peut fermer la fenÃªtre
 end;
 
 procedure TfrmBDTKWebBrowser.CEFSentinel1Close(ASender: TObject);
@@ -410,189 +313,25 @@ begin
   ModalResult := FRequestedModalResult;
 end;
 
-procedure TfrmBDTKWebBrowser.Chromium_OnAddressChange(ASender: TObject; const ABrowser: ICefBrowser; const AFrame: ICefFrame; const AUrl: ustring);
-var
-  PageIndex: Integer;
-begin
-  if (not FClosing) and (PageControl1.TabIndex >= 0) and GetPageIndex(ASender, PageIndex) and (PageControl1.TabIndex = PageIndex) then
-    URLCbx.Text := AUrl;
-end;
-
-procedure TfrmBDTKWebBrowser.Chromium_OnAfterCreated(ASender: TObject; const ABrowser: ICefBrowser);
-var
-  PageIndex: Integer;
-begin
-  if GetPageIndex(ASender, PageIndex) then
-    PostMessage(Handle, CEF_AFTERCREATED, 0, PageIndex);
-end;
-
-procedure TfrmBDTKWebBrowser.BrowserCreatedMsg(var AMessage: TMessage);
-var
-  Page: TBrowserTabSheet;
-begin
-  ButtonPnl.Enabled := True;
-  PageControl1.Enabled := True;
-
-  if GetPage(AMessage.LParam, Page) then
-    Page.WindowParent.UpdateSize;
-end;
-
-procedure TfrmBDTKWebBrowser.Chromium_OnBeforePopup(ASender: TObject; const ABrowser: ICefBrowser; const AFrame: ICefFrame; const ATargetUrl,
-  ATargetFrameName: ustring; ATargetDisposition: TCefWindowOpenDisposition; AUserGesture: Boolean; const APopupFeatures: TCefPopupFeatures;
-  var AWindowInfo: TCefWindowInfo; var AClient: ICefClient; var ASettings: TCefBrowserSettings; var AExtraInfo: ICefDictionaryValue;
-  var ANoJavascriptAccess, AResult: Boolean);
-begin
-  case ATargetDisposition of
-    WOD_NEW_FOREGROUND_TAB, WOD_NEW_BACKGROUND_TAB:
-      begin
-        AResult := True;
-      end;
-    WOD_NEW_POPUP:
-      AResult := True;
-    WOD_NEW_WINDOW:
-      AResult := True;
-    else
-      AResult := False;
-  end;
-  AResult := (ATargetDisposition in [WOD_NEW_FOREGROUND_TAB, WOD_NEW_BACKGROUND_TAB, WOD_NEW_POPUP, WOD_NEW_WINDOW]);
-end;
-
-procedure TfrmBDTKWebBrowser.Chromium_OnClose(ASender: TObject; const ABrowser: ICefBrowser; var AAction: TCefCloseBrowserAction);
-var
-  PageIndex: Integer;
-begin
-  if GetPageIndex(ASender, PageIndex) then
-  begin
-    AAction := cbaDelay;
-    PostMessage(Handle, BDTKBROWSER_DESTROYWNDPARENT, 0, PageIndex);
-  end;
-end;
-
-procedure TfrmBDTKWebBrowser.BrowserDetroyParentWindow(var AMessage: TMessage);
-var
-  Page: TBrowserTabSheet;
-begin
-  if GetPage(AMessage.LParam, Page) then
-    Page.WindowParent.Free;
-end;
-
-procedure TfrmBDTKWebBrowser.Chromium_OnBeforeClose(ASender: TObject; const ABrowser: ICefBrowser);
-var
-  PageIndex: Integer;
-begin
-  if GetPageIndex(ASender, PageIndex) then
-    PostMessage(Handle, BDTKBROWSER_DESTROYTAB, 0, PageIndex);
-end;
-
 procedure TfrmBDTKWebBrowser.BrowserDestroyTabMsg(var AMessage: TMessage);
-var
-  Page: TBrowserTabSheet;
 begin
-  if GetPage(AMessage.LParam, Page) then
-    Page.Free;
-
-  FClosingTab := False;
-  ButtonPnl.Enabled := True;
-  PageControl1.Enabled := True;
+  TObject(AMessage.LParam).Free;
 end;
 
-procedure TfrmBDTKWebBrowser.Chromium_OnTitleChange(ASender: TObject; const ABrowser: ICefBrowser; const ATitle: ustring);
+procedure TfrmBDTKWebBrowser.PopupMenu1Popup(Sender: TObject);
 var
-  PageIndex : integer;
+  p: TPoint;
 begin
-  if (not FClosing) and GetPageIndex(ASender, PageIndex) then
-    PageControl1.Pages[PageIndex].Caption := ATitle;
+  inherited;
+  Fermerlonglet1.Enabled := PageControl1.PageCount > 1;
+  p := PageControl1.ScreenToClient(Mouse.CursorPos);
+  Fermerlonglet1.Tag := PageControl1.IndexOfTabAt(p.X, p.Y);
 end;
 
-procedure TfrmBDTKWebBrowser.Chromium_OnKeyEvent(ASender: TObject; const ABrowser: ICefBrowser; const AEvent: PCefKeyEvent; AosEvent: PMsg; out AResult: Boolean);
+procedure TfrmBDTKWebBrowser.Fermerlonglet1Click(Sender: TObject);
 begin
-  AResult := False;
-
-  if Assigned(AEvent) and Assigned(AosEvent) then
-    case AosEvent.message of
-      WM_KEYUP:
-        HandleKeyUp(AosEvent^, AResult);
-      WM_KEYDOWN:
-        HandleKeyDown(AosEvent^, AResult);
-    end;
-end;
-
-procedure TfrmBDTKWebBrowser.HandleKeyUp(const AMsg: TMsg; var AHandled: Boolean);
-var
-  Msg: TMessage;
-  KeyMsg: TWMKey;
-begin
-  Msg.Msg := AMsg.message;
-  Msg.WParam := AMsg.WParam;
-  Msg.LParam := AMsg.LParam;
-  KeyMsg := TWMKey(Msg);
-
-  if (KeyMsg.CharCode = VK_F12) then
-  begin
-    AHandled := True;
-
-    if TBrowserTabSheet(PageControl1.ActivePage).DevTools.Visible then
-      PostMessage(Handle, BDTKBROWSER_HIDEDEVTOOLS, 0, PageControl1.ActivePageIndex)
-    else
-      PostMessage(Handle, BDTKBROWSER_SHOWDEVTOOLS, 0, PageControl1.ActivePageIndex);
-  end;
-end;
-
-procedure TfrmBDTKWebBrowser.HandleKeyDown(const AMsg: TMsg; var AHandled: Boolean);
-var
-  Msg: TMessage;
-  KeyMsg: TWMKey;
-begin
-  Msg.Msg := AMsg.message;
-  Msg.WParam := AMsg.WParam;
-  Msg.LParam := AMsg.LParam;
-  KeyMsg := TWMKey(Msg);
-
-  if (KeyMsg.CharCode = VK_F12) then
-    AHandled := True;
-end;
-
-procedure TfrmBDTKWebBrowser.Chromium_OnBeforeContextMenu(ASender: TObject; const ABrowser: ICefBrowser; const AFrame: ICefFrame; const AParams: ICefContextMenuParams; const AModel: ICefMenuModel);
-
-  procedure CleanSeparators(AMenu: ICefMenuModel);
-  var
-    i: Integer;
-    SubMenu: ICefMenuModel;
-  begin
-    for i := Pred(AMenu.GetCount) downto 0 do
-      case AMenu.GetTypeAt(i) of
-        MENUITEMTYPE_SEPARATOR:
-          if (i = 0) or (i = AMenu.GetCount - 1) or (AMenu.GetTypeAt(i + 1) = MENUITEMTYPE_SEPARATOR) then
-            AMenu.RemoveAt(i);
-        MENUITEMTYPE_SUBMENU:
-          begin
-            SubMenu := AMenu.GetSubMenuAt(i);
-            CleanSeparators(SubMenu);
-            if SubMenu.GetCount = 0 then
-              AMenu.RemoveAt(i);
-          end;
-      end;
-  end;
-
-var
-  PageIndex: Integer;
-  Page: TBrowserTabSheet;
-begin
-  if not (GetPageIndex(ASender, PageIndex) and GetPage(PageIndex, Page)) then
-    Exit;
-
-  AModel.Remove(MENU_ID_PRINT);
-  AModel.Remove(MENU_ID_VIEW_SOURCE);
-
-  AModel.AddSeparator;
-  if AParams.LinkUrl <> '' then
-    AModel.AddItem(BDTKBROWSER_CONTEXTMENU_LINK_TO_NEW_TAB, 'Ouvrir le lien dans un nouvel onglet');
-  AModel.AddSeparator;
-  AModel.AddItem(BDTKBROWSER_CONTEXTMENU_TOGGLEDEVTOOLS, IfThen(Page.DevTools.Visible, 'Cacher les outils de développement', 'Afficher les outils de développement'));
-  AModel.AddItem(BDTKBROWSER_CONTEXTMENU_TOGGLEAUDIO, IfThen(Page.Chromium.AudioMuted, 'Réactiver le son de l''onglet', 'Couper le son de l''onglet'));
-  AModel.AddSeparator;
-
-  CleanSeparators(AModel);
+  inherited;
+  RemoveTab(Fermerlonglet1.Tag);
 end;
 
 procedure TfrmBDTKWebBrowser.Chromium_OnContextMenuCommand(ASender: TObject; const ABrowser: ICefBrowser; const AFrame: ICefFrame; const AParams: ICefContextMenuParams; ACommandId: Integer; AEventFlags: Cardinal; out AResult: Boolean);
@@ -606,57 +345,8 @@ begin
 
   case ACommandId of
     BDTKBROWSER_CONTEXTMENU_LINK_TO_NEW_TAB:
-      PageControl1.ActivePage := TBrowserTabSheet.Create(PageControl1, AParams.LinkUrl);
-    BDTKBROWSER_CONTEXTMENU_TOGGLEDEVTOOLS:
-      PostMessage(Handle, IfThen(Page.DevTools.Visible, BDTKBROWSER_HIDEDEVTOOLS, BDTKBROWSER_SHOWDEVTOOLS), ((AParams.XCoord and $FFFF) shl 16) or (AParams.YCoord and $FFFF), PageIndex);
-    BDTKBROWSER_CONTEXTMENU_TOGGLEAUDIO:
-      Page.Chromium.AudioMuted := not Page.Chromium.AudioMuted;
+      AddTab(AParams.LinkUrl);
   end;
-end;
-
-procedure TfrmBDTKWebBrowser.ShowDevTools(APageIndex: Integer; APoint: TPoint);
-var
-  Page: TBrowserTabSheet;
-begin
-  if GetPage(APageIndex, Page) then
-  begin
-    Page.Splitter.Visible := True;
-    Page.DevTools.Visible := True;
-    Page.DevTools.Width := Width div 4;
-    Page.Chromium.ShowDevTools(APoint, Page.DevTools);
-  end;
-end;
-
-procedure TfrmBDTKWebBrowser.ShowDevTools(APageIndex: Integer);
-begin
-  ShowDevTools(APageIndex, TPoint.Create(Low(Integer), Low(Integer)));
-end;
-
-procedure TfrmBDTKWebBrowser.ShowDevToolsMsg(var AMessage: TMessage);
-begin
-  ShowDevTools(AMessage.LParam, TPoint.Create((AMessage.WParam shr 16) and $FFFF, AMessage.WParam and $FFFF));
-end;
-
-procedure TfrmBDTKWebBrowser.HideDevTools(APageIndex: Integer);
-var
-  Page: TBrowserTabSheet;
-begin
-  if GetPage(APageIndex, Page) then
-  begin
-    Page.Chromium.CloseDevTools(Page.DevTools);
-    Page.Splitter.Visible := False;
-    Page.DevTools.Visible := False;
-    Page.DevTools.Width := 0;
-  end;
-end;
-
-procedure TfrmBDTKWebBrowser.HideDevToolsMsg(var AMessage: TMessage);
-var
-  Page: TBrowserTabSheet;
-begin
-  HideDevTools(AMessage.LParam);
-  if GetPage(AMessage.LParam, Page) then
-    Page.Chromium.SetFocus(True);
 end;
 
 end.
