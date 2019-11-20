@@ -62,7 +62,7 @@ uses
   BDTK.Web.Updates.v1_0_0_1 in 'Web\Updates\BDTK.Web.Updates.v1_0_0_1.pas',
   BDTK.Web.Updates.v1_0_0_0 in 'Web\Updates\BDTK.Web.Updates.v1_0_0_0.pas',
   BDTK.Web.Updates.v1_0_0_2 in 'Web\Updates\BDTK.Web.Updates.v1_0_0_2.pas',
-  UfrmControlImport in 'Gestion\UfrmControlImport.pas' {frmControlImport},
+  BDTK.Web.Forms.Associate in 'Web\BDTK.Web.Forms.Associate.pas' {frmControlImport},
   BDTK.GUI.Controls.VirtualTreeEdit in 'GUI\Controls\BDTK.GUI.Controls.VirtualTreeEdit.pas',
   UframVTEdit in 'UframVTEdit.pas' {framVTEdit: TFrame},
   BDTK.Updates.v2_1_1_7 in 'Updates\BDTK.Updates.v2_1_1_7.pas',
