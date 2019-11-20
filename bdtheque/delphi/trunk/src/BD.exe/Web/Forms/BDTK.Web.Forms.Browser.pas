@@ -80,7 +80,7 @@ implementation
 
 uses
   BD.Utils.GUIUtils, BD.Utils.Chromium, System.Math, BD.Utils.Net,
-  System.StrUtils;
+  System.StrUtils, BDTK.Web.Forms.Associate, BDTK.Web.Import;
 
 {$R *.dfm}
 
@@ -228,6 +228,7 @@ begin
 
   AddTab(url);
 
+  FImportPreview.Album := Album;
   FImportPreview.Show;
 end;
 
@@ -295,6 +296,10 @@ end;
 procedure TfrmBDTKWebBrowser.Frame11btnOKClick(Sender: TObject);
 begin
   inherited;
+
+  FImportPreview.StoreData;
+  AssociateToDBEntities(FImportPreview);
+
   if PageControl1.PageCount = 0 then
     Frame11.btnOKClick(Sender)
   else
@@ -408,9 +413,9 @@ begin
   SubModel2.AddSeparator;
 //  AddPeriodCommand(SubModel2, BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_Parution_Date, 'Date');
   AddIntegerCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_Tome, 'Tome');
-  AddBooleanCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_Integrale, 'Intégrale');
-  AddIntegerCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_TomeDebut, 'Intégrale - Tome début');
-  AddIntegerCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_TomeFin, 'Intégrale - Tome fin');
+  SubModel2 := SubModel.AddSubMenu(BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_Integrale, 'Intégrale');
+  AddIntegerCommand(SubModel2, BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_TomeDebut, 'Tome début');
+  AddIntegerCommand(SubModel2, BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_TomeFin, 'Tome fin');
   AddBooleanCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_HorsSerie, 'Hors série');
   SubModel2 := SubModel.AddSubMenu(BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_Auteur, 'Auteur');
   AddTextCommand(SubModel2, BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_Scenaristes, 'Scénariste');

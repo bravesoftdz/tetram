@@ -120,7 +120,6 @@ type
     CheckBox19: TCheckBoxLabeled;
     CheckBoxLabeled8: TCheckBoxLabeled;
     procedure FormCreate(Sender: TObject);
-    procedure framBoutons1btnOKClick(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure cbxEtatBeforeShowPop(Sender: TObject; Menu: TPopupMenu; var Continue: Boolean);
     procedure cklImagesClick(Sender: TObject);
@@ -130,17 +129,22 @@ type
     DefaultValues: TAlbumFull;
     DefaultEdition: TEditionFull;
     procedure VisuClose(Sender: TObject);
+    procedure SetAlbum(const Value: TAlbumFull);
   public
-    property Album: TAlbumFull read FAlbum;
-
     procedure SetValue(AId: Integer; const AValue: string);
+    procedure StoreData;
+
+    procedure ReloadAlbum;
+    property Album: TAlbumFull read FAlbum write SetAlbum;
   end;
 
 implementation
 
 uses
   System.IOUtils, BD.Utils.StrUtils, BD.Utils.GUIUtils, BD.Common, BDTK.Entities.Dao.Full, BDTK.GUI.Utils,
-  BD.Entities.Common, BD.Entities.Dao.Lambda, BDTK.Web.Browser.Utils;
+  BD.Entities.Common, BD.Entities.Dao.Lambda, BDTK.Web.Browser.Utils,
+  BD.Entities.Metadata, BD.Entities.Factory.Lite, BDTK.Entities.Dao.Lite,
+  BD.Entities.Factory.Full;
 
 {$R *.dfm}
 
@@ -269,7 +273,7 @@ begin
   // pas la peine de détruire DefaultEdition, il est associé à DefaultValues qui le supprimera
 end;
 
-procedure TfrmBDTKWebPreview.framBoutons1btnOKClick(Sender: TObject);
+procedure TfrmBDTKWebPreview.StoreData;
 
   function SetValue(Ctrl: TCustomEdit; Chk: TCheckBox; const Defaut: string): string; overload;
   begin
@@ -408,6 +412,8 @@ procedure TfrmBDTKWebPreview.framBoutons1btnOKClick(Sender: TObject);
       Result := ROption.Create(Ctrl.DefaultValueChecked, Ctrl.GetCaption(Ctrl.DefaultValueChecked));
   end;
 
+var
+  Edition: TEditionFull;
 begin
   // Album
   FAlbum.TitreAlbum := SetValue(edTitreAlbum, CheckBox1, DefaultValues.TitreAlbum);
@@ -441,30 +447,34 @@ begin
   FAlbum.Serie.Collection.NomCollection := SetValue(edCollectionSerie, CheckBoxLabeled7, DefaultValues.Serie.Collection.NomCollection);
 
   // Edition
-  if FAlbum.Editions.Count > 0 then
-    with FAlbum.Editions[0] do
-    begin
-      Editeur.NomEditeur := SetValue(edNomEditeur, CheckBox20, DefaultEdition.Editeur.NomEditeur);
-      Editeur.SiteWeb := SetValue(edSiteWebEditeur, CheckBox21, DefaultEdition.Editeur.SiteWeb);
-      Collection.NomCollection := SetValue(edCollection, CheckBox22, DefaultEdition.Collection.NomCollection);
-      AnneeEdition := SetValue(edAnneeEdition, CheckBox29, DefaultEdition.AnneeEdition);
-      Prix := BDStrToDoubleDef(SetValue(edPrix, Label9, BDCurrencyToStr(DefaultEdition.Prix)), 0);
-      Gratuit := SetValue(pnGratuit, CheckBox30, DefaultEdition.Gratuit);
-      ISBN := SetValue(edISBN, Label11, DefaultEdition.ISBN);
-      Etat := SetValue(cbxEtat, CheckBox23);
-      TypeEdition := SetValue(cbxEdition, CheckBox24);
-      Reliure := SetValue(cbxReliure, CheckBox25);
-      Orientation := SetValue(cbxOrientation, CheckBox26);
-      SensLecture := SetValue(cbxSensLecture, CheckBox27);
-      FormatEdition := SetValue(cbxFormat, CheckBox28);
-      AnneeCote := SetValue(edAnneeCote, Label24, DefaultEdition.AnneeCote);
-      if PrixCote <> 0 then
-        PrixCote := BDStrToDoubleDef(SetValue(edPrixCote, Label25, BDCurrencyToStr(DefaultEdition.PrixCote)), 0);
-      Couleur := SetValue(pnCouleur, CheckBox31, DefaultEdition.Couleur);
-      VO := SetValue(pnVO, CheckBox32, DefaultEdition.VO);
-      NombreDePages := SetValue(edNbPages, CheckBox33, DefaultEdition.NombreDePages);
-      SetValue(Couvertures, cklImages, CheckBoxLabeled1);
-    end;
+  if TabEdition.TabVisible then
+  begin
+    if FAlbum.Editions.Count = 0 then
+      FAlbum.Editions.Add(TFactoryEditionFull.getInstance);
+
+    Edition := FAlbum.Editions[0];
+    Edition.ID_Album := FAlbum.ID_Album;
+
+    Edition.Editeur.NomEditeur := SetValue(edNomEditeur, CheckBox20, DefaultEdition.Editeur.NomEditeur);
+    Edition.Editeur.SiteWeb := SetValue(edSiteWebEditeur, CheckBox21, DefaultEdition.Editeur.SiteWeb);
+    Edition.Collection.NomCollection := SetValue(edCollection, CheckBox22, DefaultEdition.Collection.NomCollection);
+    Edition.AnneeEdition := SetValue(edAnneeEdition, CheckBox29, DefaultEdition.AnneeEdition);
+    Edition.Prix := BDStrToDoubleDef(SetValue(edPrix, Label9, BDCurrencyToStr(DefaultEdition.Prix)), 0);
+    Edition.Gratuit := SetValue(pnGratuit, CheckBox30, DefaultEdition.Gratuit);
+    Edition.ISBN := SetValue(edISBN, Label11, DefaultEdition.ISBN);
+    Edition.Etat := SetValue(cbxEtat, CheckBox23);
+    Edition.TypeEdition := SetValue(cbxEdition, CheckBox24);
+    Edition.Reliure := SetValue(cbxReliure, CheckBox25);
+    Edition.Orientation := SetValue(cbxOrientation, CheckBox26);
+    Edition.SensLecture := SetValue(cbxSensLecture, CheckBox27);
+    Edition.FormatEdition := SetValue(cbxFormat, CheckBox28);
+    Edition.AnneeCote := SetValue(edAnneeCote, Label24, DefaultEdition.AnneeCote);
+    Edition.PrixCote := BDStrToDoubleDef(SetValue(edPrixCote, Label25, BDCurrencyToStr(DefaultEdition.PrixCote)), 0);
+    Edition.Couleur := SetValue(pnCouleur, CheckBox31, DefaultEdition.Couleur);
+    Edition.VO := SetValue(pnVO, CheckBox32, DefaultEdition.VO);
+    Edition.NombreDePages := SetValue(edNbPages, CheckBox33, DefaultEdition.NombreDePages);
+    SetValue(Edition.Couvertures, cklImages, CheckBoxLabeled1);
+  end;
 end;
 
 procedure TfrmBDTKWebPreview.imgVisuClick(Sender: TObject);
@@ -511,7 +521,7 @@ begin
     end;
 end;
 
-procedure TfrmBDTKWebPreview.SetValue(AId: Integer; const AValue: string);
+procedure TfrmBDTKWebPreview.ReloadAlbum;
 
   procedure ChangeState(Chk: TCheckBox; Ctrl: TControl);
   var
@@ -523,10 +533,7 @@ procedure TfrmBDTKWebPreview.SetValue(AId: Integer; const AValue: string);
     while Assigned(TabSheet) and not (TabSheet is TTabSheet) do
       TabSheet := TabSheet.Parent;
     if Assigned(TabSheet) then
-    begin
       TTabSheet(TabSheet).TabVisible := True;
-      PageControl1.ActivePage := TTabSheet(TabSheet);
-    end;
   end;
 
   procedure LoadValue(const Value: string; Ctrl: TCustomEdit; Chk: TCheckBox; const Defaut: string); overload;
@@ -588,10 +595,16 @@ procedure TfrmBDTKWebPreview.SetValue(AId: Integer; const AValue: string);
     ChangeState(Chk, Ctrl);
   end;
 
-  procedure LoadValue(const Value: string; Ctrl: TCheckListBox; Chk: TCheckBox); overload;
+  procedure LoadValue(Value: TList<TAuteurSerieLite>; Ctrl: TCheckListBox; Chk: TCheckBox); overload;
+  var
+    i: Integer;
   begin
-    if not Ctrl.Items.Contains(Value) then
-      Ctrl.Checked[Ctrl.Items.Add(Value)] := True;
+    Ctrl.Items.Clear;
+    for i := 0 to Pred(Value.Count) do
+    begin
+      Ctrl.Items.Add(Value[i].Personne.ChaineAffichage);
+      Ctrl.Checked[i] := True;
+    end;
     Chk.Checked := Ctrl.Items.Count > 0;
     ChangeState(Chk, Ctrl);
   end;
@@ -644,6 +657,106 @@ procedure TfrmBDTKWebPreview.SetValue(AId: Integer; const AValue: string);
     ChangeState(Chk, Ctrl);
   end;
 
+  procedure LoadValue(const Value: ROption; Ctrl: TLightComboCheck; Chk: TCheckBox); overload;
+  begin
+    Ctrl.Value := Value.Value;
+    Chk.Checked := Value.Value <> Ctrl.DefaultValueChecked;
+    ChangeState(Chk, Ctrl);
+  end;
+var
+  Edition: TEditionFull;
+
+begin
+  // Album
+  LoadValue(FAlbum.TitreAlbum, edTitreAlbum, CheckBox1, DefaultValues.TitreAlbum);
+  LoadValue(FAlbum.MoisParution, edMoisParution, CheckBox3, DefaultValues.MoisParution);
+  LoadValue(FAlbum.AnneeParution, edAnneeParution, CheckBox4, DefaultValues.AnneeParution);
+  LoadValue(FAlbum.Tome, edTome, CheckBox2, DefaultValues.Tome);
+
+  LoadValue(FAlbum.TomeDebut, edTomeDebut, CheckBox7, DefaultValues.TomeDebut);
+  LoadValue(FAlbum.TomeFin, edTomeFin, CheckBox7, DefaultValues.TomeFin);
+  CheckBox7.Checked := (edTomeDebut.Text <> NonZero(DefaultValues.TomeDebut)) and (edTomeFin.Text <> NonZero(DefaultValues.TomeFin));
+  ChangeState(CheckBox7, edTomeDebut);
+  ChangeState(CheckBox7, edTomeFin);
+
+  LoadValue(FAlbum.HorsSerie, pnHorsSerie, CheckBox5, DefaultValues.HorsSerie);
+  LoadValue(FAlbum.Integrale, pnIntegrale, CheckBox6, DefaultValues.Integrale);
+  LoadValue(FAlbum.Scenaristes, cklScenaristes, CheckBox8);
+  LoadValue(FAlbum.Dessinateurs, cklDessinateurs, CheckBox9);
+  LoadValue(FAlbum.Coloristes, cklColoristes, CheckBox10);
+  LoadValue(FAlbum.Sujet, mmResumeAlbum, CheckBox11, DefaultValues.Sujet);
+  LoadValue(FAlbum.Notes, mmNotesAlbum, CheckBox12, DefaultValues.Notes);
+
+  // Série
+  LoadValue(FAlbum.Serie.TitreSerie, edTitreSerie, CheckBox13, DefaultValues.Serie.TitreSerie);
+  LoadValue(FAlbum.Serie.SiteWeb, edSiteWebSerie, CheckBox16, DefaultValues.Serie.SiteWeb);
+  LoadValue(FAlbum.Serie.Univers, cklUnivers, CheckBox19);
+  LoadValue(FAlbum.Serie.NbAlbums, edNbAlbums, CheckBoxLabeled8, DefaultValues.Serie.NbAlbums);
+  LoadValue(FAlbum.Serie.Terminee, pnTerminee, CheckBox14, DefaultValues.Serie.Terminee);
+  LoadValue(FAlbum.Serie.Genres, cklGenres, CheckBox15);
+  LoadValue(FAlbum.Serie.Scenaristes, cklScenaristesSerie, CheckBoxLabeled2);
+  LoadValue(FAlbum.Serie.Dessinateurs, cklDessinateursSerie, CheckBoxLabeled3);
+  LoadValue(FAlbum.Serie.Coloristes, cklColoristesSerie, CheckBoxLabeled4);
+  LoadValue(FAlbum.Serie.Sujet, mmResumeSerie, CheckBox17, DefaultValues.Serie.Sujet);
+  LoadValue(FAlbum.Serie.Notes, mmNotesSerie, CheckBox18, DefaultValues.Serie.Notes);
+  LoadValue(FAlbum.Serie.Editeur.NomEditeur, edNomEditeurSerie, CheckBoxLabeled5, DefaultValues.Serie.Editeur.NomEditeur);
+  LoadValue(FAlbum.Serie.Editeur.SiteWeb, edSiteWebEditeurSerie, CheckBoxLabeled6, DefaultValues.Serie.Editeur.SiteWeb);
+  LoadValue(FAlbum.Serie.Collection.NomCollection, edCollectionSerie, CheckBoxLabeled7, DefaultValues.Serie.Collection.NomCollection);
+
+  // Edition
+  TabEdition.TabVisible := FAlbum.FusionneEditions and (FAlbum.Editions.Count > 0);
+  if TabEdition.TabVisible then
+  begin
+    Edition := FAlbum.Editions[0];
+
+    LoadValue(Edition.Editeur.NomEditeur, edNomEditeur, CheckBox20, DefaultEdition.Editeur.NomEditeur);
+    LoadValue(Edition.Editeur.SiteWeb, edSiteWebEditeur, CheckBox21, DefaultEdition.Editeur.SiteWeb);
+    LoadValue(Edition.Collection.NomCollection, edCollection, CheckBox22, DefaultEdition.Collection.NomCollection);
+    LoadValue(Edition.AnneeEdition, edAnneeEdition, CheckBox29, DefaultEdition.AnneeEdition);
+    // if Prix <> 0 then
+    LoadValue(BDCurrencyToStr(Edition.Prix), edPrix, Label9, BDCurrencyToStr(DefaultEdition.Prix));
+    LoadValue(Edition.Gratuit, pnGratuit, CheckBox30, DefaultEdition.Gratuit);
+    LoadValue(Edition.ISBN, edISBN, Label11, DefaultEdition.ISBN);
+    LoadValue(Edition.Etat, cbxEtat, CheckBox23);
+    LoadValue(Edition.TypeEdition, cbxEdition, CheckBox24);
+    LoadValue(Edition.Reliure, cbxReliure, CheckBox25);
+    LoadValue(Edition.Orientation, cbxOrientation, CheckBox26);
+    LoadValue(Edition.SensLecture, cbxSensLecture, CheckBox27);
+    LoadValue(Edition.FormatEdition, cbxFormat, CheckBox28);
+    LoadValue(Edition.AnneeCote, edAnneeCote, Label24, DefaultEdition.AnneeCote);
+    // if PrixCote <> 0 then
+    LoadValue(BDCurrencyToStr(Edition.PrixCote), edPrixCote, Label25, BDCurrencyToStr(DefaultEdition.PrixCote));
+    LoadValue(Edition.Couleur, pnCouleur, CheckBox31, DefaultEdition.Couleur);
+    LoadValue(Edition.VO, pnVO, CheckBox32, DefaultEdition.VO);
+    LoadValue(Edition.NombreDePages, edNbPages, CheckBox33, DefaultEdition.NombreDePages);
+    LoadValue(Edition.Couvertures, cklImages, CheckBoxLabeled1);
+  end;
+end;
+
+procedure TfrmBDTKWebPreview.SetAlbum(const Value: TAlbumFull);
+begin
+  FAlbum := Value;
+  ReloadAlbum;
+end;
+
+procedure TfrmBDTKWebPreview.SetValue(AId: Integer; const AValue: string);
+
+  procedure ChangeState(Chk: TCheckBox; Ctrl: TControl);
+  var
+    TabSheet: TWinControl;
+  begin
+    Chk.Enabled := Chk.Checked;
+    Ctrl.Enabled := Chk.Enabled and not(Ctrl is TPanel);
+    TabSheet := Chk.Parent;
+    while Assigned(TabSheet) and not (TabSheet is TTabSheet) do
+      TabSheet := TabSheet.Parent;
+    if Assigned(TabSheet) then
+    begin
+      TTabSheet(TabSheet).TabVisible := True;
+      PageControl1.ActivePage := TTabSheet(TabSheet);
+    end;
+  end;
+
   procedure LoadValue(const Value: string; Ctrl: TLightComboCheck; Chk: TCheckBox); overload;
   var
     CtrlValue: Integer;
@@ -661,81 +774,79 @@ begin
   case AId of
     // Album
     BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_TITRE:
-      LoadValue(AValue, edTitreAlbum, CheckBox1, DefaultValues.TitreAlbum);
+      FAlbum.TitreAlbum := PrepareTitre(AValue);
     BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_Parution_Mois:
-      LoadValue(AValue.ToInteger, edMoisParution, CheckBox3, DefaultValues.MoisParution);
+      FAlbum.MoisParution := AValue.ToInteger;
     BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_Parution_Annee:
-      LoadValue(AValue.ToInteger, edAnneeParution, CheckBox4, DefaultValues.AnneeParution);
+      FAlbum.AnneeParution := AValue.ToInteger;
     BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_Tome:
-      LoadValue(AValue.ToInteger, edTome, CheckBox2, DefaultValues.Tome);
-    BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_TomeDebut, BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_TomeFin:
+      FAlbum.Tome := AValue.ToInteger;
+    BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_TomeDebut:
       begin
-        if AId = BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_TomeDebut then
-          LoadValue(AValue.ToInteger, edTomeDebut, CheckBox7, DefaultValues.TomeDebut)
-        else
-          LoadValue(AValue.ToInteger, edTomeFin, CheckBox7, DefaultValues.TomeFin);
-        CheckBox7.Checked := (edTomeDebut.Text <> NonZero(DefaultValues.TomeDebut)) and (edTomeFin.Text <> NonZero(DefaultValues.TomeFin));
-        ChangeState(CheckBox7, edTomeDebut);
-        ChangeState(CheckBox7, edTomeFin);
+        FAlbum.Integrale := True;
+        FAlbum.TomeDebut := AValue.ToInteger;
+      end;
+    BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_TomeFin:
+      begin
+        FAlbum.Integrale := True;
+        FAlbum.TomeFin := AValue.ToInteger;
       end;
     BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_HorsSerie:
-      LoadValue(AValue.ToBoolean, pnHorsSerie, CheckBox5, DefaultValues.HorsSerie);
-    BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_Integrale:
-      LoadValue(AValue.ToBoolean, pnIntegrale, CheckBox6, DefaultValues.Integrale);
+      FAlbum.HorsSerie := AValue.ToBoolean;
     BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_Scenaristes:
-      LoadValue(AValue, cklScenaristes, CheckBox8);
+      FAlbum.Scenaristes.Add(MakeAuteurAlbum(AValue, maScenariste));
     BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_Dessinateurs:
-      LoadValue(AValue, cklDessinateurs, CheckBox9);
+      FAlbum.Dessinateurs.Add(MakeAuteurAlbum(AValue, maDessinateur));
     BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_Coloristes:
-      LoadValue(AValue, cklColoristes, CheckBox10);
+      FAlbum.Coloristes.Add(MakeAuteurAlbum(AValue, maColoriste));
     BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_Sujet:
-      LoadValue(AValue, mmResumeAlbum, CheckBox11, DefaultValues.Sujet);
+      FAlbum.Sujet := AValue;
     BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_Notes:
-      LoadValue(AValue, mmNotesAlbum, CheckBox12, DefaultValues.Notes);
+      FAlbum.Notes := AValue;
     // Série
     BDTKBROWSER_CONTEXTMENU_IMPORT_SERIE_TITRE:
-      LoadValue(AValue, edTitreSerie, CheckBox13, DefaultValues.Serie.TitreSerie);
+      FAlbum.Serie.TitreSerie := PrepareTitre(AValue);
     BDTKBROWSER_CONTEXTMENU_IMPORT_SERIE_SiteWeb:
-      LoadValue(AValue, edSiteWebSerie, CheckBox16, DefaultValues.Serie.SiteWeb);
+      FAlbum.Serie.SiteWeb := AValue;
     BDTKBROWSER_CONTEXTMENU_IMPORT_SERIE_Univers:
-      LoadValue(AValue, cklUnivers, CheckBox19);
+      FAlbum.Serie.Univers.Add(MakeUnivers(AValue));
     BDTKBROWSER_CONTEXTMENU_IMPORT_SERIE_NbAlbums:
-      LoadValue(AValue.ToInteger, edNbAlbums, CheckBoxLabeled8, DefaultValues.Serie.NbAlbums);
+      FAlbum.Serie.NbAlbums := AValue.ToInteger;
     BDTKBROWSER_CONTEXTMENU_IMPORT_SERIE_Terminee:
-      LoadValue(AValue.ToBoolean, pnTerminee, CheckBox14, DefaultValues.Serie.Terminee);
+      FAlbum.Serie.Terminee := AValue.ToBoolean;
     BDTKBROWSER_CONTEXTMENU_IMPORT_SERIE_Genres:
-      LoadValue(AValue, cklGenres, CheckBox15);
+      FAlbum.Serie.Genres.Add(AValue);
     BDTKBROWSER_CONTEXTMENU_IMPORT_SERIE_Scenaristes:
-      LoadValue(AValue, cklScenaristesSerie, CheckBoxLabeled2);
+      FAlbum.Serie.Scenaristes.Add(MakeAuteurSerie(AValue, maScenariste));
     BDTKBROWSER_CONTEXTMENU_IMPORT_SERIE_Dessinateurs:
-      LoadValue(AValue, cklDessinateursSerie, CheckBoxLabeled3);
+      FAlbum.Serie.Dessinateurs.Add(MakeAuteurSerie(AValue, maDessinateur));
     BDTKBROWSER_CONTEXTMENU_IMPORT_SERIE_Coloristes:
-      LoadValue(AValue, cklColoristesSerie, CheckBoxLabeled4);
+      FAlbum.Serie.Coloristes.Add(MakeAuteurSerie(AValue, maColoriste));
     BDTKBROWSER_CONTEXTMENU_IMPORT_SERIE_Sujet:
-      LoadValue(AValue, mmResumeSerie, CheckBox17, DefaultValues.Serie.Sujet);
+      FAlbum.Serie.Sujet := AValue;
     BDTKBROWSER_CONTEXTMENU_IMPORT_SERIE_Notes:
-      LoadValue(AValue, mmNotesSerie, CheckBox18, DefaultValues.Serie.Notes);
+      FAlbum.Serie.Notes := AValue;
     BDTKBROWSER_CONTEXTMENU_IMPORT_SERIE_Editeur_NomEditeur:
-      LoadValue(AValue, edNomEditeurSerie, CheckBoxLabeled5, DefaultValues.Serie.Editeur.NomEditeur);
+      FAlbum.Serie.Editeur.NomEditeur := AValue;
     BDTKBROWSER_CONTEXTMENU_IMPORT_SERIE_Editeur_SiteWeb:
-      LoadValue(AValue, edSiteWebEditeurSerie, CheckBoxLabeled6, DefaultValues.Serie.Editeur.SiteWeb);
+      FAlbum.Serie.Editeur.SiteWeb := AValue;
     BDTKBROWSER_CONTEXTMENU_IMPORT_SERIE_Collection_NomCollection:
-      LoadValue(AValue, edCollectionSerie, CheckBoxLabeled7, DefaultValues.Serie.Collection.NomCollection);
-  // Edition
+      FAlbum.Serie.Collection.NomCollection := AValue;
+    // Edition
     BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_Editeur_NomEditeur:
-      LoadValue(AValue, edNomEditeur, CheckBox20, DefaultEdition.Editeur.NomEditeur);
+      FAlbum.Editions[0].Editeur.NomEditeur := AValue;
     BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_Editeur_SiteWeb:
-      LoadValue(AValue, edSiteWebEditeur, CheckBox21, DefaultEdition.Editeur.SiteWeb);
+      FAlbum.Editions[0].Editeur.SiteWeb := AValue;
     BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_Collection_NomCollection:
-      LoadValue(AValue, edCollection, CheckBox22, DefaultEdition.Collection.NomCollection);
+      FAlbum.Editions[0].Collection.NomCollection := AValue;
     BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_AnneeEdition:
-      LoadValue(AValue.ToInteger, edAnneeEdition, CheckBox29, DefaultEdition.AnneeEdition);
+      FAlbum.Editions[0].AnneeEdition := AValue.ToInteger;
     BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_Prix:
-      LoadValue(BDCurrencyToStr(AValue.ToDouble), edPrix, Label9, BDCurrencyToStr(DefaultEdition.Prix));
+      FAlbum.Editions[0].Prix := AValue.ToDouble;
     BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_Gratuit:
-      LoadValue(AValue.ToBoolean, pnGratuit, CheckBox30, DefaultEdition.Gratuit);
+      FAlbum.Editions[0].Gratuit := AValue.ToBoolean;
     BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_ISBN:
-      LoadValue(AValue, edISBN, Label11, DefaultEdition.ISBN);
+      FAlbum.Editions[0].ISBN := ClearISBN(AValue);
     BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_Etat:
       LoadValue(AValue, cbxEtat, CheckBox23);
     BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_TypeEdition:
@@ -749,19 +860,28 @@ begin
     BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_FormatEdition:
       LoadValue(AValue, cbxFormat, CheckBox28);
     BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_AnneeCote:
-      LoadValue(AValue.ToInteger, edAnneeCote, Label24, DefaultEdition.AnneeCote);
+      FAlbum.Editions[0].AnneeCote := AValue.ToInteger;
     BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_PrixCote:
-      LoadValue(BDCurrencyToStr(AValue.ToDouble), edPrixCote, Label25, BDCurrencyToStr(DefaultEdition.PrixCote));
+      FAlbum.Editions[0].PrixCote := AValue.ToDouble;
     BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_Couleur:
-      LoadValue(AValue.ToBoolean, pnCouleur, CheckBox31, DefaultEdition.Couleur);
+      FAlbum.Editions[0].Couleur := AValue.ToBoolean;
     BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_VO:
-      LoadValue(AValue.ToBoolean, pnVO, CheckBox32, DefaultEdition.VO);
+      FAlbum.Editions[0].VO := AValue.ToBoolean;
     BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_NombreDePages:
-      LoadValue(AValue.ToInteger, edNbPages, CheckBox33, DefaultEdition.NombreDePages);
+      FAlbum.Editions[0].NombreDePages := AValue.ToInteger;
     BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_Couvertures:
       // LoadValue(Couvertures, cklImages, CheckBoxLabeled1);
+      // FAlbum.Editions[0].AddImageFromURL(CombineURL(urlSite, s), ctiPlanche);
       ;
   end;
+
+  ReloadAlbum;
+  if AId > BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION then
+    PageControl1.ActivePage := TabEdition
+  else if AId > BDTKBROWSER_CONTEXTMENU_IMPORT_SERIE then
+    PageControl1.ActivePage := TabSerie
+  else
+    PageControl1.ActivePage := TabAlbum;
 end;
 
 end.

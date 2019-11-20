@@ -40,6 +40,7 @@ function ClearISBN(const Code: string): string;
 
 function FormatTitre(const Titre: string): string; inline;
 function FormatTitreAlbum(Simple, AvecSerie: Boolean; const Titre, Serie: string; Tome, TomeDebut, TomeFin: Integer; Integrale, HorsSerie: Boolean): string;
+function PrepareTitre(Titre: string): string;
 
 function BDCurrencyToStr(const Value: Double): string;
 function BDDoubleToStr(const Value: Double): string;
@@ -404,6 +405,28 @@ begin
 
   if Result = '' then
     Result := '<Sans titre>';
+end;
+
+function PrepareTitre(Titre: string): string;
+var
+  pEspace, pApostrophe: Integer;
+  PremierMot: string;
+  i: Integer;
+begin
+  Titre := Titre.Trim;
+  Result := Titre;
+  if Result.IsEmpty or Result.EndsWith(']') then
+    Exit;
+
+  pEspace := Result.IndexOf(' ');
+  pApostrophe := Result.IndexOf('''');
+  if (pApostrophe > -1) and ((pEspace = -1) or (pApostrophe < pEspace)) then
+    pEspace := pApostrophe + 1; // + 1 pour prendre l'apostrophe dans le mot
+  if pEspace = -1 then
+    Exit;
+  PremierMot := Result.Substring(0, pEspace);
+  if TArray.BinarySearch(['l''', 'un', 'une', 'des', 'le', 'la', 'les'], PremierMot.ToLowerInvariant, i) then
+    Result := Result.Substring(pEspace).Trim + ' [' + PremierMot + ']';
 end;
 
 { RGUIDEx }
