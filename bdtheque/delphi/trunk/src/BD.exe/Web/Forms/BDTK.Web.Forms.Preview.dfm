@@ -1,4 +1,4 @@
-﻿object frmBDTKWebPreview: TfrmBDTKWebPreview
+object frmBDTKWebPreview: TfrmBDTKWebPreview
   Left = 0
   Top = 0
   AutoSize = True
@@ -30,6 +30,10 @@
     TabOrder = 0
     object TabAlbum: TTabSheet
       Caption = 'Album'
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object Label17: TLabel
         Left = 428
         Top = 143
@@ -453,6 +457,10 @@
     object TabSerie: TTabSheet
       Caption = 'S'#233'rie'
       ImageIndex = 1
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object edTitreSerie: TEditLabeled
         Left = 144
         Top = 8

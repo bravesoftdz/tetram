@@ -1,4 +1,4 @@
-﻿unit BDTK.Web.Browser;
+﻿unit BDTK.Web.Forms.Browser;
 
 interface
 

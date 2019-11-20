@@ -1,4 +1,4 @@
-<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup>
         <Base>True</Base>
         <AppType>Application</AppType>
@@ -257,16 +257,15 @@ $(PreBuildEvent)]]></PreBuildEvent>
             <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="Consultation\UChampsRecherche.pas"/>
-        <DCCReference Include="Web\BDTK.Web.Forms.Publish.pas">
+        <DCCReference Include="Web\Forms\BDTK.Web.Forms.Publish.pas">
             <Form>frmPublier</Form>
             <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="Web\Updates\BDTK.Web.Updates.v1_0_0_1.pas"/>
         <DCCReference Include="Web\Updates\BDTK.Web.Updates.v1_0_0_0.pas"/>
         <DCCReference Include="Web\Updates\BDTK.Web.Updates.v1_0_0_2.pas"/>
-        <DCCReference Include="Web\BDTK.Web.Forms.Associate.pas">
+        <DCCReference Include="Web\Forms\BDTK.Web.Forms.Associate.pas">
             <Form>frmControlImport</Form>
-            <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="GUI\Controls\BDTK.GUI.Controls.VirtualTreeEdit.pas"/>
         <DCCReference Include="UframVTEdit.pas">
@@ -403,7 +402,7 @@ $(PreBuildEvent)]]></PreBuildEvent>
         <DCCReference Include="..\Commun\Entities\BD.Entities.Dao.Lambda.pas"/>
         <DCCReference Include="Entities\BDTK.Entities.Dao.Lambda.pas"/>
         <DCCReference Include="..\Commun\Utils\BD.Utils.Net.ICS.pas"/>
-        <DCCReference Include="Web\BDTK.Web.Forms.Synchronize.pas">
+        <DCCReference Include="Web\Forms\BDTK.Web.Forms.Synchronize.pas">
             <Form>frmSynchroniser</Form>
             <FormType>dfm</FormType>
         </DCCReference>
@@ -425,22 +424,23 @@ $(PreBuildEvent)]]></PreBuildEvent>
         <DCCReference Include="Updates\BDTK.Updates.v2_2_3_33.pas"/>
         <DCCReference Include="..\Commun\Utils\BD.Utils.IOUtils.pas"/>
         <DCCReference Include="..\Commun\Utils\BD.Utils.RandomForest.Classes.pas"/>
-        <DCCReference Include="Web\BDTK.Web.Browser.pas">
+        <DCCReference Include="Web\Forms\BDTK.Web.Forms.Browser.pas">
             <Form>frmBDTKWebBrowser</Form>
             <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="..\Commun\Utils\BD.Utils.Chromium.pas"/>
-        <DCCReference Include="Web\BDTK.Web.Frames.Browser.pas">
+        <DCCReference Include="Web\Frames\BDTK.Web.Frames.Browser.pas">
             <Form>frameBDTKWebBrowser</Form>
             <FormType>dfm</FormType>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
         <DCCReference Include="Web\BDTK.Web.Browser.Utils.pas"/>
         <DCCReference Include="..\Commun\Utils\BD.Utils.Chromium.Extension.pas"/>
-        <DCCReference Include="Web\BDTK.Web.Forms.Preview.pas">
+        <DCCReference Include="Web\Forms\BDTK.Web.Forms.Preview.pas">
             <Form>frmBDTKWebPreview</Form>
             <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="Web\BDTK.Web.Import.pas"/>
         <RcItem Include="..\Commun\Resources\network.png">
             <ResourceType>RCDATA</ResourceType>
             <ResourceId>BT_LINK</ResourceId>

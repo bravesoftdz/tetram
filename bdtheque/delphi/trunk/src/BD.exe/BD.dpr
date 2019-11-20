@@ -58,11 +58,11 @@ uses
   BDTK.Updates.ODS in 'Updates\BDTK.Updates.ODS.pas',
   UfrmEditCritere in 'Consultation\UfrmEditCritere.pas' {frmEditCritere},
   UChampsRecherche in 'Consultation\UChampsRecherche.pas',
-  BDTK.Web.Forms.Publish in 'Web\BDTK.Web.Forms.Publish.pas' {frmPublier},
+  BDTK.Web.Forms.Publish in 'Web\Forms\BDTK.Web.Forms.Publish.pas' {frmPublier},
   BDTK.Web.Updates.v1_0_0_1 in 'Web\Updates\BDTK.Web.Updates.v1_0_0_1.pas',
   BDTK.Web.Updates.v1_0_0_0 in 'Web\Updates\BDTK.Web.Updates.v1_0_0_0.pas',
   BDTK.Web.Updates.v1_0_0_2 in 'Web\Updates\BDTK.Web.Updates.v1_0_0_2.pas',
-  BDTK.Web.Forms.Associate in 'Web\BDTK.Web.Forms.Associate.pas' {frmControlImport},
+  BDTK.Web.Forms.Associate in 'Web\Forms\BDTK.Web.Forms.Associate.pas' {frmControlImport},
   BDTK.GUI.Controls.VirtualTreeEdit in 'GUI\Controls\BDTK.GUI.Controls.VirtualTreeEdit.pas',
   UframVTEdit in 'UframVTEdit.pas' {framVTEdit: TFrame},
   BDTK.Updates.v2_1_1_7 in 'Updates\BDTK.Updates.v2_1_1_7.pas',
@@ -157,7 +157,7 @@ uses
   BD.Entities.Dao.Lambda in '..\Commun\Entities\BD.Entities.Dao.Lambda.pas',
   BDTK.Entities.Dao.Lambda in 'Entities\BDTK.Entities.Dao.Lambda.pas',
   BD.Utils.Net.ICS in '..\Commun\Utils\BD.Utils.Net.ICS.pas',
-  BDTK.Web.Forms.Synchronize in 'Web\BDTK.Web.Forms.Synchronize.pas' {frmSynchroniser},
+  BDTK.Web.Forms.Synchronize in 'Web\Forms\BDTK.Web.Forms.Synchronize.pas' {frmSynchroniser},
   BDTK.Web in 'Web\BDTK.Web.pas',
   BDTK.Updates.v2_2_3_24 in 'Updates\BDTK.Updates.v2_2_3_24.pas',
   BDTK.Updates.v2_2_3_25 in 'Updates\BDTK.Updates.v2_2_3_25.pas',
@@ -172,12 +172,13 @@ uses
   BDTK.Updates.v2_2_3_33 in 'Updates\BDTK.Updates.v2_2_3_33.pas',
   BD.Utils.IOUtils in '..\Commun\Utils\BD.Utils.IOUtils.pas',
   BD.Utils.RandomForest.Classes in '..\Commun\Utils\BD.Utils.RandomForest.Classes.pas',
-  BDTK.Web.Browser in 'Web\BDTK.Web.Browser.pas' {frmBDTKWebBrowser},
+  BDTK.Web.Forms.Browser in 'Web\Forms\BDTK.Web.Forms.Browser.pas' {frmBDTKWebBrowser},
   BD.Utils.Chromium in '..\Commun\Utils\BD.Utils.Chromium.pas',
-  BDTK.Web.Frames.Browser in 'Web\BDTK.Web.Frames.Browser.pas' {frameBDTKWebBrowser: TFrame},
+  BDTK.Web.Frames.Browser in 'Web\Frames\BDTK.Web.Frames.Browser.pas' {frameBDTKWebBrowser: TFrame},
   BDTK.Web.Browser.Utils in 'Web\BDTK.Web.Browser.Utils.pas',
   BD.Utils.Chromium.Extension in '..\Commun\Utils\BD.Utils.Chromium.Extension.pas',
-  BDTK.Web.Forms.Preview in 'Web\BDTK.Web.Forms.Preview.pas' {frmBDTKWebPreview};
+  BDTK.Web.Forms.Preview in 'Web\Forms\BDTK.Web.Forms.Preview.pas' {frmBDTKWebPreview},
+  BDTK.Web.Import in 'Web\BDTK.Web.Import.pas';
 
 begin
   Application.Title := 'BDthèque';
