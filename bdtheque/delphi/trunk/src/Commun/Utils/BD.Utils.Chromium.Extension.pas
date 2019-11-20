@@ -9,6 +9,7 @@ uses
 
 const
   MOUSEOVER_MESSAGE_NAME = 'MouseOver';
+  SELECTEDTEXT_MESSAGE_NAME = 'SelectedText';
 
 type
   TBrowserExtension = class
@@ -18,6 +19,7 @@ type
     class property Registered: Boolean read FRegistered;
 
     class procedure mouseOver(const link: string);
+    class procedure getSelectedText(const selectedtext: string);
   end;
 
 procedure SetExtensionRegistered(AValue: Boolean);
@@ -44,26 +46,48 @@ begin
 
 //  JSCode := 'document.body.addEventListener("mouseover", function(evt){BrowserExtension.mouseOver(evt.target)})';
 
-  JSCode := 'document.body.addEventListener("mouseover", function(evt){'+
+  JSCode := 'document.addEventListener("mouseover", function(evt){'+
                 'var n = evt.target;'+
                 'while (n && !(n instanceof HTMLAnchorElement)) {n = n.parentNode;}'+
-                'BrowserExtension.mouseOver(n ? n.href : "");'+ // This is the call from JavaScript to the extension with DELPHI code in uTestExtension.pas
+                'BrowserExtension.mouseOver(n ? n.href : "");'+
               '}'+
             ')';
+  AFrame.ExecuteJavaScript(JSCode, '', 0);
 
-  AFrame.ExecuteJavaScript(JSCode, AFrame.Url, 0);
+  JSCode := 'document.addEventListener("selectionchange", function(){BrowserExtension.getSelectedText(window.getSelection().toString())})';
+  AFrame.ExecuteJavaScript(JSCode, '', 0);
+
   Result := True;
 end;
 
 { TBrowserExtension }
+
+class procedure TBrowserExtension.getSelectedText(const selectedtext: string);
+var
+  Msg: ICefProcessMessage;
+  Frame: ICefFrame;
+begin
+  // TCefv8ContextRef.Current returns the v8 context for the frame that is currently executing Javascript.
+  Frame := TCefv8ContextRef.Current.Browser.MainFrame;
+  if not (Assigned(Frame) and Frame.IsValid) then
+    Exit;
+
+  try
+    Msg := TCefProcessMessageRef.New(SELECTEDTEXT_MESSAGE_NAME);
+    Msg.ArgumentList.SetString(0, selectedtext);
+
+    // Sending a message back to the browser. It'll be received in the TChromium.OnProcessMessageReceived event.
+    Frame.SendProcessMessage(PID_BROWSER, Msg);
+  finally
+    Msg := nil;
+  end;
+end;
 
 class procedure TBrowserExtension.mouseOver(const link: string);
 var
   Msg: ICefProcessMessage;
   Frame: ICefFrame;
 begin
-  CefDebugLog('mouseOver');
-
   // TCefv8ContextRef.Current returns the v8 context for the frame that is currently executing Javascript.
   Frame := TCefv8ContextRef.Current.Browser.MainFrame;
   if not (Assigned(Frame) and Frame.IsValid) then

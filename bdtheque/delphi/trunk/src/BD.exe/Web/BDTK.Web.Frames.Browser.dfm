@@ -1,4 +1,4 @@
-﻿object frameBDTKWebBrowser: TframeBDTKWebBrowser
+object frameBDTKWebBrowser: TframeBDTKWebBrowser
   Left = 0
   Top = 0
   Width = 876
@@ -92,7 +92,6 @@
     Align = alClient
     BevelOuter = bvNone
     TabOrder = 1
-    ExplicitHeight = 542
     object Splitter: TSplitter
       Left = 773
       Top = 0
@@ -112,7 +111,6 @@
       Color = clWhite
       TabOrder = 0
       Visible = False
-      ExplicitHeight = 542
     end
     object WindowParent: TCEFWindowParent
       Left = 0
@@ -122,7 +120,6 @@
       Align = alClient
       Color = clWhite
       TabOrder = 1
-      ExplicitHeight = 542
     end
   end
   object StatusBar1: TStatusBar
@@ -133,9 +130,6 @@
     Panels = <>
     SimplePanel = True
     SizeGrip = False
-    ExplicitLeft = 93
-    ExplicitTop = 521
-    ExplicitWidth = 748
   end
   object ActionList1: TActionList
     OnUpdate = ActionList1Update

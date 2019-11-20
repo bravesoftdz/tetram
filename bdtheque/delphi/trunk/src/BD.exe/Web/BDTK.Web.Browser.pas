@@ -8,7 +8,7 @@ uses
   BD.Entities.Full, Vcl.ComCtrls, Vcl.StdCtrls, Vcl.ExtCtrls,
   uCEFChromium, uCEFWindowParent, uCEFInterfaces, uCEFApplication, uCEFTypes, uCEFConstants,
   uCEFSentinel, Vcl.AppEvnts, BDTK.Web.Frames.Browser, BDTK.Web.Browser.Utils,
-  Vcl.Menus;
+  Vcl.Menus, BDTK.Web.Forms.Preview;
 
 // This is the destruction sequence when a user closes a tab sheet:
 // 1. TChromium.CloseBrowser triggers a TChromium.OnClose event.
@@ -41,6 +41,7 @@ type
     procedure Frame11btnOKClick(Sender: TObject);
     procedure Frame11btnAnnulerClick(Sender: TObject);
     procedure ApplicationEvents1Message(var Msg: tagMSG; var Handled: Boolean);
+    procedure Chromium_OnBeforeContextMenu(ASender: TObject; const ABrowser: ICefBrowser; const AFrame: ICefFrame; const AParams: ICefContextMenuParams; const AModel: ICefMenuModel);
     procedure Chromium_OnContextMenuCommand(ASender: TObject; const ABrowser: ICefBrowser; const AFrame: ICefFrame; const AParams: ICefContextMenuParams; ACommandId: Integer; AEventFlags: Cardinal; out AResult: Boolean);
     procedure PopupMenu1Popup(Sender: TObject);
     procedure Fermerlonglet1Click(Sender: TObject);
@@ -49,10 +50,12 @@ type
     FAlbum: TAlbumFull;
     FClosingTab, FCanClose, FClosing: Boolean;
     FRequestedModalResult: TModalResult;
+    FImportPreview: TfrmBDTKWebPreview;
     procedure AddTab(const AUrl: string);
     procedure RemoveTab(APageIndex: Integer);
     function GetPageIndex(ASender: TObject; out APageIndex: Integer): Boolean;
-    function GetPage(APageIndex: Integer; out APage: TBrowserTabSheet): Boolean;
+    function GetPage(ASender: TObject; out APage: TBrowserTabSheet): Boolean; overload;
+    function GetPage(APageIndex: Integer; out APage: TBrowserTabSheet): Boolean; overload;
     procedure CloseAllBrowsers;
 
     procedure CloseModalMsg(var AMessage: TMessage); message BDTKBROWSER_CLOSE;
@@ -112,6 +115,7 @@ begin
   FFrame.Align := alClient;
   FFrame.Chromium.OnBeforeClose := Chromium_BeforeClose;
   FFrame.Chromium.OnTitleChange := Chromium_OnTitleChange;
+  FFrame.OnBeforeContextMenu := TfrmBDTKWebBrowser(AOwner.Owner).Chromium_OnBeforeContextMenu;
   FFrame.OnContextMenuCommand := TfrmBDTKWebBrowser(AOwner.Owner).Chromium_OnContextMenuCommand;
   FFrame.Initialize(ADefaultUrl);
 end;
@@ -133,10 +137,12 @@ constructor TfrmBDTKWebBrowser.Create(AOwner: TComponent);
 begin
   inherited;
   InitializeBrowser;
+  FImportPreview := TfrmBDTKWebPreview.Create(Application);
 end;
 
 destructor TfrmBDTKWebBrowser.Destroy;
 begin
+  FImportPreview.Free;
   inherited;
 end;
 
@@ -221,21 +227,32 @@ begin
     url := 'https://www.google.com/search?q=' + FAutoSearchKeyWords.Replace(' ', '+');
 
   AddTab(url);
+
+  FImportPreview.Show;
 end;
 
 function TfrmBDTKWebBrowser.GetPageIndex(ASender: TObject; out APageIndex: Integer): Boolean;
+var
+  Page: TBrowserTabSheet;
+begin
+  Result := GetPage(ASender, Page);
+  if Result then
+    APageIndex := Page.PageIndex;
+end;
+
+function TfrmBDTKWebBrowser.GetPage(ASender: TObject; out APage: TBrowserTabSheet): Boolean;
 begin
   if not (ASender is TComponent) then
     Exit(False);
 
-  if (TComponent(ASender).Owner is TTabSheet) then
-    APageIndex := TTabSheet(TComponent(ASender).Owner).PageIndex
-  else if (TComponent(ASender).Owner.Owner is TTabSheet) then
-    APageIndex := TTabSheet(TComponent(ASender).Owner.Owner).PageIndex
+  if (TComponent(ASender).Owner is TBrowserTabSheet) then
+    APage := TBrowserTabSheet(TComponent(ASender).Owner)
+  else if (TComponent(ASender).Owner.Owner is TBrowserTabSheet) then
+    APage := TBrowserTabSheet(TComponent(ASender).Owner.Owner)
   else
-    APageIndex := -1;
+    APage := nil;
 
-  Result := APageIndex > -1;
+  Result := Assigned(APage);
 end;
 
 function TfrmBDTKWebBrowser.GetPage(APageIndex: Integer; out APage: TBrowserTabSheet): Boolean;
@@ -334,18 +351,125 @@ begin
   RemoveTab(Fermerlonglet1.Tag);
 end;
 
+procedure TfrmBDTKWebBrowser.Chromium_OnBeforeContextMenu(ASender: TObject; const ABrowser: ICefBrowser; const AFrame: ICefFrame; const AParams: ICefContextMenuParams; const AModel: ICefMenuModel);
+var
+  IsText, IsInteger, IsFloat, IsBoolean: Boolean;
+
+  procedure AddTextCommand(const AModel: ICefMenuModel; ACommandId: Integer; const ACommandText: string);
+  begin
+    if IsText then
+      AModel.AddItem(ACommandId, ACommandText);
+  end;
+
+  procedure AddIntegerCommand(const AModel: ICefMenuModel; ACommandId: Integer; const ACommandText: string);
+  begin
+    if IsInteger then
+      AModel.AddItem(ACommandId, ACommandText);
+  end;
+
+  procedure AddFloatCommand(const AModel: ICefMenuModel; ACommandId: Integer; const ACommandText: string);
+  begin
+    if IsFloat then
+      AModel.AddItem(ACommandId, ACommandText);
+  end;
+
+  procedure AddBooleanCommand(const AModel: ICefMenuModel; ACommandId: Integer; const ACommandText: string);
+  begin
+    if IsBoolean then
+      AModel.AddItem(ACommandId, ACommandText);
+  end;
+
+var
+  DummyInt: Integer;
+  DummyDbl: Double;
+  DummyBool: Boolean;
+  SubModel, SubModel2: ICefMenuModel;
+  s: string;
+  Page: TBrowserTabSheet;
+begin
+  if not GetPage(ASender, Page) then
+    Exit;
+
+  s := Page.Frame.SelectedText.Trim([#9, #32, #160]);
+
+  IsText := not s.IsEmpty;
+  IsInteger := TryStrToInt(s, DummyInt);
+  IsFloat := TryStrToFloat(s, DummyDbl);
+  IsBoolean := TryStrToBool(s, DummyBool);
+
+  if not IsText then
+    Exit;
+
+  SubModel := AModel.AddSubMenu(BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM, 'Album');
+  AddTextCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_TITRE, 'Titre');
+  SubModel2 := SubModel.AddSubMenu(BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_Parution, 'Parution');
+  AddIntegerCommand(SubModel2, BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_Parution_Annee, 'Année');
+  AddIntegerCommand(SubModel2, BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_Parution_Mois, 'Mois');
+  SubModel2.AddSeparator;
+//  AddPeriodCommand(SubModel2, BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_Parution_Date, 'Date');
+  AddIntegerCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_Tome, 'Tome');
+  AddBooleanCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_Integrale, 'Intégrale');
+  AddIntegerCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_TomeDebut, 'Intégrale - Tome début');
+  AddIntegerCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_TomeFin, 'Intégrale - Tome fin');
+  AddBooleanCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_HorsSerie, 'Hors série');
+  SubModel2 := SubModel.AddSubMenu(BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_Auteur, 'Auteur');
+  AddTextCommand(SubModel2, BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_Scenaristes, 'Scénariste');
+  AddTextCommand(SubModel2, BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_Dessinateurs, 'Dessinateur');
+  AddTextCommand(SubModel2, BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_Coloristes, 'Coloriste');
+  AddTextCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_Sujet, 'Histoire');
+  AddTextCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_Notes, 'Notes');
+
+  SubModel := AModel.AddSubMenu(BDTKBROWSER_CONTEXTMENU_IMPORT_SERIE, 'Série');
+  AddTextCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_SERIE_TITRE, 'Titre');
+  AddTextCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_SERIE_SiteWeb, 'Site web');
+  AddTextCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_SERIE_Univers, 'Univers');
+  AddIntegerCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_SERIE_NbAlbums, 'Nombre d''albums');
+  AddBooleanCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_SERIE_Terminee, 'Terminée');
+  AddTextCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_SERIE_Genres, 'Genre');
+  SubModel2 := SubModel.AddSubMenu(BDTKBROWSER_CONTEXTMENU_IMPORT_SERIE_Auteurs, 'Auteur');
+  AddTextCommand(SubModel2, BDTKBROWSER_CONTEXTMENU_IMPORT_SERIE_Scenaristes, 'Scénariste');
+  AddTextCommand(SubModel2, BDTKBROWSER_CONTEXTMENU_IMPORT_SERIE_Dessinateurs, 'Dessinateur');
+  AddTextCommand(SubModel2, BDTKBROWSER_CONTEXTMENU_IMPORT_SERIE_Coloristes, 'Coloriste');
+  AddTextCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_SERIE_Sujet, 'Histoire');
+  AddTextCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_SERIE_Notes, 'Notes');
+  AddTextCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_SERIE_Editeur_NomEditeur, 'Editeur');
+  AddTextCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_SERIE_Editeur_SiteWeb, 'Site web de l''éditeur');
+  AddTextCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_SERIE_Collection_NomCollection, 'Collection');
+
+  SubModel := AModel.AddSubMenu(BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION, 'Edition');
+  AddTextCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_Editeur_NomEditeur, 'Editeur');
+  AddTextCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_Editeur_SiteWeb, 'Site web de l''éditeur');
+  AddTextCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_Collection_NomCollection, 'Collection');
+  AddIntegerCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_AnneeEdition, 'Annéee d''édition');
+  AddFloatCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_Prix, 'Prix');
+  AddBooleanCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_Gratuit, 'Gratuit');
+  AddTextCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_ISBN, 'ISBN');
+  AddTextCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_Etat, 'Etat');
+  AddTextCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_TypeEdition, 'Type d''édition');
+  AddTextCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_Reliure, 'Reliure');
+  AddTextCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_Orientation, 'Orientation');
+  AddTextCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_SensLecture, 'Sens de lecture');
+  AddTextCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_FormatEdition, 'Format');
+  AddIntegerCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_AnneeCote, 'Année de la cotation');
+  AddFloatCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_PrixCote, 'Cote');
+  AddBooleanCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_Couleur, 'Couleur');
+  AddBooleanCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_VO, 'VO');
+  AddIntegerCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_NombreDePages, 'Nombre de pages');
+//  AddImageCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_Couvertures, 'Image');
+end;
+
 procedure TfrmBDTKWebBrowser.Chromium_OnContextMenuCommand(ASender: TObject; const ABrowser: ICefBrowser; const AFrame: ICefFrame; const AParams: ICefContextMenuParams; ACommandId: Integer; AEventFlags: Cardinal; out AResult: Boolean);
 var
-  PageIndex: Integer;
   Page: TBrowserTabSheet;
 begin
   AResult := False;
-  if not (GetPageIndex(ASender, PageIndex) and GetPage(PageIndex, Page)) then
-    Exit;
 
   case ACommandId of
     BDTKBROWSER_CONTEXTMENU_LINK_TO_NEW_TAB:
       AddTab(AParams.LinkUrl);
+    BDTKBROWSER_CONTEXTMENU_IMPORT..MENU_ID_USER_LAST:
+      if GetPage(ASender, Page) then
+        FImportPreview.SetValue(ACommandId, Page.Frame.SelectedText.Trim([#9, #32, #160]));
   end;
 end;
 

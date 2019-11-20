@@ -53,6 +53,8 @@ type
   private
     FClosing: Boolean;
     FOnContextMenuCommand: TOnContextMenuCommand;
+    FOnBeforeContextMenu: TOnBeforeContextMenu;
+    FSelectedText: string;
 
     procedure BrowserCreatedMsg(var AMessage: TMessage); message CEF_AFTERCREATED;
     procedure BrowserDetroyParentWindow(var AMessage: TMessage); message BDTKBROWSER_DESTROYWNDPARENT;
@@ -65,6 +67,9 @@ type
 
     property Closing: Boolean read FClosing;
 
+    property SelectedText: string read FSelectedText;
+
+    property OnBeforeContextMenu: TOnBeforeContextMenu read FOnBeforeContextMenu write FOnBeforeContextMenu;
     property OnContextMenuCommand: TOnContextMenuCommand read FOnContextMenuCommand write FOnContextMenuCommand;
   end;
 
@@ -216,6 +221,9 @@ begin
   AModel.Remove(MENU_ID_VIEW_SOURCE);
 
   AModel.AddSeparator;
+  if Assigned(FOnBeforeContextMenu) then
+    FOnBeforeContextMenu(ASender, ABrowser, AFrame, AParams, AModel);
+  AModel.AddSeparator;
   if AParams.LinkUrl <> '' then
   begin
     AModel.AddItem(BDTKBROWSER_CONTEXTMENU_COPY_LINK, 'Copier le lien dans le presse-papiers');
@@ -325,6 +333,11 @@ begin
     StatusBar1.SimpleText := AMessage.ArgumentList.GetString(0);
     AResult := True;
   end
+  else if (AMessage.Name = SELECTEDTEXT_MESSAGE_NAME) then
+  begin
+    FSelectedText := AdjustLineBreaks(AMessage.ArgumentList.GetString(0));
+    AResult := True;
+  end;
 end;
 
 procedure TframeBDTKWebBrowser.edUrlKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);

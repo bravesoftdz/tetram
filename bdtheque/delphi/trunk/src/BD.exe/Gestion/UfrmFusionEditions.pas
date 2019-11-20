@@ -8,7 +8,7 @@ uses
   System.Generics.Collections, LabeledCheckBox;
 
 type
-  TfrmFusionEditions = class(TBdtForm)
+  TfrmFusionEditions = class(TbdtForm)
     lbEditions: TListBox;
     CheckBox1: TCheckBox;
     pnEditionSrc: TPanel;

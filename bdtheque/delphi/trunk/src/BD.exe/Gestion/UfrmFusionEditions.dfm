@@ -1,4 +1,4 @@
-﻿object frmFusionEditions: TfrmFusionEditions
+object frmFusionEditions: TfrmFusionEditions
   Left = 0
   Top = 0
   BorderStyle = bsDialog

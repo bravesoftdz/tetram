@@ -1,4 +1,4 @@
-﻿object frmBDTKWebBrowser: TfrmBDTKWebBrowser
+object frmBDTKWebBrowser: TfrmBDTKWebBrowser
   Left = 0
   Top = 0
   ClientHeight = 553
