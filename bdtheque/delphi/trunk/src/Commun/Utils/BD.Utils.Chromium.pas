@@ -71,7 +71,6 @@ begin
 {$IFDEF DEBUG}
   GlobalCEFApp.LogFile := 'BD.Chromium.debug.log';
   GlobalCEFApp.LogSeverity := LOGSEVERITY_DEBUG;
-  GlobalCEFApp.LogProcessInfo := True;
 {$ENDIF}
 
   // on n'utilise pas Application.ExeName pour éviter les uses trop gourmand (Forms)
