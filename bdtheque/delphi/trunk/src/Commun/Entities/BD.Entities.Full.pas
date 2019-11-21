@@ -270,7 +270,6 @@ type
     FUniversFull: TList<TUniversLite>;
     function GetID_Serie: RGUIDEx;
   private
-    FReadyToImport: Boolean;
     function GetDefaultSearch: string;
     procedure SetDefaultSearch(const Value: string);
     function GetSerie: TSerieFull;
@@ -288,7 +287,6 @@ type
     function ChaineAffichage(AvecSerie: Boolean): string; overload; override;
     function ChaineAffichage(Simple, AvecSerie: Boolean): string; reintroduce; overload;
 
-    property ReadyToImport: Boolean read FReadyToImport write FReadyToImport;
     property ReadyToFusion: Boolean read FReadyToFusion write FReadyToFusion;
     property FusionneEditions: Boolean read FFusionneEditions write FFusionneEditions;
     property DefaultSearch: string read GetDefaultSearch write SetDefaultSearch;

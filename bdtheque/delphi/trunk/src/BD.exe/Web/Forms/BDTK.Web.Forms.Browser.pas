@@ -1,4 +1,4 @@
-﻿unit BDTK.Web.Forms.Browser;
+unit BDTK.Web.Forms.Browser;
 
 interface
 
@@ -53,7 +53,6 @@ type
     FImportPreview: TfrmBDTKWebPreview;
     procedure AddTab(const AUrl: string);
     procedure RemoveTab(APageIndex: Integer);
-    function GetPageIndex(ASender: TObject; out APageIndex: Integer): Boolean;
     function GetPage(ASender: TObject; out APage: TBrowserTabSheet): Boolean; overload;
     function GetPage(APageIndex: Integer; out APage: TBrowserTabSheet): Boolean; overload;
     procedure CloseAllBrowsers;
@@ -230,15 +229,6 @@ begin
 
   FImportPreview.Album := Album;
   FImportPreview.Show;
-end;
-
-function TfrmBDTKWebBrowser.GetPageIndex(ASender: TObject; out APageIndex: Integer): Boolean;
-var
-  Page: TBrowserTabSheet;
-begin
-  Result := GetPage(ASender, Page);
-  if Result then
-    APageIndex := Page.PageIndex;
 end;
 
 function TfrmBDTKWebBrowser.GetPage(ASender: TObject; out APage: TBrowserTabSheet): Boolean;
