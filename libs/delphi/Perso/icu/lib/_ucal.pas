@@ -439,9 +439,6 @@ var
 
 implementation
 
-uses
-  JclSysUtils;
-
 {$IFNDEF ICU_LINKONREQUEST}
 function ucal_openTimeZoneIDEnumeration; external ICU_DEFAULT_I18N_MODULE_NAME name ucal_openTimeZoneIDEnumerationDefaultExportName;
 function ucal_openTimeZones; external ICU_DEFAULT_I18N_MODULE_NAME name ucal_openTimeZonesDefaultExportName;

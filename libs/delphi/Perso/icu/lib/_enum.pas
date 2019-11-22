@@ -73,9 +73,6 @@ var
 
 implementation
 
-uses
-  JclSysUtils;
-
 {$IFNDEF ICU_LINKONREQUEST}
 procedure uenum_close; external ICU_DEFAULT_COMMON_MODULE_NAME name uenum_closeDefaultExportName;
 function uenum_count; external ICU_DEFAULT_COMMON_MODULE_NAME name uenum_countDefaultExportName;

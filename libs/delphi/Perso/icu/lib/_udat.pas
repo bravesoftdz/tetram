@@ -5,7 +5,7 @@
 interface
 
 uses
-  icu_globals, JclSysUtils, _ucal, _umachine, _utypes, _unum, _umisc, _uloc,
+  icu_globals, _ucal, _umachine, _utypes, _unum, _umisc, _uloc,
   _udisplaycontext;
 
 type

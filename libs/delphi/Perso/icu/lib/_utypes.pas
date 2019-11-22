@@ -242,7 +242,7 @@ type
 implementation
 
 uses
-  _umachine, Winapi.Windows, System.SysUtils, JclSysUtils;
+  _umachine, Winapi.Windows, System.SysUtils;
 
 function U_SUCCESS(code: UErrorCode): Boolean;
 begin

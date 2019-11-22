@@ -74,9 +74,6 @@ var
 
 implementation
 
-uses
-  JclSysUtils;
-
 {$IFNDEF ICU_LINKONREQUEST}
 function utmscale_getTimeScaleValue; external ICU_DEFAULT_I18N_MODULE_NAME name utmscale_getTimeScaleValueDefaultExportName;
 function utmscale_fromInt64; external ICU_DEFAULT_I18N_MODULE_NAME name utmscale_fromInt64DefaultExportName;

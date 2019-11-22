@@ -123,9 +123,6 @@ implementation
 
 {$IFNDEF U_HIDE_DRAFT_API}
 
-uses
-  JclSysUtils;
-
 {$IFNDEF ICU_LINKONREQUEST}
 function ufmt_open; external ICU_DEFAULT_I18N_MODULE_NAME name ufmt_openDefaultExportName;
 procedure ufmt_close; external ICU_DEFAULT_I18N_MODULE_NAME name ufmt_closeDefaultExportName;

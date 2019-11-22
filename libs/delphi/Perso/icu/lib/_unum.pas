@@ -5,7 +5,7 @@
 interface
 
 uses
-  icu_globals, JclSysUtils, _umachine, _utypes, _umisc, parseerr, _uformattable,
+  icu_globals, _umachine, _utypes, _umisc, parseerr, _uformattable,
   _uloc;
 
 type

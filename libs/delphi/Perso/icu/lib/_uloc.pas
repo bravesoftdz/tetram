@@ -309,8 +309,6 @@ var
 {$ENDIF ~ICU_LINKONREQUEST}
 
 implementation
-uses
-  JclSysUtils;
 
 {$IFNDEF ICU_LINKONREQUEST}
 {$IFNDEF U_HIDE_SYSTEM_API}

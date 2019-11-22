@@ -5,7 +5,7 @@
 interface
 
 uses
-  JclSysUtils;
+  System.SysUtils, Winapi.Windows;
 
 const
   ICU_DEFAULT_VERSION = '52';
@@ -33,6 +33,16 @@ function IsICULoaded: Boolean;
 procedure UnloadICU;
 
 {$IFDEF ICU_LINKONREQUEST}
+type
+{$IFDEF MSWINDOWS}
+  TModuleHandle = HINST;
+{$ENDIF MSWINDOWS}
+{$IFDEF LINUX}
+  TModuleHandle = Pointer;
+{$ENDIF LINUX}
+
+const
+  INVALID_MODULEHANDLE_VALUE = TModuleHandle(0);
 
 var
   ICU_COMMON_LibraryHandle: TModuleHandle = INVALID_MODULEHANDLE_VALUE;
@@ -44,6 +54,7 @@ type
   TUnloadProcedure = procedure;
 procedure RegisterLoadICUProc(LoadProc: TLoadFunction; UnloadProc: TUnloadProcedure);
 
+function GetModuleSymbol(Module: TModuleHandle; SymbolName: string): Pointer;
 {$ENDIF ~ICU_LINKONREQUEST}
 
 const
@@ -65,6 +76,27 @@ begin
   LoadProcs.Add(LoadProc);
   UnloadProcs.Add(UnloadProc);
 end;
+
+function LoadModule(var Module: TModuleHandle; FileName: string): Boolean;
+begin
+  if Module = INVALID_MODULEHANDLE_VALUE then
+    Module := SafeLoadLibrary(FileName);
+  Result := Module <> INVALID_MODULEHANDLE_VALUE;
+end;
+
+procedure UnloadModule(var Module: TModuleHandle);
+begin
+  if Module <> INVALID_MODULEHANDLE_VALUE then
+    FreeLibrary(Module);
+  Module := INVALID_MODULEHANDLE_VALUE;
+end;
+
+function GetModuleSymbol(Module: TModuleHandle; SymbolName: string): Pointer;
+begin
+  Result := nil;
+  if Module <> INVALID_MODULEHANDLE_VALUE then
+    Result := GetProcAddress(Module, PChar(SymbolName));
+end;
 {$ENDIF ~ICU_LINKONREQUEST}
 
 function LoadICU: Boolean;
@@ -75,8 +107,10 @@ begin
   if IsICULoaded then
     Exit(True);
 
-  Result := JclSysUtils.LoadModule(ICU_COMMON_LibraryHandle, ICU_COMMON_MODULE_NAME) and JclSysUtils.LoadModule(ICU_I18N_LibraryHandle, ICU_I18N_MODULE_NAME)
-    and JclSysUtils.LoadModule(ICU_DATA_LibraryHandle, ICU_DATA_MODULE_NAME);
+  Result :=
+    LoadModule(ICU_COMMON_LibraryHandle, ICU_COMMON_MODULE_NAME)
+    and LoadModule(ICU_I18N_LibraryHandle, ICU_I18N_MODULE_NAME)
+    and LoadModule(ICU_DATA_LibraryHandle, ICU_DATA_MODULE_NAME);
 
   if Result then
     for LoadProc in LoadProcs do
@@ -92,8 +126,10 @@ end;
 function IsICULoaded: Boolean;
 begin
 {$IFDEF ICU_LINKONREQUEST}
-  Result := (ICU_COMMON_LibraryHandle <> INVALID_MODULEHANDLE_VALUE) and (ICU_I18N_LibraryHandle <> INVALID_MODULEHANDLE_VALUE) and
-    (ICU_DATA_LibraryHandle <> INVALID_MODULEHANDLE_VALUE);
+  Result :=
+    (ICU_COMMON_LibraryHandle <> INVALID_MODULEHANDLE_VALUE)
+    and (ICU_I18N_LibraryHandle <> INVALID_MODULEHANDLE_VALUE)
+    and (ICU_DATA_LibraryHandle <> INVALID_MODULEHANDLE_VALUE);
 {$ELSE ~ICU_LINKONREQUEST}
   Result := True;
 {$ENDIF ~ICU_LINKONREQUEST}
@@ -106,9 +142,9 @@ var
 begin
   for UnloadProc in UnloadProcs do
     UnloadProc;
-  JclSysUtils.UnloadModule(ICU_DATA_LibraryHandle);
-  JclSysUtils.UnloadModule(ICU_I18N_LibraryHandle);
-  JclSysUtils.UnloadModule(ICU_COMMON_LibraryHandle);
+  UnloadModule(ICU_DATA_LibraryHandle);
+  UnloadModule(ICU_I18N_LibraryHandle);
+  UnloadModule(ICU_COMMON_LibraryHandle);
 end;
 {$ELSE ~ICU_LINKONREQUEST}
 
@@ -120,15 +156,15 @@ initialization
 
 {$IFDEF ICU_LINKONREQUEST}
   LoadProcs := TList<TLoadFunction>.Create;
-UnloadProcs := TList<TUnloadProcedure>.Create;
+  UnloadProcs := TList<TUnloadProcedure>.Create;
 {$ENDIF ~ICU_LINKONREQUEST}
 
 finalization
 
-UnloadICU;
+  UnloadICU;
 {$IFDEF ICU_LINKONREQUEST}
-LoadProcs.Free;
-UnloadProcs.Free;
+  LoadProcs.Free;
+  UnloadProcs.Free;
 {$ENDIF ~ICU_LINKONREQUEST}
 
 end.
