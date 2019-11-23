@@ -1,4 +1,4 @@
-﻿unit BDTK.Web.Forms.Preview;
+unit BDTK.Web.Forms.Preview;
 
 interface
 
@@ -770,6 +770,13 @@ procedure TfrmBDTKWebPreview.SetValue(AId: Integer; const AValue: string);
     ChangeState(Chk, Ctrl);
   end;
 
+  function Edition: TEditionFull;
+  begin
+    if FAlbum.Editions.Count = 0 then
+      FAlbum.Editions.Add(TFactoryEditionFull.getInstance);
+    Result := FAlbum.Editions[0];
+  end;
+
 begin
   case AId of
     // Album
@@ -834,19 +841,19 @@ begin
       FAlbum.Serie.Collection.NomCollection := AValue;
     // Edition
     BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_Editeur_NomEditeur:
-      FAlbum.Editions[0].Editeur.NomEditeur := AValue;
+      Edition.Editeur.NomEditeur := AValue;
     BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_Editeur_SiteWeb:
-      FAlbum.Editions[0].Editeur.SiteWeb := AValue;
+      Edition.Editeur.SiteWeb := AValue;
     BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_Collection_NomCollection:
-      FAlbum.Editions[0].Collection.NomCollection := AValue;
+      Edition.Collection.NomCollection := AValue;
     BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_AnneeEdition:
-      FAlbum.Editions[0].AnneeEdition := AValue.ToInteger;
+      Edition.AnneeEdition := AValue.ToInteger;
     BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_Prix:
-      FAlbum.Editions[0].Prix := AValue.ToDouble;
+      Edition.Prix := AValue.ToDouble;
     BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_Gratuit:
-      FAlbum.Editions[0].Gratuit := AValue.ToBoolean;
+      Edition.Gratuit := AValue.ToBoolean;
     BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_ISBN:
-      FAlbum.Editions[0].ISBN := ClearISBN(AValue);
+      Edition.ISBN := ClearISBN(AValue);
     BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_Etat:
       LoadValue(AValue, cbxEtat, CheckBox23);
     BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_TypeEdition:
@@ -860,15 +867,15 @@ begin
     BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_FormatEdition:
       LoadValue(AValue, cbxFormat, CheckBox28);
     BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_AnneeCote:
-      FAlbum.Editions[0].AnneeCote := AValue.ToInteger;
+      Edition.AnneeCote := AValue.ToInteger;
     BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_PrixCote:
-      FAlbum.Editions[0].PrixCote := AValue.ToDouble;
+      Edition.PrixCote := AValue.ToDouble;
     BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_Couleur:
-      FAlbum.Editions[0].Couleur := AValue.ToBoolean;
+      Edition.Couleur := AValue.ToBoolean;
     BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_VO:
-      FAlbum.Editions[0].VO := AValue.ToBoolean;
+      Edition.VO := AValue.ToBoolean;
     BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_NombreDePages:
-      FAlbum.Editions[0].NombreDePages := AValue.ToInteger;
+      Edition.NombreDePages := AValue.ToInteger;
     BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_Couvertures:
       // LoadValue(Couvertures, cklImages, CheckBoxLabeled1);
       // FAlbum.Editions[0].AddImageFromURL(CombineURL(urlSite, s), ctiPlanche);
