@@ -1,13 +1,33 @@
-﻿unit BDTK.Web.Frames.Browser;
+unit BDTK.Web.Frames.Browser;
 
 interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls,
   Vcl.ExtCtrls, uCEFChromium, uCEFWinControl, uCEFWindowParent, System.Actions, Vcl.ActnList, uCEFInterfaces, uCEFTypes,
-  BDTK.Web.Browser.Utils, uCEFChromiumEvents, uCEFConstants, Vcl.ComCtrls;
+  BDTK.Web.Browser.Utils, uCEFChromiumEvents, uCEFConstants, Vcl.ComCtrls,
+  uCEFUrlRequestClientComponent, System.Generics.Collections;
 
 type
+  TDownloadPromise = TProc<string, TStream>;
+  TDownload = class
+  private
+    FFilename: string;
+    FPromise: TDownloadPromise;
+    FStream: TMemoryStream;
+    FUrl: string;
+  public
+    constructor Create;
+    destructor Destroy; override;
+
+    procedure PrepareDownload;
+
+    property Url: string read FUrl write FUrl;
+    property Filename: string read FFilename write FFilename;
+    property Promise: TDownloadPromise read FPromise write FPromise;
+    property Stream: TMemoryStream read FStream;
+  end;
+
   TframeBDTKWebBrowser = class(TFrame)
     pnlToolbar: TPanel;
     pnlButtons: TPanel;
@@ -29,6 +49,7 @@ type
     Browser: TPanel;
     StatusBar1: TStatusBar;
     Bevel1: TBevel;
+    CEFUrlRequestClientComponent1: TCEFUrlRequestClientComponent;
     procedure ActionList1Update(Action: TBasicAction; var Handled: Boolean);
     procedure actBackExecute(ASender: TObject);
     procedure actForwardExecute(ASender: TObject);
@@ -50,20 +71,33 @@ type
     procedure ChromiumOpenUrlFromTab(ASender: TObject; const ABrowser: ICefBrowser; const AFrame: ICefFrame; const ATargetUrl: ustring; ATargetDisposition: TCefWindowOpenDisposition; AUserGesture: Boolean; out AResult: Boolean);
     procedure ChromiumLoadStart(ASender: TObject; const ABrowser: ICefBrowser; const AFrame: ICefFrame; ATransitionType: Cardinal);
     procedure ChromiumProcessMessageReceived(ASender: TObject; const ABrowser: ICefBrowser; const AFrame: ICefFrame; ASourceProcess: TCefProcessId; const AMessage: ICefProcessMessage; out AResult: Boolean);
+    procedure CEFUrlRequestClientComponent1DownloadData(ASender: TObject; const ARequest: ICefUrlRequest; AData: Pointer; ADataLength: NativeUInt);
+    procedure CEFUrlRequestClientComponent1DownloadProgress(ASender: TObject; const ARequest: ICefUrlRequest; ACurrent, ATotal: Int64);
+    procedure CEFUrlRequestClientComponent1RequestComplete(ASender: TObject; const ARequest: ICefUrlRequest);
+    procedure CEFUrlRequestClientComponent1CreateURLRequest(ASender: TObject);
   private
     FClosing: Boolean;
     FOnContextMenuCommand: TOnContextMenuCommand;
     FOnBeforeContextMenu: TOnBeforeContextMenu;
     FSelectedText: string;
+    FPendingDownloads: TQueue<TDownload>;
+    FCurrentDownloads: TObjectDictionary<UInt64, TDownload>;
 
     procedure BrowserCreatedMsg(var AMessage: TMessage); message CEF_AFTERCREATED;
     procedure BrowserDetroyParentWindow(var AMessage: TMessage); message BDTKBROWSER_DESTROYWNDPARENT;
     procedure RunAction(var AMessage: TMessage); message BDTKBROWSER_RUN_ACTION;
+    procedure URLRequestSuccess(var AMessage: TMessage); message BDTKBROWSER_URLREQUEST_SUCCESS;
+    procedure URLRequestError(var AMessage: TMessage); message BDTKBROWSER_URLREQUEST_ERROR;
   public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+
     procedure Initialize(const ADefaultUrl: string);
 
     procedure HandleKeyUp(const AMsg: TMsg; var AHandled: Boolean);
     procedure HandleKeyDown(const AMsg: TMsg; var AHandled: Boolean);
+
+    procedure DownloadURL(const AUrl: string; APromise: TDownloadPromise);
 
     property Closing: Boolean read FClosing;
 
@@ -77,11 +111,48 @@ implementation
 
 uses
   System.Math, uCEFMiscFunctions, BD.Utils.Chromium.Extension, Vcl.Clipbrd,
-  System.IOUtils, uCEFApplication;
+  System.IOUtils, uCEFApplication, uCEFRequest, uCEFUrlRequest;
 
 {$R *.dfm}
 
+{ TDownload }
+
+constructor TDownload.Create;
+begin
+
+end;
+
+destructor TDownload.Destroy;
+begin
+  FreeAndNil(FStream);
+  inherited;
+end;
+
+procedure TDownload.PrepareDownload;
+begin
+  if not Assigned(FStream) then
+    FStream := TMemoryStream.Create;
+end;
+
 { TframeBDTKWebBrowser }
+
+constructor TframeBDTKWebBrowser.Create(AOwner: TComponent);
+begin
+  inherited;
+  FPendingDownloads := TQueue<TDownload>.Create;
+  FCurrentDownloads := TObjectDictionary<UInt64, TDownload>.Create([doOwnsValues]);
+end;
+
+destructor TframeBDTKWebBrowser.Destroy;
+begin
+  while FPendingDownloads.Count > 0 do
+    FPendingDownloads.Dequeue.Free;
+  FPendingDownloads.Free;
+
+  FCurrentDownloads.Free;
+
+  inherited;
+end;
 
 procedure TframeBDTKWebBrowser.Initialize(const ADefaultUrl: string);
 begin
@@ -164,6 +235,102 @@ end;
 procedure TframeBDTKWebBrowser.RunAction(var AMessage: TMessage);
 begin
   AMessage.Result := NativeInt(TAction(AMessage.LParam).Execute);
+end;
+
+procedure TframeBDTKWebBrowser.CEFUrlRequestClientComponent1CreateURLRequest(ASender: TObject);
+var
+  Download: TDownload;
+  NewRequest: ICefRequest;
+begin
+  while FPendingDownloads.Count > 0 do
+  begin
+    Download := FPendingDownloads.Dequeue;
+    try
+      NewRequest := TCefRequestRef.New;
+      NewRequest.Url := Download.Url;
+      NewRequest.Method := 'GET';
+      NewRequest.Flags := UR_FLAG_ALLOW_STORED_CREDENTIALS;
+
+      // Set the "client" parameter to the TCEFUrlRequestClientComponent.Client property
+      // to use the TCEFUrlRequestClientComponent events.
+      // The "requestContext" parameter can be nil to use the global request context.
+      TCefUrlRequestRef.New(NewRequest, CEFUrlRequestClientComponent1.Client, nil);
+      FCurrentDownloads.Add(NewRequest.Identifier, Download);
+    finally
+      NewRequest := nil;
+    end;
+  end;
+end;
+
+procedure TframeBDTKWebBrowser.CEFUrlRequestClientComponent1DownloadData(ASender: TObject; const ARequest: ICefUrlRequest; AData: Pointer; ADataLength: NativeUInt);
+var
+  Download: TDownload;
+begin
+  if not Assigned(ARequest) then
+    Exit;
+
+  if FClosing then
+    ARequest.Cancel
+  else if (AData <> nil) and (ADataLength > 0) and FCurrentDownloads.TryGetValue(ARequest.Request.Identifier, Download) then
+  begin
+    Download.PrepareDownload;
+    Download.Stream.WriteBuffer(AData^, ADataLength);
+  end;
+end;
+
+procedure TframeBDTKWebBrowser.CEFUrlRequestClientComponent1DownloadProgress(ASender: TObject; const ARequest: ICefUrlRequest; ACurrent, ATotal: Int64);
+begin
+  if not Assigned(ARequest) then
+    Exit;
+
+  if FClosing then
+    ARequest.Cancel
+  else
+  begin
+//    if (ATotal > 0) then
+//      StatusBar1.Panels[0].Text := 'Downloading : ' + inttostr(round((ACurrent / ATotal) * 100)) + ' %'
+//    else
+//      StatusBar1.Panels[0].Text := 'Downloading : ' + inttostr(ACurrent) + ' bytes';
+  end;
+end;
+
+procedure TframeBDTKWebBrowser.CEFUrlRequestClientComponent1RequestComplete(ASender: TObject; const ARequest: ICefUrlRequest);
+begin
+  if not Assigned(ARequest) then
+    Exit;
+
+  // Use ARequest.response here to get a ICefResponse interface with all the response headers, status, error code, etc.
+
+  if (ARequest.RequestStatus = UR_SUCCESS) then
+    PostMessage(Handle, BDTKBROWSER_URLREQUEST_SUCCESS, ARequest.Request.Identifier, 0)
+  else
+    PostMessage(Handle, BDTKBROWSER_URLREQUEST_ERROR, ARequest.Request.Identifier, ARequest.RequestError);
+end;
+
+procedure TframeBDTKWebBrowser.URLRequestError(var AMessage: TMessage);
+var
+  Download: TDownload;
+begin
+  if not FCurrentDownloads.TryGetValue(AMessage.WParam, Download) then
+    Exit;
+  try
+
+  finally
+    FCurrentDownloads.Remove(AMessage.WParam);
+  end;
+end;
+
+procedure TframeBDTKWebBrowser.URLRequestSuccess(var AMessage: TMessage);
+var
+  Download: TDownload;
+begin
+  if not FCurrentDownloads.TryGetValue(AMessage.WParam, Download) then
+    Exit;
+  try
+    Download.Promise(Download.Filename, Download.Stream);
+  finally
+    FCurrentDownloads.Remove(AMessage.WParam);
+  end;
 end;
 
 procedure TframeBDTKWebBrowser.ChromiumAddressChange(ASender: TObject; const ABrowser: ICefBrowser; const AFrame: ICefFrame; const AUrl: ustring);
@@ -392,6 +559,30 @@ begin
 
   if (KeyMsg.CharCode = VK_F12) then
     AHandled := True;
+end;
+
+procedure TframeBDTKWebBrowser.DownloadURL(const AUrl: string; APromise: TDownloadPromise);
+var
+  UrlParts: TUrlParts;
+  i: Integer;
+  NewDownload: TDownload;
+begin
+  if AUrl.IsEmpty then
+    Exit;
+
+  NewDownload := TDownload.Create;
+  NewDownload.Url := AURL;
+  NewDownload.Promise := APromise;
+
+  CefParseUrl(AUrl, UrlParts);
+  NewDownload.Filename := string(UrlParts.path).Trim;
+
+  i := NewDownload.Filename.LastIndexOf('/');
+  if (i >= 0) then
+    NewDownload.Filename := NewDownload.Filename.Substring(i + 1).Trim;
+
+  FPendingDownloads.Enqueue(NewDownload);
+  CEFUrlRequestClientComponent1.AddURLRequest;
 end;
 
 end.

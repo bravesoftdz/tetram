@@ -1,4 +1,4 @@
-unit BDTK.Web.Forms.Preview;
+﻿unit BDTK.Web.Forms.Preview;
 
 interface
 
@@ -131,7 +131,7 @@ type
     procedure VisuClose(Sender: TObject);
     procedure SetAlbum(const Value: TAlbumFull);
   public
-    procedure SetValue(AId: Integer; const AValue: string);
+    procedure SetValue(AId: Integer; const AValue: string; AStream: TStream = nil);
     procedure StoreData;
 
     procedure ReloadAlbum;
@@ -739,7 +739,7 @@ begin
   ReloadAlbum;
 end;
 
-procedure TfrmBDTKWebPreview.SetValue(AId: Integer; const AValue: string);
+procedure TfrmBDTKWebPreview.SetValue(AId: Integer; const AValue: string; AStream: TStream);
 
   procedure ChangeState(Chk: TCheckBox; Ctrl: TControl);
   var
@@ -775,6 +775,46 @@ procedure TfrmBDTKWebPreview.SetValue(AId: Integer; const AValue: string);
     if FAlbum.Editions.Count = 0 then
       FAlbum.Editions.Add(TFactoryEditionFull.getInstance);
     Result := FAlbum.Editions[0];
+  end;
+
+  procedure AddImageFromURL(Edition: TEditionFull; const AFilename: string; AStream: TStream; TypeImage: Integer);
+  var
+    TmpFileName: string;
+    FileStream: TFileStream;
+    Couverture: TCouvertureLite;
+    Stream: TStream;
+  begin
+    TmpFileName := TPath.GetTempFileName;
+
+    try
+      Stream := GetJPEGStream(AStream);
+    except
+      Exit; // l'image n'est pas d'un type acceptable
+    end;
+    try
+      if TFile.Exists(TmpFileName) then
+        // ça devrait toujours être le cas puisque GetTempFileName est sensé le créer
+        FileStream := TFileStream.Create(TmpFileName, fmOpenReadWrite, fmShareExclusive)
+      else
+        FileStream := TFileStream.Create(TmpFileName, fmCreate or fmOpenReadWrite, fmShareExclusive);
+      try
+        FileStream.CopyFrom(Stream, 0);
+      finally
+        FileStream.Free;
+      end;
+    finally
+      if Stream <> AStream then
+        Stream.Free;
+    end;
+
+    Couverture := TFactoryCouvertureLite.getInstance;
+    Edition.Couvertures.Add(Couverture);
+    Couverture.OldNom := TmpFileName;
+    Couverture.NewNom := AFilename;
+    Couverture.OldStockee := Couverture.NewStockee;
+    Couverture.NewStockee := TGlobalVar.Options.ImagesStockees;
+    Couverture.Categorie := TypeImage;
+    Couverture.sCategorie := TDaoListe.ListTypesCouverture.Values[IntToStr(TypeImage)];
   end;
 
 var
@@ -882,10 +922,8 @@ begin
       Edition.VO := AValue.ToBoolean;
     BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_NombreDePages:
       Edition.NombreDePages := AValue.ToInteger;
-    BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_Couvertures:
-      // LoadValue(Couvertures, cklImages, CheckBoxLabeled1);
-      // FAlbum.Editions[0].AddImageFromURL(CombineURL(urlSite, s), ctiPlanche);
-      ;
+    BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_Image_First..BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_Image_Last:
+       AddImageFromURL(Edition, AValue, AStream, TDaoListe.ListTypesCouverture.Names[AId - BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_Image_First].ToInteger);
   end;
 
   ReloadAlbum;

@@ -89,6 +89,7 @@ type
     destructor Destroy; override;
   end;
 
+function GetJPEGStream(AStream: TStream): TStream; overload;
 function GetJPEGStream(const Fichier: string): TStream; overload;
 function GetJPEGStream(const Fichier: string; Hauteur, Largeur: Integer; AntiAliasing: Boolean; Cadre: Boolean = False; Effet3D: Integer = 0): TStream; overload;
 function ResizePicture(Image: TPicture; Hauteur, Largeur: Integer; AntiAliasing, Cadre: Boolean; Effet3D: Integer): TStream;
@@ -526,6 +527,20 @@ begin
 end;
 
 function GetJPEGStream(const Fichier: string): TStream;
+var
+  f: TFileStream;
+begin
+  Result := nil;
+  f := TFileStream.Create(Fichier, fmOpenRead or fmShareDenyWrite);
+  try
+    Result := GetJPEGStream(f);
+  finally
+    if Result <> f then
+      f.Free;
+  end;
+end;
+
+function GetJPEGStream(AStream: TStream): TStream;
 
   function MatchesMask(const Fichier, Mask: string): Boolean;
   var
@@ -541,28 +556,26 @@ function GetJPEGStream(const Fichier: string): TStream;
   end;
 
 const
-  JPGMagic: array [0 .. 2] of Byte = ($FF, $D8, $FF);
-  GIFMagic: array [0 .. 3] of Byte = ($47, $49, $46, $38);
-  PNGMagic: array [0 .. 7] of Byte = ($89, $50, $4E, $47, $0D, $0A, $1A, $0A);
+  JPGMagic: array[0..2] of Byte = ($FF, $D8, $FF);
+  GIFMagic: array[0..3] of Byte = ($47, $49, $46, $38);
+  PNGMagic: array[0..7] of Byte = ($89, $50, $4E, $47, $0D, $0A, $1A, $0A);
 
 var
   jImg: TJPEGImage;
   img: TPicture;
   graphClass: TGraphicClass;
   graph: TGraphic;
-  f: TFileStream;
-  buffer: array [0 .. 7] of Byte;
+  buffer: array[0..7] of Byte;
 begin
-  f := TFileStream.Create(Fichier, fmOpenRead or fmShareDenyWrite);
-
-  f.Position := 0;
-  f.ReadBuffer(buffer, Length(buffer));
-  f.Position := 0;
+  AStream.Position := 0;
+  AStream.ReadBuffer(buffer, Length(buffer));
+  AStream.Position := 0;
 
   if CompareMem(@buffer, @JPGMagic, Length(JPGMagic)) then
     // déjà du JPEG
-    Exit(f)
-  else if CompareMem(@buffer, @PNGMagic, Length(PNGMagic)) then
+    Exit(AStream);
+
+  if CompareMem(@buffer, @PNGMagic, Length(PNGMagic)) then
     // PNG
     graphClass := TPngImage
   else if CompareMem(@buffer, @GIFMagic, Length(GIFMagic)) then
@@ -580,12 +593,12 @@ begin
     if Assigned(graphClass) then
     begin
       graph := graphClass.Create;
-      graph.LoadFromStream(f);
+      graph.LoadFromStream(AStream);
     end
     else
     begin
       img := TPicture.Create;
-      img.LoadFromFile(Fichier);
+      img.LoadFromStream(AStream);
     end;
 
     jImg.PixelFormat := jf24Bit;
@@ -621,7 +634,7 @@ begin
       picture.Assign(image);
     finally
       image.Free;
-      FreeAndNil(stream);
+      stream.Free;
     end;
     Result := ResizePicture(picture, Hauteur, Largeur, AntiAliasing, Cadre, Effet3D);
   finally

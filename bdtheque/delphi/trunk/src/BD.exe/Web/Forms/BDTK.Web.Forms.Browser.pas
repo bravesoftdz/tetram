@@ -1,4 +1,4 @@
-unit BDTK.Web.Forms.Browser;
+﻿unit BDTK.Web.Forms.Browser;
 
 interface
 
@@ -8,7 +8,7 @@ uses
   BD.Entities.Full, Vcl.ComCtrls, Vcl.StdCtrls, Vcl.ExtCtrls,
   uCEFChromium, uCEFWindowParent, uCEFInterfaces, uCEFApplication, uCEFTypes, uCEFConstants,
   uCEFSentinel, Vcl.AppEvnts, BDTK.Web.Frames.Browser, BDTK.Web.Browser.Utils,
-  Vcl.Menus, BDTK.Web.Forms.Preview;
+  Vcl.Menus, BDTK.Web.Forms.Preview, uCEFUrlRequestClientComponent;
 
 // This is the destruction sequence when a user closes a tab sheet:
 // 1. TChromium.CloseBrowser triggers a TChromium.OnClose event.
@@ -79,7 +79,8 @@ implementation
 
 uses
   BD.Utils.GUIUtils, BD.Utils.Chromium, System.Math, BD.Utils.Net,
-  System.StrUtils, BDTK.Web.Forms.Associate, BDTK.Web.Import;
+  System.StrUtils, BDTK.Web.Forms.Associate, BDTK.Web.Import,
+  BD.Entities.Dao.Lambda;
 
 {$R *.dfm}
 
@@ -373,9 +374,7 @@ begin
   IsInteger := TryStrToInt(s, DummyInt);
   IsFloat := TryStrToFloat(s, DummyDbl);
   IsBoolean := TryStrToBool(s, DummyBool);
-
-  if not IsText then
-    Exit;
+  IsImage := AParams.HasImageContents and not string(AParams.SourceUrl).IsEmpty;
 
   SubModel := AModel.AddSubMenu(BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM, 'Album');
   AddCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_TITRE, 'Titre', IsText);
@@ -432,7 +431,10 @@ begin
   AddCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_Couleur, 'Couleur', IsBoolean);
   AddCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_VO, 'VO', IsBoolean);
   AddCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_NombreDePages, 'Nombre de pages', IsInteger);
-//  AddImageCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_Couvertures, 'Image');
+  SubModel2 := SubMOdel.AddSubMenu(BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_Image, 'Image');
+  for var i := 0 to Pred(TDaoListe.ListTypesCouverture.Count) do
+    if BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_Image_First + i <= BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_Image_Last then
+      AddCommand(SubModel2, BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_Image_First + i, TDaoListe.ListTypesCouverture.ValueFromIndex[i], IsImage);
 end;
 
 procedure TfrmBDTKWebBrowser.Chromium_OnContextMenuCommand(ASender: TObject; const ABrowser: ICefBrowser; const AFrame: ICefFrame; const AParams: ICefContextMenuParams; ACommandId: Integer; AEventFlags: Cardinal; out AResult: Boolean);
@@ -444,9 +446,17 @@ begin
   case ACommandId of
     BDTKBROWSER_CONTEXTMENU_LINK_TO_NEW_TAB:
       AddTab(AParams.LinkUrl);
-    BDTKBROWSER_CONTEXTMENU_IMPORT..MENU_ID_USER_LAST:
+    BDTKBROWSER_CONTEXTMENU_IMPORT..BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_Image:
       if GetPage(ASender, Page) then
         FImportPreview.SetValue(ACommandId, Page.Frame.SelectedText.Trim([#9, #32, #160]));
+    BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_Image_First..BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_Image_Last:
+      if GetPage(ASender, Page) then
+        Page.Frame.DownloadURL(AParams.SourceUrl,
+          procedure(AFilename: string; AStream: TStream)
+          begin
+            FImportPreview.SetValue(ACommandId, AFilename, AStream);
+          end
+        );
   end;
 end;
 

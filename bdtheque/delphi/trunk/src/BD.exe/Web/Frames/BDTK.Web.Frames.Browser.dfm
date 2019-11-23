@@ -172,4 +172,12 @@ object frameBDTKWebBrowser: TframeBDTKWebBrowser
     Left = 120
     Top = 168
   end
+  object CEFUrlRequestClientComponent1: TCEFUrlRequestClientComponent
+    OnRequestComplete = CEFUrlRequestClientComponent1RequestComplete
+    OnDownloadProgress = CEFUrlRequestClientComponent1DownloadProgress
+    OnDownloadData = CEFUrlRequestClientComponent1DownloadData
+    OnCreateURLRequest = CEFUrlRequestClientComponent1CreateURLRequest
+    Left = 256
+    Top = 160
+  end
 end
