@@ -1,4 +1,4 @@
-﻿unit BDTK.Web.Forms.Preview;
+unit BDTK.Web.Forms.Preview;
 
 interface
 
@@ -228,7 +228,7 @@ begin
     PC := FAlbum.Editions[0].Couvertures[cklImages.ItemIndex];
     hg := THourGlass.Create;
     if IsEqualGUID(PC.ID, GUID_NULL) then
-      ms := GetJPEGStream(PC.NewNom, imgVisu.Height, imgVisu.Width, TGlobalVar.Options.AntiAliasing)
+      ms := GetJPEGStream(PC.OldNom, imgVisu.Height, imgVisu.Width, TGlobalVar.Options.AntiAliasing)
     else
       ms := GetCouvertureStream(False, PC.ID, imgVisu.Height, imgVisu.Width, TGlobalVar.Options.AntiAliasing);
     if Assigned(ms) then
@@ -491,7 +491,7 @@ begin
   PC := FAlbum.Editions[0].Couvertures[cklImages.ItemIndex];
   hg := THourGlass.Create;
   if IsEqualGUID(PC.ID, GUID_NULL) then
-    ms := GetJPEGStream(PC.NewNom, 400, 500, TGlobalVar.Options.AntiAliasing)
+    ms := GetJPEGStream(PC.OldNom, 400, 500, TGlobalVar.Options.AntiAliasing)
   else
     ms := GetCouvertureStream(False, PC.ID, 400, 500, TGlobalVar.Options.AntiAliasing);
   if Assigned(ms) then

@@ -439,10 +439,11 @@ begin
     for pi in List do
       if IsEqualGUID(pi.ID, GUID_NULL) then
       begin // nouvelles photos
+        if pi.NewNom.IsEmpty then
+          pi.NewNom := pi.OldNom;
         if (not pi.NewStockee) then
         begin // photos liées (q1)
-          pi.OldNom := pi.NewNom;
-          pi.NewNom := SearchNewFileName(TGlobalVar.RepImages, ExtractFileName(pi.NewNom), True);
+          pi.NewNom := SearchNewFileName(TGlobalVar.RepImages, ExtractFileName(pi.OldNom), True);
           qry6.Params.ByNameAsString['chemin'] := TGlobalVar.RepImages;
           qry6.Params.ByNameAsString['fichier'] := pi.NewNom;
           Stream := GetJPEGStream(pi.OldNom, -1, -1, False);
@@ -462,12 +463,12 @@ begin
           qry1.Execute;
           pi.ID := StringToGUID(qry1.Fields.AsString[0]);
         end
-        else if TFile.Exists(pi.NewNom) then
+        else if TFile.Exists(pi.OldNom) then
         begin // photos stockées (q2)
           qry2.Params.ByNameAsString['pk_parent'] := GUIDToString(ReferenceParent);
           qry2.Params.ByNameAsString['fichier'] := TPath.GetFileNameWithoutExtension(pi.NewNom);
           qry2.Params.ByNameAsInteger['ordre'] := List.IndexOf(pi);
-          Stream := GetJPEGStream(pi.NewNom);
+          Stream := GetJPEGStream(pi.OldNom);
           try
             qry2.ParamsSetBlob('image', Stream);
           finally

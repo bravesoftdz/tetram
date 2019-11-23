@@ -660,7 +660,7 @@ begin
     PC := FCurrentEditionComplete.Couvertures[Node.Index];
     hg := THourGlass.Create;
     if IsEqualGUID(PC.ID, GUID_NULL) then
-      ms := GetJPEGStream(PC.NewNom, imgVisu.Height, imgVisu.Width, TGlobalVar.Options.AntiAliasing)
+      ms := GetJPEGStream(PC.OldNom, imgVisu.Height, imgVisu.Width, TGlobalVar.Options.AntiAliasing)
     else
       ms := GetCouvertureStream(False, PC.ID, imgVisu.Height, imgVisu.Width, TGlobalVar.Options.AntiAliasing);
     if Assigned(ms) then
@@ -1118,7 +1118,7 @@ begin
   PC := FCurrentEditionComplete.Couvertures[vstImages.FocusedNode.Index];
   hg := THourGlass.Create;
   if IsEqualGUID(PC.ID, GUID_NULL) then
-    ms := GetJPEGStream(PC.NewNom, 400, 500, TGlobalVar.Options.AntiAliasing)
+    ms := GetJPEGStream(PC.OldNom, 400, 500, TGlobalVar.Options.AntiAliasing)
   else
     ms := GetCouvertureStream(False, PC.ID, 400, 500, TGlobalVar.Options.AntiAliasing);
   if Assigned(ms) then
@@ -1217,10 +1217,11 @@ begin
   if IsEqualGUID(PC.ID, GUID_NULL) then
   begin
     ChoixImageDialog.Options := ChoixImageDialog.Options - [ofAllowMultiSelect];
-    ChoixImageDialog.FileName := PC.NewNom;
+    ChoixImageDialog.FileName := PC.OldNom;
     if ChoixImageDialog.Execute then
     begin
-      PC.NewNom := ChoixImageDialog.FileName;
+      PC.OldNom := ChoixImageDialog.FileName;
+      PC.NewNom := PC.OldNom;
       vstImages.InvalidateNode(vstImages.FocusedNode);
     end;
   end;

@@ -424,7 +424,7 @@ begin
     PP := FParaBD.Photos[Node.Index];
     hg := THourGlass.Create;
     if IsEqualGUID(PP.ID, GUID_NULL) then
-      ms := GetJPEGStream(PP.NewNom, imgVisu.Height, imgVisu.Width, TGlobalVar.Options.AntiAliasing)
+      ms := GetJPEGStream(PP.OldNom, imgVisu.Height, imgVisu.Width, TGlobalVar.Options.AntiAliasing)
     else
       ms := GetCouvertureStream(True, PP.ID, imgVisu.Height, imgVisu.Width, TGlobalVar.Options.AntiAliasing);
     if Assigned(ms) then
@@ -459,10 +459,11 @@ begin
   if IsEqualGUID(PP.ID, GUID_NULL) then
   begin
     ChoixImageDialog.Options := ChoixImageDialog.Options - [ofAllowMultiSelect];
-    ChoixImageDialog.FileName := PP.NewNom;
+    ChoixImageDialog.FileName := PP.OldNom;
     if ChoixImageDialog.Execute then
     begin
-      PP.NewNom := ChoixImageDialog.FileName;
+      PP.OldNom := ChoixImageDialog.FileName;
+      PP.NewNom := PP.OldNom;
       vstImages.InvalidateNode(vstImages.FocusedNode);
     end;
   end;
@@ -768,7 +769,7 @@ begin
   PP := FParaBD.Photos[vstImages.FocusedNode.Index];
   hg := THourGlass.Create;
   if IsEqualGUID(PP.ID, GUID_NULL) then
-    ms := GetJPEGStream(PP.NewNom, 400, 500, TGlobalVar.Options.AntiAliasing)
+    ms := GetJPEGStream(PP.OldNom, 400, 500, TGlobalVar.Options.AntiAliasing)
   else
     ms := GetCouvertureStream(True, PP.ID, 400, 500, TGlobalVar.Options.AntiAliasing);
   if Assigned(ms) then
