@@ -20,6 +20,8 @@ type
     procedure TestTimeToStrShort;
     procedure TestTimeToStrLong;
     procedure TestTimeToStrFull;
+
+    procedure TestStrToMonth;
   end;
 
 implementation
@@ -97,6 +99,18 @@ begin
   CheckEquals('17:45', ICUTimeToStrShort(FDate, True, 'fr-FR'), 'fr-FR GMT');
   CheckEquals('6:45 PM', ICUTimeToStrShort(FDate, False, 'en-US'), 'en-US');
   CheckEquals('5:45 PM', ICUTimeToStrShort(FDate, True, 'en-US'), 'en-US GMT');
+end;
+
+procedure TestTICUDateFormat.TestStrToMonth;
+begin
+  CheckEquals(9, ICUStrToMonth('Septembre', 'fr-FR'), 'Septembre fr-FR');
+  CheckEquals(9, ICUStrToMonth('Sept', 'fr-FR'), 'Sept fr-FR');
+  CheckEquals(9, ICUStrToMonth('Sept.', 'fr-FR'), 'Sept. fr-FR');
+
+  CheckEquals(9, ICUStrToMonth('September', 'en-US'), 'September en-US');
+  CheckEquals(-1, ICUStrToMonth('Sept', 'en-US'), 'Sept en-US');
+  CheckEquals(9, ICUStrToMonth('Sep', 'en-US'), 'Sep en-US');
+  CheckEquals(9, ICUStrToMonth('Sep.', 'en-US'), 'Sep. en-US');
 end;
 
 initialization

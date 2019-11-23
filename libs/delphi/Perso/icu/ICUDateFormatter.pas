@@ -65,6 +65,8 @@ function ICUTimeToStrFull(const Value: TDateTime; LocalToGMT: Boolean = False; c
 function ICUTimeToStrShort(const Value: TDateTime; LocalToGMT: Boolean = False; const Locale: AnsiString = ''): string;
 function ICUTimeToStrLong(const Value: TDateTime; LocalToGMT: Boolean = False; const Locale: AnsiString = ''): string;
 
+function ICUStrToMonth(const Value: string; const Locale: AnsiString = ''): Integer;
+
 implementation
 
 uses
@@ -126,6 +128,56 @@ end;
 function ICUTimeToStrFull(const Value: TDateTime; LocalToGMT: Boolean = False; const Locale: AnsiString = ''): string;
 begin
   Result := FormatDateTime(Value, UDAT_NONE, UDAT_FULL, LocalToGMT, ProperLocale(Locale));
+end;
+
+function ICUStrToMonth(const Value: string; const Locale: AnsiString = ''): Integer;
+const
+  MONTHS_TYPES: array[0..5] of UDateFormatSymbolType = (UDAT_MONTHS, UDAT_SHORT_MONTHS, UDAT_NARROW_MONTHS, UDAT_STANDALONE_MONTHS, UDAT_STANDALONE_SHORT_MONTHS, UDAT_STANDALONE_NARROW_MONTHS);
+var
+  Formatter: TICUDateFormatter;
+  MonthType: UDateFormatSymbolType;
+  i: Integer;
+  buffer: string;
+  bufNeeded: Int32;
+  status: UErrorCode;
+  Suffix: string;
+begin
+  if TryStrToInt(Value.Trim([#32, #160]), Result) then
+    if Result in [1..12] then
+      Exit
+    else
+      Exit(-1);
+
+  Formatter := TICUDateFormatter.Create(ProperLocale(Locale));
+  try
+    for MonthType in MONTHS_TYPES do
+    begin
+      if MonthType in [UDAT_MONTHS, UDAT_STANDALONE_MONTHS] then
+        Suffix := ''
+      else
+        Suffix := '.';
+
+      for i := 0 to udat_countSymbols(Formatter.FFormat, MonthType) - 1 do
+      begin
+        bufNeeded := DEFAULT_BUFFER_SIZE;
+        SetLength(buffer, bufNeeded);
+        bufNeeded := udat_getSymbols(Formatter.FFormat, MonthType, i, @buffer[1], bufNeeded, status);
+        if status = U_BUFFER_OVERFLOW_ERROR then
+        begin
+          SetLength(buffer, bufNeeded);
+          ResetErrorCode(status);
+          bufNeeded := udat_getSymbols(Formatter.FFormat, MonthType, i, @buffer[1], bufNeeded, status);
+        end;
+        SetLength(buffer, bufNeeded);
+
+        if SameText(Value, buffer) or SameText(Value + Suffix, buffer)  then
+          Exit(i + 1);
+      end;
+    end;
+  finally
+    Formatter.Free;
+  end;
+  Result := -1;
 end;
 
 { TICUDateFormatterWrapper }
