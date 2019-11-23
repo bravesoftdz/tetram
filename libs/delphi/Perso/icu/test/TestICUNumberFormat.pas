@@ -7,7 +7,7 @@ uses
   ICUTest;
 
 type
-  // M�thodes de test pour la classe TICUNumberFormat
+  // Méthodes de test pour la classe TICUNumberFormat
 
   TestTICUNumberFormat = class(TICUTest)
   strict private
@@ -80,7 +80,7 @@ begin
     FICUNumberFormat.Symbols.ThreeDigit := 'C';
     FICUNumberFormat.Symbols.FourDigit := 'D';
     FICUNumberFormat.Symbols.FiveDigit := 'E';
-    CheckEquals('AEC,DE��', FICUNumberFormat.Format(Value));
+    CheckEquals('AEC,DE'#160'€', FICUNumberFormat.Format(Value));
   finally
     FICUNumberFormat.Free;
   end;
@@ -99,7 +99,7 @@ begin
   FICUNumberFormat := TICUNumberFormatter.Create('fr-FR', UNUM_CURRENCY);
   try
     FICUNumberFormat.Symbols.Currency := '*';
-    CheckEquals('153,45�*', FICUNumberFormat.Format(Value));
+    CheckEquals('153,45'#160'*', FICUNumberFormat.Format(Value));
   finally
     FICUNumberFormat.Free;
   end;
@@ -152,7 +152,7 @@ begin
 
   FICUNumberFormat := TICUNumberFormatter.Create('fr-FR', UNUM_CURRENCY);
   try
-    CheckEquals('153,45��', FICUNumberFormat.Format(Value));
+    CheckEquals('153,45'#160'€', FICUNumberFormat.Format(Value));
   finally
     FICUNumberFormat.Free;
   end;
@@ -165,13 +165,13 @@ begin
 
   FICUNumberFormat := TICUNumberFormatter.Create('fr-FR', UNUM_CURRENCY);
   try
-    CheckEquals('153,45�$US', FICUNumberFormat.Format(Value, 'USD'));
+    CheckEquals('153,45'#160'$US', FICUNumberFormat.Format(Value, 'USD'));
   finally
     FICUNumberFormat.Free;
   end;
   FICUNumberFormat := TICUNumberFormatter.Create('en-US', UNUM_CURRENCY);
   try
-    CheckEquals('�153.45', FICUNumberFormat.Format(Value, 'EUR'));
+    CheckEquals('€153.45', FICUNumberFormat.Format(Value, 'EUR'));
   finally
     FICUNumberFormat.Free;
   end;
