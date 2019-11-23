@@ -70,6 +70,64 @@ implementation
 uses
   System.AnsiStrings, icu_globals, _umachine, System.DateUtils, ICULocale;
 
+function FormatDateTime(Value: TDateTime; DateFormat, TimeFormat: UDateFormatStyle; LocalToGMT: Boolean; Locale: AnsiString): string;
+var
+  Formatter: TICUDateFormatter;
+  timeZone: string;
+begin
+  if LocalToGMT then
+    timeZone := 'GMT'
+  else
+    timeZone := TTimeZone.Local.Abbreviation;
+
+  Formatter := TICUDateFormatter.Create(Locale, TimeFormat, DateFormat, timeZone);
+  try
+    Result := Formatter.Format(TTimeZone.Local.ToUniversalTime(Value));
+  finally
+    Formatter.Free;
+  end;
+end;
+
+function ICUDateToStr(const Value: TDateTime; LocalToGMT: Boolean = False; const Locale: AnsiString = ''): string;
+begin
+  Result := FormatDateTime(Value, UDAT_DEFAULT, UDAT_NONE, LocalToGMT, ProperLocale(Locale));
+end;
+
+function ICUDateToStrShort(const Value: TDateTime; LocalToGMT: Boolean = False; const Locale: AnsiString = ''): string;
+begin
+  Result := FormatDateTime(Value, UDAT_SHORT, UDAT_NONE, LocalToGMT, ProperLocale(Locale));
+end;
+
+function ICUDateToStrLong(const Value: TDateTime; LocalToGMT: Boolean = False; const Locale: AnsiString = ''): string;
+begin
+  Result := FormatDateTime(Value, UDAT_LONG, UDAT_NONE, LocalToGMT, ProperLocale(Locale));
+end;
+
+function ICUDateToStrFull(const Value: TDateTime; LocalToGMT: Boolean = False; const Locale: AnsiString = ''): string;
+begin
+  Result := FormatDateTime(Value, UDAT_FULL, UDAT_NONE, LocalToGMT, ProperLocale(Locale));
+end;
+
+function ICUTimeToStr(const Value: TDateTime; LocalToGMT: Boolean = False; const Locale: AnsiString = ''): string;
+begin
+  Result := FormatDateTime(Value, UDAT_NONE, UDAT_DEFAULT, LocalToGMT, ProperLocale(Locale));
+end;
+
+function ICUTimeToStrShort(const Value: TDateTime; LocalToGMT: Boolean = False; const Locale: AnsiString = ''): string;
+begin
+  Result := FormatDateTime(Value, UDAT_NONE, UDAT_SHORT, LocalToGMT, ProperLocale(Locale));
+end;
+
+function ICUTimeToStrLong(const Value: TDateTime; LocalToGMT: Boolean = False; const Locale: AnsiString = ''): string;
+begin
+  Result := FormatDateTime(Value, UDAT_NONE, UDAT_LONG, LocalToGMT, ProperLocale(Locale));
+end;
+
+function ICUTimeToStrFull(const Value: TDateTime; LocalToGMT: Boolean = False; const Locale: AnsiString = ''): string;
+begin
+  Result := FormatDateTime(Value, UDAT_NONE, UDAT_FULL, LocalToGMT, ProperLocale(Locale));
+end;
+
 { TICUDateFormatterWrapper }
 
 constructor TICUDateFormatterWrapper.Create(UDateFormat: PUDateFormat);
@@ -146,6 +204,7 @@ const
 begin
   udat_setLenient(FFormat, boolVals[Value]);
 end;
+
 { TICUDateFormatter }
 
 constructor TICUDateFormatter.Create(const Locale: AnsiString; timeStyle, dateStyle: UDateFormatStyle; const timeZone, Pattern: WideString);
@@ -171,64 +230,6 @@ begin
   ReleaseFormatter;
   ResetErrorCode(FStatus);
   FFormat := udat_open(timeStyle, dateStyle, @Locale[1], @timeZone[1], Length(FTimeZone), PUChar(Pattern), Length(Pattern), FStatus);
-end;
-
-function FormatDateTime(Value: TDateTime; DateFormat, TimeFormat: UDateFormatStyle; LocalToGMT: Boolean; Locale: AnsiString): string;
-var
-  Formatter: TICUDateFormatter;
-  timeZone: string;
-begin
-  if LocalToGMT then
-    timeZone := 'GMT'
-  else
-    timeZone := TTimeZone.Local.Abbreviation;
-
-  Formatter := TICUDateFormatter.Create(Locale, TimeFormat, DateFormat, timeZone);
-  try
-    Result := Formatter.Format(TTimeZone.Local.ToUniversalTime(Value));
-  finally
-    Formatter.Free;
-  end;
-end;
-
-function ICUDateToStr(const Value: TDateTime; LocalToGMT: Boolean = False; const Locale: AnsiString = ''): string;
-begin
-  Result := FormatDateTime(Value, UDAT_DEFAULT, UDAT_NONE, LocalToGMT, ProperLocale(Locale));
-end;
-
-function ICUDateToStrShort(const Value: TDateTime; LocalToGMT: Boolean = False; const Locale: AnsiString = ''): string;
-begin
-  Result := FormatDateTime(Value, UDAT_SHORT, UDAT_NONE, LocalToGMT, ProperLocale(Locale));
-end;
-
-function ICUDateToStrLong(const Value: TDateTime; LocalToGMT: Boolean = False; const Locale: AnsiString = ''): string;
-begin
-  Result := FormatDateTime(Value, UDAT_LONG, UDAT_NONE, LocalToGMT, ProperLocale(Locale));
-end;
-
-function ICUDateToStrFull(const Value: TDateTime; LocalToGMT: Boolean = False; const Locale: AnsiString = ''): string;
-begin
-  Result := FormatDateTime(Value, UDAT_FULL, UDAT_NONE, LocalToGMT, ProperLocale(Locale));
-end;
-
-function ICUTimeToStr(const Value: TDateTime; LocalToGMT: Boolean = False; const Locale: AnsiString = ''): string;
-begin
-  Result := FormatDateTime(Value, UDAT_NONE, UDAT_DEFAULT, LocalToGMT, ProperLocale(Locale));
-end;
-
-function ICUTimeToStrShort(const Value: TDateTime; LocalToGMT: Boolean = False; const Locale: AnsiString = ''): string;
-begin
-  Result := FormatDateTime(Value, UDAT_NONE, UDAT_SHORT, LocalToGMT, ProperLocale(Locale));
-end;
-
-function ICUTimeToStrLong(const Value: TDateTime; LocalToGMT: Boolean = False; const Locale: AnsiString = ''): string;
-begin
-  Result := FormatDateTime(Value, UDAT_NONE, UDAT_LONG, LocalToGMT, ProperLocale(Locale));
-end;
-
-function ICUTimeToStrFull(const Value: TDateTime; LocalToGMT: Boolean = False; const Locale: AnsiString = ''): string;
-begin
-  Result := FormatDateTime(Value, UDAT_NONE, UDAT_FULL, LocalToGMT, ProperLocale(Locale));
 end;
 
 procedure TICUDateFormatter.SetLocale(const Value: AnsiString);
