@@ -441,6 +441,7 @@ $(PreBuildEvent)]]></PreBuildEvent>
             <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="Web\BDTK.Web.Import.pas"/>
+        <DCCReference Include="..\..\..\..\..\libs\delphi\Perso\icu\ICUDateFormatter.pas"/>
         <RcItem Include="..\Commun\Resources\network.png">
             <ResourceType>RCDATA</ResourceType>
             <ResourceId>BT_LINK</ResourceId>

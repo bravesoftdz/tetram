@@ -1,4 +1,4 @@
-unit BDTK.Web.Forms.Preview;
+﻿unit BDTK.Web.Forms.Preview;
 
 interface
 
@@ -144,7 +144,7 @@ uses
   System.IOUtils, BD.Utils.StrUtils, BD.Utils.GUIUtils, BD.Common, BDTK.Entities.Dao.Full, BDTK.GUI.Utils,
   BD.Entities.Common, BD.Entities.Dao.Lambda, BDTK.Web.Browser.Utils,
   BD.Entities.Metadata, BD.Entities.Factory.Lite, BDTK.Entities.Dao.Lite,
-  BD.Entities.Factory.Full;
+  BD.Entities.Factory.Full, ICUDateFormatter;
 
 {$R *.dfm}
 
@@ -777,13 +777,19 @@ procedure TfrmBDTKWebPreview.SetValue(AId: Integer; const AValue: string);
     Result := FAlbum.Editions[0];
   end;
 
+var
+  IntValue: Integer;
 begin
   case AId of
     // Album
     BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_TITRE:
       FAlbum.TitreAlbum := PrepareTitre(AValue);
     BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_Parution_Mois:
-      FAlbum.MoisParution := AValue.ToInteger;
+      begin
+        IntValue := ICUStrToMonth(AValue);
+        if IntValue <> -1 then
+          FAlbum.MoisParution := IntValue;
+      end;
     BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_Parution_Annee:
       FAlbum.AnneeParution := AValue.ToInteger;
     BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_Tome:

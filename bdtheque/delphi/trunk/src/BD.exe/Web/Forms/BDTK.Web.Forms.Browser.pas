@@ -1,4 +1,4 @@
-unit BDTK.Web.Forms.Browser;
+﻿unit BDTK.Web.Forms.Browser;
 
 interface
 
@@ -399,7 +399,7 @@ begin
   AddTextCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_TITRE, 'Titre');
   SubModel2 := SubModel.AddSubMenu(BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_Parution, 'Parution');
   AddIntegerCommand(SubModel2, BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_Parution_Annee, 'Année');
-  AddIntegerCommand(SubModel2, BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_Parution_Mois, 'Mois');
+  AddTextCommand(SubModel2, BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_Parution_Mois, 'Mois');
   SubModel2.AddSeparator;
 //  AddPeriodCommand(SubModel2, BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_Parution_Date, 'Date');
   AddIntegerCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_Tome, 'Tome');

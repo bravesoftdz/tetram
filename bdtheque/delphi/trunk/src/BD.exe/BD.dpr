@@ -178,7 +178,8 @@ uses
   BDTK.Web.Browser.Utils in 'Web\BDTK.Web.Browser.Utils.pas',
   BD.Utils.Chromium.Extension in '..\Commun\Utils\BD.Utils.Chromium.Extension.pas',
   BDTK.Web.Forms.Preview in 'Web\Forms\BDTK.Web.Forms.Preview.pas' {frmBDTKWebPreview},
-  BDTK.Web.Import in 'Web\BDTK.Web.Import.pas';
+  BDTK.Web.Import in 'Web\BDTK.Web.Import.pas',
+  ICUDateFormatter in '..\..\..\..\..\libs\delphi\Perso\icu\ICUDateFormatter.pas';
 
 begin
   Application.Title := 'BDthèque';
