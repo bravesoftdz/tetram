@@ -412,7 +412,7 @@ begin
     f.AutoSearchKeyWords := AAutoSearchKeyWords;
     f.Album := ADestination;
     hg := nil;
-    Result := frmFond.SetModalChildForm(f) = mrOk;
+    Result := (frmFond.SetModalChildForm(f) = mrOk) and ADestination.ReadyToFusion;
   finally
     f.Free;
   end;

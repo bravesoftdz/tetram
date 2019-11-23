@@ -367,7 +367,7 @@ begin
 
   AlbumToImport := TFactoryAlbumFull.getInstance;
   try
-    if ImportAlbum(KeyWords, AlbumToImport) and AlbumToImport.ReadyToFusion then
+    if ImportAlbum(KeyWords, AlbumToImport) then
     begin
       vtEditSerie.VTEdit.PopupWindow.TreeView.InitializeRep;
       vtEditUnivers.VTEdit.PopupWindow.TreeView.InitializeRep;
