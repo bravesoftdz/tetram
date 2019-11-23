@@ -196,6 +196,16 @@ end;
 
 procedure TframeBDTKWebBrowser.ChromiumBeforeContextMenu(ASender: TObject; const ABrowser: ICefBrowser; const AFrame: ICefFrame; const AParams: ICefContextMenuParams; const AModel: ICefMenuModel);
 
+  function HasVisible(AMenu: ICefMenuModel): Boolean;
+  var
+    i: Integer;
+  begin
+    Result := False;
+    for i := 0 to Pred(AMenu.GetCount) do
+      if AMenu.isVisibleAt(i) then
+        Exit(True);
+  end;
+
   procedure CleanSeparators(AMenu: ICefMenuModel);
   var
     i: Integer;
@@ -210,8 +220,11 @@ procedure TframeBDTKWebBrowser.ChromiumBeforeContextMenu(ASender: TObject; const
           begin
             SubMenu := AMenu.GetSubMenuAt(i);
             CleanSeparators(SubMenu);
-            if SubMenu.GetCount = 0 then
-              AMenu.RemoveAt(i);
+            if not HasVisible(SubMenu) then
+              if (AMenu = AModel) and InRange(AMenu.GetCommandIdAt(i), MENU_ID_USER_FIRST, MENU_ID_USER_LAST) then
+                AMenu.SetEnabledAt(i, False)
+              else
+                AMenu.RemoveAt(i);
           end;
       end;
   end;

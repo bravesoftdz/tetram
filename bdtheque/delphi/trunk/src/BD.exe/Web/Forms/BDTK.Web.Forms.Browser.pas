@@ -1,4 +1,4 @@
-﻿unit BDTK.Web.Forms.Browser;
+unit BDTK.Web.Forms.Browser;
 
 interface
 
@@ -347,34 +347,16 @@ begin
 end;
 
 procedure TfrmBDTKWebBrowser.Chromium_OnBeforeContextMenu(ASender: TObject; const ABrowser: ICefBrowser; const AFrame: ICefFrame; const AParams: ICefContextMenuParams; const AModel: ICefMenuModel);
-var
-  IsText, IsInteger, IsFloat, IsBoolean: Boolean;
 
-  procedure AddTextCommand(const AModel: ICefMenuModel; ACommandId: Integer; const ACommandText: string);
+  procedure AddCommand(const AModel: ICefMenuModel; ACommandId: Integer; const ACommandText: string; AVisible: Boolean = True); inline;
   begin
-    if IsText then
-      AModel.AddItem(ACommandId, ACommandText);
-  end;
-
-  procedure AddIntegerCommand(const AModel: ICefMenuModel; ACommandId: Integer; const ACommandText: string);
-  begin
-    if IsInteger then
-      AModel.AddItem(ACommandId, ACommandText);
-  end;
-
-  procedure AddFloatCommand(const AModel: ICefMenuModel; ACommandId: Integer; const ACommandText: string);
-  begin
-    if IsFloat then
-      AModel.AddItem(ACommandId, ACommandText);
-  end;
-
-  procedure AddBooleanCommand(const AModel: ICefMenuModel; ACommandId: Integer; const ACommandText: string);
-  begin
-    if IsBoolean then
+    // AModel.SetVisible ne semble pas fonctionner
+    if AVisible then
       AModel.AddItem(ACommandId, ACommandText);
   end;
 
 var
+  IsText, IsInteger, IsFloat, IsBoolean, IsImage: Boolean;
   DummyInt: Integer;
   DummyDbl: Double;
   DummyBool: Boolean;
@@ -396,60 +378,60 @@ begin
     Exit;
 
   SubModel := AModel.AddSubMenu(BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM, 'Album');
-  AddTextCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_TITRE, 'Titre');
+  AddCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_TITRE, 'Titre', IsText);
   SubModel2 := SubModel.AddSubMenu(BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_Parution, 'Parution');
-  AddIntegerCommand(SubModel2, BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_Parution_Annee, 'Année');
-  AddTextCommand(SubModel2, BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_Parution_Mois, 'Mois');
+  AddCommand(SubModel2, BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_Parution_Annee, 'Année', IsInteger);
+  AddCommand(SubModel2, BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_Parution_Mois, 'Mois', IsText);
   SubModel2.AddSeparator;
-//  AddPeriodCommand(SubModel2, BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_Parution_Date, 'Date');
-  AddIntegerCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_Tome, 'Tome');
+//  AddCommand(SubModel2, BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_Parution_Date, 'Date', IsDate);
+  AddCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_Tome, 'Tome', IsInteger);
   SubModel2 := SubModel.AddSubMenu(BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_Integrale, 'Intégrale');
-  AddIntegerCommand(SubModel2, BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_TomeDebut, 'Tome début');
-  AddIntegerCommand(SubModel2, BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_TomeFin, 'Tome fin');
-  AddBooleanCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_HorsSerie, 'Hors série');
+  AddCommand(SubModel2, BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_TomeDebut, 'Tome début', IsInteger);
+  AddCommand(SubModel2, BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_TomeFin, 'Tome fin', IsInteger);
+  AddCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_HorsSerie, 'Hors série', IsBoolean);
   SubModel2 := SubModel.AddSubMenu(BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_Auteur, 'Auteur');
-  AddTextCommand(SubModel2, BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_Scenaristes, 'Scénariste');
-  AddTextCommand(SubModel2, BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_Dessinateurs, 'Dessinateur');
-  AddTextCommand(SubModel2, BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_Coloristes, 'Coloriste');
-  AddTextCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_Sujet, 'Histoire');
-  AddTextCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_Notes, 'Notes');
+  AddCommand(SubModel2, BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_Scenaristes, 'Scénariste', IsText);
+  AddCommand(SubModel2, BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_Dessinateurs, 'Dessinateur', IsText);
+  AddCommand(SubModel2, BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_Coloristes, 'Coloriste', IsText);
+  AddCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_Sujet, 'Histoire', IsText);
+  AddCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_Notes, 'Notes', IsText);
 
   SubModel := AModel.AddSubMenu(BDTKBROWSER_CONTEXTMENU_IMPORT_SERIE, 'Série');
-  AddTextCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_SERIE_TITRE, 'Titre');
-  AddTextCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_SERIE_SiteWeb, 'Site web');
-  AddTextCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_SERIE_Univers, 'Univers');
-  AddIntegerCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_SERIE_NbAlbums, 'Nombre d''albums');
-  AddBooleanCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_SERIE_Terminee, 'Terminée');
-  AddTextCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_SERIE_Genres, 'Genre');
+  AddCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_SERIE_TITRE, 'Titre', IsText);
+  AddCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_SERIE_SiteWeb, 'Site web', IsText);
+  AddCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_SERIE_Univers, 'Univers', IsText);
+  AddCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_SERIE_NbAlbums, 'Nombre d''albums', IsInteger);
+  AddCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_SERIE_Terminee, 'Terminée', IsBoolean);
+  AddCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_SERIE_Genres, 'Genre', IsText);
   SubModel2 := SubModel.AddSubMenu(BDTKBROWSER_CONTEXTMENU_IMPORT_SERIE_Auteurs, 'Auteur');
-  AddTextCommand(SubModel2, BDTKBROWSER_CONTEXTMENU_IMPORT_SERIE_Scenaristes, 'Scénariste');
-  AddTextCommand(SubModel2, BDTKBROWSER_CONTEXTMENU_IMPORT_SERIE_Dessinateurs, 'Dessinateur');
-  AddTextCommand(SubModel2, BDTKBROWSER_CONTEXTMENU_IMPORT_SERIE_Coloristes, 'Coloriste');
-  AddTextCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_SERIE_Sujet, 'Histoire');
-  AddTextCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_SERIE_Notes, 'Notes');
-  AddTextCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_SERIE_Editeur_NomEditeur, 'Editeur');
-  AddTextCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_SERIE_Editeur_SiteWeb, 'Site web de l''éditeur');
-  AddTextCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_SERIE_Collection_NomCollection, 'Collection');
+  AddCommand(SubModel2, BDTKBROWSER_CONTEXTMENU_IMPORT_SERIE_Scenaristes, 'Scénariste', IsText);
+  AddCommand(SubModel2, BDTKBROWSER_CONTEXTMENU_IMPORT_SERIE_Dessinateurs, 'Dessinateur', IsText);
+  AddCommand(SubModel2, BDTKBROWSER_CONTEXTMENU_IMPORT_SERIE_Coloristes, 'Coloriste', IsText);
+  AddCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_SERIE_Sujet, 'Histoire', IsText);
+  AddCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_SERIE_Notes, 'Notes', IsText);
+  AddCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_SERIE_Editeur_NomEditeur, 'Editeur', IsText);
+  AddCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_SERIE_Editeur_SiteWeb, 'Site web de l''éditeur', IsText);
+  AddCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_SERIE_Collection_NomCollection, 'Collection', IsText);
 
   SubModel := AModel.AddSubMenu(BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION, 'Edition');
-  AddTextCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_Editeur_NomEditeur, 'Editeur');
-  AddTextCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_Editeur_SiteWeb, 'Site web de l''éditeur');
-  AddTextCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_Collection_NomCollection, 'Collection');
-  AddIntegerCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_AnneeEdition, 'Annéee d''édition');
-  AddFloatCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_Prix, 'Prix');
-  AddBooleanCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_Gratuit, 'Gratuit');
-  AddTextCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_ISBN, 'ISBN');
-  AddTextCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_Etat, 'Etat');
-  AddTextCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_TypeEdition, 'Type d''édition');
-  AddTextCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_Reliure, 'Reliure');
-  AddTextCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_Orientation, 'Orientation');
-  AddTextCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_SensLecture, 'Sens de lecture');
-  AddTextCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_FormatEdition, 'Format');
-  AddIntegerCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_AnneeCote, 'Année de la cotation');
-  AddFloatCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_PrixCote, 'Cote');
-  AddBooleanCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_Couleur, 'Couleur');
-  AddBooleanCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_VO, 'VO');
-  AddIntegerCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_NombreDePages, 'Nombre de pages');
+  AddCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_Editeur_NomEditeur, 'Editeur', IsText);
+  AddCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_Editeur_SiteWeb, 'Site web de l''éditeur', IsText);
+  AddCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_Collection_NomCollection, 'Collection', IsText);
+  AddCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_AnneeEdition, 'Annéee d''édition', IsInteger);
+  AddCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_Prix, 'Prix', IsFloat);
+  AddCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_Gratuit, 'Gratuit', IsBoolean);
+  AddCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_ISBN, 'ISBN', IsText);
+  AddCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_Etat, 'Etat', IsText);
+  AddCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_TypeEdition, 'Type d''édition', IsText);
+  AddCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_Reliure, 'Reliure', IsText);
+  AddCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_Orientation, 'Orientation', IsText);
+  AddCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_SensLecture, 'Sens de lecture', IsText);
+  AddCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_FormatEdition, 'Format', IsText);
+  AddCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_AnneeCote, 'Année de la cotation', IsInteger);
+  AddCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_PrixCote, 'Cote', IsFloat);
+  AddCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_Couleur, 'Couleur', IsBoolean);
+  AddCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_VO, 'VO', IsBoolean);
+  AddCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_NombreDePages, 'Nombre de pages', IsInteger);
 //  AddImageCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_Couvertures, 'Image');
 end;
 
