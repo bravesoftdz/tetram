@@ -1,4 +1,4 @@
-unit BDTK.Web.Frames.Browser;
+﻿unit BDTK.Web.Frames.Browser;
 
 interface
 
@@ -433,7 +433,7 @@ begin
     BDTKBROWSER_CONTEXTMENU_TOGGLEAUDIO:
       PostMessage(Handle, BDTKBROWSER_RUN_ACTION, 0, LParam(actToggleAudio));
     BDTKBROWSER_CONTEXTMENU_COPY_LINK:
-      Clipboard.AsText := AParams.LinkUrl;
+      Clipboard.AsText := AParams.UnfilteredLinkUrl;
     BDTKBROWSER_CONTEXTMENU_EMPTY_CACHE_AND_RELOAD:
       begin
         // Chromium.ReloadIgnoreCache;
