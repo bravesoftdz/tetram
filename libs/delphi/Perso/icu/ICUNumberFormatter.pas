@@ -1,4 +1,4 @@
-unit ICUNumberFormatter;
+﻿unit ICUNumberFormatter;
 
 {$I icu.inc}
 
@@ -163,6 +163,9 @@ function ICUDoubleToStr(const Value: Double; const Locale: AnsiString = ''): str
 function ICUStrToDouble(const Value: string; const Locale: AnsiString = ''): Double;
 function ICUStrToDoubleDef(const Value: string; const Default: Double; const Locale: AnsiString = ''): Double;
 
+function ICUStrToInteger(const Value: string; const Locale: AnsiString = ''): Int64;
+function ICUStrToIntegerDef(const Value: string; const ADefault: Integer; const Locale: AnsiString = ''): Int64;
+
 implementation
 
 uses
@@ -286,6 +289,40 @@ begin
   Result := InternalICUStrToDouble(Value, Locale, ErrorCode);
   if U_FAILURE(ErrorCode) then
     Result := Default;
+end;
+
+function InternalICUStrToInteger(const Value: string; const Locale: AnsiString; out ErrorCode: UErrorCode): Int64;
+var
+  Formatter: TICUNumberFormatter;
+begin
+  Formatter := TICUNumberFormatter.Create(ProperLocale(Locale), UNUM_DECIMAL);
+  try
+    Result := Formatter.ParseInt64(Value.Trim.Replace(#32, Formatter.Symbols.GroupingSeparator).Replace(#160, Formatter.Symbols.GroupingSeparator));
+    if U_FAILURE(Formatter.GetErrorCode) then
+    begin
+      Formatter.Style := UNUM_SPELLOUT;
+      Result := Formatter.ParseInt64(Value.Trim.Replace(#160, #32));
+    end;
+  finally
+    ErrorCode := Formatter.GetErrorCode;
+    Formatter.Free;
+  end;
+end;
+
+function ICUStrToInteger(const Value: string; const Locale: AnsiString = ''): Int64;
+var
+  ErrorCode: UErrorCode;
+begin
+  Result := InternalICUStrToInteger(Value, Locale, ErrorCode);
+end;
+
+function ICUStrToIntegerDef(const Value: string; const ADefault: Integer; const Locale: AnsiString = ''): Int64;
+var
+  ErrorCode: UErrorCode;
+begin
+  Result := InternalICUStrToInteger(Value, Locale, ErrorCode);
+  if U_FAILURE(ErrorCode) then
+    Result := ADefault;
 end;
 
 { TICUNumberFormatter.TICUNumberFormatterChild }
