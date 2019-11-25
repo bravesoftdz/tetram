@@ -1,4 +1,4 @@
-﻿unit ICUNumberFormatter;
+unit ICUNumberFormatter;
 
 {$I icu.inc}
 
@@ -167,6 +167,126 @@ implementation
 
 uses
   icu_globals, System.AnsiStrings, _umachine;
+
+function ICUCurrencyToStr(const Value: Double; const Locale: AnsiString = ''; const CurrencySymbol: string = ''): string;
+var
+  Formatter: TICUNumberFormatter;
+begin
+  Formatter := TICUNumberFormatter.Create(ProperLocale(Locale), UNUM_CURRENCY);
+  try
+    if CurrencySymbol <> '' then
+      Formatter.Symbols.Currency := CurrencySymbol;
+
+    Result := Formatter.Format(Value);
+  finally
+    Formatter.Free;
+  end;
+end;
+
+function ICUCurrencyToStrShort(const Value: Double; const Locale: AnsiString = ''): string;
+var
+  Formatter: TICUNumberFormatter;
+  s: string;
+begin
+  Formatter := TICUNumberFormatter.Create(ProperLocale(Locale), UNUM_CURRENCY);
+  try
+    Formatter.Symbols.Currency := '';
+    s := Formatter.Format(Value);
+    Result := s.Trim([#32, #160]);
+  finally
+    Formatter.Free;
+  end;
+end;
+
+function InternalICUStrToCurrency(const Value: string; const Locale: AnsiString; const CurrencySymbol: string; out ErrorCode: UErrorCode): Double;
+var
+  Formatter: TICUNumberFormatter;
+begin
+  Formatter := TICUNumberFormatter.Create(ProperLocale(Locale), UNUM_CURRENCY);
+  try
+    if CurrencySymbol <> '' then
+      Formatter.Symbols.Currency := CurrencySymbol;
+    Formatter.Attributes.LenientParse := True;
+
+    Result := Formatter.ParseDouble(Value.Trim.Replace(#32, Formatter.Symbols.GroupingSeparator).Replace(#160, Formatter.Symbols.GroupingSeparator));
+    if U_FAILURE(Formatter.GetErrorCode) then
+    begin
+      Formatter.Style := UNUM_SPELLOUT;
+      Result := Formatter.ParseDouble(Value.Trim.Replace(#160, #32));
+    end;
+  finally
+    ErrorCode := Formatter.GetErrorCode;
+    Formatter.Free;
+  end;
+end;
+
+function ICUStrToCurrency(const Value: string; const Locale: AnsiString = ''; const CurrencySymbol: string = ''): Double;
+var
+  ErrorCode: UErrorCode;
+begin
+  Result := InternalICUStrToCurrency(Value, Locale, CurrencySymbol, ErrorCode);
+  ICUCheck(ErrorCode);
+end;
+
+function ICUStrToCurrencyDef(const Value: string; const Default: Double; const Locale: AnsiString = ''; const CurrencySymbol: string = ''): Double;
+var
+  ErrorCode: UErrorCode;
+begin
+  Result := InternalICUStrToCurrency(Value, Locale, CurrencySymbol, ErrorCode);
+  if U_FAILURE(ErrorCode) then
+    Result := Default;
+end;
+
+function ICUDoubleToStr(const Value: Double; const Locale: AnsiString = ''): string;
+var
+  Formatter: TICUNumberFormatter;
+begin
+  Formatter := TICUNumberFormatter.Create(ProperLocale(Locale), UNUM_DECIMAL);
+  try
+    Formatter.Attributes.RoundingMode := UNUM_ROUND_HALFEVEN;
+    Result := Formatter.Format(Value);
+    ICUCheck(Formatter.GetErrorCode);
+  finally
+    Formatter.Free;
+  end;
+end;
+
+function InternalICUStrToDouble(const Value: string; const Locale: AnsiString; out ErrorCode: UErrorCode): Double;
+var
+  Formatter: TICUNumberFormatter;
+begin
+  Formatter := TICUNumberFormatter.Create(ProperLocale(Locale), UNUM_DECIMAL);
+  try
+    Formatter.Attributes.ParseIntOnly := False;
+    Formatter.Attributes.LenientParse := False;
+    Result := Formatter.ParseDouble(Value.Trim.Replace(#32, Formatter.Symbols.GroupingSeparator).Replace(#160, Formatter.Symbols.GroupingSeparator));
+    if U_FAILURE(Formatter.GetErrorCode) then
+    begin
+      Formatter.Style := UNUM_SPELLOUT;
+      Result := Formatter.ParseDouble(Value.Trim.Replace(#160, #32));
+    end;
+  finally
+    ErrorCode := Formatter.GetErrorCode;
+    Formatter.Free;
+  end;
+end;
+
+function ICUStrToDouble(const Value: string; const Locale: AnsiString = ''): Double;
+var
+  ErrorCode: UErrorCode;
+begin
+  Result := InternalICUStrToDouble(Value, Locale, ErrorCode);
+  ICUCheck(ErrorCode);
+end;
+
+function ICUStrToDoubleDef(const Value: string; const Default: Double; const Locale: AnsiString = ''): Double;
+var
+  ErrorCode: UErrorCode;
+begin
+  Result := InternalICUStrToDouble(Value, Locale, ErrorCode);
+  if U_FAILURE(ErrorCode) then
+    Result := Default;
+end;
 
 { TICUNumberFormatter.TICUNumberFormatterChild }
 
@@ -411,8 +531,10 @@ begin
   ResetErrorCode(FStatus);
   p := 0;
   Result := unum_parseDouble(FFormat, @Value[1], Length(Value), @p, FStatus);
-  if p < Length(Value) then
-    FStatus := U_PARSE_ERROR;
+  if p <= 0 then
+    FStatus := U_PARSE_ERROR
+  else if p < Length(Value) then
+    FStatus := U_ILLEGAL_CHAR_FOUND;
 end;
 
 function TICUNumberFormatterWrapper.ParseInt32(const Value: WideString): Int32;
@@ -497,112 +619,6 @@ procedure TICUNumberFormatter.SetStyle(const Value: UNumberFormatStyle);
 begin
   FStyle := Value;
   BuildFormatter;
-end;
-
-function ICUCurrencyToStr(const Value: Double; const Locale: AnsiString = ''; const CurrencySymbol: string = ''): string;
-var
-  Formatter: TICUNumberFormatter;
-begin
-  Formatter := TICUNumberFormatter.Create(ProperLocale(Locale), UNUM_CURRENCY);
-  try
-    if CurrencySymbol <> '' then
-      Formatter.Symbols.Currency := CurrencySymbol;
-
-    Result := Formatter.Format(Value);
-  finally
-    Formatter.Free;
-  end;
-end;
-
-function ICUCurrencyToStrShort(const Value: Double; const Locale: AnsiString = ''): string;
-var
-  Formatter: TICUNumberFormatter;
-  s: string;
-begin
-  Formatter := TICUNumberFormatter.Create(ProperLocale(Locale), UNUM_CURRENCY);
-  try
-    Formatter.Symbols.Currency := '';
-    s := Formatter.Format(Value);
-    Result := s.Trim([#32, #160]);
-  finally
-    Formatter.Free;
-  end;
-end;
-
-function ICUStrToCurrency(const Value: string; const Locale: AnsiString = ''; const CurrencySymbol: string = ''): Double;
-var
-  Formatter: TICUNumberFormatter;
-begin
-  Formatter := TICUNumberFormatter.Create(ProperLocale(Locale), UNUM_CURRENCY);
-  try
-    if CurrencySymbol <> '' then
-      Formatter.Symbols.Currency := CurrencySymbol;
-    Formatter.Attributes.LenientParse := True;
-
-    Result := Formatter.ParseDouble(StringReplace(Value.Trim, #32, #160, [rfReplaceAll]));
-  finally
-    Formatter.Free;
-  end;
-end;
-
-function ICUStrToCurrencyDef(const Value: string; const Default: Double; const Locale: AnsiString = ''; const CurrencySymbol: string = ''): Double;
-var
-  Formatter: TICUNumberFormatter;
-begin
-  Formatter := TICUNumberFormatter.Create(ProperLocale(Locale), UNUM_CURRENCY);
-  try
-    if CurrencySymbol <> '' then
-      Formatter.Symbols.Currency := CurrencySymbol;
-    Formatter.Attributes.LenientParse := True;
-
-    Result := Formatter.ParseDouble(StringReplace(Value.Trim, #32, #160, [rfReplaceAll]));
-    if U_FAILURE(Formatter.GetErrorCode) then
-      Result := Default;
-  finally
-    Formatter.Free;
-  end;
-end;
-
-function ICUDoubleToStr(const Value: Double; const Locale: AnsiString = ''): string;
-var
-  Formatter: TICUNumberFormatter;
-begin
-  Formatter := TICUNumberFormatter.Create(ProperLocale(Locale), UNUM_DECIMAL);
-  try
-    Formatter.Attributes.RoundingMode := UNUM_ROUND_HALFEVEN;
-    Result := Formatter.Format(Value);
-    ICUCheck(Formatter.GetErrorCode);
-  finally
-    Formatter.Free;
-  end;
-end;
-
-function ICUStrToDouble(const Value: string; const Locale: AnsiString = ''): Double;
-var
-  Formatter: TICUNumberFormatter;
-begin
-  Formatter := TICUNumberFormatter.Create(ProperLocale(Locale), UNUM_DECIMAL);
-  try
-    Result := Formatter.ParseDouble(StringReplace(Value.Trim, #32, #160, [rfReplaceAll]));
-  finally
-    Formatter.Free;
-  end;
-end;
-
-function ICUStrToDoubleDef(const Value: string; const Default: Double; const Locale: AnsiString = ''): Double;
-var
-  Formatter: TICUNumberFormatter;
-begin
-  Formatter := TICUNumberFormatter.Create(ProperLocale(Locale), UNUM_DECIMAL);
-  try
-    Formatter.Attributes.ParseIntOnly := False;
-    Formatter.Attributes.LenientParse := False;
-    Result := Formatter.ParseDouble(StringReplace(Value.Trim, #32, #160, [rfReplaceAll]));
-    if U_FAILURE(Formatter.GetErrorCode) then
-      Result := Default;
-  finally
-    Formatter.Free;
-  end;
 end;
 
 end.

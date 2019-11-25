@@ -91,8 +91,10 @@ procedure TestTICUNumberFormat.TestStrToDouble;
 begin
   CheckEquals(2145.456, ICUStrToDouble('2 145,456', 'fr-FR'), 'fr-FR - "2 145,456"');
   CheckEquals(2145.456, ICUStrToDouble('2'#160'145,456', 'fr-FR'), 'fr-FR - "2''#160''145,456"');
+  CheckEquals(2145.456, ICUStrToDouble('deux mille cent quarante-cinq virgule quatre cinq six', 'fr-FR'), 'fr-FR - "deux mille..."');
   CheckEquals(2145.456, ICUStrToDouble('2145,456', 'fr-FR'), 'fr-FR - "2145,456"');
   CheckEquals(2145.456, ICUStrToDouble('2,145.456', 'en-US'), 'en-US - "2,145.456"');
+  CheckEquals(2145.456, ICUStrToDouble('two thousand one hundred and forty-five point four five six', 'en-US'), 'en-US - "two thousand..."');
 end;
 
 procedure TestTICUNumberFormat.TestStrToDoubleDef;
