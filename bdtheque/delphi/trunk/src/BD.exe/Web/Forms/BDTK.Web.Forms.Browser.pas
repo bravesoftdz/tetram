@@ -448,13 +448,13 @@ begin
       AddTab(AParams.LinkUrl);
     BDTKBROWSER_CONTEXTMENU_IMPORT..BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_Image:
       if GetPage(ASender, Page) then
-        FImportPreview.SetValue(ACommandId, Page.Frame.SelectedText.Trim([#9, #32, #160]));
+        FImportPreview.SetValue(ACommandId, Page.Frame.SelectedText.Trim([#9, #32, #160]), Page.Frame.SelectedTextLang);
     BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_Image_First..BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_Image_Last:
       if GetPage(ASender, Page) then
         Page.Frame.DownloadURL(AParams.SourceUrl,
           procedure(AFilename: string; AStream: TStream)
           begin
-            FImportPreview.SetValue(ACommandId, AFilename, AStream);
+            FImportPreview.SetValue(ACommandId, AFilename, '', AStream);
           end
         );
   end;

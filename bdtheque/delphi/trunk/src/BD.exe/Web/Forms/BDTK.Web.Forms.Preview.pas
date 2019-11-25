@@ -131,7 +131,7 @@ type
     procedure VisuClose(Sender: TObject);
     procedure SetAlbum(const Value: TAlbumFull);
   public
-    procedure SetValue(AId: Integer; const AValue: string; AStream: TStream = nil);
+    procedure SetValue(AId: Integer; const AValue: string; const ALang: AnsiString; AStream: TStream = nil);
     procedure StoreData;
 
     procedure ReloadAlbum;
@@ -144,7 +144,7 @@ uses
   System.IOUtils, BD.Utils.StrUtils, BD.Utils.GUIUtils, BD.Common, BDTK.Entities.Dao.Full, BDTK.GUI.Utils,
   BD.Entities.Common, BD.Entities.Dao.Lambda, BDTK.Web.Browser.Utils,
   BD.Entities.Metadata, BD.Entities.Factory.Lite, BDTK.Entities.Dao.Lite,
-  BD.Entities.Factory.Full, ICUDateFormatter;
+  BD.Entities.Factory.Full, ICUDateFormatter, ICUNumberFormatter;
 
 {$R *.dfm}
 
@@ -739,7 +739,7 @@ begin
   ReloadAlbum;
 end;
 
-procedure TfrmBDTKWebPreview.SetValue(AId: Integer; const AValue: string; AStream: TStream);
+procedure TfrmBDTKWebPreview.SetValue(AId: Integer; const AValue: string; const ALang: AnsiString; AStream: TStream);
 
   procedure ChangeState(Chk: TCheckBox; Ctrl: TControl);
   var
@@ -826,23 +826,23 @@ begin
       FAlbum.TitreAlbum := PrepareTitre(AValue);
     BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_Parution_Mois:
       begin
-        IntValue := ICUStrToMonth(AValue);
-        if IntValue <> -1 then
+        IntValue := ICUStrToMonth(AValue, ALang);
+        if IntValue in [1..12] then
           FAlbum.MoisParution := IntValue;
       end;
     BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_Parution_Annee:
-      FAlbum.AnneeParution := AValue.ToInteger;
+      FAlbum.AnneeParution := BDStrToInteger(AValue, ALang);
     BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_Tome:
-      FAlbum.Tome := AValue.ToInteger;
+      FAlbum.Tome := BDStrToInteger(AValue, ALang);
     BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_TomeDebut:
       begin
         FAlbum.Integrale := True;
-        FAlbum.TomeDebut := AValue.ToInteger;
+        FAlbum.TomeDebut := BDStrToInteger(AValue, ALang);
       end;
     BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_TomeFin:
       begin
         FAlbum.Integrale := True;
-        FAlbum.TomeFin := AValue.ToInteger;
+        FAlbum.TomeFin := BDStrToInteger(AValue, ALang);
       end;
     BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_HorsSerie:
       FAlbum.HorsSerie := AValue.ToBoolean;
@@ -864,7 +864,7 @@ begin
     BDTKBROWSER_CONTEXTMENU_IMPORT_SERIE_Univers:
       FAlbum.Serie.Univers.Add(MakeUnivers(AValue));
     BDTKBROWSER_CONTEXTMENU_IMPORT_SERIE_NbAlbums:
-      FAlbum.Serie.NbAlbums := AValue.ToInteger;
+      FAlbum.Serie.NbAlbums := BDStrToInteger(AValue, ALang);
     BDTKBROWSER_CONTEXTMENU_IMPORT_SERIE_Terminee:
       FAlbum.Serie.Terminee := AValue.ToBoolean;
     BDTKBROWSER_CONTEXTMENU_IMPORT_SERIE_Genres:
@@ -893,9 +893,9 @@ begin
     BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_Collection_NomCollection:
       Edition.Collection.NomCollection := AValue;
     BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_AnneeEdition:
-      Edition.AnneeEdition := AValue.ToInteger;
+      Edition.AnneeEdition := BDStrToInteger(AValue, ALang);
     BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_Prix:
-      Edition.Prix := AValue.ToDouble;
+      Edition.Prix := BDStrToDouble(AValue, ALang);
     BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_Gratuit:
       Edition.Gratuit := AValue.ToBoolean;
     BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_ISBN:
@@ -913,15 +913,15 @@ begin
     BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_FormatEdition:
       LoadValue(AValue, cbxFormat, CheckBox28);
     BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_AnneeCote:
-      Edition.AnneeCote := AValue.ToInteger;
+      Edition.AnneeCote := BDStrToInteger(AValue, ALang);
     BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_PrixCote:
-      Edition.PrixCote := AValue.ToDouble;
+      Edition.PrixCote := BDStrToDouble(AValue, ALang);
     BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_Couleur:
       Edition.Couleur := AValue.ToBoolean;
     BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_VO:
       Edition.VO := AValue.ToBoolean;
     BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_NombreDePages:
-      Edition.NombreDePages := AValue.ToInteger;
+      Edition.NombreDePages := BDStrToInteger(AValue, ALang);
     BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_Image_First..BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_Image_Last:
        AddImageFromURL(Edition, AValue, AStream, TDaoListe.ListTypesCouverture.Names[AId - BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_Image_First].ToInteger);
   end;

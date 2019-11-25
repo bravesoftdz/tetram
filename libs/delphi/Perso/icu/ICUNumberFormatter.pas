@@ -154,6 +154,10 @@ type
     property Pattern: WideString read FPattern write SetPattern;
   end;
 
+function ICUIntegerToStr(const Value: Int64; const Locale: AnsiString = ''): string;
+function ICUStrToInteger(const Value: string; const Locale: AnsiString = ''): Int64;
+function ICUStrToIntegerDef(const Value: string; const ADefault: Integer; const Locale: AnsiString = ''): Int64;
+
 function ICUCurrencyToStr(const Value: Double; const Locale: AnsiString = ''; const CurrencySymbol: string = ''): string;
 function ICUCurrencyToStrShort(const Value: Double; const Locale: AnsiString = ''): string;
 function ICUStrToCurrency(const Value: string; const Locale: AnsiString = ''; const CurrencySymbol: string = ''): Double;
@@ -162,9 +166,6 @@ function ICUStrToCurrencyDef(const Value: string; const Default: Double; const L
 function ICUDoubleToStr(const Value: Double; const Locale: AnsiString = ''): string;
 function ICUStrToDouble(const Value: string; const Locale: AnsiString = ''): Double;
 function ICUStrToDoubleDef(const Value: string; const Default: Double; const Locale: AnsiString = ''): Double;
-
-function ICUStrToInteger(const Value: string; const Locale: AnsiString = ''): Int64;
-function ICUStrToIntegerDef(const Value: string; const ADefault: Integer; const Locale: AnsiString = ''): Int64;
 
 implementation
 
@@ -289,6 +290,20 @@ begin
   Result := InternalICUStrToDouble(Value, Locale, ErrorCode);
   if U_FAILURE(ErrorCode) then
     Result := Default;
+end;
+
+function ICUIntegerToStr(const Value: Int64; const Locale: AnsiString): string;
+var
+  Formatter: TICUNumberFormatter;
+begin
+  Formatter := TICUNumberFormatter.Create(ProperLocale(Locale), UNUM_DECIMAL);
+  try
+    Formatter.Attributes.RoundingMode := UNUM_ROUND_HALFEVEN;
+    Result := Formatter.Format(Value);
+    ICUCheck(Formatter.GetErrorCode);
+  finally
+    Formatter.Free;
+  end;
 end;
 
 function InternalICUStrToInteger(const Value: string; const Locale: AnsiString; out ErrorCode: UErrorCode): Int64;

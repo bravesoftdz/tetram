@@ -42,10 +42,13 @@ function FormatTitre(const Titre: string): string; inline;
 function FormatTitreAlbum(Simple, AvecSerie: Boolean; const Titre, Serie: string; Tome, TomeDebut, TomeFin: Integer; Integrale, HorsSerie: Boolean): string;
 function PrepareTitre(Titre: string): string;
 
-function BDCurrencyToStr(const Value: Double): string;
-function BDDoubleToStr(const Value: Double): string;
-function BDStrToDouble(const Value: string): Double;
-function BDStrToDoubleDef(const Value: string; const Default: Double): Double;
+function BDIntegerToStr(const Value: Integer; const ALocale: AnsiString = ''): string;
+function BDStrToInteger(const Value: string; const ALocale: AnsiString = ''): Integer;
+function BDStrToIntegerDef(const Value: string; const Default: Integer; const ALocale: AnsiString = ''): Integer;
+function BDCurrencyToStr(const Value: Double; const ALocale: AnsiString = ''): string;
+function BDDoubleToStr(const Value: Double; const ALocale: AnsiString = ''): string;
+function BDStrToDouble(const Value: string; const ALocale: AnsiString = ''): Double;
+function BDStrToDoubleDef(const Value: string; const Default: Double; const ALocale: AnsiString = ''): Double;
 
 implementation
 
@@ -451,24 +454,39 @@ begin
   Result.GUID := a;
 end;
 
-function BDCurrencyToStr(const Value: Double): string;
+function BDIntegerToStr(const Value: Integer; const ALocale: AnsiString): string;
 begin
-  Result := ICUCurrencyToStr(Value, uloc_getDefault, TGlobalVar.Options.SymboleMonnetaire);
+  Result := ICUIntegerToStr(Value, ALocale);
 end;
 
-function BDDoubleToStr(const Value: Double): string;
+function BDStrToInteger(const Value: string; const ALocale: AnsiString): Integer;
 begin
-  Result := ICUDoubleToStr(Value, uloc_getDefault);
+  Result := ICUStrToInteger(Value, ALocale);
 end;
 
-function BDStrToDouble(const Value: string): Double;
+function BDStrToIntegerDef(const Value: string; const Default: Integer; const ALocale: AnsiString): Integer;
 begin
-  Result := ICUStrToDouble(StringReplace(Value, TGlobalVar.Options.SymboleMonnetaire, '', []), uloc_getDefault);
+  Result := ICUStrToIntegerDef(Value, Default, ALocale);
 end;
 
-function BDStrToDoubleDef(const Value: string; const Default: Double): Double;
+function BDCurrencyToStr(const Value: Double; const ALocale: AnsiString): string;
 begin
-  Result := ICUStrToDoubleDef(StringReplace(Value, TGlobalVar.Options.SymboleMonnetaire, '', []), Default, uloc_getDefault);
+  Result := ICUCurrencyToStr(Value, ALocale, TGlobalVar.Options.SymboleMonnetaire);
+end;
+
+function BDDoubleToStr(const Value: Double; const ALocale: AnsiString): string;
+begin
+  Result := ICUDoubleToStr(Value, ALocale);
+end;
+
+function BDStrToDouble(const Value: string; const ALocale: AnsiString): Double;
+begin
+  Result := ICUStrToDouble(Value.Replace(TGlobalVar.Options.SymboleMonnetaire, ''), ALocale);
+end;
+
+function BDStrToDoubleDef(const Value: string; const Default: Double; const ALocale: AnsiString): Double;
+begin
+  Result := ICUStrToDoubleDef(Value.Replace(TGlobalVar.Options.SymboleMonnetaire, ''), Default, ALocale);
 end;
 
 initialization

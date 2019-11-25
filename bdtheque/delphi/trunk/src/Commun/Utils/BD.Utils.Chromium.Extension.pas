@@ -19,7 +19,7 @@ type
     class property Registered: Boolean read FRegistered;
 
     class procedure mouseOver(const link: string);
-    class procedure getSelectedText(const selectedtext: string);
+    class procedure getSelectedText(const lang, selectedText: string);
   end;
 
 procedure SetExtensionRegistered(AValue: Boolean);
@@ -54,7 +54,12 @@ begin
             ')';
   AFrame.ExecuteJavaScript(JSCode, '', 0);
 
-  JSCode := 'document.addEventListener("selectionchange", function(){BrowserExtension.getSelectedText(window.getSelection().toString())})';
+  JSCode := 'document.addEventListener("selectionchange", function(){'+
+    'var s = window.getSelection();' +
+    'var n = s.anchorNode;'+
+    'while (n && n.parentNode && (!n.lang || n.lang === "")) {n = n.parentNode;}' +
+    'BrowserExtension.getSelectedText(n ? n.lang : "", s.toString());' +
+    '})';
   AFrame.ExecuteJavaScript(JSCode, '', 0);
 
   Result := True;
@@ -62,7 +67,7 @@ end;
 
 { TBrowserExtension }
 
-class procedure TBrowserExtension.getSelectedText(const selectedtext: string);
+class procedure TBrowserExtension.getSelectedText(const lang, selectedText: string);
 var
   Msg: ICefProcessMessage;
   Frame: ICefFrame;
@@ -74,7 +79,8 @@ begin
 
   try
     Msg := TCefProcessMessageRef.New(SELECTEDTEXT_MESSAGE_NAME);
-    Msg.ArgumentList.SetString(0, selectedtext);
+    Msg.ArgumentList.SetString(0, lang);
+    Msg.ArgumentList.SetString(1, selectedText);
 
     // Sending a message back to the browser. It'll be received in the TChromium.OnProcessMessageReceived event.
     Frame.SendProcessMessage(PID_BROWSER, Msg);

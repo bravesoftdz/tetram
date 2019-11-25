@@ -79,6 +79,7 @@ type
     FClosing: Boolean;
     FOnContextMenuCommand: TOnContextMenuCommand;
     FOnBeforeContextMenu: TOnBeforeContextMenu;
+    FSelectedTextLang: AnsiString;
     FSelectedText: string;
     FPendingDownloads: TQueue<TDownload>;
     FCurrentDownloads: TObjectDictionary<UInt64, TDownload>;
@@ -101,6 +102,7 @@ type
 
     property Closing: Boolean read FClosing;
 
+    property SelectedTextLang: AnsiString read FSelectedTextLang;
     property SelectedText: string read FSelectedText;
 
     property OnBeforeContextMenu: TOnBeforeContextMenu read FOnBeforeContextMenu write FOnBeforeContextMenu;
@@ -515,7 +517,8 @@ begin
   end
   else if (AMessage.Name = SELECTEDTEXT_MESSAGE_NAME) then
   begin
-    FSelectedText := AdjustLineBreaks(AMessage.ArgumentList.GetString(0));
+    FSelectedTextLang := AnsiString(string(AMessage.ArgumentList.GetString(0)).Trim([#13, #10]));
+    FSelectedText := AdjustLineBreaks(AMessage.ArgumentList.GetString(1));
     AResult := True;
   end;
 end;
