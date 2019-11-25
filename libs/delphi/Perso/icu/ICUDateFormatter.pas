@@ -1,4 +1,4 @@
-﻿unit ICUDateFormatter;
+unit ICUDateFormatter;
 
 {$I icu.inc}
 
@@ -140,23 +140,20 @@ var
   buffer: string;
   bufNeeded: Int32;
   status: UErrorCode;
-  Suffix: string;
+  UseSuffix: Boolean;
 begin
   if TryStrToInt(Value.Trim([#32, #160]), Result) then
-    if Result in [1..12] then
+    if Result in [1 .. 12] then
       Exit
     else
       Exit(-1);
+
+  UseSuffix := Value.TrimRight([#32, #160]).EndsWith('.');
 
   Formatter := TICUDateFormatter.Create(ProperLocale(Locale));
   try
     for MonthType in MONTHS_TYPES do
     begin
-      if MonthType in [UDAT_MONTHS, UDAT_STANDALONE_MONTHS] then
-        Suffix := ''
-      else
-        Suffix := '.';
-
       for i := 0 to udat_countSymbols(Formatter.FFormat, MonthType) - 1 do
       begin
         bufNeeded := DEFAULT_BUFFER_SIZE;
@@ -170,7 +167,12 @@ begin
         end;
         SetLength(buffer, bufNeeded);
 
-        if SameText(Value, buffer) or SameText(Value + Suffix, buffer)  then
+        if not UseSuffix then
+          buffer := buffer.TrimRight(['.'])
+        else if not buffer.EndsWith('.') then
+          buffer := buffer + '.';
+
+        if SameText(Value, buffer) then
           Exit(i + 1);
       end;
     end;
