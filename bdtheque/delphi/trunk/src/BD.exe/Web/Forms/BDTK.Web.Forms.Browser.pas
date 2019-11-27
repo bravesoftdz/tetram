@@ -382,7 +382,7 @@ begin
   AddCommand(SubModel2, BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_Parution_Annee, 'Année', IsInteger);
   AddCommand(SubModel2, BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_Parution_Mois, 'Mois', IsText);
   SubModel2.AddSeparator;
-//  AddCommand(SubModel2, BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_Parution_Date, 'Date', IsDate);
+  AddCommand(SubModel2, BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_Parution_Date, 'Date', IsText);
   AddCommand(SubModel, BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_Tome, 'Tome', IsInteger);
   SubModel2 := SubModel.AddSubMenu(BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_Integrale, 'Intégrale');
   AddCommand(SubModel2, BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_TomeDebut, 'Tome début', IsInteger);
@@ -443,20 +443,24 @@ var
 begin
   AResult := False;
 
-  case ACommandId of
-    BDTKBROWSER_CONTEXTMENU_LINK_TO_NEW_TAB:
-      AddTab(AParams.LinkUrl);
-    BDTKBROWSER_CONTEXTMENU_IMPORT..BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_Image:
-      if GetPage(ASender, Page) then
-        FImportPreview.SetValue(ACommandId, Page.Frame.SelectedText.Trim([#9, #32, #160]), Page.Frame.SelectedTextLang);
-    BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_Image_First..BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_Image_Last:
-      if GetPage(ASender, Page) then
-        Page.Frame.DownloadURL(AParams.SourceUrl,
-          procedure(AFilename: string; AStream: TStream)
-          begin
-            FImportPreview.SetValue(ACommandId, AFilename, '', AStream);
-          end
-        );
+  try
+    case ACommandId of
+      BDTKBROWSER_CONTEXTMENU_LINK_TO_NEW_TAB:
+        AddTab(AParams.LinkUrl);
+      BDTKBROWSER_CONTEXTMENU_IMPORT..BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_Image:
+        if GetPage(ASender, Page) then
+          FImportPreview.SetValue(ACommandId, Page.Frame.SelectedText.Trim([#9, #32, #160]), Page.Frame.SelectedTextLang);
+      BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_Image_First..BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_Image_Last:
+        if GetPage(ASender, Page) then
+          Page.Frame.DownloadURL(AParams.SourceUrl,
+            procedure(AFilename: string; AStream: TStream)
+            begin
+              FImportPreview.SetValue(ACommandId, AFilename, '', AStream);
+            end
+          );
+    end;
+  except
+    // on ne doit jamais planter dans un event Chromium
   end;
 end;
 
