@@ -1,4 +1,4 @@
-﻿unit ICUCalendar;
+unit ICUCalendar;
 
 interface
 
@@ -539,7 +539,7 @@ var
   tmpCal: TICUCalendarWrapper;
 begin
   ResetErrorCode(FStatus);
-  ucal_clone(FCalendar, FStatus);
+  calClone := ucal_clone(FCalendar, FStatus);
   ICUCheck(FStatus);
   tmpCal := TICUCalendarWrapper.Create(calClone);
   try

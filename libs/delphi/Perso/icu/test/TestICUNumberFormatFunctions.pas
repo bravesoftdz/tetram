@@ -48,7 +48,7 @@ end;
 
 procedure TestTICUNumberFormat.TestCurrencyToStrDefaultLocale;
 begin
-  CheckEquals('fr_FR', uloc_getDefault);
+  CheckEquals('fr_FR', string(uloc_getDefault));
   CheckEquals('2'#160'145,46'#160'€', ICUCurrencyToStr(2145.456, uloc_getDefault), 'uloc_getDefault');
   CheckEquals('2'#160'145,46'#160'€', ICUCurrencyToStr(2145.456), 'default');
 end;
