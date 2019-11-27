@@ -9,15 +9,10 @@ uses
 
 type
   // Date and Time data type.
-  UDate = record
-  private
-    Value: Double;
-  public
-    class operator Implicit(Value: Double): UDate;
-    class operator Implicit(Value: TDateTime): UDate;
-    class operator Implicit(Value: UDate): Double;
-    class operator Implicit(Value: UDate): TDateTime;
-  end;
+  UDate = type Double;
+
+function DateTime2UDate(Value: TDateTime): UDate;
+function UDate2DateTime(Value: UDate): TDateTime;
 
 const
   U_MILLIS_PER_SECOND = 1000;
@@ -277,26 +272,14 @@ begin
   Result := u_errorName(FStatus);
 end;
 
-{ UDate }
-
-class operator UDate.Implicit(Value: TDateTime): UDate;
+function DateTime2UDate(Value: TDateTime): UDate;
 begin
-  Result.Value := (Value - UnixDateDelta) * MSecsPerDay;
+  Result := (Value - UnixDateDelta) * MSecsPerDay;
 end;
 
-class operator UDate.Implicit(Value: Double): UDate;
+function UDate2DateTime(Value: UDate): TDateTime;
 begin
-  Result.Value := Value;
-end;
-
-class operator UDate.Implicit(Value: UDate): TDateTime;
-begin
-  Result := (Value.Value / MSecsPerDay) + UnixDateDelta;
-end;
-
-class operator UDate.Implicit(Value: UDate): Double;
-begin
-  Result := Value.Value;
+  Result := (Value / MSecsPerDay) + UnixDateDelta;
 end;
 
 {$IFNDEF ICU_LINKONREQUEST}

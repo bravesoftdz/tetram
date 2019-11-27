@@ -46,7 +46,7 @@ var
 begin
   timeZone := 'GMT';
   d := EncodeDate(2015, 3, 25) + EncodeTime(18, 21, 46, 157);
-  dateToFormat := d;
+  dateToFormat := DateTime2UDate(d);
 
   ResetErrorCode(Status);
   fmt := udat_open(UDAT_DEFAULT, UDAT_DEFAULT, 'en-US', @timeZone[1], Length(timeZone), nil, 0, Status);

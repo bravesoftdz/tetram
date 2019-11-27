@@ -206,12 +206,12 @@ begin
   ResetErrorCode(FStatus);
   bufNeeded := DEFAULT_BUFFER_SIZE;
   SetLength(buffer, bufNeeded);
-  bufNeeded := udat_format(FFormat, Value, @buffer[1], bufNeeded, nil, FStatus);
+  bufNeeded := udat_format(FFormat, DateTime2UDate(Value), @buffer[1], bufNeeded, nil, FStatus);
   if FStatus = U_BUFFER_OVERFLOW_ERROR then
   begin
     SetLength(buffer, bufNeeded);
     ResetErrorCode(FStatus);
-    bufNeeded := udat_format(FFormat, Value, @buffer[1], bufNeeded, nil, FStatus);
+    bufNeeded := udat_format(FFormat, DateTime2UDate(Value), @buffer[1], bufNeeded, nil, FStatus);
   end;
 
   SetLength(buffer, bufNeeded);
@@ -241,7 +241,7 @@ begin
     udat_setNumberFormat(FFormat, FNumberFormat.UNumberFormat);
 
   ResetErrorCode(FStatus);
-  Result := udat_parse(FFormat, @Value[1], Length(Value), nil, FStatus);
+  Result := UDate2DateTime(udat_parse(FFormat, @Value[1], Length(Value), nil, FStatus));
 end;
 
 procedure TICUDateFormatterWrapper.ReleaseFormatter;
