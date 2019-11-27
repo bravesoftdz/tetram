@@ -144,7 +144,8 @@ uses
   System.IOUtils, BD.Utils.StrUtils, BD.Utils.GUIUtils, BD.Common, BDTK.Entities.Dao.Full, BDTK.GUI.Utils,
   BD.Entities.Common, BD.Entities.Dao.Lambda, BDTK.Web.Browser.Utils,
   BD.Entities.Metadata, BD.Entities.Factory.Lite, BDTK.Entities.Dao.Lite,
-  BD.Entities.Factory.Full, ICUDateFormatter, ICUNumberFormatter;
+  BD.Entities.Factory.Full, ICUDateFormatter, ICUNumberFormatter,
+  System.DateUtils;
 
 {$R *.dfm}
 
@@ -819,6 +820,7 @@ procedure TfrmBDTKWebPreview.SetValue(AId: Integer; const AValue: string; const 
 
 var
   IntValue: Integer;
+  DateValue: TDateTime;
 begin
   case AId of
     // Album
@@ -832,6 +834,12 @@ begin
       end;
     BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_Parution_Annee:
       FAlbum.AnneeParution := BDStrToInteger(AValue, ALang);
+    BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_Parution_Date:
+      begin
+        DateValue := ICUStrToDate(AValue, ALang);
+        FAlbum.MoisParution := MonthOf(DateValue);
+        FAlbum.AnneeParution := YearOf(DateValue);
+      end;
     BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_Tome:
       FAlbum.Tome := BDStrToInteger(AValue, ALang);
     BDTKBROWSER_CONTEXTMENU_IMPORT_ALBUM_TomeDebut:
