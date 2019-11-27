@@ -5,7 +5,7 @@ unit ICUDateFormatter;
 interface
 
 uses
-  System.SysUtils, System.Classes, _udat, _utypes, _uloc, _udisplaycontext,
+  Winapi.Windows, System.SysUtils, System.Classes, _udat, _utypes, _uloc, _udisplaycontext,
   ICUNumberFormatter;
 
 type
@@ -60,6 +60,7 @@ function ICUDateToStr(const Value: TDateTime; LocalToGMT: Boolean = False; const
 function ICUDateToStrFull(const Value: TDateTime; LocalToGMT: Boolean = False; const Locale: AnsiString = ''): string;
 function ICUDateToStrShort(const Value: TDateTime; LocalToGMT: Boolean = False; const Locale: AnsiString = ''): string;
 function ICUDateToStrLong(const Value: TDateTime; LocalToGMT: Boolean = False; const Locale: AnsiString = ''): string;
+function ICUStrToDate(const Value: string; const Locale: AnsiString = ''): TDateTime;
 function ICUTimeToStr(const Value: TDateTime; LocalToGMT: Boolean = False; const Locale: AnsiString = ''): string;
 function ICUTimeToStrFull(const Value: TDateTime; LocalToGMT: Boolean = False; const Locale: AnsiString = ''): string;
 function ICUTimeToStrShort(const Value: TDateTime; LocalToGMT: Boolean = False; const Locale: AnsiString = ''): string;
@@ -90,6 +91,26 @@ begin
   end;
 end;
 
+function ParseDateTime(const Value: string; DateFormat, TimeFormat: UDateFormatStyle; LocalToGMT: Boolean; const Locale: AnsiString; out ADateTime: TDateTime): Boolean;
+var
+  Formatter: TICUDateFormatter;
+  timeZone: string;
+begin
+  if LocalToGMT then
+    timeZone := 'GMT'
+  else
+    timeZone := TTimeZone.Local.Abbreviation;
+
+  Formatter := TICUDateFormatter.Create(Locale, TimeFormat, DateFormat, timeZone);
+  try
+    Formatter.Lenient := True;
+    ADateTime := TTimeZone.Local.ToLocalTime(Formatter.Parse(Value));
+    Result := U_SUCCESS(Formatter.GetErrorCode);
+  finally
+    Formatter.Free;
+  end;
+end;
+
 function ICUDateToStr(const Value: TDateTime; LocalToGMT: Boolean = False; const Locale: AnsiString = ''): string;
 begin
   Result := FormatDateTime(Value, UDAT_DEFAULT, UDAT_NONE, LocalToGMT, ProperLocale(Locale));
@@ -108,6 +129,16 @@ end;
 function ICUDateToStrFull(const Value: TDateTime; LocalToGMT: Boolean = False; const Locale: AnsiString = ''): string;
 begin
   Result := FormatDateTime(Value, UDAT_FULL, UDAT_NONE, LocalToGMT, ProperLocale(Locale));
+end;
+
+function ICUStrToDate(const Value: string; const Locale: AnsiString = ''): TDateTime;
+var
+  Format: UDateFormatStyle;
+begin
+  for Format in [UDAT_FULL, UDAT_LONG, UDAT_SHORT] do
+    if ParseDateTime(Value, Format, UDAT_NONE, False, ProperLocale(Locale), Result) then
+      Exit(Trunc(Result));
+  Result := -1;
 end;
 
 function ICUTimeToStr(const Value: TDateTime; LocalToGMT: Boolean = False; const Locale: AnsiString = ''): string;

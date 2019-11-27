@@ -22,6 +22,7 @@ type
     procedure TestTimeToStrFull;
 
     procedure TestStrToMonth;
+    procedure TestStrToDate;
   end;
 
 implementation
@@ -67,6 +68,14 @@ begin
   CheckEquals('25/03/2015', ICUDateToStrShort(FDate, True, 'fr-FR'), 'fr-FR GMT');
   CheckEquals('3/25/15', ICUDateToStrShort(FDate, False, 'en-US'), 'en-US');
   CheckEquals('3/25/15', ICUDateToStrShort(FDate, True, 'en-US'), 'en-US GMT');
+end;
+
+procedure TestTICUDateFormat.TestStrToDate;
+begin
+  CheckEquals(EncodeDate(2015, 03, 25), ICUStrToDate('25/03/2015', 'fr-FR'), 'fr-FR');
+  CheckEquals(EncodeDate(2015, 03, 25), ICUStrToDate('25 mars 2015', 'fr-FR'), 'fr-FR literal');
+  CheckEquals(EncodeDate(2015, 03, 25), ICUStrToDate('3/25/15', 'en-US'), 'en-US');
+  CheckEquals(EncodeDate(2015, 03, 25), ICUStrToDate('March 25, 2015', 'en-US'), 'en-US literal');
 end;
 
 procedure TestTICUDateFormat.TestTimeToStr;
