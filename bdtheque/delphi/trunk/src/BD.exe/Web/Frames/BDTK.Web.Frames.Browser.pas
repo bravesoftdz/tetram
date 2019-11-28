@@ -9,6 +9,8 @@ uses
   uCEFUrlRequestClientComponent, System.Generics.Collections;
 
 type
+  TOnNewTabEvent = procedure(const AUrl, AWindowName: string; var AHandled: Boolean) of object;
+
   TDownloadPromise = TProc<string, TStream>;
   TDownload = class
   private
@@ -83,28 +85,33 @@ type
     FSelectedText: string;
     FPendingDownloads: TQueue<TDownload>;
     FCurrentDownloads: TObjectDictionary<UInt64, TDownload>;
+    FOnNewTabEvent: TOnNewTabEvent;
 
     procedure BrowserCreatedMsg(var AMessage: TMessage); message CEF_AFTERCREATED;
     procedure BrowserDetroyParentWindow(var AMessage: TMessage); message BDTKBROWSER_DESTROYWNDPARENT;
     procedure RunAction(var AMessage: TMessage); message BDTKBROWSER_RUN_ACTION;
     procedure URLRequestSuccess(var AMessage: TMessage); message BDTKBROWSER_URLREQUEST_SUCCESS;
     procedure URLRequestError(var AMessage: TMessage); message BDTKBROWSER_URLREQUEST_ERROR;
+    function GetWindowName: string;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
 
-    procedure Initialize(const ADefaultUrl: string);
+    procedure Initialize(const ADefaultUrl, AWindowName: string);
 
     procedure HandleKeyUp(const AMsg: TMsg; var AHandled: Boolean);
     procedure HandleKeyDown(const AMsg: TMsg; var AHandled: Boolean);
 
     procedure DownloadURL(const AUrl: string; APromise: TDownloadPromise);
 
+    property WindowName: string read GetWindowName;
+
     property Closing: Boolean read FClosing;
 
     property SelectedTextLang: AnsiString read FSelectedTextLang;
     property SelectedText: string read FSelectedText;
 
+    property OnNewTab: TOnNewTabEvent read FOnNewTabEvent write FOnNewTabEvent;
     property OnBeforeContextMenu: TOnBeforeContextMenu read FOnBeforeContextMenu write FOnBeforeContextMenu;
     property OnContextMenuCommand: TOnContextMenuCommand read FOnContextMenuCommand write FOnContextMenuCommand;
   end;
@@ -156,11 +163,16 @@ begin
   inherited;
 end;
 
-procedure TframeBDTKWebBrowser.Initialize(const ADefaultUrl: string);
+procedure TframeBDTKWebBrowser.Initialize(const ADefaultUrl, AWindowName: string);
 begin
   edUrl.Text := ADefaultUrl; // utile pour éviter que le TEdit montre autre chose au premier affichage (même brièvement)
   Chromium.DefaultUrl := ADefaultUrl;
-  Chromium.CreateBrowser(WindowParent);
+  Chromium.CreateBrowser(WindowParent, AWindowName);
+end;
+
+function TframeBDTKWebBrowser.GetWindowName: string;
+begin
+  Result := CefString(@Chromium.CefWindowInfo.window_name);
 end;
 
 procedure TframeBDTKWebBrowser.ActionList1Update(Action: TBasicAction; var Handled: Boolean);
@@ -452,6 +464,21 @@ procedure TframeBDTKWebBrowser.ChromiumBeforePopup(ASender: TObject; const ABrow
   ATargetDisposition: TCefWindowOpenDisposition; AUserGesture: Boolean; const APopupFeatures: TCefPopupFeatures; var AWindowInfo: TCefWindowInfo; var AClient: ICefClient;
   var ASettings: TCefBrowserSettings; var AExtraInfo: ICefDictionaryValue; var ANoJavascriptAccess, AResult: Boolean);
 begin
+  case ATargetDisposition of
+    WOD_NEW_FOREGROUND_TAB:
+      if Assigned(FOnNewTabEvent) then
+        FOnNewTabEvent(ATargetUrl, ATargetFrameName, AResult)
+      else
+        AResult := True;
+    WOD_NEW_BACKGROUND_TAB:
+      AResult := True;
+    WOD_NEW_POPUP:
+      AResult := True;
+    WOD_NEW_WINDOW:
+      AResult := True;
+    else
+      AResult := False;
+  end;
   AResult := (ATargetDisposition in [WOD_NEW_FOREGROUND_TAB, WOD_NEW_BACKGROUND_TAB, WOD_NEW_POPUP, WOD_NEW_WINDOW]);
 end;
 
@@ -493,7 +520,8 @@ end;
 
 procedure TframeBDTKWebBrowser.ChromiumOpenUrlFromTab(ASender: TObject; const ABrowser: ICefBrowser; const AFrame: ICefFrame; const ATargetUrl: ustring; ATargetDisposition: TCefWindowOpenDisposition; AUserGesture: Boolean; out AResult: Boolean);
 begin
-  // CTRL + Click sur un lien...
+  if Assigned(FOnNewTabEvent) then
+    FOnNewTabEvent(ATargetUrl, '', AResult);
 end;
 
 procedure TframeBDTKWebBrowser.ChromiumProcessMessageReceived(ASender: TObject; const ABrowser: ICefBrowser; const AFrame: ICefFrame; ASourceProcess: TCefProcessId; const AMessage: ICefProcessMessage; out AResult: Boolean);

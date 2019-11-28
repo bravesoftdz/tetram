@@ -22,9 +22,11 @@ type
 
     procedure Chromium_OnTitleChange(ASender: TObject; const ABrowser: ICefBrowser; const ATitle: ustring);
     procedure Chromium_BeforeClose(ASender: TObject; const ABrowser: ICefBrowser);
+    function GetWindowName: string;
   public
-    constructor Create(AOwner: TPageControl; const ADefaultUrl: string = ''); reintroduce;
+    constructor Create(AOwner: TPageControl; const ADefaultUrl, AWindowName: string); reintroduce;
 
+    property WindowName: string read GetWindowName;
     property Frame: TframeBDTKWebBrowser read FFrame;
   end;
 
@@ -43,6 +45,7 @@ type
     procedure ApplicationEvents1Message(var Msg: tagMSG; var Handled: Boolean);
     procedure Chromium_OnBeforeContextMenu(ASender: TObject; const ABrowser: ICefBrowser; const AFrame: ICefFrame; const AParams: ICefContextMenuParams; const AModel: ICefMenuModel);
     procedure Chromium_OnContextMenuCommand(ASender: TObject; const ABrowser: ICefBrowser; const AFrame: ICefFrame; const AParams: ICefContextMenuParams; ACommandId: Integer; AEventFlags: Cardinal; out AResult: Boolean);
+    procedure OnNewTabEvent(const AUrl, AWindowName: string; var AHandled: Boolean);
     procedure PopupMenu1Popup(Sender: TObject);
     procedure Fermerlonglet1Click(Sender: TObject);
   private
@@ -51,7 +54,7 @@ type
     FClosingTab, FCanClose, FClosing: Boolean;
     FRequestedModalResult: TModalResult;
     FImportPreview: TfrmBDTKWebPreview;
-    procedure AddTab(const AUrl: string);
+    procedure AddTab(const AUrl: string; AWindowName: string);
     procedure RemoveTab(APageIndex: Integer);
     function GetPage(ASender: TObject; out APage: TBrowserTabSheet): Boolean; overload;
     function GetPage(APageIndex: Integer; out APage: TBrowserTabSheet): Boolean; overload;
@@ -103,7 +106,7 @@ end;
 
 { TBrowserTabSheet }
 
-constructor TBrowserTabSheet.Create(AOwner: TPageControl; const ADefaultUrl: string);
+constructor TBrowserTabSheet.Create(AOwner: TPageControl; const ADefaultUrl, AWindowName: string);
 begin
   inherited Create(AOwner);
 
@@ -117,7 +120,13 @@ begin
   FFrame.Chromium.OnTitleChange := Chromium_OnTitleChange;
   FFrame.OnBeforeContextMenu := TfrmBDTKWebBrowser(AOwner.Owner).Chromium_OnBeforeContextMenu;
   FFrame.OnContextMenuCommand := TfrmBDTKWebBrowser(AOwner.Owner).Chromium_OnContextMenuCommand;
-  FFrame.Initialize(ADefaultUrl);
+  FFrame.OnNewTab := TfrmBDTKWebBrowser(AOwner.Owner).OnNewTabEvent;
+  FFrame.Initialize(ADefaultUrl, AWindowName);
+end;
+
+function TBrowserTabSheet.GetWindowName: string;
+begin
+  Result := Frame.WindowName;
 end;
 
 procedure TBrowserTabSheet.Chromium_BeforeClose(ASender: TObject; const ABrowser: ICefBrowser);
@@ -173,6 +182,16 @@ begin
       Page.Frame.Chromium.NotifyMoveOrResizeStarted;
 end;
 
+procedure TfrmBDTKWebBrowser.OnNewTabEvent(const AUrl, AWindowName: string; var AHandled: Boolean);
+begin
+  TThread.Synchronize(nil,
+    procedure
+    begin
+      AddTab(AUrl, AWindowName);
+    end);
+  AHandled := True;
+end;
+
 procedure TfrmBDTKWebBrowser.WMMove(var AMessage: TWMMove);
 begin
   inherited;
@@ -226,7 +245,7 @@ begin
   else
     url := 'https://www.google.com/search?q=' + FAutoSearchKeyWords.Replace(' ', '+');
 
-  AddTab(url);
+  AddTab(url, '');
 
   FImportPreview.Album := Album;
   FImportPreview.Show;
@@ -255,10 +274,31 @@ begin
   Result := Assigned(APage);
 end;
 
-procedure TfrmBDTKWebBrowser.AddTab(const AUrl: string);
+procedure TfrmBDTKWebBrowser.AddTab(const AUrl: string; AWindowName: string);
+var
+  i: Integer;
+  NewPage: TBrowserTabSheet;
 begin
-//  PageControl1.Enabled := False;
-  PageControl1.ActivePage := TBrowserTabSheet.Create(PageControl1, AUrl);
+  AWindowName := AWindowName.Trim;
+  AWindowName := IfThen(SameText(AWindowName, '_blank'), '', AWindowName);
+
+  NewPage := nil;
+  if not AWindowName.IsEmpty then
+    for i := 0 to Pred(PageControl1.PageCount) do
+      if SameText(TBrowserTabSheet(PageControl1.Pages[i]).WindowName, AWindowName) then
+      begin
+        NewPage := TBrowserTabSheet(PageControl1.Pages[i]);
+        Break;
+      end;
+
+  //  PageControl1.Enabled := False;
+  if Assigned(NewPage) then
+  begin
+    PageControl1.ActivePage := NewPage;
+    NewPage.Frame.Chromium.LoadURL(AUrl);
+  end
+  else
+    PageControl1.ActivePage := TBrowserTabSheet.Create(PageControl1, AUrl, AWindowName);
 end;
 
 procedure TfrmBDTKWebBrowser.RemoveTab(APageIndex: Integer);
@@ -446,7 +486,7 @@ begin
   try
     case ACommandId of
       BDTKBROWSER_CONTEXTMENU_LINK_TO_NEW_TAB:
-        AddTab(AParams.LinkUrl);
+        AddTab(AParams.LinkUrl, '');
       BDTKBROWSER_CONTEXTMENU_IMPORT..BDTKBROWSER_CONTEXTMENU_IMPORT_EDITION_Image:
         if GetPage(ASender, Page) then
           FImportPreview.SetValue(ACommandId, Page.Frame.SelectedText.Trim([#9, #32, #160]), Page.Frame.SelectedTextLang);
