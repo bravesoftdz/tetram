@@ -1,1 +1,0 @@
-xcopy /e /y /q firebird %1

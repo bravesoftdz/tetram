@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<component name="dataSourceStorage">
-  <data-source name="Firebird - BD.GDB" uuid="ecb281c7-b78f-4387-82c1-9bf213a55af4">
-    <database-info product="" version="" jdbc-version="" driver-name="" driver-version=""/>
-  </data-source>
-  <data-source name="Firebird - BD.GDB@localhost [E]" uuid="1bd03baf-f7dc-40ac-8a61-175eb2833902">
-    <database-info product="" version="" jdbc-version="" driver-name="" driver-version=""/>
-  </data-source>
-</component>

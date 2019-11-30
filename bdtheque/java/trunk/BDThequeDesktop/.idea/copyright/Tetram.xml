@@ -1,9 +1,0 @@
-<component name="CopyrightManager">
-  <copyright>
-    <option name="notice" value="Copyright (c) &amp;#36;today.year, tetram.org. All Rights Reserved.&#10;&amp;#36;file.fileName &#10;Last modified by &amp;#36;username, on &amp;#36;file.lastModified.format(&quot;yyyy-MM-dd'T'HH:mm:ssz&quot;)" />
-    <option name="keyword" value="Copyright" />
-    <option name="allowReplaceKeyword" value="" />
-    <option name="myName" value="Tetram" />
-    <option name="myLocal" value="true" />
-  </copyright>
-</component>

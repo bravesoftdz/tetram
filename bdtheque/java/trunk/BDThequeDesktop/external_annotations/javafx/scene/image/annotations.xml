@@ -1,8 +1,0 @@
-<root>
-    <item name='javafx.scene.image.Image Image(java.lang.String) 0'>
-        <annotation name='org.jetbrains.annotations.NonNls'/>
-    </item>
-    <item name='javafx.scene.image.ImageView ImageView(java.lang.String) 0'>
-        <annotation name='org.jetbrains.annotations.NonNls'/>
-    </item>
-</root>
